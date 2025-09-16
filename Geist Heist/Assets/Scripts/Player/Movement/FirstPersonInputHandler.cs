@@ -63,9 +63,9 @@ public class FirstPersonInputHandler : IInputHandler
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
-        var velocity = rigidbody.angularVelocity. + direction;
+        var velocity = rigidbody.angularVelocity + direction;
 
-        rigidbody.angularVelocity = 
+        //rigidbody.angularVelocity = 
     }
 
     public override void WhileMoveNotHeld()

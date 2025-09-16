@@ -40,9 +40,9 @@ public class PlayerManager : MonoBehaviour
         InputEvents.MoveHeld.AddListener(input.WhileMoveHeld);
         InputEvents.MoveCanceled.AddListener(input.OnMoveCanceled);
 
-        InputEvents.JumpStarted.AddListener(input.OnJumpStarted);
+        /*InputEvents.JumpStarted.AddListener(input.OnJumpStarted);
         InputEvents.JumpHeld.AddListener(input.WhileJumpHeld);
-        InputEvents.JumpCanceled.AddListener(input.OnJumpCanceled);
+        InputEvents.JumpCanceled.AddListener(input.OnJumpCanceled);*/
 
         InputEvents.ActionStarted.AddListener(input.OnActionStarted);
         InputEvents.ActionHeld.AddListener(input.WhileActionHeld);

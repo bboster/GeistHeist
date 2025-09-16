@@ -26,16 +26,6 @@ public class ExampleMovement : IInputHandler
         throw new System.NotImplementedException();
     }
 
-    public override void OnJumpCanceled()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void OnJumpStarted()
-    {
-        Debug.Log("Jump started");
-    }
-
     public override void OnMoveCanceled()
     {
         Debug.Log("Move canceled");
@@ -56,12 +46,12 @@ public class ExampleMovement : IInputHandler
         throw new System.NotImplementedException();
     }
 
-    public override void WhileJumpHeld()
+    public override void WhileMoveHeld()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("move held");
     }
 
-    public override void WhileMoveHeld()
+    public override void WhileMoveNotHeld()
     {
         Debug.Log("move held");
     }
