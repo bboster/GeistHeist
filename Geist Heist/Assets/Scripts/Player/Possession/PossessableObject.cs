@@ -16,4 +16,19 @@ public class PossessableObject : MonoBehaviour
 {
     public IInputHandler InputHandler;
     public ICameraInputHandler CameraInputHandler;
+
+    public void Possess()
+    {
+        SwitchCamera();
+        //not detectable
+        //disable movement
+        //can do thing
+    }
+
+    public void SwitchCamera()
+    {
+        //switch from 1st to 3rd
+    }
+
+
 }
