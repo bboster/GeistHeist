@@ -4,7 +4,15 @@ using UnityEngine.AI;
 
 public class EnemyMovement : Behavior
 {
+    [Tooltip("Distance from destination at which movement is considered complete.")]
+    [SerializeField] private float moveCompletionThreshold;
+
     protected NavMeshAgent thisAgent;
+
+    private void Awake()
+    {
+        thisAgent = GetComponent<NavMeshAgent>();
+    }
 
     /// <summary>
     /// Sets the destination for the enemy to move to.
@@ -19,13 +27,14 @@ public class EnemyMovement : Behavior
     /// Checks to see if the enemy has reached the end of its path.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator CheckPathCompletion()
+    protected bool CheckPathCompletion()
     {
-        for(; ; )
+        if (thisAgent.remainingDistance <= moveCompletionThreshold)
         {
-
-
-            yield return new WaitForEndOfFrame();
+            Debug.Log("PATH COMPLETE");
+            return true;
         }
+        else
+            return false;
     }
 }
