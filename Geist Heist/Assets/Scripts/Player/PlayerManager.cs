@@ -48,9 +48,9 @@ public class PlayerManager : MonoBehaviour
         InputEvents.ActionHeld.AddListener(input.WhileActionHeld);
         InputEvents.ActionCanceled.AddListener(input.OnActionCanceled);
 
-        InputEvents.EscapeObjectStarted.AddListener(input.OnEscapeObjectStarted);
-        InputEvents.EscapeObjectHeld.AddListener(input.WhileEscapeObjectHeld);
-        InputEvents.EscapeObjectCanceled.AddListener(input.OnEscapeObjectCanceled);
+        InputEvents.PossessStarted.AddListener(input.OnPossessStarted);
+        InputEvents.PossessHeld.AddListener(input.WhilePossessHeld);
+        InputEvents.PossessCanceled.AddListener(input.OnPossessCanceled);
 
         // camera is really bad pls refactor it.
         var cam = possessable.CameraInputHandler;

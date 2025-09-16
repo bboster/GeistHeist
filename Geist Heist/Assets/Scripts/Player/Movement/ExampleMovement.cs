@@ -16,12 +16,12 @@ public class ExampleMovement : IInputHandler
         throw new System.NotImplementedException();
     }
 
-    public override void OnEscapeObjectCanceled()
+    public override void OnPossessCanceled()
     {
         throw new System.NotImplementedException();
     }
 
-    public override void OnEscapeObjectStarted()
+    public override void OnPossessStarted()
     {
         throw new System.NotImplementedException();
     }
@@ -51,7 +51,7 @@ public class ExampleMovement : IInputHandler
         throw new System.NotImplementedException();
     }
 
-    public override void WhileEscapeObjectHeld()
+    public override void WhilePossessHeld()
     {
         throw new System.NotImplementedException();
     }

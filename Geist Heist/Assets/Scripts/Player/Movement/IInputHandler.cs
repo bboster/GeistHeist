@@ -21,14 +21,17 @@ public abstract class IInputHandler : MonoBehaviour
     /// called every fixed update while move is held
     /// </summary>
     public abstract void WhileMoveHeld();
+    public abstract void WhileMoveNotHeld();
     public abstract void OnMoveCanceled();
 
+    /*
     public abstract void OnJumpStarted();
     /// <summary>
     /// called every fixed update while jump is held
     /// </summary>
     public abstract void WhileJumpHeld();
     public abstract void OnJumpCanceled();
+    */
 
     public abstract void OnActionStarted();
     /// <summary>
@@ -37,12 +40,12 @@ public abstract class IInputHandler : MonoBehaviour
     public abstract void WhileActionHeld();
     public abstract void OnActionCanceled();
 
-    public abstract void OnEscapeObjectStarted();
+    public abstract void OnPossessStarted();
     /// <summary>
     /// called every fixed update while escape oject is held
     /// </summary>
-    public abstract void WhileEscapeObjectHeld();
-    public abstract void OnEscapeObjectCanceled();
+    public abstract void WhilePossessHeld();
+    public abstract void OnPossessCanceled();
 
 
 

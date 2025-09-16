@@ -17,7 +17,7 @@ public class InputEvents : Singleton<InputEvents>
     // Events
 
     [SerializeField] private string moveKey = "Move";
-    [SerializeField] private string jumpKey = "Jump";
+    //[SerializeField] private string jumpKey = "Jump";
     [SerializeField] private string pauseKey = "Pause";
     [SerializeField] private string lookKey = "Look";
     [SerializeField] private string actionKey = "Escape Object";
@@ -25,19 +25,20 @@ public class InputEvents : Singleton<InputEvents>
 
     public static UnityEvent MoveStarted = new UnityEvent();
     public static UnityEvent MoveHeld = new UnityEvent();
+    public static UnityEvent MoveNotHeld = new UnityEvent();
     public static UnityEvent MoveCanceled = new UnityEvent();
 
-    public static UnityEvent JumpStarted = new UnityEvent();
+    /*public static UnityEvent JumpStarted = new UnityEvent();
     public static UnityEvent JumpHeld = new UnityEvent();
-    public static UnityEvent JumpCanceled = new UnityEvent();
+    public static UnityEvent JumpCanceled = new UnityEvent();*/
 
     public static UnityEvent ActionStarted = new UnityEvent();
     public static UnityEvent ActionHeld = new UnityEvent();
     public static UnityEvent ActionCanceled = new UnityEvent();
 
-    public static UnityEvent EscapeObjectStarted = new UnityEvent();
-    public static UnityEvent EscapeObjectHeld = new UnityEvent();
-    public static UnityEvent EscapeObjectCanceled = new UnityEvent();
+    public static UnityEvent PossessStarted = new UnityEvent();
+    public static UnityEvent PossessHeld = new UnityEvent();
+    public static UnityEvent PossessCanceled = new UnityEvent();
 
     public static UnityEvent PauseStarted = new UnityEvent();
 
@@ -55,7 +56,7 @@ public class InputEvents : Singleton<InputEvents>
     public static bool MovePressed, JumpPressed, ActionPressed, EscapeObjectPressed;
 
     private PlayerInput playerInput;
-    private InputAction Move, Jump, Look, Pause, Action, EscapeObject;
+    private InputAction Move, /*Jump,*/ Look, Pause, Action, Possess;
 
     private Transform movementOrigin;
 
@@ -70,21 +71,23 @@ public class InputEvents : Singleton<InputEvents>
     {
         var map = playerInput.currentActionMap;
         Move = map.FindAction(moveKey);
-        Jump = map.FindAction(jumpKey);
+        //Jump = map.FindAction(jumpKey);
         Look = map.FindAction(lookKey);
         //Respawn = map.FindAction("Respawn");
         Pause = map.FindAction(pauseKey);
         Action = map.FindAction(actionKey);
-        EscapeObject = map.FindAction(escapeObjectKey);
+        Possess = map.FindAction(escapeObjectKey);
 
         Move.started += ctx => InputActionStarted(ref MovePressed, MoveStarted);
-        Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
+        //Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
         Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted);
+        Possess.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted);
         Pause.started += ctx => { PauseStarted.Invoke(); };
 
         Move.canceled += ctx => InputActionCanceled(ref MovePressed, MoveCanceled);
-        Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
+        //Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
         Action.canceled += ctx => InputActionCanceled(ref ActionPressed, ActionCanceled);
+        Possess.canceled += ctx => InputActionCanceled(ref ActionPressed, ActionCanceled);
     }
     void InputActionStarted(ref bool pressedFlag, UnityEvent actionEvent)
     {
@@ -99,19 +102,20 @@ public class InputEvents : Singleton<InputEvents>
     private void FixedUpdate()
     {
         if (MovePressed) MoveHeld.Invoke();
-        if (JumpPressed) JumpHeld.Invoke();
+        else MoveNotHeld.Invoke();
+        //if (JumpPressed) JumpHeld.Invoke();
         if (ActionPressed) ActionHeld.Invoke();
-        if (EscapeObjectPressed) EscapeObjectHeld.Invoke();
+        if (EscapeObjectPressed) PossessHeld.Invoke();
 
         LookUpdate.Invoke(LookDelta);
     }
     private void OnDisable()
     {
         Move.Reset();   
-        Jump.Reset();
+        //Jump.Reset();
         Pause.Reset();
         Action.Reset();
-        EscapeObject.Reset();
+        Possess.Reset();
         Look.Reset();
     }
 }
