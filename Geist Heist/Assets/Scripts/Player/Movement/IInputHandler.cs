@@ -11,35 +11,38 @@
 using UnityEngine;
 using System;
 
-public interface IInputHandler
+public abstract class IInputHandler : MonoBehaviour
 {
-    public void OnMoveStarted(Vector2 input);
+    // Note: transformed / camera relative move input vectors are on InputEvents.cs
+    //  FirstPersonInputDirection, ThirdPersonInputDirection
+
+    public abstract void OnMoveStarted();
     /// <summary>
     /// called every fixed update while move is held
     /// </summary>
-    public void WhileMoveHeld(Vector2 input);
-    public void OnMoveCanceled(Vector2 input);
+    public abstract void WhileMoveHeld();
+    public abstract void OnMoveCanceled();
 
-    public void OnJumpStarted();
+    public abstract void OnJumpStarted();
     /// <summary>
     /// called every fixed update while jump is held
     /// </summary>
-    public void WhileJumpHeld();
-    public void OnJumpCanceled();
+    public abstract void WhileJumpHeld();
+    public abstract void OnJumpCanceled();
 
-    public void OnActionStarted();
+    public abstract void OnActionStarted();
     /// <summary>
     /// called every fixed update while action is held
     /// </summary>
-    public void WhileActionHeld();
-    public void OnActionCanceled();
+    public abstract void WhileActionHeld();
+    public abstract void OnActionCanceled();
 
-    public void OnEscapeObjectStarted();
+    public abstract void OnEscapeObjectStarted();
     /// <summary>
     /// called every fixed update while escape oject is held
     /// </summary>
-    public void WhileEscapeObjectHeld();
-    public void OnEscapeObjectCanceled();
+    public abstract void WhileEscapeObjectHeld();
+    public abstract void OnEscapeObjectCanceled();
 
 
 

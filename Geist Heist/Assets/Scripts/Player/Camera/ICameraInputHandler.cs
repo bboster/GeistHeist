@@ -13,7 +13,7 @@
 
 using UnityEngine;
 
-public abstract class CameraInputHandler
+public abstract class ICameraInputHandler : MonoBehaviour
 {
     public abstract void OnMouseMove(Vector2 mouseDelta);
 
