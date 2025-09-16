@@ -3,7 +3,8 @@ using UnityEngine;
 public class FirstPersonInputHandler : IInputHandler
 {
     private Rigidbody rigidbody;
-    [SerializeField] private float maxSpeed = 10;
+    [SerializeField] private float speed = 3;
+    [SerializeField] private float maxVelocity = 10;
     [SerializeField] private float slowDownFactor = 0.1f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -53,23 +54,6 @@ public class FirstPersonInputHandler : IInputHandler
     }
     #endregion
 
-    #region jump
-    public override void OnJumpCanceled()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void WhileJumpHeld()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void OnJumpStarted()
-    {
-        throw new System.NotImplementedException();
-    }
-    #endregion
-
     #region Move
     public override void OnMoveStarted()
     {
@@ -79,7 +63,9 @@ public class FirstPersonInputHandler : IInputHandler
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
+        var velocity = rigidbody.angularVelocity. + direction;
 
+        rigidbody.angularVelocity = 
     }
 
     public override void WhileMoveNotHeld()
