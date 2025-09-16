@@ -1,24 +1,27 @@
 /*
+ * Contributors: Toby
+ * Creation Date: 9/16/25
+ * Last Modified: 9/16/25
+ * 
  * Connects to PlayerInput map actions and invokes static UnityEvents.
  * Use other scripts to connect to the unityevents.
- * 
- * - Alec P, Toby S, Clare G, Sky B, Tyler B
  */
 
 using System.Net.Http.Headers;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
+ using UnityEngine.InputSystem;
 
 public class InputEvents : Singleton<InputEvents>
 {
     // Events
 
     [SerializeField] private string moveKey = "Move";
-    [SerializeField] private string leftClickKey = "LeftClick";
     [SerializeField] private string jumpKey = "Jump";
     [SerializeField] private string pauseKey = "Pause";
     [SerializeField] private string lookKey = "Look";
+    [SerializeField] private string actionKey = "Escape Object";
+    [SerializeField] private string escapeObjectKey = "Action";
 
     public static UnityEvent MoveStarted = new UnityEvent();
     public static UnityEvent MoveHeld = new UnityEvent();
@@ -28,12 +31,17 @@ public class InputEvents : Singleton<InputEvents>
     public static UnityEvent JumpHeld = new UnityEvent();
     public static UnityEvent JumpCanceled = new UnityEvent();
 
-    public static UnityEvent PauseStarted = new UnityEvent();
-    public static UnityEvent PauseCanceled = new UnityEvent();
+    public static UnityEvent ActionStarted = new UnityEvent();
+    public static UnityEvent ActionHeld = new UnityEvent();
+    public static UnityEvent ActionCanceled = new UnityEvent();
 
-    public static UnityEvent LeftClickStarted = new UnityEvent();
-    public static UnityEvent LeftClickHeld = new UnityEvent();
-    public static UnityEvent LeftClickCanceled = new UnityEvent();
+    public static UnityEvent EscapeObjectStarted = new UnityEvent();
+    public static UnityEvent EscapeObjectHeld = new UnityEvent();
+    public static UnityEvent EscapeObjectCanceled = new UnityEvent();
+
+    public static UnityEvent PauseStarted = new UnityEvent();
+
+    public static UnityEvent<Vector2> LookUpdate = new UnityEvent<Vector2>();
 
     //public static UnityEvent RestartStarted, RespawnStarted;
 
@@ -41,12 +49,13 @@ public class InputEvents : Singleton<InputEvents>
 
     // Input values and flags
     public Vector2 LookDelta => Look.ReadValue<Vector2>() * _sensitivity;
-    public Vector3 InputDirection => movementOrigin.TransformDirection(new Vector3(InputDirection2D.x, 0f, InputDirection2D.y));
+    public Vector3 FirstPersonInputDirection => movementOrigin.TransformDirection(new Vector3(InputDirection2D.x, 0f, InputDirection2D.y));
+    public Vector3 ThirdPersonInputDirection => new Vector3() /*TODO: i have no fucking idea*/ ;
     public Vector2 InputDirection2D => Move.ReadValue<Vector2>();
-    public static bool MovePressed, JumpPressed, LeftClickPressed, PausePressed;
+    public static bool MovePressed, JumpPressed, ActionPressed, EscapeObjectPressed;
 
     private PlayerInput playerInput;
-    private InputAction Move, LeftClick, Jump, Look, Pause;
+    private InputAction Move, Jump, Look, Pause, Action, EscapeObject;
 
     private Transform movementOrigin;
 
@@ -65,44 +74,44 @@ public class InputEvents : Singleton<InputEvents>
         Look = map.FindAction(lookKey);
         //Respawn = map.FindAction("Respawn");
         Pause = map.FindAction(pauseKey);
-        LeftClick = map.FindAction(leftClickKey);
+        Action = map.FindAction(actionKey);
+        EscapeObject = map.FindAction(escapeObjectKey);
 
-        Move.started += ctx => ActionStarted(ref MovePressed, MoveStarted);
-        Jump.started += ctx => ActionStarted(ref JumpPressed, JumpStarted);
-        LeftClick.started += ctx => ActionStarted(ref LeftClickPressed, LeftClickStarted);
-        Pause.started += ctx => { PausePressed = true; PauseStarted.Invoke(); };
+        Move.started += ctx => InputActionStarted(ref MovePressed, MoveStarted);
+        Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
+        Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted);
+        Pause.started += ctx => { PauseStarted.Invoke(); };
 
-        Move.canceled += ctx => ActionCanceled(ref MovePressed, MoveCanceled);
-        Jump.canceled += ctx => ActionCanceled(ref JumpPressed, JumpCanceled);
-        LeftClick.canceled += ctx => ActionCanceled(ref LeftClickPressed, LeftClickCanceled);
-        Pause.canceled += ctx => { PausePressed = false; PauseCanceled.Invoke(); };
+        Move.canceled += ctx => InputActionCanceled(ref MovePressed, MoveCanceled);
+        Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
+        Action.canceled += ctx => InputActionCanceled(ref ActionPressed, ActionCanceled);
     }
-    void ActionStarted(ref bool pressedFlag, UnityEvent actionEvent)
+    void InputActionStarted(ref bool pressedFlag, UnityEvent actionEvent)
     {
         pressedFlag = true;
         actionEvent?.Invoke();
     }
-    void ActionCanceled(ref bool pressedFlag, UnityEvent actionEvent)
+    void InputActionCanceled(ref bool pressedFlag, UnityEvent actionEvent)
     {
         pressedFlag = false;
         actionEvent?.Invoke();
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if (MovePressed) MoveHeld.Invoke();
         if (JumpPressed) JumpHeld.Invoke();
-        if (LeftClickPressed) LeftClickHeld.Invoke();
+        if (ActionPressed) ActionHeld.Invoke();
+        if (EscapeObjectPressed) EscapeObjectHeld.Invoke();
+
+        LookUpdate.Invoke(LookDelta);
     }
     private void OnDisable()
     {
-        Move.started -= ctx => ActionStarted(ref MovePressed, MoveStarted);
-        Jump.started -= ctx => ActionStarted(ref JumpPressed, JumpStarted);
-        LeftClick.started -= ctx => ActionStarted(ref LeftClickPressed, LeftClickStarted);
-        Pause.started -= ctx => { PausePressed = true; PauseStarted.Invoke(); };
-
-        Move.canceled -= ctx => ActionCanceled(ref MovePressed, MoveCanceled);
-        Jump.canceled -= ctx => ActionCanceled(ref JumpPressed, JumpCanceled);
-        LeftClick.canceled -= ctx => ActionCanceled(ref LeftClickPressed, LeftClickCanceled);
-        Pause.canceled -= ctx => { PausePressed = false; PauseCanceled.Invoke(); };
+        Move.Reset();   
+        Jump.Reset();
+        Pause.Reset();
+        Action.Reset();
+        EscapeObject.Reset();
+        Look.Reset();
     }
 }
