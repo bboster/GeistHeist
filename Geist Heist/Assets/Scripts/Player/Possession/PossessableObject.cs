@@ -16,4 +16,10 @@ public class PossessableObject : MonoBehaviour
 {
     public IInputHandler InputHandler;
     public ICameraInputHandler CameraInputHandler;
+
+    private void Awake()
+    {
+        InputHandler = InputHandler ?? GetComponent<IInputHandler>();
+        CameraInputHandler = CameraInputHandler ?? GetComponent<ICameraInputHandler>();
+    }
 }

@@ -1,6 +1,12 @@
 /*
+ * Contributors: Toby S, Sky B, Cade Naylor, Jay Embry
+ * Creation Date: 9/16/25
+ * Last Modified: 9/16/25
  * 
- * 
+ * Brief Description: General use utility functions that can be
+ * applied to any project. 
+ * This script has been used in projects past and it will be used
+ * in projects future.
  */
 
 using System;
@@ -131,7 +137,7 @@ public static class StaticUtilities
 
     #endregion
 
-    #region Math
+    #region Vectors
     
     public static Vector3 Average(this Vector3[] vectors)
     {
@@ -141,6 +147,39 @@ public static class StaticUtilities
             total += v;
         }
         return total / vectors.Length;
+    }
+
+    /// <summary>
+    /// Return vector with x value changed
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <returns></returns>
+    public static Vector3 WithX(this Vector3 vector, float x)
+    {
+        vector.x = x;
+        return vector;
+    }
+
+    /// <summary>
+    /// Return vector with y value changed
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <returns></returns>
+    public static Vector3 WithY(this Vector3 vector, float y)
+    {
+        vector.y = y;
+        return vector;
+    }
+
+    /// <summary>
+    /// Return vector with z value changed
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <returns></returns>
+    public static Vector3 WithZ(this Vector3 vector, float z)
+    {
+        vector.z = z;
+        return vector;
     }
 
     #endregion

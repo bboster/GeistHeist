@@ -9,7 +9,9 @@
 
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerManager : MonoBehaviour
 {
     public PossessableObject PlayerGhostObject;
@@ -33,7 +35,7 @@ public class PlayerManager : MonoBehaviour
 
     public void RegisterInputs(PossessableObject possessable)
     {
-        //TODO: unregrister old inputs 
+        //TODO: unregrister old inputs from other object
 
         var input = possessable.InputHandler;
         InputEvents.MoveStarted.AddListener(input.OnMoveStarted);
