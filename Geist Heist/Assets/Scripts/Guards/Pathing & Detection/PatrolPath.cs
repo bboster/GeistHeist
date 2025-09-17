@@ -1,3 +1,11 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 9/16/25
+ * Last Edited:
+ * Summary: Holds data for patrol paths that enemies use to travel along routes.
+ */
+
 using System.Collections;
 using UnityEngine;
 

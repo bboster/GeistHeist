@@ -1,3 +1,11 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 9/16/25
+ * Last Edited:
+ * Summary: Contains utility functions for enemies to use while running movement behavior.
+ */
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;

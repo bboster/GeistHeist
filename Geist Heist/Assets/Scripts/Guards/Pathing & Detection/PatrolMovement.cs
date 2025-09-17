@@ -1,3 +1,12 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 9/16/25
+ * Last Edited:
+ * Summary: Runs the behavior for the patrol movement type for enemies. BehaviorLoop runs every frame
+ * and controls when certain aspects of the behavior are triggered. 
+ */
+
 using System.Collections;
 using UnityEngine;
 

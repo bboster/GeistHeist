@@ -1,5 +1,16 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 9/16/25
+ * Last Edited:
+ * Summary: Handles initialization of the enemy and activating/deactivating behaviors.
+ * To Do: Build in behavior swapping code.
+ */
+
 using System;
+using System.ComponentModel;
 using UnityEngine;
+using EnemyUtilities;
 
 public class EnemyController : MonoBehaviour
 {
@@ -11,6 +22,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private Behavior moveBehavior;
     [SerializeField] private Behavior chaseBehavior;
     [SerializeField] private Behavior attackBehavior;
+
+    private Behavior currentBehavior;
 
     #endregion
 
@@ -29,6 +42,7 @@ public class EnemyController : MonoBehaviour
         if (CheckBehaviors() == false)
             return false;
 
+        currentBehavior = defaultBehavior;
         defaultBehavior.StartBehavior();
 
         return true;
