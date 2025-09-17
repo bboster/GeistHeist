@@ -18,12 +18,20 @@ public class PlayerManager : MonoBehaviour
     [ReadOnly]
     public PossessableObject CurrentObject;
 
+    public IInputHandler currentInputHandler => CurrentObject?.InputHandler;
+    public ICameraInputHandler curentCameraInput => CurrentObject?.CameraInputHandler;
+
     private InputEvents inputEvents => InputEvents.Instance;
+    private Camera camera;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        CurrentObject = PlayerGhostObject;
         RegisterInputs(PlayerGhostObject);
+        camera = Camera.main;
+
+        Cursor.visible = false;
     }
 
     public void PossessObject(PossessableObject possessable)
@@ -31,6 +39,8 @@ public class PlayerManager : MonoBehaviour
         PlayerGhostObject.gameObject.SetActive(false);
 
         RegisterInputs(possessable);
+
+        CurrentObject = possessable;
     }
 
     public void RegisterInputs(PossessableObject possessable)
@@ -56,6 +66,24 @@ public class PlayerManager : MonoBehaviour
 
         // camera is really bad pls refactor it.
         var cam = possessable.CameraInputHandler;
-        InputEvents.LookUpdate.AddListener(cam.OnMouseMove);
+        InputEvents.LookUpdate.AddListener(LookUpdate);
+    }
+
+    private void LookUpdate(Vector2 sensitiveMouseDelta)
+    {
+        if(curentCameraInput == null)
+        {
+            Debug.LogError("no current camera input");
+            return;
+        }
+
+        curentCameraInput.OnMouseMove(camera, sensitiveMouseDelta * curentCameraInput.sensitivityScalar);
+    }
+
+    public void FixedUpdate()
+    {
+        var properties = curentCameraInput.GetCameraTransform(camera);
+        camera.transform.position = properties.position;
+        //camera.transform.rotation = properties.rotation;
     }
 }
