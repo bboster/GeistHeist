@@ -50,5 +50,8 @@ public class PossessableObject : MonoBehaviour
         //on button push, do action if applicable
     }
 
-
+    private void Awake()
+    {
+        InputHandler = InputHandler ?? GetComponent<IInputHandler>();
+    }
 }

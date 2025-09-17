@@ -16,24 +16,14 @@ public class ExampleMovement : IInputHandler
         throw new System.NotImplementedException();
     }
 
-    public override void OnEscapeObjectCanceled()
+    public override void OnPossessCanceled()
     {
         throw new System.NotImplementedException();
     }
 
-    public override void OnEscapeObjectStarted()
+    public override void OnPossessStarted()
     {
         throw new System.NotImplementedException();
-    }
-
-    public override void OnJumpCanceled()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void OnJumpStarted()
-    {
-        Debug.Log("Jump started");
     }
 
     public override void OnMoveCanceled()
@@ -51,17 +41,17 @@ public class ExampleMovement : IInputHandler
         throw new System.NotImplementedException();
     }
 
-    public override void WhileEscapeObjectHeld()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void WhileJumpHeld()
+    public override void WhilePossessHeld()
     {
         throw new System.NotImplementedException();
     }
 
     public override void WhileMoveHeld()
+    {
+        Debug.Log("move held");
+    }
+
+    public override void WhileMoveNotHeld()
     {
         Debug.Log("move held");
     }
