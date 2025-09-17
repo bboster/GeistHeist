@@ -10,12 +10,21 @@
  *  Also a reference to the thing the camera is orbiting
  */
 
+
+
+//change cameras by turning cameras on and off
+//use triggers to detect when ghost is close enough, on button press
+//not detectable, can't move
+//press button to perform an action (spawn a cube or something)
 using UnityEngine;
 
 public class PossessableObject : MonoBehaviour
 {
     public IInputHandler InputHandler;
     public ICameraInputHandler CameraInputHandler;
+
+    //oncontrol()
+    //possess()
 
     public void Possess()
     {
@@ -28,6 +37,17 @@ public class PossessableObject : MonoBehaviour
     public void SwitchCamera()
     {
         //switch from 1st to 3rd
+    }
+
+    public void ChangeMovement()
+    {
+        //disable movement
+        //or change movement to specific object
+    }
+
+    public void PerformAction()
+    {
+        //on button push, do action if applicable
     }
 
 
