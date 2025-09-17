@@ -19,7 +19,6 @@ public class PlayerManager : MonoBehaviour
     public PossessableObject CurrentObject;
 
     public IInputHandler currentInputHandler => CurrentObject?.InputHandler;
-    public ICameraInputHandler curentCameraInput => CurrentObject?.CameraInputHandler;
 
     private InputEvents inputEvents => InputEvents.Instance;
     private Camera camera;
@@ -65,25 +64,7 @@ public class PlayerManager : MonoBehaviour
         InputEvents.PossessCanceled.AddListener(input.OnPossessCanceled);
 
         // camera is really bad pls refactor it.
-        var cam = possessable.CameraInputHandler;
-        InputEvents.LookUpdate.AddListener(LookUpdate);
-    }
-
-    private void LookUpdate(Vector2 sensitiveMouseDelta)
-    {
-        if(curentCameraInput == null)
-        {
-            Debug.LogError("no current camera input");
-            return;
-        }
-
-        curentCameraInput.OnMouseMove(camera, sensitiveMouseDelta * curentCameraInput.sensitivityScalar);
-    }
-
-    public void FixedUpdate()
-    {
-        var properties = curentCameraInput.GetCameraTransform(camera);
-        camera.transform.position = properties.position;
-        camera.transform.rotation = properties.rotation;
+        //var cam = possessable.CameraInputHandler;
+        //InputEvents.LookUpdate.AddListener(LookUpdate);
     }
 }

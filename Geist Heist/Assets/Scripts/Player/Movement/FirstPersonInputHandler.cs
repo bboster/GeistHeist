@@ -81,8 +81,6 @@ public class FirstPersonInputHandler : IInputHandler
         var horizontalVelocity = Vector3.Lerp(rigidbody.linearVelocity.WithY(0), (direction* speed), speedPickup*Time.fixedDeltaTime);
         Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);
 
-        Debug.Log(horizontalVelocity);
-
         rigidbody.linearVelocity = horizontalVelocity.WithY(rigidbody.linearVelocity.y);
     }
 
