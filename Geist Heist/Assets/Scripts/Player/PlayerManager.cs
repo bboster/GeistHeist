@@ -84,6 +84,6 @@ public class PlayerManager : MonoBehaviour
     {
         var properties = curentCameraInput.GetCameraTransform(camera);
         camera.transform.position = properties.position;
-        //camera.transform.rotation = properties.rotation;
+        camera.transform.rotation = properties.rotation;
     }
 }
