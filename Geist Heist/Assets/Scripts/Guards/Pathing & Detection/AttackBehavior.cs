@@ -33,7 +33,7 @@ public class AttackBehavior : Behavior
         {
             if(performingAttack == true)
             {
-                Debug.Log("ATTACKING");
+                Debug.Log("Player Caught");
                 performingAttack = false; //This should be removed later and the variable should be changed by an animation keyframe.
             }
             else

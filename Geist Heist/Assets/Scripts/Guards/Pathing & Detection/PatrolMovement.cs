@@ -62,7 +62,7 @@ public class PatrolMovement : EnemyMovement
             else
             {
                 calculatingMovement = false;
-                Debug.Log(gameObject.name + " IS PATROLLING");
+                //Debug.Log(gameObject.name + " IS PATROLLING");
             }
 
             yield return new WaitForEndOfFrame();
