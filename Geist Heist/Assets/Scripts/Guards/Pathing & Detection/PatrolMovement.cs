@@ -12,11 +12,24 @@ using UnityEngine;
 
 public class PatrolMovement : EnemyMovement
 {
-    private bool calculatingMovement = false;
-
     private int currentPathIndex = 0;
 
+    [Header("Patrol Behavior Values")]
     [SerializeField] private PatrolPath currentPatrolPath;
+
+    /// <summary>
+    /// Overrides the default StopBehavior function to pause all movement the enemy is doing.
+    /// </summary>
+    public override void StopBehavior()
+    {
+        if (currentLoop == null)
+            return;
+
+        thisAgent.isStopped = true;
+
+        StopCoroutine(currentLoop);
+        currentLoop = null;
+    }
 
     /// <summary>
     /// Controls the overall logic for the behavior.
@@ -30,14 +43,15 @@ public class PatrolMovement : EnemyMovement
             {
                 calculatingMovement = true;
                 MoveToPoint(GetNextPoint());
-                yield return new WaitForEndOfFrame();
+                thisAgent.isStopped = false;
             }
             else
             {
                 calculatingMovement = false;
                 Debug.Log(gameObject.name + " IS PATROLLING");
-                yield return new WaitForEndOfFrame();
             }
+
+            yield return new WaitForEndOfFrame();
         }
     }
 

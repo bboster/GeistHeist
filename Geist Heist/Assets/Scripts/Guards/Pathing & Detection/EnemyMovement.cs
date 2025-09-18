@@ -12,6 +12,9 @@ using UnityEngine.AI;
 
 public class EnemyMovement : Behavior
 {
+    protected bool calculatingMovement = false;
+
+    [Header("Enemy Movement Values")]
     [Tooltip("Distance from destination at which movement is considered complete.")]
     [SerializeField] private float moveCompletionThreshold;
 
@@ -37,7 +40,7 @@ public class EnemyMovement : Behavior
     /// <returns></returns>
     protected bool CheckPathCompletion()
     {
-        if (thisAgent.remainingDistance <= moveCompletionThreshold)
+        if (thisAgent.remainingDistance <= moveCompletionThreshold && thisAgent.hasPath)
         {
             Debug.Log("PATH COMPLETE");
             return true;

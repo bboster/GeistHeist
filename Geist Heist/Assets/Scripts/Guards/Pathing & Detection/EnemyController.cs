@@ -4,7 +4,7 @@
  * Creation: 9/16/25
  * Last Edited:
  * Summary: Handles initialization of the enemy and activating/deactivating behaviors.
- * To Do: Build in behavior swapping code.
+ * To Do: Build in behavior swapping code. Build in a listener for an action that tells the controller when the player possesses and object.
  */
 
 using System;
@@ -19,9 +19,9 @@ public class EnemyController : MonoBehaviour
     [Header("Behaviors")]
     [SerializeField, Tooltip("Default behavior for the enemy")]
     private Behavior defaultBehavior;
-    [SerializeField] private Behavior moveBehavior;
-    [SerializeField] private Behavior chaseBehavior;
-    [SerializeField] private Behavior attackBehavior;
+
+    [Tooltip("List of all behaviors the enemy is able to run.")]
+    [SerializeField] private Behavior[] behaviors;
 
     private Behavior currentBehavior;
 
@@ -62,4 +62,17 @@ public class EnemyController : MonoBehaviour
 
         return true;
     }
+
+    /// <summary>
+    /// Swaps the currently running behavior.
+    /// </summary>
+    /// <param name="newBehavior"></param>
+    public void ChangeBehavior(int behaviorIndex)
+    {
+        currentBehavior.StopBehavior();
+        currentBehavior = behaviors[behaviorIndex];
+        currentBehavior.StartBehavior();
+    }
+
+
 }

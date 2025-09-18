@@ -13,7 +13,7 @@ using EnemyUtilities;
 
 public class Behavior : MonoBehaviour
 {
-    private Coroutine currentLoop;
+    protected Coroutine currentLoop;
 
     public EnemyData.EnemyStates stateName;
 
@@ -30,7 +30,7 @@ public class Behavior : MonoBehaviour
     /// <summary>
     /// Stops the current behavior loop.
     /// </summary>
-    public void StopBehavior()
+    public virtual void StopBehavior()
     {
         if (currentLoop == null)
             return;
