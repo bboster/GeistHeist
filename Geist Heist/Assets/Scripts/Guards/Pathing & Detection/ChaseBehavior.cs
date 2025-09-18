@@ -37,19 +37,17 @@ public class ChaseBehavior : EnemyMovement
     {
         for(; ; )
         {
-            if (CheckPathCompletion() == true && attacking == false)
+            if (CheckPathCompletion() == true /*&& attacking == false*/)
             {
-                attacking = true;
-                //Change to attack behavior.
-                Debug.Log("ATTACK");
-                GetComponent<EnemyController>().ChangeBehavior(0); //Resets behavior to default.
+                //attacking = true;
+                GetComponent<EnemyController>().ChangeBehavior(2);
             }
             else
             {
-                attacking = false;
+                //attacking = false;
                 MoveToPoint(GetPlayerLocation());
                 thisAgent.isStopped = false;
-                Debug.Log(gameObject.name + " IS CHASING");
+                //Debug.Log(gameObject.name + " IS CHASING");
             }
 
             yield return new WaitForEndOfFrame();

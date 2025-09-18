@@ -26,6 +26,7 @@ public class PatrolMovement : EnemyMovement
     {
         currentLoop = StartCoroutine(BehaviorLoop());
         MoveToPoint(GetNextPoint());
+        thisAgent.isStopped = false;
     }
 
     /// <summary>
@@ -61,7 +62,7 @@ public class PatrolMovement : EnemyMovement
             else
             {
                 calculatingMovement = false;
-                //Debug.Log(gameObject.name + " IS PATROLLING");
+                Debug.Log(gameObject.name + " IS PATROLLING");
             }
 
             yield return new WaitForEndOfFrame();

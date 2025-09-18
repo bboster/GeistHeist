@@ -19,13 +19,13 @@ public class VisionCone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("PLAYER SEEN");
+        //Debug.Log("PLAYER SEEN");
         parentController.ChangeBehavior(behaviorIndex);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("PLAYER UNSEEN");
+        //Debug.Log("PLAYER UNSEEN");
         parentController.ChangeBehavior(recoveryBehaviorIndex); // (Will swap to a recovery behavior once that is programmed)
     }
 }
