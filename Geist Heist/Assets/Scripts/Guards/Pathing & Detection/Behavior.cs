@@ -22,7 +22,7 @@ public class Behavior : MonoBehaviour
     /// <summary>
     /// Starts the behavior. Should be called by the controller when a behavior starts or changes.
     /// </summary>
-    public void StartBehavior()
+    public virtual void StartBehavior()
     {
         currentLoop = StartCoroutine(BehaviorLoop());
     }

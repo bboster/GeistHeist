@@ -1,3 +1,12 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 9/16/25
+ * Last Edited: 9/18/25
+ * Summary: Handles behavior for the enemy when it is chasing the player.
+ * To Do: Replace GetPlayerLocation() .Find() with a reference to a manager.
+ */
+
 using UnityEngine;
 using EnemyUtilities;
 using System.Collections;
@@ -53,8 +62,6 @@ public class ChaseBehavior : EnemyMovement
     /// <returns></returns>
     private Vector3 GetPlayerLocation()
     {
-        //return the player location.
-
-        return new Vector3(0, 1, 0);
+        return GameObject.Find("1st Person Player").transform.position; //REPLACE WITH CENTRALIZED REFERENCE FROM A MANAGER ONCE ABLE.
     }
 }

@@ -2,9 +2,9 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited:
+ * Last Edited: 9/18/25
  * Summary: Handles initialization of the enemy and activating/deactivating behaviors.
- * To Do: Build in behavior swapping code. Build in a listener for an action that tells the controller when the player possesses and object.
+ * To Do: Build in a listener for an action that tells the controller when the player possesses and object.
  */
 
 using System;

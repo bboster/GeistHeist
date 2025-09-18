@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited:
+ * Last Edited: 9/18/25
  * Summary: Contains utility functions for enemies to use while running movement behavior.
  */
 
@@ -42,7 +42,7 @@ public class EnemyMovement : Behavior
     {
         if (thisAgent.remainingDistance <= moveCompletionThreshold && thisAgent.hasPath)
         {
-            Debug.Log("PATH COMPLETE");
+            //Debug.Log("PATH COMPLETE");
             return true;
         }
         else

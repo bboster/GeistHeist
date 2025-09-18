@@ -1,3 +1,11 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 9/18/25
+ * Last Edited: 9/18/25
+ * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
+ */
+
 using UnityEngine;
 
 public class VisionCone : MonoBehaviour
@@ -7,17 +15,17 @@ public class VisionCone : MonoBehaviour
     [Tooltip("The index of the behavior to activate when the enemy loses track of the player during a chase.")]
     [SerializeField] private int recoveryBehaviorIndex;
 
+    [SerializeField] private EnemyController parentController;
+
     private void OnTriggerEnter(Collider other)
     {
-        //Detect when player enters trigger.
-
-        //Trigger ChangeBehavior
+        Debug.Log("PLAYER SEEN");
+        parentController.ChangeBehavior(behaviorIndex);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        //Detect when player leaves trigger.
-
-        //Trigger ChangeBehavior to return to base behavior. (Will swap to a recovery behavior once that is programmed)
+        Debug.Log("PLAYER UNSEEN");
+        parentController.ChangeBehavior(recoveryBehaviorIndex); // (Will swap to a recovery behavior once that is programmed)
     }
 }

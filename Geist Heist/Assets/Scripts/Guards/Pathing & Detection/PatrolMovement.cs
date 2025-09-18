@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited:
+ * Last Edited: 9/18/25
  * Summary: Runs the behavior for the patrol movement type for enemies. BehaviorLoop runs every frame
  * and controls when certain aspects of the behavior are triggered. 
  */
@@ -17,6 +17,17 @@ public class PatrolMovement : EnemyMovement
     [Header("Patrol Behavior Values")]
     [SerializeField] private PatrolPath currentPatrolPath;
 
+    #region Start and Stop Behavior
+
+    /// <summary>
+    /// Starts the behavior. Should be called by the controller when a behavior starts or changes.
+    /// </summary>
+    public override void StartBehavior()
+    {
+        currentLoop = StartCoroutine(BehaviorLoop());
+        MoveToPoint(GetNextPoint());
+    }
+
     /// <summary>
     /// Overrides the default StopBehavior function to pause all movement the enemy is doing.
     /// </summary>
@@ -30,6 +41,8 @@ public class PatrolMovement : EnemyMovement
         StopCoroutine(currentLoop);
         currentLoop = null;
     }
+
+    #endregion
 
     /// <summary>
     /// Controls the overall logic for the behavior.
@@ -48,7 +61,7 @@ public class PatrolMovement : EnemyMovement
             else
             {
                 calculatingMovement = false;
-                Debug.Log(gameObject.name + " IS PATROLLING");
+                //Debug.Log(gameObject.name + " IS PATROLLING");
             }
 
             yield return new WaitForEndOfFrame();
