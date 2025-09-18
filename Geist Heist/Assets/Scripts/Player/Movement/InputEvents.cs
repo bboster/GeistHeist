@@ -22,6 +22,7 @@ public class InputEvents : Singleton<InputEvents>
     [SerializeField] private string lookKey = "Look";
     [SerializeField] private string actionKey = "Escape Object";
     [SerializeField] private string escapeObjectKey = "Action";
+    [SerializeField] private string scrollKey = "Camera Zoom";
 
     public static UnityEvent MoveStarted = new UnityEvent();
     public static UnityEvent MoveHeld = new UnityEvent();
@@ -77,6 +78,7 @@ public class InputEvents : Singleton<InputEvents>
         Pause = map.FindAction(pauseKey);
         Action = map.FindAction(actionKey);
         Possess = map.FindAction(escapeObjectKey);
+        Scroll = map.FindAction(scrollKey);
 
         Move.started += ctx => InputActionStarted(ref MovePressed, MoveStarted);
         //Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
@@ -88,6 +90,8 @@ public class InputEvents : Singleton<InputEvents>
         //Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
         Action.canceled += ctx => InputActionCanceled(ref ActionPressed, ActionCanceled);
         Possess.canceled += ctx => InputActionCanceled(ref ActionPressed, ActionCanceled);
+
+        Scroll.performed += ctx => ScrollUpdate.Invoke(ctx.ReadValue<float>());
     }
     void InputActionStarted(ref bool pressedFlag, UnityEvent actionEvent)
     {
@@ -117,5 +121,6 @@ public class InputEvents : Singleton<InputEvents>
         Action.Reset();
         Possess.Reset();
         Look.Reset();
+        Scroll.Reset();
     }
 }
