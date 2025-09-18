@@ -21,7 +21,6 @@ using UnityEngine;
 public class PossessableObject : MonoBehaviour
 {
     public IInputHandler InputHandler;
-    public ICameraInputHandler CameraInputHandler;
 
     //oncontrol()
     //possess()
