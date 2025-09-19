@@ -18,6 +18,9 @@ public class FirstPersonInputHandler : IInputHandler
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
+    [SerializeField] private GameObject firstPersoncinemachineCamera;
+    [SerializeField] private float sphereCastRadius = 10;
+    [SerializeField] private float sphereCastDistance = 100000000;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -52,17 +55,26 @@ public class FirstPersonInputHandler : IInputHandler
     #region Possess
     public override void OnPossessStarted()
     {
-        throw new System.NotImplementedException();
+        LayerMask lm = LayerMask.GetMask("PossessableObject");
+        var sphereCastResult = Physics.SphereCastAll(firstPersoncinemachineCamera.transform.position, sphereCastRadius, firstPersoncinemachineCamera.transform.forward, sphereCastDistance, lm);
+
+        foreach (var results in sphereCastResult)
+        {
+            if (results.transform.GetComponent<PossessableObject>() && results.transform != this.transform)
+            {
+                PlayerManager.Instance.PossessObject(results.transform.GetComponent<PossessableObject>());
+                break;
+            }
+        }
     }
 
+
+
     public override void WhilePossessHeld()
-    {
-        throw new System.NotImplementedException();
-    }
+    { }
 
     public override void OnPossessCanceled()
     {
-        throw new System.NotImplementedException();
     }
     #endregion
 
@@ -93,7 +105,4 @@ public class FirstPersonInputHandler : IInputHandler
 
     public override void OnMoveCanceled(){}
     #endregion
-
-
-
 }
