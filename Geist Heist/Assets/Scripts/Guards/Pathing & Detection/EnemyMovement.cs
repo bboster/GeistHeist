@@ -20,7 +20,7 @@ public class EnemyMovement : Behavior
 
     protected NavMeshAgent thisAgent;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         thisAgent = GetComponent<NavMeshAgent>();
     }
@@ -40,6 +40,7 @@ public class EnemyMovement : Behavior
     /// <returns></returns>
     protected bool CheckPathCompletion()
     {
+        thisAgent = thisAgent ?? GetComponent<NavMeshAgent>();  
         if (thisAgent.hasPath && thisAgent.remainingDistance <= moveCompletionThreshold)
         {
             //Debug.Log("PATH COMPLETE");

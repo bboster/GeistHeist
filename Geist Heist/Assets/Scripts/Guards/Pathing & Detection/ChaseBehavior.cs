@@ -17,8 +17,9 @@ public class ChaseBehavior : EnemyMovement
 
     #region Event Listeners for Possession Behavior
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         FirstPersonInputHandler.OnPossessObject += GetComponent<EnemyController>().ChangeBehavior;
     }
 
