@@ -1,20 +1,21 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 9/16/25
+ * Last Modified: 9/18/25
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
  *  
- *  TODO: this should probably need a reference to the camera and an anchor point (for 3rd person).
- *  Also a reference to the thing the camera is orbiting
+ *  TODO:
  */
-
 using UnityEngine;
+using Unity.Cinemachine;
+using NaughtyAttributes;
 
 public class PossessableObject : MonoBehaviour
 {
     public IInputHandler InputHandler;
+    [Required] public CinemachineCamera CinemachineCamera;
 
     private void Awake()
     {
