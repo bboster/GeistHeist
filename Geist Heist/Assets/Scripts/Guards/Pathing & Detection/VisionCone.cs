@@ -10,6 +10,8 @@ using UnityEngine;
 
 public class VisionCone : MonoBehaviour
 {
+    private bool hasSeenPlayer = false;
+
     [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
     [SerializeField] private int behaviorIndex;
     [Tooltip("The index of the behavior to activate when the enemy loses track of the player during a chase.")]
@@ -19,13 +21,21 @@ public class VisionCone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("PLAYER SEEN");
-        parentController.ChangeBehavior(behaviorIndex);
+        if(other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == false)
+        {
+            //Debug.Log("PLAYER SEEN");
+            hasSeenPlayer = true;
+            parentController.ChangeBehavior(behaviorIndex);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        //Debug.Log("PLAYER UNSEEN");
-        parentController.ChangeBehavior(recoveryBehaviorIndex); // (Will swap to a recovery behavior once that is programmed)
+        if(other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == true)
+        {
+            //Debug.Log("PLAYER UNSEEN");
+            hasSeenPlayer = false;
+            parentController.ChangeBehavior(recoveryBehaviorIndex); // (Will swap to a proper recovery behavior once that is programmed)
+        }
     }
 }

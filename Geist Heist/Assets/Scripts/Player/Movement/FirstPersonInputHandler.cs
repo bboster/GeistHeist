@@ -1,11 +1,12 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Jacob
  * Creation Date: 9/16/25
  * Last Modified: 9/16/25
  * 
  * Brief Description: For prototyping first person gameplay, for now
  */
 
+using System;
 using UnityEngine;
 
 public class FirstPersonInputHandler : IInputHandler
@@ -21,6 +22,8 @@ public class FirstPersonInputHandler : IInputHandler
     [SerializeField] private GameObject firstPersoncinemachineCamera;
     [SerializeField] private float sphereCastRadius = 10;
     [SerializeField] private float sphereCastDistance = 100000000;
+
+    public static Action<int> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -63,6 +66,7 @@ public class FirstPersonInputHandler : IInputHandler
             if (results.transform.GetComponent<PossessableObject>() && results.transform != this.transform)
             {
                 PlayerManager.Instance.PossessObject(results.transform.GetComponent<PossessableObject>());
+                OnPossessObject?.Invoke(0);
                 break;
             }
         }

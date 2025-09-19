@@ -15,6 +15,20 @@ public class ChaseBehavior : EnemyMovement
 {
     private bool attacking = false;
 
+    #region Event Listeners for Possession Behavior
+
+    private void Awake()
+    {
+        FirstPersonInputHandler.OnPossessObject += GetComponent<EnemyController>().ChangeBehavior;
+    }
+
+    private void OnDisable()
+    {
+        FirstPersonInputHandler.OnPossessObject -= GetComponent<EnemyController>().ChangeBehavior;
+    }
+
+    #endregion
+
     /// <summary>
     /// Overrides the default StopBehavior function to pause all movement the enemy is doing.
     /// </summary>

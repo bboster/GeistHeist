@@ -40,7 +40,7 @@ public class EnemyMovement : Behavior
     /// <returns></returns>
     protected bool CheckPathCompletion()
     {
-        if (thisAgent.remainingDistance <= moveCompletionThreshold && thisAgent.hasPath)
+        if (thisAgent.hasPath && thisAgent.remainingDistance <= moveCompletionThreshold)
         {
             //Debug.Log("PATH COMPLETE");
             return true;
