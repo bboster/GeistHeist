@@ -6,6 +6,7 @@ public class AudioManager : Singleton<AudioManager>
 {
     public static AudioManager instance { get; private set; }
 
+    //Sets AudioManager instance in the scene
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -16,11 +17,13 @@ public class AudioManager : Singleton<AudioManager>
         instance = this;
     }
 
+    //Plays a non-looping event WITHOUT 3d Attributes
     public void PlayOneShot(EventReference sound)
     {
         RuntimeManager.PlayOneShot(sound);
     }
 
+    //Plays a non-looping event WITH 3d Attributes (has a spacializer)
     public void PlayOneShot(EventReference sound, Vector3 worldPos)
     {
         RuntimeManager.PlayOneShot(sound, worldPos);
@@ -29,13 +32,13 @@ public class AudioManager : Singleton<AudioManager>
     public EventInstance CreateEventInstance(EventReference eventReference)
     {
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
-        //eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject.GetComponent<Transform>(), gameObject.GetComponent<Rigidbody>()));
         return eventInstance;
     }
 
-    public void SetEventParameters(Transform t, Rigidbody r)
+    //Sets EventInstance e's 3d attributes to a gameObject's transform + rigidbody
+    public void SetEventParameters(EventInstance e, Transform t, Rigidbody r)
     {
-
+        e.set3DAttributes(RuntimeUtils.To3DAttributes(t, r));
     }
 
     private void OnDestroy()
