@@ -36,9 +36,32 @@ public class AudioManager : Singleton<AudioManager>
     }
 
     //Sets EventInstance e's 3d attributes to a gameObject's transform + rigidbody
+    //Should be called in e's update function
     public void SetEventParameters(EventInstance e, Transform t, Rigidbody r)
     {
         e.set3DAttributes(RuntimeUtils.To3DAttributes(t, r));
+    }
+
+    //Starts a looping sound effect from an ALREADY EXISTING INSTANCE
+    //Music will have it's own script and functions for transitions
+    public void StartLoopingSFX(EventInstance sound)
+    {
+        sound.start();
+    }
+
+    //Stops a looping sound effect
+    //When fadeOut is true, allow for sound to finish
+    //When fadeOut is false, stop sound immediately
+    public void StopSFX(EventInstance sound, bool fadeOut)
+    {
+        if (fadeOut)
+        {
+            sound.stop(STOP_MODE.ALLOWFADEOUT);
+        }
+        else
+        {
+            sound.stop(STOP_MODE.IMMEDIATE);
+        }
     }
 
     private void OnDestroy()
