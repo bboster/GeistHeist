@@ -1,13 +1,14 @@
 /*
- * Contributors: Toby, Jacob
+ * Contributors: Toby, Jacob, Brooke
  * Creation Date: 9/16/25
- * Last Modified: 9/16/25
+ * Last Modified: 9/29/25
  * 
  * Brief Description: For prototyping first person gameplay, for now
  */
 
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FirstPersonInputHandler : IInputHandler
 {
@@ -23,6 +24,13 @@ public class FirstPersonInputHandler : IInputHandler
     [SerializeField] private float sphereCastRadius = 10;
     [SerializeField] private float sphereCastDistance = 100000000;
 
+    // Scene transition specific variables
+    [SerializeField] private string sceneName;
+    [Tooltip("Higher number: longer interactable distance from object")]
+    [SerializeField] private float rayLength = 10;
+    [SerializeField] private LayerMask raycastLayer;
+    [SerializeField] GameObject canvas;
+
     public static Action<int> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,9 +40,9 @@ public class FirstPersonInputHandler : IInputHandler
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-
+        TransitionScene();
     }
 
     #region action
@@ -45,7 +53,7 @@ public class FirstPersonInputHandler : IInputHandler
 
     public override void WhileActionHeld()
     {
-        throw new System.NotImplementedException();
+        SceneManager.LoadScene(sceneName);
     }
 
     public override void OnActionCanceled()
@@ -108,5 +116,26 @@ public class FirstPersonInputHandler : IInputHandler
 
 
     public override void OnMoveCanceled(){}
+    #endregion
+
+    #region  SceneTransition
+    public void TransitionScene()
+    {
+        RaycastHit hit;
+        Vector3 origin = transform.position;
+        Vector3 direction = Camera.main.transform.forward; // moves the raycast with the camera, since the player remains still
+
+        Debug.DrawRay(origin, direction * rayLength, Color.red);
+
+        if (Physics.Raycast(origin, direction, out hit, rayLength, raycastLayer))
+        {
+            canvas.SetActive(true);
+        }
+        else
+        {
+            canvas.SetActive(false);
+        }
+    }
+
     #endregion
 }
