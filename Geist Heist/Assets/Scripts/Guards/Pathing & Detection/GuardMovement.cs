@@ -10,19 +10,29 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMovement : Behavior
+public class GuardMovement : Behavior
 {
     protected bool calculatingMovement = false;
 
-    [Header("Enemy Movement Values")]
+    [Header("Guard Movement Values")]
     [Tooltip("Distance from destination at which movement is considered complete.")]
     [SerializeField] private float moveCompletionThreshold;
 
     protected NavMeshAgent thisAgent;
 
-    protected virtual void Awake()
+    /*protected virtual void Awake()
     {
-        thisAgent = GetComponent<NavMeshAgent>();
+        thisAgent = selfRef.GetComponent<NavMeshAgent>();
+    }*/
+
+    /// <summary>
+    /// Initializes the behavior.
+    /// </summary>
+    /// <param name="selfRef"></param>
+    public override void InitializeBehavior(GameObject selfRef)
+    {
+        base.InitializeBehavior(selfRef);
+        thisAgent = selfRef.GetComponent<NavMeshAgent>();
     }
 
     /// <summary>
@@ -40,7 +50,7 @@ public class EnemyMovement : Behavior
     /// <returns></returns>
     protected bool CheckPathCompletion()
     {
-        thisAgent = thisAgent ?? GetComponent<NavMeshAgent>();  
+        //thisAgent = thisAgent ?? GetComponent<NavMeshAgent>();  
         if (thisAgent.hasPath && thisAgent.remainingDistance <= moveCompletionThreshold)
         {
             //Debug.Log("PATH COMPLETE");

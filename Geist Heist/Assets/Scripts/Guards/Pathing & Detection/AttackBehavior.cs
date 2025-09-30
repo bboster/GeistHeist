@@ -7,7 +7,7 @@
  */
 
 using UnityEngine;
-using EnemyUtilities;
+using GuardUtilities;
 using System.Collections;
 
 public class AttackBehavior : Behavior
@@ -17,11 +17,11 @@ public class AttackBehavior : Behavior
     /// <summary>
     /// Ensures that the performingAttack variable is reset before stopping the behavior.
     /// </summary>
-    public override void StopBehavior()
+    /*public override void StopBehavior()
     {
         performingAttack = true;
         base.StopBehavior();
-    }
+    }*/
 
     /// <summary>
     /// Controls the flow of the attack behavior for the enemy.
@@ -38,7 +38,7 @@ public class AttackBehavior : Behavior
             }
             else
             {
-                GetComponent<EnemyController>().ChangeBehavior(0);
+                selfRef.GetComponent<GuardController>().ChangeBehavior(0);
             }
 
             yield return new WaitForEndOfFrame();

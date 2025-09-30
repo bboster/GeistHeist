@@ -639,6 +639,12 @@ MonoBehaviour:
   firstPersoncinemachineCamera: {fileID: 1652601171}
   sphereCastRadius: 2
   sphereCastDistance: 1
+  sceneName: Lobby
+  interactableRayLength: 10
+  raycastLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  interactableCanvas: {fileID: 0}
 --- !u!23 &1087182279
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1148,6 +1154,22 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4906703080055724546, guid: d5e0f2863c8abf14cb3a98c2f874e8a4, type: 3}
+      propertyPath: defaultBehavior
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4906703080055724546, guid: d5e0f2863c8abf14cb3a98c2f874e8a4, type: 3}
+      propertyPath: 'behaviors.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4906703080055724546, guid: d5e0f2863c8abf14cb3a98c2f874e8a4, type: 3}
+      propertyPath: 'behaviors.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4906703080055724546, guid: d5e0f2863c8abf14cb3a98c2f874e8a4, type: 3}
+      propertyPath: 'behaviors.Array.data[2]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6532902853392296530, guid: d5e0f2863c8abf14cb3a98c2f874e8a4, type: 3}
       propertyPath: currentPatrolPath
       value: 
@@ -1156,7 +1178,10 @@ PrefabInstance:
       propertyPath: m_IncludeLayers.m_Bits
       value: 72
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6532902853392296530, guid: d5e0f2863c8abf14cb3a98c2f874e8a4, type: 3}
+    - {fileID: 9029093488494580836, guid: d5e0f2863c8abf14cb3a98c2f874e8a4, type: 3}
+    - {fileID: 805330747840559581, guid: d5e0f2863c8abf14cb3a98c2f874e8a4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

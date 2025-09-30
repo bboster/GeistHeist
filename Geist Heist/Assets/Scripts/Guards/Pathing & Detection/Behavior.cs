@@ -9,20 +9,22 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using EnemyUtilities;
+using GuardUtilities;
 
-public class Behavior : MonoBehaviour
+public class Behavior : ScriptableObject
 {
+    protected GameObject selfRef;
+
     protected Coroutine currentLoop;
 
-    public EnemyData.EnemyStates StateName;
+    public GuardData.GuardStates StateName;
 
     #region StartLoop and StopLoop
 
     /// <summary>
     /// Starts the behavior. Should be called by the controller when a behavior starts or changes.
     /// </summary>
-    public virtual void StartBehavior()
+    /*public virtual void StartBehavior()
     {
         currentLoop = StartCoroutine(BehaviorLoop());
     }
@@ -37,6 +39,13 @@ public class Behavior : MonoBehaviour
 
         StopCoroutine(currentLoop);
         currentLoop = null;
+    }*/
+
+
+    /// Initializes the behavior
+    public virtual void InitializeBehavior(GameObject selfRef)
+    {
+        this.selfRef = selfRef;
     }
 
     #endregion

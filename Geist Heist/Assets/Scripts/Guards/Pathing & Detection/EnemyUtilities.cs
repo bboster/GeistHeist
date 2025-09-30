@@ -8,11 +8,11 @@
 
 using UnityEngine;
 
-namespace EnemyUtilities
+namespace GuardUtilities
 {
-    public class EnemyData
+    public class GuardData
     {
-        public enum EnemyStates { none, idle, patrol, chase, attack }
+        public enum GuardStates { none, idle, patrol, chase, attack }
     }
 }
 

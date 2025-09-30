@@ -8,32 +8,38 @@
  */
 
 using UnityEngine;
-using EnemyUtilities;
+using GuardUtilities;
 using System.Collections;
 
-public class ChaseBehavior : EnemyMovement
+public class ChaseBehavior : GuardMovement
 {
     private bool attacking = false;
 
-    #region Event Listeners for Possession Behavior
+    #region Initialize Function and OnDisable
 
-    protected override void Awake()
+    public override void InitializeBehavior(GameObject selfRef)
     {
-        base.Awake();
-        FirstPersonInputHandler.OnPossessObject += GetComponent<EnemyController>().ChangeBehavior;
+        base.InitializeBehavior(selfRef);
+        FirstPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     private void OnDisable()
     {
-        FirstPersonInputHandler.OnPossessObject -= GetComponent<EnemyController>().ChangeBehavior;
+        FirstPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     #endregion
 
+    /*protected override void Awake()
+{
+    base.Awake();
+    FirstPersonInputHandler.OnPossessObject += GetComponent<GuardController>().ChangeBehavior;
+}*/
+
     /// <summary>
     /// Overrides the default StopBehavior function to pause all movement the enemy is doing.
     /// </summary>
-    public override void StopBehavior()
+    /*public override void StopBehavior()
     {
         if (currentLoop == null)
             return;
@@ -42,7 +48,7 @@ public class ChaseBehavior : EnemyMovement
 
         StopCoroutine(currentLoop);
         currentLoop = null;
-    }
+    }*/
 
     /// <summary>
     /// Controls the flow of the chase behavior.
@@ -55,7 +61,7 @@ public class ChaseBehavior : EnemyMovement
             if (CheckPathCompletion() == true /*&& attacking == false*/)
             {
                 //attacking = true;
-                GetComponent<EnemyController>().ChangeBehavior(2);
+                selfRef.GetComponent<GuardController>().ChangeBehavior(2);
             }
             else
             {

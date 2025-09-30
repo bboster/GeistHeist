@@ -10,7 +10,8 @@
 using System.Collections;
 using UnityEngine;
 
-public class PatrolMovement : EnemyMovement
+[CreateAssetMenu(fileName = "New Patrol Behavior", menuName = "Guard Behaviors/New Patrol Behavior")]
+public class PatrolMovement : GuardMovement
 {
     private int currentPathIndex = 0;
 
@@ -22,7 +23,7 @@ public class PatrolMovement : EnemyMovement
     /// <summary>
     /// Starts the behavior. Should be called by the controller when a behavior starts or changes.
     /// </summary>
-    public override void StartBehavior()
+    /*public override void StartBehavior()
     {
         currentLoop = StartCoroutine(BehaviorLoop());
         MoveToPoint(GetNextPoint());
@@ -41,7 +42,7 @@ public class PatrolMovement : EnemyMovement
 
         StopCoroutine(currentLoop);
         currentLoop = null;
-    }
+    }*/
 
     #endregion
 

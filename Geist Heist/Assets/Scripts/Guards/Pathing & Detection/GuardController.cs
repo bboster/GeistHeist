@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 9/18/25
+ * Last Edited: 9/30/25
  * Summary: Handles initialization of the enemy and activating/deactivating behaviors.
  * To Do: Build in a listener for an action that tells the controller when the player possesses and object.
  */
@@ -10,11 +10,14 @@
 using System;
 using System.ComponentModel;
 using UnityEngine;
-using EnemyUtilities;
+using GuardUtilities;
 
-public class EnemyController : MonoBehaviour
+public class GuardController : MonoBehaviour
 {
     #region Variable Declarations
+
+    [Header("Design Values")]
+
 
     [Header("Behaviors")]
     [SerializeField, Tooltip("Default behavior for the enemy")]
@@ -30,20 +33,20 @@ public class EnemyController : MonoBehaviour
     //DELETE THIS LATER IN FAVOR OF AN OVERALL ENEMY HANDLER
     private void Start()
     {
-        InitializeEnemy();
+        InitializeGuard();
     }
 
     /// <summary>
     /// Initializes the enemy. Returns true if successful, false if unsuccessful.
     /// </summary>
     /// <returns></returns>
-    public bool InitializeEnemy()
+    public bool InitializeGuard()
     {
         if (CheckBehaviors() == false)
             return false;
 
         currentBehavior = defaultBehavior;
-        defaultBehavior.StartBehavior();
+        //defaultBehavior.StartBehavior();
 
         return true;
     }
@@ -69,10 +72,19 @@ public class EnemyController : MonoBehaviour
     /// <param name="newBehavior"></param>
     public void ChangeBehavior(int behaviorIndex)
     {
-        currentBehavior.StopBehavior();
-        currentBehavior = behaviors[behaviorIndex];
-        currentBehavior.StartBehavior();
+
+
+        //currentBehavior.StopBehavior();
+        //currentBehavior = behaviors[behaviorIndex];
+        //currentBehavior.StartBehavior();
     }
 
-
+    /// <summary>
+    /// Returns a reference to the guard GameObject this script is attached to
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetGuard()
+    {
+        return gameObject;
+    }
 }

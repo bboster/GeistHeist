@@ -17,7 +17,7 @@ public class VisionCone : MonoBehaviour
     [Tooltip("The index of the behavior to activate when the enemy loses track of the player during a chase.")]
     [SerializeField] private int recoveryBehaviorIndex;
 
-    [SerializeField] private EnemyController parentController;
+    [SerializeField] private GuardController parentController;
 
     private void OnTriggerEnter(Collider other)
     {
