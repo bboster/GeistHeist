@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 9/18/25
+ * Last Edited: 9/30/25
  * Summary: Contains utility functions for enemies to use while running movement behavior.
  */
 

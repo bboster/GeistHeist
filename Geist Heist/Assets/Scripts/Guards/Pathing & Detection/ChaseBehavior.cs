@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 9/18/25
+ * Last Edited: 9/30/25
  * Summary: Handles behavior for the enemy when it is chasing the player.
  * To Do: Replace GetPlayerLocation() .Find() with a reference to a manager.
  */

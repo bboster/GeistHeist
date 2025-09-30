@@ -1,3 +1,11 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 9/30/25
+ * Last Edited: 9/30/25
+ * Summary: Stores the scriptable objects for guard behaviors and facilitates their retrieval.
+ */
+
 using UnityEngine;
 using GuardUtilities;
 

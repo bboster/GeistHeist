@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 9/18/25
+ * Last Edited: 9/30/25
  * Summary: Runs the behavior for the patrol movement type for enemies. BehaviorLoop runs every frame
  * and controls when certain aspects of the behavior are triggered. 
  */
