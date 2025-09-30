@@ -11,6 +11,7 @@ using UnityEngine;
 using GuardUtilities;
 using System.Collections;
 
+[CreateAssetMenu(fileName = "New Chase Behavior", menuName = "Guard Behaviors/New Chase Behavior")]
 public class ChaseBehavior : GuardMovement
 {
     private bool attacking = false;
@@ -23,8 +24,9 @@ public class ChaseBehavior : GuardMovement
         FirstPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
-    private void OnDisable()
+    public override void StopBehavior()
     {
+        base.StopBehavior();
         FirstPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
@@ -54,14 +56,14 @@ public class ChaseBehavior : GuardMovement
     /// Controls the flow of the chase behavior.
     /// </summary>
     /// <returns></returns>
-    protected override IEnumerator BehaviorLoop()
+    public override IEnumerator BehaviorLoop()
     {
         for(; ; )
         {
             if (CheckPathCompletion() == true /*&& attacking == false*/)
             {
                 //attacking = true;
-                selfRef.GetComponent<GuardController>().ChangeBehavior(2);
+                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardData.GuardStates.attack);
             }
             else
             {
@@ -82,5 +84,11 @@ public class ChaseBehavior : GuardMovement
     private Vector3 GetPlayerLocation()
     {
         return GameObject.Find("1st Person Player").transform.position; //REPLACE WITH CENTRALIZED REFERENCE FROM A MANAGER ONCE ABLE.
+    }
+
+    ~ChaseBehavior()
+    {
+        if(selfRef != null)
+            FirstPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 }

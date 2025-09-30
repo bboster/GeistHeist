@@ -46,11 +46,19 @@ public class PatrolMovement : GuardMovement
 
     #endregion
 
+    public override void InitializeBehavior(GameObject selfRef)
+    {
+        base.InitializeBehavior(selfRef);
+        currentPatrolPath = selfRef.GetComponent<GuardController>().Path;
+        MoveToPoint(GetNextPoint());
+        thisAgent.isStopped = false;
+    }
+
     /// <summary>
     /// Controls the overall logic for the behavior.
     /// </summary>
     /// <returns></returns>
-    protected override IEnumerator BehaviorLoop()
+    public override IEnumerator BehaviorLoop()
     {
         for(; ; )
         {

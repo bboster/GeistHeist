@@ -12,7 +12,7 @@ namespace GuardUtilities
 {
     public class GuardData
     {
-        public enum GuardStates { none, idle, patrol, chase, attack }
+        public enum GuardStates { none, patrol, chase, attack, surprised, search }
     }
 }
 

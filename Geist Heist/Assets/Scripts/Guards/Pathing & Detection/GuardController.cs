@@ -17,16 +17,16 @@ public class GuardController : MonoBehaviour
     #region Variable Declarations
 
     [Header("Design Values")]
-
+    [SerializeField] private PatrolPath path;
+    public PatrolPath Path { get { return path; } }
 
     [Header("Behaviors")]
     [SerializeField, Tooltip("Default behavior for the enemy")]
     private Behavior defaultBehavior;
 
-    [Tooltip("List of all behaviors the enemy is able to run.")]
-    [SerializeField] private Behavior[] behaviors;
-
     private Behavior currentBehavior;
+
+    private Coroutine activeBehaviorLoop;
 
     #endregion
 
@@ -46,7 +46,7 @@ public class GuardController : MonoBehaviour
             return false;
 
         currentBehavior = defaultBehavior;
-        //defaultBehavior.StartBehavior();
+        StartBehavior();
 
         return true;
     }
@@ -70,13 +70,34 @@ public class GuardController : MonoBehaviour
     /// Swaps the currently running behavior.
     /// </summary>
     /// <param name="newBehavior"></param>
-    public void ChangeBehavior(int behaviorIndex)
+    public void ChangeBehavior(GuardData.GuardStates state)
     {
-
+        StopBehavior();
+        currentBehavior = BehaviorDatabase.instance.GetBehavior(state);
+        StartBehavior();
 
         //currentBehavior.StopBehavior();
         //currentBehavior = behaviors[behaviorIndex];
         //currentBehavior.StartBehavior();
+    }
+
+    /// <summary>
+    /// Starts the currently selected behavior
+    /// </summary>
+    private void StartBehavior()
+    {
+        currentBehavior.InitializeBehavior(gameObject);
+        activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
+    }
+
+    /// <summary>
+    /// Stops the currently running behavior
+    /// </summary>
+    private void StopBehavior()
+    {
+        currentBehavior.StopBehavior();
+        StopCoroutine(activeBehaviorLoop);
+        activeBehaviorLoop = null;
     }
 
     /// <summary>

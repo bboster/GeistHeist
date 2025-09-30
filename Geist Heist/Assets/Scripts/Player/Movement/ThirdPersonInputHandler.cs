@@ -10,6 +10,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
+using GuardUtilities;
 
 public class FirstPersonInputHandler : IInputHandler
 {
@@ -34,7 +35,7 @@ public class FirstPersonInputHandler : IInputHandler
     [SerializeField] private LayerMask raycastLayer;
     [SerializeField] GameObject interactableCanvas;
 
-    public static Action<int> OnPossessObject;
+    public static Action<GuardData.GuardStates> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -84,7 +85,7 @@ public class FirstPersonInputHandler : IInputHandler
             if (results.transform.GetComponent<PossessableObject>() && results.transform != this.transform)
             {
                 PlayerManager.Instance.PossessObject(results.transform.GetComponent<PossessableObject>());
-                OnPossessObject?.Invoke(0);
+                OnPossessObject?.Invoke(GuardData.GuardStates.patrol);
                 break;
             }
         }

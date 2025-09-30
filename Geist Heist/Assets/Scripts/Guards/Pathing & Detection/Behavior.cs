@@ -16,6 +16,7 @@ public class Behavior : ScriptableObject
     protected GameObject selfRef;
 
     protected Coroutine currentLoop;
+    public Coroutine behaviorLoop;
 
     public GuardData.GuardStates StateName;
 
@@ -42,10 +43,18 @@ public class Behavior : ScriptableObject
     }*/
 
 
-    /// Initializes the behavior
+    ///Initializes the behavior
     public virtual void InitializeBehavior(GameObject selfRef)
     {
         this.selfRef = selfRef;
+    }
+
+    /// <summary>
+    /// Stops the behaviors functions
+    /// </summary>
+    public virtual void StopBehavior()
+    {
+
     }
 
     #endregion
@@ -54,7 +63,7 @@ public class Behavior : ScriptableObject
     /// Controls the overall flow of the behavior.
     /// </summary>
     /// <returns></returns>
-    protected virtual IEnumerator BehaviorLoop()
+    public virtual IEnumerator BehaviorLoop()
     {
         for(; ; )
         {

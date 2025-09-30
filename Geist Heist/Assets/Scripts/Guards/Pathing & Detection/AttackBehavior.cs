@@ -10,6 +10,7 @@ using UnityEngine;
 using GuardUtilities;
 using System.Collections;
 
+[CreateAssetMenu(fileName = "New Attack Behavior", menuName = "Guard Behaviors/New Attack Behavior")]
 public class AttackBehavior : Behavior
 {
     private bool performingAttack = true;
@@ -27,7 +28,7 @@ public class AttackBehavior : Behavior
     /// Controls the flow of the attack behavior for the enemy.
     /// </summary>
     /// <returns></returns>
-    protected override IEnumerator BehaviorLoop()
+    public override IEnumerator BehaviorLoop()
     {
         for(; ; )
         {
@@ -38,7 +39,7 @@ public class AttackBehavior : Behavior
             }
             else
             {
-                selfRef.GetComponent<GuardController>().ChangeBehavior(0);
+                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardData.GuardStates.patrol);
             }
 
             yield return new WaitForEndOfFrame();
