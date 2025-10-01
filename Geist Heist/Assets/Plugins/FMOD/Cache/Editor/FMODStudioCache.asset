@@ -15,11 +15,38 @@ MonoBehaviour:
   Path: FMODProject/GeistHeistFMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638937893164977970
+  lastModified: 638948286227552315
   FileSizes:
   - Name: Desktop
-    Value: 934
+    Value: 1070
   Exists: 1
+--- !u!114 &-7054679826196195791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/Enemy Test 50
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/Enemy Test 50
+  Guid:
+    Data1: -1160148149
+    Data2: 1127717465
+    Data3: 97332868
+    Data4: -1982505424
+  Banks:
+  - {fileID: 4432249888800648698}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 50
+  Length: 19056
 --- !u!114 &-6099483799440657850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40,6 +67,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 506
   Exists: 1
+--- !u!114 &-5526216273694252752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/Enemy Test 25
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/Enemy Test 25
+  Guid:
+    Data1: 145375557
+    Data2: 1090700711
+    Data3: -43353699
+    Data4: 319161774
+  Banks:
+  - {fileID: 4432249888800648698}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 25
+  Length: 19056
 --- !u!114 &-1386032467478442245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,7 +109,7 @@ MonoBehaviour:
   Path: FMODProject/GeistHeistFMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638937893164957916
+  lastModified: 638948286227542297
   FileSizes:
   - Name: Desktop
     Value: 1074
@@ -80,15 +134,24 @@ MonoBehaviour:
   - {fileID: 344769283064663283}
   - {fileID: 2582444302623032592}
   - {fileID: -6099483799440657850}
-  EditorEvents: []
+  EditorEvents:
+  - {fileID: 7215722401697518624}
+  - {fileID: -5526216273694252752}
+  - {fileID: -7054679826196195791}
   EditorParameters: []
   MasterBanks:
   - {fileID: -1386032467478442245}
   StringsBanks:
   - {fileID: -7683158611172191669}
   cacheVersion: 131849
-  cacheTime: 638937893165124674
-  SerializableEventsDict: []
+  cacheTime: 638948286227552315
+  SerializableEventsDict:
+  - key: event:/Enemy/Enemy Test 10
+    index: 0
+  - key: event:/Enemy/Enemy Test 25
+    index: 1
+  - key: event:/Enemy/Enemy Test 50
+    index: 2
 --- !u!114 &344769283064663283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,11 +207,38 @@ MonoBehaviour:
   Path: FMODProject/GeistHeistFMOD/Build/Desktop/Enemy.bank
   Name: Enemy
   StudioPath: bank:/Enemy
-  lastModified: 638937893165030175
+  lastModified: 638948286227316792
   FileSizes:
   - Name: Desktop
-    Value: 506
+    Value: 174112
   Exists: 1
+--- !u!114 &7215722401697518624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/Enemy Test 10
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/Enemy Test 10
+  Guid:
+    Data1: -375047612
+    Data2: 1268782329
+    Data3: -2045554525
+    Data4: 521524463
+  Banks:
+  - {fileID: 4432249888800648698}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 10
+  Length: 19056
 --- !u!114 &8277493656931115403
 MonoBehaviour:
   m_ObjectHideFlags: 0
