@@ -1,9 +1,9 @@
 /*
- * Contributors: Toby, Jacob, Brooke
+ * Contributors: Toby, Jacob, Brooke, Sky
  * Creation Date: 9/16/25
- * Last Modified: 9/29/25
+ * Last Modified: 9/30/25
  * 
- * Brief Description: For prototyping first person gameplay, for now
+ * Brief Description: Handles third person movement and interaction
  */
 
 using System;
@@ -16,12 +16,15 @@ public class ThirdPersonInputHandler : IInputHandler
 {
     private Rigidbody rigidbody;
 
+    [Header("Design Variables")]
     [SerializeField] private float speed = 3;
     [SerializeField] private float maxVelocity = 10;
     [Tooltip("Higher number: reaches desired speed faster")]
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
+
+    [Header("Sphere Cast Variables")]
     [SerializeField] private GameObject thirdPersonCinemachineCamera;
     [SerializeField] private float sphereCastRadius = 10;
     [SerializeField] private float sphereCastDistance = 1000;
@@ -31,10 +34,8 @@ public class ThirdPersonInputHandler : IInputHandler
     // Scene transition specific variables
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField] private float interactableRayLength = 10;
-    [SerializeField] private LayerMask raycastLayer;
     [SerializeField] private GameObject interactableCanvas;
 
-    //?
     public static Action<int> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -78,16 +79,15 @@ public class ThirdPersonInputHandler : IInputHandler
             {
                 interactable.Interact(result.transform.GetComponent<PossessableObject>());
 
-                //OnPossessObject?.Invoke(0);
+                OnPossessObject?.Invoke(0);
                 break;
             }
         }
     }
 
-
-
     public override void WhileInteractHeld()
-    { }
+    { 
+    }
 
     public override void OnInteractCanceled()
     {
@@ -125,13 +125,18 @@ public class ThirdPersonInputHandler : IInputHandler
     #region  SceneTransition
     public void TurnOnInteractableCanvas()
     {
+        if (interactableCanvas == null)
+        {
+            return;
+        }
+
         RaycastHit hit;
         Vector3 interactableOrigin = transform.position;
         Vector3 interactableDirection = Camera.main.transform.forward; // moves the raycast with the camera, since the player remains still
 
         Debug.DrawRay(interactableOrigin, interactableDirection * interactableRayLength, Color.red);
 
-        if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, raycastLayer))
+        if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, layerToInclude))
         {
             interactableCanvas.SetActive(true);
         }
