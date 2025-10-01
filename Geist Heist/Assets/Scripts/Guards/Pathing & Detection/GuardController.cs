@@ -96,8 +96,12 @@ public class GuardController : MonoBehaviour
     private void StopBehavior()
     {
         currentBehavior.StopBehavior();
-        StopCoroutine(activeBehaviorLoop);
-        activeBehaviorLoop = null;
+
+        if(activeBehaviorLoop != null)
+        {
+            StopCoroutine(activeBehaviorLoop);
+            activeBehaviorLoop = null;
+        }
     }
 
     /// <summary>

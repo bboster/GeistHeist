@@ -25,7 +25,7 @@ public class VisionCone : MonoBehaviour
         {
             //Debug.Log("PLAYER SEEN");
             hasSeenPlayer = true;
-            parentController.ChangeBehavior(GuardUtilities.GuardData.GuardStates.chase);
+            parentController.ChangeBehavior(GuardUtilities.GuardData.GuardStates.surprised);
         }
     }
 
