@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
 
-public class FirstPersonInputHandler : IInputHandler
+public class ThirdPersonInputHandler : IInputHandler
 {
     private Rigidbody rigidbody;
 
