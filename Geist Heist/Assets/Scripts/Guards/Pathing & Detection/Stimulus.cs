@@ -8,10 +8,13 @@
 
 using GuardUtilities;
 using UnityEngine;
+using NaughtyAttributes;
 
 public abstract class Stimulus : MonoBehaviour
 {
+
     public enum StimulusType { sight, sound }
+    [Header("Stimulus Values")]
     [Tooltip("The type of sense this is")]
     [SerializeField] protected StimulusType stimulusType;
 

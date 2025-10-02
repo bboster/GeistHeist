@@ -17,31 +17,13 @@ public class Behavior : ScriptableObject
 
     protected Coroutine currentLoop;
     public Coroutine behaviorLoop;
+    public Coroutine TimerCoroutine;
 
     public GuardStates StateName;
 
+    public Priority Priority;
+
     #region StartLoop and StopLoop
-
-    /// <summary>
-    /// Starts the behavior. Should be called by the controller when a behavior starts or changes.
-    /// </summary>
-    /*public virtual void StartBehavior()
-    {
-        currentLoop = StartCoroutine(BehaviorLoop());
-    }
-
-    /// <summary>
-    /// Stops the current behavior loop.
-    /// </summary>
-    public virtual void StopBehavior()
-    {
-        if (currentLoop == null)
-            return;
-
-        StopCoroutine(currentLoop);
-        currentLoop = null;
-    }*/
-
 
     ///Initializes the behavior
     public virtual void InitializeBehavior(GameObject selfRef)

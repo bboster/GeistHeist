@@ -10,6 +10,7 @@ using System;
 using System.ComponentModel;
 using UnityEngine;
 using GuardUtilities;
+using NaughtyAttributes;
 
 public class GuardController : MonoBehaviour
 {
@@ -27,7 +28,13 @@ public class GuardController : MonoBehaviour
 
     private Coroutine activeBehaviorLoop;
 
-    private Priority currentPriority;
+    [SerializeField] private Priority currentPriority;
+
+    [Header("Programming")]
+    [SerializeField] private bool showProgrammingValues;
+
+    [ShowIf("showProgrammingValues")]
+    [SerializeField] private Animator animator;
 
     #endregion
 
@@ -84,6 +91,7 @@ public class GuardController : MonoBehaviour
     private void StartBehavior()
     {
         currentBehavior.InitializeBehavior(gameObject);
+        currentPriority = currentBehavior.Priority;
         activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
     }
 

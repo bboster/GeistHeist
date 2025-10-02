@@ -18,34 +18,6 @@ public class PatrolMovement : GuardMovement
     [Header("Patrol Behavior Values")]
     [SerializeField] private PatrolPath currentPatrolPath;
 
-    #region Start and Stop Behavior
-
-    /// <summary>
-    /// Starts the behavior. Should be called by the controller when a behavior starts or changes.
-    /// </summary>
-    /*public override void StartBehavior()
-    {
-        currentLoop = StartCoroutine(BehaviorLoop());
-        MoveToPoint(GetNextPoint());
-        thisAgent.isStopped = false;
-    }
-
-    /// <summary>
-    /// Overrides the default StopBehavior function to pause all movement the enemy is doing.
-    /// </summary>
-    public override void StopBehavior()
-    {
-        if (currentLoop == null)
-            return;
-
-        thisAgent.isStopped = true;
-
-        StopCoroutine(currentLoop);
-        currentLoop = null;
-    }*/
-
-    #endregion
-
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);

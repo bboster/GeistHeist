@@ -8,23 +8,30 @@
 
 using UnityEngine;
 using GuardUtilities;
+using NaughtyAttributes;
 
 public class VisionStimulus : Stimulus
 {
+    [Header("Progamming")]
+    [Tooltip("Controls whether or not certain variables are displayed")]
+    [SerializeField] private bool showProgrammingValues;
+
     private bool hasSeenPlayer = false;
 
     [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
+    [ShowIf("showProgrammingValues")]
     [SerializeField] private int behaviorIndex;
     [Tooltip("The index of the behavior to activate when the enemy loses track of the player during a chase.")]
+    [ShowIf("showProgrammingValues")]
     [SerializeField] private int recoveryBehaviorIndex;
 
+    [ShowIf("showProgrammingValues")]
     [SerializeField] private GuardController parentController;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == false)
         {
-            //Debug.Log("PLAYER SEEN");
             hasSeenPlayer = true;
             TriggerStimulus();
         }
@@ -34,7 +41,6 @@ public class VisionStimulus : Stimulus
     {
         if (other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == true)
         {
-            //Debug.Log("PLAYER UNSEEN");
             hasSeenPlayer = false;
             parentController.ChangeBehavior(GuardStates.patrol); // (Will swap to a proper recovery behavior once that is programmed)
         }
@@ -46,6 +52,5 @@ public class VisionStimulus : Stimulus
     public override void TriggerStimulus()
     {
         parentController.RecieveStimulus(this, stateToChangeTo);
-        //parentController.ChangeBehavior(GuardUtilities.GuardData.GuardStates.surprised);
     }
 }
