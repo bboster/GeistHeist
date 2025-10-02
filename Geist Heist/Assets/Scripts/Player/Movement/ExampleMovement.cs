@@ -16,12 +16,12 @@ public class ExampleMovement : IInputHandler
         throw new System.NotImplementedException();
     }
 
-    public override void OnPossessCanceled()
+    public override void OnInteractCanceled()
     {
         throw new System.NotImplementedException();
     }
 
-    public override void OnPossessStarted()
+    public override void OnInteractStarted()
     {
         throw new System.NotImplementedException();
     }
@@ -41,7 +41,7 @@ public class ExampleMovement : IInputHandler
         throw new System.NotImplementedException();
     }
 
-    public override void WhilePossessHeld()
+    public override void WhileInteractHeld()
     {
         throw new System.NotImplementedException();
     }

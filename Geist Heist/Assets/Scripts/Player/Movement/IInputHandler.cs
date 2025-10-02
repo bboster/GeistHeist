@@ -40,12 +40,12 @@ public abstract class IInputHandler : MonoBehaviour
     public abstract void WhileActionHeld();
     public abstract void OnActionCanceled();
 
-    public abstract void OnPossessStarted();
+    public abstract void OnInteractStarted();
     /// <summary>
     /// called every fixed update while escape oject is held
     /// </summary>
-    public abstract void WhilePossessHeld();
-    public abstract void OnPossessCanceled();
+    public abstract void WhileInteractHeld();
+    public abstract void OnInteractCanceled();
 
 
 

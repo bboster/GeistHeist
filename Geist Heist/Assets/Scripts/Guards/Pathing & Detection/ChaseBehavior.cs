@@ -27,7 +27,7 @@ public class ChaseBehavior : GuardMovement
     public override void StopBehavior()
     {
         base.StopBehavior();
-        FirstPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
+        ThirdPersonInputHandler.OnPossessObject -= GetComponent<EnemyController>().ChangeBehavior;
     }
 
     #endregion
