@@ -35,7 +35,10 @@ public class GuardCoroutineManager : MonoBehaviour
     /// <param name="stopRef"></param>
     public void StopBehaviorTimer(Coroutine stopRef)
     {
-        StopCoroutine(stopRef);
+        if(stopRef != null)
+        {
+            StopCoroutine(stopRef);
+        }
     }
 
     /// <summary>

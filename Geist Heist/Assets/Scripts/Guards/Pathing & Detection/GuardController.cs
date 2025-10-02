@@ -16,6 +16,8 @@ public class GuardController : MonoBehaviour
 {
     #region Variable Declarations
 
+    private bool changingBehaviors = false;
+
     [Header("Design Values")]
     [SerializeField] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
@@ -80,9 +82,14 @@ public class GuardController : MonoBehaviour
     /// <param name="newBehavior"></param>
     public void ChangeBehavior(GuardStates state)
     {
-        StopBehavior();
-        currentBehavior = BehaviorDatabase.instance.GetBehavior(state);
-        StartBehavior();
+        if (changingBehaviors == false)
+        {
+            changingBehaviors = true;
+            StopBehavior();
+            currentBehavior = BehaviorDatabase.instance.GetBehavior(state);
+            StartBehavior();
+            changingBehaviors = false;
+        }
     }
 
     /// <summary>
@@ -90,9 +97,12 @@ public class GuardController : MonoBehaviour
     /// </summary>
     private void StartBehavior()
     {
-        currentBehavior.InitializeBehavior(gameObject);
-        currentPriority = currentBehavior.Priority;
-        activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
+        if (currentBehavior != null)
+        {
+            currentBehavior.InitializeBehavior(gameObject);
+            currentPriority = currentBehavior.Priority;
+            activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
+        }
     }
 
     /// <summary>
@@ -100,7 +110,8 @@ public class GuardController : MonoBehaviour
     /// </summary>
     private void StopBehavior()
     {
-        currentBehavior.StopBehavior();
+        if(currentBehavior != null)
+            currentBehavior.StopBehavior();
 
         if(activeBehaviorLoop != null)
         {
@@ -128,5 +139,14 @@ public class GuardController : MonoBehaviour
     public GameObject GetGuard()
     {
         return gameObject;
+    }
+
+    /// <summary>
+    /// Returns a reference to the guard's Animator component
+    /// </summary>
+    /// <returns></returns>
+    public Animator GetAnimator()
+    {
+        return animator;
     }
 }

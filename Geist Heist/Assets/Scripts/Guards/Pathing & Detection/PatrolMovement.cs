@@ -43,7 +43,6 @@ public class PatrolMovement : GuardMovement
             else
             {
                 calculatingMovement = false;
-                //Debug.Log(gameObject.name + " IS PATROLLING");
             }
 
             yield return new WaitForEndOfFrame();

@@ -19,15 +19,6 @@ public class AttackBehavior : Behavior
     [SerializeField] private float attackLength; //REPLACE WITH ANIMATION STUFF LATER
 
     /// <summary>
-    /// Ensures that the performingAttack variable is reset before stopping the behavior.
-    /// </summary>
-    /*public override void StopBehavior()
-    {
-        performingAttack = true;
-        base.StopBehavior();
-    }*/
-
-    /// <summary>
     /// Controls the flow of the attack behavior for the enemy.
     /// </summary>
     /// <returns></returns>

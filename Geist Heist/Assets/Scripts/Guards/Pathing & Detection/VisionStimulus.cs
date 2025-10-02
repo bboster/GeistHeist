@@ -42,7 +42,7 @@ public class VisionStimulus : Stimulus
         if (other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == true)
         {
             hasSeenPlayer = false;
-            parentController.ChangeBehavior(GuardStates.patrol); // (Will swap to a proper recovery behavior once that is programmed)
+            parentController.ChangeBehavior(GuardStates.visionBreak); // (Will swap to a proper recovery behavior once that is programmed)
         }
     }
 

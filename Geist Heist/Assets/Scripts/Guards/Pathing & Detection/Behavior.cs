@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using GuardUtilities;
+using UnityEditor.Animations;
 
 public class Behavior : ScriptableObject
 {
@@ -23,12 +24,19 @@ public class Behavior : ScriptableObject
 
     public Priority Priority;
 
+    public AnimatorController stateController;
+
     #region StartLoop and StopLoop
 
     ///Initializes the behavior
     public virtual void InitializeBehavior(GameObject selfRef)
     {
         this.selfRef = selfRef;
+
+        if (stateController != null)
+        {
+            selfRef.GetComponent<Animator>().runtimeAnimatorController = stateController;
+        }
     }
 
     /// <summary>
@@ -36,7 +44,7 @@ public class Behavior : ScriptableObject
     /// </summary>
     public virtual void StopBehavior()
     {
-
+        selfRef.GetComponent<Animator>().runtimeAnimatorController = null;
     }
 
     #endregion

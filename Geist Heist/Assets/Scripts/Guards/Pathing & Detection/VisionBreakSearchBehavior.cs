@@ -14,14 +14,21 @@ public class VisionBreakSearchBehavior : GuardMovement
 
     public Vector3 SearchLocation;
 
+    public override void InitializeBehavior(GameObject selfRef)
+    {
+        base.InitializeBehavior(selfRef);
+        SearchLocation = GameObject.Find("1st Person Player").transform.position; //REPLACE WITH A CENTRALIZED REFERENCE TO THE PLAYER WHEN ABLE
+        MoveToPoint(SearchLocation);
+        thisAgent.isStopped = false;
+        behaviorComplete = false;
+    }
+
     /// <summary>
     /// Controls the overall logic for the behavior.
     /// </summary>
     /// <returns></returns>
     public override IEnumerator BehaviorLoop()
     {
-        MoveToPoint(SearchLocation);
-
         for (; ; )
         {
             if (CheckPathCompletion() == true && searching == false)
@@ -45,7 +52,7 @@ public class VisionBreakSearchBehavior : GuardMovement
     private void StartSearch()
     {
         GuardCoroutineManager.instance.StartBehaviorTimer(searchLength, this);
-        //START ANIMATION THAT CONTROLS SEARCH MOVEMENT
+        selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
     }
 
     /// <summary>
@@ -53,7 +60,9 @@ public class VisionBreakSearchBehavior : GuardMovement
     /// </summary>
     public override void StopBehavior()
     {
+        base.StopBehavior();
         GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;
+        selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
     }
 }

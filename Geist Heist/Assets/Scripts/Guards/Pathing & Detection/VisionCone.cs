@@ -36,7 +36,7 @@ public class VisionCone : MonoBehaviour
         {
             //Debug.Log("PLAYER UNSEEN");
             hasSeenPlayer = false;
-            parentController.ChangeBehavior(GuardStates.patrol); // (Will swap to a proper recovery behavior once that is programmed)
+            parentController.ChangeBehavior(GuardStates.search); // (Will swap to a proper recovery behavior once that is programmed)
         }
     }
 }

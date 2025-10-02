@@ -32,26 +32,6 @@ public class ChaseBehavior : GuardMovement
 
     #endregion
 
-    /*protected override void Awake()
-{
-    base.Awake();
-    FirstPersonInputHandler.OnPossessObject += GetComponent<GuardController>().ChangeBehavior;
-}*/
-
-    /// <summary>
-    /// Overrides the default StopBehavior function to pause all movement the enemy is doing.
-    /// </summary>
-    /*public override void StopBehavior()
-    {
-        if (currentLoop == null)
-            return;
-
-        thisAgent.isStopped = true;
-
-        StopCoroutine(currentLoop);
-        currentLoop = null;
-    }*/
-
     /// <summary>
     /// Controls the flow of the chase behavior.
     /// </summary>
