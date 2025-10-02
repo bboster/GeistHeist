@@ -34,7 +34,7 @@ public class ThirdPersonInputHandler : IInputHandler
     // Scene transition specific variables
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField] private float interactableRayLength = 10;
-    [SerializeField] private GameObject interactableCanvas;
+    [SerializeField, Required] private GameObject interactableCanvas;
 
     public static Action<int> OnPossessObject;
 
@@ -43,6 +43,11 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
+
+        if(interactableCanvas == null)
+        {
+            Debug.LogError("No interactable canvas has been set");
+        }
     }
 
     // Update is called once per frame
@@ -51,7 +56,7 @@ public class ThirdPersonInputHandler : IInputHandler
         TurnOnInteractableCanvas();
     }
 
-    #region action
+    #region Action
     public override void OnActionStarted()
     {
     }

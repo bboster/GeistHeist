@@ -7,6 +7,7 @@
  */
 
 using NaughtyAttributes;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -36,8 +37,12 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             SaveData();
     }
 
-    public void MarkCollectableAsCompleted(Collectable obj, bool autoSave = true)
+    public void MarkCollectableAsCollected(Collectable obj, bool autoSave = true)
     {
+        if(currentSaveDta == null)
+            currentSaveDta = new SaveDataFile();
+        if (currentSaveDta.CollectablesCollected == null)
+            currentSaveDta.CollectablesCollected = new HashSet<int>();
         currentSaveDta.CollectablesCollected.Add((int)obj);
 
         if (autoSave)
