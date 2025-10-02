@@ -18,9 +18,9 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     private SaveDataFile currentSaveDta;
 
     [Header("Export Settings")]
-    [SerializeField] private string _defaultpath = "Assets\\Save Files\\";
+    [SerializeField] private string _defaultPath = "Assets\\Save Files\\";
     [SerializeField] private string _defaultfFileName = "Save File";
-    [SerializeField] private string _fileType = "JSON";
+    [SerializeField] private string _fileType = "json";
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -36,20 +36,26 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         if (currentSaveDta.ScenesCompleted == null)
             currentSaveDta.ScenesCompleted = new List<string>();
 
-        currentSaveDta.ScenesCompleted.Add(sceneName);
+        if (IsSceneCompleted(sceneName))
+            Debug.Log("This level has already been completed");
+        else
+            currentSaveDta.ScenesCompleted.Add(sceneName);
 
         if (autoSave)
             SaveData();
     }
 
-    public void MarkCollectableAsCollected(Collectable obj, bool autoSave = true)
+    public void MarkCollectableAsCollected(Collectable collectable, bool autoSave = true)
     {
         if(currentSaveDta == null)
             currentSaveDta = new SaveDataFile();
         if (currentSaveDta.CollectablesCollected == null)
             currentSaveDta.CollectablesCollected = new List<int>();
 
-        currentSaveDta.CollectablesCollected.Add((int)obj);
+        if(IsCollectableCollected(collectable))
+            Debug.Log("Collectable has already been collected");
+        else
+            currentSaveDta.CollectablesCollected.Add((int)collectable);
 
         if (autoSave)
             SaveData();
@@ -74,12 +80,14 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     {
         if(saveFile == null)
         {
-            Debug.LogWarning("No save file is present!");
+            Debug.LogWarning("No save file is present to load");
             currentSaveDta = new();
             return;
         }
 
-        JsonUtility.FromJson<SaveDataFile>(saveFile.text);
+        currentSaveDta = JsonUtility.FromJson<SaveDataFile>(saveFile.text);
+
+        Debug.Log($"Loaded save file:\n{currentSaveDta.CollectablesCollected.Count} collectables\n{currentSaveDta.ScenesCompleted.Count} levels completed");
     }
 
     [Button]
@@ -88,13 +96,22 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     /// </summary>
     public void SaveData()
     {
-        string path = saveFile == null ? GetNewPath() : AssetDatabase.GetAssetPath(saveFile);
-        var textFile = File.CreateText(path);
+        if(saveFile == null)
+        {
+            SaveDataAsNewFile();
+            return;
+        }    
+
+        string path = AssetDatabase.GetAssetPath(saveFile);
+        //var textFile = File.CreateText(path);
 
         string elemString = JsonUtility.ToJson(currentSaveDta);
-        textFile.WriteLine(elemString);
+        //textFile.WriteLine(elemString);
 
-        Debug.Log($"Overwrote save file at {path}");
+        Debug.Log($"Overwriting save file at {path}");
+
+        File.WriteAllText(path, elemString);
+
     }
 
     [Button]
@@ -112,6 +129,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         if(saveFile == null)
             saveFile = new TextAsset(path);
 
+        textFile.Close();
         Debug.Log($"Created new save file at {path}");
     }
 
@@ -132,6 +150,8 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
         Debug.Log($"Backup of file contents (copy paste to new file if deleting was a mistake):\n{fileContents}");
 
+        saveFile= null; 
+
     }
 
     private string GetNewPath()
@@ -142,9 +162,9 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             string path = "";
 
             if (number == 1)
-                path = _defaultpath + _defaultfFileName + "." + _fileType;
+                path = _defaultPath + _defaultfFileName + "." + _fileType;
             else
-                path = _defaultpath + _defaultfFileName + " " + number + "." + _fileType;
+                path = _defaultPath + _defaultfFileName + " " + number + "." + _fileType;
 
             if (!File.Exists(path))
                 return path;

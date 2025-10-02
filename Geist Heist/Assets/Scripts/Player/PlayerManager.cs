@@ -45,9 +45,8 @@ public class PlayerManager : Singleton<PlayerManager>
         if (CurrentObject != null) CurrentObject.OnPossessionEnded();
         possessable.OnPossessionStarted();
 
+        DeRegisterInputs(CurrentObject);
         CurrentObject = possessable;
-
-        DeRegisterInputs(PlayerGhostObject);
     }
 
     public void PossessGhost(PossessableObject possessable)
@@ -85,15 +84,10 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.PossessStarted.AddListener(input.OnInteractStarted);
         InputEvents.PossessHeld.AddListener(input.WhileInteractHeld);
         InputEvents.PossessCanceled.AddListener(input.OnInteractCanceled);
-
-        // camera is really bad pls refactor it.
-        //var cam = possessable.CameraInputHandler;
-        //InputEvents.LookUpdate.AddListener(LookUpdate);
     }
 
     public void DeRegisterInputs(PossessableObject possessable)
     {
-
         var input = possessable.InputHandler;
         InputEvents.MoveStarted.RemoveListener(input.OnMoveStarted);
         InputEvents.MoveHeld.RemoveListener(input.WhileMoveHeld);

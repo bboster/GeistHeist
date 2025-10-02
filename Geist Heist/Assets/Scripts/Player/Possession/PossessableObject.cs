@@ -30,7 +30,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     // Called in PlayerManager
     public void OnPossessionStarted()
     {
-        InputHandler.OnPossessionEnded();
+        InputHandler.OnPossessionStarted();
     }
 
     // Called in PlayerManager

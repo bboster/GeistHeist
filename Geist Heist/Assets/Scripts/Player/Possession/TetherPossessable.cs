@@ -14,12 +14,13 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class TetherPossessable : IInputHandler
 {
-    [SerializeField] private Collectable ThisCollectable;
     [SerializeField] private GameObject CollectionParticlePrefab;
     [SerializeField,Required] private GameObject thirdPersoncinemachineCamera;
+    [Tooltip("Loads this scene")]
     [SerializeField, Scene] private string HubScene = "Lobby";
 
     private Coroutine victoryAnimation;
@@ -36,15 +37,21 @@ public class TetherPossessable : IInputHandler
 
     public override void OnPossessionEnded()
     {
+        // Not sure if this code will ever get reached (hopefully not), but im keeping it to be safe
+        Debug.Log("Canceling victory");
         StopCoroutine(victoryAnimation);
     }
 
     //TODO: replace this with something else
     IEnumerator LoadNextSceneCooldown()
     {
-        yield return new WaitForSeconds(2);
+        Debug.Log($"Tether collected! Leaving {SceneManager.GetActiveScene().name} now...");
+        
+        yield return new WaitForSeconds(1.5f);
 
+        SaveDataManager.Instance.MarkSceneAsCompleted(SceneManager.GetActiveScene().name);
 
+        SceneManager.LoadScene(HubScene);
     }
 
     #region action
