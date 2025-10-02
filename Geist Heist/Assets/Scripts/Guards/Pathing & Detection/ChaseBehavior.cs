@@ -20,12 +20,12 @@ public class ChaseBehavior : EnemyMovement
     protected override void Awake()
     {
         base.Awake();
-        FirstPersonInputHandler.OnPossessObject += GetComponent<EnemyController>().ChangeBehavior;
+        ThirdPersonInputHandler.OnPossessObject += GetComponent<EnemyController>().ChangeBehavior;
     }
 
     private void OnDisable()
     {
-        FirstPersonInputHandler.OnPossessObject -= GetComponent<EnemyController>().ChangeBehavior;
+        ThirdPersonInputHandler.OnPossessObject -= GetComponent<EnemyController>().ChangeBehavior;
     }
 
     #endregion
