@@ -1,5 +1,5 @@
 /*
- * Contributors: Toby, Jacob, Brooke, Sky
+ * Contributors: Toby, Jacob, Brooke, Sky, Josh
  * Creation Date: 9/16/25
  * Last Modified: 9/30/25
  * 
@@ -43,6 +43,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
+        GameManager.Instance.LoadCurrentLevel();
     }
 
     // Update is called once per frame
