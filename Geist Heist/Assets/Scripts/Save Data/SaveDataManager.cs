@@ -31,6 +31,11 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     public void MarkSceneAsCompleted(string sceneName, bool autoSave=true)
     {
+        if (currentSaveDta == null)
+            currentSaveDta = new SaveDataFile();
+        if (currentSaveDta.ScenesCompleted == null)
+            currentSaveDta.ScenesCompleted = new List<string>();
+
         currentSaveDta.ScenesCompleted.Add(sceneName);
 
         if (autoSave)
@@ -42,11 +47,26 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         if(currentSaveDta == null)
             currentSaveDta = new SaveDataFile();
         if (currentSaveDta.CollectablesCollected == null)
-            currentSaveDta.CollectablesCollected = new HashSet<int>();
+            currentSaveDta.CollectablesCollected = new List<int>();
+
         currentSaveDta.CollectablesCollected.Add((int)obj);
 
         if (autoSave)
             SaveData();
+    }
+
+    public bool IsSceneCompleted(string sceneName)
+    {
+        if (currentSaveDta == null || currentSaveDta.ScenesCompleted == null) return false;
+        
+        return currentSaveDta.ScenesCompleted.Contains(sceneName);
+    }
+
+    public bool IsCollectableCollected(Collectable collectable)
+    {
+        if (currentSaveDta == null || currentSaveDta.CollectablesCollected == null) return false;
+
+        return currentSaveDta.CollectablesCollected.Contains((int)collectable);
     }
 
     [Button]
@@ -79,7 +99,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     [Button]
     /// <summary>
-    /// Overrides current text asset
+    /// Creates and saves new text asset
     /// </summary>
     public void SaveDataAsNewFile()
     {
@@ -93,6 +113,25 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             saveFile = new TextAsset(path);
 
         Debug.Log($"Created new save file at {path}");
+    }
+
+    [Button]
+    public void DeleteSaveFile()
+    {
+        if (saveFile == null)
+        {
+            Debug.LogWarning("No save file is present!");
+            currentSaveDta = new();
+            return;
+        }
+
+        Debug.Log($"Deleting save file at {AssetDatabase.GetAssetPath(saveFile)}");
+
+        string fileContents = saveFile.text;
+        AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(saveFile));
+
+        Debug.Log($"Backup of file contents (copy paste to new file if deleting was a mistake):\n{fileContents}");
+
     }
 
     private string GetNewPath()

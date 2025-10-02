@@ -14,7 +14,7 @@ public class DoorInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField][Scene] private string sceneName;
     
-    public void Interact(PossessableObject possessable)
+    public void Interact()
     {
         SceneManager.LoadScene(sceneName);
     }

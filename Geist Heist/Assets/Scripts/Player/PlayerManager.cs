@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 9/18/25
+ * Last Modified: 10/2/25
  * 
  * Brief Description: dont put this script on the player.
  * handles possession and such.
@@ -42,6 +42,9 @@ public class PlayerManager : Singleton<PlayerManager>
 
         RegisterInputs(possessable);
 
+        if (CurrentObject != null) CurrentObject.OnPossessionEnded();
+        possessable.OnPossessionStarted();
+
         CurrentObject = possessable;
 
         DeRegisterInputs(PlayerGhostObject);
@@ -53,8 +56,10 @@ public class PlayerManager : Singleton<PlayerManager>
         possessable.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(true);
 
-
         RegisterInputs(PlayerGhostObject);
+
+        possessable.OnPossessionEnded();
+        PlayerGhostObject.OnPossessionStarted();
 
         CurrentObject = PlayerGhostObject;
 

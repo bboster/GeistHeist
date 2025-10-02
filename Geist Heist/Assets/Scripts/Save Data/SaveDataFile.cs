@@ -14,6 +14,7 @@ using UnityEngine;
 
 public class SaveDataFile
 {
-    public HashSet<string> ScenesCompleted = new();
-    public HashSet<int> CollectablesCollected = new(); // int correlates to the Collectable Enum
+    public List<string> ScenesCompleted = new();
+    public List<int> CollectablesCollected = new(); // int correlates to the Collectable Enum
+    public int CollectableWearing = -1; // TODO: not implementing, just assuming we will be doing wearable stuff
 }

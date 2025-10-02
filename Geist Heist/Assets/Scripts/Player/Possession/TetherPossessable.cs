@@ -1,15 +1,28 @@
-using UnityEngine;
- /*
- * Contributors: Sky
- * Creation Date: 9/17/25
- * Last Modified: 9/30/25
+/*
+ * Contributors: Toby
+ * Creation: 10/2/2025
+ * Last Edited: 10/2/25
+ * Summary: Tether possessable. Progresses player to next level
  * 
- * Brief Description: Input Handler for the Vase, handles movement and actions for the vase
+ * TODO: An animation for when tether is collected, i suppose
  */
 
-public class VaseObject : IInputHandler
+using NaughtyAttributes;
+using System;
+using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
+using System.Collections;
+
+public class TetherPossessable : IInputHandler
 {
-    [SerializeField] private GameObject thirdPersoncinemachineCamera;
+    [SerializeField] private Collectable ThisCollectable;
+    [SerializeField] private GameObject CollectionParticlePrefab;
+    [SerializeField,Required] private GameObject thirdPersoncinemachineCamera;
+    [SerializeField, Scene] private string HubScene = "Lobby";
+
+    private Coroutine victoryAnimation;
 
     private void Start()
     {
@@ -18,26 +31,33 @@ public class VaseObject : IInputHandler
 
     public override void OnPossessionStarted()
     {
+        victoryAnimation = StartCoroutine(LoadNextSceneCooldown());
     }
 
     public override void OnPossessionEnded()
     {
+        StopCoroutine(victoryAnimation);
+    }
+
+    //TODO: replace this with something else
+    IEnumerator LoadNextSceneCooldown()
+    {
+        yield return new WaitForSeconds(2);
+
+
     }
 
     #region action
     public override void OnActionStarted()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void WhileActionHeld()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void OnActionCanceled()
     {
-        throw new System.NotImplementedException();
     }
 
     #endregion
@@ -74,4 +94,3 @@ public class VaseObject : IInputHandler
     public override void OnMoveCanceled() { }
     #endregion
 }
-

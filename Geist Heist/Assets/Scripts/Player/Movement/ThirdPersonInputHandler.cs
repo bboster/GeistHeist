@@ -56,6 +56,16 @@ public class ThirdPersonInputHandler : IInputHandler
         TurnOnInteractableCanvas();
     }
 
+    // for the player / ghost: this means ENTERING ghost mode
+    public override void OnPossessionStarted()
+    {
+    }
+
+    // for the player / ghost: this means EXITING ghost mode
+    public override void OnPossessionEnded()
+    {
+    }
+
     #region Action
     public override void OnActionStarted()
     {
@@ -63,12 +73,10 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void WhileActionHeld()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void OnActionCanceled()
     {
-        throw new System.NotImplementedException();
     }
 
     #endregion
@@ -82,7 +90,7 @@ public class ThirdPersonInputHandler : IInputHandler
         {
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
-                interactable.Interact(result.transform.GetComponent<PossessableObject>());
+                interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
 
                 OnPossessObject?.Invoke(0);
                 break;
@@ -162,4 +170,6 @@ public class ThirdPersonInputHandler : IInputHandler
         Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * sphereCastDistance), sphereCastRadius);
   
     }
+
+   
 }
