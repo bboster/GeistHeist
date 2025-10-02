@@ -77,9 +77,9 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionHeld.AddListener(input.WhileActionHeld);
         InputEvents.ActionCanceled.AddListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.AddListener(input.OnPossessStarted);
-        InputEvents.PossessHeld.AddListener(input.WhilePossessHeld);
-        InputEvents.PossessCanceled.AddListener(input.OnPossessCanceled);
+        InputEvents.PossessStarted.AddListener(input.OnInteractStarted);
+        InputEvents.PossessHeld.AddListener(input.WhileInteractHeld);
+        InputEvents.PossessCanceled.AddListener(input.OnInteractCanceled);
 
         // camera is really bad pls refactor it.
         //var cam = possessable.CameraInputHandler;
@@ -98,8 +98,8 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionHeld.RemoveListener(input.WhileActionHeld);
         InputEvents.ActionCanceled.RemoveListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.RemoveListener(input.OnPossessStarted);
-        InputEvents.PossessHeld.RemoveListener(input.WhilePossessHeld);
-        InputEvents.PossessCanceled.RemoveListener(input.OnPossessCanceled);
+        InputEvents.PossessStarted.RemoveListener(input.OnInteractStarted);
+        InputEvents.PossessHeld.RemoveListener(input.WhileInteractHeld);
+        InputEvents.PossessCanceled.RemoveListener(input.OnInteractCanceled);
     }
 }

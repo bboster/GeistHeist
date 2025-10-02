@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 8762889882606682532}
   - component: {fileID: 8335339708118637179}
   - component: {fileID: 5283868960214701501}
-  - component: {fileID: 7413776157936059847}
   - component: {fileID: 3107868394456876978}
   - component: {fileID: 5974260262404806057}
   - component: {fileID: 7039407254155894154}
+  - component: {fileID: 4905116492384401093}
   m_Layer: 0
   m_Name: 3rd Person Player
   m_TagString: Untagged
@@ -94,25 +94,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7413776157936059847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3233496734506821444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87706826846a65d42a9390a9728aaa8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FirstPersonInputHandler
-  speed: 3
-  maxVelocity: 5
-  speedPickup: 1000
-  slowDownFactor: 0.05
-  firstPersoncinemachineCamera: {fileID: 6503710880496754358}
-  sphereCastRadius: 10
-  sphereCastDistance: 100000000
 --- !u!114 &3107868394456876978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +158,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &4905116492384401093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3233496734506821444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f4c20950db8e9147aa3ca13fc977891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstPersonInputHandler
+  speed: 3
+  maxVelocity: 10
+  speedPickup: 3
+  slowDownFactor: 0.1
+  thirdPersonCinemachineCamera: {fileID: 6503710880496754358}
+  sphereCastRadius: 2.5
+  sphereCastDistance: 5.4
+  interactableRayLength: 10
+  raycastLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  interactableCanvas: {fileID: 0}
 --- !u!1 &6503710880496754358
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,8 +210,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6503710880496754358}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1521234, y: 0, z: 0, w: 0.98836154}
-  m_LocalPosition: {x: 0, y: 3.0070581, z: -9.537169}
+  m_LocalRotation: {x: 0.01833461, y: 0.925693, z: 0.04524572, w: -0.3751122}
+  m_LocalPosition: {x: 6.9281836, y: -0.9752234, z: 7.144873}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -289,7 +294,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 0
+    Value: -135.88214
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -299,7 +304,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 17.5
+    Value: -5.596514
     Center: 17.5
     Range: {x: -10, y: 45}
     Wrap: 0
@@ -386,7 +391,7 @@ MonoBehaviour:
         LegacyInput: 
         LegacyGain: 1
         CancelDeltaTime: 0
-      InputValue: 0
+      InputValue: -0
       Driver:
         AccelTime: 0.2
         DecelTime: 0.2
@@ -399,7 +404,7 @@ MonoBehaviour:
         LegacyInput: 
         LegacyGain: 1
         CancelDeltaTime: 0
-      InputValue: 0
+      InputValue: -0
       Driver:
         AccelTime: 0
         DecelTime: 0
