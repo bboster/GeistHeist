@@ -21,13 +21,13 @@ public class ChaseBehavior : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        FirstPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
+        ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     public override void StopBehavior()
     {
         base.StopBehavior();
-        ThirdPersonInputHandler.OnPossessObject -= GetComponent<EnemyController>().ChangeBehavior;
+        ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     #endregion
@@ -69,6 +69,6 @@ public class ChaseBehavior : GuardMovement
     ~ChaseBehavior()
     {
         if(selfRef != null)
-            FirstPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
+            ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 }
