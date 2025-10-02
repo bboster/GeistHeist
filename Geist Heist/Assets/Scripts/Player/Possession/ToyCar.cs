@@ -1,35 +1,58 @@
-using UnityEngine;
- /*
+using UnityEngine; 
+/*
  * Contributors: Sky
  * Creation Date: 9/17/25
  * Last Modified: 9/30/25
  * 
  * Brief Description: Input Handler for the Vase, handles movement and actions for the vase
  */
-
-public class VaseObject : IInputHandler, IInteractable
+public class ToyCar : IInputHandler, IInteractable
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
+
+    [Header("Design Variables")]
+    [SerializeField] private float minStrength;
+    [SerializeField] private float currentStrength;
+    [SerializeField] private float maxStrength;
+    [SerializeField] private float chargeRate;
+
+    private Rigidbody rb;
 
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     #region action
     public override void OnActionStarted()
     {
-        throw new System.NotImplementedException();
+        if ()
+        {
+            rb.AddForce(gameObject.transform.forward * minStrength);
+        }
+        else
+        {
+            currentStrength = minStrength;
+        }
     }
 
     public override void WhileActionHeld()
     {
-        throw new System.NotImplementedException();
+            currentStrength += currentStrength;
+
+            if (currentStrength > maxStrength)
+            {
+                currentStrength = maxStrength;
+            }
     }
 
     public override void OnActionCanceled()
     {
-        throw new System.NotImplementedException();
+        if (!Tap)
+        {
+            rb.AddForce(gameObject.transform.forward * currentStrength);
+        }
     }
 
     #endregion
