@@ -2,9 +2,8 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 9/30/25
- * Summary: Handles initialization of the enemy and activating/deactivating behaviors.
- * To Do: Build in a listener for an action that tells the controller when the player possesses and object.
+ * Last Edited: 10/02/25
+ * Summary: Handles initialization of the enemy and activating/deactivating and switching behaviors.
  */
 
 using System;
@@ -27,6 +26,8 @@ public class GuardController : MonoBehaviour
     private Behavior currentBehavior;
 
     private Coroutine activeBehaviorLoop;
+
+    private Priority currentPriority;
 
     #endregion
 
@@ -70,15 +71,11 @@ public class GuardController : MonoBehaviour
     /// Swaps the currently running behavior.
     /// </summary>
     /// <param name="newBehavior"></param>
-    public void ChangeBehavior(GuardData.GuardStates state)
+    public void ChangeBehavior(GuardStates state)
     {
         StopBehavior();
         currentBehavior = BehaviorDatabase.instance.GetBehavior(state);
         StartBehavior();
-
-        //currentBehavior.StopBehavior();
-        //currentBehavior = behaviors[behaviorIndex];
-        //currentBehavior.StartBehavior();
     }
 
     /// <summary>
@@ -101,6 +98,18 @@ public class GuardController : MonoBehaviour
         {
             StopCoroutine(activeBehaviorLoop);
             activeBehaviorLoop = null;
+        }
+    }
+
+    /// <summary>
+    /// Recieves a stimulus and determines whether to change behaviors
+    /// </summary>
+    /// <param name="stimulus"></param>
+    public void RecieveStimulus(Stimulus stimulus, GuardStates stateToChangeTo)
+    {
+        if(stimulus.GetPriority() > currentPriority)
+        {
+            ChangeBehavior(stateToChangeTo);
         }
     }
 

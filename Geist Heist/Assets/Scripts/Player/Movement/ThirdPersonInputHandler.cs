@@ -35,7 +35,7 @@ public class FirstPersonInputHandler : IInputHandler
     [SerializeField] private LayerMask raycastLayer;
     [SerializeField] GameObject interactableCanvas;
 
-    public static Action<GuardData.GuardStates> OnPossessObject;
+    public static Action<GuardStates> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -85,7 +85,7 @@ public class FirstPersonInputHandler : IInputHandler
             if (results.transform.GetComponent<PossessableObject>() && results.transform != this.transform)
             {
                 PlayerManager.Instance.PossessObject(results.transform.GetComponent<PossessableObject>());
-                OnPossessObject?.Invoke(GuardData.GuardStates.patrol);
+                OnPossessObject?.Invoke(GuardStates.patrol);
                 break;
             }
         }

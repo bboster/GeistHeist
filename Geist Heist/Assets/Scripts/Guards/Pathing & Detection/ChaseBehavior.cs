@@ -63,7 +63,7 @@ public class ChaseBehavior : GuardMovement
             if (CheckPathCompletion() == true /*&& attacking == false*/)
             {
                 //attacking = true;
-                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardData.GuardStates.attack);
+                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.attack);
             }
             else
             {

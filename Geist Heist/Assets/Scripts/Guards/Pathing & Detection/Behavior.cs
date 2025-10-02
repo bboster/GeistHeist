@@ -18,7 +18,7 @@ public class Behavior : ScriptableObject
     protected Coroutine currentLoop;
     public Coroutine behaviorLoop;
 
-    public GuardData.GuardStates StateName;
+    public GuardStates StateName;
 
     #region StartLoop and StopLoop
 

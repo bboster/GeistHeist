@@ -31,7 +31,7 @@ public class BehaviorDatabase : MonoBehaviour
     /// Retrieves a behavior from the database.
     /// </summary>
     /// <param name="state"></param>
-    public Behavior GetBehavior(GuardData.GuardStates state)
+    public Behavior GetBehavior(GuardStates state)
     {
         return guardBehaviors[(int)state];
     }

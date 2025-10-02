@@ -9,6 +9,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using GuardUtilities;
 
 [CreateAssetMenu(fileName = "New Surprised Behavior", menuName = "Guard Behaviors/New Surprised Behavior")]
 public class SurprisedBehavior : Behavior
@@ -27,6 +28,6 @@ public class SurprisedBehavior : Behavior
         thisAgent.isStopped = true;
         yield return new WaitForSeconds(reactionLength); //REPLACE THIS WITH SOMETHING TO TIE IN ANIMATIONS LATER
         thisAgent.isStopped = false;
-        selfRef.GetComponent<GuardController>().ChangeBehavior(GuardUtilities.GuardData.GuardStates.chase);
+        selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.chase);
     }
 }

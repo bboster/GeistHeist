@@ -1,15 +1,15 @@
 /*
  * Author: Jacob Bateman
  * Contributors:
- * Creation: 9/18/25
- * Last Edited: 9/30/25
+ * Creation: 10/02/25
+ * Last Edited: 10/02/25
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
 using UnityEngine;
 using GuardUtilities;
 
-public class VisionCone : MonoBehaviour
+public class VisionStimulus : Stimulus
 {
     private bool hasSeenPlayer = false;
 
@@ -22,21 +22,30 @@ public class VisionCone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == false)
+        if (other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == false)
         {
             //Debug.Log("PLAYER SEEN");
             hasSeenPlayer = true;
-            parentController.ChangeBehavior(GuardStates.surprised);
+            TriggerStimulus();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == true)
+        if (other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == true)
         {
             //Debug.Log("PLAYER UNSEEN");
             hasSeenPlayer = false;
             parentController.ChangeBehavior(GuardStates.patrol); // (Will swap to a proper recovery behavior once that is programmed)
         }
+    }
+
+    /// <summary>
+    /// Sends the stimulus to the guard recieving it
+    /// </summary>
+    public override void TriggerStimulus()
+    {
+        parentController.RecieveStimulus(this, stateToChangeTo);
+        //parentController.ChangeBehavior(GuardUtilities.GuardData.GuardStates.surprised);
     }
 }
