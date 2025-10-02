@@ -7,7 +7,7 @@ using UnityEngine;
 * 
 * Brief Description: Input Handler for the Vending Machine, handles movement and actions for the Vending Machine
 */
-public class VendingObject : IInputHandler
+public class VendingObject : IInputHandler, IInteractable
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private GameObject CanSpawnPoint;
@@ -55,7 +55,7 @@ public class VendingObject : IInputHandler
     {
         if (!Tap)
         {
-            currentStrength += currentStrength;
+            currentStrength += StrengthGrowthRate;
             if(currentStrength > MaxStrength)
             {
                 currentStrength = MaxStrength;
@@ -76,7 +76,7 @@ public class VendingObject : IInputHandler
     #endregion
 
     #region Possess
-    public override void OnPossessStarted()
+    public override void OnInteractStarted()
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
@@ -84,12 +84,12 @@ public class VendingObject : IInputHandler
         }
     }
 
-    public override void WhilePossessHeld()
+    public override void WhileInteractHeld()
     { }
 
-    public override void OnPossessCanceled()
-    {
-    }
+    public override void OnInteractCanceled()
+    { }
+
     #endregion
 
     #region Move
@@ -108,5 +108,11 @@ public class VendingObject : IInputHandler
 
 
     public override void OnMoveCanceled() { }
+
     #endregion
+
+    void IInteractable.Interact(PossessableObject possessable)
+    {
+        PlayerManager.Instance.PossessObject(possessable);
+    }
 }
