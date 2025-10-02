@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky
  * Creation Date: 9/16/25
- * Last Modified: 9/30/25
+ * Last Modified: 10/1/25
  * 
  * Brief Description: Handles third person movement and interaction
  */
@@ -10,7 +10,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
-using UnityEditor.UIElements;
+//using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
 
 public class ThirdPersonInputHandler : IInputHandler
 {
