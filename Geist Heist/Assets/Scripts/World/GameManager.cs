@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     public void LoadCurrentLevel()
     {
         Debug.Log("Loading level: " + currentLevel);
-        if (currentLevel < 1)
+        if (currentLevel >= 1)
         { 
             if (SceneManager.GetActiveScene().name == "Lobby")
             {
