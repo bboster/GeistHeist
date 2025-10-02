@@ -1,38 +1,40 @@
 /*
- * Contributors: Toby, Jacob, Brooke
+ * Contributors: Toby, Jacob, Brooke, Sky
  * Creation Date: 9/16/25
- * Last Modified: 9/29/25
+ * Last Modified: 10/1/25
  * 
- * Brief Description: For prototyping first person gameplay, for now
+ * Brief Description: Handles third person movement and interaction
  */
 
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
+//using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
 
-public class FirstPersonInputHandler : IInputHandler
+public class ThirdPersonInputHandler : IInputHandler
 {
     private Rigidbody rigidbody;
 
+    [Header("Design Variables")]
     [SerializeField] private float speed = 3;
     [SerializeField] private float maxVelocity = 10;
     [Tooltip("Higher number: reaches desired speed faster")]
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
-    [SerializeField] private GameObject firstPersoncinemachineCamera;
+
+    [Header("Sphere Cast Variables")]
+    [SerializeField] private GameObject thirdPersonCinemachineCamera;
     [SerializeField] private float sphereCastRadius = 10;
-    [SerializeField] private float sphereCastDistance = 100000000;
+    [SerializeField] private float sphereCastDistance = 1000;
+    private LayerMask layerToInclude;
 
     [Header("Scene Transition Variables")]
     // Scene transition specific variables
-
-    [SerializeField] [Scene] private string sceneName;
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField] private float interactableRayLength = 10;
-    [SerializeField] private LayerMask raycastLayer;
-    [SerializeField] GameObject interactableCanvas;
+    [SerializeField] private GameObject interactableCanvas;
 
     public static Action<int> OnPossessObject;
 
@@ -40,6 +42,7 @@ public class FirstPersonInputHandler : IInputHandler
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
+        layerToInclude = LayerMask.GetMask("Interactable");
     }
 
     // Update is called once per frame
@@ -51,14 +54,6 @@ public class FirstPersonInputHandler : IInputHandler
     #region action
     public override void OnActionStarted()
     {
-        RaycastHit hit;
-        Vector3 interactableOrigin = transform.position;
-        Vector3 interactableDirection = Camera.main.transform.forward; // moves the raycast with the camera, since the player remains still
-
-        if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, raycastLayer))
-        {
-            SceneManager.LoadScene(sceneName);
-        }
     }
 
     public override void WhileActionHeld()
@@ -74,28 +69,27 @@ public class FirstPersonInputHandler : IInputHandler
     #endregion
 
     #region Possess
-    public override void OnPossessStarted()
+    public override void OnInteractStarted()
     {
-        LayerMask lm = LayerMask.GetMask("PossessableObject");
-        var sphereCastResult = Physics.SphereCastAll(firstPersoncinemachineCamera.transform.position, sphereCastRadius, firstPersoncinemachineCamera.transform.forward, sphereCastDistance, lm);
-
-        foreach (var results in sphereCastResult)
+        var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, sphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
+        
+        foreach (var result in sphereCastResults)
         {
-            if (results.transform.GetComponent<PossessableObject>() && results.transform != this.transform)
+            if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
-                PlayerManager.Instance.PossessObject(results.transform.GetComponent<PossessableObject>());
+                interactable.Interact(result.transform.GetComponent<PossessableObject>());
+
                 OnPossessObject?.Invoke(0);
                 break;
             }
         }
     }
 
+    public override void WhileInteractHeld()
+    { 
+    }
 
-
-    public override void WhilePossessHeld()
-    { }
-
-    public override void OnPossessCanceled()
+    public override void OnInteractCanceled()
     {
     }
     #endregion
@@ -131,13 +125,18 @@ public class FirstPersonInputHandler : IInputHandler
     #region  SceneTransition
     public void TurnOnInteractableCanvas()
     {
+        if (interactableCanvas == null)
+        {
+            return;
+        }
+
         RaycastHit hit;
         Vector3 interactableOrigin = transform.position;
         Vector3 interactableDirection = Camera.main.transform.forward; // moves the raycast with the camera, since the player remains still
 
         Debug.DrawRay(interactableOrigin, interactableDirection * interactableRayLength, Color.red);
 
-        if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, raycastLayer))
+        if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, layerToInclude))
         {
             interactableCanvas.SetActive(true);
         }
@@ -148,4 +147,14 @@ public class FirstPersonInputHandler : IInputHandler
     }
 
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        //var sphereCastResults = Physics.SphereCastAll(thirdPersonCinemachineCamera.transform.position, sphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(gameObject.transform.position, sphereCastRadius);
+        Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * sphereCastDistance));
+        Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * sphereCastDistance), sphereCastRadius);
+  
+    }
 }
