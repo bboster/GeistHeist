@@ -901,10 +901,10 @@ GameObject:
   - component: {fileID: 1658780623}
   - component: {fileID: 1658780622}
   - component: {fileID: 1658780621}
-  - component: {fileID: 1658780626}
   - component: {fileID: 1658780624}
   - component: {fileID: 1658780620}
   - component: {fileID: 1658780628}
+  - component: {fileID: 1658780629}
   m_Layer: 0
   m_Name: 1st Person Player
   m_TagString: Untagged
@@ -1020,22 +1020,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
   InputHandler: {fileID: 0}
---- !u!114 &1658780626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1658780619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87706826846a65d42a9390a9728aaa8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FirstPersonInputHandler
-  speed: 3
-  maxVelocity: 5
-  speedPickup: 1000
-  slowDownFactor: 0.05
+  CinemachineCamera: {fileID: 0}
 --- !u!54 &1658780628
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1063,6 +1048,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &1658780629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658780619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f4c20950db8e9147aa3ca13fc977891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonInputHandler
+  speed: 5
+  maxVelocity: 10
+  speedPickup: 3
+  slowDownFactor: 0.1
+  thirdPersonCinemachineCamera: {fileID: 0}
+  sphereCastRadius: 10
+  sphereCastDistance: 1000
+  interactableRayLength: 10
+  interactableCanvas: {fileID: 0}
 --- !u!1001 &1846985328
 PrefabInstance:
   m_ObjectHideFlags: 0
