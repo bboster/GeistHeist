@@ -1,8 +1,7 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh
  * Creation Date: 9/16/25
- * Last Modified: 9/30/25
- * 
+ * Last Modified: 10/1/2025
  * Brief Description: Handles third person movement and interaction
  */
 
