@@ -15,7 +15,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections;
 
-public class OptionalCollectableHub : MonoBehaviour, IInteractable
+public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 {
     [InfoBox("Set this gameobject to active by default, it will be disabled based on whether or not the player has save data for the relevant collectable")]
 

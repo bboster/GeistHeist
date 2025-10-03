@@ -36,7 +36,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         if (currentSaveDta.ScenesCompleted == null)
             currentSaveDta.ScenesCompleted = new List<string>();
 
-        if (IsSceneCompleted(sceneName))
+        if (IsLevelCompleted(sceneName))
             Debug.Log("This level has already been completed");
         else
             currentSaveDta.ScenesCompleted.Add(sceneName);
@@ -61,7 +61,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             SaveData();
     }
 
-    public bool IsSceneCompleted(string sceneName)
+    public bool IsLevelCompleted(string sceneName)
     {
         if (currentSaveDta == null || currentSaveDta.ScenesCompleted == null) return false;
         
@@ -134,6 +134,21 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     }
 
     [Button]
+    /// <summary>
+    /// Not sure if this function has any practical use, actually.
+    /// Better to have it as a debug tool anyways, just in case
+    /// </summary>
+    public void ClearSaveFile()
+    {
+        currentSaveDta = new();
+        SaveData();
+    }
+
+    [Button]
+    /// <summary>
+    /// Not sure if this function has any practical use, actually.
+    /// Better to have it as a debug tool anyways, just in case
+    /// </summary>
     public void DeleteSaveFile()
     {
         if (saveFile == null)
