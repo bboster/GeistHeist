@@ -54,7 +54,7 @@
                 {
                     "name": "Look",
                     "type": "Value",
-                    "id": "fede7af3-176d-4630-b934-384a589b4108",
+                    "id": "93b08e0a-a3cc-43d9-8ca2-9f96d869afea",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -163,11 +163,22 @@
                 },
                 {
                     "name": "",
-                    "id": "c0209fcb-7afe-4efa-9ae0-d9fe06eadc75",
-                    "path": "<Mouse>/delta",
+                    "id": "6d998ab9-7e27-4f57-9582-3f8276b122fd",
+                    "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "",
-                    "groups": "",
+                    "processors": "ScaleVector2(x=100,y=100)",
+                    "groups": ";Gamepad",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "27d2823b-a2c0-4adb-9c36-8e1b0f41dfc8",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "DeltaTimeScale,ScaleVector2(x=0.1,y=0.1)",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
