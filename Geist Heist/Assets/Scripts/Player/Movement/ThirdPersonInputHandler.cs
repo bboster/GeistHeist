@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby, Jacob, Brooke, Sky
+ * Contributors: Toby, Jacob, Brooke, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/1/25
+ * Last Modified: 10/3/25
  * 
  * Brief Description: Handles third person movement and interaction
  */
@@ -36,6 +36,10 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float interactableRayLength = 10;
     [SerializeField] private GameObject interactableCanvas;
 
+    [Header("Between Possession Cooldown Variables")]
+    [SerializeField] private Canvas betweenPossessionCanvas;
+    [SerializeField] CooldownManager cooldownManager;
+
     public static Action<int> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -43,12 +47,18 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
+        cooldownManager.OnCooldownFinished += OnCooldownFinished;
     }
 
     // Update is called once per frame
     void Update()
     {
         TurnOnInteractableCanvas();
+
+        if (cooldownManager.IsCooldownActive && betweenPossessionCanvas != null)
+        {
+            betweenPossessionCanvas.gameObject.SetActive(true);
+        }
     }
 
     #region action
@@ -72,7 +82,7 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnInteractStarted()
     {
         var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, sphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
-        
+
         foreach (var result in sphereCastResults)
         {
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
@@ -86,11 +96,24 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
     public override void WhileInteractHeld()
-    { 
+    {
     }
 
     public override void OnInteractCanceled()
     {
+    }
+
+    public void OnPossessFinished()
+    {
+        cooldownManager.StartCooldown();
+    }
+
+    private void OnCooldownFinished()
+    {
+        if(betweenPossessionCanvas != null)
+        {
+            betweenPossessionCanvas.gameObject.SetActive(false);
+        }
     }
     #endregion
 
