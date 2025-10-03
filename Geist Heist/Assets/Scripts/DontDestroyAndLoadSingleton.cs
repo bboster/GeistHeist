@@ -1,14 +1,10 @@
 /*****************************************************************************
-// File Name :         Singleton.cs
-// Author :            Kyle Grenier
+// File Name :         DontDestroyOnLoadSingleton.cs
+// Author :            Kyle Grenier, Toby Schamberger
 // Creation Date :     09/29/2021
 //
-// Brief Description : Defines a class with a single instance.
-
-note from toby: this is the most excessive piece of code ive ever seen i think 
-its so funny.
-
-shoutout kyle and oos, this script is so silly
+// Brief Description : Defines a class with a single instance. Becomes dont destroy 
+// on load.
 *****************************************************************************/
 using UnityEngine;
 
