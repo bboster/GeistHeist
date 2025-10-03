@@ -133,6 +133,18 @@ public class GuardController : MonoBehaviour
     }
 
     /// <summary>
+    /// Recieves a stimulus and determines whether to change behaviors
+    /// </summary>
+    /// <param name="stimulus"></param>
+    public void RecieveStimulus(Stimulus stimulus, GuardStates stateToChangeTo, Vector3 searchLocation)
+    {
+        if (stimulus.GetPriority() > currentPriority)
+        {
+            ChangeBehavior(stateToChangeTo);
+        }
+    }
+
+    /// <summary>
     /// Returns a reference to the guard GameObject this script is attached to
     /// </summary>
     /// <returns></returns>
