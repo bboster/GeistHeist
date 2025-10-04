@@ -104,11 +104,6 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
-    public void OnPossessFinished()
-    {
-        cooldownManager.StartCooldown();
-    }
-
     private void OnCooldownFinished()
     {
         if(cooldownCanvas != null)
