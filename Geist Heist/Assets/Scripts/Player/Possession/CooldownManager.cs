@@ -50,11 +50,4 @@ public class CooldownManager : Singleton<CooldownManager>
             cooldownSlider.value = currentCooldownTime / cooldownTime;
         }
     }
-
-    public void ResetCooldown()
-    {
-        currentCooldownTime = cooldownTime;
-        isCooldownActive = true;
-        UpdateSlider();
-    }
 }
