@@ -79,17 +79,20 @@ public class ThirdPersonInputHandler : IInputHandler
     #region Possess
     public override void OnInteractStarted()
     {
-        if(cooldownManager.IsCooldownActive)
-        {
-            return;
-        }
+        
         var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, sphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
 
         foreach (var result in sphereCastResults)
         {
+            
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
                 interactable.Interact(result.transform.GetComponent<PossessableObject>());
+
+                if (cooldownManager.IsCooldownActive)
+                {
+                    return;
+                }
 
                 OnPossessObject?.Invoke(0);
                 break;
