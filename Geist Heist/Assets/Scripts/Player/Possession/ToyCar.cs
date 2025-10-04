@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Xml.Serialization;
 using UnityEngine; 
 /*
  * Contributors: Sky
@@ -12,11 +14,13 @@ public class ToyCar : IInputHandler, IInteractable
 
     [Header("Design Variables")]
     [SerializeField] private float minStrength;
-    [SerializeField] private float currentStrength;
+    private float currentStrength;
     [SerializeField] private float maxStrength;
     [SerializeField] private float chargeRate;
+    private bool IsMoving = false;
 
     private Rigidbody rb;
+    private Coroutine freezeCoroutine;
 
     private void Start()
     {
@@ -27,32 +31,63 @@ public class ToyCar : IInputHandler, IInteractable
     #region action
     public override void OnActionStarted()
     {
-        if ()
-        {
-            rb.AddForce(gameObject.transform.forward * minStrength);
-        }
-        else
+        if (rb.linearVelocity == Vector3.zero)
         {
             currentStrength = minStrength;
+            IsMoving = true;
         }
     }
 
     public override void WhileActionHeld()
     {
-            currentStrength += currentStrength;
+        if (rb.linearVelocity == Vector3.zero)
+        {
+            currentStrength += chargeRate * Time.deltaTime;
 
             if (currentStrength > maxStrength)
             {
                 currentStrength = maxStrength;
             }
+        }
+    }
+    public override void WhileActionNotHeld()
+    {
+        if (rb.linearVelocity == Vector3.zero)
+        {
+            if (freezeCoroutine == null)
+            {
+                freezeCoroutine = StartCoroutine(ReFreezeConstraints());
+            }
+            else
+            {
+                StopCoroutine(freezeCoroutine);
+            }
+        }
     }
 
     public override void OnActionCanceled()
     {
-        if (!Tap)
+        if (rb.linearVelocity == Vector3.zero)
         {
-            rb.AddForce(gameObject.transform.forward * currentStrength);
+            UnFreezePosition();
+            rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
         }
+    }
+
+    public IEnumerator ReFreezeConstraints()
+    {
+        while (rb.linearVelocity == Vector3.zero)
+        {
+            yield return new WaitForSeconds(1);
+
+            if (rb.linearVelocity != Vector3.zero)
+                yield break;
+
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            IsMoving = false;
+        }
+
+        freezeCoroutine = null;
     }
 
     #endregion
@@ -92,6 +127,19 @@ public class ToyCar : IInputHandler, IInteractable
     void IInteractable.Interact(PossessableObject possessable)
     {
         PlayerManager.Instance.PossessObject(possessable);
+    }
+
+    public void UnFreezePosition()
+    {
+        rb.constraints = RigidbodyConstraints.None;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        Debug.Log("i'm running");
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(gameObject.transform.position, gameObject.transform.forward);
     }
 }
 

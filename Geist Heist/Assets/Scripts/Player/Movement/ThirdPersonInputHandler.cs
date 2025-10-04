@@ -61,6 +61,11 @@ public class ThirdPersonInputHandler : IInputHandler
         throw new System.NotImplementedException();
     }
 
+    public override void WhileActionNotHeld()
+    {
+        throw new NotImplementedException();
+    }
+
     public override void OnActionCanceled()
     {
         throw new System.NotImplementedException();

@@ -27,6 +27,11 @@ public class Vase : IInputHandler, IInteractable
         throw new System.NotImplementedException();
     }
 
+    public override void WhileActionNotHeld()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void OnActionCanceled()
     {
         throw new System.NotImplementedException();

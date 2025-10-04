@@ -38,6 +38,7 @@ public abstract class IInputHandler : MonoBehaviour
     /// called every fixed update while action is held
     /// </summary>
     public abstract void WhileActionHeld();
+    public abstract void WhileActionNotHeld();
     public abstract void OnActionCanceled();
 
     public abstract void OnInteractStarted();
