@@ -2,6 +2,7 @@ using GuardUtilities;
 using UnityEngine;
 using System.Collections;
 
+[CreateAssetMenu(fileName = "New Search Behavior", menuName = "Guard Behaviors/New Search Behavior")]
 public class SearchBehavior : GuardMovement
 {
     private bool atSearchLocation = false;
@@ -15,11 +16,12 @@ public class SearchBehavior : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        SearchLocation = //REPLACE WITH A CENTRALIZED REFERENCE TO THE PLAYER WHEN ABLE
+        SearchLocation = selfRef.GetComponent<GuardController>().SearchLocation;
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;
     }
+    
 
     /// <summary>
     /// Controls the overall logic for the behavior.
@@ -62,5 +64,6 @@ public class SearchBehavior : GuardMovement
         GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
+        SearchLocation = Vector3.zero;
     }
 }

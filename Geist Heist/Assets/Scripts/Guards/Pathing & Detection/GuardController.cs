@@ -38,6 +38,30 @@ public class GuardController : MonoBehaviour
     [ShowIf("showProgrammingValues")]
     [SerializeField] private Animator animator;
 
+    public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
+
+    #endregion
+
+    #region Getters
+
+    /// <summary>
+    /// Returns a reference to the guard GameObject this script is attached to
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetGuard()
+    {
+        return gameObject;
+    }
+
+    /// <summary>
+    /// Returns a reference to the guard's Animator component
+    /// </summary>
+    /// <returns></returns>
+    public Animator GetAnimator()
+    {
+        return animator;
+    }
+
     #endregion
 
     //DELETE THIS LATER IN FAVOR OF AN OVERALL ENEMY HANDLER
@@ -92,6 +116,8 @@ public class GuardController : MonoBehaviour
         }
     }
 
+    #region Start and Stop Behavior
+
     /// <summary>
     /// Starts the currently selected behavior
     /// </summary>
@@ -120,6 +146,10 @@ public class GuardController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region RecieveStimulus Functions
+
     /// <summary>
     /// Recieves a stimulus and determines whether to change behaviors
     /// </summary>
@@ -136,29 +166,16 @@ public class GuardController : MonoBehaviour
     /// Recieves a stimulus and determines whether to change behaviors
     /// </summary>
     /// <param name="stimulus"></param>
-    public void RecieveStimulus(Stimulus stimulus, GuardStates stateToChangeTo, Vector3 searchLocation)
+    /// <param name="stateToChangeTo"></param>
+    /// <param name="stimulusLocation"></param>
+    public void RecieveStimulus(Stimulus stimulus, GuardStates stateToChangeTo, Vector3 stimulusLocation)
     {
-        if (stimulus.GetPriority() > currentPriority)
+        if(stimulus.GetPriority() > currentPriority)
         {
+            SearchLocation = stimulusLocation;
             ChangeBehavior(stateToChangeTo);
         }
     }
 
-    /// <summary>
-    /// Returns a reference to the guard GameObject this script is attached to
-    /// </summary>
-    /// <returns></returns>
-    public GameObject GetGuard()
-    {
-        return gameObject;
-    }
-
-    /// <summary>
-    /// Returns a reference to the guard's Animator component
-    /// </summary>
-    /// <returns></returns>
-    public Animator GetAnimator()
-    {
-        return animator;
-    }
+    #endregion
 }

@@ -64,5 +64,6 @@ public class VisionBreakSearchBehavior : GuardMovement
         GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
+        SearchLocation = Vector3.zero;
     }
 }
