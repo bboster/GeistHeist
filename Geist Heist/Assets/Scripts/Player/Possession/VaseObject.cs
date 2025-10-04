@@ -40,6 +40,7 @@ public class VaseObject : IInputHandler, IInteractable
         if (thirdPersoncinemachineCamera.activeSelf)
         {
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+            CooldownManager.Instance.StartCooldown();
         }
     }
 

@@ -9,17 +9,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class CooldownManager : MonoBehaviour
+public class CooldownManager : Singleton<CooldownManager>
 {
     public event Action OnCooldownFinished;
-
 
     [SerializeField] private Slider cooldownSlider;
     [SerializeField] private float cooldownTime;
     private float currentCooldownTime;
     private bool isCooldownActive = false;
     
-    public float CurrentCooldownTime => currentCooldownTime;
     public bool IsCooldownActive => isCooldownActive;
 
     void Update()

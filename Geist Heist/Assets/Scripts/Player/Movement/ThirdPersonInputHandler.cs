@@ -47,6 +47,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
+        betweenPossessionCanvas.gameObject.SetActive(false);
         cooldownManager.OnCooldownFinished += OnCooldownFinished;
     }
 
