@@ -357,6 +357,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 559434661}
   m_CullTransparentMesh: 1
+--- !u!1 &599225772 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6503710880496754358, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+  m_PrefabInstance: {fileID: 1070234489}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &746245450
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,6 +700,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+      propertyPath: sceneName
+      value: Lobby
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+      propertyPath: sphereCastRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+      propertyPath: interactableCanvas
+      value: 
+      objectReference: {fileID: 187208572}
+    - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+      propertyPath: sphereCastDistance
+      value: 0.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+      propertyPath: raycastLayer.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+      propertyPath: interactableRayLength
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+      propertyPath: thirdPersonCinemachineCamera
+      value: 
+      objectReference: {fileID: 599225772}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -944,6 +977,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2053106555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2053106557}
+  - component: {fileID: 2053106556}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!114 &2053106556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053106555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61d42bd870d64164f99d3d30e3f60338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  blockingWall: {fileID: 0}
+--- !u!4 &2053106557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053106555}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.45995, y: 0, z: 5.72428}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5159277541554576072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -959,6 +1037,14 @@ PrefabInstance:
     - target: {fileID: 5180823948527331709, guid: 9752e7e0b42cef04dba92aef6873fc0c, type: 3}
       propertyPath: sceneName
       value: Globe
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180823948527331709, guid: 9752e7e0b42cef04dba92aef6873fc0c, type: 3}
+      propertyPath: EndOfScene
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180823948527331709, guid: 9752e7e0b42cef04dba92aef6873fc0c, type: 3}
+      propertyPath: sceneIndex
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5875264548881130905, guid: 9752e7e0b42cef04dba92aef6873fc0c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1017,3 +1103,4 @@ SceneRoots:
   - {fileID: 809988658}
   - {fileID: 187208576}
   - {fileID: 1947294205}
+  - {fileID: 2053106557}
