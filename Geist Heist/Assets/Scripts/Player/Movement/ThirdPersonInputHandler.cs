@@ -56,11 +56,7 @@ public class ThirdPersonInputHandler : IInputHandler
     void Update()
     {
         TurnOnInteractableCanvas();
-
-        if (cooldownManager.IsCooldownActive && cooldownCanvas != null)
-        {
-            cooldownCanvas.gameObject.SetActive(true);
-        }
+        TurnOnCooldownCanvas();
     }
 
     #region action
@@ -83,6 +79,10 @@ public class ThirdPersonInputHandler : IInputHandler
     #region Possess
     public override void OnInteractStarted()
     {
+        if(cooldownManager.IsCooldownActive)
+        {
+            return;
+        }
         var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, sphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
 
         foreach (var result in sphereCastResults)
@@ -110,6 +110,14 @@ public class ThirdPersonInputHandler : IInputHandler
         if(cooldownCanvas != null)
         {
             cooldownCanvas.gameObject.SetActive(false);
+        }
+    }
+
+    private void TurnOnCooldownCanvas()
+    {
+        if (cooldownManager.IsCooldownActive && cooldownCanvas != null)
+        {
+            cooldownCanvas.gameObject.SetActive(true);
         }
     }
     #endregion
