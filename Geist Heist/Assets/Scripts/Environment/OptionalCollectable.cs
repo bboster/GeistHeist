@@ -23,9 +23,8 @@ using System.Threading.Tasks;
 
 public class OptionalCollectable : MonoBehaviour
 {
-    [SerializeField] private Collectable ThisCollectable;
     [SerializeField] private GameObject CollectionParticlePrefab;
-    
+    [SerializeField] private Collectable ThisCollectable;
     private void OnTriggerEnter(Collider other)
     {
         // TODO: animation (?)
