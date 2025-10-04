@@ -85,6 +85,8 @@ public class GuardController : MonoBehaviour
         return true;
     }
 
+    #region Behavior Functions
+
     /// <summary>
     /// Checks to make sure that behaviors are set up properly.
     /// </summary>
@@ -137,6 +139,8 @@ public class GuardController : MonoBehaviour
 
         ChangeBehavior(GuardStates.visionBreak);
     }
+
+    #endregion
 
     #region Start and Stop Behavior
 

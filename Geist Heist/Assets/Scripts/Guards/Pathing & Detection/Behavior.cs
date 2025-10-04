@@ -14,6 +14,8 @@ using UnityEditor.Animations;
 
 public class Behavior : ScriptableObject
 {
+    #region Variable Declarations
+
     protected GameObject selfRef;
 
     protected Coroutine currentLoop;
@@ -25,6 +27,8 @@ public class Behavior : ScriptableObject
     public Priority Priority;
 
     public AnimatorController stateController;
+
+    #endregion
 
     #region StartLoop and StopLoop
 

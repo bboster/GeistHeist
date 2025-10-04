@@ -49,6 +49,8 @@ public class PatrolMovement : GuardMovement
         }
     }
 
+    #region Path Functions
+
     /// <summary>
     /// Gets the next point on the patrol path.
     /// </summary>
@@ -72,6 +74,8 @@ public class PatrolMovement : GuardMovement
         else
             currentPathIndex++;
     }
+
+    #endregion
 
     ~PatrolMovement()
     {

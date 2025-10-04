@@ -12,6 +12,8 @@ using NaughtyAttributes;
 
 public class VisionStimulus : Stimulus
 {
+    #region Variable Declarations
+
     [Header("Progamming")]
     [Tooltip("Controls whether or not certain variables are displayed")]
     [SerializeField] private bool showProgrammingValues;
@@ -27,6 +29,8 @@ public class VisionStimulus : Stimulus
 
     [ShowIf("showProgrammingValues")]
     [SerializeField] private GuardController parentController;
+
+    #endregion
 
     private void OnTriggerEnter(Collider other)
     {

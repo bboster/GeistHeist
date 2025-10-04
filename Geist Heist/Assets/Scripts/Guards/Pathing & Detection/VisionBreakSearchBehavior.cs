@@ -14,6 +14,10 @@ public class VisionBreakSearchBehavior : GuardMovement
 
     public Vector3 SearchLocation;
 
+    /// <summary>
+    /// Sets unique values required for the vision break behavior.
+    /// </summary>
+    /// <param name="selfRef"></param>
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
