@@ -37,7 +37,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private GameObject interactableCanvas;
 
     [Header("Between Possession Cooldown Variables")]
-    [SerializeField] private Canvas betweenPossessionCanvas;
+    [SerializeField] private Canvas cooldownCanvas;
     [SerializeField] CooldownManager cooldownManager;
 
     public static Action<int> OnPossessObject;
@@ -47,7 +47,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
-        betweenPossessionCanvas.gameObject.SetActive(false);
+        cooldownCanvas.gameObject.SetActive(false);
         cooldownManager.OnCooldownFinished += OnCooldownFinished;
     }
 
@@ -56,9 +56,9 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         TurnOnInteractableCanvas();
 
-        if (cooldownManager.IsCooldownActive && betweenPossessionCanvas != null)
+        if (cooldownManager.IsCooldownActive && cooldownCanvas != null)
         {
-            betweenPossessionCanvas.gameObject.SetActive(true);
+            cooldownCanvas.gameObject.SetActive(true);
         }
     }
 
@@ -111,9 +111,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void OnCooldownFinished()
     {
-        if(betweenPossessionCanvas != null)
+        if(cooldownCanvas != null)
         {
-            betweenPossessionCanvas.gameObject.SetActive(false);
+            cooldownCanvas.gameObject.SetActive(false);
         }
     }
     #endregion
