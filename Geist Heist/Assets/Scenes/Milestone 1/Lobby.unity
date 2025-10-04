@@ -960,6 +960,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3233496734506821444, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1754152454}
+      addedObject: {fileID: 1997841154}
+    - targetCorrespondingSourceObject: {fileID: 3233496734506821444, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1997841161}
   m_SourcePrefab: {fileID: 100100000, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
 --- !u!1 &1081649049
 GameObject:
@@ -1492,6 +1496,28 @@ MonoBehaviour:
   sceneName: Globe
   EndOfScene: 0
   sceneIndex: 0
+  m_EditorClassIdentifier: Assembly-CSharp::SceneTransition
+--- !u!114 &1997841161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997841147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87706826846a65d42a9390a9728aaa8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonInputHandler
+  speed: 3
+  maxVelocity: 10
+  speedPickup: 3
+  slowDownFactor: 0.1
+  thirdPersonCinemachineCamera: {fileID: 632097405}
+  sphereCastRadius: 10
+  sphereCastDistance: 1000
+  interactableRayLength: 10
+  interactableCanvas: {fileID: 193024564}
 --- !u!1 &2048236346
 GameObject:
   m_ObjectHideFlags: 0
