@@ -20,11 +20,6 @@ public class GuardMovement : Behavior
 
     protected NavMeshAgent thisAgent;
 
-    /*protected virtual void Awake()
-    {
-        thisAgent = selfRef.GetComponent<NavMeshAgent>();
-    }*/
-
     /// <summary>
     /// Initializes the behavior.
     /// </summary>

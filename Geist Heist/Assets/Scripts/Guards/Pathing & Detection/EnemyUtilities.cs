@@ -11,7 +11,7 @@ using UnityEngine;
 namespace GuardUtilities
 {
     public enum Priority { low, medium, high, highest }
-    public enum GuardStates { none, patrol, chase, attack, surprised, search, visionBreak, concussed }
+    public enum GuardStates { none, patrol, chase, attack, surprised, search, visionBreak, returnToPath, concussed }
 }
 
 

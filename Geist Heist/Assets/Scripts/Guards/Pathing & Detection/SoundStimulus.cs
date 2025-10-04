@@ -19,6 +19,6 @@ public class SoundStimulus : Stimulus
     /// </summary>
     public override void TriggerStimulus()
     {
-        contactedGuard.RecieveStimulus(this, stateToChangeTo);
+        contactedGuard.RecieveStimulus(this, stateToChangeTo, transform.position);
     }
 }

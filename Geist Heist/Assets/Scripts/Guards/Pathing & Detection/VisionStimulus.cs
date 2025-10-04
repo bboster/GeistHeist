@@ -30,7 +30,7 @@ public class VisionStimulus : Stimulus
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == false)
+        if (other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == false)
         {
             hasSeenPlayer = true;
             TriggerStimulus();
@@ -39,10 +39,10 @@ public class VisionStimulus : Stimulus
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == true)
+        if (other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == true)
         {
             hasSeenPlayer = false;
-            parentController.ChangeBehavior(GuardStates.visionBreak); // (Will swap to a proper recovery behavior once that is programmed)
+            parentController.OnVisionBroken();
         }
     }
 

@@ -26,7 +26,7 @@ public class GuardController : MonoBehaviour
     [SerializeField, Tooltip("Default behavior for the enemy")]
     private Behavior defaultBehavior;
 
-    private Behavior currentBehavior;
+    [SerializeField]private Behavior currentBehavior;
 
     private Coroutine activeBehaviorLoop;
 
@@ -79,7 +79,7 @@ public class GuardController : MonoBehaviour
         if (CheckBehaviors() == false)
             return false;
 
-        currentBehavior = defaultBehavior;
+        currentBehavior = Instantiate(defaultBehavior);
         StartBehavior();
 
         return true;
@@ -106,14 +106,35 @@ public class GuardController : MonoBehaviour
     /// <param name="newBehavior"></param>
     public void ChangeBehavior(GuardStates state)
     {
-        if (changingBehaviors == false)
+        StopBehavior();
+        currentBehavior = Instantiate(BehaviorDatabase.instance.GetBehavior(state));
+        StartBehavior();
+    }
+    
+    /// <summary>
+    /// Swaps the currently running behavior if priority is higher
+    /// </summary>
+    /// <param name="state"></param>
+    /// <param name="priority"></param>
+    public void ChangeBehaviorConditional(GuardStates state, Priority priority)
+    {
+        if(priority > currentPriority)
         {
-            changingBehaviors = true;
             StopBehavior();
-            currentBehavior = BehaviorDatabase.instance.GetBehavior(state);
+            currentBehavior = Instantiate(BehaviorDatabase.instance.GetBehavior(state));
             StartBehavior();
-            changingBehaviors = false;
         }
+    }
+
+    /// <summary>
+    /// Handles edge case for vision breaking after attacking
+    /// </summary>
+    public void OnVisionBroken()
+    {
+        if (currentBehavior.StateName == GuardStates.returnToPath)
+            return;
+
+        ChangeBehavior(GuardStates.visionBreak);
     }
 
     #region Start and Stop Behavior

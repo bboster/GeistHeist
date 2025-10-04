@@ -37,7 +37,7 @@ public class AttackBehavior : Behavior
             }
             else
             {
-                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.patrol);
+                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.returnToPath);
             }
 
             yield return new WaitForSeconds(attackLength);

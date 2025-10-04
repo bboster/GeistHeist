@@ -72,4 +72,9 @@ public class PatrolMovement : GuardMovement
         else
             currentPathIndex++;
     }
+
+    ~PatrolMovement()
+    {
+        currentPatrolPath = null;
+    }
 }

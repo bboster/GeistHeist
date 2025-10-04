@@ -44,7 +44,9 @@ public class Behavior : ScriptableObject
     /// </summary>
     public virtual void StopBehavior()
     {
+        selfRef.GetComponent<Animator>().StopPlayback();
         selfRef.GetComponent<Animator>().runtimeAnimatorController = null;
+        Destroy(this);
     }
 
     #endregion

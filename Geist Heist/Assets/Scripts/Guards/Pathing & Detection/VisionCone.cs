@@ -22,7 +22,7 @@ public class VisionCone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == false)
+        if(other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == false)
         {
             //Debug.Log("PLAYER SEEN");
             hasSeenPlayer = true;
@@ -32,7 +32,7 @@ public class VisionCone : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.name.Equals("1st Person Player") && hasSeenPlayer == true)
+        if(other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == true)
         {
             //Debug.Log("PLAYER UNSEEN");
             hasSeenPlayer = false;

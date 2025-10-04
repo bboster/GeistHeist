@@ -40,17 +40,14 @@ public class ChaseBehavior : GuardMovement
     {
         for(; ; )
         {
-            if (CheckPathCompletion() == true /*&& attacking == false*/)
+            if (CheckPathCompletion() == true)
             {
-                //attacking = true;
                 selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.attack);
             }
             else
             {
-                //attacking = false;
                 MoveToPoint(GetPlayerLocation());
                 thisAgent.isStopped = false;
-                //Debug.Log(gameObject.name + " IS CHASING");
             }
 
             yield return new WaitForEndOfFrame();
@@ -63,7 +60,7 @@ public class ChaseBehavior : GuardMovement
     /// <returns></returns>
     private Vector3 GetPlayerLocation()
     {
-        return GameObject.Find("1st Person Player").transform.position; //REPLACE WITH CENTRALIZED REFERENCE FROM A MANAGER ONCE ABLE.
+        return GameObject.Find("3rd Person Player").transform.position; //REPLACE WITH CENTRALIZED REFERENCE FROM A MANAGER ONCE ABLE.
     }
 
     ~ChaseBehavior()
