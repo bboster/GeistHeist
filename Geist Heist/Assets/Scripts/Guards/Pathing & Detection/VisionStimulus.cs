@@ -32,6 +32,7 @@ public class VisionStimulus : Stimulus
     {
         if (other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == false)
         {
+            //MAKE SURE PLAYER ISN'T BEHIND A WALL HERE
             hasSeenPlayer = true;
             TriggerStimulus();
         }

@@ -108,6 +108,7 @@ public class GuardController : MonoBehaviour
     {
         StopBehavior();
         currentBehavior = Instantiate(BehaviorDatabase.instance.GetBehavior(state));
+        GetComponent<StateText>().ChangeText(currentBehavior.StateName);
         StartBehavior();
     }
     
