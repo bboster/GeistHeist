@@ -1,5 +1,5 @@
 /*
- * Contributors: Toby, Jacob, Brooke, Sky, Skylar
+ * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
  * Last Modified: 10/3/25
  * 
@@ -49,6 +49,7 @@ public class ThirdPersonInputHandler : IInputHandler
         layerToInclude = LayerMask.GetMask("Interactable");
         cooldownCanvas.gameObject.SetActive(false);
         cooldownManager.OnCooldownFinished += OnCooldownFinished;
+        GameManager.Instance.LoadCurrentLevel();
     }
 
     // Update is called once per frame
