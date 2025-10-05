@@ -11,6 +11,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
+using GuardUtilities;
 //using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
 
 public class ThirdPersonInputHandler : IInputHandler
@@ -37,7 +38,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float interactableRayLength = 10;
     [SerializeField] private GameObject interactableCanvas;
 
-    public static Action<int> OnPossessObject;
+    public static Action<GuardStates> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

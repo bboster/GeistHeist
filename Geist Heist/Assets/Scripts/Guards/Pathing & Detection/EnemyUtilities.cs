@@ -2,18 +2,16 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited:
+ * Last Edited: 10/02/25
  * Summary: Holds data that needs to be accessed by multiple scripts that the enemies utilize.
  */
 
 using UnityEngine;
 
-namespace EnemyUtilities
+namespace GuardUtilities
 {
-    public class EnemyData
-    {
-        public enum EnemyStates { none, idle, patrol, chase, attack }
-    }
+    public enum Priority { low, medium, high, highest }
+    public enum GuardStates { none, patrol, chase, attack, surprised, search, visionBreak, returnToPath, concussed }
 }
 
 
