@@ -19,7 +19,7 @@ public class CooldownManager : Singleton<CooldownManager>
     private float currentCooldownTime;
     private bool isCooldownActive = false;
     
-    public bool IsCooldownActive => isCooldownActive;
+    public bool IsCooldownActive => currentCooldownTime > 0;
 
     void Update()
     {
