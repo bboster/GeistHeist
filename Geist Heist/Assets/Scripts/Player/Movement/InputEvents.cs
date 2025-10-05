@@ -111,11 +111,11 @@ public class InputEvents : Singleton<InputEvents>
     }
     private void OnDisable()
     {
-        Move.Reset();   
+        Move?.Reset();   
         //Jump.Reset();
-        Pause.Reset();
-        Action.Reset();
-        Possess.Reset();
-        Look.Reset();
+        Pause?.Reset();
+        Action?.Reset();
+        Possess?.Reset();
+        Look?.Reset();
     }
 }

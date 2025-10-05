@@ -31,8 +31,8 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     public void MarkSceneAsCompleted(string sceneName, bool autoSave=true)
     {
-        if (currentSaveDta == null)
-            currentSaveDta = new SaveDataFile();
+        if (currentSaveDta == null) LoadData();
+        if (currentSaveDta == null) currentSaveDta = new SaveDataFile();
         if (currentSaveDta.ScenesCompleted == null)
             currentSaveDta.ScenesCompleted = new List<string>();
 
@@ -47,8 +47,8 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     public void MarkCollectableAsCollected(Collectable collectable, bool autoSave = true)
     {
-        if(currentSaveDta == null)
-            currentSaveDta = new SaveDataFile();
+        if (currentSaveDta == null) LoadData();
+        if (currentSaveDta == null) currentSaveDta = new();
         if (currentSaveDta.CollectablesCollected == null)
             currentSaveDta.CollectablesCollected = new List<int>();
 
@@ -63,6 +63,8 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     public bool IsLevelCompleted(string sceneName)
     {
+        if (currentSaveDta == null) LoadData();
+        if (currentSaveDta == null) return false;
         if (currentSaveDta == null || currentSaveDta.ScenesCompleted == null) return false;
         
         return currentSaveDta.ScenesCompleted.Contains(sceneName);
@@ -70,6 +72,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     public bool IsCollectableCollected(Collectable collectable)
     {
+        if (currentSaveDta == null) LoadData();
         if (currentSaveDta == null || currentSaveDta.CollectablesCollected == null) return false;
 
         return currentSaveDta.CollectablesCollected.Contains((int)collectable);
