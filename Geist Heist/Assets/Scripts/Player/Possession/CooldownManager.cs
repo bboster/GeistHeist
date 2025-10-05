@@ -3,7 +3,7 @@
  * Creation Date: 10/2/25
  * Last Modified: 10/3/25
  * 
- * Brief Description: Handles third person movement and interaction
+ * Brief Description: Handles possession cooldown
  */
 using UnityEngine;
 using UnityEngine.UI;
