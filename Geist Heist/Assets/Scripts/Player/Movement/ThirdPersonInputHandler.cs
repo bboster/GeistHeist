@@ -1,6 +1,7 @@
 /*
- * Contributors: Toby, Jacob, Brooke, Sky
+ * Contributors: Toby, Jacob, Brooke, Sky, Josh
  * Creation Date: 9/16/25
+ * Last Modified: 10/1/2025
  * Last Modified: 10/1/25
  * 
  * Brief Description: Handles third person movement and interaction
@@ -10,6 +11,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
+using GuardUtilities;
 //using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
 
 public class ThirdPersonInputHandler : IInputHandler
@@ -36,13 +38,14 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float interactableRayLength = 10;
     [SerializeField] private GameObject interactableCanvas;
 
-    public static Action<int> OnPossessObject;
+    public static Action<GuardStates> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
+        GameManager.Instance.LoadCurrentLevel();
     }
 
     // Update is called once per frame

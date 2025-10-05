@@ -7,41 +7,40 @@
  */
 
 using UnityEngine;
-using EnemyUtilities;
+using GuardUtilities;
 using System.Collections;
+using UnityEngine.AI;
 
+[CreateAssetMenu(fileName = "New Attack Behavior", menuName = "Guard Behaviors/New Attack Behavior")]
 public class AttackBehavior : Behavior
 {
     private bool performingAttack = true;
 
-    /// <summary>
-    /// Ensures that the performingAttack variable is reset before stopping the behavior.
-    /// </summary>
-    public override void StopBehavior()
-    {
-        performingAttack = true;
-        base.StopBehavior();
-    }
+    [SerializeField] private float attackLength; //REPLACE WITH ANIMATION STUFF LATER
 
     /// <summary>
     /// Controls the flow of the attack behavior for the enemy.
     /// </summary>
     /// <returns></returns>
-    protected override IEnumerator BehaviorLoop()
+    public override IEnumerator BehaviorLoop()
     {
+        NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
+        thisAgent.isStopped = true;
+
         for(; ; )
         {
             if(performingAttack == true)
             {
                 Debug.Log("Player Caught");
                 performingAttack = false; //This should be removed later and the variable should be changed by an animation keyframe.
+                yield return new WaitForSeconds(attackLength);
             }
             else
             {
-                GetComponent<EnemyController>().ChangeBehavior(0);
+                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.returnToPath);
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(attackLength);
         }
     }
 }

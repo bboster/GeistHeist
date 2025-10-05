@@ -65,7 +65,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
 
         var input = possessable.InputHandler;
-        InputEvents.MoveStarted.AddListener(input.OnMoveStarted);
+        InputEvents.MoveStarted.AddListener(input.OnMoveStarted);   
         InputEvents.MoveHeld.AddListener(input.WhileMoveHeld);
         InputEvents.MoveNotHeld.AddListener(input.WhileMoveNotHeld);
         InputEvents.MoveCanceled.AddListener(input.OnMoveCanceled);
