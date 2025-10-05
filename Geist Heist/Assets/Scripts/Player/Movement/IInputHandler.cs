@@ -51,7 +51,6 @@ public abstract class IInputHandler : MonoBehaviour
     public abstract void WhileInteractHeld();
     public abstract void OnInteractCanceled();
 
-
-
+   
 
 }

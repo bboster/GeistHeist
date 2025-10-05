@@ -72,10 +72,6 @@ public class TetherPossessable : IInputHandler
     #region Possess
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf)
-        {
-            PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
-        }
     }
 
     public override void WhileInteractHeld()
