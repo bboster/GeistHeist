@@ -12,7 +12,7 @@ using UnityEngine;
 using Unity.Cinemachine;
 using NaughtyAttributes;
 
-public class PossessableObject : MonoBehaviour
+public class PossessableObject : MonoBehaviour, IInteractable
 {
     public IInputHandler InputHandler;
     [Required] public CinemachineCamera CinemachineCamera;
@@ -20,5 +20,22 @@ public class PossessableObject : MonoBehaviour
     private void Awake()
     {
         InputHandler = InputHandler ?? GetComponent<IInputHandler>();
+    }
+
+    void IInteractable.Interact()
+    {
+        PlayerManager.Instance.PossessObject(this);
+    }
+
+    // Called in PlayerManager
+    public void OnPossessionStarted()
+    {
+        InputHandler.OnPossessionStarted();
+    }
+
+    // Called in PlayerManager
+    public void OnPossessionEnded()
+    {
+        InputHandler.OnPossessionEnded();
     }
 }

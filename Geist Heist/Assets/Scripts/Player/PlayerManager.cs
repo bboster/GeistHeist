@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 9/18/25
+ * Last Modified: 10/2/25
  * 
  * Brief Description: dont put this script on the player.
  * handles possession and such.
@@ -42,9 +42,11 @@ public class PlayerManager : Singleton<PlayerManager>
 
         RegisterInputs(possessable);
 
-        CurrentObject = possessable;
+        if (CurrentObject != null) CurrentObject.OnPossessionEnded();
+        possessable.OnPossessionStarted();
 
-        DeRegisterInputs(PlayerGhostObject);
+        DeRegisterInputs(CurrentObject);
+        CurrentObject = possessable;
     }
 
     public void PossessGhost(PossessableObject possessable)
@@ -53,8 +55,10 @@ public class PlayerManager : Singleton<PlayerManager>
         possessable.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(true);
 
-
         RegisterInputs(PlayerGhostObject);
+
+        possessable.OnPossessionEnded();
+        PlayerGhostObject.OnPossessionStarted();
 
         CurrentObject = PlayerGhostObject;
 
@@ -82,15 +86,10 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.PossessStarted.AddListener(input.OnInteractStarted);
         InputEvents.PossessHeld.AddListener(input.WhileInteractHeld);
         InputEvents.PossessCanceled.AddListener(input.OnInteractCanceled);
-
-        // camera is really bad pls refactor it.
-        //var cam = possessable.CameraInputHandler;
-        //InputEvents.LookUpdate.AddListener(LookUpdate);
     }
 
     public void DeRegisterInputs(PossessableObject possessable)
     {
-
         var input = possessable.InputHandler;
         InputEvents.MoveStarted.RemoveListener(input.OnMoveStarted);
         InputEvents.MoveHeld.RemoveListener(input.WhileMoveHeld);

@@ -35,6 +35,14 @@ public class VendingObject : IInputHandler, IInteractable
         
     }
 
+    public override void OnPossessionStarted()
+    {
+    }
+
+    public override void OnPossessionEnded()
+    {
+    }
+
 
     #region action
     public override void OnActionStarted()
@@ -111,8 +119,10 @@ public class VendingObject : IInputHandler, IInteractable
 
     #endregion
 
-    void IInteractable.Interact(PossessableObject possessable)
+    void IInteractable.Interact()
     {
-        PlayerManager.Instance.PossessObject(possessable);
+        PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
     }
+
+    
 }
