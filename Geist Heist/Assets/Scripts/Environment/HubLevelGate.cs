@@ -31,6 +31,12 @@ public class HubLevelGate : MonoBehaviour
 
     private void UpdateVisibility()
     {
-        gameObject.SetActive( ! (DebugAlwaysHide || SaveDataManager.Instance.IsLevelCompleted(RequiredLevel)));
+        if (DebugAlwaysHide)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        gameObject.SetActive( !SaveDataManager.Instance.IsLevelCompleted(RequiredLevel));
     }
 }
