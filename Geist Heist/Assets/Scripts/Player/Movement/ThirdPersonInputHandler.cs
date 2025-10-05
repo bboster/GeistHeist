@@ -1,6 +1,7 @@
 /*
- * Contributors: Toby, Jacob, Brooke, Sky
+ * Contributors: Toby, Jacob, Brooke, Sky, Josh
  * Creation Date: 9/16/25
+ * Last Modified: 10/1/2025
  * Last Modified: 10/1/25
  * 
  * Brief Description: Handles third person movement and interaction
@@ -43,6 +44,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
+        GameManager.Instance.LoadCurrentLevel();
     }
 
     // Update is called once per frame
