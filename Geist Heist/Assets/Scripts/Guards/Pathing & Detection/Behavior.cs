@@ -9,34 +9,48 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using EnemyUtilities;
+using GuardUtilities;
+using UnityEditor.Animations;
 
-public class Behavior : MonoBehaviour
+public class Behavior : ScriptableObject
 {
-    protected Coroutine currentLoop;
+    #region Variable Declarations
 
-    public EnemyData.EnemyStates StateName;
+    protected GameObject selfRef;
+
+    protected Coroutine currentLoop;
+    public Coroutine behaviorLoop;
+    public Coroutine TimerCoroutine;
+
+    public GuardStates StateName;
+
+    public Priority Priority;
+
+    public AnimatorController stateController;
+
+    #endregion
 
     #region StartLoop and StopLoop
 
-    /// <summary>
-    /// Starts the behavior. Should be called by the controller when a behavior starts or changes.
-    /// </summary>
-    public virtual void StartBehavior()
+    ///Initializes the behavior
+    public virtual void InitializeBehavior(GameObject selfRef)
     {
-        currentLoop = StartCoroutine(BehaviorLoop());
+        this.selfRef = selfRef;
+
+        if (stateController != null)
+        {
+            selfRef.GetComponent<Animator>().runtimeAnimatorController = stateController;
+        }
     }
 
     /// <summary>
-    /// Stops the current behavior loop.
+    /// Stops the behaviors functions
     /// </summary>
     public virtual void StopBehavior()
     {
-        if (currentLoop == null)
-            return;
-
-        StopCoroutine(currentLoop);
-        currentLoop = null;
+        selfRef.GetComponent<Animator>().StopPlayback();
+        selfRef.GetComponent<Animator>().runtimeAnimatorController = null;
+        Destroy(this);
     }
 
     #endregion
@@ -45,7 +59,7 @@ public class Behavior : MonoBehaviour
     /// Controls the overall flow of the behavior.
     /// </summary>
     /// <returns></returns>
-    protected virtual IEnumerator BehaviorLoop()
+    public virtual IEnumerator BehaviorLoop()
     {
         for(; ; )
         {

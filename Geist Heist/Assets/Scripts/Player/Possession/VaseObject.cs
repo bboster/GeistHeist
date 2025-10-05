@@ -7,13 +7,21 @@ using UnityEngine;
  * Brief Description: Input Handler for the Vase, handles movement and actions for the vase
  */
 
-public class VaseObject : IInputHandler, IInteractable
+public class VaseObject : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
 
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
+    }
+
+    public override void OnPossessionStarted()
+    {
+    }
+
+    public override void OnPossessionEnded()
+    {
     }
 
     #region action
@@ -66,10 +74,5 @@ public class VaseObject : IInputHandler, IInteractable
     }
     public override void OnMoveCanceled() { }
     #endregion
-
-    void IInteractable.Interact(PossessableObject possessable)
-    {
-        PlayerManager.Instance.PossessObject(possessable);
-    }
 }
 

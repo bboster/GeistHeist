@@ -43,9 +43,9 @@ public static class StaticUtilities
     /// Instiates a particle system, and destroys it after its done playing.
     /// If a particle is set to loop, it will play forever
     /// </summary>
-    public static void PlayAndDestroyParticle(GameObject particleSystemPrefab, Vector3 position, Vector3? scale=null, Quaternion? rotation=null)
+    public static GameObject PlayAndDestroyParticle(GameObject particleSystemPrefab, Vector3 position, Vector3? scale=null, Quaternion? rotation=null)
     {
-        if(particleSystemPrefab == null) return;
+        if(particleSystemPrefab == null) return null;
         scale = scale ?? Vector3.one;
         rotation = rotation ?? Quaternion.identity;
 
@@ -54,7 +54,7 @@ public static class StaticUtilities
         if (ps == null)
         {
             Debug.LogWarning("Tried to spawn a particle, but no ParticleSystem was attached");
-            return;
+            return null;
         }
 
         // Build
@@ -62,13 +62,14 @@ public static class StaticUtilities
         if(!ps.main.playOnAwake)
             ps.Play();
 
+
         // Destroy
         if (!ps.main.loop)
         {
-            float time = ps.main.startLifetime.constantMax;
-            GameObject.Destroy(particleGameObject, ps.main.duration);
+            float timeToDestroy = Mathf.Max(ps.main.startLifetime.constantMax, ps.main.duration);
+            GameObject.Destroy(particleGameObject, timeToDestroy);
         }
-           
+        return particleGameObject;
     }
 
     #endregion

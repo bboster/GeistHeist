@@ -1,0 +1,57 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 9/16/25
+ * Last Edited: 9/30/25
+ * Summary: Contains utility functions for enemies to use while running movement behavior.
+ */
+
+using System.Collections;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class GuardMovement : Behavior
+{
+    protected bool calculatingMovement = false;
+
+    [Header("Guard Movement Values")]
+    [Tooltip("Distance from destination at which movement is considered complete.")]
+    [SerializeField] private float moveCompletionThreshold;
+
+    protected NavMeshAgent thisAgent;
+
+    /// <summary>
+    /// Initializes the behavior.
+    /// </summary>
+    /// <param name="selfRef"></param>
+    public override void InitializeBehavior(GameObject selfRef)
+    {
+        base.InitializeBehavior(selfRef);
+        thisAgent = selfRef.GetComponent<NavMeshAgent>();
+    }
+
+    /// <summary>
+    /// Sets the destination for the enemy to move to.
+    /// </summary>
+    /// <param name="destination"></param>
+    protected void MoveToPoint(Vector3 destination)
+    {
+        thisAgent.SetDestination(destination);
+    }
+
+    /// <summary>
+    /// Checks to see if the enemy has reached the end of its path.
+    /// </summary>
+    /// <returns></returns>
+    protected bool CheckPathCompletion()
+    {
+        //thisAgent = thisAgent ?? GetComponent<NavMeshAgent>();  
+        if (thisAgent.hasPath && thisAgent.remainingDistance <= moveCompletionThreshold)
+        {
+            //Debug.Log("PATH COMPLETE");
+            return true;
+        }
+        else
+            return false;
+    }
+}

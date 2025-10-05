@@ -15,7 +15,7 @@ public class DoorInteractable : MonoBehaviour, IInteractable
     [SerializeField][Scene] private string sceneName;
     [SerializeField] private bool EndOfScene = false;
     [SerializeField] int sceneIndex = 0;
-    public void Interact(PossessableObject possessable)
+    public void Interact()
     {
         if (EndOfScene == true  && GameManager.currentLevel < 1)
         {
