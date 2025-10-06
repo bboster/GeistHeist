@@ -41,7 +41,11 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private Canvas cooldownCanvas;
     [SerializeField] CooldownManager cooldownManager;
 
+    [Header("Possession Timer Variables")]
+    [SerializeField] private Canvas timerCanvas;
+    
     public static Action<GuardStates> OnPossessObject;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -57,6 +61,8 @@ public class ThirdPersonInputHandler : IInputHandler
         }
 
         GameManager.Instance.LoadCurrentLevel();
+        timerCanvas.gameObject.SetActive(false);
+        TimerManager.Instance.OnTimerFinished += OnTimerFinished;
     }
 
     // Update is called once per frame
@@ -110,7 +116,7 @@ public class ThirdPersonInputHandler : IInputHandler
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
-
+                TurnOnTimer();
                 OnPossessObject?.Invoke(0);
                 break;
             }
@@ -139,6 +145,22 @@ public class ThirdPersonInputHandler : IInputHandler
         {
             cooldownCanvas.gameObject.SetActive(true);
         }
+    }
+
+    private void OnTimerFinished()
+    {
+        if(timerCanvas != null)
+        {
+            timerCanvas.gameObject.SetActive(false);
+            PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+        }
+    }
+
+    private void TurnOnTimer()
+    {
+        timerCanvas.gameObject.SetActive(true);
+        TimerManager.Instance.StartTimer();
+
     }
     #endregion
 

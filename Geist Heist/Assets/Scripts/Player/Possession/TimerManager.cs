@@ -14,12 +14,12 @@ public class TimerManager : Singleton<TimerManager>
     public event Action OnTimerFinished;
 
     [SerializeField] private Slider timerSlider;
-    [Tooltip("Refers to the time between possessions before player can possess again")]
+    [Tooltip("Refers to the time a player can possess an object for")]
     [SerializeField] private float timerTime;
     private float currentTimerTime;
     private bool isTimerActive = false;
 
-    public bool IsCooldownActive => isTimerActive;
+    public bool IsTimerActive => currentTimerTime > 0;
 
     void Update()
     {
@@ -40,6 +40,12 @@ public class TimerManager : Singleton<TimerManager>
     {
         currentTimerTime = timerTime;
         isTimerActive = true;
+        UpdateSlider();
+    }
+
+    public void ResetTimer()
+    {
+        currentTimerTime = timerTime;
         UpdateSlider();
     }
 
