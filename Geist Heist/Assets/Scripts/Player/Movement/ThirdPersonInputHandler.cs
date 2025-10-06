@@ -37,9 +37,8 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float interactableRayLength = 10;
     [SerializeField, Required] private GameObject interactableCanvas;
 
-    [Header("Between Possession Cooldown Variables")]
+    [Header("Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas;
-    [SerializeField] CooldownManager cooldownManager;
 
     [Header("Possession Timer Variables")]
     [SerializeField] private Canvas timerCanvas;
@@ -53,7 +52,7 @@ public class ThirdPersonInputHandler : IInputHandler
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
         cooldownCanvas.gameObject.SetActive(false);
-        cooldownManager.OnCooldownFinished += OnCooldownFinished;
+        CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
 
         if(interactableCanvas == null)
         {
@@ -69,12 +68,13 @@ public class ThirdPersonInputHandler : IInputHandler
     void Update()
     {
         TurnOnInteractableCanvas();
-        TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
     public override void OnPossessionStarted()
     {
+        CooldownManager.Instance.StartCooldown();
+        TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means EXITING ghost mode
@@ -107,7 +107,7 @@ public class ThirdPersonInputHandler : IInputHandler
         {
             if(result.transform.TryGetComponent(out PossessableObject possessableObject) && result.transform != this.transform)
             {
-                if(cooldownManager.IsCooldownActive)
+                if(CooldownManager.Instance.IsCooldownActive)
                 {
                     return;
                 }
@@ -141,7 +141,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void TurnOnCooldownCanvas()
     {
-        if (cooldownManager.IsCooldownActive && cooldownCanvas != null)
+        if (CooldownManager.Instance.IsCooldownActive && cooldownCanvas != null)
         {
             cooldownCanvas.gameObject.SetActive(true);
         }
@@ -158,9 +158,11 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void TurnOnTimer()
     {
-        timerCanvas.gameObject.SetActive(true);
-        TimerManager.Instance.StartTimer();
-
+        if(timerCanvas != null)
+        {
+            timerCanvas.gameObject.SetActive(true);
+            TimerManager.Instance.StartTimer();
+        }
     }
     #endregion
 

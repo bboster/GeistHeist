@@ -43,12 +43,6 @@ public class TimerManager : Singleton<TimerManager>
         UpdateSlider();
     }
 
-    public void ResetTimer()
-    {
-        currentTimerTime = timerTime;
-        UpdateSlider();
-    }
-
     private void UpdateSlider()
     {
         if (timerSlider != null)
