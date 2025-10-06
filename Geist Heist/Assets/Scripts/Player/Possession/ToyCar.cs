@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System.Collections;
 using System.Xml.Serialization;
 using UnityEngine; 
@@ -8,9 +9,10 @@ using UnityEngine;
  * 
  * Brief Description: Input Handler for the Vase, handles movement and actions for the vase
  */
-public class ToyCar : IInputHandler, IInteractable
+public class ToyCar : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
+    [Required][SerializeField] private Transform ghostSpawnPoint;
 
     [Header("Design Variables")]
     [SerializeField] private float minStrength;
@@ -97,6 +99,7 @@ public class ToyCar : IInputHandler, IInteractable
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
+            PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         }
     }
@@ -105,6 +108,14 @@ public class ToyCar : IInputHandler, IInteractable
     { }
 
     public override void OnInteractCanceled()
+    {
+    }
+
+    public override void OnPossessionStarted()
+    {
+    }
+
+    public override void OnPossessionEnded()
     {
     }
     #endregion
@@ -124,10 +135,6 @@ public class ToyCar : IInputHandler, IInteractable
     public override void OnMoveCanceled() { }
     #endregion
 
-    void IInteractable.Interact(PossessableObject possessable)
-    {
-        PlayerManager.Instance.PossessObject(possessable);
-    }
 
     public void UnFreezePosition()
     {
