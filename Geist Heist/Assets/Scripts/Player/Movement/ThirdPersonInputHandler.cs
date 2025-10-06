@@ -11,6 +11,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
+using GuardUtilities;
 //using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
 
 public class ThirdPersonInputHandler : IInputHandler
@@ -35,15 +36,20 @@ public class ThirdPersonInputHandler : IInputHandler
     // Scene transition specific variables
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField] private float interactableRayLength = 10;
-    [SerializeField] private GameObject interactableCanvas;
+    [SerializeField, Required] private GameObject interactableCanvas;
 
-    public static Action<int> OnPossessObject;
+    public static Action<GuardStates> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
+
+        if(interactableCanvas == null)
+        {
+            Debug.LogError("No interactable canvas has been set");
+        }
         GameManager.Instance.LoadCurrentLevel();
     }
 
@@ -53,19 +59,27 @@ public class ThirdPersonInputHandler : IInputHandler
         TurnOnInteractableCanvas();
     }
 
-    #region action
+    // for the player / ghost: this means ENTERING ghost mode
+    public override void OnPossessionStarted()
+    {
+    }
+
+    // for the player / ghost: this means EXITING ghost mode
+    public override void OnPossessionEnded()
+    {
+    }
+
+    #region Action
     public override void OnActionStarted()
     {
     }
 
     public override void WhileActionHeld()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void OnActionCanceled()
     {
-        throw new System.NotImplementedException();
     }
 
     #endregion
@@ -79,7 +93,7 @@ public class ThirdPersonInputHandler : IInputHandler
         {
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
-                interactable.Interact(result.transform.GetComponent<PossessableObject>());
+                interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
 
                 OnPossessObject?.Invoke(0);
                 break;
@@ -159,4 +173,6 @@ public class ThirdPersonInputHandler : IInputHandler
         Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * sphereCastDistance), sphereCastRadius);
   
     }
+
+   
 }

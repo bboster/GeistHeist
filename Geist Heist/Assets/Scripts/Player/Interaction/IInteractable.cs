@@ -19,8 +19,7 @@ public interface IInteractable
     /// Function called from player's Interact script when Interact input is
     /// detected. Will contain that object's functionality.
     /// </summary>
-    /// <param name="player"></param>
-    void Interact(PossessableObject possessable);
+    void Interact();
 
     /// <summary>
     /// Called when interaction input is canceled. Is not required to implement
