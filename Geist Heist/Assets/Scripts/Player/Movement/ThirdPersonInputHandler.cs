@@ -56,7 +56,10 @@ public class ThirdPersonInputHandler : IInputHandler
             Debug.LogError("No interactable canvas has been set");
         }
 
-        GameManager.Instance.LoadCurrentLevel();
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.LoadCurrentLevel();
+        }
     }
 
     // Update is called once per frame
