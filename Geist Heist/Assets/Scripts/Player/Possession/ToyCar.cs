@@ -4,10 +4,10 @@ using System.Xml.Serialization;
 using UnityEngine; 
 /*
  * Contributors: Sky
- * Creation Date: 9/17/25
- * Last Modified: 9/30/25
+ * Creation Date: 10/2/25
+ * Last Modified: 10/6/25
  * 
- * Brief Description: Input Handler for the Vase, handles movement and actions for the vase
+ * Brief Description: Input Handler for the Toy Car, handles movement and actions for the Toy Car
  */
 public class ToyCar : IInputHandler
 {
@@ -18,8 +18,8 @@ public class ToyCar : IInputHandler
     [SerializeField] private float minStrength;
     private float currentStrength;
     [SerializeField] private float maxStrength;
+    [Tooltip("How much hold charges up by per second")]
     [SerializeField] private float chargeRate;
-    private bool IsMoving = false;
 
     private Rigidbody rb;
     private Coroutine freezeCoroutine;
@@ -36,7 +36,6 @@ public class ToyCar : IInputHandler
         if (rb.linearVelocity == Vector3.zero)
         {
             currentStrength = minStrength;
-            IsMoving = true;
         }
     }
 
@@ -86,7 +85,6 @@ public class ToyCar : IInputHandler
                 yield break;
 
             rb.constraints = RigidbodyConstraints.FreezeAll;
-            IsMoving = false;
         }
 
         freezeCoroutine = null;
@@ -140,7 +138,6 @@ public class ToyCar : IInputHandler
     {
         rb.constraints = RigidbodyConstraints.None;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
-        Debug.Log("i'm running");
     }
 
     private void OnDrawGizmos()
