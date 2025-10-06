@@ -1,8 +1,7 @@
 /*
- * Contributors: Toby, Jacob, Brooke, Sky, Josh
+ * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/1/2025
- * Last Modified: 10/1/25
+ * Last Modified: 10/3/25
  * 
  * Brief Description: Handles third person movement and interaction
  */
@@ -38,6 +37,10 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float interactableRayLength = 10;
     [SerializeField, Required] private GameObject interactableCanvas;
 
+    [Header("Between Possession Cooldown Variables")]
+    [SerializeField] private Canvas cooldownCanvas;
+    [SerializeField] CooldownManager cooldownManager;
+
     public static Action<GuardStates> OnPossessObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -45,11 +48,14 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
+        cooldownCanvas.gameObject.SetActive(false);
+        cooldownManager.OnCooldownFinished += OnCooldownFinished;
 
         if(interactableCanvas == null)
         {
             Debug.LogError("No interactable canvas has been set");
         }
+
         GameManager.Instance.LoadCurrentLevel();
     }
 
@@ -57,6 +63,7 @@ public class ThirdPersonInputHandler : IInputHandler
     void Update()
     {
         TurnOnInteractableCanvas();
+        TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -92,10 +99,19 @@ public class ThirdPersonInputHandler : IInputHandler
     #region Possess
     public override void OnInteractStarted()
     {
-        var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, sphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
         
+        var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, sphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
+
         foreach (var result in sphereCastResults)
         {
+            if(result.transform.TryGetComponent(out PossessableObject possessableObject) && result.transform != this.transform)
+            {
+                if(cooldownManager.IsCooldownActive)
+                {
+                    return;
+                }
+            }
+
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
@@ -107,11 +123,27 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
     public override void WhileInteractHeld()
-    { 
+    {
     }
 
     public override void OnInteractCanceled()
     {
+    }
+
+    private void OnCooldownFinished()
+    {
+        if(cooldownCanvas != null)
+        {
+            cooldownCanvas.gameObject.SetActive(false);
+        }
+    }
+
+    private void TurnOnCooldownCanvas()
+    {
+        if (cooldownManager.IsCooldownActive && cooldownCanvas != null)
+        {
+            cooldownCanvas.gameObject.SetActive(true);
+        }
     }
     #endregion
 
