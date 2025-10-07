@@ -28,6 +28,8 @@ public class CooldownManager : Singleton<CooldownManager>
     {
         CooldownCanvas = Instantiate(CooldownCanvasPrefab);
         cooldownSlider = CooldownCanvas.GetComponentInChildren<Slider>();
+
+        CooldownCanvas.SetActive(false);
     }
 
     void Update()

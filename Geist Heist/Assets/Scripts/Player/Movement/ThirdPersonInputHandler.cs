@@ -37,8 +37,7 @@ public class ThirdPersonInputHandler : IInputHandler
     private GameObject interactableCanvas => GameManager.Instance.InteractionCanvas;
 
     [Header("Between Possession Cooldown Variables")]
-    [SerializeField] private Canvas cooldownCanvas;
-    [SerializeField] CooldownManager cooldownManager;
+    [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
 
     private Rigidbody rigidbody;
 
@@ -49,8 +48,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
-        cooldownCanvas.gameObject.SetActive(false);
-        cooldownManager.OnCooldownFinished += OnCooldownFinished;
+        CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
 
         //GameManager.Instance.LoadCurrentLevel();
     }
@@ -97,7 +95,7 @@ public class ThirdPersonInputHandler : IInputHandler
         {
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
-                if (result.transform.TryGetComponent(out PossessableObject possessableObject) && cooldownManager.IsCooldownActive)
+                if (result.transform.TryGetComponent(out PossessableObject possessableObject) && CooldownManager.Instance.IsCooldownActive)
                 {
                     return;
                 }
@@ -128,7 +126,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void TurnOnCooldownCanvas()
     {
-        if (cooldownManager.IsCooldownActive && cooldownCanvas != null)
+        if (CooldownManager.Instance.IsCooldownActive && cooldownCanvas != null)
         {
             cooldownCanvas.gameObject.SetActive(true);
         }

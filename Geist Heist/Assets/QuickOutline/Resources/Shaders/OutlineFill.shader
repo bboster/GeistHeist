@@ -1,5 +1,5 @@
 ﻿//
-//  OutlineFill.shader
+//  PossessableOutlineFill.shader
 //  QuickOutline
 //
 //  Created by Chris Nolet on 2/21/18.
@@ -9,60 +9,60 @@
 //  10/7/2025
 //
 
-Shader "Custom/Outline Fill" {
-  Properties {
+Shader "Custom/Possessable Outline Fill" {
+    Properties {
     [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
 
     _OutlineColor("Outline Color", Color) = (1, 1, 1, 1)
     _OutlineWidth("Outline Width", Range(0, 10)) = 2
     _PlayerDistance("Player Distance", Range(0,100)) = 20
 
-    _Player_Position ("_Player_Position", float3)
-  }
+    //_Player_Position("_Player_Position", float3) = (0,0,0)
+    }
 
-  SubShader {
+    SubShader {
     Tags {
-      "Queue" = "Transparent+110"
-      "RenderType" = "Transparent"
-      "DisableBatching" = "True"
+        "Queue" = "Transparent+110"
+        "RenderType" = "Transparent"
+        "DisableBatching" = "True"
     }
 
     Pass {
-      Name "Fill"
-      Cull Off
-      ZTest [_ZTest]
-      ZWrite Off
-      Blend SrcAlpha OneMinusSrcAlpha
-      ColorMask RGB
+        Name "Fill"
+        Cull Off
+        ZTest [_ZTest]
+        ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha
+        ColorMask RGB
 
-      Stencil {
+        Stencil {
         Ref 1
         Comp NotEqual
-      }
+        }
 
-      CGPROGRAM
-      #include "UnityCG.cginc"
+        CGPROGRAM
+        #include "UnityCG.cginc"
 
-      #pragma vertex vert
-      #pragma fragment frag
+        #pragma vertex vert
+        #pragma fragment frag
 
-      struct appdata {
+        struct appdata {
         float4 vertex : POSITION;
         float3 normal : NORMAL;
         float3 smoothNormal : TEXCOORD3;
         UNITY_VERTEX_INPUT_INSTANCE_ID
-      };
+        };
 
-      struct v2f {
+        struct v2f {
         float4 position : SV_POSITION;
         fixed4 color : COLOR;
         UNITY_VERTEX_OUTPUT_STEREO
-      };
+        };
 
-      uniform fixed4 _OutlineColor;
-      uniform float _OutlineWidth;
+        uniform fixed4 _OutlineColor;
+        uniform float _OutlineWidth;
 
-      v2f vert(appdata input) {
+        v2f vert(appdata input) {
         v2f output;
 
         UNITY_SETUP_INSTANCE_ID(input);
@@ -76,17 +76,19 @@ Shader "Custom/Outline Fill" {
         output.color = _OutlineColor;
 
         return output;
-      }
+        }
 
-      fixed4 frag(v2f input) : SV_Target {
-          // Lerp the opacity based on player proximity
-          float dist = Distance(unity_ObjectToWorld, _Player_Position);
-          float t = clamp(dist/_PlayerDistance, 0, 1);
-          t = 1 - pow(t,6); // using the same hard coded number as the shader graph
+        fixed4 frag(v2f input) : SV_Target {
+            // Lerp the opacity based on player proximity
+            /*float3 worldPos = mul(unity_ObjectToWorld, input.vertex).xyz;
+            float dist = distance(worldPos, _Player_Position);
+            float t = saturate(1 - pow(dist / _PlayerDistance, 6)); // set between 0 and 1 (i think?)
 
-        return input.color;
-      }
-      ENDCG
+            return fixed4(input.color.rgb, input.color.a * t);*/
+            // TODO come back to this
+            return input.color;
+        }
+        ENDCG
     }
-  }
+    }
 }

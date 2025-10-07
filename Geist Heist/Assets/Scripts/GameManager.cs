@@ -21,6 +21,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject SaveDataManagerPrefab;
     [SerializeField, Required] GameObject GuardCoroutineManagerPrefab;
     [SerializeField, Required] GameObject BehaviourDatabasePrefab;
+    [SerializeField, Required] GameObject ShaderManagerPrefab;
 
     [Header("Other Constants")]
     [SerializeField, Required] GameObject CameraPrefab;
@@ -39,6 +40,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(SaveDataManagerPrefab);
         Instantiate(GuardCoroutineManagerPrefab);
         Instantiate(BehaviourDatabasePrefab);
+        Instantiate(ShaderManagerPrefab);
 
         InteractionCanvas = Instantiate(InteractionCanvasPrefab);
 
