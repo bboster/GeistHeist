@@ -6,6 +6,7 @@
 //  Copyright © 2018 Chris Nolet. All rights reserved.
 //
 
+using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,23 +75,25 @@ public class Outline : MonoBehaviour {
   [SerializeField, HideInInspector]
   private List<ListVector3> bakeValues = new List<ListVector3>();
 
-  private Renderer[] renderers;
-  private Material outlineMaskMaterial;
-  private Material outlineFillMaterial;
-  public Material SharedMat => outlineFillMaterial;
+    private Renderer[] renderers;
+    [InfoBox("Leave null for default solid color outlines")]
+    [SerializeField] private Material outlineFillMaterial; // toby was here
+    private Material outlineMaskMaterial;
+    public Material SharedMat => outlineFillMaterial;
 
-  private bool needsUpdate;
+    private bool needsUpdate;
 
-  void Awake() {
+    void Awake()
+    {
 
-    // Cache renderers
-    renderers = GetComponentsInChildren<Renderer>();
+        // Cache renderers
+        renderers = GetComponentsInChildren<Renderer>();
 
-    // Instantiate outline materials
-    outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
-    outlineFillMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineFill"));
+        // Instantiate outline materials
+        outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
+        outlineFillMaterial = outlineFillMaterial == null ? Instantiate(Resources.Load<Material>(@"Materials/OutlineFill")) : outlineFillMaterial;
 
-    outlineMaskMaterial.name = "OutlineMask (Instance)";
+        outlineMaskMaterial.name = "OutlineMask (Instance)";
     outlineFillMaterial.name = "OutlineFill (Instance)";
 
     // Retrieve or generate smooth normals
