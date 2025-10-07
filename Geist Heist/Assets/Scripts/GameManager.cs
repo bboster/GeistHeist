@@ -1,9 +1,10 @@
 /*
  * Contributors:  Josh, Toby
  * Creation Date: 10/1/25
- * Last Modified: 10/1/25
+ * Last Modified: 10/7/25
  * 
- * Brief Description: Keeps track of game state, such as level.
+ * Brief Description: Instantiates managers scripts that are required for scene to function.
+ * Keeps track of game state, such as level.
  */
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,6 +26,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject CameraPrefab;
     [SerializeField, Required] GameObject InteractionCanvasPrefab;
 
+    [HideInInspector] public GameObject InteractionCanvas;
+
     protected override void Awake()
     {
         base.Awake();
@@ -37,12 +40,17 @@ public class GameManager : Singleton<GameManager>
         Instantiate(GuardCoroutineManagerPrefab);
         Instantiate(BehaviourDatabasePrefab);
 
-        Instantiate(InteractionCanvasPrefab);
+        InteractionCanvas = Instantiate(InteractionCanvasPrefab);
 
         // I saw a designer not understand why the camera wasnt working (they didnt have a cinemachine brain / the right settings on it).
         // So this should kinda streamline things.
         var currentCamera = Camera.main;
-        CameraPrefab.GetComponent<CinemachineBrain>().CopyComponent(currentCamera.gameObject);
+        if (currentCamera.GetComponent<CinemachineBrain>() == null)
+        {
+            CameraPrefab.GetComponent<CinemachineBrain>().CopyComponent(currentCamera.gameObject);
+            CameraPrefab.GetComponent<Transform>().CopyComponent(currentCamera.gameObject);
+            CameraPrefab.GetComponent<Camera>().CopyComponent(currentCamera.gameObject);
+        }
 
     }
 

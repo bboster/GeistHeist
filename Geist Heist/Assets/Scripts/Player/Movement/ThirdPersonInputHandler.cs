@@ -1,9 +1,10 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/3/25
+ * Last Modified: 10/7/25
  * 
- * Brief Description: Handles third person movement and interaction
+ * Brief Description: Handles third person movement and interaction. 
+ * This script should only be used for the ghost
  */
 
 using System;
@@ -15,8 +16,6 @@ using GuardUtilities;
 
 public class ThirdPersonInputHandler : IInputHandler
 {
-    private Rigidbody rigidbody;
-
     [Header("Design Variables")]
     [SerializeField] private float speed = 3;
     [SerializeField] private float maxVelocity = 10;
@@ -31,15 +30,17 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float sphereCastDistance = 1000;
     private LayerMask layerToInclude;
 
-    [Header("Scene Transition Variables")]
+    [Header("Interaction")]
     // Scene transition specific variables
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField] private float interactableRayLength = 10;
-    [SerializeField, Required] private GameObject interactableCanvas;
+    private GameObject interactableCanvas => GameManager.Instance.InteractionCanvas;
 
     [Header("Between Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas;
     [SerializeField] CooldownManager cooldownManager;
+
+    private Rigidbody rigidbody;
 
     public static Action<GuardStates> OnPossessObject;
 
@@ -50,11 +51,6 @@ public class ThirdPersonInputHandler : IInputHandler
         layerToInclude = LayerMask.GetMask("Interactable");
         cooldownCanvas.gameObject.SetActive(false);
         cooldownManager.OnCooldownFinished += OnCooldownFinished;
-
-        if(interactableCanvas == null)
-        {
-            Debug.LogError("No interactable canvas has been set");
-        }
 
         //GameManager.Instance.LoadCurrentLevel();
     }
