@@ -14,10 +14,10 @@ public class DoorInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField][Scene] private string sceneName;
     [SerializeField] private bool EndOfScene = false;
-    [SerializeField] int sceneIndex = 0;
+    [SerializeField] int levelIndex = 0;
     public void Interact()
     {
-        if (EndOfScene == true  && GameManager.currentLevel < 1)
+        if (EndOfScene == true  && GameManager.currentLevel < levelIndex)
         {
             GameManager.Instance.NextLevel(sceneName);
             EndOfScene = false;
