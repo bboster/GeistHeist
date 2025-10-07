@@ -36,8 +36,6 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessObject(PossessableObject possessable)
     {
-        Debug.Log("PossessObject Possessable: " + possessable);
-        Debug.Log("PossessObject PlayerGhostObject: " + PlayerGhostObject);
         possessable.CinemachineCamera.gameObject.SetActive(true);
         PlayerGhostObject.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(false);
@@ -53,8 +51,6 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessGhost(PossessableObject possessable)
     {
-        Debug.Log("PossessGhost Possessable: " + possessable);
-        Debug.Log("PossessGhost PlayerGhostObject: " + PlayerGhostObject);
         PlayerGhostObject.CinemachineCamera.gameObject.SetActive(true);
         possessable.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(true);
