@@ -5,24 +5,30 @@ using UnityEngine;
 /*
  * Contributors: Sky
  * Creation Date: 10/2/25
- * Last Modified: 10/6/25
+ * Last Modified: 10/7/25
  * 
  * Brief Description: Input Handler for the Toy Car, handles movement and actions for the Toy Car
  */
 public class ToyCar : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
+    [Tooltip("Location where the ghost spawns after leaving the car.")]
     [Required][SerializeField] private Transform ghostSpawnPoint;
 
     [Header("Design Variables")]
+    [Tooltip("Strength that a tap would do- the LEAST the car can move forward when interacting.")]
     [SerializeField] private float minStrength;
-    private float currentStrength;
+    [Tooltip("Strength that a full hold would do- the MOST the car can move forward when interacting.")]
     [SerializeField] private float maxStrength;
-    [Tooltip("How much hold charges up by per second")]
+    [Tooltip("How much hold charges up by per second.")]
     [SerializeField] private float chargeRate;
+    //realtime hold strength
+    private float currentStrength;
 
     private Rigidbody rb;
     private Coroutine freezeCoroutine;
+    //activates when ghost is leaving an object
+    private bool IsLeaving = false;
 
     private void Start()
     {
@@ -59,10 +65,6 @@ public class ToyCar : IInputHandler
             {
                 freezeCoroutine = StartCoroutine(ReFreezeConstraints());
             }
-            else
-            {
-                StopCoroutine(freezeCoroutine);
-            }
         }
     }
 
@@ -77,16 +79,26 @@ public class ToyCar : IInputHandler
 
     public IEnumerator ReFreezeConstraints()
     {
-        while (rb.linearVelocity == Vector3.zero)
+        //either stopped or exiting object
+        while (rb.linearVelocity == Vector3.zero || IsLeaving)
         {
-            yield return new WaitForSeconds(1);
+            //wait to see if still not moving
+            yield return new WaitForSeconds(.2f);
 
+            //if still moving, don't do anything YET
             if (rb.linearVelocity != Vector3.zero)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            //if stopped
+            if (rb.linearVelocity == Vector3.zero)
+            {
+                rb.constraints = RigidbodyConstraints.FreezeAll;
+                freezeCoroutine = null;
                 yield break;
-
-            rb.constraints = RigidbodyConstraints.FreezeAll;
+            }
         }
-
         freezeCoroutine = null;
     }
 
@@ -98,7 +110,13 @@ public class ToyCar : IInputHandler
         if (thirdPersoncinemachineCamera.activeSelf)
         {
             PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
-            PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+            PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
+            IsLeaving = true;
+
+            if (freezeCoroutine == null)
+            { 
+                freezeCoroutine = StartCoroutine(ReFreezeConstraints());
+            }
         }
     }
 
@@ -111,6 +129,7 @@ public class ToyCar : IInputHandler
 
     public override void OnPossessionStarted()
     {
+        IsLeaving = false;
     }
 
     public override void OnPossessionEnded()
