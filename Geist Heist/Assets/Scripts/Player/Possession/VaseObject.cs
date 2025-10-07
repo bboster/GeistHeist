@@ -14,7 +14,7 @@ public class VaseObject : IInputHandler
     [Header("Timer Variables")]
     [SerializeField] private float timerTime = 5f;
     private float currentTimerTime;
-    [SerializeField] bool isTimerActive;
+    private bool isTimerActive;
     [SerializeField] Slider timerSlider;
 
     private void Update()

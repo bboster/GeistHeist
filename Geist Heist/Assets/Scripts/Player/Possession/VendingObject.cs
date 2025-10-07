@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 /*
 * Contributors: Brenden
 * Creation Date: 10/1/25
@@ -22,6 +23,11 @@ public class VendingObject : IInputHandler, IInteractable
     /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
     /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
 
+    [Header("Timer Variables")]
+    [SerializeField] private float timerTime = 5f;
+    private float currentTimerTime;
+    private bool isTimerActive;
+    [SerializeField] Slider timerSlider;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,15 +38,29 @@ public class VendingObject : IInputHandler, IInteractable
     // Update is called once per frame
     void Update()
     {
-        
+        if (isTimerActive)
+        {
+            currentTimerTime -= Time.deltaTime;
+            if (currentTimerTime <= 0)
+            {
+                currentTimerTime = 0;
+                isTimerActive = false;
+                OnTimerFinished();
+            }
+            UpdateSlider();
+        }
     }
 
     public override void OnPossessionStarted()
     {
+        timerSlider.gameObject.SetActive(true);
+        isTimerActive = true;
+        currentTimerTime = timerTime;
     }
 
     public override void OnPossessionEnded()
     {
+        timerSlider.gameObject.SetActive(false);
     }
 
 
@@ -117,6 +137,29 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnMoveCanceled() { }
 
+    #endregion
+
+    #region Timer
+    private void OnTimerFinished()
+    {
+        OnInteractStarted();
+        ResetTimer();
+    }
+
+    private void UpdateSlider()
+    {
+        if (timerSlider != null)
+        {
+            timerSlider.value = currentTimerTime / timerTime;
+        }
+    }
+
+    private void ResetTimer()
+    {
+        currentTimerTime = timerTime;
+        isTimerActive = false;
+        timerSlider.gameObject.SetActive(false);
+    }
     #endregion
 
     void IInteractable.Interact()
