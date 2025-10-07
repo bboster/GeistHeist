@@ -14,7 +14,7 @@ using NaughtyAttributes;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    public IInputHandler InputHandler;
+    [HideInInspector] public IInputHandler InputHandler;
     [Required] public CinemachineCamera CinemachineCamera;
 
     private void Awake()

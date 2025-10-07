@@ -56,7 +56,7 @@ public class ThirdPersonInputHandler : IInputHandler
             Debug.LogError("No interactable canvas has been set");
         }
 
-        GameManager.Instance.LoadCurrentLevel();
+        //GameManager.Instance.LoadCurrentLevel();
     }
 
     // Update is called once per frame
@@ -99,16 +99,13 @@ public class ThirdPersonInputHandler : IInputHandler
 
         foreach (var result in sphereCastResults)
         {
-            if(result.transform.TryGetComponent(out PossessableObject possessableObject) && result.transform != this.transform)
+            if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
-                if(cooldownManager.IsCooldownActive)
+                if (result.transform.TryGetComponent(out PossessableObject possessableObject) && cooldownManager.IsCooldownActive)
                 {
                     return;
                 }
-            }
 
-            if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
-            {
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
 
                 OnPossessObject?.Invoke(0);
