@@ -5,6 +5,9 @@
 //  Created by Chris Nolet on 2/21/18.
 //  Copyright © 2018 Chris Nolet. All rights reserved.
 //
+//  Toby Was here tho :P
+//  10/7/2025
+//
 
 Shader "Custom/Outline Fill" {
   Properties {
@@ -12,6 +15,9 @@ Shader "Custom/Outline Fill" {
 
     _OutlineColor("Outline Color", Color) = (1, 1, 1, 1)
     _OutlineWidth("Outline Width", Range(0, 10)) = 2
+    _PlayerDistance("Player Distance", Range(0,100)) = 20
+
+    _Player_Position ("_Player_Position", float3)
   }
 
   SubShader {
@@ -73,6 +79,11 @@ Shader "Custom/Outline Fill" {
       }
 
       fixed4 frag(v2f input) : SV_Target {
+          // Lerp the opacity based on player proximity
+          float dist = Distance(unity_ObjectToWorld, _Player_Position);
+          float t = clamp(dist/_PlayerDistance, 0, 1);
+          t = 1 - pow(t,6); // using the same hard coded number as the shader graph
+
         return input.color;
       }
       ENDCG
