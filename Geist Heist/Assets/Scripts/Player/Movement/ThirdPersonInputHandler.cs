@@ -39,9 +39,6 @@ public class ThirdPersonInputHandler : IInputHandler
 
     [Header("Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas;
-
-    [Header("Possession Timer Variables")]
-    [SerializeField] private Canvas timerCanvas;
     
     public static Action<GuardStates> OnPossessObject;
 
@@ -60,8 +57,6 @@ public class ThirdPersonInputHandler : IInputHandler
         }
 
         GameManager.Instance.LoadCurrentLevel();
-        timerCanvas.gameObject.SetActive(false);
-        TimerManager.Instance.OnTimerFinished += OnTimerFinished;
     }
 
     // Update is called once per frame
@@ -116,7 +111,6 @@ public class ThirdPersonInputHandler : IInputHandler
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
-                TurnOnTimer();
                 OnPossessObject?.Invoke(0);
                 break;
             }
@@ -144,24 +138,6 @@ public class ThirdPersonInputHandler : IInputHandler
         if (CooldownManager.Instance.IsCooldownActive && cooldownCanvas != null)
         {
             cooldownCanvas.gameObject.SetActive(true);
-        }
-    }
-
-    private void OnTimerFinished()
-    {
-        if(timerCanvas != null)
-        {
-            timerCanvas.gameObject.SetActive(false);
-            PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
-        }
-    }
-
-    private void TurnOnTimer()
-    {
-        if(timerCanvas != null)
-        {
-            timerCanvas.gameObject.SetActive(true);
-            TimerManager.Instance.StartTimer();
         }
     }
     #endregion
