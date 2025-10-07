@@ -8,6 +8,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
+using Unity.Cinemachine;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -41,10 +42,7 @@ public class GameManager : Singleton<GameManager>
         // I saw a designer not understand why the camera wasnt working (they didnt have a cinemachine brain / the right settings on it).
         // So this should kinda streamline things.
         var currentCamera = Camera.main;
-        var camPosition = currentCamera.transform.position;
-        var camRotation = currentCamera.transform.rotation;
-        Destroy(Camera.main);
-        Instantiate(CameraPrefab, camPosition, camRotation);
+        CameraPrefab.GetComponent<CinemachineBrain>().CopyComponent(currentCamera.gameObject);
 
     }
 
@@ -55,7 +53,7 @@ public class GameManager : Singleton<GameManager>
     {
         //currentLevel++;
         SceneManager.LoadScene(sceneName);
-        //Debug.Log("Advancing to level index: " + currentLevel);
+        Debug.Log("Advancing to level: " + sceneName);
     }
 
     /*public void LoadCurrentLevel()
