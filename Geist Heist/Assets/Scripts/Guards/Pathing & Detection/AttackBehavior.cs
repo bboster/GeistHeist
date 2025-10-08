@@ -10,6 +10,7 @@ using UnityEngine;
 using GuardUtilities;
 using System.Collections;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 [CreateAssetMenu(fileName = "New Attack Behavior", menuName = "Guard Behaviors/New Attack Behavior")]
 public class AttackBehavior : Behavior
@@ -32,6 +33,7 @@ public class AttackBehavior : Behavior
             if(performingAttack == true)
             {
                 Debug.Log("Player Caught");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 performingAttack = false; //This should be removed later and the variable should be changed by an animation keyframe.
                 yield return new WaitForSeconds(attackLength);
             }
