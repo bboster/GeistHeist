@@ -8,9 +8,11 @@
  */
 
 using System.Net.Http.Headers;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
  using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 public class InputEvents : Singleton<InputEvents>
 {
@@ -34,6 +36,7 @@ public class InputEvents : Singleton<InputEvents>
 
     public static UnityEvent ActionStarted = new UnityEvent();
     public static UnityEvent ActionHeld = new UnityEvent();
+    public static UnityEvent ActionNotHeld = new UnityEvent();
     public static UnityEvent ActionCanceled = new UnityEvent();
 
     public static UnityEvent PossessStarted = new UnityEvent();
@@ -47,6 +50,8 @@ public class InputEvents : Singleton<InputEvents>
     //public static UnityEvent RestartStarted, RespawnStarted;
 
     [SerializeField] private float _sensitivity=1;
+
+    public static bool IsHeld = false;
 
     // Input values and flags
     public Vector2 LookDelta => Look.ReadValue<Vector2>() * _sensitivity;
@@ -109,6 +114,7 @@ public class InputEvents : Singleton<InputEvents>
         else MoveNotHeld.Invoke();
         //if (JumpPressed) JumpHeld.Invoke();
         if (ActionPressed) ActionHeld.Invoke();
+        else ActionNotHeld.Invoke();
         if (EscapeObjectPressed) PossessHeld.Invoke();
 
         LookUpdate.Invoke(LookDelta);
