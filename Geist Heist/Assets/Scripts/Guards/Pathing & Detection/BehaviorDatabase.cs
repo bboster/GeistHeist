@@ -9,23 +9,11 @@
 using UnityEngine;
 using GuardUtilities;
 
-public class BehaviorDatabase : MonoBehaviour
+public class BehaviorDatabase : Singleton<BehaviorDatabase>
 {
     [SerializeField] private Behavior[] guardBehaviors;
 
     public static BehaviorDatabase instance;
-
-    private void Awake()
-    {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     /// <summary>
     /// Retrieves a behavior from the database.

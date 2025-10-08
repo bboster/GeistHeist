@@ -13,13 +13,24 @@ public class CooldownManager : Singleton<CooldownManager>
 {
     public event Action OnCooldownFinished;
 
-    [SerializeField] private Slider cooldownSlider;
+    [SerializeField] private GameObject CooldownCanvasPrefab;
     [Tooltip("Refers to the time between possessions before player can possess again")]
     [SerializeField] private float cooldownTime;
+    private Slider cooldownSlider;
     private float currentCooldownTime;
     private bool isCooldownActive = false;
-    
+
+    [HideInInspector] public GameObject CooldownCanvas;
     public bool IsCooldownActive => currentCooldownTime > 0;
+
+    // Called in GameManager
+    public void Start()
+    {
+        CooldownCanvas = Instantiate(CooldownCanvasPrefab);
+        cooldownSlider = CooldownCanvas.GetComponentInChildren<Slider>();
+
+        CooldownCanvas.SetActive(false);
+    }
 
     void Update()
     {

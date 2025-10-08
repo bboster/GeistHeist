@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 /*
 * Contributors: Brenden
 * Creation Date: 10/1/25
@@ -7,7 +8,7 @@ using UnityEngine;
 * 
 * Brief Description: Input Handler for the Vending Machine, handles movement and actions for the Vending Machine
 */
-public class VendingObject : IInputHandler
+public class VendingObject : IInputHandler, IInteractable
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private GameObject CanSpawnPoint;
@@ -22,27 +23,21 @@ public class VendingObject : IInputHandler
     /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
     /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public override void OnPossessionStarted()
     {
+
     }
 
     public override void OnPossessionEnded()
     {
-    }
 
+    }
 
     #region action
     public override void OnActionStarted()
@@ -96,7 +91,7 @@ public class VendingObject : IInputHandler
     { }
     public override void WhileActionNotHeld()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void OnInteractCanceled()
@@ -118,9 +113,14 @@ public class VendingObject : IInputHandler
 
     }
 
-
     public override void OnMoveCanceled() { }
 
     #endregion
 
+    void IInteractable.Interact()
+    {
+        PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
+    }
+
+    
 }

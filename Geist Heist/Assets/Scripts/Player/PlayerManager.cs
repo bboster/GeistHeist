@@ -14,6 +14,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [HideInInspector]
     public PossessableObject PlayerGhostObject;
     [ReadOnly]
     public PossessableObject CurrentObject;
@@ -26,6 +27,9 @@ public class PlayerManager : Singleton<PlayerManager>
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (PlayerGhostObject == null)
+            PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
+
         CurrentObject = PlayerGhostObject;
         RegisterInputs(PlayerGhostObject);
         camera = Camera.main;

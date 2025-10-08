@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
  /*
  * Contributors: Sky
  * Creation Date: 9/17/25
@@ -18,31 +19,33 @@ public class VaseObject : IInputHandler
 
     public override void OnPossessionStarted()
     {
+
     }
 
     public override void OnPossessionEnded()
     {
+
     }
 
     #region action
     public override void OnActionStarted()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void WhileActionHeld()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void WhileActionNotHeld()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void OnActionCanceled()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     #endregion
@@ -53,7 +56,6 @@ public class VaseObject : IInputHandler
         if (thirdPersoncinemachineCamera.activeSelf)
         {
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
-            CooldownManager.Instance.StartCooldown();
         }
     }
 

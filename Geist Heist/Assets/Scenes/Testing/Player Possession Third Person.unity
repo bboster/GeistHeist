@@ -316,6 +316,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0419aec6580122146a1979e34ee5434d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
+--- !u!1001 &390173543
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4463789532903866669, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.73492
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.7596
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586666018572188143, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5d73af633b862454899f2297804d352e, type: 3}
 --- !u!1 &556370098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1146,51 +1203,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1163097896}
   m_CullTransparentMesh: 1
---- !u!1 &1203943187
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1203943189}
-  - component: {fileID: 1203943188}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: GameController
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
---- !u!114 &1203943188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203943187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61d42bd870d64164f99d3d30e3f60338, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  blockingWall: {fileID: 0}
---- !u!4 &1203943189
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203943187}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.45995, y: 0, z: 5.72428}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1608243192
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1393,7 +1405,7 @@ PrefabInstance:
     - target: {fileID: 7787585546473787916, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
       propertyPath: cooldownSlider
       value: 
-      objectReference: {fileID: 1538592114}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1706,4 +1718,7 @@ SceneRoots:
   - {fileID: 1719237424}
   - {fileID: 632325567}
   - {fileID: 1144691144}
-  - {fileID: 1203943189}
+  - {fileID: 268106997}
+  - {fileID: 3319188078341957616}
+  - {fileID: 2043620079}
+  - {fileID: 390173543}
