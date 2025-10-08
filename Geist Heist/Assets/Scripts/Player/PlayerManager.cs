@@ -75,6 +75,7 @@ public class PlayerManager : Singleton<PlayerManager>
         var input = possessable.InputHandler;
         InputEvents.MoveStarted.AddListener(input.OnMoveStarted);   
         InputEvents.MoveHeld.AddListener(input.WhileMoveHeld);
+        InputEvents.MoveNotHeld.AddListener(input.WhileMoveNotHeld);
         InputEvents.MoveCanceled.AddListener(input.OnMoveCanceled);
 
         /*InputEvents.JumpStarted.AddListener(input.OnJumpStarted);
@@ -83,6 +84,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
         InputEvents.ActionStarted.AddListener(input.OnActionStarted);
         InputEvents.ActionHeld.AddListener(input.WhileActionHeld);
+        InputEvents.ActionNotHeld.AddListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.AddListener(input.OnActionCanceled);
 
         InputEvents.PossessStarted.AddListener(input.OnInteractStarted);
@@ -95,10 +97,12 @@ public class PlayerManager : Singleton<PlayerManager>
         var input = possessable.InputHandler;
         InputEvents.MoveStarted.RemoveListener(input.OnMoveStarted);
         InputEvents.MoveHeld.RemoveListener(input.WhileMoveHeld);
+        InputEvents.MoveNotHeld.RemoveListener(input.WhileMoveNotHeld);
         InputEvents.MoveCanceled.RemoveListener(input.OnMoveCanceled);
 
         InputEvents.ActionStarted.RemoveListener(input.OnActionStarted);
         InputEvents.ActionHeld.RemoveListener(input.WhileActionHeld);
+        InputEvents.ActionNotHeld.RemoveListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.RemoveListener(input.OnActionCanceled);
 
         InputEvents.PossessStarted.RemoveListener(input.OnInteractStarted);

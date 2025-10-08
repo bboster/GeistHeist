@@ -64,6 +64,11 @@ public class TetherPossessable : IInputHandler
     {
     }
 
+    public override void WhileActionNotHeld()
+    {
+        throw new NotImplementedException();
+    }
+
     public override void OnActionCanceled()
     {
     }
@@ -96,5 +101,6 @@ public class TetherPossessable : IInputHandler
     {
     }
     public override void OnMoveCanceled() { }
+
     #endregion
 }

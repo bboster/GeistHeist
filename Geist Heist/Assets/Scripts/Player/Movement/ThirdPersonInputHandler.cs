@@ -50,7 +50,15 @@ public class ThirdPersonInputHandler : IInputHandler
         layerToInclude = LayerMask.GetMask("Interactable");
         CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
 
-        //GameManager.Instance.LoadCurrentLevel();
+        if(interactableCanvas == null)
+        {
+            Debug.LogError("No interactable canvas has been set");
+        }
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.LoadCurrentLevel();
+        }
     }
 
     // Update is called once per frame
@@ -79,6 +87,11 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
+    public override void WhileActionNotHeld()
+    {
+        throw new NotImplementedException();
+    }
+
     public override void OnActionCanceled()
     {
     }
@@ -102,7 +115,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
 
-                OnPossessObject?.Invoke(0);
+                OnPossessObject?.Invoke(GuardStates.returnToPath);
                 break;
             }
         }
