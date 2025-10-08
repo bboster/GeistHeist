@@ -140,6 +140,9 @@
         },
         {
             "m_Id": "1bccc59a906d425abf060c4d1856939a"
+        },
+        {
+            "m_Id": "42032e2e608143c185630c386a5556b4"
         }
     ],
     "m_GroupDatas": [
@@ -171,20 +174,6 @@
                     "m_Id": "e30625de376d4b2d8962a2efe30b18f9"
                 },
                 "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "1bccc59a906d425abf060c4d1856939a"
-                },
-                "m_SlotId": 2
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "ddd4b8c917c44198933bec1ffd730bb2"
-                },
-                "m_SlotId": 2
             }
         },
         {
@@ -238,7 +227,7 @@
             },
             "m_InputSlot": {
                 "m_Node": {
-                    "m_Id": "1bccc59a906d425abf060c4d1856939a"
+                    "m_Id": "42032e2e608143c185630c386a5556b4"
                 },
                 "m_SlotId": 0
             }
@@ -297,6 +286,34 @@
                     "m_Id": "b0631ad2836f4a06ad59a43f258f8ab9"
                 },
                 "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "42032e2e608143c185630c386a5556b4"
+                },
+                "m_SlotId": 1
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "1bccc59a906d425abf060c4d1856939a"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "42032e2e608143c185630c386a5556b4"
+                },
+                "m_SlotId": 1
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "ddd4b8c917c44198933bec1ffd730bb2"
+                },
+                "m_SlotId": 2
             }
         },
         {
@@ -1069,6 +1086,30 @@
 }
 
 {
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
+    "m_ObjectId": "2124651c874b4ec3be24491e4779e9f9",
+    "m_Id": 0,
+    "m_DisplayName": "",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    }
+}
+
+{
     "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.Internal.ColorShaderProperty",
     "m_ObjectId": "216a8865c3474b8ba4eb8e3e8f320f8d",
@@ -1588,6 +1629,42 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
+    }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.RedirectNodeData",
+    "m_ObjectId": "42032e2e608143c185630c386a5556b4",
+    "m_Group": {
+        "m_Id": "c32ec6198c1947d8bad3a14cba1b657a"
+    },
+    "m_Name": "Redirect Node",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -1345.0,
+            "y": 393.0,
+            "width": 56.0,
+            "height": 24.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "2124651c874b4ec3be24491e4779e9f9"
+        },
+        {
+            "m_Id": "a8bcbfdee270408d90dff6d7b98ba417"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
     }
 }
 
@@ -2955,8 +3032,8 @@
     "m_ObjectId": "970c85cddb9740fd9fb676ecd339e5f8",
     "m_Title": "Get Player Distance (0 - 1)",
     "m_Position": {
-        "x": -3251.199951171875,
-        "y": -732.800048828125
+        "x": -3251.0,
+        "y": -731.0
     }
 }
 
@@ -3134,6 +3211,30 @@
         "e31": 0.0,
         "e32": 0.0,
         "e33": 1.0
+    }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
+    "m_ObjectId": "a8bcbfdee270408d90dff6d7b98ba417",
+    "m_Id": 1,
+    "m_DisplayName": "",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
     }
 }
 
@@ -3501,8 +3602,8 @@
     "m_ObjectId": "c32ec6198c1947d8bad3a14cba1b657a",
     "m_Title": "Lerp Color by player distance",
     "m_Position": {
-        "x": -1558.4000244140625,
-        "y": -232.00006103515626
+        "x": -1558.0,
+        "y": -230.0
     }
 }
 
@@ -3704,8 +3805,8 @@
     "m_ObjectId": "d4d4a01350a04917b7ee81f25b28008a",
     "m_Title": "Make the shape jiggly (only works for high poly meshes...)",
     "m_Position": {
-        "x": -1163.2003173828125,
-        "y": -1167.2000732421875
+        "x": -1163.0,
+        "y": -1165.0
     }
 }
 
