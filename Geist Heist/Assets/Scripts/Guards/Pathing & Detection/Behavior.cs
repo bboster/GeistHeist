@@ -10,7 +10,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using GuardUtilities;
-using UnityEditor.Animations;
 
 public class Behavior : ScriptableObject
 {
@@ -26,7 +25,7 @@ public class Behavior : ScriptableObject
 
     public Priority Priority;
 
-    public AnimatorController stateController;
+    public RuntimeAnimatorController stateController;
 
     #endregion
 

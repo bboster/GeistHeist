@@ -43,6 +43,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public static Action<GuardStates> OnPossessObject;
 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -65,12 +66,13 @@ public class ThirdPersonInputHandler : IInputHandler
     void Update()
     {
         TurnOnInteractableCanvas();
-        TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
     public override void OnPossessionStarted()
     {
+        CooldownManager.Instance.StartCooldown();
+        TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means EXITING ghost mode
@@ -89,7 +91,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void WhileActionNotHeld()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public override void OnActionCanceled()
@@ -114,7 +116,6 @@ public class ThirdPersonInputHandler : IInputHandler
                 }
 
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
-
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
                 break;
             }
