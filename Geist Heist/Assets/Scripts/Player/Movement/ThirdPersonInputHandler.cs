@@ -35,6 +35,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField] private float interactableRayLength = 10;
     private GameObject interactableCanvas => GameManager.Instance.InteractionCanvas;
+    private GameObject lastObjectLookedAt;
 
     [Header("Between Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
@@ -171,7 +172,7 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnMoveCanceled(){}
     #endregion
 
-    #region  SceneTransition
+    #region  Interaction
     public void TurnOnInteractableCanvas()
     {
         if (interactableCanvas == null)
@@ -188,10 +189,30 @@ public class ThirdPersonInputHandler : IInputHandler
         if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, layerToInclude))
         {
             interactableCanvas.SetActive(true);
+
+            // if switching what youre looking at
+            if(hit.transform.gameObject != lastObjectLookedAt && lastObjectLookedAt != null)
+            {
+                if(lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline)){
+                    outline.enabled = false;
+                }
+            }
+
+            if (hit.transform.TryGetComponent<Outline>(out Outline outline2))
+            {
+                outline2.enabled = true;
+            }
+            lastObjectLookedAt = hit.transform.gameObject;
         }
         else
         {
             interactableCanvas.SetActive(false);
+
+            if (lastObjectLookedAt != null && lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline))
+            {
+                outline.enabled = false;
+            }
+            lastObjectLookedAt = null;
         }
     }
 
