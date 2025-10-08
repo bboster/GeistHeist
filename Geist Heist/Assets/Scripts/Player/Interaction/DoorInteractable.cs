@@ -13,17 +13,18 @@ using NaughtyAttributes;
 public class DoorInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField][Scene] private string sceneName;
-    [SerializeField] private bool EndOfScene = false;
-    [SerializeField] int sceneIndex = 0;
+    //[SerializeField] private bool EndOfScene = false;
+    //[SerializeField] int sceneIndex = 0;
     public void Interact()
     {
-        if (EndOfScene == true  && GameManager.currentLevel < 1)
+        /*if (EndOfScene == true  && GameManager.currentLevel < 1)
         {
             GameManager.Instance.NextLevel(sceneName);
             EndOfScene = false;
         }
-        else
-            SceneManager.LoadScene(sceneName);
+        else*/
+        //SceneManager.LoadScene(sceneName);
+        GameManager.Instance.NextLevel(sceneName);
         
     }
 }
