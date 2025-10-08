@@ -56,7 +56,10 @@ public class ThirdPersonInputHandler : IInputHandler
             Debug.LogError("No interactable canvas has been set");
         }
 
-        GameManager.Instance.LoadCurrentLevel();
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.LoadCurrentLevel();
+        }
     }
 
     // Update is called once per frame
@@ -85,6 +88,11 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
+    public override void WhileActionNotHeld()
+    {
+        throw new NotImplementedException();
+    }
+
     public override void OnActionCanceled()
     {
     }
@@ -111,7 +119,7 @@ public class ThirdPersonInputHandler : IInputHandler
             {
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
 
-                OnPossessObject?.Invoke(0);
+                OnPossessObject?.Invoke(GuardStates.returnToPath);
                 break;
             }
         }

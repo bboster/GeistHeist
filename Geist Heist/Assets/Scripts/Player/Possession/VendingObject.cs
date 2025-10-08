@@ -7,7 +7,7 @@ using UnityEngine;
 * 
 * Brief Description: Input Handler for the Vending Machine, handles movement and actions for the Vending Machine
 */
-public class VendingObject : IInputHandler, IInteractable
+public class VendingObject : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private GameObject CanSpawnPoint;
@@ -94,6 +94,10 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void WhileInteractHeld()
     { }
+    public override void WhileActionNotHeld()
+    {
+        throw new System.NotImplementedException();
+    }
 
     public override void OnInteractCanceled()
     { }
@@ -119,10 +123,4 @@ public class VendingObject : IInputHandler, IInteractable
 
     #endregion
 
-    void IInteractable.Interact()
-    {
-        PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
-    }
-
-    
 }
