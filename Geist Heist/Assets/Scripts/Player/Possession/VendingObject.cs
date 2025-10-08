@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 /*
 * Contributors: Brenden
 * Creation Date: 10/1/25
@@ -22,27 +23,21 @@ public class VendingObject : IInputHandler, IInteractable
     /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
     /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public override void OnPossessionStarted()
     {
+
     }
 
     public override void OnPossessionEnded()
     {
-    }
 
+    }
 
     #region action
     public override void OnActionStarted()
@@ -94,6 +89,10 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void WhileInteractHeld()
     { }
+    public override void WhileActionNotHeld()
+    {
+        //throw new System.NotImplementedException();
+    }
 
     public override void OnInteractCanceled()
     { }
@@ -113,7 +112,6 @@ public class VendingObject : IInputHandler, IInteractable
     {
 
     }
-
 
     public override void OnMoveCanceled() { }
 

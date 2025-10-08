@@ -1,9 +1,10 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/3/25
+ * Last Modified: 10/7/25
  * 
- * Brief Description: Handles third person movement and interaction
+ * Brief Description: Handles third person movement and interaction. 
+ * This script should only be used for the ghost
  */
 
 using System;
@@ -15,8 +16,6 @@ using GuardUtilities;
 
 public class ThirdPersonInputHandler : IInputHandler
 {
-    private Rigidbody rigidbody;
-
     [Header("Design Variables")]
     [SerializeField] private float speed = 3;
     [SerializeField] private float maxVelocity = 10;
@@ -31,44 +30,45 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float sphereCastDistance = 1000;
     private LayerMask layerToInclude;
 
-    [Header("Scene Transition Variables")]
+    [Header("Interaction")]
     // Scene transition specific variables
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField] private float interactableRayLength = 10;
-    [SerializeField, Required] private GameObject interactableCanvas;
+    private GameObject interactableCanvas => GameManager.Instance.InteractionCanvas;
 
     [Header("Between Possession Cooldown Variables")]
-    [SerializeField] private Canvas cooldownCanvas;
-    [SerializeField] CooldownManager cooldownManager;
+    [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
+
+    private Rigidbody rigidbody;
 
     public static Action<GuardStates> OnPossessObject;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
-        cooldownCanvas.gameObject.SetActive(false);
-        cooldownManager.OnCooldownFinished += OnCooldownFinished;
+        CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
 
         if(interactableCanvas == null)
         {
             Debug.LogError("No interactable canvas has been set");
         }
 
-        GameManager.Instance.LoadCurrentLevel();
     }
 
     // Update is called once per frame
     void Update()
     {
         TurnOnInteractableCanvas();
-        TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
     public override void OnPossessionStarted()
     {
+        CooldownManager.Instance.StartCooldown();
+        TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means EXITING ghost mode
@@ -85,6 +85,11 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
+    public override void WhileActionNotHeld()
+    {
+        //throw new NotImplementedException();
+    }
+
     public override void OnActionCanceled()
     {
     }
@@ -99,19 +104,15 @@ public class ThirdPersonInputHandler : IInputHandler
 
         foreach (var result in sphereCastResults)
         {
-            if(result.transform.TryGetComponent(out PossessableObject possessableObject) && result.transform != this.transform)
+            if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
-                if(cooldownManager.IsCooldownActive)
+                if (result.transform.TryGetComponent(out PossessableObject possessableObject) && CooldownManager.Instance.IsCooldownActive)
                 {
                     return;
                 }
-            }
 
-            if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
-            {
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
-
-                OnPossessObject?.Invoke(0);
+                OnPossessObject?.Invoke(GuardStates.returnToPath);
                 break;
             }
         }
@@ -135,7 +136,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void TurnOnCooldownCanvas()
     {
-        if (cooldownManager.IsCooldownActive && cooldownCanvas != null)
+        if (CooldownManager.Instance.IsCooldownActive && cooldownCanvas != null)
         {
             cooldownCanvas.gameObject.SetActive(true);
         }

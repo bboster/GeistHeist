@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 10/02/25
- * Last Edited: 10/02/25
+ * Last Edited: 10/07/25
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
@@ -26,6 +26,10 @@ public class VisionStimulus : Stimulus
     [Tooltip("The index of the behavior to activate when the enemy loses track of the player during a chase.")]
     [ShowIf("showProgrammingValues")]
     [SerializeField] private int recoveryBehaviorIndex;
+    [ShowIf("showProgrammingValues")]
+    [SerializeField] private LayerMask raycastLayer;
+    [ShowIf("showProgrammingValues")]
+    [SerializeField] private Transform raycastSpawn;
 
     [ShowIf("showProgrammingValues")]
     [SerializeField] private GuardController parentController;
@@ -36,9 +40,16 @@ public class VisionStimulus : Stimulus
     {
         if (other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == false)
         {
-            //MAKE SURE PLAYER ISN'T BEHIND A WALL HERE
-            hasSeenPlayer = true;
-            TriggerStimulus();
+            Vector3 direction = -(raycastSpawn.position - other.gameObject.transform.position);
+            float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 1;
+            Physics.Raycast(raycastSpawn.position, direction, out RaycastHit info, distance, raycastLayer);
+            //StartCoroutine(GuardDebug.PersistentRay(raycastSpawn.transform.position, direction, 10));
+
+            if (info.collider != null && info.collider.gameObject.name.Equals("3rd Person Player"))
+            {
+                hasSeenPlayer = true;
+                TriggerStimulus();
+            }
         }
     }
 

@@ -51,7 +51,8 @@ public class TetherPossessable : IInputHandler
 
         SaveDataManager.Instance.MarkSceneAsCompleted(SceneManager.GetActiveScene().name);
 
-        SceneManager.LoadScene(HubScene);
+        //SceneManager.LoadScene(HubScene);
+        GameManager.Instance.NextLevel(HubScene);
     }
 
     #region action
@@ -61,6 +62,11 @@ public class TetherPossessable : IInputHandler
 
     public override void WhileActionHeld()
     {
+    }
+
+    public override void WhileActionNotHeld()
+    {
+        throw new NotImplementedException();
     }
 
     public override void OnActionCanceled()
@@ -95,5 +101,6 @@ public class TetherPossessable : IInputHandler
     {
     }
     public override void OnMoveCanceled() { }
+
     #endregion
 }
