@@ -17,6 +17,22 @@ public class SurprisedBehavior : Behavior
     [Tooltip("The length that the guard will pause before chasing after seeing the player")]
     [SerializeField] private float reactionLength;
 
+    #region Initialize Function and StopBehavior
+
+    public override void InitializeBehavior(GameObject selfRef)
+    {
+        base.InitializeBehavior(selfRef);
+        ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
+    }
+
+    public override void StopBehavior()
+    {
+        base.StopBehavior();
+        ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
+    }
+
+    #endregion
+
     /// <summary>
     /// Runs the logic for the behavior.
     /// </summary>
