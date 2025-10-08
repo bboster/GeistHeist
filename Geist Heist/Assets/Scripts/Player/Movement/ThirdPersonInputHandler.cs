@@ -37,11 +37,11 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float interactableRayLength = 10;
     [SerializeField, Required] private GameObject interactableCanvas;
 
-    [Header("Between Possession Cooldown Variables")]
+    [Header("Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas;
-    [SerializeField] CooldownManager cooldownManager;
-
+    
     public static Action<GuardStates> OnPossessObject;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -49,7 +49,7 @@ public class ThirdPersonInputHandler : IInputHandler
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
         cooldownCanvas.gameObject.SetActive(false);
-        cooldownManager.OnCooldownFinished += OnCooldownFinished;
+        CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
 
         if(interactableCanvas == null)
         {
@@ -66,12 +66,13 @@ public class ThirdPersonInputHandler : IInputHandler
     void Update()
     {
         TurnOnInteractableCanvas();
-        TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
     public override void OnPossessionStarted()
     {
+        CooldownManager.Instance.StartCooldown();
+        TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means EXITING ghost mode
@@ -90,7 +91,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void WhileActionNotHeld()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public override void OnActionCanceled()
@@ -109,7 +110,7 @@ public class ThirdPersonInputHandler : IInputHandler
         {
             if(result.transform.TryGetComponent(out PossessableObject possessableObject) && result.transform != this.transform)
             {
-                if(cooldownManager.IsCooldownActive)
+                if(CooldownManager.Instance.IsCooldownActive)
                 {
                     return;
                 }
@@ -118,7 +119,6 @@ public class ThirdPersonInputHandler : IInputHandler
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
-
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
                 break;
             }
@@ -143,7 +143,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void TurnOnCooldownCanvas()
     {
-        if (cooldownManager.IsCooldownActive && cooldownCanvas != null)
+        if (CooldownManager.Instance.IsCooldownActive && cooldownCanvas != null)
         {
             cooldownCanvas.gameObject.SetActive(true);
         }
