@@ -51,12 +51,6 @@ public class ThirdPersonInputHandler : IInputHandler
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
         CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
-
-        if(interactableCanvas == null)
-        {
-            Debug.LogError("No interactable canvas has been set");
-        }
-
     }
 
     // Update is called once per frame
