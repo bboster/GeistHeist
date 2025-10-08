@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,48 @@ public static class StaticUtilities
             ( referencePoint.forward * inputDirection.y 
             + referencePoint.right * inputDirection.x)
             .normalized;
+    }
+
+    #endregion
+
+    #region GameObjects and Components
+
+    // Stole ts from the internet
+    public static T CopyComponent<T>(this T original, GameObject destination) where T : Component
+    {
+        System.Type type = original.GetType();
+        
+        Component copy = destination.GetOrAddComponent<T>();
+
+        FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (FieldInfo field in fields)
+        {
+            field.SetValue(copy, field.GetValue(original));
+        }
+
+        // Get all properties
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (PropertyInfo property in properties)
+        {
+            if (property.CanWrite)
+            {
+                property.SetValue(copy, property.GetValue(original));
+            }
+        }
+
+        return copy as T;
+    }
+
+    public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
+    {
+        T component = gameObject.GetComponent<T>();
+
+        if (component == null)
+        {
+            component = gameObject.AddComponent<T>();
+        }
+
+        return component;
     }
 
     #endregion
