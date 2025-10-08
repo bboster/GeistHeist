@@ -11,26 +11,6 @@ using UnityEngine.UI;
 public class VaseObject : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
-    [Header("Timer Variables")]
-    [SerializeField] private float timerTime = 5f;
-    private float currentTimerTime;
-    private bool isTimerActive;
-    [SerializeField] Slider timerSlider;
-
-    private void Update()
-    {
-        if (isTimerActive)
-        {
-            currentTimerTime -= Time.deltaTime;
-            if (currentTimerTime <= 0)
-            {
-                currentTimerTime = 0;
-                isTimerActive = false;
-                OnTimerFinished();
-            }
-            UpdateSlider();
-        }
-    }
 
     private void Start()
     {
@@ -39,35 +19,33 @@ public class VaseObject : IInputHandler
 
     public override void OnPossessionStarted()
     {
-        timerSlider.gameObject.SetActive(true);
-        isTimerActive = true;
-        currentTimerTime = timerTime;
+
     }
 
     public override void OnPossessionEnded()
     {
-        timerSlider.gameObject.SetActive(false);
+
     }
 
     #region action
     public override void OnActionStarted()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void WhileActionHeld()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void WhileActionNotHeld()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void OnActionCanceled()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     #endregion
@@ -102,29 +80,6 @@ public class VaseObject : IInputHandler
     {
     }
     public override void OnMoveCanceled() { }
-    #endregion
-
-    #region Timer
-    private void OnTimerFinished()
-    {
-        OnInteractStarted();
-        ResetTimer();
-    }
-
-    private void UpdateSlider()
-    {
-        if (timerSlider != null)
-        {
-            timerSlider.value = currentTimerTime / timerTime;
-        }
-    }
-
-    private void ResetTimer()
-    {
-        currentTimerTime = timerTime;
-        isTimerActive = false;
-        timerSlider.gameObject.SetActive(false);
-    }
     #endregion
 }
 

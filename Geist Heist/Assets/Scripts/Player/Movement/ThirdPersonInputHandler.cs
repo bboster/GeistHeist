@@ -91,7 +91,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void WhileActionNotHeld()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public override void OnActionCanceled()
