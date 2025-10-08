@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 /*
 * Contributors: Brenden
 * Creation Date: 10/1/25
@@ -7,7 +8,7 @@ using UnityEngine;
 * 
 * Brief Description: Input Handler for the Vending Machine, handles movement and actions for the Vending Machine
 */
-public class VendingObject : IInputHandler, IInteractable
+public class VendingObject : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private GameObject CanSpawnPoint;
@@ -15,38 +16,51 @@ public class VendingObject : IInputHandler, IInteractable
 
     private float currentStrength;
 
-    /*[Dropdown("balancing")]*/
-    [SerializeField] private float MaxStrength;
-    /*[Dropdown("balancing")]*/
-    [SerializeField] private float MinStrength;
-    /*[Dropdown("balancing")]*/
-    [SerializeField] private float StrengthGrowthRate;
-    /*[Dropdown("balancing")]*/
-    [SerializeField] private float TapStrength;
-    /*[Dropdown("balancing")]*/
-    [SerializeField] private Vector3 launchDirection;
-    /*[Dropdown("balancing")]*/
-    [SerializeField] private bool Tap;
+    /*[Dropdown("balancing")]*/[SerializeField] private float MaxStrength;
+    /*[Dropdown("balancing")]*/[SerializeField] private float MinStrength;
+    /*[Dropdown("balancing")]*/[SerializeField] private float StrengthGrowthRate;
+    /*[Dropdown("balancing")]*/[SerializeField] private float TapStrength;
+    /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
+    /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
 
+    [Header("Timer Variables")]
+    [SerializeField] private float timerTime = 5f;
+    private float currentTimerTime;
+    private bool isTimerActive;
+    [SerializeField] Slider timerSlider;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (isTimerActive)
+        {
+            currentTimerTime -= Time.deltaTime;
+            if (currentTimerTime <= 0)
+            {
+                currentTimerTime = 0;
+                isTimerActive = false;
+                OnTimerFinished();
+            }
+            UpdateSlider();
+        }
     }
 
     public override void OnPossessionStarted()
     {
+        timerSlider.gameObject.SetActive(true);
+        isTimerActive = true;
+        currentTimerTime = timerTime;
     }
 
     public override void OnPossessionEnded()
     {
+        timerSlider.gameObject.SetActive(false);
     }
 
 
@@ -70,7 +84,7 @@ public class VendingObject : IInputHandler, IInteractable
         if (!Tap)
         {
             currentStrength += StrengthGrowthRate;
-            if (currentStrength > MaxStrength)
+            if(currentStrength > MaxStrength)
             {
                 currentStrength = MaxStrength;
             }
@@ -100,6 +114,10 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void WhileInteractHeld()
     { }
+    public override void WhileActionNotHeld()
+    {
+        throw new System.NotImplementedException();
+    }
 
     public override void OnInteractCanceled()
     { }
@@ -146,12 +164,12 @@ public class VendingObject : IInputHandler, IInteractable
         isTimerActive = false;
         timerSlider.gameObject.SetActive(false);
     }
-
     #endregion
-    void IInteractable.Interact()
-    {
-        PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
-    }
 
+    //void IInteractable.Interact()
+    //{
+    //    PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
+    //}
 
+    
 }
