@@ -166,10 +166,10 @@ public class VendingObject : IInputHandler
     }
     #endregion
 
-    void IInteractable.Interact()
-    {
-        PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
-    }
+    //void IInteractable.Interact()
+    //{
+    //    PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
+    //}
 
     
 }
