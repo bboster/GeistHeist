@@ -22,6 +22,11 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     [SerializeField] private string _defaultfFileName = "Save File";
     [SerializeField] private string _fileType = "json";
 
+    [Header("Debug")]
+    [Tooltip("If true, does not save any data")]
+    public bool DontSaveData = false;
+    // Debug buttons will be under this area
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -99,6 +104,9 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     /// </summary>
     public void SaveData()
     {
+        if (DontSaveData)
+            return;
+
         if(saveFile == null)
         {
             SaveDataAsNewFile();
@@ -123,6 +131,9 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     /// </summary>
     public void SaveDataAsNewFile()
     {
+        if (DontSaveData)
+            return;
+
         string path = GetNewPath();
         var textFile = File.CreateText(path);
 

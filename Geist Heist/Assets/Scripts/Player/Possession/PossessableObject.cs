@@ -16,7 +16,7 @@ using System;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    public IInputHandler InputHandler;
+    [HideInInspector] public IInputHandler InputHandler;
     [Required] public CinemachineCamera CinemachineCamera;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
