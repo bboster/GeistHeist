@@ -184,7 +184,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dac7ba7d075323149a72ff14b540e9e0, type: 2}
+  - {fileID: 2100000, guid: dbbf66483312fdb43976216ec45d6994, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -719,7 +719,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dac7ba7d075323149a72ff14b540e9e0, type: 2}
+  - {fileID: 2100000, guid: dbbf66483312fdb43976216ec45d6994, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -888,7 +888,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dac7ba7d075323149a72ff14b540e9e0, type: 2}
+  - {fileID: 2100000, guid: ff169f3c74b844e48a7ff2993f6180dd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1039,7 +1039,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61d42bd870d64164f99d3d30e3f60338, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  blockingWall: {fileID: 2048236346}
+  InputManagerPrefab: {fileID: 0}
+  SaveDataManagerPrefab: {fileID: 0}
+  GuardCoroutineManagerPrefab: {fileID: 0}
+  BehaviourDatabasePrefab: {fileID: 0}
+  ShaderManagerPrefab: {fileID: 0}
+  CameraPrefab: {fileID: 0}
+  InteractionCanvasPrefab: {fileID: 0}
+  InteractionCanvas: {fileID: 0}
 --- !u!1 &1150009489
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,7 +1112,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dac7ba7d075323149a72ff14b540e9e0, type: 2}
+  - {fileID: 2100000, guid: dbbf66483312fdb43976216ec45d6994, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1612,8 +1619,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
   sceneName: Globe
-  EndOfScene: 0
-  sceneIndex: 0
 --- !u!1 &2048236346
 GameObject:
   m_ObjectHideFlags: 0
@@ -1846,7 +1851,7 @@ Transform:
   m_GameObject: {fileID: 2073150213}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.85, y: 1.5, z: -0.1339}
+  m_LocalPosition: {x: 20.85, y: 1.5, z: -4.1338997}
   m_LocalScale: {x: 1, y: 4, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1864,9 +1869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38800cd25e1334c45a1e3092994495da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
-  sceneName: Level 1
-  EndOfScene: 0
-  sceneIndex: 0
+  sceneName: Adam Distraction
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
