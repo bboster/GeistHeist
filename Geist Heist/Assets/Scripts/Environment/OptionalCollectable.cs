@@ -222,4 +222,8 @@ public enum Collectable
 {
     None,
 	Test_Collectable,
+	Test_Collectable_1,
+	Test_Collectable_2,
+	Test_Collectable_3,
+	Test_Collectable_4,
 }
