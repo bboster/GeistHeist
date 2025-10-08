@@ -119,7 +119,7 @@ public class ThirdPersonInputHandler : IInputHandler
             if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
             {
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
-                OnPossessObject?.Invoke(0);
+                OnPossessObject?.Invoke(GuardStates.returnToPath);
                 break;
             }
         }
