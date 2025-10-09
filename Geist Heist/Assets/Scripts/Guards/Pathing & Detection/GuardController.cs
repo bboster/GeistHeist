@@ -109,7 +109,7 @@ public class GuardController : MonoBehaviour
     public void ChangeBehavior(GuardStates state)
     {
         StopBehavior();
-        currentBehavior = Instantiate(BehaviorDatabase.instance.GetBehavior(state));
+        currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
         GetComponent<StateText>().ChangeText(currentBehavior.StateName);
         StartBehavior();
     }
@@ -124,7 +124,7 @@ public class GuardController : MonoBehaviour
         if(priority > currentPriority)
         {
             StopBehavior();
-            currentBehavior = Instantiate(BehaviorDatabase.instance.GetBehavior(state));
+            currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
             StartBehavior();
         }
     }
