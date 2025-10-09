@@ -16,7 +16,8 @@ using System;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    [HideInInspector] public IInputHandler InputHandler;
+    [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
+    [HideInInspector] private IInputHandler inputHandler;
     [Required] public CinemachineCamera CinemachineCamera;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
@@ -25,10 +26,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private bool isTimerActive;
     [SerializeField, Required] Slider timerSlider;
 
-    private void Awake()
+    private IInputHandler GetInputHandler()
     {
-        InputHandler = InputHandler ?? GetComponent<IInputHandler>();
+        return inputHandler = inputHandler == null ? GetComponent<IInputHandler>() : inputHandler;
     }
+
 
     private void Update()
     {
