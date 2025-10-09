@@ -28,7 +28,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject CameraPrefab;
     [SerializeField, Required] GameObject InteractionCanvasPrefab;
 
-    [HideInInspector] public GameObject InteractionCanvas;
+     public GameObject InteractionCanvas;
 
     protected override void Awake()
     {

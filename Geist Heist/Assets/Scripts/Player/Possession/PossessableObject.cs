@@ -23,7 +23,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField] private float timerTime = 5f;
     private float currentTimerTime;
     private bool isTimerActive;
-    [SerializeField, Required] Slider timerSlider;
+
+    Slider timerSlider => CooldownManager.Instance.cooldownSlider;
 
     private void Awake()
     {
