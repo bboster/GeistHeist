@@ -12,6 +12,8 @@ public class VaseObject : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
 
+    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
@@ -55,6 +57,8 @@ public class VaseObject : IInputHandler
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
+            //evil bandaid
+            timerSlider.gameObject.SetActive(false);
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         }
     }

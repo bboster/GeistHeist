@@ -13,6 +13,7 @@ using Unity.Cinemachine;
 using NaughtyAttributes;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
@@ -23,11 +24,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField] private bool hasTimer;
     [SerializeField] private float timerTime = 5f;
     private float currentTimerTime;
-    private bool isTimerActive;
+    private bool isTimerActive = false;
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+    private Coroutine timerCoroutine;
 
     private void Update()
     {
+        /*
         if (isTimerActive && hasTimer)
         {
             timerSlider.gameObject.SetActive(true);
@@ -35,17 +38,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
             if (currentTimerTime <= 0)
             {
                 currentTimerTime = 0;
-                isTimerActive = false;
+                //isTimerActive = false;
                 OnTimerFinished();
             }
             UpdateSlider();
-        }
-        else if (!isTimerActive)
-        {
-            ResetTimer();
-        }
+        }*/
 
-        Debug.Log(timerSlider.gameObject.activeSelf);
+        //Debug.Log(timerSlider.gameObject.activeSelf);
+        Debug.Log(isTimerActive);
     }
 
     public IInputHandler GetInputHandler()
@@ -63,12 +63,20 @@ public class PossessableObject : MonoBehaviour, IInteractable
     public void OnPossessionStarted()
     {
         InputHandler.OnPossessionStarted();
+
         if(timerSlider != null)
         {
             timerSlider.gameObject.SetActive(true);
         }
+
         isTimerActive = true;
+
         currentTimerTime = timerTime;
+
+        if (timerCoroutine == null && hasTimer)
+        {
+            timerCoroutine = StartCoroutine(TimerCountdown());
+        }
     }
 
     // Called in PlayerManager
@@ -101,6 +109,25 @@ public class PossessableObject : MonoBehaviour, IInteractable
         currentTimerTime = timerTime;
         isTimerActive = false;
         timerSlider.gameObject.SetActive(false);
+    }
+
+    private IEnumerator TimerCountdown()
+    {
+        while (isTimerActive)
+        {
+            currentTimerTime -= Time.deltaTime;
+            Debug.Log("CURRENT TIMER TIME " + currentTimerTime);
+            if (currentTimerTime <= 0)
+            {
+                currentTimerTime = 0;
+                OnTimerFinished();
+            }
+
+            UpdateSlider();
+            yield return null;
+        }
+        timerCoroutine = null;
+        yield break;
     }
     #endregion
 }
