@@ -180,6 +180,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
         Debug.DrawRay(interactableOrigin, interactableDirection * interactableRayLength, Color.red);
 
+        // TODO: make it a spherecast here.
+        // If you could find a way to generalize this spherecast to be the same as the spherecast in the OnInteractStarted started function that would be huge!
+
         if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, layerToInclude))
         {
             interactableCanvas.SetActive(true);
