@@ -40,6 +40,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
             }
             UpdateSlider();
         }
+        else if (!isTimerActive)
+        {
+            ResetTimer();
+        }
+
+        Debug.Log(timerSlider.gameObject.activeSelf);
     }
 
     public IInputHandler GetInputHandler()
@@ -71,7 +77,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
         InputHandler.OnPossessionEnded();
         if(timerSlider != null)
         {
-            timerSlider.gameObject.SetActive(false);
             ResetTimer();
         }
     }
@@ -81,7 +86,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         ResetTimer();
-        timerSlider.gameObject.SetActive(false);
     }
 
     private void UpdateSlider()
