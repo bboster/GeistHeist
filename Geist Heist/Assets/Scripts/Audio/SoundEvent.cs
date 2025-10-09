@@ -7,8 +7,14 @@ public class SoundEvent
 
     public EventReference soundEvent;
 
+    public string subtitle;
+
     public override string ToString()
     {
         return "KEY: " + key + " EVENT: ";
+    }
+
+    public EventReference GetReference() {
+        return soundEvent;
     }
 }

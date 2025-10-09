@@ -44,10 +44,11 @@ public class AudioManager : Singleton<AudioManager>
 
     //Starts a looping sound effect from an ALREADY EXISTING INSTANCE
     //Music will have it's own script and functions for transitions
-    public void StartLoopingSFX(EventInstance sound)
+    //Not needed? Just play start function in each script
+    /*public void StartLoopingSFX(EventInstance sound)
     {
         sound.start();
-    }
+    }*/
 
     //Stops a looping sound effect
     //When fadeOut is true, allow for sound to finish

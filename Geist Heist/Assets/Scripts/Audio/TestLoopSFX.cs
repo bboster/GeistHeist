@@ -6,14 +6,15 @@ public class TestLoopSFX : MonoBehaviour
     EventInstance TestSFX;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        
+        TestSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.EnemyBank.Find(x => x.Equals("TestA")).GetReference());
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        TestSFX.start();
+        //AudioManager.SetEventParameters(TestSFX, transform, rigidbody);
     }
 }
