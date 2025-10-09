@@ -375,7 +375,6 @@ Transform:
   m_Children:
   - {fileID: 916208400}
   - {fileID: 1059413103}
-  - {fileID: 1523313416}
   - {fileID: 189667161}
   - {fileID: 2040102245}
   - {fileID: 171553047}
@@ -783,7 +782,7 @@ PrefabInstance:
     - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: cooldownManager
       value: 
-      objectReference: {fileID: 1523313417}
+      objectReference: {fileID: 0}
     - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: interactableCanvas
       value: 
@@ -798,87 +797,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 121252902873117158, guid: d5e0f2863c8abf14cb3a98c2f874e8a4, type: 3}
   m_PrefabInstance: {fileID: 1715596539}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1523313415
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 860953932}
-    m_Modifications:
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 8.66291
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -4.64007
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.5254903
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5229048113705303352, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_Name
-      value: CooldownManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 7787585546473787916, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: cooldownTime
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7787585546473787916, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: cooldownSlider
-      value: 
-      objectReference: {fileID: 2061799304}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
---- !u!4 &1523313416 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-  m_PrefabInstance: {fileID: 1523313415}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1523313417 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7787585546473787916, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-  m_PrefabInstance: {fileID: 1523313415}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 552fe6d7b8fd7364d8367be6176039e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CooldownManager
 --- !u!1001 &1612242304
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1566,17 +1484,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!114 &2061799304 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1924992059879875002, guid: 4e146b943465cb142a50146a8347bf93, type: 3}
-  m_PrefabInstance: {fileID: 1059413100}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1001 &7060278735106656167
 PrefabInstance:
   m_ObjectHideFlags: 0
