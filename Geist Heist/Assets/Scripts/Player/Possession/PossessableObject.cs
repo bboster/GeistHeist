@@ -44,6 +44,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
             UpdateSlider();
         }*/
 
+        if(isTimerActive)
+        {
+            currentTimerTime -= Time.deltaTime;
+            UpdateSlider();
+        }
+
         //Debug.Log(timerSlider.gameObject.activeSelf);
         Debug.Log(isTimerActive);
     }
@@ -64,18 +70,21 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         InputHandler.OnPossessionStarted();
 
-        if(timerSlider != null)
+        if(!gameObject.TryGetComponent<ThirdPersonInputHandler>(out ThirdPersonInputHandler obj))
         {
-            timerSlider.gameObject.SetActive(true);
-        }
+            if (timerSlider != null)
+            {
+                timerSlider.gameObject.SetActive(true);
+            }
 
-        isTimerActive = true;
+            isTimerActive = true;
 
-        currentTimerTime = timerTime;
+            currentTimerTime = timerTime;
 
-        if (timerCoroutine == null && hasTimer)
-        {
-            timerCoroutine = StartCoroutine(TimerCountdown());
+            if (timerCoroutine == null && hasTimer)
+            {
+                timerCoroutine = StartCoroutine(TimerCountdown());
+            }
         }
     }
 
@@ -83,7 +92,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
     public void OnPossessionEnded()
     {
         InputHandler.OnPossessionEnded();
-        if(timerSlider != null)
+
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
+
+        if (timerSlider != null)
         {
             ResetTimer();
         }
@@ -93,6 +109,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private void OnTimerFinished()
     {
         PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+
+        if(timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
+
         ResetTimer();
     }
 
@@ -113,7 +136,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     private IEnumerator TimerCountdown()
     {
-        while (isTimerActive)
+        /*while (isTimerActive)
         {
             currentTimerTime -= Time.deltaTime;
             Debug.Log("CURRENT TIMER TIME " + currentTimerTime);
@@ -127,7 +150,10 @@ public class PossessableObject : MonoBehaviour, IInteractable
             yield return null;
         }
         timerCoroutine = null;
-        yield break;
+        yield break;*/
+
+        yield return new WaitForSeconds(timerTime);
+        OnTimerFinished();
     }
     #endregion
 }
