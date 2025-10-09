@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 9/18/25
+ * Last Modified: 10/2/25
  * 
  * Brief Description: dont put this script on the player.
  * handles possession and such.
@@ -14,6 +14,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [HideInInspector]
     public PossessableObject PlayerGhostObject;
     [ReadOnly]
     public PossessableObject CurrentObject;
@@ -26,6 +27,9 @@ public class PlayerManager : Singleton<PlayerManager>
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (PlayerGhostObject == null)
+            PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
+
         CurrentObject = PlayerGhostObject;
         RegisterInputs(PlayerGhostObject);
         camera = Camera.main;
@@ -42,9 +46,11 @@ public class PlayerManager : Singleton<PlayerManager>
 
         RegisterInputs(possessable);
 
-        CurrentObject = possessable;
+        if (CurrentObject != null) CurrentObject.OnPossessionEnded();
+        possessable.OnPossessionStarted();
 
-        DeRegisterInputs(PlayerGhostObject);
+        DeRegisterInputs(CurrentObject);
+        CurrentObject = possessable;
     }
 
     public void PossessGhost(PossessableObject possessable)
@@ -53,8 +59,10 @@ public class PlayerManager : Singleton<PlayerManager>
         possessable.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(true);
 
-
         RegisterInputs(PlayerGhostObject);
+
+        possessable.OnPossessionEnded();
+        PlayerGhostObject.OnPossessionStarted();
 
         CurrentObject = PlayerGhostObject;
 
@@ -65,8 +73,9 @@ public class PlayerManager : Singleton<PlayerManager>
     {
 
         var input = possessable.InputHandler;
-        InputEvents.MoveStarted.AddListener(input.OnMoveStarted);
+        InputEvents.MoveStarted.AddListener(input.OnMoveStarted);   
         InputEvents.MoveHeld.AddListener(input.WhileMoveHeld);
+        InputEvents.MoveNotHeld.AddListener(input.WhileMoveNotHeld);
         InputEvents.MoveCanceled.AddListener(input.OnMoveCanceled);
 
         /*InputEvents.JumpStarted.AddListener(input.OnJumpStarted);
@@ -75,31 +84,29 @@ public class PlayerManager : Singleton<PlayerManager>
 
         InputEvents.ActionStarted.AddListener(input.OnActionStarted);
         InputEvents.ActionHeld.AddListener(input.WhileActionHeld);
+        InputEvents.ActionNotHeld.AddListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.AddListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.AddListener(input.OnPossessStarted);
-        InputEvents.PossessHeld.AddListener(input.WhilePossessHeld);
-        InputEvents.PossessCanceled.AddListener(input.OnPossessCanceled);
-
-        // camera is really bad pls refactor it.
-        //var cam = possessable.CameraInputHandler;
-        //InputEvents.LookUpdate.AddListener(LookUpdate);
+        InputEvents.PossessStarted.AddListener(input.OnInteractStarted);
+        InputEvents.PossessHeld.AddListener(input.WhileInteractHeld);
+        InputEvents.PossessCanceled.AddListener(input.OnInteractCanceled);
     }
 
     public void DeRegisterInputs(PossessableObject possessable)
     {
-
         var input = possessable.InputHandler;
         InputEvents.MoveStarted.RemoveListener(input.OnMoveStarted);
         InputEvents.MoveHeld.RemoveListener(input.WhileMoveHeld);
+        InputEvents.MoveNotHeld.RemoveListener(input.WhileMoveNotHeld);
         InputEvents.MoveCanceled.RemoveListener(input.OnMoveCanceled);
 
         InputEvents.ActionStarted.RemoveListener(input.OnActionStarted);
         InputEvents.ActionHeld.RemoveListener(input.WhileActionHeld);
+        InputEvents.ActionNotHeld.RemoveListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.RemoveListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.RemoveListener(input.OnPossessStarted);
-        InputEvents.PossessHeld.RemoveListener(input.WhilePossessHeld);
-        InputEvents.PossessCanceled.RemoveListener(input.OnPossessCanceled);
+        InputEvents.PossessStarted.RemoveListener(input.OnInteractStarted);
+        InputEvents.PossessHeld.RemoveListener(input.WhileInteractHeld);
+        InputEvents.PossessCanceled.RemoveListener(input.OnInteractCanceled);
     }
 }

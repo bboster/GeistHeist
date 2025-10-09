@@ -8,9 +8,11 @@
  */
 
 using System.Net.Http.Headers;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
  using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 public class InputEvents : Singleton<InputEvents>
 {
@@ -34,6 +36,7 @@ public class InputEvents : Singleton<InputEvents>
 
     public static UnityEvent ActionStarted = new UnityEvent();
     public static UnityEvent ActionHeld = new UnityEvent();
+    public static UnityEvent ActionNotHeld = new UnityEvent();
     public static UnityEvent ActionCanceled = new UnityEvent();
 
     public static UnityEvent PossessStarted = new UnityEvent();
@@ -48,10 +51,16 @@ public class InputEvents : Singleton<InputEvents>
 
     [SerializeField] private float _sensitivity=1;
 
+    public static bool IsHeld = false;
+
     // Input values and flags
     public Vector2 LookDelta => Look.ReadValue<Vector2>() * _sensitivity;
-    public Vector3 FirstPersonInputDirection => movementOrigin.TransformDirection(new Vector3(InputDirection2D.x, 0f, InputDirection2D.y));
-    public Vector3 ThirdPersonInputDirection => new Vector3() /*TODO: i have no fucking idea*/ ;
+    public Vector3 FirstPersonInputDirection => (
+        (movementOrigin.forward * InputDirection2D.y)
+        + (movementOrigin.right * InputDirection2D.x))
+        .WithY(0)
+        .normalized;
+    /*public Vector3 FirstPersonInputDirection => movementOrigin.TransformDirection(new Vector3(InputDirection2D.x, 0f, InputDirection2D.y));*/
     public Vector2 InputDirection2D => Move.ReadValue<Vector2>();
     public static bool MovePressed, JumpPressed, ActionPressed, EscapeObjectPressed, PossessPressed;
 
@@ -105,17 +114,18 @@ public class InputEvents : Singleton<InputEvents>
         else MoveNotHeld.Invoke();
         //if (JumpPressed) JumpHeld.Invoke();
         if (ActionPressed) ActionHeld.Invoke();
+        else ActionNotHeld.Invoke();
         if (EscapeObjectPressed) PossessHeld.Invoke();
 
         LookUpdate.Invoke(LookDelta);
     }
     private void OnDisable()
     {
-        Move.Reset();   
+        Move?.Reset();   
         //Jump.Reset();
-        Pause.Reset();
-        Action.Reset();
-        Possess.Reset();
-        Look.Reset();
+        Pause?.Reset();
+        Action?.Reset();
+        Possess?.Reset();
+        Look?.Reset();
     }
 }
