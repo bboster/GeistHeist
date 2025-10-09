@@ -16,25 +16,21 @@ using System;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    [HideInInspector] public IInputHandler InputHandler;
+    [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
+    [HideInInspector] private IInputHandler inputHandler;
     [Required] public CinemachineCamera CinemachineCamera;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
     [SerializeField] private float timerTime = 5f;
     private float currentTimerTime;
     private bool isTimerActive;
-
-    Slider timerSlider => CooldownManager.Instance.cooldownSlider;
-
-    private void Awake()
-    {
-        InputHandler = InputHandler ?? GetComponent<IInputHandler>();
-    }
+    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
 
     private void Update()
     {
         if (isTimerActive && hasTimer)
         {
+            timerSlider.gameObject.SetActive(true);
             currentTimerTime -= Time.deltaTime;
             if (currentTimerTime <= 0)
             {
@@ -44,6 +40,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
             }
             UpdateSlider();
         }
+    }
+
+    public IInputHandler GetInputHandler()
+    {
+        inputHandler = inputHandler == null ? GetComponent<IInputHandler>(): inputHandler;
+        return inputHandler;
     }
 
     void IInteractable.Interact()
@@ -79,6 +81,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         ResetTimer();
+        timerSlider.gameObject.SetActive(false);
     }
 
     private void UpdateSlider()

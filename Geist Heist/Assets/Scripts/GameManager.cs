@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
 using Unity.Cinemachine;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -27,8 +28,10 @@ public class GameManager : Singleton<GameManager>
     [Header("Other Constants")]
     [SerializeField, Required] GameObject CameraPrefab;
     [SerializeField, Required] GameObject InteractionCanvasPrefab;
+    [SerializeField, Required] GameObject TimerCanvasPrefab;
 
-     public GameObject InteractionCanvas;
+    [HideInInspector] public GameObject InteractionCanvas;
+    [HideInInspector] public Slider TimerSlider;
 
     protected override void Awake()
     {
@@ -43,6 +46,9 @@ public class GameManager : Singleton<GameManager>
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
         Instantiate(CooldownManagerPrefab);
+        var timerCanvas = Instantiate(TimerCanvasPrefab);
+        TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
+        TimerSlider.gameObject.SetActive(false);
 
         InteractionCanvas = Instantiate(InteractionCanvasPrefab);
 
