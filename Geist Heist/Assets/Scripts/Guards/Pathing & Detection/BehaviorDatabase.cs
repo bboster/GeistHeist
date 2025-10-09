@@ -13,8 +13,6 @@ public class BehaviorDatabase : Singleton<BehaviorDatabase>
 {
     [SerializeField] private Behavior[] guardBehaviors;
 
-    public static BehaviorDatabase instance;
-
     /// <summary>
     /// Retrieves a behavior from the database.
     /// </summary>

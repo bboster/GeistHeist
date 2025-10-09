@@ -72,7 +72,7 @@ public class VendingObject : IInputHandler, IInteractable
         {
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            temp.GetComponent<Rigidbody>().AddForce(launchDirection * currentStrength);
+            temp.GetComponent<Rigidbody>().AddForce(Vector3.Scale(launchDirection,transform.forward) * currentStrength);
         }
     }
 
