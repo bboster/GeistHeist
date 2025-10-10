@@ -16,11 +16,12 @@ public class CooldownManager : Singleton<CooldownManager>
     [SerializeField] private GameObject CooldownCanvasPrefab;
     [Tooltip("Refers to the time between possessions before player can possess again")]
     [SerializeField] private float cooldownTime;
-    private Slider cooldownSlider;
     private float currentCooldownTime;
     private bool isCooldownActive = false;
 
     [HideInInspector] public GameObject CooldownCanvas;
+    [HideInInspector] public Slider cooldownSlider;
+
     public bool IsCooldownActive => currentCooldownTime > 0;
 
     // Called in GameManager

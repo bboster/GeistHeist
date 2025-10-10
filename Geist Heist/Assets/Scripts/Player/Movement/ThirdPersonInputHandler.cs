@@ -108,6 +108,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
+
+                //Hide button prompt and outline
+                OnInteractableCanvasMissed();
                 break;
             }
         }
@@ -181,7 +184,7 @@ public class ThirdPersonInputHandler : IInputHandler
         Debug.DrawRay(interactableOrigin, interactableDirection * interactableRayLength, Color.red);
 
         // TODO: make it a spherecast here.
-        // If you could find a way to generalize this spherecast to be the same as the spherecast in the OnInteractStarted started function that would be huge!
+        // If you could find a way to generalize this spherecast to be the same as the spherecast in the OnInteractStarted started function that would be huge
 
         if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, layerToInclude))
         {
@@ -203,14 +206,19 @@ public class ThirdPersonInputHandler : IInputHandler
         }
         else
         {
-            interactableCanvas.SetActive(false);
-
-            if (lastObjectLookedAt != null && lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline))
-            {
-                outline.enabled = false;
-            }
-            lastObjectLookedAt = null;
+           OnInteractableCanvasMissed();
         }
+    }
+
+    private void OnInteractableCanvasMissed()
+    {
+        interactableCanvas.SetActive(false);
+
+        if (lastObjectLookedAt != null && lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline))
+        {
+            outline.enabled = false;
+        }
+        lastObjectLookedAt = null;
     }
 
     #endregion
