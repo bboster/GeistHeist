@@ -54,7 +54,8 @@ public class VisionStimulus : Stimulus
                 TriggerStimulus();
             }
 
-            Debug.Log(info.collider.gameObject.name);
+            if(info.collider != null)
+                Debug.Log(info.collider.gameObject.name);
         }
     }
 
