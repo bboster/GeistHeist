@@ -88,8 +88,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
             if (timerCoroutine == null && hasTimer)
             {
-
-                currentTimerTime = timerTime;
                 timerCoroutine = StartCoroutine(TimerCountdown());
             }
         }
