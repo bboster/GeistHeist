@@ -40,16 +40,21 @@ public class VisionStimulus : Stimulus
     {
         if (other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == false)
         {
-            Vector3 direction = -(raycastSpawn.position - other.gameObject.transform.position);
-            float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 1;
-            Physics.Raycast(raycastSpawn.position, direction, out RaycastHit info, distance, raycastLayer);
-            //StartCoroutine(GuardDebug.PersistentRay(raycastSpawn.transform.position, direction, 10));
+            Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
 
-            if (info.collider != null && info.collider.gameObject.name.Equals("3rd Person Player"))
+            Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
+            float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 2;
+
+            /*Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer);*/
+            GuardDebug.PersistentRay(spawnLocation, direction, 2, GetComponent<GuardDebugger>());
+
+            if (!Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer))
             {
                 hasSeenPlayer = true;
                 TriggerStimulus();
             }
+
+            Debug.Log(info.collider.gameObject.name);
         }
     }
 

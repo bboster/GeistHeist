@@ -40,7 +40,6 @@ Transform:
   m_Children:
   - {fileID: 6381422457824038256}
   - {fileID: 2749016206893264801}
-  - {fileID: 4476812346470414564}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8161871110166116040
@@ -157,7 +156,7 @@ MonoBehaviour:
   defaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
-  showProgrammingValues: 1
+  showProgrammingValues: 0
   animator: {fileID: 8501832552835297838}
   SearchLocation: {x: 0, y: 0, z: 0}
 --- !u!95 &8501832552835297838
@@ -371,12 +370,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 735619524292305938}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.83}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.96, z: 0.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1960475012492913843}
+  m_Father: {fileID: 2749016206893264801}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5230751797453662090
 GameObject:
@@ -544,6 +543,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5467543623775934886}
+  - {fileID: 4476812346470414564}
   m_Father: {fileID: 1960475012492913843}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5506253662552374861
@@ -653,6 +653,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9013638940889411661, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6517444019377171808}
+    - targetCorrespondingSourceObject: {fileID: 9013638940889411661, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6380891739477289876}
   m_SourcePrefab: {fileID: 100100000, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
 --- !u!1 &3565940870479334912 stripped
 GameObject:
@@ -688,13 +691,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VisionStimulus
   stimulusType: 0
   priority: 2
-  stateToChangeTo: 2
+  stateToChangeTo: 4
   showProgrammingValues: 1
   behaviorIndex: 1
   recoveryBehaviorIndex: 0
   raycastLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   raycastSpawn: {fileID: 4476812346470414564}
   parentController: {fileID: 4906703080055724546}
 --- !u!64 &6517444019377171808
@@ -719,6 +722,18 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 3613567641014311022, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
+--- !u!114 &6380891739477289876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3565940870479334912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfc40b9b93513c04cb7c2f849916d456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardDebugger
 --- !u!4 &5467543623775934886 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
