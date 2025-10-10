@@ -16,16 +16,15 @@ public class VendingObject : IInputHandler, IInteractable
 
     private float currentStrength;
 
-    /*[Dropdown("balancing")]*/[SerializeField] private float MaxStrength;
-    /*[Dropdown("balancing")]*/[SerializeField] private float MinStrength;
-    /*[Dropdown("balancing")]*/[SerializeField] private float StrengthGrowthRate;
-    /*[Dropdown("balancing")]*/[SerializeField] private float TapStrength;
+    /*[Dropdown("balancing")]*/[SerializeField] private float maxStrength;
+    /*[Dropdown("balancing")]*/[SerializeField] private float minStrength;
+    /*[Dropdown("balancing")]*/[SerializeField] private float strengthGrowthRate;
+    /*[Dropdown("balancing")]*/[SerializeField] private float tapStrength;
     /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
     /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
 
-    [Tooltip("Location where the ghost spawns after leaving the vending machine.")]
-    [Required][SerializeField] private Transform ghostSpawnPoint;
-
+    [SerializeField] private Image ChargeUI;
+    [SerializeField] private GameObject Images;
 
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
 
@@ -43,7 +42,6 @@ public class VendingObject : IInputHandler, IInteractable
     public override void OnPossessionEnded()
     {
 
-        PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
     }
 
     #region action
@@ -53,11 +51,13 @@ public class VendingObject : IInputHandler, IInteractable
         {
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            temp.GetComponent<Rigidbody>().AddForce(launchDirection * TapStrength);
+            temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength);
         }
         else
         {
-            currentStrength = MinStrength;
+            currentStrength = minStrength;
+            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
+            Images.SetActive(true);
         }
     }
 
@@ -65,11 +65,12 @@ public class VendingObject : IInputHandler, IInteractable
     {
         if (!Tap)
         {
-            currentStrength += StrengthGrowthRate;
-            if(currentStrength > MaxStrength)
+            currentStrength += strengthGrowthRate;
+            if(currentStrength > maxStrength)
             {
-                currentStrength = MaxStrength;
+                currentStrength = maxStrength;
             }
+            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
         }
     }
 
@@ -79,7 +80,10 @@ public class VendingObject : IInputHandler, IInteractable
         {
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            temp.GetComponent<Rigidbody>().AddForce(Vector3.Scale(launchDirection,transform.forward) * currentStrength);
+            Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
+            tempLaunch.y = launchDirection.y;
+            temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
+            Images.SetActive(false);
         }
     }
 
