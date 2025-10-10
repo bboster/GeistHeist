@@ -28,6 +28,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
     private Coroutine timerCoroutine;
 
+    [HideInInspector] public bool CanUnPossess = false;
+    private Coroutine unpossessCoroutine;
+
     private void Update()
     {
         /*
@@ -70,7 +73,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         InputHandler.OnPossessionStarted();
 
-        if(!gameObject.TryGetComponent<ThirdPersonInputHandler>(out ThirdPersonInputHandler obj))
+        CanUnPossess = false;
+
+        if (unpossessCoroutine == null)
+        {
+            unpossessCoroutine = StartCoroutine(WaitForUnpossess());
+        }
+
+        if (!gameObject.TryGetComponent<ThirdPersonInputHandler>(out ThirdPersonInputHandler obj))
         {
             if (timerSlider != null)
             {
@@ -103,6 +113,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
         {
             ResetTimer();
         }
+    }
+
+    public IEnumerator WaitForUnpossess()
+    {
+        yield return new WaitForEndOfFrame();
+        CanUnPossess = true;
+        unpossessCoroutine = null;
     }
 
     #region Timer

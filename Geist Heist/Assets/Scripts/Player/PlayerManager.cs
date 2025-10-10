@@ -55,6 +55,11 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessGhost(PossessableObject possessable)
     {
+        if (!possessable.CanUnPossess)
+        {
+            return;
+        }
+
         PlayerGhostObject.CinemachineCamera.gameObject.SetActive(true);
         possessable.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(true);
