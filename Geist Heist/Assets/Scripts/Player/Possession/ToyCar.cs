@@ -33,6 +33,9 @@ public class ToyCar : IInputHandler
 
     [SerializeField] private Image ChargeUI;
     [SerializeField] private GameObject Images;
+
+    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
@@ -117,6 +120,8 @@ public class ToyCar : IInputHandler
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
+            //evil bandaid
+            timerSlider.gameObject.SetActive(false);
             PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;

@@ -26,6 +26,8 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField] private Image ChargeUI;
     [SerializeField] private GameObject Images;
 
+    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -92,6 +94,9 @@ public class VendingObject : IInputHandler, IInteractable
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
+            //evil bandaid
+            timerSlider.gameObject.SetActive(false);
+            Debug.Log("EBBOGBOBUAOGABGAGABG");
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         }
     }
