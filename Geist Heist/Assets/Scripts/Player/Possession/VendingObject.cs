@@ -96,7 +96,6 @@ public class VendingObject : IInputHandler, IInteractable
         {
             //evil bandaid
             timerSlider.gameObject.SetActive(false);
-            Debug.Log("EBBOGBOBUAOGABGAGABG");
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         }
     }

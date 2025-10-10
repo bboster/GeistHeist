@@ -22,13 +22,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [Required] public CinemachineCamera CinemachineCamera;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
-    [SerializeField] private float timerTime = 5f;
+    [SerializeField, ShowIf(nameof(hasTimer))] private float timerTime = 5f;
     private float currentTimerTime;
     private bool isTimerActive = false;
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
     private Coroutine timerCoroutine;
 
-    [HideInInspector] public bool CanUnPossess = false;
+    [HideInInspector] public bool CanUnPossess = true;
     private Coroutine unpossessCoroutine;
 
     private void Update()
@@ -47,14 +47,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
             UpdateSlider();
         }*/
 
-        if(isTimerActive)
+        if (isTimerActive && hasTimer)
         {
             currentTimerTime -= Time.deltaTime;
             UpdateSlider();
         }
-
-        //Debug.Log(timerSlider.gameObject.activeSelf);
-        Debug.Log(isTimerActive);
     }
 
     public IInputHandler GetInputHandler()
@@ -73,7 +70,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         InputHandler.OnPossessionStarted();
 
-        CanUnPossess = false;
 
         if (unpossessCoroutine == null)
         {
@@ -89,10 +85,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
             isTimerActive = true;
 
-            currentTimerTime = timerTime;
 
             if (timerCoroutine == null && hasTimer)
             {
+
+                currentTimerTime = timerTime;
                 timerCoroutine = StartCoroutine(TimerCountdown());
             }
         }
@@ -117,6 +114,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     public IEnumerator WaitForUnpossess()
     {
+        CanUnPossess = false;
         yield return new WaitForEndOfFrame();
         CanUnPossess = true;
         unpossessCoroutine = null;
