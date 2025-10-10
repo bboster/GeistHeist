@@ -31,6 +31,8 @@ public class ToyCar : IInputHandler
     //activates when ghost is leaving an object
     private bool IsLeaving = false;
 
+    [SerializeField] private Image ChargeUI;
+    [SerializeField] private GameObject Images;
 
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
 
@@ -46,6 +48,8 @@ public class ToyCar : IInputHandler
         if (rb.linearVelocity == Vector3.zero)
         {
             currentStrength = minStrength;
+            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
+            Images.SetActive(true);
         }
     }
 
@@ -59,6 +63,8 @@ public class ToyCar : IInputHandler
             {
                 currentStrength = maxStrength;
             }
+
+            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
         }
     }
     public override void WhileActionNotHeld()
@@ -78,6 +84,7 @@ public class ToyCar : IInputHandler
         {
             UnFreezePosition();
             rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
+            Images.SetActive(false);
         }
     }
 
