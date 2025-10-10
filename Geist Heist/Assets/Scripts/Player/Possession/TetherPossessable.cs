@@ -30,7 +30,7 @@ public class TetherPossessable : IInputHandler
         thirdPersoncinemachineCamera.SetActive(false);
     }
 
-    public override void OnPossessionStarted()
+    public override void OnPossessionStart()
     {
         victoryAnimation = StartCoroutine(LoadNextSceneCooldown());
     }

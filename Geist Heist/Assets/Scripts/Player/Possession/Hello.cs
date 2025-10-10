@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class Hello : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+    // WhilePossessingUpdate is called once per frame
     void Update()
     {
         

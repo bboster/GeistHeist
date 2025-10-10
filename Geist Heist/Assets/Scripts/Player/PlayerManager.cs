@@ -24,7 +24,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private InputEvents inputEvents => InputEvents.Instance;
     private Camera camera;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
         if (PlayerGhostObject == null)
@@ -47,7 +47,7 @@ public class PlayerManager : Singleton<PlayerManager>
         RegisterInputs(possessable);
 
         if (CurrentObject != null) CurrentObject.OnPossessionEnded();
-        possessable.OnPossessionStarted();
+        possessable.OnPossessionStart();
 
         DeRegisterInputs(CurrentObject);
         CurrentObject = possessable;
@@ -67,7 +67,7 @@ public class PlayerManager : Singleton<PlayerManager>
         RegisterInputs(PlayerGhostObject);
 
         possessable.OnPossessionEnded();
-        PlayerGhostObject.OnPossessionStarted();
+        PlayerGhostObject.OnPossessionStart();
 
         CurrentObject = PlayerGhostObject;
 
@@ -113,5 +113,11 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.PossessStarted.RemoveListener(input.OnInteractStarted);
         InputEvents.PossessHeld.RemoveListener(input.WhileInteractHeld);
         InputEvents.PossessCanceled.RemoveListener(input.OnInteractCanceled);
+    }
+
+    private void Update()
+    {
+        if (CurrentObject != null)
+            CurrentObject.WhilePossessingUpdate();
     }
 }

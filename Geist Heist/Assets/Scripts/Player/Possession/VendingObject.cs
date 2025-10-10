@@ -8,6 +8,7 @@ using UnityEngine.UI;
 * 
 * Brief Description: Input Handler for the Vending Machine, handles movement and actions for the Vending Machine
 */
+[RequireComponent(typeof(PossessableObject))]
 public class VendingObject : IInputHandler, IInteractable
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
@@ -26,15 +27,15 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField] private Image ChargeUI;
     [SerializeField] private GameObject Images;
 
-    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+    private PossessableObject possessableObject;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
-        
+        possessableObject = GetComponent<PossessableObject>();
     }
 
-    public override void OnPossessionStarted()
+    public override void OnPossessionStart()
     {
 
     }
@@ -94,8 +95,6 @@ public class VendingObject : IInputHandler, IInteractable
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
-            //evil bandaid
-            timerSlider.gameObject.SetActive(false);
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         }
     }
