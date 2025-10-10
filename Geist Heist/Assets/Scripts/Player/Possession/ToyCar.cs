@@ -140,6 +140,8 @@ public class ToyCar : IInputHandler
 
     public override void OnPossessionEnded()
     {
+        Debug.Log("meow meow");
+        PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
     }
     #endregion
 

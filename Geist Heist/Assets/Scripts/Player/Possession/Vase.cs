@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
  /*
@@ -14,6 +15,9 @@ public class VaseObject : IInputHandler
 
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
 
+    [Tooltip("Location where the ghost spawns after leaving the vase.")]
+    [Required][SerializeField] private Transform ghostSpawnPoint;
+
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
@@ -26,7 +30,7 @@ public class VaseObject : IInputHandler
 
     public override void OnPossessionEnded()
     {
-
+        PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
     }
 
     #region action
@@ -60,6 +64,7 @@ public class VaseObject : IInputHandler
             //evil bandaid
             timerSlider.gameObject.SetActive(false);
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+            PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
         }
     }
 

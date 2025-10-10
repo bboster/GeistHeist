@@ -23,6 +23,9 @@ public class VendingObject : IInputHandler, IInteractable
     /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
     /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
 
+    [Tooltip("Location where the ghost spawns after leaving the vending machine.")]
+    [Required][SerializeField] private Transform ghostSpawnPoint;
+
 
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
 
@@ -40,6 +43,7 @@ public class VendingObject : IInputHandler, IInteractable
     public override void OnPossessionEnded()
     {
 
+        PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
     }
 
     #region action
