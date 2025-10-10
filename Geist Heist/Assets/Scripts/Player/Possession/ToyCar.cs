@@ -1,7 +1,8 @@
 using NaughtyAttributes;
 using System.Collections;
 using System.Xml.Serialization;
-using UnityEngine; 
+using UnityEngine;
+using UnityEngine.UI;
 /*
  * Contributors: Sky
  * Creation Date: 10/2/25
@@ -29,6 +30,9 @@ public class ToyCar : IInputHandler
     private Coroutine freezeCoroutine;
     //activates when ghost is leaving an object
     private bool IsLeaving = false;
+
+
+    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
 
     private void Start()
     {
@@ -109,6 +113,8 @@ public class ToyCar : IInputHandler
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
+            //evil bandaid
+            timerSlider.gameObject.SetActive(false);
             PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;

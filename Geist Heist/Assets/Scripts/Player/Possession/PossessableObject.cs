@@ -13,36 +13,51 @@ using Unity.Cinemachine;
 using NaughtyAttributes;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    [HideInInspector] public IInputHandler InputHandler;
+    [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
+    [HideInInspector] private IInputHandler inputHandler;
     [Required] public CinemachineCamera CinemachineCamera;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
     [SerializeField] private float timerTime = 5f;
     private float currentTimerTime;
-    private bool isTimerActive;
-    [SerializeField, Required] Slider timerSlider;
-
-    private void Awake()
-    {
-        InputHandler = InputHandler ?? GetComponent<IInputHandler>();
-    }
+    private bool isTimerActive = false;
+    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+    private Coroutine timerCoroutine;
 
     private void Update()
     {
+        /*
         if (isTimerActive && hasTimer)
         {
+            timerSlider.gameObject.SetActive(true);
             currentTimerTime -= Time.deltaTime;
             if (currentTimerTime <= 0)
             {
                 currentTimerTime = 0;
-                isTimerActive = false;
+                //isTimerActive = false;
                 OnTimerFinished();
             }
             UpdateSlider();
+        }*/
+
+        if(isTimerActive)
+        {
+            currentTimerTime -= Time.deltaTime;
+            UpdateSlider();
         }
+
+        //Debug.Log(timerSlider.gameObject.activeSelf);
+        Debug.Log(isTimerActive);
+    }
+
+    public IInputHandler GetInputHandler()
+    {
+        inputHandler = inputHandler == null ? GetComponent<IInputHandler>(): inputHandler;
+        return inputHandler;
     }
 
     void IInteractable.Interact()
@@ -54,21 +69,38 @@ public class PossessableObject : MonoBehaviour, IInteractable
     public void OnPossessionStarted()
     {
         InputHandler.OnPossessionStarted();
-        if(timerSlider != null)
+
+        if(!gameObject.TryGetComponent<ThirdPersonInputHandler>(out ThirdPersonInputHandler obj))
         {
-            timerSlider.gameObject.SetActive(true);
+            if (timerSlider != null)
+            {
+                timerSlider.gameObject.SetActive(true);
+            }
+
+            isTimerActive = true;
+
+            currentTimerTime = timerTime;
+
+            if (timerCoroutine == null && hasTimer)
+            {
+                timerCoroutine = StartCoroutine(TimerCountdown());
+            }
         }
-        isTimerActive = true;
-        currentTimerTime = timerTime;
     }
 
     // Called in PlayerManager
     public void OnPossessionEnded()
     {
         InputHandler.OnPossessionEnded();
-        if(timerSlider != null)
+
+        if (timerCoroutine != null)
         {
-            timerSlider.gameObject.SetActive(false);
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
+
+        if (timerSlider != null)
+        {
             ResetTimer();
         }
     }
@@ -77,6 +109,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private void OnTimerFinished()
     {
         PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+
+        if(timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
+
         ResetTimer();
     }
 
@@ -93,6 +132,28 @@ public class PossessableObject : MonoBehaviour, IInteractable
         currentTimerTime = timerTime;
         isTimerActive = false;
         timerSlider.gameObject.SetActive(false);
+    }
+
+    private IEnumerator TimerCountdown()
+    {
+        /*while (isTimerActive)
+        {
+            currentTimerTime -= Time.deltaTime;
+            Debug.Log("CURRENT TIMER TIME " + currentTimerTime);
+            if (currentTimerTime <= 0)
+            {
+                currentTimerTime = 0;
+                OnTimerFinished();
+            }
+
+            UpdateSlider();
+            yield return null;
+        }
+        timerCoroutine = null;
+        yield break;*/
+
+        yield return new WaitForSeconds(timerTime);
+        OnTimerFinished();
     }
     #endregion
 }

@@ -23,6 +23,9 @@ public class VendingObject : IInputHandler, IInteractable
     /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
     /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
 
+
+    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -83,6 +86,9 @@ public class VendingObject : IInputHandler, IInteractable
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
+            //evil bandaid
+            timerSlider.gameObject.SetActive(false);
+            Debug.Log("EBBOGBOBUAOGABGAGABG");
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         }
     }
