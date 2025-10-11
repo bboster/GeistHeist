@@ -8,6 +8,7 @@ using UnityEngine.UI;
 * 
 * Brief Description: Input Handler for the Vending Machine, handles movement and actions for the Vending Machine
 */
+[RequireComponent(typeof(PossessableObject))]
 public class VendingObject : IInputHandler, IInteractable
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
@@ -16,23 +17,25 @@ public class VendingObject : IInputHandler, IInteractable
 
     private float currentStrength;
 
-    /*[Dropdown("balancing")]*/[SerializeField] private float MaxStrength;
-    /*[Dropdown("balancing")]*/[SerializeField] private float MinStrength;
-    /*[Dropdown("balancing")]*/[SerializeField] private float StrengthGrowthRate;
-    /*[Dropdown("balancing")]*/[SerializeField] private float TapStrength;
+    /*[Dropdown("balancing")]*/[SerializeField] private float maxStrength;
+    /*[Dropdown("balancing")]*/[SerializeField] private float minStrength;
+    /*[Dropdown("balancing")]*/[SerializeField] private float strengthGrowthRate;
+    /*[Dropdown("balancing")]*/[SerializeField] private float tapStrength;
     /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
     /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
 
+    [SerializeField] private Image ChargeUI;
+    [SerializeField] private GameObject Images;
 
-    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+    private PossessableObject possessableObject;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
-        
+        possessableObject = GetComponent<PossessableObject>();
     }
 
-    public override void OnPossessionStarted()
+    public override void OnPossessionStart()
     {
 
     }
@@ -49,11 +52,13 @@ public class VendingObject : IInputHandler, IInteractable
         {
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            temp.GetComponent<Rigidbody>().AddForce(launchDirection * TapStrength);
+            temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength);
         }
         else
         {
-            currentStrength = MinStrength;
+            currentStrength = minStrength;
+            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
+            Images.SetActive(true);
         }
     }
 
@@ -61,11 +66,12 @@ public class VendingObject : IInputHandler, IInteractable
     {
         if (!Tap)
         {
-            currentStrength += StrengthGrowthRate;
-            if(currentStrength > MaxStrength)
+            currentStrength += strengthGrowthRate;
+            if(currentStrength > maxStrength)
             {
-                currentStrength = MaxStrength;
+                currentStrength = maxStrength;
             }
+            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
         }
     }
 
@@ -75,7 +81,10 @@ public class VendingObject : IInputHandler, IInteractable
         {
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            temp.GetComponent<Rigidbody>().AddForce(Vector3.Scale(launchDirection,transform.forward) * currentStrength);
+            Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
+            tempLaunch.y = launchDirection.y;
+            temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
+            Images.SetActive(false);
         }
     }
 
@@ -86,9 +95,6 @@ public class VendingObject : IInputHandler, IInteractable
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
-            //evil bandaid
-            timerSlider.gameObject.SetActive(false);
-            Debug.Log("EBBOGBOBUAOGABGAGABG");
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         }
     }

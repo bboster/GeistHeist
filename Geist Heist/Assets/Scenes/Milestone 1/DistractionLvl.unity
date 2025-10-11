@@ -1664,7 +1664,6 @@ Transform:
   m_Children:
   - {fileID: 1169766230}
   - {fileID: 1486927037}
-  - {fileID: 615000006}
   - {fileID: 856671137}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1909,68 +1908,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1148149316958636690, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
   m_PrefabInstance: {fileID: 1486407500}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &615000005
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 528759656}
-    m_Modifications:
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5229048113705303352, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-      propertyPath: m_Name
-      value: CooldownManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
---- !u!4 &615000006 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3147485840695679165, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-  m_PrefabInstance: {fileID: 615000005}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &654093801
 GameObject:
   m_ObjectHideFlags: 0
@@ -2155,17 +2092,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 755688049}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &802264685 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7787585546473787916, guid: 168fd4f66dcae614e8555f5a26232555, type: 3}
-  m_PrefabInstance: {fileID: 615000005}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 552fe6d7b8fd7364d8367be6176039e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CooldownManager
 --- !u!1 &805497309
 GameObject:
   m_ObjectHideFlags: 0
@@ -4342,7 +4268,7 @@ PrefabInstance:
     - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: cooldownManager
       value: 
-      objectReference: {fileID: 802264685}
+      objectReference: {fileID: 0}
     - target: {fileID: 8861427484589388494, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: interactableCanvas
       value: 

@@ -10,6 +10,7 @@ using UnityEngine.UI;
  * 
  * Brief Description: Input Handler for the Toy Car, handles movement and actions for the Toy Car
  */
+[RequireComponent(typeof(PossessableObject))]
 public class ToyCar : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
@@ -27,17 +28,21 @@ public class ToyCar : IInputHandler
     private float currentStrength;
 
     private Rigidbody rb;
+    private PossessableObject possessableObject;
+
     private Coroutine freezeCoroutine;
     //activates when ghost is leaving an object
     private bool IsLeaving = false;
 
 
-    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+    [SerializeField] private Image ChargeUI;
+    [SerializeField] private GameObject Images;
 
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
         rb = gameObject.GetComponent<Rigidbody>();
+        possessableObject = GetComponent<PossessableObject>();  
     }
 
     #region action
@@ -46,6 +51,8 @@ public class ToyCar : IInputHandler
         if (rb.linearVelocity == Vector3.zero)
         {
             currentStrength = minStrength;
+            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
+            Images.SetActive(true);
         }
     }
 
@@ -59,6 +66,8 @@ public class ToyCar : IInputHandler
             {
                 currentStrength = maxStrength;
             }
+
+            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
         }
     }
     public override void WhileActionNotHeld()
@@ -78,6 +87,7 @@ public class ToyCar : IInputHandler
         {
             UnFreezePosition();
             rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
+            Images.SetActive(false);
         }
     }
 
@@ -109,12 +119,14 @@ public class ToyCar : IInputHandler
     #endregion
 
     #region Possess
+
+    /// <summary>
+    /// When player leaves toy car
+    /// </summary>
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf)
+        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess) 
         {
-            //evil bandaid
-            timerSlider.gameObject.SetActive(false);
             PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;
@@ -133,7 +145,7 @@ public class ToyCar : IInputHandler
     {
     }
 
-    public override void OnPossessionStarted()
+    public override void OnPossessionStart()
     {
         IsLeaving = false;
     }
