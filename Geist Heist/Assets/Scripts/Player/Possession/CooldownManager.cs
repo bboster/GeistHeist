@@ -16,8 +16,7 @@ public class CooldownManager : Singleton<CooldownManager>
     [SerializeField] private GameObject CooldownCanvasPrefab;
     [Tooltip("Refers to the time between possessions before player can possess again")]
     [SerializeField] private float cooldownTime;
-    private float currentCooldownTime;
-    private bool isCooldownActive = false;
+    private float currentCooldownTime=0;
 
     [HideInInspector] public GameObject CooldownCanvas;
     [HideInInspector] public Slider cooldownSlider;
@@ -30,20 +29,22 @@ public class CooldownManager : Singleton<CooldownManager>
         CooldownCanvas = Instantiate(CooldownCanvasPrefab);
         cooldownSlider = CooldownCanvas.GetComponentInChildren<Slider>();
 
-        CooldownCanvas.SetActive(false);
+        cooldownSlider.gameObject.SetActive(false);
+
+        UpdateSlider();
     }
 
     void Update()
     {
-        if (isCooldownActive)
+        if (IsCooldownActive)
         {
             currentCooldownTime -= Time.deltaTime;
             if(currentCooldownTime <= 0)
             {
-                currentCooldownTime = 0;
-                isCooldownActive = false;
-                OnCooldownFinished?.Invoke();
+                StopCooldown();
+                return;
             }
+
             UpdateSlider();
         }
     }
@@ -51,15 +52,29 @@ public class CooldownManager : Singleton<CooldownManager>
     public void StartCooldown()
     {
         currentCooldownTime = cooldownTime;
-        isCooldownActive = true;
+        UpdateSlider();
+    }
+
+    public void StopCooldown()
+    {
+        currentCooldownTime = 0;
+        OnCooldownFinished?.Invoke();
         UpdateSlider();
     }
 
     private void UpdateSlider()
     {
-        if(cooldownSlider != null)
+        if (cooldownSlider==null)
+            return;
+        
+        if (IsCooldownActive)
         {
+            cooldownSlider.gameObject.SetActive(true);
             cooldownSlider.value = currentCooldownTime / cooldownTime;
+        }
+        else
+        {
+            cooldownSlider.gameObject.SetActive(false);
         }
     }
 }

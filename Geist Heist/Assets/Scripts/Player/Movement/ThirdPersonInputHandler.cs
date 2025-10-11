@@ -45,7 +45,7 @@ public class ThirdPersonInputHandler : IInputHandler
     public static Action<GuardStates> OnPossessObject;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -53,14 +53,14 @@ public class ThirdPersonInputHandler : IInputHandler
         CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
     }
 
-    // Update is called once per frame
+    // WhilePossessingUpdate is called once per frame
     void Update()
     {
         TurnOnInteractableCanvas();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
-    public override void OnPossessionStarted()
+    public override void OnPossessionStart()
     {
         CooldownManager.Instance.StartCooldown();
         TurnOnCooldownCanvas();

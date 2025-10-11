@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 9/18/25
+ * Last Modified: 10/10/25
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -22,37 +22,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [Required] public CinemachineCamera CinemachineCamera;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
-    [SerializeField] private float timerTime = 5f;
+    [SerializeField, ShowIf(nameof(hasTimer))] private float timerTime = 5f;
     private float currentTimerTime;
-    private bool isTimerActive = false;
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
     private Coroutine timerCoroutine;
 
-    private void Update()
-    {
-        /*
-        if (isTimerActive && hasTimer)
-        {
-            timerSlider.gameObject.SetActive(true);
-            currentTimerTime -= Time.deltaTime;
-            if (currentTimerTime <= 0)
-            {
-                currentTimerTime = 0;
-                //isTimerActive = false;
-                OnTimerFinished();
-            }
-            UpdateSlider();
-        }*/
-
-        if(isTimerActive)
-        {
-            currentTimerTime -= Time.deltaTime;
-            UpdateSlider();
-        }
-
-        //Debug.Log(timerSlider.gameObject.activeSelf);
-        Debug.Log(isTimerActive);
-    }
+    [HideInInspector] public bool CanUnPossess = true;
+    private Coroutine unpossessCoroutine=null;
 
     public IInputHandler GetInputHandler()
     {
@@ -65,32 +41,42 @@ public class PossessableObject : MonoBehaviour, IInteractable
         PlayerManager.Instance.PossessObject(this);
     }
 
-    // Called in PlayerManager
-    public void OnPossessionStarted()
+    /// <summary>
+    /// Called in PlayerManager when player enters object
+    /// </summary>
+    public void OnPossessionStart()
     {
-        InputHandler.OnPossessionStarted();
+        InputHandler.OnPossessionStart();
 
-        if(!gameObject.TryGetComponent<ThirdPersonInputHandler>(out ThirdPersonInputHandler obj))
+
+        if (unpossessCoroutine == null)
+            unpossessCoroutine = StartCoroutine(WaitForUnpossess());
+
+        if (hasTimer)
         {
-            if (timerSlider != null)
-            {
-                timerSlider.gameObject.SetActive(true);
-            }
-
-            isTimerActive = true;
+            timerSlider?.gameObject.SetActive(true);
 
             currentTimerTime = timerTime;
-
-            if (timerCoroutine == null && hasTimer)
-            {
+            if(timerCoroutine == null)
                 timerCoroutine = StartCoroutine(TimerCountdown());
-            }
+        }
+        else
+        {
+            timerSlider?.gameObject.SetActive(false);
         }
     }
 
-    // Called in PlayerManager
+    /// <summary>
+    /// Called in PlayerManager when player exits object
+    /// </summary>
     public void OnPossessionEnded()
     {
+        if (!CanUnPossess)
+        {
+            Debug.LogError("Trying to unpossess early");
+            return;
+        }
+
         InputHandler.OnPossessionEnded();
 
         if (timerCoroutine != null)
@@ -105,18 +91,41 @@ public class PossessableObject : MonoBehaviour, IInteractable
         }
     }
 
-    #region Timer
-    private void OnTimerFinished()
+    /// <summary>
+    /// Called in PlayerManager while player is in this object
+    /// </summary>
+    public void WhilePossessingUpdate()
     {
-        PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+        
+        // Nothing right now
+        
+    }
 
-        if(timerCoroutine != null)
+    public IEnumerator WaitForUnpossess()
+    {
+        CanUnPossess = false;
+        yield return new WaitForEndOfFrame();
+        CanUnPossess = true;
+        unpossessCoroutine = null;
+    }
+
+    #region Timer
+    
+    private IEnumerator TimerCountdown()
+    {
+        if (!hasTimer)
+            yield break;
+
+        currentTimerTime = timerTime;
+
+        while(currentTimerTime > 0)
         {
-            StopCoroutine(timerCoroutine);
-            timerCoroutine = null;
+            currentTimerTime -= Time.deltaTime;
+            UpdateSlider();
+            yield return null;
         }
 
-        ResetTimer();
+        OnTimerFinished();
     }
 
     private void UpdateSlider()
@@ -127,33 +136,24 @@ public class PossessableObject : MonoBehaviour, IInteractable
         }
     }
 
+    private void OnTimerFinished()
+    {
+        PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
+
+        ResetTimer();
+    }
+
     private void ResetTimer()
     {
         currentTimerTime = timerTime;
-        isTimerActive = false;
         timerSlider.gameObject.SetActive(false);
     }
 
-    private IEnumerator TimerCountdown()
-    {
-        /*while (isTimerActive)
-        {
-            currentTimerTime -= Time.deltaTime;
-            Debug.Log("CURRENT TIMER TIME " + currentTimerTime);
-            if (currentTimerTime <= 0)
-            {
-                currentTimerTime = 0;
-                OnTimerFinished();
-            }
-
-            UpdateSlider();
-            yield return null;
-        }
-        timerCoroutine = null;
-        yield break;*/
-
-        yield return new WaitForSeconds(timerTime);
-        OnTimerFinished();
-    }
     #endregion
 }
