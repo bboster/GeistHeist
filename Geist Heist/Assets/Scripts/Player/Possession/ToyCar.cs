@@ -14,8 +14,6 @@ using UnityEngine.UI;
 public class ToyCar : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
-    [Tooltip("Location where the ghost spawns after leaving the car.")]
-    [Required][SerializeField] private Transform ghostSpawnPoint;
 
     [Header("Design Variables")]
     [Tooltip("Strength that a tap would do- the LEAST the car can move forward when interacting.")]
@@ -127,7 +125,6 @@ public class ToyCar : IInputHandler
     {
         if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess) 
         {
-            PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;
 
@@ -152,8 +149,6 @@ public class ToyCar : IInputHandler
 
     public override void OnPossessionEnded()
     {
-        Debug.Log("meow meow");
-        PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
     }
     #endregion
 

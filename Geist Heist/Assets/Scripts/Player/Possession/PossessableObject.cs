@@ -30,6 +30,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [HideInInspector] public bool CanUnPossess = true;
     private Coroutine unpossessCoroutine=null;
 
+    [Tooltip("Location where the ghost spawns after leaving the possessable.")]
+    public Transform ghostSpawnPoint;
+
     public IInputHandler GetInputHandler()
     {
         inputHandler = inputHandler == null ? GetComponent<IInputHandler>(): inputHandler;
