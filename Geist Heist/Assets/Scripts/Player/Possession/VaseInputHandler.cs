@@ -9,21 +9,21 @@ using UnityEngine.UI;
  * Brief Description: Input Handler for the Vase, handles movement and actions for the vase
  */
 
-public class VaseObject : IInputHandler
+public class VaseInputHandler : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
-
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
 
     [Tooltip("Location where the ghost spawns after leaving the vase.")]
     [Required][SerializeField] private Transform ghostSpawnPoint;
+
 
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
     }
 
-    public override void OnPossessionStarted()
+    public override void OnPossessionStart()
     {
 
     }
@@ -61,8 +61,6 @@ public class VaseObject : IInputHandler
     {
         if (thirdPersoncinemachineCamera.activeSelf)
         {
-            //evil bandaid
-            timerSlider.gameObject.SetActive(false);
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
             PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
         }
