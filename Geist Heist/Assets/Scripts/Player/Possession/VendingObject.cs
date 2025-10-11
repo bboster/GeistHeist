@@ -43,6 +43,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnPossessionEnded()
     {
+        Images.SetActive(false);
     }
 
     #region action
@@ -96,6 +97,7 @@ public class VendingObject : IInputHandler, IInteractable
         if (thirdPersoncinemachineCamera.activeSelf)
         {
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+            Images.SetActive(false);
         }
     }
 
