@@ -127,7 +127,7 @@ public class ToyCar : IInputHandler
         {
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;
-
+            Images.SetActive(false);
             if (freezeCoroutine == null)
             { 
                 freezeCoroutine = StartCoroutine(ReFreezeConstraints());
@@ -149,6 +149,7 @@ public class ToyCar : IInputHandler
 
     public override void OnPossessionEnded()
     {
+        Images.SetActive(false);
     }
     #endregion
 
