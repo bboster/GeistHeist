@@ -14,9 +14,6 @@ public class VaseInputHandler : IInputHandler
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
 
-    [Tooltip("Location where the ghost spawns after leaving the vase.")]
-    [Required][SerializeField] private Transform ghostSpawnPoint;
-
 
     private void Start()
     {
@@ -30,7 +27,6 @@ public class VaseInputHandler : IInputHandler
 
     public override void OnPossessionEnded()
     {
-        PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
     }
 
     #region action
@@ -62,7 +58,6 @@ public class VaseInputHandler : IInputHandler
         if (thirdPersoncinemachineCamera.activeSelf)
         {
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
-            PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
         }
     }
 

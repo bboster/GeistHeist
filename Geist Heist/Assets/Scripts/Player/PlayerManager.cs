@@ -60,6 +60,11 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
+        if (possessable.ghostSpawnPoint != null)
+        {
+            PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostSpawnPoint.position;
+        }
+
         PlayerGhostObject.CinemachineCamera.gameObject.SetActive(true);
         possessable.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(true);

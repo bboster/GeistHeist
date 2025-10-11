@@ -28,8 +28,6 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField] private GameObject Images;
 
     private PossessableObject possessableObject;
-    [Tooltip("Location where the ghost spawns after leaving the vending machine.")]
-    [Required][SerializeField] private Transform ghostSpawnPoint;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -45,7 +43,6 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnPossessionEnded()
     {
-        PlayerManager.Instance.PlayerGhostObject.transform.position = ghostSpawnPoint.position;
     }
 
     #region action
