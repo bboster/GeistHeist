@@ -63,7 +63,6 @@ public class PlayerManager : Singleton<PlayerManager>
         if (possessable.ghostSpawnPoint != null)
         {
             PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostSpawnPoint.position;
-            Debug.Log("IM READY");
         }
 
         PlayerGhostObject.CinemachineCamera.gameObject.SetActive(true);
