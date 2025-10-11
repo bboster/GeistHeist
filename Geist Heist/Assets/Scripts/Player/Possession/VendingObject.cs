@@ -29,7 +29,8 @@ public class VendingObject : IInputHandler, IInteractable
 
     private PossessableObject possessableObject;
 
-    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         possessableObject = GetComponent<PossessableObject>();
@@ -42,7 +43,6 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnPossessionEnded()
     {
-
     }
 
     #region action

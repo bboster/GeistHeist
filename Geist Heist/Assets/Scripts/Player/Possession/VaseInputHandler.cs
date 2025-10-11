@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
  /*
@@ -11,6 +12,8 @@ using UnityEngine.UI;
 public class VaseInputHandler : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
+    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+
 
     private void Start()
     {
@@ -24,7 +27,6 @@ public class VaseInputHandler : IInputHandler
 
     public override void OnPossessionEnded()
     {
-
     }
 
     #region action
