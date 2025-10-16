@@ -10,6 +10,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
 using Unity.Cinemachine;
+using UnityEngine.UI;
+using System;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -23,12 +25,17 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject BehaviourDatabasePrefab;
     [SerializeField, Required] GameObject ShaderManagerPrefab;
     [SerializeField, Required] GameObject CooldownManagerPrefab;
+    [SerializeField, Required] GameObject GuardManager;
 
     [Header("Other Constants")]
     [SerializeField, Required] GameObject CameraPrefab;
     [SerializeField, Required] GameObject InteractionCanvasPrefab;
+    [SerializeField, Required] GameObject TimerCanvasPrefab;
 
     [HideInInspector] public GameObject InteractionCanvas;
+    [HideInInspector] public Slider TimerSlider;
+
+    public static Action OnInitialize;
 
     protected override void Awake()
     {
@@ -47,6 +54,10 @@ public class GameManager : Singleton<GameManager>
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
         Instantiate(CooldownManagerPrefab);
+        Instantiate(GuardManager).GetComponent<GuardManager>().Initialize();
+        var timerCanvas = Instantiate(TimerCanvasPrefab);
+        TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
+        TimerSlider.gameObject.SetActive(false);
 
         InteractionCanvas = Instantiate(InteractionCanvasPrefab);
 
@@ -60,6 +71,7 @@ public class GameManager : Singleton<GameManager>
             CameraPrefab.GetComponent<Camera>().CopyComponent(currentCamera.gameObject);
         }
 
+        OnInitialize?.Invoke();
     }
 
     /*[SerializeField] private GameObject blockingWall;

@@ -29,7 +29,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     private string runtimeSavePath;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
         // TODO: move this from start later, probably

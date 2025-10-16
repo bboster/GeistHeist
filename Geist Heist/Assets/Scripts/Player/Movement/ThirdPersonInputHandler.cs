@@ -45,7 +45,7 @@ public class ThirdPersonInputHandler : IInputHandler
     public static Action<GuardStates> OnPossessObject;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -53,14 +53,14 @@ public class ThirdPersonInputHandler : IInputHandler
         CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
     }
 
-    // Update is called once per frame
+    // WhilePossessingUpdate is called once per frame
     void Update()
     {
         TurnOnInteractableCanvas();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
-    public override void OnPossessionStarted()
+    public override void OnPossessionStart()
     {
         CooldownManager.Instance.StartCooldown();
         TurnOnCooldownCanvas();
@@ -108,6 +108,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
+
+                //Hide button prompt and outline
+                OnInteractableCanvasMissed();
                 break;
             }
         }
@@ -181,7 +184,7 @@ public class ThirdPersonInputHandler : IInputHandler
         Debug.DrawRay(interactableOrigin, interactableDirection * interactableRayLength, Color.red);
 
         // TODO: make it a spherecast here.
-        // If you could find a way to generalize this spherecast to be the same as the spherecast in the OnInteractStarted started function that would be huge!
+        // If you could find a way to generalize this spherecast to be the same as the spherecast in the OnInteractStarted started function that would be huge
 
         if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, layerToInclude))
         {
@@ -203,14 +206,19 @@ public class ThirdPersonInputHandler : IInputHandler
         }
         else
         {
-            interactableCanvas.SetActive(false);
-
-            if (lastObjectLookedAt != null && lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline))
-            {
-                outline.enabled = false;
-            }
-            lastObjectLookedAt = null;
+           OnInteractableCanvasMissed();
         }
+    }
+
+    private void OnInteractableCanvasMissed()
+    {
+        interactableCanvas.SetActive(false);
+
+        if (lastObjectLookedAt != null && lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline))
+        {
+            outline.enabled = false;
+        }
+        lastObjectLookedAt = null;
     }
 
     #endregion
