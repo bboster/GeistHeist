@@ -25,7 +25,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject BehaviourDatabasePrefab;
     [SerializeField, Required] GameObject ShaderManagerPrefab;
     [SerializeField, Required] GameObject CooldownManagerPrefab;
-    [SerializeField, Required] GameObject GuardManager;
+    [SerializeField, Required] GameObject GuardManagerPrefab;
+    [SerializeField, Required] GameObject BillboardUIManagerPrefab;
 
     [Header("Other Constants")]
     [SerializeField, Required] GameObject CameraPrefab;
@@ -54,7 +55,9 @@ public class GameManager : Singleton<GameManager>
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
         Instantiate(CooldownManagerPrefab);
-        Instantiate(GuardManager).GetComponent<GuardManager>().Initialize();
+        Instantiate(BillboardUIManagerPrefab);
+
+        Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
         var timerCanvas = Instantiate(TimerCanvasPrefab);
         TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
         TimerSlider.gameObject.SetActive(false);

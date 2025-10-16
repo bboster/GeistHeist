@@ -363,6 +363,53 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f794dc6560c3c394f9ed5cddeb3adbee, type: 3}
+--- !u!1 &403786347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 403786348}
+  - component: {fileID: 403786349}
+  m_Layer: 6
+  m_Name: UI Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &403786348
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403786347}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 772948621}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &403786349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403786347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6646ea5922be444b714d8e1a547696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
+  HideByDefault: 1
+  UIObjectPrefab: {fileID: 0}
+  SourceGameObject: {fileID: 0}
 --- !u!1 &632097405
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,9 +826,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7116384447673086645, guid: 84a2258ad193e664d9029218db041157, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 403786348}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84a2258ad193e664d9029218db041157, type: 3}
+--- !u!4 &772948621 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7116384447673086645, guid: 84a2258ad193e664d9029218db041157, type: 3}
+  m_PrefabInstance: {fileID: 772948620}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &790559909
 GameObject:
   m_ObjectHideFlags: 0
@@ -1597,6 +1652,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5936082507384950302, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: GuardManagerPrefab
+      value: 
+      objectReference: {fileID: 9002200780245745328, guid: e2b89edd59ae58b4abf6f5ff1f8bfa76, type: 3}
+    - target: {fileID: 5936082507384950302, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: BillboardUIManagerPrefab
+      value: 
+      objectReference: {fileID: 4982342633366459792, guid: 65b8dbb1500a47c429dbae8aeacff97b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1834,7 +1897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38800cd25e1334c45a1e3092994495da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
-  sceneName: Globe
+  sceneName: Lobby
 --- !u!1 &2048236346
 GameObject:
   m_ObjectHideFlags: 0
