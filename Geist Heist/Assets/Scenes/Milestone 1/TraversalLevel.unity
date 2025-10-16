@@ -2816,6 +2816,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vending Machine (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4242893702993749836, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: timerTime
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5139431784850570232, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.087576
@@ -2856,11 +2860,73 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: Images
+      value: 
+      objectReference: {fileID: 280344033}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: ChargeUI
+      value: 
+      objectReference: {fileID: 280344034}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: maxStrength
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: minStrength
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: tapStrength
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: CanSpawnPoint
+      value: 
+      objectReference: {fileID: 280344035}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: launchDirection.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: strengthGrowthRate
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: thirdPersoncinemachineCamera
+      value: 
+      objectReference: {fileID: 280344036}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+--- !u!1 &280344033 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6481723510338255605, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 280344032}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &280344034 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6669801645909307421, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 280344032}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!1 &280344035 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8831139708237052725, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 280344032}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &280344036 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2874937476590195754, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 280344032}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &311894910
 GameObject:
   m_ObjectHideFlags: 0
@@ -5584,8 +5650,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 618756337}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.018334612, y: 0.92569304, z: 0.04524572, w: -0.37511218}
-  m_LocalPosition: {x: 42.93389, y: 27.904776, z: 137.75053}
+  m_LocalRotation: {x: 0.08900999, y: 0.31563297, z: -0.029753903, w: 0.9442287}
+  m_LocalPosition: {x: 24.902689, y: 30.368744, z: 114.54082}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6631,6 +6697,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 261295155624401962, guid: 3c23d2bb2b93dda4ca9d778be33970a1, type: 3}
+      propertyPath: timerTime
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 726645532892400056, guid: 3c23d2bb2b93dda4ca9d778be33970a1, type: 3}
       propertyPath: m_Name
       value: TestObject
@@ -10172,6 +10242,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vending Machine (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4242893702993749836, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: timerTime
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5139431784850570232, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.99
@@ -10212,11 +10286,73 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: Images
+      value: 
+      objectReference: {fileID: 1300865132}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: ChargeUI
+      value: 
+      objectReference: {fileID: 1300865133}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: maxStrength
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: minStrength
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: tapStrength
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: CanSpawnPoint
+      value: 
+      objectReference: {fileID: 1300865134}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: launchDirection.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: strengthGrowthRate
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: thirdPersoncinemachineCamera
+      value: 
+      objectReference: {fileID: 1300865135}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+--- !u!1 &1300865132 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6481723510338255605, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 1300865131}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1300865133 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6669801645909307421, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 1300865131}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!1 &1300865134 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8831139708237052725, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 1300865131}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1300865135 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2874937476590195754, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 1300865131}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1338325336
 GameObject:
   m_ObjectHideFlags: 0
@@ -13160,6 +13296,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vending Machine
       objectReference: {fileID: 0}
+    - target: {fileID: 4242893702993749836, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: timerTime
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5139431784850570232, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.48
@@ -13200,11 +13340,73 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: Images
+      value: 
+      objectReference: {fileID: 1478668631}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: ChargeUI
+      value: 
+      objectReference: {fileID: 1478668632}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: maxStrength
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: minStrength
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: tapStrength
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: CanSpawnPoint
+      value: 
+      objectReference: {fileID: 1478668633}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: launchDirection.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: strengthGrowthRate
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: thirdPersoncinemachineCamera
+      value: 
+      objectReference: {fileID: 1478668634}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+--- !u!1 &1478668631 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6481723510338255605, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 1478668630}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1478668632 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6669801645909307421, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 1478668630}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!1 &1478668633 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8831139708237052725, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 1478668630}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1478668634 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2874937476590195754, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 1478668630}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1489255953
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13213,6 +13415,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1017091926079607577, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
+      propertyPath: chargeRate
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1017091926079607577, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
+      propertyPath: maxStrength
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1017091926079607577, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
+      propertyPath: minStrength
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1148149316958636690, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.21
@@ -13256,6 +13470,10 @@ PrefabInstance:
     - target: {fileID: 3402368958818299834, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
       propertyPath: m_Name
       value: Toy Car (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7862096149762473002, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
+      propertyPath: timerTime
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8698059868396046234, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16119,6 +16337,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1017091926079607577, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
+      propertyPath: chargeRate
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1017091926079607577, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
+      propertyPath: maxStrength
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1017091926079607577, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
+      propertyPath: minStrength
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1148149316958636690, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 13.245839
@@ -16186,6 +16416,10 @@ PrefabInstance:
     - target: {fileID: 5142991431077681176, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7862096149762473002, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
+      propertyPath: timerTime
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8499778219910120063, guid: 6986dce9dbd94014d97ea9eb54dbf3cc, type: 3}
       propertyPath: m_LocalPosition.y
