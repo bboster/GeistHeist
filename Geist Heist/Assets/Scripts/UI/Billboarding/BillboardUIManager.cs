@@ -1,7 +1,7 @@
 /*
  * Contributors:  Toby
  * Creation Date: 10/9/25
- * Last Modified: 10/9/25
+ * Last Modified: 10/16/25
  * 
  * Brief Description: Manages Billboard UI objects.
  * Put this script on a canvas
@@ -26,8 +26,10 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
     private Camera _camera;
     private Canvas billboardUICanvas;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    /// <summary>
+    /// Called in GameManager, close to awake
+    /// </summary>
+    public void Initialize()
     {
         billboardUICanvas = GetComponent<Canvas>() ;
         _camera = Camera.main;
@@ -38,13 +40,27 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
     {
         foreach(var uiAnchorPair in billboardUIPoints)
         {
-            var elemRectTransform = uiAnchorPair.Item2.rectTransform;
+            var elem = uiAnchorPair.Item2;
+            var elemRectTransform = elem.rectTransform;
+            var elemTransform = elem.transform;
             var anchor = uiAnchorPair.Item1;
 
-            Vector3 screenPos = _camera.WorldToScreenPoint(anchor.position);
+            /*Vector3 screenPos = _camera.WorldToScreenPoint(anchor.position);
             Vector3 uiPos = new Vector3(screenPos.x, Screen.height - screenPos.y, screenPos.z);
 
-            elemRectTransform.position = uiPos;
+            elemRectTransform.position = uiPos;*/
+
+            elemTransform.position = anchor.position;
+
+            // face camera
+            if (elem.MirrorBillboard)
+                elemTransform.LookAway(_camera.transform);
+            else
+                elemTransform.LookAt(_camera.transform);
+
+            // set scale
+
+            // set opacity
         }
     }
 
@@ -61,5 +77,6 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
         billboardUIPoints.Add(new Tuple<Transform, IBillboardUI>(worldPoint, UIElement));
 
         UIElement.OnInitialize(SourceGameObject);
+        UIElement.ToggleVisibility(HideByDefault);
     }
 }

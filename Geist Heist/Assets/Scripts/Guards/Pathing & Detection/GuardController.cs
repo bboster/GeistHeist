@@ -11,6 +11,7 @@ using System.ComponentModel;
 using UnityEngine;
 using GuardUtilities;
 using NaughtyAttributes;
+using UnityEngine.Events;
 
 public class GuardController : MonoBehaviour
 {
@@ -39,6 +40,8 @@ public class GuardController : MonoBehaviour
     [SerializeField] private Animator animator;
 
     public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
+
+    [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted= new();
 
     #endregion
 
@@ -145,9 +148,10 @@ public class GuardController : MonoBehaviour
         if (currentBehavior != null)
         {
             currentBehavior.InitializeBehavior(gameObject);
-            GetComponent<StateText>().ChangeText(currentBehavior.StateName);
+            //GetComponent<StateText>().ChangeText(currentBehavior.StateName);
             currentPriority = currentBehavior.Priority;
             activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
+            OnBehaviorStarted.Invoke(currentBehavior.StateName);
         }
     }
 

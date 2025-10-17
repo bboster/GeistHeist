@@ -10,11 +10,29 @@
  * - always faces the player
  */
 
+using NaughtyAttributes;
 using UnityEngine;
 
 [RequireComponent (typeof(CanvasGroup))]
 public abstract class IBillboardUI : MonoBehaviour
 {
+    [Header("Billboard Settings")]
+    [SerializeField] public bool MirrorBillboard = true;
+
+    [SerializeField, Foldout("Scale by proximity")] private float minScale = 0.7f;
+    [SerializeField, Foldout("Scale by proximity")] private float maxScale = 1f;
+    [Tooltip("Distance for camera to be when the UI object will be its smallest")]
+    [SerializeField, Foldout("Scale by proximity")] private float minScaleDistance = 15;
+    [Tooltip("Distance for camera to be when the UI object will be its largest")]
+    [SerializeField, Foldout("Scale by proximity")] private float maxScaleDistance = 7;
+
+    [SerializeField, Range(0, 1), Foldout("Alpha by proximity")] private float minOpacity = 0f;
+    [SerializeField, Range(0, 1), Foldout("Alpha by proximity")] private float maxOpacity = 1f;
+    [Tooltip("Distance for camera to be when the UI object will be its smallest")]
+    [SerializeField, Foldout("Alpha by proximity")] private float minOpacityDistance = 15;
+    [Tooltip("Distance for camera to be when the UI object will be its largest")]
+    [SerializeField, Foldout("Alpha by proximity")] private float maxOpacityDistance = 7.5f;
+
     public CanvasGroup canvasGroup => GetCanvasGroup();
     public RectTransform rectTransform  => GetRectTransform();
 
@@ -41,7 +59,7 @@ public abstract class IBillboardUI : MonoBehaviour
     // It is expected that you would use GetComponent to get the data that you need.
     public abstract void OnInitialize(GameObject sourceGameObject);
 
-
+    #region Visibility
     public virtual void ToggleVisibility(bool isVisible)
     {
         if (isVisible) Show();
@@ -55,5 +73,12 @@ public abstract class IBillboardUI : MonoBehaviour
     public virtual void Show()
     {
         StaticUtilities.EnableCanvasGroup(canvasGroup);
+    }
+    #endregion
+
+    public virtual void SetScale(float playerDistance)
+    {
+        float t = Mathf.InverseLerp(maxScaleDistance, minScaleDistance, playerDistance);
+        transform.localScale = Vector3.one * t;
     }
 }
