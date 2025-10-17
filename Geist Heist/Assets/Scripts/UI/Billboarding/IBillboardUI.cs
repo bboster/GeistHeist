@@ -34,21 +34,26 @@ public abstract class IBillboardUI : MonoBehaviour
     [SerializeField, Foldout("Scale by proximity")] private float farScale = 0.9f;
 
     // Scale Opacity by position on screen
-    [SerializeField, Foldout("Alpha by proximity")] private bool fadeInCorners = true;
+    [SerializeField, Foldout("Opacity by screen position")] private bool fadeInCorners = true;
     [Tooltip("If this element's x position on the screen is within the outer [X] percent of the screen, it will start to become semi-transparent")]
-    [SerializeField, Range(0, 0.5f), Foldout("Alpha by proximity"), ShowIf(nameof(fadeInCorners))] private float xEdgePercentToFade = 0.15f;
+    [SerializeField, Range(0, 0.5f), Foldout("Opacity by screen position"), ShowIf(nameof(fadeInCorners))] private float closeXEdgePercentToFade = 0.05f;
+    [Tooltip("If this element's x position on the screen is within the outer [X] percent of the screen, it will start to become semi-transparent")]
+    [SerializeField, Range(0, 0.5f), Foldout("Opacity by screen position"), ShowIf(nameof(fadeInCorners))] private float farXEdgePercentToFade = 0.15f;
+
     [Tooltip("If this element's y position on the screen is within the outer [X] percent of the screen, it will start to become semi-transparent")]
-    [SerializeField, Range(0, 0.5f), Foldout("Alpha by proximity"), ShowIf(nameof(fadeInCorners))] private float yEdgePercentToFade = 0.10f;
+    [SerializeField, Range(0, 0.5f), Foldout("Opacity by screen position"), ShowIf(nameof(fadeInCorners))] private float closeYEdgePercentToFade = 0.02f;
+    [Tooltip("If this element's y position on the screen is within the outer [X] percent of the screen, it will start to become semi-transparent")]
+    [SerializeField, Range(0, 0.5f), Foldout("Opacity by screen position"), ShowIf(nameof(fadeInCorners))] private float farYEdgePercentToFade = 0.10f;
 
     // Smooth opacity by player distance
     [Tooltip("Distance for camera to be when the UI object will be its largest")]
-    [SerializeField, Foldout("Alpha by proximity")] private float closeOpacityDistance = 20;
+    [SerializeField, Foldout("Opacity by proximity")] private float closeOpacityDistance = 20;
     [Tooltip("The UI Objects max opacity")]
-    [SerializeField, Range(0, 1), Foldout("Alpha by proximity")] private float closeOpacity = 1f;
+    [SerializeField, Range(0, 1), Foldout("Opacity by proximity")] private float closeOpacity = 1f;
     [Tooltip("Distance for camera to be when the UI object will be its smallest")]
-    [SerializeField, Foldout("Alpha by proximity")] private float farOpacityDistance = 22;
+    [SerializeField, Foldout("Opacity by proximity")] private float farOpacityDistance = 22;
     [Tooltip("The UI Objects min opacity")]
-    [SerializeField, Range(0, 1), Foldout("Alpha by proximity")] private float farOpacity = 0f;
+    [SerializeField, Range(0, 1), Foldout("Opacity by proximity")] private float farOpacity = 0f;
 
     public CanvasGroup canvasGroup => GetCanvasGroup();
     public RectTransform rectTransform  => GetRectTransform();
@@ -131,8 +136,8 @@ public abstract class IBillboardUI : MonoBehaviour
         float y_edge_proximity = y_percent > 0.5f ? 1 - y_percent : y_percent;
 
         // 0 (within fade radius. Hide completely) -> 1 (not within fade radius)
-        float x_edge_percent = Mathf.InverseLerp(0, xEdgePercentToFade, x_edge_proximity);
-        float y_edge_percent = Mathf.InverseLerp(0, yEdgePercentToFade, y_edge_proximity);
+        float x_edge_percent = Mathf.InverseLerp(closeXEdgePercentToFade, farXEdgePercentToFade, x_edge_proximity);
+        float y_edge_percent = Mathf.InverseLerp(closeYEdgePercentToFade, farYEdgePercentToFade, y_edge_proximity);
 
         // Min between both axes
         float min_edge_percent = Mathf.Min(x_edge_percent, y_edge_percent);
@@ -140,6 +145,7 @@ public abstract class IBillboardUI : MonoBehaviour
         // Debug
         //GetComponent<TextMeshProUGUI>().text = min_edge_percent.ToString();
 
+        // Set opacity
         CurrentAlpha = Mathf.Lerp(CurrentAlpha, Mathf.Min(baseAlpha, min_edge_percent), Time.deltaTime * SMOOTH_SPEED);
         canvasGroup.alpha = CurrentAlpha;
     }
