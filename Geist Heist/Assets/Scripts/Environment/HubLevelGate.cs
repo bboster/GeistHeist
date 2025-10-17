@@ -36,7 +36,6 @@ public class HubLevelGate : MonoBehaviour
             gameObject.SetActive(false);
             return;
         }
-        Debug.Log(SaveDataManager.Instance.IsLevelCompleted(RequiredLevel));
         gameObject.SetActive( ! SaveDataManager.Instance.IsLevelCompleted(RequiredLevel));
     }
 }
