@@ -13,8 +13,6 @@ using NaughtyAttributes;
 
 public class BillboardUIPoint : MonoBehaviour
 {
-    [Tooltip("If true, hides this ui element at start")]
-    [SerializeField] private bool HideByDefault = true;
     [SerializeField, Required] private GameObject UIObjectPrefab;
     [SerializeField, Required] private GameObject SourceGameObject;
 
@@ -26,9 +24,8 @@ public class BillboardUIPoint : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        print(HideByDefault);
         billboardUI = Instantiate(UIObjectPrefab).GetComponent<IBillboardUI>();
-        BillboardUIManager.Instance.RegisterAndInitializeBillboardUIPoint(this.transform, billboardUI, SourceGameObject, HideByDefault);
+        BillboardUIManager.Instance.RegisterAndInitializeBillboardUIPoint(this.transform, billboardUI, SourceGameObject);
     }
 
     private void OnDrawGizmos()
