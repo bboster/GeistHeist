@@ -15,8 +15,8 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private int HubScene;
-    [SerializeField] private int NewGameScene; // making it seperate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
+    [SerializeField, Scene] private int HubScene;
+    [SerializeField, Scene] private int NewGameScene; // making it seperate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
 
     [Header("Main Page")]
     [SerializeField, Required] private Button newGameButton;
@@ -46,6 +46,7 @@ public class MainMenu : MonoBehaviour
         continueGameButton.gameObject.SetActive(playerHasSignificantSaveData == true);
 
         // Hide other pages
+        // The only reason im setting them active in code instead of having them active in scene is that i do not trust game designers
         confirmDeleteSaveButton.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(confirmDeleteSavePanel);
         creditsPage.gameObject.SetActive(true);
