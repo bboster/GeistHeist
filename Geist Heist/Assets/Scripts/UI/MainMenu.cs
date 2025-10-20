@@ -22,6 +22,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private Button newGameButton;
     [SerializeField, Required] private Button continueGameButton;
     [SerializeField, Required] private Button creditsButton;
+    [SerializeField, Required] private Button howToPlayButton;
     [SerializeField, Required] private Button quitGameButton;
 
     [Header("Confirm New Save")]
@@ -32,6 +33,10 @@ public class MainMenu : MonoBehaviour
     [Header("Credits Page")]
     [SerializeField, Required] private CanvasGroup creditsPage;
     [SerializeField, Required] private Button closeCreditsButton;
+
+    [Header("How to Play Page")]
+    [SerializeField, Required] private CanvasGroup howToPlayPage;
+    [SerializeField, Required] private Button closeHowToPlayButton;
 
     // if the player has played before and got past the first level
     private bool playerHasSignificantSaveData;
@@ -51,16 +56,21 @@ public class MainMenu : MonoBehaviour
         StaticUtilities.DisableCanvasGroup(confirmDeleteSavePanel);
         creditsPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(creditsPage);
+        howToPlayPage.gameObject.SetActive(true);
+        StaticUtilities.DisableCanvasGroup(howToPlayPage);
 
         newGameButton.onClick.AddListener(OnNewGameButtonClicked);
         continueGameButton.onClick.AddListener(OnContinueButtonClicked);
         creditsButton.onClick.AddListener(OnCreditsButtonClicked);
+        howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
         quitGameButton.onClick.AddListener(OnQuitButtonClicked);
 
         confirmDeleteSaveButton.onClick.AddListener(OnConfirmDeleteSaveButtonClicked);
         cancelDeleteSaveButton.onClick.AddListener(OnCancelDeleteSaveButtonClicked);
 
         closeCreditsButton.onClick.AddListener(OnCreditsBackButtonClicked);
+
+        closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
     }
 
     /// <summary>
@@ -84,6 +94,8 @@ public class MainMenu : MonoBehaviour
         }
 
         // if player has save data: open confirmation popup
+        StaticUtilities.DisableCanvasGroup(howToPlayPage);
+        StaticUtilities.DisableCanvasGroup(creditsPage);
         StaticUtilities.EnableCanvasGroup(confirmDeleteSavePanel);
     }
 
@@ -94,7 +106,16 @@ public class MainMenu : MonoBehaviour
 
     void OnCreditsButtonClicked()
     {
+        StaticUtilities.DisableCanvasGroup(howToPlayPage);
+        StaticUtilities.DisableCanvasGroup(confirmDeleteSavePanel);
         StaticUtilities.EnableCanvasGroup(creditsPage);
+    }
+
+    void OnHowToPlayButtonClicked()
+    {
+        StaticUtilities.DisableCanvasGroup(creditsPage);
+        StaticUtilities.DisableCanvasGroup(confirmDeleteSavePanel);
+        StaticUtilities.EnableCanvasGroup(howToPlayPage);
     }
 
     void OnQuitButtonClicked()
@@ -127,6 +148,15 @@ public class MainMenu : MonoBehaviour
     void OnCreditsBackButtonClicked()
     {
         StaticUtilities.DisableCanvasGroup(creditsPage);
+    }
+
+    #endregion
+
+    #region Credits
+
+    void OnCloseHowToPlayButtonClicked()
+    {
+        StaticUtilities.DisableCanvasGroup(howToPlayPage);
     }
 
     #endregion
