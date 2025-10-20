@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
  /*
@@ -8,23 +9,24 @@ using UnityEngine.UI;
  * Brief Description: Input Handler for the Vase, handles movement and actions for the vase
  */
 
-public class VaseObject : IInputHandler
+public class VaseInputHandler : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
+    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
+
 
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
     }
 
-    public override void OnPossessionStarted()
+    public override void OnPossessionStart()
     {
 
     }
 
     public override void OnPossessionEnded()
     {
-
     }
 
     #region action

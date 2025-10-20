@@ -64,12 +64,6 @@ public class GuardController : MonoBehaviour
 
     #endregion
 
-    //DELETE THIS LATER IN FAVOR OF AN OVERALL ENEMY HANDLER
-    private void Start()
-    {
-        InitializeGuard();
-    }
-
     /// <summary>
     /// Initializes the enemy. Returns true if successful, false if unsuccessful.
     /// </summary>
@@ -109,8 +103,7 @@ public class GuardController : MonoBehaviour
     public void ChangeBehavior(GuardStates state)
     {
         StopBehavior();
-        currentBehavior = Instantiate(BehaviorDatabase.instance.GetBehavior(state));
-        GetComponent<StateText>().ChangeText(currentBehavior.StateName);
+        currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
         StartBehavior();
     }
     
@@ -124,7 +117,7 @@ public class GuardController : MonoBehaviour
         if(priority > currentPriority)
         {
             StopBehavior();
-            currentBehavior = Instantiate(BehaviorDatabase.instance.GetBehavior(state));
+            currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
             StartBehavior();
         }
     }
@@ -152,6 +145,7 @@ public class GuardController : MonoBehaviour
         if (currentBehavior != null)
         {
             currentBehavior.InitializeBehavior(gameObject);
+            GetComponent<StateText>().ChangeText(currentBehavior.StateName);
             currentPriority = currentBehavior.Priority;
             activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
         }

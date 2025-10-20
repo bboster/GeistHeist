@@ -10,10 +10,14 @@ using System;
 using System.Collections;
 using UnityEngine;
 using GuardUtilities;
+using UnityEngine.AI;
 
 public class Behavior : ScriptableObject
 {
     #region Variable Declarations
+
+    [Tooltip("The speed the guard will travel at while performing this behavior")]
+    [SerializeField] private float speed;
 
     protected GameObject selfRef;
 
@@ -40,6 +44,8 @@ public class Behavior : ScriptableObject
         {
             selfRef.GetComponent<Animator>().runtimeAnimatorController = stateController;
         }
+
+        selfRef.GetComponent<NavMeshAgent>().speed = speed;
     }
 
     /// <summary>

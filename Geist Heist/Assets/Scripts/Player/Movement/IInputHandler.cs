@@ -14,7 +14,7 @@ using System;
 public abstract class IInputHandler : MonoBehaviour
 {
     // Possession sometimes refers to entering ghost mode, keep that in mind, I guess
-    public abstract void OnPossessionStarted();
+    public abstract void OnPossessionStart();
     public abstract void OnPossessionEnded();
 
     // Note: transformed / camera relative move input vectors are on InputEvents.cs

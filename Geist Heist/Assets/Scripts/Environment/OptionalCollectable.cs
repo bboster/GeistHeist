@@ -29,6 +29,12 @@ public class OptionalCollectable : MonoBehaviour
     {
         // TODO: animation (?)
 
+        // if player
+        if(other.transform.GetComponent<PossessableObject>() == null)
+        {
+            return;
+        }
+
         StaticUtilities.PlayAndDestroyParticle(CollectionParticlePrefab, transform.position);
         SaveDataManager.Instance.MarkCollectableAsCollected(ThisCollectable);
         //Destroy(this.gameObject);

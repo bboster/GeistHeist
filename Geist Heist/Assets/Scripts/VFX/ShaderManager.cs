@@ -16,7 +16,7 @@ public class ShaderManager : DontDestroyOnLoadSingleton<ShaderManager>
 
     private static readonly int playerPositionID = Shader.PropertyToID("_Player_Position");
 
-    // Update is called once per frame
+    // WhilePossessingUpdate is called once per frame
     void Update()
     {
         if (PlayerManager.Instance == null || PlayerManager.Instance.CurrentObject == null) return;
