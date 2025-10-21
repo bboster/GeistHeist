@@ -1,7 +1,7 @@
 /*
  * Contributors:  Josh, Toby
  * Creation Date: 10/1/25
- * Last Modified: 10/7/25
+ * Last Modified: 10/9/25
  * 
  * Brief Description: Instantiates managers scripts that are required for scene to function.
  * Keeps track of game state, such as level.
@@ -24,7 +24,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject GuardCoroutineManagerPrefab;
     [SerializeField, Required] GameObject BehaviourDatabasePrefab;
     [SerializeField, Required] GameObject ShaderManagerPrefab;
-    [SerializeField, Required] GameObject GuardManager;
+    [SerializeField, Required] GameObject CooldownManagerPrefab;
+    [SerializeField, Required] GameObject GuardManagerPrefab;
+    [SerializeField, Required] GameObject BillboardUIManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject CooldownManagerPrefab;
@@ -47,6 +49,10 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
 
+        // this can be destroyed bc it is a singleton
+        if (this == null || gameObject == null) 
+            return;
+
         // All of these should be singletons, which destroy themselves if they already exist, 
         // so its okay if we dont check if this doesnt exist first
 
@@ -56,7 +62,10 @@ public class GameManager : Singleton<GameManager>
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
         Instantiate(CooldownManagerPrefab);
-        Instantiate(GuardManager).GetComponent<GuardManager>().Initialize();
+
+        Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
+        Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
+
         var timerCanvas = Instantiate(TimerCanvasPrefab);
         TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
         TimerSlider.gameObject.SetActive(false);

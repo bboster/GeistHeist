@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby S, Sky B, Cade Naylor, Jay Embry
- * Creation Date: 9/16/25
- * Last Modified: 9/16/25
+ * Creation Date: ???
+ * Last Modified: 10/17/25
  * 
  * Brief Description: General use utility functions that can be
  * applied to any project. 
@@ -38,7 +38,8 @@ public static class StaticUtilities
 
     #endregion
 
-    #region GameObjects and Components
+
+    #region Components
 
     // Stole ts from the internet
     public static T CopyComponent<T>(this T original, GameObject destination) where T : Component
@@ -181,8 +182,33 @@ public static class StaticUtilities
 
     #endregion
 
+
+    #region Transform
+
+    /// <summary>
+    /// Rotates the transform so the forward vector points AWAY from worldPosition
+    /// </summary>
+    public static void LookAway(this Transform transform, Vector3 worldPosition)
+    {
+        // Weird equation but it does indeed make it look away
+        transform.LookAt(2 * transform.position - worldPosition);
+    }
+
+    /// <summary>
+    /// Rotates the transform so the forward vector points AWAY from target
+    /// </summary>
+    public static void LookAway(this Transform transform, Transform target)
+    {
+        // Calls the other function
+        transform.LookAway(target.position);
+    }
+
+   
+
+    #endregion
+
     #region Vectors
-    
+
     public static Vector3 Average(this Vector3[] vectors)
     {
         Vector3 total = Vector3.zero;
