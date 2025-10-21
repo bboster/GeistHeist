@@ -10,10 +10,14 @@ its so funny.
 
 shoutout kyle and oos, this script is so silly
 *****************************************************************************/
+using NaughtyAttributes;
 using UnityEngine;
 
 public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
+    [Foldout("Singleton Settings")]
+    [SerializeField] private bool destroyGameObject = false; 
+
     private static T instance;
     public static T Instance
     {
@@ -31,7 +35,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
         }
         else
         {
-            Destroy(this);
+            Destroy(destroyGameObject ? this.gameObject : this);
         }
     }
 }

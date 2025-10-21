@@ -24,7 +24,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject GuardCoroutineManagerPrefab;
     [SerializeField, Required] GameObject BehaviourDatabasePrefab;
     [SerializeField, Required] GameObject ShaderManagerPrefab;
-    [SerializeField, Required] GameObject CooldownManagerPrefab;
     [SerializeField, Required] GameObject GuardManagerPrefab;
     [SerializeField, Required] GameObject BillboardUIManagerPrefab;
 
