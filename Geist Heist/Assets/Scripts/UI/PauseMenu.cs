@@ -34,6 +34,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] private Button restartLevelButton;
     [SerializeField, Required] private Button resetSaveButton;
 
+    private static float timeOfLastPause;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -77,7 +79,14 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     void OnPauseKeyPressed()
     {
+        // Bandaid solution to a bad problem
+        if (Time.unscaledTime - timeOfLastPause < 0.1f)
+            return;
+
+        timeOfLastPause = Time.unscaledTime;
+
         GameManager.Instance.IsPaused = !GameManager.Instance.IsPaused;
+        Debug.Log("Pause pressed");
 
         if (GameManager.Instance.IsPaused)
             OpenPauseMenu();
@@ -106,6 +115,7 @@ public class PauseMenu : MonoBehaviour
 
     void OnConfirmQuitToHubButtonClicked()
     {
+        ClosePauseMenu();
         Time.timeScale = 1;
         SceneManager.LoadScene(HubScene);
     }
@@ -133,6 +143,5 @@ public class PauseMenu : MonoBehaviour
     #endregion
 
     #endregion
-
 
 }
