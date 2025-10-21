@@ -142,14 +142,14 @@ public static class StaticUtilities
         canvasgroup.ignoreParentGroups = ignoreParentGroups ?? canvasgroup.ignoreParentGroups;
     }
 
-    public static void EnableCursor()
+    public static void ShowCursor()
     {
         UnityEngine.Cursor.visible = true;
         // Free mouse if editor, locked to window if in a build. For the sake of debugging because oh my god
         UnityEngine.Cursor.lockState = Application.isEditor ? CursorLockMode.None : CursorLockMode.Confined;
     }
 
-    public static void DisableCursor()
+    public static void HideCursor()
     {
         UnityEngine.Cursor.visible = false;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;

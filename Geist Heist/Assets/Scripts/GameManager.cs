@@ -24,16 +24,21 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject GuardCoroutineManagerPrefab;
     [SerializeField, Required] GameObject BehaviourDatabasePrefab;
     [SerializeField, Required] GameObject ShaderManagerPrefab;
-    [SerializeField, Required] GameObject CooldownManagerPrefab;
     [SerializeField, Required] GameObject GuardManager;
 
-    [Header("Other Constants")]
-    [SerializeField, Required] GameObject CameraPrefab;
+    [Header("Canvases")]
+    [SerializeField, Required] GameObject CooldownManagerPrefab;
     [SerializeField, Required] GameObject InteractionCanvasPrefab;
     [SerializeField, Required] GameObject TimerCanvasPrefab;
 
+    [Header("Other Constants")]
+    [SerializeField, Required] GameObject CameraPrefab;
+
     [HideInInspector] public GameObject InteractionCanvas;
     [HideInInspector] public Slider TimerSlider;
+
+    [Header("Debug")]
+    [ReadOnly] public bool IsPaused = false;
 
     public static Action OnInitialize;
 
