@@ -25,15 +25,10 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] private Button quitToHubButton; 
     [SerializeField, Required] private Button quitToMainMenuButton;
 
-    [Header("Quit To Hub Confirmation")]
-    [SerializeField, Required] private CanvasGroup confirmQuitToHubPanel;
-    [SerializeField, Required] private Button confirmQuitToHubButton;
-    [SerializeField, Required] private Button cancelQuitToHubButton;
-
-    [Header("Quit To Main Menu Confirmation")]
-    [SerializeField, Required] private CanvasGroup confirmQuitToMainMenuPanel;
-    [SerializeField, Required] private Button confirmQuitToMainMenuButton;
-    [SerializeField, Required] private Button cancelQuitToMainMenuButton;
+    [Header("Exit Confirmations")]
+    [SerializeField, Required] private ConfirmationPopup confirmationPopup;
+    [SerializeField] private string exitToHubText = "Are you sure you want to exit to the hub?\nYou will lose all progress in the current level";
+    [SerializeField] private string exitToMainMenuText = "Are you sure you want to exit to the main menu?\nYou will lose all progress in the current level";
 
     [Header("Debug Buttons")]
     [SerializeField, Required] private Button restartLevelButton;
@@ -48,11 +43,7 @@ public class PauseMenu : MonoBehaviour
             quitToHubButton.interactable = false;
         }
 
-        // Hide different panels / screens
-        confirmQuitToHubPanel.gameObject.SetActive(true);
-        StaticUtilities.DisableCanvasGroup(confirmQuitToHubPanel);
-        confirmQuitToMainMenuPanel.gameObject.SetActive(true);
-        StaticUtilities.DisableCanvasGroup(confirmQuitToMainMenuPanel);
+        pauseScreenParent.gameObject.SetActive(true);
 
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
 
@@ -60,17 +51,12 @@ public class PauseMenu : MonoBehaviour
         quitToHubButton.onClick.AddListener(OnGoToHubButtonClicked);
         quitToMainMenuButton.onClick.AddListener(OnGoToMainMenuButtonClicked);
 
-        confirmQuitToHubButton.onClick.AddListener(OnConfirmQuitToHubButtonClicked) ;
-        cancelQuitToHubButton.onClick.AddListener(OnCancelQuitToHubButtonClicked) ;
-
-        confirmQuitToMainMenuButton.onClick.AddListener(OnConfirmQuitToMainMenuButtonClicked);
-        cancelQuitToMainMenuButton.onClick.AddListener(OnCancelQuitToMainMenuButtonClicked);
-
         ClosePauseMenu();
     }
 
     public void OpenPauseMenu()
     {
+        Debug.Log("Pause Menu Opened");
         GameManager.Instance.IsPaused = true;
         pauseScreenParent.gameObject.SetActive(true);
         Time.timeScale = 0f;
@@ -79,6 +65,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ClosePauseMenu()
     {
+        Debug.Log("Pause Menu closed");
         GameManager.Instance.IsPaused = false;
         pauseScreenParent.gameObject.SetActive(false);
         Time.timeScale = 1.0f;
@@ -91,7 +78,11 @@ public class PauseMenu : MonoBehaviour
     void OnPauseKeyPressed()
     {
         GameManager.Instance.IsPaused = !GameManager.Instance.IsPaused;
-        pauseScreenParent.gameObject.SetActive(GameManager.Instance.IsPaused);
+
+        if (GameManager.Instance.IsPaused)
+            OpenPauseMenu();
+        else
+            ClosePauseMenu() ;
     }
 
 #region UI Buttons
@@ -103,19 +94,15 @@ public class PauseMenu : MonoBehaviour
     }
     void OnGoToHubButtonClicked()
     {
-        StaticUtilities.DisableCanvasGroup(confirmQuitToMainMenuPanel);
-
-        StaticUtilities.EnableCanvasGroup(confirmQuitToHubPanel);
+        confirmationPopup.OpenConfirmationPopup(exitToHubText, OnConfirmQuitToHubButtonClicked);
     }
     void OnGoToMainMenuButtonClicked()
     {
-        StaticUtilities.DisableCanvasGroup(confirmQuitToHubPanel);
-
-        StaticUtilities.EnableCanvasGroup(confirmQuitToMainMenuPanel);
+        confirmationPopup.OpenConfirmationPopup(exitToMainMenuText, OnConfirmQuitToMainMenuButtonClicked);
     }
     #endregion
 
-    #region Quit To Hub
+    #region Confirmation Menus
 
     void OnConfirmQuitToHubButtonClicked()
     {
@@ -123,24 +110,10 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(HubScene);
     }
 
-    void OnCancelQuitToHubButtonClicked()
-    {
-        StaticUtilities.DisableCanvasGroup(confirmQuitToHubPanel);
-    }
-
-    #endregion
-
-    #region Quit To Main Menu
-
     void OnConfirmQuitToMainMenuButtonClicked()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(MainMenuScene);
-    }
-
-    void OnCancelQuitToMainMenuButtonClicked()
-    {
-        StaticUtilities.DisableCanvasGroup(confirmQuitToMainMenuPanel);
     }
 
     #endregion
