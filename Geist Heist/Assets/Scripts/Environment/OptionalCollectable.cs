@@ -232,4 +232,7 @@ public enum Collectable
 	Test_Collectable_2,
 	Test_Collectable_3,
 	Test_Collectable_4,
+	Stone_Collectable,
+	Wood_Collectable,
+	Vending_Machine_Collectable,
 }
