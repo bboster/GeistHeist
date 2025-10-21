@@ -40,6 +40,12 @@ public class PatrolMovement : GuardMovement
                 MoveToPoint(GetNextPoint());
                 thisAgent.isStopped = false;
             }
+            else if(thisAgent.hasPath == false && calculatingMovement == false)
+            {
+                calculatingMovement = true;
+                MoveToPoint(GetNextPoint());
+                thisAgent.isStopped = false;
+            }
             else
             {
                 calculatingMovement = false;

@@ -35,6 +35,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField] private float interactableRayLength = 10;
     private GameObject interactableCanvas => GameManager.Instance.InteractionCanvas;
+    private GameObject lastObjectLookedAt;
 
     [Header("Between Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
@@ -44,28 +45,22 @@ public class ThirdPersonInputHandler : IInputHandler
     public static Action<GuardStates> OnPossessObject;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         layerToInclude = LayerMask.GetMask("Interactable");
         CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
-
-        if(interactableCanvas == null)
-        {
-            Debug.LogError("No interactable canvas has been set");
-        }
-
     }
 
-    // Update is called once per frame
+    // WhilePossessingUpdate is called once per frame
     void Update()
     {
         TurnOnInteractableCanvas();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
-    public override void OnPossessionStarted()
+    public override void OnPossessionStart()
     {
         CooldownManager.Instance.StartCooldown();
         TurnOnCooldownCanvas();
@@ -113,6 +108,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
                 interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
+
+                //Hide button prompt and outline
+                OnInteractableCanvasMissed();
                 break;
             }
         }
@@ -171,7 +169,7 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnMoveCanceled(){}
     #endregion
 
-    #region  SceneTransition
+    #region  Interaction
     public void TurnOnInteractableCanvas()
     {
         if (interactableCanvas == null)
@@ -185,14 +183,42 @@ public class ThirdPersonInputHandler : IInputHandler
 
         Debug.DrawRay(interactableOrigin, interactableDirection * interactableRayLength, Color.red);
 
+        // TODO: make it a spherecast here.
+        // If you could find a way to generalize this spherecast to be the same as the spherecast in the OnInteractStarted started function that would be huge
+
         if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, layerToInclude))
         {
             interactableCanvas.SetActive(true);
+
+            // if switching what youre looking at
+            if(hit.transform.gameObject != lastObjectLookedAt && lastObjectLookedAt != null)
+            {
+                if(lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline)){
+                    outline.enabled = false;
+                }
+            }
+
+            if (hit.transform.TryGetComponent<Outline>(out Outline outline2))
+            {
+                outline2.enabled = true;
+            }
+            lastObjectLookedAt = hit.transform.gameObject;
         }
         else
         {
-            interactableCanvas.SetActive(false);
+           OnInteractableCanvasMissed();
         }
+    }
+
+    private void OnInteractableCanvasMissed()
+    {
+        interactableCanvas.SetActive(false);
+
+        if (lastObjectLookedAt != null && lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline))
+        {
+            outline.enabled = false;
+        }
+        lastObjectLookedAt = null;
     }
 
     #endregion

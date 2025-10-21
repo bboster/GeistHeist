@@ -118,7 +118,7 @@ public class Outline : MonoBehaviour {
 
   void OnValidate() {
 
-    // Update material properties
+    // WhilePossessingUpdate material properties
     needsUpdate = true;
 
     // Clear cache when baking is disabled or corrupted

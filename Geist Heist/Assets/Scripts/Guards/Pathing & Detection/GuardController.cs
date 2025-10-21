@@ -11,6 +11,7 @@ using System.ComponentModel;
 using UnityEngine;
 using GuardUtilities;
 using NaughtyAttributes;
+using UnityEngine.Events;
 
 public class GuardController : MonoBehaviour
 {
@@ -40,6 +41,8 @@ public class GuardController : MonoBehaviour
 
     public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
+    [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted= new();
+
     #endregion
 
     #region Getters
@@ -63,12 +66,6 @@ public class GuardController : MonoBehaviour
     }
 
     #endregion
-
-    //DELETE THIS LATER IN FAVOR OF AN OVERALL ENEMY HANDLER
-    private void Start()
-    {
-        InitializeGuard();
-    }
 
     /// <summary>
     /// Initializes the enemy. Returns true if successful, false if unsuccessful.
@@ -109,8 +106,7 @@ public class GuardController : MonoBehaviour
     public void ChangeBehavior(GuardStates state)
     {
         StopBehavior();
-        currentBehavior = Instantiate(BehaviorDatabase.instance.GetBehavior(state));
-        GetComponent<StateText>().ChangeText(currentBehavior.StateName);
+        currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
         StartBehavior();
     }
     
@@ -124,7 +120,7 @@ public class GuardController : MonoBehaviour
         if(priority > currentPriority)
         {
             StopBehavior();
-            currentBehavior = Instantiate(BehaviorDatabase.instance.GetBehavior(state));
+            currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
             StartBehavior();
         }
     }
@@ -152,8 +148,10 @@ public class GuardController : MonoBehaviour
         if (currentBehavior != null)
         {
             currentBehavior.InitializeBehavior(gameObject);
+            //GetComponent<StateText>().ChangeText(currentBehavior.StateName);
             currentPriority = currentBehavior.Priority;
             activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
+            OnBehaviorStarted.Invoke(currentBehavior.StateName);
         }
     }
 

@@ -8,6 +8,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Rendering.UI;
 
 namespace GuardUtilities
 {
@@ -23,13 +24,9 @@ namespace GuardUtilities
         /// <param name="direction"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static IEnumerator PersistentRay(Vector3 start, Vector3 direction, int length)
+        public static void PersistentRay(Vector3 start, Vector3 direction, int length, GuardDebugger debug)
         {
-            for (int i = 0; i < length; i++)
-            {
-                Debug.DrawRay(start, direction);
-                yield return new WaitForSeconds(1f);
-            }
+            debug.DrawRay(start, direction);
         }
     }
 }
