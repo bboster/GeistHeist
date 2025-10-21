@@ -62,7 +62,7 @@ public class InputEvents : Singleton<InputEvents>
         .normalized;
     /*public Vector3 FirstPersonInputDirection => movementOrigin.TransformDirection(new Vector3(InputDirection2D.x, 0f, InputDirection2D.y));*/
     public Vector2 InputDirection2D => Move.ReadValue<Vector2>();
-    public static bool MovePressed, JumpPressed, ActionPressed, EscapeObjectPressed, PossessPressed;
+    public static bool MovePressed, JumpPressed, ActionPressed, EscapeObjectPressed, PossessPressed, PausePressed;
 
     private PlayerInput playerInput;
     private InputAction Move, /*Jump,*/ Look, Pause, Action, Possess;
@@ -87,19 +87,25 @@ public class InputEvents : Singleton<InputEvents>
         Action = map.FindAction(actionKey);
         Possess = map.FindAction(escapeObjectKey);
 
+        // Reset all inputs
+        RemoveAllListeners();
+
         Move.started += ctx => InputActionStarted(ref MovePressed, MoveStarted);
         //Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
         Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted);
         Possess.started += ctx => InputActionStarted(ref PossessPressed, PossessStarted);
-        Pause.started += ctx => { PauseStarted.Invoke(); };
+        Pause.started += ctx => PauseStarted.Invoke();
 
         Move.canceled += ctx => InputActionCanceled(ref MovePressed, MoveCanceled);
         //Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
         Action.canceled += ctx => InputActionCanceled(ref ActionPressed, ActionCanceled);
         Possess.canceled += ctx => InputActionCanceled(ref PossessPressed, PossessCanceled);
     }
-    void InputActionStarted(ref bool pressedFlag, UnityEvent actionEvent)
+    void InputActionStarted(ref bool pressedFlag, UnityEvent actionEvent, bool ignorePaused = false)
     {
+        if (GameManager.Instance.IsPaused && !ignorePaused)
+            return;
+
         pressedFlag = true;
         actionEvent?.Invoke();
     }
@@ -110,6 +116,9 @@ public class InputEvents : Singleton<InputEvents>
     }
     private void FixedUpdate()
     {
+        if (GameManager.Instance.IsPaused)
+            return;
+
         if (MovePressed) MoveHeld.Invoke();
         else MoveNotHeld.Invoke();
         //if (JumpPressed) JumpHeld.Invoke();
@@ -119,11 +128,24 @@ public class InputEvents : Singleton<InputEvents>
 
         LookUpdate.Invoke(LookDelta);
     }
+
+    private void RemoveAllListeners()
+    {
+        MoveStarted.RemoveAllListeners();
+        ActionStarted.RemoveAllListeners();
+        PossessStarted.RemoveAllListeners();
+        PauseStarted.RemoveAllListeners();
+
+        MoveCanceled.RemoveAllListeners();
+        ActionCanceled.RemoveAllListeners();
+        PossessCanceled.RemoveAllListeners();
+    }
     private void OnDisable()
     {
+        Debug.Log("On Disable");
         Move?.Reset();   
         //Jump.Reset();
-        Pause?.Reset();
+        Pause.Reset();
         Action?.Reset();
         Possess?.Reset();
         Look?.Reset();
