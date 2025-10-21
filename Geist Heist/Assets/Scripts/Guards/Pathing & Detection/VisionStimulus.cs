@@ -38,7 +38,7 @@ public class VisionStimulus : Stimulus
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == false)
+        if (other.gameObject.Equals(GameManager.Instance.Player) && hasSeenPlayer == false)
         {
             Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
 
@@ -61,7 +61,7 @@ public class VisionStimulus : Stimulus
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == true)
+        if (other.gameObject.Equals(GameManager.Instance.Player) && hasSeenPlayer == true)
         {
             hasSeenPlayer = false;
             parentController.OnVisionBroken();
