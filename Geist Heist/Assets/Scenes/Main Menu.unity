@@ -647,14 +647,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
   HubScene: 1
   NewGameScene: 1
+  confirmationPopup: {fileID: 4829084256391149290}
   newGameButton: {fileID: 2107775485}
   continueGameButton: {fileID: 1678776194}
   creditsButton: {fileID: 2018957205}
   howToPlayButton: {fileID: 1316631113}
   quitGameButton: {fileID: 1555930244}
-  confirmDeleteSavePanel: {fileID: 2117821963}
-  confirmDeleteSaveButton: {fileID: 990559482}
-  cancelDeleteSaveButton: {fileID: 1359655610}
   creditsPage: {fileID: 503608978}
   closeCreditsButton: {fileID: 707776233}
   howToPlayPage: {fileID: 1517193077}
@@ -1431,17 +1429,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791848477}
   m_CullTransparentMesh: 1
---- !u!114 &990559482 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2428979584632392368, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
-  m_PrefabInstance: {fileID: 4829084256391149289}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1078950201
 GameObject:
   m_ObjectHideFlags: 0
@@ -2451,17 +2438,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1359655610 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1180839706523954416, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
-  m_PrefabInstance: {fileID: 4829084256391149289}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1360851821
 GameObject:
   m_ObjectHideFlags: 0
@@ -3463,11 +3439,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 880787938445838310, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
   m_PrefabInstance: {fileID: 4829084256391149289}
   m_PrefabAsset: {fileID: 0}
---- !u!225 &2117821963 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 1740730426532534669, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
-  m_PrefabInstance: {fileID: 4829084256391149289}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4829084256391149289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3573,6 +3544,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+--- !u!114 &4829084256391149290 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 80495182813852025, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+  m_PrefabInstance: {fileID: 4829084256391149289}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85fa31bbe8e61414e959e3748473819d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConfirmationPopup
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
