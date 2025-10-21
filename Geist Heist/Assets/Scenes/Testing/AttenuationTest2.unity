@@ -581,11 +581,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5550330620149850164, guid: a8760656a1dbe26428d8e9753560794d, type: 3}
+      propertyPath: EnemyBank.Array.data[0].key
+      value: testa
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8760656a1dbe26428d8e9753560794d, type: 3}
+--- !u!1 &571226314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3233496734506821444, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+  m_PrefabInstance: {fileID: 1014500735}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &632097405
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,7 +707,7 @@ Transform:
   m_GameObject: {fileID: 632097405}
   serializedVersion: 2
   m_LocalRotation: {x: 0.018334612, y: 0.92569304, z: 0.04524572, w: -0.37511218}
-  m_LocalPosition: {x: 23.248182, y: 0.4047765, z: 7.4548726}
+  m_LocalPosition: {x: 15.398184, y: 0.4047765, z: 24.914873}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -717,7 +726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
   nonRigidbodyVelocity: 0
-  attenuationObject: {fileID: 0}
+  attenuationObject: {fileID: 571226314}
 --- !u!114 &632097411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1056,7 +1065,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762889882606682532, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.32
+      value: 8.47
       objectReference: {fileID: 0}
     - target: {fileID: 8762889882606682532, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1064,7 +1073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762889882606682532, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.31
+      value: 17.77
       objectReference: {fileID: 0}
     - target: {fileID: 8762889882606682532, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1152,9 +1161,13 @@ MonoBehaviour:
   GuardCoroutineManagerPrefab: {fileID: 0}
   BehaviourDatabasePrefab: {fileID: 0}
   ShaderManagerPrefab: {fileID: 0}
+  CooldownManagerPrefab: {fileID: 0}
+  GuardManager: {fileID: 0}
   CameraPrefab: {fileID: 0}
   InteractionCanvasPrefab: {fileID: 0}
+  TimerCanvasPrefab: {fileID: 0}
   InteractionCanvas: {fileID: 0}
+  TimerSlider: {fileID: 0}
 --- !u!1 &1150009489
 GameObject:
   m_ObjectHideFlags: 0
@@ -1371,6 +1384,7 @@ GameObject:
   - component: {fileID: 1417326863}
   - component: {fileID: 1417326862}
   - component: {fileID: 1417326861}
+  - component: {fileID: 1417326866}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -1484,6 +1498,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1417326866
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417326860}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &1502836420
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1682,7 +1723,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3107868394456876978, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
   m_PrefabInstance: {fileID: 1014500735}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 571226314}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0419aec6580122146a1979e34ee5434d, type: 3}

@@ -2,14 +2,14 @@ using FMODUnity;
 using UnityEngine;
 using FMOD.Studio;
 
-public class AudioManager : Singleton<AudioManager>
+public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance { get; private set; }
 
     //Sets AudioManager instance in the scene
-    private void Start()
+    private void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        
         if (instance != null)
         {
             Debug.Log("There is more than one AudioManager in the scene");
@@ -37,7 +37,7 @@ public class AudioManager : Singleton<AudioManager>
 
     //Sets EventInstance e's 3d attributes to a gameObject's transform + rigidbody
     //Should be called in e's update function
-    public void SetEventParameters(EventInstance e, Transform t, Rigidbody r)
+    public static void SetEventParameters(ref EventInstance e, Transform t, Rigidbody r)
     {
         e.set3DAttributes(RuntimeUtils.To3DAttributes(t, r));
     }
