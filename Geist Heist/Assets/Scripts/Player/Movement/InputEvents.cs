@@ -24,6 +24,7 @@ public class InputEvents : Singleton<InputEvents>
     [SerializeField] private string lookKey = "Look";
     [SerializeField] private string actionKey = "Escape Object";
     [SerializeField] private string escapeObjectKey = "Action";
+    [SerializeField] private string debugKey = "DebugConsole";
 
     public static UnityEvent MoveStarted = new UnityEvent();
     public static UnityEvent MoveHeld = new UnityEvent();
@@ -45,6 +46,8 @@ public class InputEvents : Singleton<InputEvents>
 
     public static UnityEvent PauseStarted = new UnityEvent();
 
+    public static UnityEvent DebugStarted = new UnityEvent();
+
     public static UnityEvent<Vector2> LookUpdate = new UnityEvent<Vector2>();
 
     //public static UnityEvent RestartStarted, RespawnStarted;
@@ -65,7 +68,7 @@ public class InputEvents : Singleton<InputEvents>
     public static bool MovePressed, JumpPressed, ActionPressed, EscapeObjectPressed, PossessPressed;
 
     private PlayerInput playerInput;
-    private InputAction Move, /*Jump,*/ Look, Pause, Action, Possess;
+    private InputAction Move, /*Jump,*/ Look, Pause, Debug, Action, Possess;
 
     private Transform movementOrigin;
 
@@ -84,6 +87,7 @@ public class InputEvents : Singleton<InputEvents>
         Look = map.FindAction(lookKey);
         //Respawn = map.FindAction("Respawn");
         Pause = map.FindAction(pauseKey);
+        Debug = map.FindAction(debugKey);
         Action = map.FindAction(actionKey);
         Possess = map.FindAction(escapeObjectKey);
 
@@ -92,6 +96,7 @@ public class InputEvents : Singleton<InputEvents>
         Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted);
         Possess.started += ctx => InputActionStarted(ref PossessPressed, PossessStarted);
         Pause.started += ctx => { PauseStarted.Invoke(); };
+        Debug.started += ctx => { DebugStarted.Invoke(); };
 
         Move.canceled += ctx => InputActionCanceled(ref MovePressed, MoveCanceled);
         //Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
@@ -124,6 +129,7 @@ public class InputEvents : Singleton<InputEvents>
         Move?.Reset();   
         //Jump.Reset();
         Pause?.Reset();
+        Debug?.Reset();
         Action?.Reset();
         Possess?.Reset();
         Look?.Reset();
