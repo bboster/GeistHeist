@@ -30,6 +30,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject CooldownManagerPrefab;
     [SerializeField, Required] GameObject InteractionCanvasPrefab;
     [SerializeField, Required] GameObject TimerCanvasPrefab;
+    [SerializeField, Required] GameObject PauseMenuPrefab;
 
     [Header("Other Constants")]
     [SerializeField, Required] GameObject CameraPrefab;
@@ -61,6 +62,7 @@ public class GameManager : Singleton<GameManager>
         TimerSlider.gameObject.SetActive(false);
 
         InteractionCanvas = Instantiate(InteractionCanvasPrefab);
+        Instantiate(PauseMenuPrefab);
 
         // I saw a designer not understand why the camera wasnt working (they didnt have a cinemachine brain / the right settings on it).
         // So this should kinda streamline things.
