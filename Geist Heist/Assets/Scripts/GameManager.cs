@@ -27,6 +27,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject ShaderManagerPrefab;
     [SerializeField, Required] GameObject GuardManagerPrefab;
     [SerializeField, Required] GameObject BillboardUIManagerPrefab;
+    [SerializeField, Required] GameObject LevelManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject CooldownManagerPrefab;
@@ -61,7 +62,7 @@ public class GameManager : Singleton<GameManager>
         // so its okay if we dont check if this doesnt exist first
         await InstantiateManagers();
 
-        SetCheckpoint(PlayerStart.position);
+        await LevelManager.Instance.InitializeLevelManager(PlayerStart.position);
         await SpawnPlayer();
 
         // I saw a designer not understand why the camera wasnt working (they didnt have a cinemachine brain / the right settings on it).
@@ -93,7 +94,8 @@ public class GameManager : Singleton<GameManager>
     /// <returns></returns>
     public Task SpawnPlayer()
     {
-        //Player = Instantiate(PlayerPrefab, CurrentSpawnLocation, Quaternion.identity);
+        Player = Instantiate(PlayerPrefab, LevelManager.Instance.SpawnLocation, Quaternion.identity);
+        PlayerManager.Instance.InitializePlayerManager();
 
         return Task.CompletedTask;
     }
@@ -110,6 +112,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
         Instantiate(CooldownManagerPrefab);
+        Instantiate(LevelManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
@@ -122,17 +125,6 @@ public class GameManager : Singleton<GameManager>
         Instantiate(PauseMenuPrefab);
 
         return Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Sets the current checkpoint to spawn the player at
-    /// </summary>
-    /// <returns></returns>
-    public void SetCheckpoint(Vector3 checkpointLocation)
-    {
-        //GameManager.CurrentSpawnLocation = checkpointLocation;
-
-        //UI Element to indicate checkpoint reached
     }
 
     /// <summary>

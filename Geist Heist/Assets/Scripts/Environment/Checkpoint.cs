@@ -15,7 +15,7 @@ public class Checkpoint : MonoBehaviour
     {
         if(other.gameObject.TryGetComponent(out ThirdPersonInputHandler handler))
         {
-            //GameManager.CurrentSpawnLocation = spawnLocation.position;
+            LevelManager.Instance.UpdateCheckpoint(spawnLocation.position);
         }
     }
 }
