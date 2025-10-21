@@ -9,11 +9,13 @@
 using NaughtyAttributes;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 {
+    [Header("Save Data")]
     [SerializeField] private TextAsset saveFile;
     private SaveDataFile currentSaveDta;
 
@@ -21,6 +23,9 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     [SerializeField] private string _defaultPath = "Assets/Save Files/";
     [SerializeField] private string _defaultfFileName = "Save File";
     [SerializeField] private string _fileType = "json";
+
+    [Header("Scene Transition")]
+    [SerializeField, Scene] private List<string> ScenesToExcludeFromCompletionCount;
 
     [Header("Debug")]
     [Tooltip("If true, does not save any data")]
@@ -69,10 +74,28 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         return currentSaveDta.ScenesCompleted.Contains(sceneName);
     }
 
+    /// <summary>
+    /// Specifically excludes scenes like main menu, lobby, globe, etc.
+    /// </summary>
+    public int GetLevelsCompletedCount()
+    {
+        EnsureSaveData();
+        return currentSaveDta.ScenesCompleted
+            .Where(s => ScenesToExcludeFromCompletionCount.Contains(s) == false)
+            .Count();
+    }
+
     public bool IsCollectableCollected(Collectable collectable)
     {
         EnsureSaveData();
         return currentSaveDta.CollectablesCollected.Contains((int)collectable);
+    }
+
+    #region File Manipulation
+
+    public bool DoesSaveDataExist()
+    {
+        return (saveFile != null);
     }
 
     [Button]
@@ -248,4 +271,6 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         if (currentSaveDta.CollectablesCollected == null)
             currentSaveDta.CollectablesCollected = new List<int>();
     }
+
+    #endregion
 }
