@@ -24,16 +24,44 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     [SerializeField] private Collectable ThisCollectable;
     [SerializeField] private CollectableRegistry registry;
 
-
     [Header("Debug")]
-    [SerializeField,OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysDisplay;
+    [SerializeField, OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysDisplay;
+    PossessableObject player;
+    Transform wearable;
 
     public void Interact()
     {
-        Debug.Log("TODO: put hat wearing code here!"); // assuming we're going with that
-        throw new NotImplementedException();
+        GameObject meshPrefab = registry.GetMesh(ThisCollectable);
+        if (meshPrefab != null)
+        {
+            Debug.Log($"Attempting to wear: {ThisCollectable}");
+
+            // Remove any previously equipped hat(s)
+            foreach (Transform child in wearable)
+            {
+                Destroy(child.gameObject);
+            }
+
+            // Instantiate the new hat
+            GameObject hat = Instantiate(meshPrefab, wearable);
+            hat.transform.localPosition = Vector3.zero;
+            hat.transform.localRotation = Quaternion.identity;
+            hat.transform.localScale = Vector3.one; // ensures correct size
+
+            SaveDataManager.Instance.MarkCollectableAsWorn(ThisCollectable);
+
+            Debug.Log($"{ThisCollectable} equipped successfully!");
+        }
+        else
+        {
+            Debug.LogWarning($"No prefab found in registry for {ThisCollectable}.");
+        }
     }
 
+
+
+    /*
+     * maybe figure this out later
     private void Awake()
     {
         GameObject meshPrefab = registry.GetMesh(ThisCollectable);
@@ -42,11 +70,13 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
             Instantiate(meshPrefab, transform);
         }
     }
+    */
     public void Start()
     {
         // TODO: I think it might be better if the collectables model/mesh was pulled from some kind of table/dictionary?
         //       I only say that because of the way the player is going to need to switch out hats
-
+        player = PlayerManager.Instance.PlayerGhostObject;
+        wearable = player.transform.Find("Wearable");
         UpdateVisibility();
     }
 

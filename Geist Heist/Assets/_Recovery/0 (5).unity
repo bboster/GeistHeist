@@ -862,10 +862,14 @@ PrefabInstance:
       propertyPath: ThisCollectable
       value: 9
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8214755714323440968, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5723779480297480578, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 992161820}
   m_SourcePrefab: {fileID: 100100000, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
 --- !u!1 &656674722
 GameObject:
@@ -1251,6 +1255,26 @@ Transform:
   - {fileID: 658094489}
   m_Father: {fileID: 72199001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &992161816 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5723779480297480578, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
+  m_PrefabInstance: {fileID: 648671723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &992161820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992161816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b7a76a9694e0db4a9fc41b7ebf828e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OptionalCollectableHubDisplay
+  ThisCollectable: 0
+  registry: {fileID: 11400000, guid: 9d18891e60060f240a07d1d6a8ee3244, type: 2}
+  DebugAlwaysDisplay: 0
 --- !u!1001 &1032679199
 PrefabInstance:
   m_ObjectHideFlags: 0

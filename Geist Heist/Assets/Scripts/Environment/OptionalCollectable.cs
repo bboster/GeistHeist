@@ -27,11 +27,11 @@ public class OptionalCollectable : MonoBehaviour
 {
     [SerializeField] private GameObject CollectionParticlePrefab;
     [SerializeField] private Collectable ThisCollectable;
-    [InfoBox("Must be a refence to the model from assets folder, nor from in scene")]
+    [InfoBox("Must be a refence to the model from assets folder, not from in scene")]
     [SerializeField] private GameObject CollectableModel;
 
     #if UNITY_EDITOR
-    [SerializeField] private CollectableRegistry registry;
+    [SerializeField] private CollectableRegistry Registry;
     #endif
 
 
@@ -164,20 +164,20 @@ public class OptionalCollectable : MonoBehaviour
 
     private void TryAutoRegister()
     {
-        // Attempt to find registry if not assigned
-        if (registry == null)
+        // Attempt to find Registry if not assigned
+        if (Registry == null)
         {
-            registry = Resources.Load<CollectableRegistry>("Data/CollectableRegistry");
+            Registry = Resources.Load<CollectableRegistry>("Resource/CollectableRegistry.asset");
 
             // If still null, delay retry until after scripts reload
-            if (registry == null)
+            if (Registry == null)
             {
                 EditorApplication.delayCall += () =>
                 {
-                    registry = Resources.Load<CollectableRegistry>("Data/CollectableRegistry");
-                    if (registry != null)
+                    Registry = Resources.Load<CollectableRegistry>("Resource/CollectableRegistry.asset");
+                    if (Registry != null)
                     {
-                        Debug.Log($"[AutoRegister] {name} found registry after reload, retrying registration...");
+                        Debug.Log($"[AutoRegister] {name} found Registry after reload, retrying registration...");
                         AutoRegisterToRegistry();
                     }
                 };
@@ -196,7 +196,7 @@ public class OptionalCollectable : MonoBehaviour
             Debug.LogWarning($"[{name}] No MeshRenderer found to register with CollectableRegistry.");
             return;
         }
-        registry.AddOrUpdate(ThisCollectable, CollectableModel);
+        Registry.AddOrUpdate(ThisCollectable, CollectableModel);
         Debug.Log($"✅ Auto-registered {ThisCollectable} mesh into CollectableRegistry.");   
     }
 
@@ -204,7 +204,7 @@ public class OptionalCollectable : MonoBehaviour
     #region Debug Tools
     private string filePath => Application.dataPath + "/Scripts/Environment/OptionalCollectable.cs";
 
-    [Button("Add new collectable as enum")]
+    [Button("Add new collectable to Registry")]
     private async void RegisterAsEnum()
     {
         // code that rewrites the script itself. lol
@@ -301,4 +301,5 @@ public enum Collectable
 	Wood_Collectable,
 	Vending_Machine_Collectable,
 	ToyCarCollectible,
+	VaseCollectible,
 }
