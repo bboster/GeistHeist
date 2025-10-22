@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby, Sky
+ * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/10/25
+ * Last Modified: 10/22/25
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -20,12 +20,23 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
     [HideInInspector] private IInputHandler inputHandler;
     [Required] public CinemachineCamera CinemachineCamera;
+
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
-    [SerializeField, ShowIf(nameof(hasTimer))] private float timerTime = 5f;
-    private float currentTimerTime;
-    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
-    private Coroutine timerCoroutine;
+    [Tooltip("The time in seconds between each percentage update.")]
+    [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargeInterval = 2.5f;
+    [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
+    [SerializeField, ShowIf(nameof(hasTimer))] [Range(0, 100)] private int timerRechargePercentage = 10;
+    [Tooltip("The time in seconds between each percentage update while discharging.")]
+    [SerializeField, ShowIf(nameof(hasTimer))] private float timerDischargeInterval = 1.5f;
+    [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
+    [SerializeField, ShowIf(nameof(hasTimer))] [Range(0, 100)] private int timerDischargePercentage = 10;
+
+    private float currentTimerPercentage = 100f;
+    [SerializeField] private Image timerImage => GameManager.Instance.TimerImage;
+    private RawImage timerBackground => GameManager.Instance.TimerBackground;
+    private Coroutine dischargeCoroutine = null;
+    private Coroutine rechargeCoroutine;
 
     [HideInInspector] public bool CanUnPossess = true;
     private Coroutine unpossessCoroutine=null;
@@ -57,15 +68,22 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         if (hasTimer)
         {
-            timerSlider?.gameObject.SetActive(true);
+            timerImage?.gameObject.SetActive(true);
+            timerBackground?.gameObject.SetActive(true);
+            
+            if(rechargeCoroutine != null)
+            {
+                StopCoroutine(rechargeCoroutine);
+                rechargeCoroutine = null;
+            }
 
-            currentTimerTime = timerTime;
-            if(timerCoroutine == null)
-                timerCoroutine = StartCoroutine(TimerCountdown());
+            if(dischargeCoroutine == null)
+                dischargeCoroutine = StartCoroutine(StartDischarge());
         }
         else
         {
-            timerSlider?.gameObject.SetActive(false);
+            timerImage?.gameObject.SetActive(false);
+            timerBackground?.gameObject.SetActive(false);
         }
     }
 
@@ -82,15 +100,18 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         InputHandler.OnPossessionEnded();
 
-        if (timerCoroutine != null)
+        if (hasTimer)
         {
-            StopCoroutine(timerCoroutine);
-            timerCoroutine = null;
-        }
+            if (dischargeCoroutine != null)
+            {
+                StopCoroutine(dischargeCoroutine);
+                dischargeCoroutine = null;
+            }
 
-        if (timerSlider != null)
-        {
-            ResetTimer();
+            if(rechargeCoroutine == null)
+            {
+                rechargeCoroutine = StartCoroutine(StartRecharge());
+            }
         }
     }
 
@@ -114,28 +135,40 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     #region Timer
     
-    private IEnumerator TimerCountdown()
+    private IEnumerator StartDischarge()
     {
         if (!hasTimer)
             yield break;
 
-        currentTimerTime = timerTime;
-
-        while(currentTimerTime > 0)
+        while(currentTimerPercentage > 0)
         {
-            currentTimerTime -= Time.deltaTime;
+            currentTimerPercentage = Mathf.Max(currentTimerPercentage - timerDischargePercentage, 0);
             UpdateSlider();
-            yield return null;
+            yield return new WaitForSeconds(timerDischargeInterval);
         }
 
         OnTimerFinished();
     }
 
+    private IEnumerator StartRecharge()
+    {
+        if (!hasTimer)
+            yield break;
+
+        while(currentTimerPercentage < 100f)
+        {
+            currentTimerPercentage = Mathf.Min(currentTimerPercentage + timerRechargePercentage, 100f);
+            UpdateSlider();
+            yield return new WaitForSeconds(timerRechargeInterval);
+        }
+    }
+
     private void UpdateSlider()
     {
-        if (timerSlider != null)
+        if (timerImage != null)
         {
-            timerSlider.value = currentTimerTime / timerTime;
+            Debug.Log(currentTimerPercentage / 100f);
+            timerImage.fillAmount = currentTimerPercentage / 100f;
         }
     }
 
@@ -143,20 +176,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
 
-        if (timerCoroutine != null)
+        if (dischargeCoroutine != null)
         {
-            StopCoroutine(timerCoroutine);
-            timerCoroutine = null;
+            StopCoroutine(dischargeCoroutine);
+            dischargeCoroutine = null;
         }
-
-        ResetTimer();
     }
-
-    private void ResetTimer()
-    {
-        currentTimerTime = timerTime;
-        timerSlider.gameObject.SetActive(false);
-    }
-
     #endregion
 }

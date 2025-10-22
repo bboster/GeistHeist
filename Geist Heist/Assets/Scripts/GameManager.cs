@@ -37,7 +37,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject CameraPrefab;
 
     [HideInInspector] public GameObject InteractionCanvas;
-    [HideInInspector] public Slider TimerSlider;
+    [HideInInspector] public Image TimerImage;
+    [HideInInspector] public RawImage TimerBackground;
 
     [Header("Debug")]
     [ReadOnly] public bool IsPaused = false;
@@ -66,8 +67,10 @@ public class GameManager : Singleton<GameManager>
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
 
         var timerCanvas = Instantiate(TimerCanvasPrefab);
-        TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
-        TimerSlider.gameObject.SetActive(false);
+        TimerImage = timerCanvas.GetComponentInChildren<Image>();
+        TimerBackground = timerCanvas.GetComponentInChildren<RawImage>();
+        TimerImage.gameObject.SetActive(false);
+        TimerBackground.gameObject.SetActive(false);
 
         InteractionCanvas = Instantiate(InteractionCanvasPrefab);
         Instantiate(PauseMenuPrefab);
