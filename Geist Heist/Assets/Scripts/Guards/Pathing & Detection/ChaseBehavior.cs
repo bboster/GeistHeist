@@ -2,67 +2,52 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 9/18/25
+ * Last Edited: 9/30/25
  * Summary: Handles behavior for the enemy when it is chasing the player.
  * To Do: Replace GetPlayerLocation() .Find() with a reference to a manager.
  */
 
 using UnityEngine;
-using EnemyUtilities;
+using GuardUtilities;
 using System.Collections;
 
-public class ChaseBehavior : EnemyMovement
+[CreateAssetMenu(fileName = "New Chase Behavior", menuName = "Guard Behaviors/New Chase Behavior")]
+public class ChaseBehavior : GuardMovement
 {
     private bool attacking = false;
 
-    #region Event Listeners for Possession Behavior
+    #region Initialize Function and OnDisable
 
-    protected override void Awake()
+    public override void InitializeBehavior(GameObject selfRef)
     {
-        base.Awake();
-        FirstPersonInputHandler.OnPossessObject += GetComponent<EnemyController>().ChangeBehavior;
+        base.InitializeBehavior(selfRef);
+        ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
-    private void OnDisable()
+    public override void StopBehavior()
     {
-        FirstPersonInputHandler.OnPossessObject -= GetComponent<EnemyController>().ChangeBehavior;
+        base.StopBehavior();
+        ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     #endregion
 
     /// <summary>
-    /// Overrides the default StopBehavior function to pause all movement the enemy is doing.
-    /// </summary>
-    public override void StopBehavior()
-    {
-        if (currentLoop == null)
-            return;
-
-        thisAgent.isStopped = true;
-
-        StopCoroutine(currentLoop);
-        currentLoop = null;
-    }
-
-    /// <summary>
     /// Controls the flow of the chase behavior.
     /// </summary>
     /// <returns></returns>
-    protected override IEnumerator BehaviorLoop()
+    public override IEnumerator BehaviorLoop()
     {
         for(; ; )
         {
-            if (CheckPathCompletion() == true /*&& attacking == false*/)
+            if (CheckPathCompletion() == true)
             {
-                //attacking = true;
-                GetComponent<EnemyController>().ChangeBehavior(2);
+                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.attack);
             }
             else
             {
-                //attacking = false;
                 MoveToPoint(GetPlayerLocation());
                 thisAgent.isStopped = false;
-                //Debug.Log(gameObject.name + " IS CHASING");
             }
 
             yield return new WaitForEndOfFrame();
@@ -75,6 +60,12 @@ public class ChaseBehavior : EnemyMovement
     /// <returns></returns>
     private Vector3 GetPlayerLocation()
     {
-        return GameObject.Find("1st Person Player").transform.position; //REPLACE WITH CENTRALIZED REFERENCE FROM A MANAGER ONCE ABLE.
+        return GameObject.Find("3rd Person Player").transform.position; //REPLACE WITH CENTRALIZED REFERENCE FROM A MANAGER ONCE ABLE.
+    }
+
+    ~ChaseBehavior()
+    {
+        if(selfRef != null)
+            ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 }
