@@ -21,8 +21,9 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
     [InfoBox("New collectable enums can be added from an object with the OptionalCollectable script")]
 
-    [SerializeField] private Collectable ThisCollectable; 
-    [SerializeField] private GameObject collectableModelz;
+    [SerializeField] private Collectable ThisCollectable;
+    [SerializeField] private CollectableRegistry registry;
+
 
     [Header("Debug")]
     [SerializeField,OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysDisplay;
@@ -33,6 +34,14 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
         throw new NotImplementedException();
     }
 
+    private void Awake()
+    {
+        GameObject meshPrefab = registry.GetMesh(ThisCollectable);
+        if (meshPrefab != null)
+        {
+            Instantiate(meshPrefab, transform);
+        }
+    }
     public void Start()
     {
         // TODO: I think it might be better if the collectables model/mesh was pulled from some kind of table/dictionary?
