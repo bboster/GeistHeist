@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
- * Creation: 10/2/25
- * Last Edited: 10/2/25
+ * Contributors: Toby, Josh
+ * Creation: 10/21/25
+ * Last Edited: 10/21/25
  * Summary: Mirrors a collectable object, appears in the hub if the save data has marked the collectable as got.
  * 
  * TODO: hat code >:)
@@ -21,7 +21,8 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
     [InfoBox("New collectable enums can be added from an object with the OptionalCollectable script")]
 
-    [SerializeField] private Collectable ThisCollectable;
+    [SerializeField] private Collectable ThisCollectable; 
+    [SerializeField] private GameObject collectableModelz;
 
     [Header("Debug")]
     [SerializeField,OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysDisplay;
