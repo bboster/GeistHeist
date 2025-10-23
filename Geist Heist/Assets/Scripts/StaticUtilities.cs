@@ -312,6 +312,13 @@ public static class StaticUtilities
         return result;
     }
 
+    public static bool IsNullOrEmpty<T>(this ICollection<T> array)
+    {
+        if (array == null) return true;
+        if (array.Count == 0) return true;
+        return false;
+    }
+
     #endregion
 
     #region Color

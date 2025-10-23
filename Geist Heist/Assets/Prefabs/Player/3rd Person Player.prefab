@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 8762889882606682532}
   - component: {fileID: 3107868394456876978}
+  - component: {fileID: 8861427484589388494}
   - component: {fileID: 5974260262404806057}
   - component: {fileID: 7039407254155894154}
-  - component: {fileID: 8861427484589388494}
   m_Layer: 0
   m_Name: 3rd Person Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -54,6 +54,29 @@ MonoBehaviour:
   timerTime: 5
   CanUnPossess: 1
   ghostSpawnPoint: {fileID: 0}
+--- !u!114 &8861427484589388494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3233496734506821444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f4c20950db8e9147aa3ca13fc977891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonInputHandler
+  speed: 7
+  maxVelocity: 11
+  speedPickup: 3
+  slowDownFactor: 0.1
+  thirdPersonCinemachineCamera: {fileID: 6503710880496754358}
+  interactSphereCastRadius: 3
+  interactRayLength: 5
+  layerToInclude:
+    serializedVersion: 2
+    m_Bits: 193
+  drawInteractRay: 1
 --- !u!136 &5974260262404806057
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -104,26 +127,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &8861427484589388494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3233496734506821444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f4c20950db8e9147aa3ca13fc977891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonInputHandler
-  speed: 7
-  maxVelocity: 11
-  speedPickup: 3
-  slowDownFactor: 0.1
-  thirdPersonCinemachineCamera: {fileID: 6503710880496754358}
-  sphereCastRadius: 3
-  sphereCastDistance: 5
-  interactableRayLength: 10
 --- !u!1 &6503710880496754358
 GameObject:
   m_ObjectHideFlags: 0

@@ -125,4 +125,6 @@ public class PlayerManager : Singleton<PlayerManager>
         if (CurrentObject != null)
             CurrentObject.WhilePossessingUpdate();
     }
+
+
 }
