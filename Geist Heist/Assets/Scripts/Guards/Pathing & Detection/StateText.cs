@@ -29,7 +29,7 @@ public class StateText : IBillboardUI
     {
         switch(state)
         {
-            case GuardStates.none:
+            case GuardStates.idle:
                 stateText.text = "NONE";
                 break;
             case GuardStates.patrol:
