@@ -29,14 +29,14 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject CooldownManagerPrefab;
-    [SerializeField, Required] GameObject InteractionCanvasPrefab;
+    //[SerializeField, Required] GameObject InteractionCanvasPrefab;
     [SerializeField, Required] GameObject TimerCanvasPrefab;
     [SerializeField, Required] GameObject PauseMenuPrefab;
 
     [Header("Other Constants")]
     [SerializeField, Required] GameObject CameraPrefab;
 
-    [HideInInspector] public GameObject InteractionCanvas;
+    //[HideInInspector] public GameObject InteractionCanvas;
     [HideInInspector] public Slider TimerSlider;
 
     [Header("Debug")]
@@ -69,7 +69,7 @@ public class GameManager : Singleton<GameManager>
         TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
         TimerSlider.gameObject.SetActive(false);
 
-        InteractionCanvas = Instantiate(InteractionCanvasPrefab);
+        //InteractionCanvas = Instantiate(InteractionCanvasPrefab);
         Instantiate(PauseMenuPrefab);
 
         // I saw a designer not understand why the camera wasnt working (they didnt have a cinemachine brain / the right settings on it).
