@@ -17,6 +17,8 @@ public class MainMenu : MonoBehaviour
     [Header("Settings")]
     [SerializeField, Scene] private int HubScene;
     [SerializeField, Scene] private int NewGameScene; // making it seperate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
+    [SerializeField, Required] private ConfirmationPopup confirmationPopup;
+    [SerializeField] string confirmNewGameText = "Are you sure? Continuing will delete your progress.";
 
     [Header("Main Page")]
     [SerializeField, Required] private Button newGameButton;
@@ -24,11 +26,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private Button creditsButton;
     [SerializeField, Required] private Button howToPlayButton;
     [SerializeField, Required] private Button quitGameButton;
-
-    [Header("Confirm New Save")]
-    [SerializeField, Required] private CanvasGroup confirmDeleteSavePanel;
-    [SerializeField, Required] private Button confirmDeleteSaveButton;
-    [SerializeField, Required] private Button cancelDeleteSaveButton;
 
     [Header("Credits Page")]
     [SerializeField, Required] private CanvasGroup creditsPage;
@@ -52,8 +49,6 @@ public class MainMenu : MonoBehaviour
 
         // Hide other pages
         // The only reason im setting them active in code instead of having them active in scene is that i do not trust game designers
-        confirmDeleteSaveButton.gameObject.SetActive(true);
-        StaticUtilities.DisableCanvasGroup(confirmDeleteSavePanel);
         creditsPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(creditsPage);
         howToPlayPage.gameObject.SetActive(true);
@@ -64,9 +59,6 @@ public class MainMenu : MonoBehaviour
         creditsButton.onClick.AddListener(OnCreditsButtonClicked);
         howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
         quitGameButton.onClick.AddListener(OnQuitButtonClicked);
-
-        confirmDeleteSaveButton.onClick.AddListener(OnConfirmDeleteSaveButtonClicked);
-        cancelDeleteSaveButton.onClick.AddListener(OnCancelDeleteSaveButtonClicked);
 
         closeCreditsButton.onClick.AddListener(OnCreditsBackButtonClicked);
 
@@ -96,7 +88,8 @@ public class MainMenu : MonoBehaviour
         // if player has save data: open confirmation popup
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         StaticUtilities.DisableCanvasGroup(creditsPage);
-        StaticUtilities.EnableCanvasGroup(confirmDeleteSavePanel);
+
+        confirmationPopup.OpenConfirmationPopup(confirmNewGameText, OnConfirmDeleteSaveButtonClicked);
     }
 
     void OnContinueButtonClicked()
@@ -107,14 +100,12 @@ public class MainMenu : MonoBehaviour
     void OnCreditsButtonClicked()
     {
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
-        StaticUtilities.DisableCanvasGroup(confirmDeleteSavePanel);
         StaticUtilities.EnableCanvasGroup(creditsPage);
     }
 
     void OnHowToPlayButtonClicked()
     {
         StaticUtilities.DisableCanvasGroup(creditsPage);
-        StaticUtilities.DisableCanvasGroup(confirmDeleteSavePanel);
         StaticUtilities.EnableCanvasGroup(howToPlayPage);
     }
 
@@ -134,11 +125,6 @@ public class MainMenu : MonoBehaviour
     void OnConfirmDeleteSaveButtonClicked()
     {
         LoadNewGame();
-    }
-
-    void OnCancelDeleteSaveButtonClicked()
-    {
-        StaticUtilities.DisableCanvasGroup(confirmDeleteSavePanel);
     }
 
     #endregion
