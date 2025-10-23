@@ -129,7 +129,7 @@ public class ThirdPersonInputHandler : IInputHandler
             Vector3 interactPos = result.transform.position;
             bool ray = Physics.Raycast(playerPos, interactPos - interactPos, out RaycastHit hit, Vector3.Distance(playerPos, interactPos), layerToInclude);
             if (drawInteractRay) Debug.DrawLine(playerPos, interactPos,
-                                ray || hit.transform.gameObject != result.transform.gameObject ? Color.red : Color.green, 1);
+                                ray && hit.transform.gameObject != result.transform.gameObject ? Color.red : Color.green);
             if (ray && hit.transform.gameObject != result.transform.gameObject)
                 continue;
 

@@ -12,15 +12,15 @@
  * TODO: swap UI for controller support eventually.
  */
 
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class ButtonPromptInteractable : MonoBehaviour, IInteractable
 {
-    [SerializeField] private string buttonText="E";
+    [SerializeField] public string buttonText="E";
 
-    private TMP_Text interactText;
     private ButtonPromptBillboardUI billboardUI;
     [HideInInspector] public UnityEvent ShowUIEvent = new();
     [HideInInspector] public UnityEvent HideUIEvent = new();
@@ -29,20 +29,16 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
     public void InitializeFromBillboardUI(ButtonPromptBillboardUI buttonPrompt)
     {
         billboardUI = buttonPrompt;
-        interactText = buttonPrompt.GetComponentInChildren<TMP_Text>();
     }
 
     void IInteractable.Interact()
     {/* do nothing */}
 
-    // Call this with controller updates later.
-    public void UpdateButtonText()
-    {
-        interactText.text = buttonText;
-    }
-
     void IInteractable.DisplayInteractUI()
     {
+        // UpdateButtonPrompt changes the text depending on if its a controller / keyboard. 
+        // This is redundant now but will be important later.
+        billboardUI.UpdateButtonPrompt();
         billboardUI.Show();
     }
     void IInteractable.HideInteractUI()

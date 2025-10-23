@@ -10,11 +10,13 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -34,6 +36,15 @@ public static class StaticUtilities
             ( referencePoint.forward * inputDirection.y 
             + referencePoint.right * inputDirection.x)
             .normalized;
+    }
+
+    public static void StopAndStartCoroutine(ref Coroutine coroutineInstance, IEnumerator coroutineToPlay)
+    {
+        // If using this code in other projects, replace GuardCoroutineManager with a different singleton
+        if (coroutineInstance != null)
+            GuardCoroutineManager.instance.StopCoroutine(coroutineInstance);
+
+        coroutineInstance = GuardCoroutineManager.instance.StartCoroutine(coroutineToPlay);
     }
 
     #endregion
