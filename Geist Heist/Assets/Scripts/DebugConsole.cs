@@ -8,20 +8,23 @@ using UnityEngine.Windows;
 public class DebugConsole : MonoBehaviour
 {
     [SerializeField] GameObject Console;
-    [SerializeField] InputField inputs;
+    [SerializeField] TMPro.TMP_InputField inputs;
     [SerializeField] TMPro.TMP_Text TextArea;
+    [SerializeField] GameObject Player;
+
     private bool noClipToggle = false;
     private bool godToggle = false;
 
     private void Start()
     {
         Console.SetActive(false);
-        InputEvents.MoveStarted.AddListener(ToggleConsole());
+        InputEvents.DebugStarted.AddListener(ToggleConsole);
     }
 
 
-    public UnityAction ToggleConsole()
+    public void ToggleConsole()
     {
+        Debug.Log("In toggle");
         if (Console != null)
         {
 
@@ -38,19 +41,17 @@ public class DebugConsole : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 inputs.ActivateInputField();
             }
-            return null;
         }
         else
         {
             Debug.Log("No Console Exists");
-            return null;
         }
     }
 
     public void CallFunction()
     {
         string Command = inputs.text;
-        TextArea.text = "\n" + Command;
+        TextArea.text = TextArea.text + "\n" + Command;
         if(Command.ToLower() == "nc")
         {
             Debug.Log("no clip");
@@ -78,10 +79,14 @@ public class DebugConsole : MonoBehaviour
         {
             Debug.Log("Help");
         }
-        else if (Command.ToLower().Substring(0,5) == "spawn")
+        else if(Command.Length > 4)
         {
-            Debug.Log("Spawn Item");
+            if (Command.ToLower().Substring(0, 5) == "spawn")
+            {
+                Debug.Log("Spawn Item");
+            }
         }
         inputs.text = "";
+        inputs.ActivateInputField();
     }
 }
