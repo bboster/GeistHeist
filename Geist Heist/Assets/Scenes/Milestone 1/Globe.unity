@@ -283,14 +283,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87706826846a65d42a9390a9728aaa8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonInputHandler
-  speed: 3
-  maxVelocity: 10
-  speedPickup: 3
-  slowDownFactor: 0.1
-  thirdPersonCinemachineCamera: {fileID: 0}
-  sphereCastRadius: 10
-  sphereCastDistance: 1000
-  interactableRayLength: 10
 --- !u!4 &72199001 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8762889882606682532, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
@@ -348,6 +340,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToyCarCollectible
       objectReference: {fileID: 0}
+    - target: {fileID: 8214755714323440968, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
+      propertyPath: Registry
+      value: 
+      objectReference: {fileID: 11400000, guid: 9d18891e60060f240a07d1d6a8ee3244, type: 2}
     - target: {fileID: 8214755714323440968, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
       propertyPath: registry
       value: 
@@ -850,9 +846,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4535634920585215996, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5723779480297480578, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
       propertyPath: m_Name
       value: ToyCarCollectible (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5723779480297480578, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8214755714323440968, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
       propertyPath: registry
@@ -862,10 +866,14 @@ PrefabInstance:
       propertyPath: ThisCollectable
       value: 9
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8214755714323440968, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5723779480297480578, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 941757270}
   m_SourcePrefab: {fileID: 100100000, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
 --- !u!1 &656674722
 GameObject:
@@ -1219,6 +1227,26 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf56fe11c801cfe4c9429f3280a1fdd1, type: 3}
+--- !u!1 &941757266 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5723779480297480578, guid: 0a0d93dff3f20cd41a7d0c836c3f9b54, type: 3}
+  m_PrefabInstance: {fileID: 648671723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &941757270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941757266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b7a76a9694e0db4a9fc41b7ebf828e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OptionalCollectableHubDisplay
+  ThisCollectable: 9
+  registry: {fileID: 11400000, guid: 9d18891e60060f240a07d1d6a8ee3244, type: 2}
+  DebugAlwaysDisplay: 0
 --- !u!1 &956503495
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,16 +22,15 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     [InfoBox("New collectable enums can be added from an object with the OptionalCollectable script")]
 
     [SerializeField] private Collectable ThisCollectable;
-    [SerializeField] private CollectableRegistry registry;
+    public CollectableRegistry Registry = Resources.Load<CollectableRegistry>("Resource/CollectableRegistry.asset");
 
     [Header("Debug")]
     [SerializeField, OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysDisplay;
-    PossessableObject player;
-    Transform wearable;
+
 
     public void Interact()
     {
-        GameObject meshPrefab = registry.GetMesh(ThisCollectable);
+        GameObject meshPrefab = Registry.GetMesh(ThisCollectable);
         if (meshPrefab != null)
         {
             Debug.Log($"Attempting to wear: {ThisCollectable}");
@@ -41,6 +40,8 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
             {
                 Destroy(child.gameObject);
             }
+
+            //repalce below with a method call to equip hats eventually
 
             // Instantiate the new hat
             GameObject hat = Instantiate(meshPrefab, wearable);
@@ -54,7 +55,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
         }
         else
         {
-            Debug.LogWarning($"No prefab found in registry for {ThisCollectable}.");
+            Debug.LogWarning($"No prefab found in Registry for {ThisCollectable}.");
         }
     }
 
@@ -64,7 +65,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
      * maybe figure this out later
     private void Awake()
     {
-        GameObject meshPrefab = registry.GetMesh(ThisCollectable);
+        GameObject meshPrefab = Registry.GetMesh(ThisCollectable);
         if (meshPrefab != null)
         {
             Instantiate(meshPrefab, transform);
@@ -75,8 +76,6 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     {
         // TODO: I think it might be better if the collectables model/mesh was pulled from some kind of table/dictionary?
         //       I only say that because of the way the player is going to need to switch out hats
-        player = PlayerManager.Instance.PlayerGhostObject;
-        wearable = player.transform.Find("Wearable");
         UpdateVisibility();
     }
 

@@ -76,6 +76,13 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             SaveData();
     }
 
+    public int EquipedHat()
+    {
+        EnsureSaveData();
+        return currentSaveDta.CollectableWearing;
+    }
+
+
     public bool IsLevelCompleted(string sceneName)
     {
         EnsureSaveData();
