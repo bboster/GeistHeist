@@ -31,7 +31,7 @@ public class WearableCollectible : MonoBehaviour
 
     }
 
-    void equipHat(Collectable  ThisCollectable)
+    public void equipHat(Collectable  ThisCollectable)
     { 
             GameObject hat = Instantiate(meshPrefab);
             hat.transform.localPosition = Vector3.zero;

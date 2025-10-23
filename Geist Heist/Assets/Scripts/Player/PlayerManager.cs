@@ -36,8 +36,6 @@ public class PlayerManager : Singleton<PlayerManager>
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        WearableCollectible.equipHat();
-
     }
 
     public void PossessObject(PossessableObject possessable)

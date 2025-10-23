@@ -22,7 +22,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     [InfoBox("New collectable enums can be added from an object with the OptionalCollectable script")]
 
     [SerializeField] private Collectable ThisCollectable;
-    public CollectableRegistry Registry = Resources.Load<CollectableRegistry>("Resource/CollectableRegistry.asset");
+    public CollectableRegistry Registry;
 
     [Header("Debug")]
     [SerializeField, OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysDisplay;
@@ -34,20 +34,6 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
         if (meshPrefab != null)
         {
             Debug.Log($"Attempting to wear: {ThisCollectable}");
-
-            // Remove any previously equipped hat(s)
-            foreach (Transform child in wearable)
-            {
-                Destroy(child.gameObject);
-            }
-
-            //repalce below with a method call to equip hats eventually
-
-            // Instantiate the new hat
-            GameObject hat = Instantiate(meshPrefab, wearable);
-            hat.transform.localPosition = Vector3.zero;
-            hat.transform.localRotation = Quaternion.identity;
-            hat.transform.localScale = Vector3.one; // ensures correct size
 
             SaveDataManager.Instance.MarkCollectableAsWorn(ThisCollectable);
 
@@ -61,19 +47,22 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
 
 
-    /*
-     * maybe figure this out later
+    
     private void Awake()
     {
+        Registry = Resources.Load<CollectableRegistry>("Resource/CollectableRegistry.asset");
+    }
+
+    public void Start()
+    {/*
+        *maybe figure this out later, essentially a way to have a single "collectible display" prefab that you could assign a registered collectible to
+        *and have automatically be displayed by using MeshRenderer
         GameObject meshPrefab = Registry.GetMesh(ThisCollectable);
         if (meshPrefab != null)
         {
             Instantiate(meshPrefab, transform);
         }
-    }
-    */
-    public void Start()
-    {
+         */
         // TODO: I think it might be better if the collectables model/mesh was pulled from some kind of table/dictionary?
         //       I only say that because of the way the player is going to need to switch out hats
         UpdateVisibility();
