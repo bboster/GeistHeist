@@ -24,15 +24,15 @@ public class CollectableRegistry : ScriptableObject
     // Runtime-safe read-only access
     public IReadOnlyList<CollectableEntry> Entries => entries;
 
-    /// <summary> Get the mesh prefab for a given collectable enum </summary>
-    public GameObject GetMesh(Collectable collectable)
+    /// Get the mesh renderer for a given collectable enum
+    public MeshRenderer GetMesh(Collectable collectable)
     {
         var entry = entries.Find(e => e.collectable == collectable);
-        return entry?.meshPrefab;
+        return entry?.meshPrefab?.GetComponent<MeshRenderer>();
     }
 
 #if UNITY_EDITOR
-    /// <summary> Add or update an entry in the registry (editor-only) </summary>
+    /// Add or update an entry in the registry (editor-only)
     public void AddOrUpdate(Collectable collectable, GameObject meshPrefab)
     {
         var existing = entries.Find(e => e.collectable == collectable);
@@ -53,7 +53,7 @@ public class CollectableRegistry : ScriptableObject
         UnityEditor.AssetDatabase.SaveAssets();
     }
 
-    /// <summary> Remove an entry (editor-only) </summary>
+    /// Remove an entry (editor-only)
     public void Remove(Collectable collectable)
     {
         entries.RemoveAll(e => e.collectable == collectable);

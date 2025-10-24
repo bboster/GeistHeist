@@ -38,7 +38,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
         else
         {
-            GameObject meshPrefab = Registry.GetMesh(ThisCollectable);
+            MeshRenderer meshPrefab = Registry.GetMesh(ThisCollectable);
             if (meshPrefab != null)
             {
                 Debug.Log($"Attempting to wear: {ThisCollectable}");
@@ -53,7 +53,11 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
                     Debug.Log($"{ThisCollectable} equipped successfully!");
 
                     foreach (Transform child in this.transform)
-                        Destroy(child.gameObject);
+                    {
+                        MeshRenderer existingMesh = GetComponentInChildren<MeshRenderer>();
+                        if (existingMesh != null)
+                            existingMesh.enabled = false;
+                    }
                 }
                 else
                 {
@@ -72,22 +76,46 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
         // Only respawn if this OptionalCollectable matches the collectible
         if (ThisCollectable != collectableToRespawn)
             return;
-        GameObject meshPrefab = Registry.GetMesh(ThisCollectable);
-        // Clear any existing children (optional)
-        foreach (Transform child in transform)
-            DestroyImmediate(child.gameObject);
 
-        if (meshPrefab == null)
+        MeshRenderer newMeshPrefab = Registry.GetMesh(ThisCollectable);
+        if (newMeshPrefab == null)
         {
             Debug.LogWarning($"[{name}] No CollectableModel to respawn for {ThisCollectable}");
             return;
         }
 
-        // Instantiate the mesh
-        GameObject meshInstance = Instantiate(meshPrefab, transform);
-        meshInstance.transform.localPosition = Vector3.zero;
-        meshInstance.transform.localRotation = Quaternion.identity;
+        // Try to find an existing MeshRenderer child
+        MeshRenderer existingMesh = GetComponentInChildren<MeshRenderer>();
+
+        if (existingMesh != null)
+        {
+            // Swap the mesh & material instead of destroying and recreating
+            MeshFilter existingFilter = existingMesh.GetComponent<MeshFilter>();
+            MeshFilter newFilter = newMeshPrefab.GetComponent<MeshFilter>();
+
+            if (existingFilter != null && newFilter != null)
+                existingFilter.sharedMesh = newFilter.sharedMesh;
+
+            existingMesh.sharedMaterials = newMeshPrefab.sharedMaterials;
+
+            // Reset transform in case anything got misaligned
+            existingMesh.transform.localPosition = Vector3.zero;
+            existingMesh.transform.localRotation = Quaternion.identity;
+
+            Debug.Log($"[{name}] Updated existing mesh for {ThisCollectable}");
+        }
+        else
+        {
+            // If no mesh exists yet, instantiate a new one
+            MeshRenderer meshInstance = Instantiate(newMeshPrefab, transform);
+            meshInstance.transform.localPosition = Vector3.zero;
+            meshInstance.transform.localRotation = Quaternion.identity;
+            meshInstance.transform.localScale = Vector3.one;
+
+            Debug.Log($"[{name}] Spawned new mesh for {ThisCollectable}");
+        }
     }
+
 
 
     private void OnValidate()

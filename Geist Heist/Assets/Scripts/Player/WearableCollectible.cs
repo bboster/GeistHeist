@@ -13,16 +13,12 @@ using UnityEngine;
  */
 public class WearableCollectible : MonoBehaviour
 {
-    public CollectableRegistry Registry;
+    private CollectableRegistry Registry;
     private Collectable currentHat;
     private Collectable previousHat;
 
     private void OnValidate()
     {
-#if UNITY_EDITOR
-        if (Registry == null)
-            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
-#endif
     }
 
     private void Awake()
@@ -45,7 +41,7 @@ public class WearableCollectible : MonoBehaviour
         currentHat = newCollectable;
 
         // Get the correct mesh *each time*
-        GameObject meshPrefab = Registry.GetMesh(currentHat);
+        MeshRenderer meshPrefab = Registry.GetMesh(currentHat);
         if (meshPrefab == null)
         {
             Debug.LogWarning($"No mesh prefab found for {currentHat}.");
@@ -73,7 +69,7 @@ public class WearableCollectible : MonoBehaviour
         }
 
         // Instantiate the new hat
-        GameObject hat = Instantiate(meshPrefab, wearableTransform);
+        MeshRenderer hat = Instantiate(meshPrefab, wearableTransform);
         hat.transform.localPosition = Vector3.zero;
         hat.transform.localRotation = Quaternion.identity;
 
