@@ -17,6 +17,7 @@ public class StationaryBehavior : Behavior
 {
     private bool isRotatingRight = true;
 
+    #region Might Be Used Later
 
     /*[Header("Rotation Values")]
     [Tooltip("How far left the guard can rotate from 0 degrees.")]
@@ -28,6 +29,10 @@ public class StationaryBehavior : Behavior
     [Tooltip("How long it should take for the guard to rotate from the center to one side")]
     [SerializeField] private float rotationTime;*/
 
+    #endregion
+
+    #region Initialize and Stop Behavior
+
     /// <summary>
     /// Initializes the behavior
     /// </summary>
@@ -36,12 +41,24 @@ public class StationaryBehavior : Behavior
     {
         base.InitializeBehavior(selfRef);
         selfRef.GetComponent<NavMeshAgent>().isStopped = true;
+        selfRef.GetComponent<NavMeshAgent>().enabled = false;
 
         Vector3 rotation = selfRef.transform.rotation.eulerAngles;
         rotation.y = selfRef.GetComponent<GuardController>().DefaultRotation - selfRef.transform.rotation.eulerAngles.y;
 
         selfRef.transform.Rotate(rotation);
     }
+
+    /// <summary>
+    /// Stops the behavior
+    /// </summary>
+    public override void StopBehavior()
+    {
+        selfRef.GetComponent<NavMeshAgent>().enabled = true;
+        base.StopBehavior();
+    }
+
+    #endregion
 
     public override IEnumerator BehaviorLoop()
     {
