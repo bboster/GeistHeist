@@ -76,7 +76,6 @@ public class WearableCollectible : MonoBehaviour
         GameObject hat = Instantiate(meshPrefab, wearableTransform);
         hat.transform.localPosition = Vector3.zero;
         hat.transform.localRotation = Quaternion.identity;
-        hat.transform.localScale = Vector3.one;
 
         if (Application.isPlaying)
         {

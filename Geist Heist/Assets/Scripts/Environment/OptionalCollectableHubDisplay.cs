@@ -87,7 +87,6 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
         GameObject meshInstance = Instantiate(meshPrefab, transform);
         meshInstance.transform.localPosition = Vector3.zero;
         meshInstance.transform.localRotation = Quaternion.identity;
-        meshInstance.transform.localScale = Vector3.one;
     }
 
 
