@@ -123,7 +123,7 @@ public class InputEvents : Singleton<InputEvents>
         else MoveNotHeld.Invoke();
         //if (JumpPressed) JumpHeld.Invoke();
         if (ActionPressed) ActionHeld.Invoke();
-        else ActionNotHeld.Invoke();
+        //else ActionNotHeld.Invoke();
         if (EscapeObjectPressed) PossessHeld.Invoke();
 
         LookUpdate.Invoke(LookDelta);

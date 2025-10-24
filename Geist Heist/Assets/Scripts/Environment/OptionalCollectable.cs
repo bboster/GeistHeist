@@ -30,15 +30,12 @@ public class OptionalCollectable : MonoBehaviour
     [InfoBox("Must be a refence to the model from assets folder, not from in scene")]
     [SerializeField] private GameObject CollectableModel;
 
-    #if UNITY_EDITOR
-    [SerializeField] private CollectableRegistry Registry;
-    #endif
-
-
+    private CollectableRegistry Registry;
     private Collider childCollider;
 
     private void Awake()
     {
+
         childCollider = GetComponentInChildren<Collider>();
     }
 
@@ -47,7 +44,7 @@ public class OptionalCollectable : MonoBehaviour
         // TODO: animation (?)
 
         // if player
-        if(other.transform.GetComponent<PossessableObject>() == null)
+        if (other.transform.GetComponent<PossessableObject>() == null)
         {
             return;
         }
@@ -158,34 +155,8 @@ public class OptionalCollectable : MonoBehaviour
     {
         if (EditorApplication.isPlayingOrWillChangePlaymode)
             return;
-
-        TryAutoRegister();
-    }
-
-    private void TryAutoRegister()
-    {
-        // Attempt to find Registry if not assigned
         if (Registry == null)
-        {
-            Registry = Resources.Load<CollectableRegistry>("Resource/CollectableRegistry.asset");
-
-            // If still null, delay retry until after scripts reload
-            if (Registry == null)
-            {
-                EditorApplication.delayCall += () =>
-                {
-                    Registry = Resources.Load<CollectableRegistry>("Resource/CollectableRegistry.asset");
-                    if (Registry != null)
-                    {
-                        Debug.Log($"[AutoRegister] {name} found Registry after reload, retrying registration...");
-                        AutoRegisterToRegistry();
-                    }
-                };
-                Debug.LogWarning($"[{name}] Registry not ready yet, will retry after compile.");
-                return;
-            }
-        }
-
+            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
         AutoRegisterToRegistry();
     }
 
@@ -196,9 +167,22 @@ public class OptionalCollectable : MonoBehaviour
             Debug.LogWarning($"[{name}] No MeshRenderer found to register with CollectableRegistry.");
             return;
         }
-        Registry.AddOrUpdate(ThisCollectable, CollectableModel);
-        Debug.Log($"✅ Auto-registered {ThisCollectable} mesh into CollectableRegistry.");   
+
+        // Queue the registry update to happen after import/validation finishes
+        EditorApplication.delayCall += () =>
+        {
+            if (Registry == null)
+            {
+                Debug.LogWarning($"[{name}] Registry still null after delay, skipping auto-registration.");
+                return;
+            }
+
+            Registry.AddOrUpdate(ThisCollectable, CollectableModel);
+
+            Debug.Log($"✅ Auto-registered {ThisCollectable} mesh into CollectableRegistry (delayed).");
+        };
     }
+
 
     #endregion
     #region Debug Tools
@@ -252,7 +236,8 @@ public class OptionalCollectable : MonoBehaviour
     [Button("Delete this enum")]
     private async void DeleteThisEnum()
     {
-        if(ThisCollectable == 0) {
+        if (ThisCollectable == 0)
+        {
             Debug.Log("Cant delete default enum");
             return;
         }
@@ -292,14 +277,15 @@ public class OptionalCollectable : MonoBehaviour
 public enum Collectable
 {
     None,
-	Test_Collectable,
-	Test_Collectable_1,
-	Test_Collectable_2,
-	Test_Collectable_3,
-	Test_Collectable_4,
-	Stone_Collectable,
-	Wood_Collectable,
-	Vending_Machine_Collectable,
+    Test_Collectable,
+    Test_Collectable_1,
+    Test_Collectable_2,
+    Test_Collectable_3,
+    Test_Collectable_4,
+    Stone_Collectable,
+    Wood_Collectable,
+    Vending_Machine_Collectable,
+    
+    VaseCollectible,
 	ToyCarCollectible,
-	VaseCollectible,
 }

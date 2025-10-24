@@ -22,7 +22,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     [InfoBox("New collectable enums can be added from an object with the OptionalCollectable script")]
 
     [SerializeField] private Collectable ThisCollectable;
-    public CollectableRegistry Registry;
+    private CollectableRegistry Registry;
 
     [Header("Debug")]
     [SerializeField, OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysDisplay;
@@ -30,41 +30,84 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        GameObject meshPrefab = Registry.GetMesh(ThisCollectable);
-        if (meshPrefab != null)
+        if (SaveDataManager.Instance.EquipedHat() == (int)ThisCollectable)
         {
-            Debug.Log($"Attempting to wear: {ThisCollectable}");
-
-            SaveDataManager.Instance.MarkCollectableAsWorn(ThisCollectable);
-
-            Debug.Log($"{ThisCollectable} equipped successfully!");
+            Debug.Log($"{ThisCollectable} is already equipped.");
+            return;
         }
+
         else
         {
-            Debug.LogWarning($"No prefab found in Registry for {ThisCollectable}.");
+            GameObject meshPrefab = Registry.GetMesh(ThisCollectable);
+            if (meshPrefab != null)
+            {
+                Debug.Log($"Attempting to wear: {ThisCollectable}");
+
+                // Find an instance of WearableCollectible in the scene
+                WearableCollectible wearableCollectible = FindAnyObjectByType<WearableCollectible>();
+                if (wearableCollectible != null)
+                {
+                    wearableCollectible.EquipHat(ThisCollectable);
+                    SaveDataManager.Instance.MarkCollectableAsWorn(ThisCollectable);
+
+                    Debug.Log($"{ThisCollectable} equipped successfully!");
+
+                    foreach (Transform child in this.transform)
+                        Destroy(child.gameObject);
+                }
+                else
+                {
+                    Debug.LogWarning("No WearableCollectible instance found in the scene.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"No prefab found in Registry for {ThisCollectable}.");
+            }
         }
     }
 
+    public void spawnMesh(Collectable collectableToRespawn)
+    {
+        // Only respawn if this OptionalCollectable matches the collectible
+        if (ThisCollectable != collectableToRespawn)
+            return;
+        GameObject meshPrefab = Registry.GetMesh(ThisCollectable);
+        // Clear any existing children (optional)
+        foreach (Transform child in transform)
+            DestroyImmediate(child.gameObject);
+
+        if (meshPrefab == null)
+        {
+            Debug.LogWarning($"[{name}] No CollectableModel to respawn for {ThisCollectable}");
+            return;
+        }
+
+        // Instantiate the mesh
+        GameObject meshInstance = Instantiate(meshPrefab, transform);
+        meshInstance.transform.localPosition = Vector3.zero;
+        meshInstance.transform.localRotation = Quaternion.identity;
+        meshInstance.transform.localScale = Vector3.one;
+    }
 
 
-    
+    private void OnValidate()
+    {
+#if UNITY_EDITOR
+        if (Registry == null)
+            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+#endif
+    }
+
     private void Awake()
     {
-        Registry = Resources.Load<CollectableRegistry>("Resource/CollectableRegistry.asset");
+        if (Registry == null)
+            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
     }
 
     public void Start()
-    {/*
-        *maybe figure this out later, essentially a way to have a single "collectible display" prefab that you could assign a registered collectible to
-        *and have automatically be displayed by using MeshRenderer
-        GameObject meshPrefab = Registry.GetMesh(ThisCollectable);
-        if (meshPrefab != null)
-        {
-            Instantiate(meshPrefab, transform);
-        }
-         */
-        // TODO: I think it might be better if the collectables model/mesh was pulled from some kind of table/dictionary?
-        //       I only say that because of the way the player is going to need to switch out hats
+    {
+        spawnMesh(ThisCollectable);
         UpdateVisibility();
     }
 
@@ -73,4 +116,24 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
         gameObject.SetActive(DebugAlwaysDisplay || SaveDataManager.Instance.IsCollectableCollected(ThisCollectable));
 
     }
+
+    #region Debug Tools
+#if UNITY_EDITOR
+
+    [Button("Preview Collectable")]
+    private void PreviewHat()
+    {
+        if (Registry == null)
+        {
+            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+            if (Registry == null)
+            {
+                Debug.LogWarning("Registry not found.");
+                return;
+            }
+        }
+        spawnMesh(ThisCollectable);
+    }
+#endif
+    #endregion
 }

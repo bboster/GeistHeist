@@ -1,5 +1,6 @@
-using System;
-using System.Runtime.CompilerServices;
+﻿using System;
+using NaughtyAttributes;
+using UnityEditor;
 using UnityEngine;
 
 /*
@@ -7,59 +8,126 @@ using UnityEngine;
  * Creation Date: 10/23/25
  * Last Modified: 10/23/25
  * 
- * Brief Description: dont put this script on the player.
- * handles possession and such.
+ * Brief Description: Handles the display of the currently equipped wearable (like hats).
+ * Do NOT attach this to the player prefab directly.
  */
 public class WearableCollectible : MonoBehaviour
 {
-    PossessableObject player;
-    Transform wearable;
-    public CollectableRegistry Registry = Resources.Load<CollectableRegistry>("Resource/CollectableRegistry.asset");
-    private Collectable ThisCollectable;
-    private GameObject meshPrefab;
+    public CollectableRegistry Registry;
+    private Collectable currentHat;
+    private Collectable previousHat;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {   ThisCollectable = GetEquippedCollectable(SaveDataManager.Instance.EquipedHat());
-        meshPrefab = GetEquippedCollectableMesh(Registry);
-        equipHat(ThisCollectable);
-    }
-
-    // Update is called once per frame
-    void Update()
+    private void OnValidate()
     {
-
+#if UNITY_EDITOR
+        if (Registry == null)
+            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+#endif
     }
 
-    public void equipHat(Collectable  ThisCollectable)
-    { 
-            GameObject hat = Instantiate(meshPrefab);
-            hat.transform.localPosition = Vector3.zero;
-            hat.transform.localRotation = Quaternion.identity;
-            hat.transform.localScale = Vector3.one; // ensures correct size
+    private void Awake()
+    {
+        if (Registry == null)
+            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
     }
+
+    private void Start()
+    {
+        // Load what the player had equipped last
+        currentHat = GetEquippedCollectable(SaveDataManager.Instance.EquipedHat());
+        EquipHat(currentHat);
+    }
+
+    public void EquipHat(Collectable newCollectable)
+    {
+        previousHat = currentHat;
+        // Update the current reference
+        currentHat = newCollectable;
+
+        // Get the correct mesh *each time*
+        GameObject meshPrefab = Registry.GetMesh(currentHat);
+        if (meshPrefab == null)
+        {
+            Debug.LogWarning($"No mesh prefab found for {currentHat}.");
+            return;
+        }
+
+        // Find the Wearable node
+        GameObject wearableNode = GameObject.Find("Wearable");
+        if (wearableNode == null)
+        {
+            Debug.LogError("No 'Wearable' object found in the scene or player hierarchy!");
+            return;
+        }
+
+        // Destroy any existing hat
+        Transform wearableTransform = wearableNode.transform;
+        int childCount = wearableTransform.childCount;
+        Transform[] children = new Transform[childCount];
+        for (int i = 0; i < childCount; i++)
+            children[i] = wearableTransform.GetChild(i);
+
+        foreach (Transform child in children)
+        {
+            DestroyImmediate(child.gameObject); // or Destroy(child.gameObject) at runtime
+        }
+
+        // Instantiate the new hat
+        GameObject hat = Instantiate(meshPrefab, wearableTransform);
+        hat.transform.localPosition = Vector3.zero;
+        hat.transform.localRotation = Quaternion.identity;
+        hat.transform.localScale = Vector3.one;
+
+        if (Application.isPlaying)
+        {
+            ReplaceHat(previousHat);
+        }
+    }
+
+    public void ReplaceHat(Collectable previousHat)
+    {
+        // Move the current hat back to hub instead of destroying
+        if (previousHat != Collectable.None)
+        {
+            // Find all OptionalCollectable objects in the scene
+            var allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
+            foreach (var display in allHubDisplays)
+            {
+                Debug.Log($"Attemptin to call display.RespawnMes.{previousHat} in hub display.");
+                display.spawnMesh(previousHat); // currentHat = Collectable currently equipped
+            }
+
+            // No need to destroy currentHat, as it's an enum
+        }
+    }
+
     public Collectable GetEquippedCollectable(int collectableValue)
     {
-        if (collectableValue < 0)
-            return Collectable.None;
-
-        if (!Enum.IsDefined(typeof(Collectable), collectableValue))
+        if (collectableValue < 0 || !Enum.IsDefined(typeof(Collectable), collectableValue))
             return Collectable.None;
 
         return (Collectable)collectableValue;
     }
 
-    /// <summary>
-    /// Returns the mesh prefab for the currently equipped collectable (or null).
-    /// </summary>
-    public GameObject GetEquippedCollectableMesh(CollectableRegistry registry)
+    #region Debug Tools
+#if UNITY_EDITOR
+    [SerializeField] private Collectable PreviewCollectable;
+
+    [Button("Preview Hat")]
+    private void PreviewHat()
     {
-        if (registry == null)
-            return null;
+        if (Registry == null)
+        {
+            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+            if (Registry == null)
+            {
+                Debug.LogWarning("Registry not found.");
+                return;
+            }
+        }
 
-        if (ThisCollectable == Collectable.None)
-            return null;
-
-        return registry.GetMesh(ThisCollectable);
+        EquipHat(PreviewCollectable);
     }
+#endif
+    #endregion
 }
