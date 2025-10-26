@@ -13,7 +13,7 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.TryGetComponent(out ThirdPersonInputHandler handler))
+        if(other.gameObject == PlayerManager.Instance.CurrentObject)
         {
             LevelManager.Instance.UpdateCheckpoint(spawnLocation.position);
         }

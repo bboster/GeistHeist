@@ -50,7 +50,7 @@ public class GameManager : Singleton<GameManager>
 
     public static Action OnInitialize;
 
-    protected override async void Awake()
+    protected override void Awake()
     {
         base.Awake();
 
@@ -60,10 +60,10 @@ public class GameManager : Singleton<GameManager>
 
         // All of these should be singletons, which destroy themselves if they already exist, 
         // so its okay if we dont check if this doesnt exist first
-        await InstantiateManagers();
+        InstantiateManagers();
 
-        await LevelManager.Instance.InitializeLevelManager(PlayerStart.position);
-        await SpawnPlayer();
+        LevelManager.Instance.InitializeLevelManager(PlayerStart.position);
+        SpawnPlayer();
 
         // I saw a designer not understand why the camera wasnt working (they didnt have a cinemachine brain / the right settings on it).
         // So this should kinda streamline things.
