@@ -31,7 +31,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField, ShowIf(nameof(hasTimer))] private float timerDischargeInterval = 1f;
     [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
     [SerializeField, ShowIf(nameof(hasTimer))] [Range(0, 100)] private int timerDischargePercentage = 10;
-
     private float currentTimerPercentage = 100f;
     private bool canUpdateTimer;
     [SerializeField] private Image timerImage => GameManager.Instance.TimerImage;
@@ -39,11 +38,27 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private Coroutine dischargeCoroutine = null;
     private Coroutine rechargeCoroutine;
 
-    [HideInInspector] public bool CanUnPossess = true;
-    private Coroutine unpossessCoroutine=null;
-
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
     public Transform ghostSpawnPoint;
+
+    [Header("Materials")]
+    [SerializeField, Required, ShowAssetPreview(16, 16)] private Material PossessedMaterial;
+    [SerializeField, Required, ShowAssetPreview(16, 16)] private Material UnpossessedMaterial;
+
+    [HideInInspector] public bool CanUnPossess = true;
+    private Coroutine unpossessCoroutine=null;
+    private MeshRenderer meshRenderer;
+
+    
+    void Start()
+    {
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
+
+        if (UnpossessedMaterial != null)
+            meshRenderer.material = UnpossessedMaterial;
+        else
+            Debug.LogWarning("No unpossession material for " + gameObject.name);
+    }
 
     public IInputHandler GetInputHandler()
     {
@@ -63,6 +78,10 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         InputHandler.OnPossessionStart();
 
+        if(PossessedMaterial != null)
+            meshRenderer.material = PossessedMaterial;
+        else
+            Debug.LogWarning("No possession material for "+gameObject.name);
 
         if (unpossessCoroutine == null)
             unpossessCoroutine = StartCoroutine(WaitForUnpossess());
@@ -99,6 +118,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
             Debug.LogError("Trying to unpossess early");
             return;
         }
+
+        if (PossessedMaterial != null)
+            meshRenderer.material = UnpossessedMaterial;
+        else
+            Debug.LogWarning("No unpossession material for " + gameObject.name);
 
         InputHandler.OnPossessionEnded();
 
