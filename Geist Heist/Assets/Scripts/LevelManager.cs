@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 
-public class LevelManager : Singleton<LevelManager>
+public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 {
     private int previousLevel = -1;
 
@@ -18,7 +18,6 @@ public class LevelManager : Singleton<LevelManager>
     protected override void Awake()
     {
         base.Awake();
-        DontDestroyOnLoad(this);
     }
 
 #if UNITY_EDITOR

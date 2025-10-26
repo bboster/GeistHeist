@@ -54,6 +54,9 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
 
+        if (this == null)
+            return;
+
         // this can be destroyed bc it is a singleton
         if (this == null || gameObject == null) 
             return;
