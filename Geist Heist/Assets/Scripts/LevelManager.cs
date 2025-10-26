@@ -45,6 +45,7 @@ public class LevelManager : Singleton<LevelManager>
             previousLevel = SceneManager.GetActiveScene().buildIndex;
         }
 
+        PlayerManager.Instance.PlayerGhostObject.gameObject.transform.position = SpawnLocation;
         return Task.CompletedTask;
     }
 

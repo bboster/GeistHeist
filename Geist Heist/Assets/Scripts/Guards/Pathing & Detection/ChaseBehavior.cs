@@ -60,7 +60,7 @@ public class ChaseBehavior : GuardMovement
     /// <returns></returns>
     private Vector3 GetPlayerLocation()
     {
-        return GameManager.Instance.Player.transform.position; //REPLACE WITH CENTRALIZED REFERENCE FROM A MANAGER ONCE ABLE.
+        return PlayerManager.Instance.PlayerGhostObject.transform.position;
     }
 
     ~ChaseBehavior()

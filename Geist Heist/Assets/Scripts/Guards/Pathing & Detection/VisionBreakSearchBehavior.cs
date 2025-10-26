@@ -21,7 +21,7 @@ public class VisionBreakSearchBehavior : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        SearchLocation = GameManager.Instance.Player.transform.position;
+        SearchLocation = PlayerManager.Instance.PlayerGhostObject.transform.position;
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;

@@ -13,9 +13,12 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject == PlayerManager.Instance.CurrentObject)
+        if(other.gameObject.TryGetComponent(out PossessableObject obj))
         {
-            LevelManager.Instance.UpdateCheckpoint(spawnLocation.position);
+            if (obj == PlayerManager.Instance.CurrentObject)
+            {
+                LevelManager.Instance.UpdateCheckpoint(spawnLocation.position);
+            }
         }
     }
 }

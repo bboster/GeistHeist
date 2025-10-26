@@ -38,33 +38,39 @@ public class VisionStimulus : Stimulus
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.Equals(GameManager.Instance.Player) && hasSeenPlayer == false)
+        if (other.gameObject.TryGetComponent(out PossessableObject obj))
         {
-            Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
-
-            Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
-            float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 2;
-
-            /*Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer);*/
-            GuardDebug.PersistentRay(spawnLocation, direction, 2, GetComponent<GuardDebugger>());
-
-            if (!Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer))
+            if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
             {
-                hasSeenPlayer = true;
-                TriggerStimulus();
-            }
+                Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
 
-            if(info.collider != null)
-                Debug.Log(info.collider.gameObject.name);
+                Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
+                float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 2;
+
+                /*Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer);*/
+                GuardDebug.PersistentRay(spawnLocation, direction, 2, GetComponent<GuardDebugger>());
+
+                if (!Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer))
+                {
+                    hasSeenPlayer = true;
+                    TriggerStimulus();
+                }
+
+                if (info.collider != null)
+                    Debug.Log(info.collider.gameObject.name);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.Equals(GameManager.Instance.Player) && hasSeenPlayer == true)
+        if(other.gameObject.TryGetComponent(out PossessableObject obj))
         {
-            hasSeenPlayer = false;
-            parentController.OnVisionBroken();
+            if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
+            {
+                hasSeenPlayer = false;
+                parentController.OnVisionBroken();
+            }
         }
     }
 

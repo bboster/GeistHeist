@@ -38,7 +38,7 @@ public class GameManager : Singleton<GameManager>
     [Header("Other Constants")]
     [SerializeField, Required] GameObject CameraPrefab;
     [SerializeField, Required] GameObject PlayerPrefab;
-    [SerializeField, Required] Transform PlayerStart;
+    [Required] public Transform PlayerStart;
 
     [HideInInspector] public GameObject InteractionCanvas;
     [HideInInspector] public Slider TimerSlider;
@@ -62,7 +62,6 @@ public class GameManager : Singleton<GameManager>
         // so its okay if we dont check if this doesnt exist first
         InstantiateManagers();
 
-        LevelManager.Instance.InitializeLevelManager(PlayerStart.position);
         SpawnPlayer();
 
         // I saw a designer not understand why the camera wasnt working (they didnt have a cinemachine brain / the right settings on it).
@@ -94,8 +93,10 @@ public class GameManager : Singleton<GameManager>
     /// <returns></returns>
     public Task SpawnPlayer()
     {
-        Player = Instantiate(PlayerPrefab, LevelManager.Instance.SpawnLocation, Quaternion.identity);
-        PlayerManager.Instance.InitializePlayerManager();
+        /*Player = Instantiate(PlayerPrefab, LevelManager.Instance.SpawnLocation, Quaternion.identity);*/
+        //PlayerManager.Instance.InitializePlayerManager();
+
+        
 
         return Task.CompletedTask;
     }
