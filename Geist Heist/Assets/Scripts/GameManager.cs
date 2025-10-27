@@ -125,7 +125,6 @@ public class GameManager : Singleton<GameManager>
         TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
         TimerSlider.gameObject.SetActive(false);
 
-        InteractionCanvas = Instantiate(InteractionCanvasPrefab);
         Instantiate(PauseMenuPrefab);
 
         return Task.CompletedTask;
