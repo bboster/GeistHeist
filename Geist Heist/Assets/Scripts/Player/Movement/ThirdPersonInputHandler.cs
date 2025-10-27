@@ -146,6 +146,8 @@ public class ThirdPersonInputHandler : IInputHandler
         // Filter interactables in spherecast
         var filteredSphereCastResults = GetAllInteractablesSphereCast();
 
+        if(filteredSphereCastResults.IsNullOrEmpty()) return null;
+
         // Sort by which one the player is looking at most. 
         return filteredSphereCastResults
             .OrderBy(r => 
