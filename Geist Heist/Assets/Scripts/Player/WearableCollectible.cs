@@ -24,7 +24,7 @@ public class WearableCollectible : MonoBehaviour
     private void Awake()
     {
         if (Registry == null)
-            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+            Registry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
     }
 
     private void Start()
@@ -113,7 +113,7 @@ public class WearableCollectible : MonoBehaviour
     {
         if (Registry == null)
         {
-            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+            Registry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
             if (Registry == null)
             {
                 Debug.LogWarning("Registry not found.");

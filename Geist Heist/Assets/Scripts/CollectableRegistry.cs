@@ -12,6 +12,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CollectableRegistry", menuName = "Data/Collectable Registry")]
 public class CollectableRegistry : ScriptableObject
 {
+    public const string RESOURCE_PATH = "CollectableRegistry";
+
     [System.Serializable]
     public class CollectableEntry
     {

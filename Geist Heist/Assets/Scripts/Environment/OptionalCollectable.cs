@@ -156,7 +156,7 @@ public class OptionalCollectable : MonoBehaviour
         if (EditorApplication.isPlayingOrWillChangePlaymode)
             return;
         if (Registry == null)
-            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+            Registry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
         AutoRegisterToRegistry();
     }
 

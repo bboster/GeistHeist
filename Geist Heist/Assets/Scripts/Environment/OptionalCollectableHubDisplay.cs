@@ -102,12 +102,15 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
             existingMesh.transform.localPosition = Vector3.zero;
             existingMesh.transform.localRotation = Quaternion.identity;
 
+            existingMesh.gameObject.SetActive(true);
             Debug.Log($"[{name}] Updated existing mesh for {ThisCollectable}");
         }
         else
         {
             // If no mesh exists yet, instantiate a new one
             MeshRenderer meshInstance = Instantiate(newMeshPrefab, transform);
+            meshInstance.gameObject.SetActive(true);
+
             meshInstance.transform.localPosition = Vector3.zero;
             meshInstance.transform.localRotation = Quaternion.identity;
             meshInstance.transform.localScale = Vector3.one;
@@ -122,14 +125,14 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     {
 #if UNITY_EDITOR
         if (Registry == null)
-            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+            Registry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
 #endif
     }
 
     private void Awake()
     {
         if (Registry == null)
-            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+            Registry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
     }
 
     public void Start()
@@ -148,11 +151,11 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 #if UNITY_EDITOR
 
     [Button("Preview Collectable")]
-    private void PreviewHat()
+    private void PreviewCollectable()
     {
         if (Registry == null)
         {
-            Registry = Resources.Load<CollectableRegistry>("CollectableRegistry");
+            Registry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
             if (Registry == null)
             {
                 Debug.LogWarning("Registry not found.");
