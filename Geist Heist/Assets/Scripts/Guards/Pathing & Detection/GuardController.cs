@@ -143,7 +143,7 @@ public class GuardController : MonoBehaviour
     /// <summary>
     /// Starts the currently selected behavior
     /// </summary>
-    private void StartBehavior()
+    public void StartBehavior()
     {
         if (currentBehavior != null)
         {
@@ -158,7 +158,7 @@ public class GuardController : MonoBehaviour
     /// <summary>
     /// Stops the currently running behavior
     /// </summary>
-    private void StopBehavior()
+    public void StopBehavior()
     {
         if(currentBehavior != null)
             currentBehavior.StopBehavior();
