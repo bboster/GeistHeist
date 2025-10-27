@@ -4,9 +4,9 @@ using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 /*
- * Contributors: Sky
+ * Contributors: Sky, Toby
  * Creation Date: 10/2/25
- * Last Modified: 10/7/25
+ * Last Modified: 10/27/25
  * 
  * Brief Description: Input Handler for the Toy Car, handles movement and actions for the Toy Car
  */
@@ -22,6 +22,10 @@ public class ToyCar : IInputHandler
     [SerializeField] private float maxStrength;
     [Tooltip("How much hold charges up by per second.")]
     [SerializeField] private float chargeRate;
+    [Tooltip("When not held, how much hold charges down by per second.")]
+    [SerializeField] private float chargeLossRates;
+
+    private float secondsToCharge; // calculated in start => (maxStrength-minStrength) / chargeRate
     //realtime hold strength
     private float chargeAmount;
 
@@ -37,6 +41,7 @@ public class ToyCar : IInputHandler
 
     private void Start()
     {
+        secondsToCharge = (maxStrength- minStrength) / chargeRate;
         thirdPersoncinemachineCamera.SetActive(false);
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();  
@@ -54,7 +59,15 @@ public class ToyCar : IInputHandler
     // Called every frame while player is possessing.
     public override void WhilePossessingUpdate()
     {
-        //chargeMeter.UpdateCharge
+        if (InputEvents.ActionPressed)
+        {
+            Debug.Log(InputEvents.ActionHeldTime);
+            chargeMeter.UpdateCharge(InputEvents.ActionHeldTime, secondsToCharge);
+        }
+        else
+        {
+            chargeMeter.UpdateCharge((chargeAmount-minStrength) / (maxStrength-minStrength), secondsToCharge);
+        }
     }
 
     #region action
@@ -91,6 +104,7 @@ public class ToyCar : IInputHandler
                 freezeCoroutine = StartCoroutine(ReFreezeConstraints());
             }
         }
+        chargeAmount -= Time.deltaTime * chargeRate;
     }
 
     public override void OnActionCanceled(float secondsHeld)

@@ -19,7 +19,7 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
     [SerializeField] private float minAngle = 90;
     [Tooltip("Angle of the ticker at the right")]
     [SerializeField] private float maxAngle = -70;
-    [SerializeField] private float tickStrength = 15;
+    [SerializeField] private float shakeStrength = 15;
     [SerializeField] private float shakeSpeed = 3;
 
     [Header("Opacity Settings")]
@@ -55,12 +55,15 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
         {
             float t_extra = (heldTime - timeForMaxCharge) * shakeSpeed;
 
-            // clamp 0 <-> 2 then -1 <-> 1
-            t_extra = Mathf.PingPong(t_extra, 2) - 1;
+            // ping pong 0 <-> 1
+            t_extra = Mathf.PingPong(t_extra, 1);
 
             // Add shakey affect
-            z_angle += Mathf.Lerp(-tickStrength, tickStrength, t_extra);
+            z_angle += Mathf.Lerp(-shakeStrength, shakeStrength, t_extra);
         }
+        
+        // Smooth
+        z_angle = Mathf.LerpAngle(pointerTransform.eulerAngles.z, z_angle, Time.deltaTime * 10);
 
         // Apply angle
         pointerTransform.eulerAngles = pointerTransform.eulerAngles.WithZ(z_angle);
@@ -78,10 +81,14 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
 
         float a;
 
-        // if charge is decreasing or zero
-        if (heldTime < lastHeldTime || heldTime == 0)
+        if(heldTime <= 0)
         {
-            a = heldTime / SecondsToHide;
+            return 0;
+        }
+        // if charge is decreasing
+        else if (heldTime < lastHeldTime)
+        {
+            a = currentOpacity - (Time.deltaTime * SecondsToHide);
         }
         // if charge is increasing
         else

@@ -64,9 +64,9 @@ public class InputEvents : Singleton<InputEvents>
 
     #region Time Held
     private static float moveTimeStarted, actionTimeStarted, interactTimeStarted = -1; // other inputs can be added but i dont think theyre super necessary.
-    public static float MoveHeldTime => MovePressed ? Time.deltaTime - moveTimeStarted : 0;
-    public static float ActionHeldTime => ActionPressed ? Time.deltaTime - actionTimeStarted : 0;
-    public static float InteractHeldTime => InteractPressed ? Time.deltaTime - interactTimeStarted : 0;
+    public static float MoveHeldTime => MovePressed ? Time.time - moveTimeStarted : 0;
+    public static float ActionHeldTime => ActionPressed ? Time.time - actionTimeStarted : 0;
+    public static float InteractHeldTime => InteractPressed ? Time.time - interactTimeStarted : 0;
     #endregion
 
     private PlayerInput playerInput;

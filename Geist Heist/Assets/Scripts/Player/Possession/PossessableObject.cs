@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 10/21/25
+ * Last Modified: 10/27/25
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -22,7 +22,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
     public Transform ghostSpawnPoint;
-    [SerializeField] private Canvas possessableCanvas;
 
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
@@ -42,6 +41,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private IInputHandler inputHandler;
     private Slider timerSlider => GameManager.Instance.TimerSlider;
     private Coroutine timerCoroutine;
+    private Canvas possessableCanvas;
 
 
     void Start()
@@ -52,6 +52,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
             meshRenderer.material = UnpossessedMaterial;
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
+
+        if(possessableCanvas == null)
+            possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
+
+        if(possessableCanvas != null)
+            possessableCanvas.gameObject.SetActive(false);
     }
 
     public IInputHandler GetInputHandler()
@@ -70,7 +76,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
-        possessableCanvas.gameObject.SetActive(true);
+        if (possessableCanvas != null)
+            possessableCanvas.gameObject.SetActive(true);
 
         InputHandler.OnPossessionStart();
 
@@ -101,8 +108,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
-        // this breaks the current timer, but thats okay because it will be moved to being off of the possessable object
-        possessableCanvas.gameObject.SetActive(false);
+        // this breaks the current cooldown timer, but thats okay because it will be moved to being off of the possessable object
+        if (possessableCanvas != null)
+            possessableCanvas.gameObject.SetActive(false);
 
         if (!CanUnPossess)
         {

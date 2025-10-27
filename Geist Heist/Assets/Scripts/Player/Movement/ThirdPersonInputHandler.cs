@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/7/25
+ * Last Modified: 10/27/25
  * 
  * Brief Description: Handles third person movement and interaction. 
  * This script should only be used for the ghost
