@@ -36,6 +36,21 @@ public class PlayerManager : Singleton<PlayerManager>
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+    }
+
+    public void InitializePlayerManager()
+    {
+        if (PlayerGhostObject == null)
+            PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
+
+        CurrentObject = PlayerGhostObject;
+        RegisterInputs(PlayerGhostObject);
+        camera = Camera.main;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void PossessObject(PossessableObject possessable)

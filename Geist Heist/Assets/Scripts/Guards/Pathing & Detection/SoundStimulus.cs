@@ -21,14 +21,7 @@ public class SoundStimulus : Stimulus
         StartCoroutine(SoundLength());
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.TryGetComponent<GuardController>(out GuardController controller))
-        {
-            contactedGuard = controller;
-            TriggerStimulus();
-        }
-    }
+
 
     /// <summary>
     /// Sends the stimulus to the guard recieving it
