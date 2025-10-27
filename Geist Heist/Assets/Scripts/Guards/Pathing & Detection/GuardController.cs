@@ -27,7 +27,7 @@ public class GuardController : MonoBehaviour
     [SerializeField, Tooltip("Default behavior for the enemy")]
     private Behavior defaultBehavior;
 
-    [SerializeField]private Behavior currentBehavior;
+    [SerializeField] public Behavior currentBehavior;
 
     private Coroutine activeBehaviorLoop;
 
