@@ -23,7 +23,7 @@ public class ToyCar : IInputHandler
     [Tooltip("How much hold charges up by per second.")]
     [SerializeField] private float chargeRate;
     //realtime hold strength
-    private float currentStrength;
+    private float chargeAmount;
 
     private Rigidbody rb;
     private PossessableObject possessableObject;
@@ -33,8 +33,7 @@ public class ToyCar : IInputHandler
     private bool IsLeaving = false;
 
 
-    [SerializeField] private Image ChargeUI;
-    [SerializeField] private GameObject Images;
+    [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
     private void Start()
     {
@@ -43,29 +42,44 @@ public class ToyCar : IInputHandler
         possessableObject = GetComponent<PossessableObject>();  
     }
 
+    public override void OnPossessionStart()
+    {
+        chargeMeter.OnPossessionStarted();
+    }
+
+    public override void OnPossessionEnded()
+    {
+    }
+
+    // Called every frame while player is possessing.
+    public override void WhilePossessingUpdate()
+    {
+        //chargeMeter.UpdateCharge
+    }
+
     #region action
     public override void OnActionStarted()
     {
         if (rb.linearVelocity == Vector3.zero)
         {
-            currentStrength = minStrength;
-            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
-            Images.SetActive(true);
+            chargeAmount = minStrength;
+            //ChargeUI.fillAmount = (chargeAmount - minStrength) / (maxStrength - minStrength);
+            //Images.SetActive(true);
         }
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
         if (rb.linearVelocity == Vector3.zero)
         {
-            currentStrength += chargeRate * Time.deltaTime;
+            chargeAmount += chargeRate * Time.deltaTime;
 
-            if (currentStrength > maxStrength)
+            if (chargeAmount > maxStrength)
             {
-                currentStrength = maxStrength;
+                chargeAmount = maxStrength;
             }
 
-            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
+            //ChargeUI.fillAmount = (chargeAmount - minStrength) / (maxStrength - minStrength);
         }
     }
     public override void WhileActionNotHeld()
@@ -79,13 +93,13 @@ public class ToyCar : IInputHandler
         }
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
         if (rb.linearVelocity == Vector3.zero)
         {
             UnFreezePosition();
-            rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
-            Images.SetActive(false);
+            rb.AddForce(gameObject.transform.forward * chargeAmount, ForceMode.Impulse);
+            //Images.SetActive(false);
         }
     }
 
@@ -127,7 +141,6 @@ public class ToyCar : IInputHandler
         {
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;
-            Images.SetActive(false);
             if (freezeCoroutine == null)
             { 
                 freezeCoroutine = StartCoroutine(ReFreezeConstraints());
@@ -135,22 +148,13 @@ public class ToyCar : IInputHandler
         }
     }
 
-    public override void WhileInteractHeld()
+    public override void WhileInteractHeld(float secondsHeld)
     { }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractCanceled(float secondsHeld)
     {
     }
 
-    public override void OnPossessionStart()
-    {
-        IsLeaving = false;
-    }
-
-    public override void OnPossessionEnded()
-    {
-        Images.SetActive(false);
-    }
     #endregion
 
     #region Move
@@ -158,14 +162,14 @@ public class ToyCar : IInputHandler
     {
 
     }
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
     }
 
     public override void WhileMoveNotHeld()
     {
     }
-    public override void OnMoveCanceled() { }
+    public override void OnMoveCanceled(float secondsHeld) { }
     #endregion
 
 
@@ -180,5 +184,7 @@ public class ToyCar : IInputHandler
         Gizmos.color = Color.green;
         Gizmos.DrawRay(gameObject.transform.position, gameObject.transform.forward);
     }
+
+    
 }
 

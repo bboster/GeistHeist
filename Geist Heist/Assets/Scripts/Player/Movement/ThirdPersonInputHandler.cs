@@ -54,7 +54,7 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
     // WhilePossessingUpdate is called once per frame
-    void Update()
+    public override void WhilePossessingUpdate()
     {
         TurnOnInteractableCanvas();
     }
@@ -76,7 +76,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
     }
 
@@ -85,7 +85,7 @@ public class ThirdPersonInputHandler : IInputHandler
         //throw new NotImplementedException();
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
     }
 
@@ -116,11 +116,11 @@ public class ThirdPersonInputHandler : IInputHandler
         }
     }
 
-    public override void WhileInteractHeld()
+    public override void WhileInteractHeld(float secondsHeld)
     {
     }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractCanceled(float secondsHeld)
     {
     }
 
@@ -146,7 +146,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         
     }
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
@@ -166,7 +166,7 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
 
-    public override void OnMoveCanceled(){}
+    public override void OnMoveCanceled(float secondsHeld) {}
     #endregion
 
     #region  Interaction

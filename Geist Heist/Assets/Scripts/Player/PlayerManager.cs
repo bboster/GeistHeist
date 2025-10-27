@@ -112,9 +112,9 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionNotHeld.AddListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.AddListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.AddListener(input.OnInteractStarted);
-        InputEvents.PossessHeld.AddListener(input.WhileInteractHeld);
-        InputEvents.PossessCanceled.AddListener(input.OnInteractCanceled);
+        InputEvents.InteractStarted.AddListener(input.OnInteractStarted);
+        InputEvents.InteractHeld.AddListener(input.WhileInteractHeld);
+        InputEvents.InteractCanceled.AddListener(input.OnInteractCanceled);
     }
 
     public void DeRegisterInputs(PossessableObject possessable)
@@ -130,14 +130,16 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionNotHeld.RemoveListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.RemoveListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.RemoveListener(input.OnInteractStarted);
-        InputEvents.PossessHeld.RemoveListener(input.WhileInteractHeld);
-        InputEvents.PossessCanceled.RemoveListener(input.OnInteractCanceled);
+        InputEvents.InteractStarted.RemoveListener(input.OnInteractStarted);
+        InputEvents.InteractHeld.RemoveListener(input.WhileInteractHeld);
+        InputEvents.InteractCanceled.RemoveListener(input.OnInteractCanceled);
     }
 
     private void Update()
     {
         if (CurrentObject != null)
             CurrentObject.WhilePossessingUpdate();
+        if (currentInputHandler != null)
+            currentInputHandler.WhilePossessingUpdate();
     }
 }

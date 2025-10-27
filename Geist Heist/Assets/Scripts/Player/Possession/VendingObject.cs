@@ -46,6 +46,10 @@ public class VendingObject : IInputHandler, IInteractable
         Images.SetActive(false);
     }
 
+    public override void WhilePossessingUpdate()
+    {
+    }
+
     #region action
     public override void OnActionStarted()
     {
@@ -63,7 +67,7 @@ public class VendingObject : IInputHandler, IInteractable
         }
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
         if (!Tap)
         {
@@ -76,7 +80,7 @@ public class VendingObject : IInputHandler, IInteractable
         }
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
         if (!Tap)
         {
@@ -101,14 +105,14 @@ public class VendingObject : IInputHandler, IInteractable
         }
     }
 
-    public override void WhileInteractHeld()
+    public override void WhileInteractHeld(float secondsHeld)
     { }
     public override void WhileActionNotHeld()
     {
         //throw new System.NotImplementedException();
     }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractCanceled(float secondsHeld)
     { }
 
     #endregion
@@ -118,7 +122,7 @@ public class VendingObject : IInputHandler, IInteractable
     {
 
     }
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
     }
 
@@ -127,7 +131,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     }
 
-    public override void OnMoveCanceled() { }
+    public override void OnMoveCanceled(float secondsHeld) { }
 
     #endregion
 
@@ -136,5 +140,5 @@ public class VendingObject : IInputHandler, IInteractable
         PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
     }
 
-    
+   
 }

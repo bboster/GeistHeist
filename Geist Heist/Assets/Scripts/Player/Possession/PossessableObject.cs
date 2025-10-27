@@ -17,12 +17,13 @@ using System.Collections;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
-    [HideInInspector] private IInputHandler inputHandler;
+    
     [Required] public CinemachineCamera CinemachineCamera;
 
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
     public Transform ghostSpawnPoint;
+    [SerializeField] private Canvas possessableCanvas;
+
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
     [SerializeField, ShowIf(nameof(hasTimer))] private float timerTime = 5f;
@@ -32,14 +33,17 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField, Required, ShowAssetPreview(16, 16)] private Material UnpossessedMaterial;
 
     private float currentTimerTime;
+    
+    [HideInInspector] public bool CanUnPossess = true;
+    public IInputHandler InputHandler => GetInputHandler();
+
+    private Coroutine unpossessCoroutine=null;
+    private MeshRenderer meshRenderer;
+    private IInputHandler inputHandler;
     private Slider timerSlider => GameManager.Instance.TimerSlider;
     private Coroutine timerCoroutine;
 
-    [HideInInspector] public bool CanUnPossess = true;
-    private Coroutine unpossessCoroutine=null;
-    private MeshRenderer meshRenderer;
 
-    
     void Start()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
@@ -66,6 +70,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
+        possessableCanvas.gameObject.SetActive(true);
+
         InputHandler.OnPossessionStart();
 
         if(PossessedMaterial != null)
@@ -95,6 +101,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
+        // this breaks the current timer, but thats okay because it will be moved to being off of the possessable object
+        possessableCanvas.gameObject.SetActive(false);
+
         if (!CanUnPossess)
         {
             Debug.LogError("Trying to unpossess early");
