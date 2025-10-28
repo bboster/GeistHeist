@@ -58,6 +58,7 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenPauseMenu()
     {
+        confirmationPopup.HideConfirmationPopup();
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.IsPaused = true;
         pauseScreenParent.gameObject.SetActive(true);
@@ -67,6 +68,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ClosePauseMenu()
     {
+        confirmationPopup.HideConfirmationPopup();
         Debug.Log("Pause Menu closed");
         GameManager.Instance.IsPaused = false;
         pauseScreenParent.gameObject.SetActive(false);
