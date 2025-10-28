@@ -22,10 +22,14 @@ public class GuardController : MonoBehaviour
     [Header("Design Values")]
     [SerializeField] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
+    [Tooltip("The location a guard will return to by default")]
+    [Required] public Transform ReturnLocation;
+    [Tooltip("The rotation the guard should face by default, match this to its placement in the level")]
+    public float DefaultRotation;
 
     [Header("Behaviors")]
-    [SerializeField, Tooltip("Default behavior for the enemy")]
-    private Behavior defaultBehavior;
+    [Tooltip("Default behavior for the enemy")]
+    [Required] public Behavior DefaultBehavior;
 
     [SerializeField] public Behavior currentBehavior;
 
@@ -38,6 +42,7 @@ public class GuardController : MonoBehaviour
 
     [ShowIf("showProgrammingValues")]
     [SerializeField] private Animator animator;
+
 
     public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
@@ -76,7 +81,7 @@ public class GuardController : MonoBehaviour
         if (CheckBehaviors() == false)
             return false;
 
-        currentBehavior = Instantiate(defaultBehavior);
+        currentBehavior = Instantiate(DefaultBehavior);
         StartBehavior();
 
         return true;
@@ -90,7 +95,7 @@ public class GuardController : MonoBehaviour
     /// <exception cref="Exception"></exception>
     private bool CheckBehaviors()
     {
-        if (defaultBehavior == null)
+        if (DefaultBehavior == null)
         {
             Debug.LogError(gameObject.name + " HAS NO DEFAULT BEHAVIOR");
             return false;
