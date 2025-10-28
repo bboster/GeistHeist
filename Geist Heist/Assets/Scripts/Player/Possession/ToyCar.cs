@@ -26,6 +26,7 @@ public class ToyCar : IInputHandler
     [SerializeField] private float chargeRate;
     [Tooltip("When not held, how much hold charges down by per second.")]
     [SerializeField] private float chargeLossRates;
+    [SerializeField] private float delayToUpdateSpeedometer = 0.5f;
 
     private float secondsToCharge; // calculated in start => (maxStrength-minStrength) / chargeRate
     //realtime hold strength
@@ -67,7 +68,11 @@ public class ToyCar : IInputHandler
         }
         else
         {
-            chargeMeter.UpdateCharge((chargeAmount-minStrength) / (maxStrength-minStrength), secondsToCharge);
+            if (InputEvents.ActionReleasedTime < delayToUpdateSpeedometer)
+                return;
+
+            float t = (chargeAmount - minStrength) / (maxStrength - minStrength);
+            chargeMeter.UpdateCharge(t*secondsToCharge, secondsToCharge);
         }
     }
 
@@ -86,8 +91,6 @@ public class ToyCar : IInputHandler
             {
                 chargeAmount = maxStrength;
             }
-
-            //ChargeUI.fillAmount = (chargeAmount - minStrength) / (maxStrength - minStrength);
         }
     }
 
@@ -101,8 +104,8 @@ public class ToyCar : IInputHandler
             }
         }
 
-        // dont update the speedometer for a sec... (sorry to hard code this but i think it will look cool
-        if (secondsNotHeld < 0.2)
+        // dont update the speedometer for a sec..
+        if (secondsNotHeld < delayToUpdateSpeedometer)
             return;
 
         chargeAmount -= Time.deltaTime * chargeLossRates;
