@@ -26,6 +26,7 @@ public class ToyCar : IInputHandler
     private float currentStrength;
 
     private Rigidbody rb;
+    private bool physicsEnabled = false;
     private PossessableObject possessableObject;
 
     private Coroutine freezeCoroutine;
@@ -41,6 +42,16 @@ public class ToyCar : IInputHandler
         thirdPersoncinemachineCamera.SetActive(false);
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();  
+    }
+
+    private void FixedUpdate()
+    {
+        //consistent speed for car
+        if (physicsEnabled)
+        {
+            rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
+            physicsEnabled = false;
+        }
     }
 
     #region action
@@ -84,7 +95,8 @@ public class ToyCar : IInputHandler
         if (rb.linearVelocity == Vector3.zero)
         {
             UnFreezePosition();
-            rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
+            //for fixed update to handle physics better
+            physicsEnabled = true;
             Images.SetActive(false);
         }
     }
