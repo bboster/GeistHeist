@@ -60,6 +60,14 @@ public class ConfirmationPopup : MonoBehaviour
         StaticUtilities.EnableCanvasGroup(canvasGroup);
     }
 
+    public void HideConfirmationPopup()
+    {
+        if (canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
+
+        StaticUtilities.DisableCanvasGroup(canvasGroup);
+    }
+
     void OnCancelButtonPressed()
     {
         Time.timeScale = oldTimeScale;

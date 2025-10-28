@@ -15,8 +15,11 @@ public class DoorInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField][Scene] private string sceneName;
 
+    [InfoBox("The loading screen is the parent that manages the loading card\n\nThe loading card should be level-specific, so have one for each level.")]
     // TODO: can this be moved to some cached/shared confirmation canvas? so we dont have to respawn it everytime.
-    [SerializeField, Required] private GameObject loadingCardPrefab;
+    [SerializeField, Required] private GameObject loadingScreenPrefab;
+    [SerializeField, Required("Make sure each level has its own level-specific title card")] 
+    private GameObject levelLoadingCardPrefab;
 
     [Header("Popup text")]
     [SerializeField] private string confirmationText = "Go to _____?";
@@ -40,13 +43,14 @@ public class DoorInteractable : MonoBehaviour, IInteractable
     void OnConfrimPressed(GameObject confirmationPopup)
     {
 
-        if (loadingCardPrefab == null)
+        if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);
             GameManager.Instance.NextLevel(sceneName);
             return;
         }
-        Instantiate(loadingCardPrefab);
+        var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
+        levelTransition.StartTransition(sceneName, levelLoadingCardPrefab);
 
     }
 }
