@@ -16,6 +16,7 @@ public class VisionStimulus : Stimulus
     #region Variable Declarations
 
     private bool hasSeenPlayer = false;
+    private bool playerObjectSeen = false;
     private Coroutine timer;
 
     [Header("Progamming")]
@@ -40,6 +41,11 @@ public class VisionStimulus : Stimulus
     [SerializeField] private GuardController parentController;
 
     #endregion
+
+    private void Awake()
+    {
+        PossessableObject.OnActionPerformed += ActionDetected;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -66,9 +72,9 @@ public class VisionStimulus : Stimulus
                 if (info.collider != null)
                     Debug.Log(info.collider.gameObject.name);
             }
-            else if(obj.Equals(PlayerManager.Instance.CurrentObject) && obj.IsHidingObject == false)
+            else if(obj.Equals(PlayerManager.Instance.CurrentObject))
             {
-                parentController.RecieveStimulus(this, GuardStates.possessableSearch, PlayerManager.Instance.CurrentObject.transform.position);
+                playerObjectSeen = true;
             }
         }
     }
@@ -80,6 +86,10 @@ public class VisionStimulus : Stimulus
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
             {
                 timer = StartCoroutine(VisionBreakTimer());
+            }
+            else if(obj.Equals(PlayerManager.Instance.CurrentObject))
+            {
+                playerObjectSeen = false;
             }
         }
     }
@@ -103,5 +113,18 @@ public class VisionStimulus : Stimulus
     public override void TriggerStimulus()
     {
         parentController.RecieveStimulus(this, stateToChangeTo);
+    }
+
+    private void ActionDetected()
+    {
+        if(playerObjectSeen == true)
+        {
+            parentController.RecieveStimulus(this, stateToChangeTo);
+        }
+    }
+
+    private void OnDisable()
+    {
+        PossessableObject.OnActionPerformed -= ActionDetected;
     }
 }

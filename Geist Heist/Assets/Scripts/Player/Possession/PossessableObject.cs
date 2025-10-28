@@ -17,9 +17,6 @@ using System.Collections;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    [Tooltip("Tells the guards whether or not to enter search upon seeing a possessed form of this object")]
-    public bool IsHidingObject;
-
     [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
     [HideInInspector] private IInputHandler inputHandler;
     [Required] public CinemachineCamera CinemachineCamera;
@@ -42,6 +39,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private Coroutine unpossessCoroutine=null;
     private MeshRenderer meshRenderer;
 
+    public static Action OnActionPerformed;
     
     void Start()
     {
