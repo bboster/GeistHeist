@@ -1,13 +1,14 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 10/2/25
+ * Last Modified: 10/23/25
  * 
  * Brief Description: dont put this script on the player.
  * handles possession and such.
  */
 
 using NaughtyAttributes;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,8 +25,27 @@ public class PlayerManager : Singleton<PlayerManager>
     private InputEvents inputEvents => InputEvents.Instance;
     private Camera camera;
 
+    private CinemachineOrbitalFollow possessableCOF;
+    private CinemachineOrbitalFollow playerCOF;
+
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
+    {
+        if (PlayerGhostObject == null)
+            PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
+
+        CurrentObject = PlayerGhostObject;
+        RegisterInputs(PlayerGhostObject);
+        camera = Camera.main;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        playerCOF = PlayerGhostObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+        LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+    }
+
+    public void InitializePlayerManager()
     {
         if (PlayerGhostObject == null)
             PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
@@ -40,6 +60,10 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessObject(PossessableObject possessable)
     {
+        //make transition not crazy
+        possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+        possessableCOF.HorizontalAxis.Value = playerCOF.HorizontalAxis.Value;
+
         possessable.CinemachineCamera.gameObject.SetActive(true);
         PlayerGhostObject.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(false);
@@ -64,6 +88,10 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostSpawnPoint.position;
         }
+
+        //make transition not crazy
+        possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+        playerCOF.HorizontalAxis.Value = possessableCOF.HorizontalAxis.Value;
 
         PlayerGhostObject.CinemachineCamera.gameObject.SetActive(true);
         possessable.CinemachineCamera.gameObject.SetActive(false);

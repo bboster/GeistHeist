@@ -13,7 +13,7 @@ using NaughtyAttributes;
 public abstract class Stimulus : MonoBehaviour
 {
 
-    public enum StimulusType { sight, sound, sightBreak }
+    public enum StimulusType { sight, sound, sightBreak, proximity }
     [Header("Stimulus Values")]
     [Tooltip("The type of sense this is")]
     [SerializeField] protected StimulusType stimulusType;
