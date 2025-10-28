@@ -99,8 +99,6 @@ public class GameManager : Singleton<GameManager>
         /*Player = Instantiate(PlayerPrefab, LevelManager.Instance.SpawnLocation, Quaternion.identity);*/
         //PlayerManager.Instance.InitializePlayerManager();
 
-        
-
         return Task.CompletedTask;
     }
 

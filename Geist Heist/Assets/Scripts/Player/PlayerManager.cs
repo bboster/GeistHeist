@@ -42,7 +42,11 @@ public class PlayerManager : Singleton<PlayerManager>
         Cursor.lockState = CursorLockMode.Locked;
 
         playerCOF = PlayerGhostObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
-        LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+
+        if (GameManager.Instance.PlayerStart != null)
+            LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+        else
+            Debug.LogError("No playerstart set in GameManager");
     }
 
     public void InitializePlayerManager()
