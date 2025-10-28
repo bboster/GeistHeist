@@ -88,7 +88,7 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
         // if charge is decreasing
         else if (heldTime < lastHeldTime)
         {
-            a = currentOpacity - (Time.deltaTime * SecondsToHide);
+            a = currentOpacity - (Time.deltaTime / SecondsToHide);
         }
         // if charge is increasing
         else

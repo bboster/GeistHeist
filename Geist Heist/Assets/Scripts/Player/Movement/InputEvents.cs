@@ -36,7 +36,7 @@ public class InputEvents : Singleton<InputEvents>
 
     public static UnityEvent ActionStarted = new UnityEvent();
     public static UnityEvent<float> ActionHeld = new();
-    public static UnityEvent ActionNotHeld = new UnityEvent();
+    public static UnityEvent<float> ActionNotHeld = new();
     public static UnityEvent<float> ActionCanceled = new();
 
     public static UnityEvent InteractStarted = new UnityEvent();
@@ -64,9 +64,13 @@ public class InputEvents : Singleton<InputEvents>
 
     #region Time Held
     private static float moveTimeStarted, actionTimeStarted, interactTimeStarted = -1; // other inputs can be added but i dont think theyre super necessary.
+    private static float actionTimeReleased = -1;
     public static float MoveHeldTime => MovePressed ? Time.time - moveTimeStarted : 0;
     public static float ActionHeldTime => ActionPressed ? Time.time - actionTimeStarted : 0;
+    public static float ActionReleasedTime => ActionPressed ? 0: Time.time - actionTimeReleased;
     public static float InteractHeldTime => InteractPressed ? Time.time - interactTimeStarted : 0;
+
+
     #endregion
 
     private PlayerInput playerInput;
@@ -104,7 +108,7 @@ public class InputEvents : Singleton<InputEvents>
 
         Move.canceled += ctx => InputActionCanceled(ref MovePressed, MoveCanceled, MoveHeldTime);
         //Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
-        Action.canceled += ctx => InputActionCanceled(ref ActionPressed, ActionCanceled, ActionHeldTime);
+        Action.canceled += ctx => InputActionCanceled(ref ActionPressed, ActionCanceled, ActionHeldTime, ref actionTimeReleased);
         Interact.canceled += ctx => InputActionCanceled(ref InteractPressed, InteractCanceled, InteractHeldTime);
     }
     void InputActionStarted(ref bool pressedFlag, UnityEvent actionEvent, bool ignorePaused = false)
@@ -139,6 +143,14 @@ public class InputEvents : Singleton<InputEvents>
         pressedFlag = false;
     }
 
+    void InputActionCanceled(ref bool pressedFlag, UnityEvent<float> actionEvent, float timeHeld, ref float timeStartedFlag)
+    {
+        timeStartedFlag = Time.time;
+
+        actionEvent?.Invoke(timeHeld);
+        pressedFlag = false;
+    }
+
     private void FixedUpdate()
     {
         if (GameManager.Instance.IsPaused)
@@ -148,7 +160,7 @@ public class InputEvents : Singleton<InputEvents>
         else MoveNotHeld.Invoke();
         //if (JumpPressed) JumpHeld.Invoke();
         if (ActionPressed) ActionHeld.Invoke(ActionHeldTime);
-        else ActionNotHeld.Invoke();
+        else ActionNotHeld.Invoke(ActionReleasedTime);
         if (InteractPressed) InteractHeld.Invoke(InteractHeldTime);
 
         LookUpdate.Invoke(LookDelta);

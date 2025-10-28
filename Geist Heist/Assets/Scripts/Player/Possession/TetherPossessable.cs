@@ -69,9 +69,8 @@ public class TetherPossessable : IInputHandler
     {
     }
 
-    public override void WhileActionNotHeld()
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        throw new NotImplementedException();
     }
 
     public override void OnActionCanceled(float secondsHeld)

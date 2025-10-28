@@ -20,6 +20,8 @@ public class ToyCar : IInputHandler
     [SerializeField] private float minStrength;
     [Tooltip("Strength that a full hold would do- the MOST the car can move forward when interacting.")]
     [SerializeField] private float maxStrength;
+    [Tooltip("Max speed for car to be already be going able to go.")]
+    [SerializeField] private float maxSpeedToZoom = 1;
     [Tooltip("How much hold charges up by per second.")]
     [SerializeField] private float chargeRate;
     [Tooltip("When not held, how much hold charges down by per second.")]
@@ -61,7 +63,6 @@ public class ToyCar : IInputHandler
     {
         if (InputEvents.ActionPressed)
         {
-            Debug.Log(InputEvents.ActionHeldTime);
             chargeMeter.UpdateCharge(InputEvents.ActionHeldTime, secondsToCharge);
         }
         else
@@ -73,12 +74,6 @@ public class ToyCar : IInputHandler
     #region action
     public override void OnActionStarted()
     {
-        if (rb.linearVelocity == Vector3.zero)
-        {
-            chargeAmount = minStrength;
-            //ChargeUI.fillAmount = (chargeAmount - minStrength) / (maxStrength - minStrength);
-            //Images.SetActive(true);
-        }
     }
 
     public override void WhileActionHeld(float secondsHeld)
@@ -95,25 +90,33 @@ public class ToyCar : IInputHandler
             //ChargeUI.fillAmount = (chargeAmount - minStrength) / (maxStrength - minStrength);
         }
     }
-    public override void WhileActionNotHeld()
+
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        if (rb.linearVelocity == Vector3.zero)
+        if (rb.linearVelocity.magnitude <= 0)
         {
             if (freezeCoroutine == null)
             {
                 freezeCoroutine = StartCoroutine(ReFreezeConstraints());
             }
         }
-        chargeAmount -= Time.deltaTime * chargeRate;
+
+        // dont update the speedometer for a sec... (sorry to hard code this but i think it will look cool
+        if (secondsNotHeld < 0.2)
+            return;
+
+        chargeAmount -= Time.deltaTime * chargeLossRates;
     }
 
     public override void OnActionCanceled(float secondsHeld)
     {
-        if (rb.linearVelocity == Vector3.zero)
+        // Fake charge amount calculation (this is a failsafe, sanity thing)
+        //chargeAmount = Mathf.Min((secondsHeld * chargeRate) + minStrength, maxStrength);
+
+        if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
             UnFreezePosition();
             rb.AddForce(gameObject.transform.forward * chargeAmount, ForceMode.Impulse);
-            //Images.SetActive(false);
         }
     }
 

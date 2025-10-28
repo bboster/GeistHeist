@@ -107,7 +107,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void WhileInteractHeld(float secondsHeld)
     { }
-    public override void WhileActionNotHeld()
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
         //throw new System.NotImplementedException();
     }
