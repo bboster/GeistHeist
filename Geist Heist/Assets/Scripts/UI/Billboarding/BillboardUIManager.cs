@@ -46,6 +46,9 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             if(uiAnchorPair.Item2.IsVisible == false)
                 continue;
 
+            if (PlayerManager.Instance.CurrentObject == null)
+                continue;
+
             var elem = uiAnchorPair.Item2;
             var elemRectTransform = elem.rectTransform;
             var elemTransform = elem.transform;
@@ -54,7 +57,6 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             float playerDistance = CalculateScalingByCameraPosition ? 
                 Vector3.Distance(anchor.position, _camera.transform.position) :
                 Vector3.Distance(anchor.position, PlayerManager.Instance.CurrentObject.transform.position);
-            float t;
 
             // Set Position
             elemTransform.position = anchor.position;

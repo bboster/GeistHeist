@@ -1,3 +1,11 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 10/02/25
+ * Last Edited: 10/02/25
+ * Summary: Search behavior that runs when the guard hears something
+ */
+
 using GuardUtilities;
 using UnityEngine;
 using System.Collections;
@@ -22,7 +30,6 @@ public class SearchBehavior : GuardMovement
         behaviorComplete = false;
     }
     
-
     /// <summary>
     /// Controls the overall logic for the behavior.
     /// </summary>
