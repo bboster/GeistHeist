@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 10/21/25
+ * Last Modified: 10/28/25
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -17,6 +17,9 @@ using System.Collections;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
+    [Tooltip("Tells the guards whether or not to enter search upon seeing a possessed form of this object")]
+    public bool IsHidingObject;
+
     [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
     [HideInInspector] private IInputHandler inputHandler;
     [Required] public CinemachineCamera CinemachineCamera;

@@ -66,6 +66,10 @@ public class VisionStimulus : Stimulus
                 if (info.collider != null)
                     Debug.Log(info.collider.gameObject.name);
             }
+            else if(obj.Equals(PlayerManager.Instance.CurrentObject) && obj.IsHidingObject == false)
+            {
+                parentController.RecieveStimulus(this, GuardStates.possessableSearch, PlayerManager.Instance.CurrentObject.transform.position);
+            }
         }
     }
 
