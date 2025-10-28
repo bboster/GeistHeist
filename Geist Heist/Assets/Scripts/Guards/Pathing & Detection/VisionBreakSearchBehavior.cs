@@ -1,3 +1,11 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 10/02/25
+ * Last Edited: 10/27/25
+ * Summary: Search behavior that runs when the player leaves the guard's vision cone
+ */
+
 using UnityEngine;
 using System.Collections;
 using System;

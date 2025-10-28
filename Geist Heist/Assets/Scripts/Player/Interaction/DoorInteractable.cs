@@ -9,6 +9,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
+using UnityEngine.Events;
 
 public class DoorInteractable : MonoBehaviour, IInteractable
 {

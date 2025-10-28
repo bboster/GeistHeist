@@ -42,11 +42,10 @@ public class PlayerManager : Singleton<PlayerManager>
         Cursor.lockState = CursorLockMode.Locked;
 
         playerCOF = PlayerGhostObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
-
-        if (GameManager.Instance.PlayerStart != null)
-            LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+        if (GameManager.Instance.Player == null)
+            Debug.Log("PlayerStart is null in gamemanager");
         else
-            Debug.LogError("No playerstart set in GameManager");
+            LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
     }
 
     public void InitializePlayerManager()
@@ -64,6 +63,17 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessObject(PossessableObject possessable)
     {
+        if(possessable == null)
+        {
+            Debug.LogError("Possessable is null");
+            return;
+        }
+        if (PlayerGhostObject == null)
+        {
+            Debug.LogError("Player Ghost Object is null");
+            return;
+        }
+
         //make transition not crazy
         possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
         possessableCOF.HorizontalAxis.Value = playerCOF.HorizontalAxis.Value;
@@ -83,6 +93,17 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessGhost(PossessableObject possessable)
     {
+        if (possessable == null)
+        {
+            Debug.LogError("Possessable is null");
+            return;
+        }
+        if (PlayerGhostObject == null)
+        {
+            Debug.LogError("Player Ghost Object is null");
+            return;
+        }
+
         if (!possessable.CanUnPossess)
         {
             return;
@@ -157,4 +178,6 @@ public class PlayerManager : Singleton<PlayerManager>
         if (CurrentObject != null)
             CurrentObject.WhilePossessingUpdate();
     }
+
+
 }
