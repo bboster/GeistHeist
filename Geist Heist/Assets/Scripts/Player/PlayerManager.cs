@@ -8,6 +8,7 @@
  */
 
 using NaughtyAttributes;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -84,9 +85,34 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
-        if (possessable.ghostSpawnPoint != null)
+        Collider[] colliders = Physics.OverlapSphere(possessable.ghostExitPoints[0].transform.position, 1);
+
+        //if ghost exit point is in the wall, find another exit point - if there's only one exit point, use that one
+        if ((possessable.ghostExitPoints != null && colliders.Length <= 0) || (possessable.ghostExitPoints != null && possessable.ghostExitPoints.Count < 2))
         {
-            PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostSpawnPoint.position;
+            PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[0].position;
+        }
+        //try other exit points
+        else
+        {
+            //go through spawn points until one of them doesn't collide
+            for (int i = 1; i < possessable.ghostExitPoints.Count; i++)
+            {
+                Collider[] secondaryColliders = Physics.OverlapSphere(possessable.ghostExitPoints[i].transform.position, 1);
+                Debug.Log("collisions = " + secondaryColliders.Length);
+                //no collision = use this point
+                if (secondaryColliders.Length <= 0)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
+                    break;
+                }
+                
+                //if all of them collide, just use the first exit point
+                if (i == possessable.ghostExitPoints.Count - 1)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[0].position;
+                }
+            }
         }
 
         //make transition not crazy

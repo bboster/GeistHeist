@@ -14,6 +14,7 @@ using NaughtyAttributes;
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
@@ -22,7 +23,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [Required] public CinemachineCamera CinemachineCamera;
 
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
-    public Transform ghostSpawnPoint;
+    public List<Transform> ghostExitPoints;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
     [SerializeField, ShowIf(nameof(hasTimer))] private float timerTime = 5f;
