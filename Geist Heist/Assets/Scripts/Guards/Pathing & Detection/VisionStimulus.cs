@@ -6,6 +6,7 @@
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
+using System.Collections;
 using UnityEngine;
 using GuardUtilities;
 using NaughtyAttributes;
@@ -14,11 +15,12 @@ public class VisionStimulus : Stimulus
 {
     #region Variable Declarations
 
+    private bool hasSeenPlayer = false;
+    private Coroutine timer;
+
     [Header("Progamming")]
     [Tooltip("Controls whether or not certain variables are displayed")]
     [SerializeField] private bool showProgrammingValues;
-
-    private bool hasSeenPlayer = false;
 
     [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
     [ShowIf("showProgrammingValues")]
@@ -27,9 +29,12 @@ public class VisionStimulus : Stimulus
     [ShowIf("showProgrammingValues")]
     [SerializeField] private int recoveryBehaviorIndex;
     [ShowIf("showProgrammingValues")]
+    [SerializeField] private float visionBreakTimer;
+    [ShowIf("showProgrammingValues")]
     [SerializeField] private LayerMask raycastLayer;
     [ShowIf("showProgrammingValues")]
     [SerializeField] private Transform raycastSpawn;
+
 
     [ShowIf("showProgrammingValues")]
     [SerializeField] private GuardController parentController;
@@ -38,7 +43,12 @@ public class VisionStimulus : Stimulus
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out PossessableObject obj))
+        if(timer != null)
+        {
+            StopCoroutine(timer);
+            timer = null;
+        }
+        else if (other.gameObject.TryGetComponent(out PossessableObject obj))
         {
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
             {
@@ -46,9 +56,6 @@ public class VisionStimulus : Stimulus
 
                 Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
                 float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 2;
-
-                /*Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer);*/
-                GuardDebug.PersistentRay(spawnLocation, direction, 2, GetComponent<GuardDebugger>());
 
                 if (!Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer))
                 {
@@ -68,10 +75,22 @@ public class VisionStimulus : Stimulus
         {
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
             {
-                hasSeenPlayer = false;
-                parentController.OnVisionBroken();
+                timer = StartCoroutine(VisionBreakTimer());
             }
         }
+    }
+
+    /// <summary>
+    /// Controls how long the player must be out of the vision cone before it enters search state
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator VisionBreakTimer()
+    {
+        yield return new WaitForSeconds(visionBreakTimer);
+
+        hasSeenPlayer = false;
+        parentController.OnVisionBroken();
+        timer = null;
     }
 
     /// <summary>

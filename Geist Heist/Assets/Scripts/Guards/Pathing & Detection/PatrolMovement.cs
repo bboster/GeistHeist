@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 9/30/25
+ * Last Edited: 10/27/25
  * Summary: Runs the behavior for the patrol movement type for enemies. BehaviorLoop runs every frame
  * and controls when certain aspects of the behavior are triggered. 
  */
@@ -36,15 +36,11 @@ public class PatrolMovement : GuardMovement
         {
             if (CheckPathCompletion() == true && calculatingMovement == false)
             {
-                calculatingMovement = true;
-                MoveToPoint(GetNextPoint());
-                thisAgent.isStopped = false;
+                CalculateMovement();
             }
             else if(thisAgent.hasPath == false && calculatingMovement == false)
             {
-                calculatingMovement = true;
-                MoveToPoint(GetNextPoint());
-                thisAgent.isStopped = false;
+                CalculateMovement();
             }
             else
             {
@@ -54,6 +50,16 @@ public class PatrolMovement : GuardMovement
             yield return new WaitForEndOfFrame();
         }
     }
+
+    /// <summary>
+    /// Calculates and sets the path for the next point on the patrol path
+    /// </summary>
+    private void CalculateMovement()
+    {
+        calculatingMovement = true;
+        MoveToPoint(GetNextPoint());
+        thisAgent.isStopped = false;
+    }    
 
     #region Path Functions
 
