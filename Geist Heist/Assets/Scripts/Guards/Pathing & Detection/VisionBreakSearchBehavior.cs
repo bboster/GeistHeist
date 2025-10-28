@@ -1,3 +1,11 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 10/02/25
+ * Last Edited: 10/27/25
+ * Summary: Search behavior that runs when the player leaves the guard's vision cone
+ */
+
 using UnityEngine;
 using System.Collections;
 using System;
@@ -21,7 +29,7 @@ public class VisionBreakSearchBehavior : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        SearchLocation = GameObject.Find("3rd Person Player").transform.position; //REPLACE WITH A CENTRALIZED REFERENCE TO THE PLAYER WHEN ABLE
+        SearchLocation = PlayerManager.Instance.PlayerGhostObject.transform.position;
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;

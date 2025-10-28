@@ -33,7 +33,7 @@ public class AttackBehavior : Behavior
             if(performingAttack == true)
             {
                 Debug.Log("Player Caught");
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                GameManager.Instance.DeathReset();
                 performingAttack = false; //This should be removed later and the variable should be changed by an animation keyframe.
                 yield return new WaitForSeconds(attackLength);
             }

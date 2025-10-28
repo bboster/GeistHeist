@@ -384,7 +384,7 @@ GameObject:
   - component: {fileID: 1845882495621757304}
   - component: {fileID: 8260563878581112116}
   m_Layer: 6
-  m_Name: Test Tether
+  m_Name: Test Tether Possessable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -442,8 +442,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0419aec6580122146a1979e34ee5434d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
-  InputHandler: {fileID: 0}
   CinemachineCamera: {fileID: 6298278276870955070}
+  ghostSpawnPoint: {fileID: 0}
+  hasTimer: 0
+  timerTime: 5
+  PossessedMaterial: {fileID: 2100000, guid: 397951d614b934d4d93e7cc7bbe2edc5, type: 2}
+  UnpossessedMaterial: {fileID: 2100000, guid: 85687a2e1ab634342855b4e1bcf96f17, type: 2}
+  CanUnPossess: 1
 --- !u!114 &8260563878581112116
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ public class StateText : IBillboardUI
     {
         var guard = sourceGameObject.GetComponent<GuardController>();
         guard.OnBehaviorStarted.AddListener(ChangeText);
+        ChangeText(guard.currentBehavior.StateName);
     }
 
     /// <summary>
@@ -29,8 +30,8 @@ public class StateText : IBillboardUI
     {
         switch(state)
         {
-            case GuardStates.none:
-                stateText.text = "NONE";
+            case GuardStates.idle:
+                stateText.text = "IDLE";
                 break;
             case GuardStates.patrol:
                 stateText.text = "PATROL";
