@@ -66,6 +66,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
+        gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
 
         if(PossessedMaterial != null)
