@@ -9,22 +9,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
+using UnityEngine.Events;
 
 public class DoorInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField][Scene] private string sceneName;
-    //[SerializeField] private bool EndOfScene = false;
-    //[SerializeField] int sceneIndex = 0;
+
     public void Interact()
     {
-        /*if (EndOfScene == true  && GameManager.currentLevel < 1)
-        {
-            GameManager.Instance.NextLevel(sceneName);
-            EndOfScene = false;
-        }
-        else*/
-        //SceneManager.LoadScene(sceneName);
         GameManager.Instance.NextLevel(sceneName);
-        
     }
 }
