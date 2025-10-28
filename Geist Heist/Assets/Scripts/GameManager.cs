@@ -31,7 +31,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject CooldownManagerPrefab;
-    [SerializeField, Required] GameObject InteractionCanvasPrefab;
+    //[SerializeField, Required] GameObject InteractionCanvasPrefab;
     [SerializeField, Required] GameObject TimerCanvasPrefab;
     [SerializeField, Required] GameObject PauseMenuPrefab;
 
@@ -39,10 +39,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject CameraPrefab;
     [SerializeField, Required] GameObject PlayerPrefab;
     [Required] public Transform PlayerStart;
-
-    [HideInInspector] public GameObject InteractionCanvas;
-    [HideInInspector] public Image TimerImage;
-    [HideInInspector] public RawImage TimerBackground;
 
     [Header("Debug")]
     [ReadOnly] public bool IsPaused = false;
@@ -126,7 +122,6 @@ public class GameManager : Singleton<GameManager>
         TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
         TimerSlider.gameObject.SetActive(false);
 
-        InteractionCanvas = Instantiate(InteractionCanvasPrefab);
         Instantiate(PauseMenuPrefab);
 
         return Task.CompletedTask;

@@ -68,6 +68,21 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             SaveData();
     }
 
+    public void MarkCollectableAsWorn(Collectable collectable, bool autoSave = true)
+    {
+        EnsureSaveData();
+        currentSaveDta.CollectableWearing = (int)collectable;
+        if (autoSave)
+            SaveData();
+    }
+
+    public int EquipedHat()
+    {
+        EnsureSaveData();
+        return currentSaveDta.CollectableWearing;
+    }
+
+
     public bool IsLevelCompleted(string sceneName)
     {
         EnsureSaveData();
