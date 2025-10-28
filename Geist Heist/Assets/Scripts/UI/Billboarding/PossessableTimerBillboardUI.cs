@@ -4,8 +4,11 @@
  * Last Modified: 10/28/2025
  * 
  * Brief Description: 
+ * 
+ * TODO: it would be cool if the timer got bigger when its almost out
  */
 
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,12 +19,17 @@ public class PossessableTimerBillboardUI : IBillboardUI
 {
     [Header("Possessable timer settings")]
     [SerializeField] private float hideSeconds = 0.2f;
+    [SerializeField] private float opacityWhenUnpossessed = 0.5f;
+    [SerializeField] private float percentToHide = 0.08f;
+
+    private float targetOpacity => PlayerManager.Instance.CurrentObject == possessable ? 1 : opacityWhenUnpossessed;
+    private float opacityByTimeRemaining => (t <= percentToHide || t>= 1 - percentToHide) ? 0 : 1; // dont show if percent is almost 0 or almost full.
 
     private PossessableObject possessable;
     private CanvasGroup group;
     private Slider slider;
 
-    private Coroutine hideTimerCoroutine;
+    float t;
     public override void OnInitialize(GameObject sourceGameObject)
     {
         group = GetComponent<CanvasGroup>();
@@ -34,33 +42,15 @@ public class PossessableTimerBillboardUI : IBillboardUI
 
     private void OnTimerUpdate(float percentage)
     {
-
-        float t = percentage / possessable.maxChargePercentage;
+        t = percentage / possessable.maxChargePercentage;
         slider.value = t;
-
-        // start hiding if going down
-        if(t <= 0.05)
-        {
-            if (hideTimerCoroutine == null)
-                hideTimerCoroutine = StartCoroutine(HideTimer());
-        }
-        // Show wheel if high value
-        else
-        {
-            if (hideTimerCoroutine != null)
-                StopCoroutine(hideTimerCoroutine);
-
-            group.alpha = Mathf.MoveTowards(group.alpha, 1, Time.deltaTime * 30);
-        }
     }
 
-    private IEnumerator HideTimer()
+    protected override float CalculateOpacity(float playerDistance, Vector3 UIPosition)
     {
-        while(group.alpha > 0)
-        {
+        float a = base.CalculateOpacity(playerDistance, UIPosition);
 
-            group.alpha = Mathf.MoveTowards(group.alpha, 0, Time.deltaTime / hideSeconds);
-            yield return null;
-        }
+        // This sounds harsh, but CalculateAndSetOpacity smooths the opacity so its okay
+        return a * targetOpacity * opacityByTimeRemaining;
     }
 }
