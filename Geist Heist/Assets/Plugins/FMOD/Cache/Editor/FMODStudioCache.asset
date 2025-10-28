@@ -1,5 +1,72 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8870196979555995748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/TestC
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/TestC
+  Guid:
+    Data1: 84552645
+    Data2: 1312150263
+    Data3: -179643516
+    Data4: 956204786
+  Banks:
+  - {fileID: -8746302623698817023}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 50
+  Length: 19056
+--- !u!114 &-8746302623698817023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Enemy.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMODProject/GHFMOD/Build/Desktop/Enemy.bank
+  Name: Enemy
+  StudioPath: bank:/Enemy
+  lastModified: 638971859446300268
+  FileSizes:
+  - Name: Desktop
+    Value: 174112
+  Exists: 1
+--- !u!114 &-8699732775561427613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Prop.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMODProject/GHFMOD/Build/Desktop/Prop.bank
+  Name: Prop
+  StudioPath: bank:/Prop
+  lastModified: 638971856899480684
+  FileSizes:
+  - Name: Desktop
+    Value: 506
+  Exists: 1
 --- !u!114 &-8266630530672512274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,6 +134,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 10
   Length: 19056
+--- !u!114 &-8097718733711776939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/BGM.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMODProject/GHFMOD/Build/Desktop/BGM.bank
+  Name: BGM
+  StudioPath: bank:/BGM
+  lastModified: 638971856899283891
+  FileSizes:
+  - Name: Desktop
+    Value: 506
+  Exists: 1
 --- !u!114 &-8052056082778704322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,6 +509,26 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1070
   Exists: 1
+--- !u!114 &-4227558621710741167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMODProject/GHFMOD/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638971859446361289
+  FileSizes:
+  - Name: Desktop
+    Value: 1106
+  Exists: 1
 --- !u!114 &-3944406139664430041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,31 +756,31 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EventCache
   EditorBanks:
-  - {fileID: -7892336690166043199}
-  - {fileID: -309426952473512504}
-  - {fileID: -8052056082778704322}
-  - {fileID: 839512886293536272}
-  - {fileID: 3828090121250299163}
-  - {fileID: -8266630530672512274}
-  - {fileID: 1814598485019453090}
-  - {fileID: 9018470403224042577}
+  - {fileID: -4227558621710741167}
+  - {fileID: -8097718733711776939}
+  - {fileID: -8746302623698817023}
+  - {fileID: 6307407490134213863}
+  - {fileID: 3517980883353252726}
+  - {fileID: 8787835663204950775}
+  - {fileID: 9056286881726524944}
+  - {fileID: -8699732775561427613}
   EditorEvents:
-  - {fileID: 3082957670001096763}
-  - {fileID: -858593364191468945}
-  - {fileID: -6906947566540764889}
+  - {fileID: 5016498384002374832}
+  - {fileID: 7311800368060650295}
+  - {fileID: -8870196979555995748}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -8266630530672512274}
+  - {fileID: 8787835663204950775}
   StringsBanks:
-  - {fileID: -7892336690166043199}
+  - {fileID: -4227558621710741167}
   cacheVersion: 131849
   cacheTime: 638971859446361289
   SerializableEventsDict:
-  - key: event:/Enemy/TestC
-    index: 0
   - key: event:/Enemy/TestA
-    index: 1
+    index: 0
   - key: event:/Enemy/TestB
+    index: 1
+  - key: event:/Enemy/TestC
     index: 2
 --- !u!114 &272656179473779345
 MonoBehaviour:
@@ -896,6 +1003,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 50
   Length: 19056
+--- !u!114 &3517980883353252726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Interface.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMODProject/GHFMOD/Build/Desktop/Interface.bank
+  Name: Interface
+  StudioPath: bank:/Interface
+  lastModified: 638971856899409132
+  FileSizes:
+  - Name: Desktop
+    Value: 506
+  Exists: 1
 --- !u!114 &3828090121250299163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1023,6 +1150,53 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 50
   Length: 19056
+--- !u!114 &5016498384002374832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/TestA
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/TestA
+  Guid:
+    Data1: -1294811868
+    Data2: 1103178331
+    Data3: -1804492889
+    Data4: 2005432091
+  Banks:
+  - {fileID: -8746302623698817023}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 10
+  Length: 19056
+--- !u!114 &6307407490134213863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Environment.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMODProject/GHFMOD/Build/Desktop/Environment.bank
+  Name: Environment
+  StudioPath: bank:/Environment
+  lastModified: 638971856899359925
+  FileSizes:
+  - Name: Desktop
+    Value: 506
+  Exists: 1
 --- !u!114 &6745417685413859371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1097,6 +1271,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 10
   Length: 19056
+--- !u!114 &7311800368060650295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/TestB
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/TestB
+  Guid:
+    Data1: -1810028730
+    Data2: 1287964611
+    Data3: 14723255
+    Data4: 1569895311
+  Banks:
+  - {fileID: -8746302623698817023}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 25
+  Length: 19056
 --- !u!114 &7552994009621766456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1164,6 +1365,26 @@ MonoBehaviour:
   - Name: Desktop
     Value: 506
   Exists: 1
+--- !u!114 &8787835663204950775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMODProject/GHFMOD/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638971859446346592
+  FileSizes:
+  - Name: Desktop
+    Value: 1074
+  Exists: 1
 --- !u!114 &9018470403224042577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1180,6 +1401,26 @@ MonoBehaviour:
   Name: Prop
   StudioPath: bank:/Prop
   lastModified: 638971856899480684
+  FileSizes:
+  - Name: Desktop
+    Value: 506
+  Exists: 1
+--- !u!114 &9056286881726524944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Player.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMODProject/GHFMOD/Build/Desktop/Player.bank
+  Name: Player
+  StudioPath: bank:/Player
+  lastModified: 638971856899450093
   FileSizes:
   - Name: Desktop
     Value: 506
