@@ -10,6 +10,7 @@
 
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.Events;
 
 public class BillboardUIPoint : MonoBehaviour
 {
@@ -24,6 +25,11 @@ public class BillboardUIPoint : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if(SourceGameObject == null)
+        {
+            Debug.LogError("sourceGameObject has not been set for "+gameObject.name);
+        }
+
         billboardUI = Instantiate(UIObjectPrefab).GetComponent<IBillboardUI>();
         BillboardUIManager.Instance.RegisterAndInitializeBillboardUIPoint(this.transform, billboardUI, SourceGameObject);
     }
