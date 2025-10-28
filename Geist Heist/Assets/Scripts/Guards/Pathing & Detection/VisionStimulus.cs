@@ -50,10 +50,6 @@ public class VisionStimulus : Stimulus
 
     private void OnValidate()
     {
-        if (visionCollider == null)
-            visionCollider = GetComponent<Collider>();
-        if (spotLight == null)
-            spotLight = GetComponentInChildren<Light>();
         SyncLightToCollider();
     }
 
