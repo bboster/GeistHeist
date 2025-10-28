@@ -31,8 +31,6 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject CooldownManagerPrefab;
-    //[SerializeField, Required] GameObject InteractionCanvasPrefab;
-    [SerializeField, Required] GameObject TimerCanvasPrefab;
     [SerializeField, Required] GameObject PauseMenuPrefab;
 
     [Header("Other Constants")]
@@ -117,10 +115,6 @@ public class GameManager : Singleton<GameManager>
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
-
-        var timerCanvas = Instantiate(TimerCanvasPrefab);
-        TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
-        TimerSlider.gameObject.SetActive(false);
 
         Instantiate(PauseMenuPrefab);
 

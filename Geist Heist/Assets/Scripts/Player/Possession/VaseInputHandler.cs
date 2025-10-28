@@ -12,7 +12,6 @@ using UnityEngine.UI;
 public class VaseInputHandler : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
-    [SerializeField] private Image timerImage => GameManager.Instance.TimerImage;
 
 
     private void Start()

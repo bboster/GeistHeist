@@ -10,6 +10,7 @@
  */
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine.Events;
 using NaughtyAttributes;
 using UnityEngine.UI;
 using System;
@@ -25,16 +26,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField] private bool hasTimer;
     [Tooltip("The time in seconds between each percentage update.")]
     [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargeInterval = 2f;
+    [SerializeField] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer))] [Range(0, 100)] private int timerRechargePercentage = 10;
+    [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargePercentage = 10;
     [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer))] [Range(0, 100)] private int timerDischargePercentage = 10;
-    [ReadOnly] public float currentTimerPercentage = 100f;
-    private Coroutine timerCooldown = null;
+    [SerializeField, ShowIf(nameof(hasTimer))] private float timerDischargePercentage = 10;
 
-    private bool canUpdateTimer;
-    //[SerializeField] private Image timerImage => GameManager.Instance.TimerImage;
-    //private RawImage timerBackground => GameManager.Instance.TimerBackground;
+
     private Coroutine dischargeCoroutine = null;
     private Coroutine rechargeCoroutine;
 
@@ -49,7 +47,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private Coroutine unpossessCoroutine=null;
     private MeshRenderer meshRenderer;
 
-    
+    [ReadOnly] private float currentTimerPercentage = 100f;
+    [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
+
     void Start()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
@@ -88,8 +88,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         if (hasTimer)
         {
-            canUpdateTimer = true;
-            
             if(rechargeCoroutine != null)
             {
                 StopCoroutine(rechargeCoroutine);
@@ -121,7 +119,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         if (hasTimer)
         {
-            canUpdateTimer = false;
             if (dischargeCoroutine != null)
             {
                 StopCoroutine(dischargeCoroutine);
@@ -163,6 +160,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         while(currentTimerPercentage > 0)
         {
             currentTimerPercentage = Mathf.Max(currentTimerPercentage - (timerDischargePercentage * Time.deltaTime), 0);
+            OnTimerUpdate.Invoke(currentTimerPercentage);
             yield return null;
         }
 
@@ -174,9 +172,10 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (!hasTimer)
             yield break;
 
-        while(currentTimerPercentage < 100f)
+        while(currentTimerPercentage < maxChargePercentage)
         {
-            currentTimerPercentage = Mathf.Min(currentTimerPercentage + (timerRechargePercentage * Time.deltaTime), 100f);
+            currentTimerPercentage = Mathf.Min(currentTimerPercentage + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
+            OnTimerUpdate.Invoke(currentTimerPercentage);
             yield return null;
         }
     }
@@ -187,6 +186,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         if (dischargeCoroutine != null)
         {
+            OnTimerUpdate.Invoke(currentTimerPercentage);
             StopCoroutine(dischargeCoroutine);
             dischargeCoroutine = null;
         }
