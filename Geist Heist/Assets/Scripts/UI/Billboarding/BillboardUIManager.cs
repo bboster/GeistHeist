@@ -46,6 +46,9 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             if(uiAnchorPair.Item2.IsVisible == false)
                 continue;
 
+            if (PlayerManager.Instance.CurrentObject == null)
+                continue;
+
             var elem = uiAnchorPair.Item2;
             var elemRectTransform = elem.rectTransform;
             var elemTransform = elem.transform;

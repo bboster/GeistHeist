@@ -45,10 +45,8 @@ public class GuardMovement : Behavior
     /// <returns></returns>
     protected bool CheckPathCompletion()
     {
-        //thisAgent = thisAgent ?? GetComponent<NavMeshAgent>();  
         if (thisAgent.hasPath && thisAgent.remainingDistance <= moveCompletionThreshold)
         {
-            //Debug.Log("PATH COMPLETE");
             return true;
         }
         else

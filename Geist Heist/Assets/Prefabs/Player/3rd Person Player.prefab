@@ -51,10 +51,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
   CinemachineCamera: {fileID: 511838750177028954}
+  ghostSpawnPoint: {fileID: 0}
   hasTimer: 0
   timerTime: 5
+  PossessedMaterial: {fileID: 0}
+  UnpossessedMaterial: {fileID: 0}
   CanUnPossess: 1
-  ghostSpawnPoint: {fileID: 0}
 --- !u!136 &5974260262404806057
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -123,7 +125,7 @@ MonoBehaviour:
   slowDownFactor: 0.1
   thirdPersonCinemachineCamera: {fileID: 6503710880496754358}
   sphereCastRadius: 3
-  sphereCastDistance: 5
+  sphereCastDistance: 10
   interactableRayLength: 10
 --- !u!1 &5789115753528163449
 GameObject:
