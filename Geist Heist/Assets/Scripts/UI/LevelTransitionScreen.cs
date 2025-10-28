@@ -31,7 +31,11 @@ public class LevelTransitionScreen : MonoBehaviour
 
         DontDestroyOnLoad(this);
         _sceneToLoad = sceneToLoad;
-        animationObject = Instantiate(animationPrefab, this.transform);
+        if (animationPrefab != null)
+            animationObject = Instantiate(animationPrefab, this.transform);
+        else
+            Debug.LogError("No level transition card set");
+
         StartCoroutine(TitleCardFadeAnimation());
     }
 

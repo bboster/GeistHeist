@@ -372,6 +372,10 @@ PrefabInstance:
       propertyPath: confirmationText
       value: Go to Distraction Level?
       objectReference: {fileID: 0}
+    - target: {fileID: 8024416891471425332, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
+      propertyPath: levelLoadingCardPrefab
+      value: 
+      objectReference: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
     - target: {fileID: 8947550977130072934, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10.05
@@ -417,6 +421,80 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
+--- !u!1001 &267417487
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 632097409}
+    m_Modifications:
+    - target: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_Name
+      value: Button Prompt
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 11.149527
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.7044194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 19.647036
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.37549415
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.0070331693
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.92663556
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.01735629
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054673630455065609, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: SourceGameObject
+      value: 
+      objectReference: {fileID: 808413098}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 26581e60da394724197441682d8b83a4, type: 3}
+--- !u!4 &267417488 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+  m_PrefabInstance: {fileID: 267417487}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &498493211
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +729,8 @@ Transform:
   m_LocalPosition: {x: 19.140139, y: 1.531812, z: 3.2183433}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 267417488}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -25.76, y: 0, z: 0}
 --- !u!114 &632097410
@@ -829,6 +908,10 @@ PrefabInstance:
       propertyPath: confirmationText
       value: Go to Stealth Level?
       objectReference: {fileID: 0}
+    - target: {fileID: 8024416891471425332, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
+      propertyPath: levelLoadingCardPrefab
+      value: 
+      objectReference: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
     - target: {fileID: 8947550977130072934, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.25
@@ -1219,6 +1302,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &808413098 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5752954917928777214, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
+  m_PrefabInstance: {fileID: 942690673}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &870755430
 GameObject:
   m_ObjectHideFlags: 0
@@ -1411,6 +1499,10 @@ PrefabInstance:
       propertyPath: confirmationText
       value: Go to Traversal Level?
       objectReference: {fileID: 0}
+    - target: {fileID: 8024416891471425332, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
+      propertyPath: levelLoadingCardPrefab
+      value: 
+      objectReference: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
     - target: {fileID: 8947550977130072934, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.45
@@ -2298,6 +2390,7 @@ GameObject:
   - component: {fileID: 1965427895}
   - component: {fileID: 1965427894}
   - component: {fileID: 1965427898}
+  - component: {fileID: 1965427899}
   m_Layer: 0
   m_Name: Globe
   m_TagString: Untagged
@@ -2409,11 +2502,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38800cd25e1334c45a1e3092994495da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
-  sceneName: Lobby
-  loadingScreenPrefab: {fileID: 0}
-  levelLoadingCardPrefab: {fileID: 0}
-  confirmationText: Go to _____?
-  confirmationPopupPrefab: {fileID: 0}
+  sceneName: Globe
+  loadingScreenPrefab: {fileID: 4996678474793840024, guid: ef6279e25117c4d4ab9e6b822786aca1, type: 3}
+  levelLoadingCardPrefab: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
+  confirmationText: Go in the Globe?
+  confirmationPopupPrefab: {fileID: 7508292700099194344, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+--- !u!114 &1965427899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1965427893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+  outlineFillMaterial: {fileID: 0}
 --- !u!1 &2048236346
 GameObject:
   m_ObjectHideFlags: 0
