@@ -57,7 +57,6 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             float playerDistance = CalculateScalingByCameraPosition ? 
                 Vector3.Distance(anchor.position, _camera.transform.position) :
                 Vector3.Distance(anchor.position, PlayerManager.Instance.CurrentObject.transform.position);
-            float t;
 
             // Set Position
             elemTransform.position = anchor.position;
