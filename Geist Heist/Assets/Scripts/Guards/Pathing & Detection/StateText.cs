@@ -19,6 +19,11 @@ public class StateText : IBillboardUI
     {
         var guard = sourceGameObject.GetComponent<GuardController>();
         guard.OnBehaviorStarted.AddListener(ChangeText);
+        if (guard == null || guard.currentBehavior == null)
+        {
+            Debug.LogError("guard is null");
+            return;
+        }
         ChangeText(guard.currentBehavior.StateName);
     }
 
