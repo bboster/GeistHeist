@@ -6,7 +6,7 @@ using UnityEngine;
 /*
  * Contributors: Joshua Kelly
  * Creation Date: 10/23/25
- * Last Modified: 10/23/25
+ * Last Modified: 10/27/25
  * 
  * Brief Description: Handles the display of the currently equipped wearable (like hats).
  * Do NOT attach this to the player prefab directly.

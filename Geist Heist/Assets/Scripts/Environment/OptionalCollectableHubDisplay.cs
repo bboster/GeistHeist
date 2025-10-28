@@ -1,14 +1,14 @@
 /*
  * Contributors: Toby, Josh
  * Creation: 10/21/25
- * Last Edited: 10/23/25
+ * Last Edited: 10/27/25
  * Summary: Mirrors a collectable object, appears in the hub if the save data has marked the collectable as got.
  * 
  */
 
 using NaughtyAttributes;
 using System;
-using UnityEditor;
+using UnityEditor;  
 using UnityEngine;
 
 public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
@@ -91,23 +91,41 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
             return;
         }
 
-        // Clear existing children to avoid duplicates
-        foreach (Transform child in transform)
-            DestroyImmediate(child.gameObject);
+        // Try to reuse an existing mesh
+        MeshRenderer existingMesh = GetComponentInChildren<MeshRenderer>(true);
+        if (existingMesh == null)
+        {
+            existingMesh = Instantiate(newMeshPrefab, transform);
+            Debug.Log($"[{name}] Spawned new mesh for {ThisCollectable}");
+        }
+        else
+        {
+            Debug.Log($"[{name}] Updated existing mesh for {ThisCollectable}");
+        }
 
-        // Spawn new mesh
-        MeshRenderer meshInstance = Instantiate(newMeshPrefab, transform);
-        meshInstance.transform.localPosition = Vector3.zero;
-        meshInstance.transform.localRotation = Quaternion.identity;
-        meshInstance.transform.localScale = Vector3.one;
-        meshInstance.gameObject.SetActive(true);
-
-        Debug.Log($"[{name}] Spawned new mesh for {ThisCollectable}");
+        ApplyMeshData(existingMesh, newMeshPrefab);
     }
     #endregion
 
 
     #region Helpers
+    private void ApplyMeshData(MeshRenderer target, MeshRenderer source)
+    {
+        // Copy mesh and materials
+        MeshFilter targetFilter = target.GetComponent<MeshFilter>();
+        MeshFilter sourceFilter = source.GetComponent<MeshFilter>();
+
+        if (targetFilter != null && sourceFilter != null)
+            targetFilter.sharedMesh = sourceFilter.sharedMesh;
+
+        target.sharedMaterials = source.sharedMaterials;
+
+        // Reset transform and ensure visibility
+        target.transform.localPosition = Vector3.zero;
+        target.transform.localRotation = Quaternion.identity;
+        target.transform.localScale = Vector3.one;
+        target.gameObject.SetActive(true);
+    }
     private void LoadRegistry()
     {
         if (Registry == null)

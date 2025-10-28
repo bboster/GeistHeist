@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Josh
  * Creation: 9/30/25
- * Last Edited: 9/30/25
+ * Last Edited: 10/27/2025
  * Summary: Collectable object. saves to player data.
  * 
  * TODO: make a vfx/shader/material for if player is replaying level, and this collectable has already been collected
