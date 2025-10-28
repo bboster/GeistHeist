@@ -39,8 +39,15 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private Coroutine unpossessCoroutine=null;
     private MeshRenderer meshRenderer;
 
+    #region Guard Detection Variables
+
+    public bool IsMoving = false;
+
     public static Action OnActionPerformed;
-    
+    public static Action OnObjectLeft;
+
+    #endregion
+
     void Start()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
@@ -108,6 +115,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
         InputHandler.OnPossessionEnded();
+        OnObjectLeft?.Invoke();
 
         if (timerCoroutine != null)
         {

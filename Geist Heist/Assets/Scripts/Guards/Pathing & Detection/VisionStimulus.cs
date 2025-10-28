@@ -45,9 +45,10 @@ public class VisionStimulus : Stimulus
     private void Awake()
     {
         PossessableObject.OnActionPerformed += ActionDetected;
+        PossessableObject.OnObjectLeft += ObjectLeft;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if(timer != null)
         {
@@ -58,6 +59,7 @@ public class VisionStimulus : Stimulus
         {
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
             {
+                hasSeenPlayer = true;
                 Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
 
                 Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
@@ -72,7 +74,7 @@ public class VisionStimulus : Stimulus
                 if (info.collider != null)
                     Debug.Log(info.collider.gameObject.name);
             }
-            else if(obj.Equals(PlayerManager.Instance.CurrentObject))
+            else if(obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
             {
                 playerObjectSeen = true;
             }
@@ -123,8 +125,14 @@ public class VisionStimulus : Stimulus
         }
     }
 
+    private void ObjectLeft()
+    {
+        playerObjectSeen = false;
+    }
+
     private void OnDisable()
     {
         PossessableObject.OnActionPerformed -= ActionDetected;
+        PossessableObject.OnObjectLeft -= ObjectLeft;
     }
 }
