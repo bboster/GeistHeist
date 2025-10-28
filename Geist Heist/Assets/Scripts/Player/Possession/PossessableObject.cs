@@ -22,7 +22,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [HideInInspector] private IInputHandler inputHandler;
     [Required] public CinemachineCamera CinemachineCamera;
 
-    [Tooltip("Location where the ghost spawns after leaving the possessable.")]
+    [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
     public List<Transform> ghostExitPoints;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
@@ -43,6 +43,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
     
     void Start()
     {
+        if (ghostExitPoints.Count == 0)
+        {
+            Debug.Log("No exit points set for " + this);
+        }
+
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
         if (UnpossessedMaterial != null)
