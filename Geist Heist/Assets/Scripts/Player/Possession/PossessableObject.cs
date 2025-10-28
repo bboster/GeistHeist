@@ -27,14 +27,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargeInterval = 2f;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
     [SerializeField, ShowIf(nameof(hasTimer))] [Range(0, 100)] private int timerRechargePercentage = 10;
-    [Tooltip("The time in seconds between each percentage update while discharging.")]
-    [SerializeField, ShowIf(nameof(hasTimer))] private float timerDischargeInterval = 1f;
     [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
     [SerializeField, ShowIf(nameof(hasTimer))] [Range(0, 100)] private int timerDischargePercentage = 10;
-    private float currentTimerPercentage = 100f;
+    [ReadOnly] public float currentTimerPercentage = 100f;
+    private Coroutine timerCooldown = null;
+
     private bool canUpdateTimer;
-    [SerializeField] private Image timerImage => GameManager.Instance.TimerImage;
-    private RawImage timerBackground => GameManager.Instance.TimerBackground;
+    //[SerializeField] private Image timerImage => GameManager.Instance.TimerImage;
+    //private RawImage timerBackground => GameManager.Instance.TimerBackground;
     private Coroutine dischargeCoroutine = null;
     private Coroutine rechargeCoroutine;
 
@@ -89,8 +89,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (hasTimer)
         {
             canUpdateTimer = true;
-            timerImage?.gameObject.SetActive(true);
-            timerBackground?.gameObject.SetActive(true);
             
             if(rechargeCoroutine != null)
             {
@@ -100,11 +98,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
             if(dischargeCoroutine == null)
                 dischargeCoroutine = StartCoroutine(StartDischarge());
-        }
-        else
-        {
-            timerImage?.gameObject.SetActive(false);
-            timerBackground?.gameObject.SetActive(false);
         }
     }
 
@@ -169,12 +162,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         while(currentTimerPercentage > 0)
         {
-            currentTimerPercentage = Mathf.Max(currentTimerPercentage - timerDischargePercentage, 0);
-            if (canUpdateTimer)
-            {
-                UpdateSlider();
-            }
-            yield return new WaitForSeconds(timerDischargeInterval);
+            currentTimerPercentage = Mathf.Max(currentTimerPercentage - (timerDischargePercentage * Time.deltaTime), 0);
+            yield return null;
         }
 
         OnTimerFinished();
@@ -187,21 +176,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         while(currentTimerPercentage < 100f)
         {
-            currentTimerPercentage = Mathf.Min(currentTimerPercentage + timerRechargePercentage, 100f);
-            if(canUpdateTimer)
-            {
-                UpdateSlider();
-            }
-            yield return new WaitForSeconds(timerRechargeInterval);
-        }
-    }
-
-    private void UpdateSlider()
-    {
-        if (timerImage != null)
-        {
-            Debug.Log(currentTimerPercentage / 100f);
-            timerImage.fillAmount = currentTimerPercentage / 100f;
+            currentTimerPercentage = Mathf.Min(currentTimerPercentage + (timerRechargePercentage * Time.deltaTime), 100f);
+            yield return null;
         }
     }
 
