@@ -65,7 +65,6 @@ public class ToyCar : IInputHandler
     // Called every frame while player is possessing.
     public override void WhilePossessingUpdate()
     {
-        Debug.Log(currentStrength);
         chargeMeter.UpdateCharge(currentStrength, maxStrength);
     }
     

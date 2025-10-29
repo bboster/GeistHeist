@@ -41,7 +41,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private IInputHandler inputHandler;
     private Slider timerSlider => GameManager.Instance.TimerSlider;
     private Coroutine timerCoroutine;
-    private Canvas possessableCanvas;
+    
 
 
     void Start()
@@ -56,8 +56,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if(possessableCanvas == null)
             possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
 
-        if(possessableCanvas != null)
+        if (possessableCanvas != null)
+        {
+            possessableCanvasGroup = possessableCanvas.gameObject.GetOrAddComponent<CanvasGroup>();
             possessableCanvas.gameObject.SetActive(false);
+        }
     }
 
     public IInputHandler GetInputHandler()
@@ -76,8 +79,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
-        if (possessableCanvas != null)
-            possessableCanvas.gameObject.SetActive(true);
+        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
 
         gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
@@ -109,9 +111,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
-        // this breaks the current cooldown timer, but thats okay because it will be moved to being off of the possessable object
-        if (possessableCanvas != null)
-            possessableCanvas.gameObject.SetActive(false);
+        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
 
         if (!CanUnPossess)
         {
@@ -200,6 +200,44 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         currentTimerTime = timerTime;
         timerSlider.gameObject.SetActive(false);
+    }
+
+    #endregion
+
+    #region Canvas
+
+    [Header("Canvas settings")]
+    [SerializeField] private Canvas possessableCanvas;
+    [SerializeField] private float showSeconds = 1;
+    [SerializeField] private float hideSeconds = 0.3f;
+
+    private CanvasGroup possessableCanvasGroup;
+    private Coroutine fadeOpacityCoroutine;
+
+    private IEnumerator ShowAndEnableCanvas()
+    {
+        if (possessableCanvas == null)
+            yield break;
+
+        possessableCanvas.gameObject.SetActive(true);
+        while(possessableCanvasGroup.alpha < 1)
+        {
+            possessableCanvasGroup.alpha += Time.deltaTime / showSeconds;
+            yield return null;
+        }
+    }
+
+    private IEnumerator HideAndDisableCanvas()
+    {
+        if (possessableCanvas == null)
+            yield break;
+
+        while (possessableCanvasGroup.alpha > 0)
+        {
+            possessableCanvasGroup.alpha -= Time.deltaTime / hideSeconds;
+            yield return null;
+        }
+        possessableCanvas.gameObject.SetActive(false);
     }
 
     #endregion
