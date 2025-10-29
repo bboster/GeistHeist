@@ -10,6 +10,7 @@ using System.Collections;
 using UnityEngine;
 using GuardUtilities;
 using NaughtyAttributes;
+using Unity.Cinemachine;
 
 public class VisionStimulus : Stimulus
 {
@@ -76,6 +77,18 @@ public class VisionStimulus : Stimulus
             }
             else if(obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
             {
+                if(obj.gameObject.TryGetComponent(out Rigidbody rb))
+                {
+                    Vector3 velocityCheck = rb.linearVelocity.Abs();
+
+                    //If there's a better way to check if a possessable is moving please leave a note in the review
+                    if (velocityCheck.x > 1 || velocityCheck.y > 1 || velocityCheck.z > 1)
+                    {
+                        TriggerStimulus();
+                        return;
+                    }
+                }
+
                 playerObjectSeen = true;
             }
         }

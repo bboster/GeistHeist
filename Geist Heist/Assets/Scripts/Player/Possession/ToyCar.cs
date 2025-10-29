@@ -79,6 +79,7 @@ public class ToyCar : IInputHandler
             ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
         }
     }
+
     public override void WhileActionNotHeld()
     {
         if (rb.linearVelocity == Vector3.zero)
