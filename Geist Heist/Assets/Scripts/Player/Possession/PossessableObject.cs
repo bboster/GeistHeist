@@ -44,6 +44,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [HideInInspector] public bool CanUnPossess = true;
     public IInputHandler InputHandler => GetInputHandler();
+    private IInputHandler inputHandler;
 
     private Coroutine unpossessCoroutine=null;
     private MeshRenderer meshRenderer;

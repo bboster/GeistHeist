@@ -147,7 +147,7 @@ MonoBehaviour:
   chargeRate: 3
   chargeLossRates: 0
   delayToUpdateSpeedometer: 0.25
-  chargeMeter: {fileID: 0}
+  chargeMeter: {fileID: 2299211873282198318}
 --- !u!54 &2667771672078999720
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -188,12 +188,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
   CinemachineCamera: {fileID: 8636809632817563645}
-  ghostSpawnPoint: {fileID: 5454552123015739937}
   hasTimer: 1
-  timerTime: 5
+  timerRechargeInterval: 2
+  maxChargePercentage: 100
+  timerRechargePercentage: 10
+  timerDischargePercentage: 10
+  ghostSpawnPoint: {fileID: 5454552123015739937}
   PossessedMaterial: {fileID: 2100000, guid: 7f215450e14de644d82bf78622e04701, type: 2}
   UnpossessedMaterial: {fileID: 2100000, guid: 85687a2e1ab634342855b4e1bcf96f17, type: 2}
   CanUnPossess: 0
+  OnTimerUpdate:
+    m_PersistentCalls:
+      m_Calls: []
   possessableCanvas: {fileID: 0}
   showSeconds: 1
   hideSeconds: 0.3
@@ -713,6 +719,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
+--- !u!114 &2299211873282198318 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9121925590646871397, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
+  m_PrefabInstance: {fileID: 7025589008815480395}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dc9536c61d9246478144dbcda620c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToyCarSpeedometerUI
 --- !u!224 &4460887975667798625 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}

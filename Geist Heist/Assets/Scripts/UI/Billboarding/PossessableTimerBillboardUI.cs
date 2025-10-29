@@ -8,11 +8,11 @@
  * TODO: it would be cool if the timer got bigger when its almost out
  */
 
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Slider = UnityEngine.UI.Slider;
 
 public class PossessableTimerBillboardUI : IBillboardUI
@@ -21,6 +21,8 @@ public class PossessableTimerBillboardUI : IBillboardUI
     [SerializeField] private float hideSeconds = 0.2f;
     [SerializeField] private float opacityWhenUnpossessed = 0.5f;
     [SerializeField] private float percentToHide = 0.08f;
+    [SerializeField,Required] private Image timerFill;
+    [SerializeField] private Gradient timerFillGradient;
 
     private float targetOpacity => PlayerManager.Instance.CurrentObject == possessable ? 1 : opacityWhenUnpossessed;
     private float opacityByTimeRemaining => (t <= percentToHide || t>= 1 - percentToHide) ? 0 : 1; // dont show if percent is almost 0 or almost full.
@@ -44,6 +46,7 @@ public class PossessableTimerBillboardUI : IBillboardUI
     {
         t = percentage / possessable.maxChargePercentage;
         slider.value = t;
+        timerFill.color = timerFillGradient.Evaluate(1-t);
     }
 
     protected override float CalculateOpacity(float playerDistance, Vector3 UIPosition)
@@ -52,5 +55,15 @@ public class PossessableTimerBillboardUI : IBillboardUI
 
         // This sounds harsh, but CalculateAndSetOpacity smooths the opacity so its okay
         return a * targetOpacity * opacityByTimeRemaining;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (Application.isPlaying)
+            return;
+
+        float t = (Time.time / 4) % 1;
+        timerFill.color = timerFillGradient.Evaluate(1-t);
+        slider.value = t;
     }
 }
