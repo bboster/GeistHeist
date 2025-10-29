@@ -21,10 +21,13 @@ public class PossessableTimerBillboardUI : IBillboardUI
     [SerializeField] private float hideSeconds = 0.2f;
     [SerializeField] private float opacityWhenUnpossessed = 0.5f;
     [SerializeField] private float percentToHide = 0.08f;
+    [SerializeField] private bool hideTimerIfPlayerPossessing = false;
     [SerializeField,Required] private Image timerFill;
     [SerializeField] private Gradient timerFillGradient;
 
-    private float targetOpacity => PlayerManager.Instance.CurrentObject == possessable ? 1 : opacityWhenUnpossessed;
+    private bool playerPossessingThis => PlayerManager.Instance.CurrentObject == possessable;
+
+    private float targetOpacity => playerPossessingThis ? 1 : opacityWhenUnpossessed;
     private float opacityByTimeRemaining => (t <= percentToHide || t>= 1 - percentToHide) ? 0 : 1; // dont show if percent is almost 0 or almost full.
 
     private PossessableObject possessable;
@@ -51,7 +54,12 @@ public class PossessableTimerBillboardUI : IBillboardUI
 
     protected override float CalculateOpacity(float playerDistance, Vector3 UIPosition)
     {
-        float a = base.CalculateOpacity(playerDistance, UIPosition);
+        float a;
+
+        if (hideTimerIfPlayerPossessing && playerPossessingThis)
+            a = 0;
+        else
+            a = base.CalculateOpacity(playerDistance, UIPosition);
 
         // This sounds harsh, but CalculateAndSetOpacity smooths the opacity so its okay
         return a * targetOpacity * opacityByTimeRemaining;
@@ -61,6 +69,9 @@ public class PossessableTimerBillboardUI : IBillboardUI
     {
         if (Application.isPlaying)
             return;
+
+        if(slider == null)
+            slider = GetComponent<Slider>();
 
         float t = (Time.time / 4) % 1;
         timerFill.color = timerFillGradient.Evaluate(1-t);
