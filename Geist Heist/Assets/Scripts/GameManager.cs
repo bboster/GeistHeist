@@ -28,6 +28,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject GuardManagerPrefab;
     [SerializeField, Required] GameObject BillboardUIManagerPrefab;
     [SerializeField, Required] GameObject LevelManagerPrefab;
+    [SerializeField, Required] GameObject DailougeManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject CooldownManagerPrefab;
@@ -117,6 +118,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(ShaderManagerPrefab);
         Instantiate(CooldownManagerPrefab);
         Instantiate(LevelManagerPrefab);
+        Instantiate(DailougeManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
