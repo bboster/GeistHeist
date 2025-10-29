@@ -10,6 +10,7 @@
 
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ToyCarSpeedometerUI : PossessableChargeMeterUI
 {
@@ -30,6 +31,7 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
     [Header("Components")]
     [SerializeField, Required] private RectTransform pointerTransform;
     [SerializeField, Required] private CanvasGroup speedometerGroup;
+    [SerializeField, Required] private Image fillImage;
 
     private float currentOpacity=0;
     private float lastHeldTime;
@@ -67,6 +69,7 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
 
         // Apply angle
         pointerTransform.eulerAngles = pointerTransform.eulerAngles.WithZ(z_angle);
+        fillImage.fillAmount = Mathf.InverseLerp(minAngle, maxAngle, z_angle);
 
         lastHeldTime = heldTime;
     }

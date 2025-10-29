@@ -40,7 +40,6 @@ public class ToyCar : IInputHandler
     //activates when ghost is leaving an object
     private bool IsLeaving = false;
 
-
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
     private void Start()
@@ -48,7 +47,10 @@ public class ToyCar : IInputHandler
         secondsToCharge = (maxStrength- minStrength) / chargeRate;
         thirdPersoncinemachineCamera.SetActive(false);
         rb = gameObject.GetComponent<Rigidbody>();
-        possessableObject = GetComponent<PossessableObject>();  
+        possessableObject = GetComponent<PossessableObject>();
+
+        if (chargeMeter == null)
+            chargeMeter = GetComponentInChildren<ToyCarSpeedometerUI>();
     }
 
     public override void OnPossessionStart()

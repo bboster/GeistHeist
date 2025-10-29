@@ -137,10 +137,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -248,7 +248,7 @@ MonoBehaviour:
   chargeRate: 3
   chargeLossRates: 0
   delayToUpdateSpeedometer: 0.5
-  chargeMeter: {fileID: 0}
+  chargeMeter: {fileID: 9009675019166137376}
 --- !u!54 &2667771672078999720
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -656,41 +656,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6847999550896907631}
     m_Modifications:
+    - target: {fileID: 3181534525798250846, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: m_FillClockwise
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5961405962273672736, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_Name
       value: Toy Car Speedometer
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_Pivot.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -722,11 +726,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 905.0016
+      value: -75
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -457.50006
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -750,6 +754,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
   m_PrefabInstance: {fileID: 3445414521819557798}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9009675019166137376 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5969620198072603526, guid: 65747143fce5523488645e37eb14252d, type: 3}
+  m_PrefabInstance: {fileID: 3445414521819557798}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dc9536c61d9246478144dbcda620c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToyCarSpeedometerUI
 --- !u!1001 &9169062900381163633
 PrefabInstance:
   m_ObjectHideFlags: 0
