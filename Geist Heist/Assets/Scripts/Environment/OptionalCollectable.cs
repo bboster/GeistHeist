@@ -289,4 +289,7 @@ public enum Collectable
     VaseCollectible,
 	ToyCarCollectible,
 	ChairCollectible,
+	Collectible_A,
+	Collectible_B,
+	Collectible_C,
 }
