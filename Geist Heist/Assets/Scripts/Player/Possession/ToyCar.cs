@@ -24,11 +24,12 @@ public class ToyCar : IInputHandler
     [SerializeField] private float maxSpeedToZoom = 1;
     [Tooltip("How much hold charges up by per second.")]
     [SerializeField] private float chargeRate;
+
+    [Header("Speedometer seconds")]
     [Tooltip("When not held, how much hold charges down by per second.")]
     [SerializeField] private float chargeLossRates;
-    [SerializeField] private float delayToUpdateSpeedometer = 0.5f;
+    [SerializeField] private float delayToUpdateSpeedometer = 0.25f;
 
-    private float secondsToCharge; // calculated in start => (maxStrength-minStrength) / chargeRate
     //realtime hold strength
     private float currentStrength;
 
@@ -44,7 +45,6 @@ public class ToyCar : IInputHandler
 
     private void Start()
     {
-        secondsToCharge = (maxStrength- minStrength) / chargeRate;
         thirdPersoncinemachineCamera.SetActive(false);
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();
@@ -65,18 +65,8 @@ public class ToyCar : IInputHandler
     // Called every frame while player is possessing.
     public override void WhilePossessingUpdate()
     {
-        if (InputEvents.ActionPressed)
-        {
-            chargeMeter.UpdateCharge(InputEvents.ActionHeldTime, secondsToCharge);
-        }
-        else
-        {
-            if (InputEvents.ActionReleasedTime < delayToUpdateSpeedometer)
-                return;
-
-            float t = (currentStrength - minStrength) / (maxStrength - minStrength);
-            chargeMeter.UpdateCharge(t*secondsToCharge, secondsToCharge);
-        }
+        Debug.Log(currentStrength);
+        chargeMeter.UpdateCharge(currentStrength, maxStrength);
     }
     
     private void FixedUpdate()
@@ -84,6 +74,8 @@ public class ToyCar : IInputHandler
         //consistent speed for car
         if (physicsEnabled)
         {
+            Debug.Log("clamping strength");
+            currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
             rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
             physicsEnabled = false;
         }
@@ -98,12 +90,8 @@ public class ToyCar : IInputHandler
     {
         if (rb.linearVelocity == Vector3.zero)
         {
+            // Will be clamped later
             currentStrength += chargeRate * Time.deltaTime;
-
-            if (currentStrength > maxStrength)
-            {
-                currentStrength = maxStrength;
-            }
         }
     }
 
@@ -117,11 +105,15 @@ public class ToyCar : IInputHandler
             }
         }
 
+        //Debug.Log(secondsNotHeld);
+
         // dont update the speedometer for a sec..
         if (secondsNotHeld < delayToUpdateSpeedometer)
             return;
 
-        currentStrength -= Time.deltaTime * chargeLossRates;
+        currentStrength = Mathf.Max(
+            currentStrength - (Time.deltaTime * chargeLossRates),
+            0);
     }
 
     public override void OnActionCanceled(float secondsHeld)

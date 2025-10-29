@@ -69,7 +69,10 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
 
         // Apply angle
         pointerTransform.eulerAngles = pointerTransform.eulerAngles.WithZ(z_angle);
-        fillImage.fillAmount = Mathf.InverseLerp(minAngle, maxAngle, z_angle);
+
+        fillImage.fillAmount = StaticUtilities.InverseLerpAngleUnclamped (minAngle, maxAngle, z_angle);
+
+        //Debug.Log($"fill amount: {fillImage.fillAmount}, z angle: {z_angle}");
 
         lastHeldTime = heldTime;
     }

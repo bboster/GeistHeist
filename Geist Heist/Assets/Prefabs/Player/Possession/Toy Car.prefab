@@ -246,8 +246,8 @@ MonoBehaviour:
   maxStrength: 21
   maxSpeedToZoom: 1
   chargeRate: 3
-  chargeLossRates: 0
-  delayToUpdateSpeedometer: 0.5
+  chargeLossRates: 6
+  delayToUpdateSpeedometer: 0.25
   chargeMeter: {fileID: 9009675019166137376}
 --- !u!54 &2667771672078999720
 Rigidbody:
@@ -656,13 +656,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6847999550896907631}
     m_Modifications:
-    - target: {fileID: 3181534525798250846, guid: 65747143fce5523488645e37eb14252d, type: 3}
-      propertyPath: m_FillClockwise
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5961405962273672736, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_Name
       value: Toy Car Speedometer
+      objectReference: {fileID: 0}
+    - target: {fileID: 5969620198072603526, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: shakeSpeed
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_Pivot.x
