@@ -30,7 +30,7 @@ public class ToyCar : IInputHandler
 
     private float secondsToCharge; // calculated in start => (maxStrength-minStrength) / chargeRate
     //realtime hold strength
-    private float chargeAmount;
+    private float currentStrength;
 
     private Rigidbody rb;
     private bool physicsEnabled = false;
@@ -72,7 +72,7 @@ public class ToyCar : IInputHandler
             if (InputEvents.ActionReleasedTime < delayToUpdateSpeedometer)
                 return;
 
-            float t = (chargeAmount - minStrength) / (maxStrength - minStrength);
+            float t = (currentStrength - minStrength) / (maxStrength - minStrength);
             chargeMeter.UpdateCharge(t*secondsToCharge, secondsToCharge);
         }
     }
@@ -96,11 +96,11 @@ public class ToyCar : IInputHandler
     {
         if (rb.linearVelocity == Vector3.zero)
         {
-            chargeAmount += chargeRate * Time.deltaTime;
+            currentStrength += chargeRate * Time.deltaTime;
 
-            if (chargeAmount > maxStrength)
+            if (currentStrength > maxStrength)
             {
-                chargeAmount = maxStrength;
+                currentStrength = maxStrength;
             }
         }
     }
@@ -119,13 +119,13 @@ public class ToyCar : IInputHandler
         if (secondsNotHeld < delayToUpdateSpeedometer)
             return;
 
-        chargeAmount -= Time.deltaTime * chargeLossRates;
+        currentStrength -= Time.deltaTime * chargeLossRates;
     }
 
     public override void OnActionCanceled(float secondsHeld)
     {
         // Fake charge amount calculation (this is a failsafe, sanity thing)
-        //chargeAmount = Mathf.Min((secondsHeld * chargeRate) + minStrength, maxStrength);
+        //currentStrength = Mathf.Min((secondsHeld * chargeRate) + minStrength, maxStrength);
 
         if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
