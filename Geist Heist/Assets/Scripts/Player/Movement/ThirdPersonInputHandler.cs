@@ -121,7 +121,10 @@ public class ThirdPersonInputHandler : IInputHandler
             }
 
             // change this when every interactable has its own cooldown
-            if (CooldownManager.Instance.IsCooldownActive)
+            //if (CooldownManager.Instance.IsCooldownActive)
+            //    continue;
+
+            if (result.transform.gameObject == this.gameObject)
                 continue;
 
             // Test if there is a wall between player and the object
@@ -150,6 +153,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
         // Sort by which one the player is looking at most. 
         return filteredSphereCastResults
+            .Where(r => r.transform.gameObject != this.transform.gameObject)
             .OrderBy(r => 
                 // Ref: dot product returns value -1 to 1. -1 for completely opposite directions and 1 for perfectly perpendicular.
                 Vector3.Dot(
@@ -169,6 +173,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
         foreach(var interactable in allInteractables)
         {
+            if (interactable == null)
+                continue;
+
             interactable.Interact();
             
             if(interactable is PossessableObject)
