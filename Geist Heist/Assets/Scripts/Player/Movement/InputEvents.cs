@@ -182,7 +182,7 @@ public class InputEvents : Singleton<InputEvents>
         Debug.Log("On Disable");
         Move?.Reset();   
         //Jump.Reset();
-        Pause.Reset();
+        Pause?.Reset();
         Action?.Reset();
         Interact?.Reset();
         Look?.Reset();

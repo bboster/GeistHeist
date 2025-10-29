@@ -33,6 +33,7 @@ public class ToyCar : IInputHandler
     private float chargeAmount;
 
     private Rigidbody rb;
+    private bool physicsEnabled = false;
     private PossessableObject possessableObject;
 
     private Coroutine freezeCoroutine;
@@ -73,6 +74,16 @@ public class ToyCar : IInputHandler
 
             float t = (chargeAmount - minStrength) / (maxStrength - minStrength);
             chargeMeter.UpdateCharge(t*secondsToCharge, secondsToCharge);
+        }
+    }
+    
+    private void FixedUpdate()
+    {
+        //consistent speed for car
+        if (physicsEnabled)
+        {
+            rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
+            physicsEnabled = false;
         }
     }
 
@@ -119,7 +130,8 @@ public class ToyCar : IInputHandler
         if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
             UnFreezePosition();
-            rb.AddForce(gameObject.transform.forward * chargeAmount, ForceMode.Impulse);
+            //for fixed update to handle physics better
+            physicsEnabled = true;
         }
     }
 

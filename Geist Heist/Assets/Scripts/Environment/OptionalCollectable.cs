@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Josh
  * Creation: 9/30/25
- * Last Edited: 9/30/25
+ * Last Edited: 10/27/2025
  * Summary: Collectable object. saves to player data.
  * 
  * TODO: make a vfx/shader/material for if player is replaying level, and this collectable has already been collected
@@ -14,6 +14,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 
 #if UNITY_EDITOR
@@ -25,19 +27,31 @@ public class OptionalCollectable : MonoBehaviour
 {
     [SerializeField] private GameObject CollectionParticlePrefab;
     [SerializeField] private Collectable ThisCollectable;
+    [InfoBox("Must be a refence to the model from assets folder, not from in scene")]
+    [SerializeField] private GameObject CollectableModel;
+
+    private CollectableRegistry Registry;
+    private Collider childCollider;
+
+    private void Awake()
+    {
+
+        childCollider = GetComponentInChildren<Collider>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // TODO: animation (?)
 
         // if player
-        if(other.transform.GetComponent<PossessableObject>() == null)
+        if (other.transform.GetComponent<PossessableObject>() == null)
         {
             return;
         }
 
         StaticUtilities.PlayAndDestroyParticle(CollectionParticlePrefab, transform.position);
         SaveDataManager.Instance.MarkCollectableAsCollected(ThisCollectable);
-        //Destroy(this.gameObject);
+        Destroy(childCollider);
         StartCoroutine(CollectAnimation());
     }
 
@@ -45,7 +59,6 @@ public class OptionalCollectable : MonoBehaviour
     {
         OnTriggerEnter(collision.collider);
     }
-
 
     #region Animation 
 
@@ -134,11 +147,48 @@ public class OptionalCollectable : MonoBehaviour
     #endregion
 
 
-    #region Debug Tools 
 #if UNITY_EDITOR
+
+    #region Registry Auto-Registration
+
+    private void OnValidate()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+            return;
+        if (Registry == null)
+            Registry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
+        AutoRegisterToRegistry();
+    }
+
+    private void AutoRegisterToRegistry()
+    {
+        if (CollectableModel == null)
+        {
+            Debug.LogWarning($"[{name}] No MeshRenderer found to register with CollectableRegistry.");
+            return;
+        }
+
+        // Queue the registry update to happen after import/validation finishes
+        EditorApplication.delayCall += () =>
+        {
+            if (Registry == null)
+            {
+                Debug.LogWarning($"[{name}] Registry still null after delay, skipping auto-registration.");
+                return;
+            }
+
+            Registry.AddOrUpdate(ThisCollectable, CollectableModel);
+
+            Debug.Log($"✅ Auto-registered {ThisCollectable} mesh into CollectableRegistry (delayed).");
+        };
+    }
+
+
+    #endregion
+    #region Debug Tools
     private string filePath => Application.dataPath + "/Scripts/Environment/OptionalCollectable.cs";
 
-    [Button("Add new collectable as enum")]
+    [Button("Add new collectable to Registry")]
     private async void RegisterAsEnum()
     {
         // code that rewrites the script itself. lol
@@ -146,7 +196,7 @@ public class OptionalCollectable : MonoBehaviour
         var currentEnums = Enum.GetNames(typeof(Collectable));
         string name = new string(
             this.gameObject.name
-            .Replace(" ","_")
+            .Replace(" ", "_")
             .Where(c => !" $.,;'()!@#$%^&*()/\\\"[]-".Contains(c))
             .ToArray()
             );
@@ -181,13 +231,13 @@ public class OptionalCollectable : MonoBehaviour
         ThisCollectable = (Collectable)((int)currentEnums.Count() + 1);
 
         Debug.Log("Saved enum as " + name);
-
     }
 
     [Button("Delete this enum")]
     private async void DeleteThisEnum()
     {
-        if(ThisCollectable == 0) {
+        if (ThisCollectable == 0)
+        {
             Debug.Log("Cant delete default enum");
             return;
         }
@@ -217,8 +267,8 @@ public class OptionalCollectable : MonoBehaviour
         Debug.Log("done recompiling");
 
     }
+    #endregion
 #endif
-#endregion
 }
 
 
@@ -227,9 +277,16 @@ public class OptionalCollectable : MonoBehaviour
 public enum Collectable
 {
     None,
-	Test_Collectable,
-	Test_Collectable_1,
-	Test_Collectable_2,
-	Test_Collectable_3,
-	Test_Collectable_4,
+    Test_Collectable,
+    Test_Collectable_1,
+    Test_Collectable_2,
+    Test_Collectable_3,
+    Test_Collectable_4,
+    Stone_Collectable,
+    Wood_Collectable,
+    Vending_Machine_Collectable,
+    
+    VaseCollectible,
+	ToyCarCollectible,
+	ChairCollectible,
 }
