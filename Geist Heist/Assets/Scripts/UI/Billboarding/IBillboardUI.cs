@@ -62,7 +62,7 @@ public abstract class IBillboardUI : MonoBehaviour
     [HideInInspector] public float CurrentAlpha = 1;
 
     // My magic number
-    private const float SMOOTH_SPEED = 10;
+    private const float SMOOTH_SPEED =1;
 
     #region Getters Setters
 
@@ -115,7 +115,15 @@ public abstract class IBillboardUI : MonoBehaviour
 
     // Can be overridden for custom behavior
     /// <param name="UIPosition">The position of this UI element on the screen</param>
-    public virtual void CalculateAndSetOpacity(float playerDistance, Vector3 UIPosition)
+    public void CalculateAndSetOpacity(float playerDistance, Vector3 UIPosition)
+    {
+        float a = CalculateOpacity(playerDistance, UIPosition);
+        // Smooth it
+        CurrentAlpha = Mathf.MoveTowards(CurrentAlpha, a, Time.deltaTime * SMOOTH_SPEED);
+        canvasGroup.alpha = CurrentAlpha;
+    }
+
+    protected virtual float CalculateOpacity(float playerDistance, Vector3 UIPosition)
     {
         float t = Mathf.InverseLerp(closeScaleDistance, farScaleDistance, playerDistance);
         float baseAlpha = Mathf.Lerp(closeOpacity, farOpacity, t);
@@ -123,16 +131,14 @@ public abstract class IBillboardUI : MonoBehaviour
         // check if baseAlpha is 0 to avoid all the bs happening down there
         if (!fadeInCorners || baseAlpha == 0)
         {
-            CurrentAlpha = Mathf.Lerp(CurrentAlpha, baseAlpha, Time.deltaTime * SMOOTH_SPEED);
-            canvasGroup.alpha = baseAlpha;
-            return;
+            return baseAlpha;
         }
 
         float x_percent = UIPosition.x / Screen.width; // 0 (left) -> 1 (right)
         float y_percent = UIPosition.y / Screen.height;// 0 (top) -> 1 (bottom)4
 
         // 0 (edge of screen) -> 0.5 (center of screen)
-        float x_edge_proximity = x_percent > 0.5f ? 1 - x_percent : x_percent; 
+        float x_edge_proximity = x_percent > 0.5f ? 1 - x_percent : x_percent;
         float y_edge_proximity = y_percent > 0.5f ? 1 - y_percent : y_percent;
 
         // 0 (within fade radius. Hide completely) -> 1 (not within fade radius)
@@ -142,11 +148,8 @@ public abstract class IBillboardUI : MonoBehaviour
         // Min between both axes
         float min_edge_percent = Mathf.Min(x_edge_percent, y_edge_percent);
 
-        // Debug
-        //GetComponent<TextMeshProUGUI>().text = min_edge_percent.ToString();
-
         // Set opacity
-        CurrentAlpha = Mathf.Lerp(CurrentAlpha, Mathf.Min(baseAlpha, min_edge_percent), Time.deltaTime * SMOOTH_SPEED);
-        canvasGroup.alpha = CurrentAlpha;
+        return Mathf.Min(baseAlpha, min_edge_percent);
+       
     }
 }
