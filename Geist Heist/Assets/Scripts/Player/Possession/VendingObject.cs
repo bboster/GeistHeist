@@ -90,6 +90,8 @@ public class VendingObject : IInputHandler, IInteractable
             tempLaunch.y = launchDirection.y;
             temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
         }
+
+        PossessableObject.OnActionPerformed?.Invoke();
     }
 
     public override void WhileActionNotHeld(float secondsNotHeld)

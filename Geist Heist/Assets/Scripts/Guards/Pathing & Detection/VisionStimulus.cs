@@ -9,6 +9,7 @@
 using System.Collections;
 using GuardUtilities;
 using NaughtyAttributes;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 
@@ -17,6 +18,7 @@ public class VisionStimulus : Stimulus
     #region Variable Declarations
 
     private bool hasSeenPlayer = false;
+    private bool playerObjectSeen = false;
     private Coroutine timer;
 
     [Header("Progamming")]
@@ -46,6 +48,13 @@ public class VisionStimulus : Stimulus
 
     #endregion
 
+    private void Awake()
+    {
+        PossessableObject.OnActionPerformed += ActionDetected;
+        PossessableObject.OnObjectLeft += ObjectLeft;
+    }
+
+    private void OnTriggerStay(Collider other)
 
 
     private void OnValidate()
@@ -64,6 +73,7 @@ public class VisionStimulus : Stimulus
         {
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
             {
+                hasSeenPlayer = true;
                 Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
 
                 Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
@@ -78,6 +88,22 @@ public class VisionStimulus : Stimulus
                 if (info.collider != null)
                     Debug.Log(info.collider.gameObject.name);
             }
+            else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
+            {
+                if (obj.gameObject.TryGetComponent(out Rigidbody rb))
+                {
+                    Vector3 velocityCheck = rb.linearVelocity.Abs();
+
+                    //If there's a better way to check if a possessable is moving please leave a note in the review
+                    if (velocityCheck.x > 1 || velocityCheck.y > 1 || velocityCheck.z > 1)
+                    {
+                        TriggerStimulus();
+                        return;
+                    }
+                }
+
+                playerObjectSeen = true;
+            }
         }
     }
 
@@ -88,6 +114,10 @@ public class VisionStimulus : Stimulus
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
             {
                 timer = StartCoroutine(VisionBreakTimer());
+            }
+            else if (obj.Equals(PlayerManager.Instance.CurrentObject))
+            {
+                playerObjectSeen = false;
             }
         }
     }
@@ -113,6 +143,25 @@ public class VisionStimulus : Stimulus
         parentController.RecieveStimulus(this, stateToChangeTo);
     }
 
+    private void ActionDetected()
+    {
+        if (playerObjectSeen == true)
+        {
+            parentController.RecieveStimulus(this, stateToChangeTo);
+        }
+    }
+
+    private void ObjectLeft()
+    {
+        playerObjectSeen = false;
+    }
+
+    private void OnDisable()
+    {
+        PossessableObject.OnActionPerformed -= ActionDetected;
+        PossessableObject.OnObjectLeft -= ObjectLeft;
+    }
+
     [Button("Sync Light to Collider")]
     private void SyncLightToCollider()
     {
@@ -136,7 +185,7 @@ public class VisionStimulus : Stimulus
             float coneHeight = bounds.size.z * transform.localScale.z;
             float coneRadius = Mathf.Max(bounds.size.x, bounds.size.y) * 0.5f * transform.localScale.x;
 
-            spotLight.range = coneHeight*5;
+            spotLight.range = coneHeight * 5;
             spotLight.spotAngle = Mathf.Rad2Deg * Mathf.Atan(coneRadius / coneHeight) * 2f;
             spotLight.innerSpotAngle = spotLight.spotAngle * 0.8f;
 

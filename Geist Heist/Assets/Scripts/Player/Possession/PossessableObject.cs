@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/27/25
+ * Last Modified: 10/28/25
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -52,6 +52,16 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [ReadOnly] private float currentTimerPercentage = 100f;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
+
+    #region Guard Detection Variables
+
+    public bool IsMoving = false;
+
+    public static Action OnActionPerformed;
+    public static Action OnObjectLeft;
+
+    #endregion
+
 
     void Start()
     {
@@ -138,6 +148,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
         InputHandler.OnPossessionEnded();
+        OnObjectLeft?.Invoke();
 
         if (hasTimer)
         {
