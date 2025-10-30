@@ -23,8 +23,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
-    [Tooltip("The time in seconds between each percentage update.")]
-    [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargeInterval = 2f;
     [SerializeField] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
     [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargePercentage = 10;

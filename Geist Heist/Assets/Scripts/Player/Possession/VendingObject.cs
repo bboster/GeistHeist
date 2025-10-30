@@ -14,7 +14,7 @@ using UnityEngine.UI;
 public class VendingObject : IInputHandler, IInteractable
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
-    [SerializeField] private GameObject CanSpawnPoint;
+    [SerializeField] private Transform CanSpawnPoint;
     [SerializeField] private GameObject CanPrefab;
 
     private float currentStrength;
@@ -23,9 +23,12 @@ public class VendingObject : IInputHandler, IInteractable
     /*[Dropdown("balancing")]*/[SerializeField] private float minStrength;
     /*[Dropdown("balancing")]*/[SerializeField] private float strengthGrowthRate;
     /*[Dropdown("balancing")]*/[SerializeField] private float chargeLossRate;
-    /*[Dropdown("balancing")]*/[SerializeField] private float tapStrength;
     /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
     /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
+    [SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
+
+    [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
+
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
@@ -58,7 +61,6 @@ public class VendingObject : IInputHandler, IInteractable
     #region action
     public override void OnActionStarted()
     {
-        Debug.Log("hiii");
         if (Tap)
         {
             GameObject temp;
@@ -72,7 +74,7 @@ public class VendingObject : IInputHandler, IInteractable
         if (!Tap)
         {
             // Will be clamped later (dont clamp now for charge ui animations)
-            currentStrength += strengthGrowthRate;
+            currentStrength += Time.deltaTime * strengthGrowthRate;
         }
     }
 
@@ -91,6 +93,9 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void WhileActionNotHeld(float secondsNotHeld)
     {
+        if (secondsNotHeld < delayToUpdateChargeMeter)
+            return;
+
         currentStrength = Mathf.Max(
             currentStrength - (Time.deltaTime * chargeLossRate),
             minStrength);
@@ -139,5 +144,36 @@ public class VendingObject : IInputHandler, IInteractable
         //PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
     }
 
-   
+    public void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(CanSpawnPoint.position, CanSpawnPoint.forward);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawRay(CanSpawnPoint.position, 
+            Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward)
+            .WithY(launchDirection.y)
+        );
+    }
+
+    public void OnDrawGizmosSelected()
+    {
+        // ok guys i got distracted but i still wanna finish this l8r
+        /*Gizmos.color = Color.green;
+        Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward)
+            .WithY(launchDirection.y);
+        Gizmos.DrawRay(CanSpawnPoint.position, tempLaunch * maxStrength);
+
+        float angle = Mathf.Atan2(launchDirection.y, launchDirection.x);
+        float prevy = 0;
+        for(int i = 1; i< 10; i++)
+        {
+            float y = tempLaunch.y * Mathf.Sin(angle) - (0.5f * -Physics.gravity.y * Mathf.Pow(i, 2));
+
+            Gizmos.DrawLine(
+                CanSpawnPoint.position + new Vector3(tempLaunch.x * (i - 1f), prevy, tempLaunch.z * (i - 1f)),
+                CanSpawnPoint.position + new Vector3(tempLaunch.x * i, y, tempLaunch.z * i)
+                );
+            prevy = y;
+        } */
+    }
 }

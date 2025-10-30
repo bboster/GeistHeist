@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622679869027423434}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 1.23, y: -0.199, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5139431784850570232}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &2128761672490447748
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +108,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
   CinemachineCamera: {fileID: 6933669320086577963}
   hasTimer: 1
-  timerRechargeInterval: 2
   maxChargePercentage: 100
   timerRechargePercentage: 10
   timerDischargePercentage: 10
@@ -119,7 +118,7 @@ MonoBehaviour:
   OnTimerUpdate:
     m_PersistentCalls:
       m_Calls: []
-  possessableCanvas: {fileID: 6447547969885873939}
+  possessableCanvas: {fileID: 0}
   showSeconds: 1
   hideSeconds: 0.3
 --- !u!114 &8338812846202371703
@@ -135,15 +134,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VendingObject
   thirdPersoncinemachineCamera: {fileID: 2874937476590195754}
-  CanSpawnPoint: {fileID: 8831139708237052725}
+  CanSpawnPoint: {fileID: 3232091217144684036}
   CanPrefab: {fileID: 2652521570684091903, guid: 6927a51dfcbc2f7468bcae6a92d9ce22, type: 3}
-  maxStrength: 0
-  minStrength: 0
-  strengthGrowthRate: 0
-  chargeLossRate: 0
-  tapStrength: 0
+  maxStrength: 30
+  minStrength: 3
+  strengthGrowthRate: 4
+  chargeLossRate: 10
   launchDirection: {x: 1, y: 2, z: 1}
   Tap: 0
+  tapStrength: 0
+  delayToUpdateChargeMeter: 0.25
   chargeMeter: {fileID: 0}
 --- !u!114 &5015108751406224692
 MonoBehaviour:
@@ -721,6 +721,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1108840346302473861, guid: 9c745ed607871d5468850584fc531e86, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4331414674891715746, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -801,6 +805,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7912095340210317922, guid: 9c745ed607871d5468850584fc531e86, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8303213893348085824, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -808,6 +816,10 @@ PrefabInstance:
     - target: {fileID: 8303213893348085824, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8575200198184065595, guid: 9c745ed607871d5468850584fc531e86, type: 3}
+      propertyPath: HideWhenNotHeld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -817,10 +829,5 @@ PrefabInstance:
 --- !u!224 &5101196992942564610 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4331414674891715746, guid: 9c745ed607871d5468850584fc531e86, type: 3}
-  m_PrefabInstance: {fileID: 8851632730009784736}
-  m_PrefabAsset: {fileID: 0}
---- !u!223 &6447547969885873939 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 2570741363069089459, guid: 9c745ed607871d5468850584fc531e86, type: 3}
   m_PrefabInstance: {fileID: 8851632730009784736}
   m_PrefabAsset: {fileID: 0}
