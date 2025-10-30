@@ -107,13 +107,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
   CinemachineCamera: {fileID: 6933669320086577963}
-  ghostSpawnPoint: {fileID: 3232091217144684036}
   hasTimer: 1
-  timerTime: 5
+  timerRechargeInterval: 2
+  maxChargePercentage: 100
+  timerRechargePercentage: 10
+  timerDischargePercentage: 10
+  ghostSpawnPoint: {fileID: 3232091217144684036}
   PossessedMaterial: {fileID: 2100000, guid: 2db4e064d1bb3964a9a05b1c2f2c9000, type: 2}
   UnpossessedMaterial: {fileID: 2100000, guid: 05b7f6e1af8172c499751543cad51070, type: 2}
   CanUnPossess: 1
-  possessableCanvas: {fileID: 0}
+  OnTimerUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  possessableCanvas: {fileID: 6447547969885873939}
   showSeconds: 1
   hideSeconds: 0.3
 --- !u!114 &8338812846202371703
@@ -134,11 +140,11 @@ MonoBehaviour:
   maxStrength: 0
   minStrength: 0
   strengthGrowthRate: 0
+  chargeLossRate: 0
   tapStrength: 0
   launchDirection: {x: 1, y: 2, z: 1}
   Tap: 0
-  ChargeUI: {fileID: 0}
-  Images: {fileID: 0}
+  chargeMeter: {fileID: 0}
 --- !u!114 &5015108751406224692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -711,6 +717,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vending Machine Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1108840346302473861, guid: 9c745ed607871d5468850584fc531e86, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4331414674891715746, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -791,6 +801,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8303213893348085824, guid: 9c745ed607871d5468850584fc531e86, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303213893348085824, guid: 9c745ed607871d5468850584fc531e86, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 40
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -799,5 +817,10 @@ PrefabInstance:
 --- !u!224 &5101196992942564610 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4331414674891715746, guid: 9c745ed607871d5468850584fc531e86, type: 3}
+  m_PrefabInstance: {fileID: 8851632730009784736}
+  m_PrefabAsset: {fileID: 0}
+--- !u!223 &6447547969885873939 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 2570741363069089459, guid: 9c745ed607871d5468850584fc531e86, type: 3}
   m_PrefabInstance: {fileID: 8851632730009784736}
   m_PrefabAsset: {fileID: 0}

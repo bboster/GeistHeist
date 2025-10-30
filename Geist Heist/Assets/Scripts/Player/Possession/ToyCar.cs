@@ -27,7 +27,7 @@ public class ToyCar : IInputHandler
 
     [Header("Speedometer seconds")]
     [Tooltip("When not held, how much hold charges down by per second.")]
-    [SerializeField] private float chargeLossRates;
+    [SerializeField] private float chargeLossRate;
     [SerializeField] private float delayToUpdateSpeedometer = 0.25f;
 
     //realtime hold strength
@@ -111,8 +111,8 @@ public class ToyCar : IInputHandler
             return;
 
         currentStrength = Mathf.Max(
-            currentStrength - (Time.deltaTime * chargeLossRates),
-            0);
+            currentStrength - (Time.deltaTime * chargeLossRate),
+            minStrength);
     }
 
     public override void OnActionCanceled(float secondsHeld)
