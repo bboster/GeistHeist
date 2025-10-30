@@ -35,10 +35,6 @@ public class ThirdPersonInputHandler : IInputHandler
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField, Foldout("Interaction")] private float interactRayLength = 5;
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
-    private GameObject lastObjectLookedAt;
-    private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
-
-    //private GameObject interactableCanvas => GameManager.Instance.InteractionCanvas;
 
     [Header("Between Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
@@ -49,6 +45,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public static Action<GuardStates> OnPossessObject;
 
+    private GameObject lastObjectLookedAt;
+    private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
+    private float frameCountSinceLastInteraction;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -165,8 +164,13 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void OnInteractStarted()
     {
+        if (Time.frameCount - frameCountSinceLastInteraction <= 3)
+            return;
+
         var result = GetBestInteractableSphereCast();
         if (result == null) return;
+
+        frameCountSinceLastInteraction = Time.time;
 
         var allInteractables = result.GetComponentsInChildren<IInteractable>();
 

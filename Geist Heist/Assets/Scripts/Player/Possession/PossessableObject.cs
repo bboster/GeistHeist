@@ -15,12 +15,15 @@ using NaughtyAttributes;
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
     
     [Required] public CinemachineCamera CinemachineCamera;
-
+    
+    [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
+    public List<Transform> ghostExitPoints;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
     [SerializeField] public float maxChargePercentage = 100;
@@ -52,6 +55,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     void Start()
     {
+        if (ghostExitPoints.Count == 0)
+        {
+            Debug.Log("No exit points set for " + this);
+        }
+
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
         if (UnpossessedMaterial != null)
