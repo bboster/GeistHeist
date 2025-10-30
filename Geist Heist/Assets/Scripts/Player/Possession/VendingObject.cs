@@ -43,7 +43,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnPossessionEnded()
     {
-        Images.SetActive(false);
+        //Images.SetActive(false);
     }
 
     #region action
@@ -58,8 +58,8 @@ public class VendingObject : IInputHandler, IInteractable
         else
         {
             currentStrength = minStrength;
-            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
-            Images.SetActive(true);
+            //ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
+            //Images.SetActive(true);
         }
     }
 
@@ -72,7 +72,7 @@ public class VendingObject : IInputHandler, IInteractable
             {
                 currentStrength = maxStrength;
             }
-            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
+            //ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
         }
     }
 
@@ -85,7 +85,7 @@ public class VendingObject : IInputHandler, IInteractable
             Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
             tempLaunch.y = launchDirection.y;
             temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
-            Images.SetActive(false);
+            //Images.SetActive(false);
         }
     }
 
@@ -94,10 +94,10 @@ public class VendingObject : IInputHandler, IInteractable
     #region Possess
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf)
+        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess)
         {
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
-            Images.SetActive(false);
+            //Images.SetActive(false);
         }
     }
 
@@ -133,7 +133,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     void IInteractable.Interact()
     {
-        PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
+        //PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
     }
 
     
