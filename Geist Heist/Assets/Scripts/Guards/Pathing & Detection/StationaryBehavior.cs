@@ -7,7 +7,7 @@
  */
 using System.Collections;
 using System.Linq.Expressions;
-using UnityEditor.Splines;
+//using UnityEditor.Splines;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Splines.Interpolators;

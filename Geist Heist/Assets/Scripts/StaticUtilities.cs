@@ -49,7 +49,6 @@ public static class StaticUtilities
 
     #endregion
 
-
     #region Components
 
     // Stole ts from the internet
@@ -193,7 +192,6 @@ public static class StaticUtilities
 
     #endregion
 
-
     #region Transform
 
     /// <summary>
@@ -261,6 +259,58 @@ public static class StaticUtilities
     {
         vector.z = z;
         return vector;
+    }
+
+    #endregion
+
+    #region Math
+
+    public static float InverseLerpUnclamped(float a, float b, float value)
+    {
+        if (a != b)
+        {
+            return (value - a) / (b - a);
+        }
+
+        return 0f;
+    }
+
+    public static float InverseLerpAngle(float a, float b, float value)
+    {
+        // this is an AWFUL way to do this bro 
+        while (a < 0 || b < 0 || value < 0)
+        {
+            a += 180;
+            b += 180;
+            value += 180;
+        }
+
+        a = Mathf.Repeat(a, 360);
+        b = Mathf.Repeat(b, 360);
+        value = Mathf.Repeat(value, 360);
+
+        //Debug.Log($"a: {Mathf.Round(a)} b: {Mathf.Round(b)} value:{Mathf.Round(value)} t: {Mathf.Round(Mathf.InverseLerp(a, b, value) * 100) / 100}");
+
+        return Mathf.InverseLerp(a, b, value);
+    }
+
+    public static float InverseLerpAngleUnclamped(float a, float b, float value)
+    {
+        // this is an AWFUL way to do this bro 
+        while (a < 0 || b < 0 || value < 0)
+        {
+            a += 180;
+            b += 180;
+            value += 180;
+        }
+
+        a = Mathf.Repeat(a, 360);
+        b = Mathf.Repeat(b, 360);
+        value = Mathf.Repeat(value, 360);
+
+        //Debug.Log($"a: {Mathf.Round(a)} b: {Mathf.Round(b)} value:{Mathf.Round(value)} t: {Mathf.Round(InverseLerpUnclamped(a, b, value) * 100) / 100}");
+
+        return InverseLerpUnclamped(a, b, value);
     }
 
     #endregion

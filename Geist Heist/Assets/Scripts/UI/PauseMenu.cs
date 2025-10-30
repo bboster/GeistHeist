@@ -53,11 +53,15 @@ public class PauseMenu : MonoBehaviour
         quitToHubButton.onClick.AddListener(OnGoToHubButtonClicked);
         quitToMainMenuButton.onClick.AddListener(OnGoToMainMenuButtonClicked);
 
+        resetSaveButton.onClick.AddListener(ResetSaveDataButtonClicked);
+        restartLevelButton.onClick.AddListener(RestartLevelButtonClicked);
+
         ClosePauseMenu();
     }
 
     public void OpenPauseMenu()
     {
+        confirmationPopup.HideConfirmationPopup();
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.IsPaused = true;
         pauseScreenParent.gameObject.SetActive(true);
@@ -67,6 +71,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ClosePauseMenu()
     {
+        confirmationPopup.HideConfirmationPopup();
         Debug.Log("Pause Menu closed");
         GameManager.Instance.IsPaused = false;
         pauseScreenParent.gameObject.SetActive(false);
