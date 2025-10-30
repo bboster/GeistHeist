@@ -65,7 +65,11 @@ public class CooldownManager : Singleton<CooldownManager>
     private void UpdateSlider()
     {
         if (cooldownSlider==null)
+        {
+            Debug.Log("COOLDOWN SLIDER NULL");
             return;
+        }
+
         
         if (IsCooldownActive)
         {
