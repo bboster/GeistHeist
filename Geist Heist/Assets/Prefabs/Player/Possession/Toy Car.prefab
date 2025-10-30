@@ -458,7 +458,7 @@ MonoBehaviour:
   minStrength: 3
   maxStrength: 21
   chargeRate: 3
-  rotationRate: 15
+  rotationRate: 30
   ChargeUI: {fileID: 2524094790011941006}
   Images: {fileID: 2175208431951941387}
 --- !u!54 &2667771672078999720
@@ -508,10 +508,17 @@ MonoBehaviour:
   - {fileID: 2031045793947953859}
   - {fileID: 858603141691523537}
   hasTimer: 1
-  timerTime: 5
+  timerRechargeInterval: 2
+  maxChargePercentage: 100
+  timerRechargePercentage: 10
+  timerDischargePercentage: 10
+  ghostSpawnPoint: {fileID: 0}
   PossessedMaterial: {fileID: 2100000, guid: 7f215450e14de644d82bf78622e04701, type: 2}
   UnpossessedMaterial: {fileID: 2100000, guid: 85687a2e1ab634342855b4e1bcf96f17, type: 2}
   CanUnPossess: 0
+  OnTimerUpdate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6480417976091650489
 MonoBehaviour:
   m_ObjectHideFlags: 0

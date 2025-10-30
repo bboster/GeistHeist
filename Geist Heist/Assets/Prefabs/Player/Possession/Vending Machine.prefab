@@ -84,8 +84,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3232091217144684036}
+  - component: {fileID: 4600751154703980395}
   m_Layer: 6
-  m_Name: GhostSpawnPoint
+  m_Name: GhostExitPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,6 +107,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5139431784850570232}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4600751154703980395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622679869027423434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b3fe61085f9b94186df4016697fd94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AddGizmo
 --- !u!1 &2128761672490447748
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,10 +197,17 @@ MonoBehaviour:
   ghostExitPoints:
   - {fileID: 3232091217144684036}
   hasTimer: 1
-  timerTime: 7
+  timerRechargeInterval: 2
+  maxChargePercentage: 100
+  timerRechargePercentage: 10
+  timerDischargePercentage: 10
+  ghostSpawnPoint: {fileID: 0}
   PossessedMaterial: {fileID: 2100000, guid: 2db4e064d1bb3964a9a05b1c2f2c9000, type: 2}
   UnpossessedMaterial: {fileID: 2100000, guid: 05b7f6e1af8172c499751543cad51070, type: 2}
   CanUnPossess: 1
+  OnTimerUpdate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8338812846202371703
 MonoBehaviour:
   m_ObjectHideFlags: 0
