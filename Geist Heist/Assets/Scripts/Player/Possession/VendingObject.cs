@@ -52,6 +52,7 @@ public class VendingObject : IInputHandler, IInteractable
     public override void WhilePossessingUpdate()
     {
         chargeMeter.UpdateCharge(currentStrength, maxStrength);
+        //Images.SetActive(false);
     }
 
     #region action
@@ -100,7 +101,7 @@ public class VendingObject : IInputHandler, IInteractable
     #region Interact
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf)
+        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess)
         {
             PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
         }
@@ -135,7 +136,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     void IInteractable.Interact()
     {
-        PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
+        //PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
     }
 
    
