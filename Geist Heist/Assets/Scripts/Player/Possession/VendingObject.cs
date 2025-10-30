@@ -87,6 +87,8 @@ public class VendingObject : IInputHandler, IInteractable
             temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
             //Images.SetActive(false);
         }
+
+        PossessableObject.OnActionPerformed?.Invoke();
     }
 
     #endregion
