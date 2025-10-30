@@ -22,6 +22,8 @@ public class ToyCar : IInputHandler
     [SerializeField] private float maxStrength;
     [Tooltip("How much hold charges up by per second.")]
     [SerializeField] private float chargeRate;
+    [Tooltip("How much moving rotates by per second.")]
+    [SerializeField] private float rotationRate;
     //realtime hold strength
     private float currentStrength;
 
@@ -168,16 +170,25 @@ public class ToyCar : IInputHandler
     #region Move
     public override void OnMoveStarted()
     {
-
     }
+
     public override void WhileMoveHeld()
     {
+        var direction = InputEvents.Instance.InputDirection2D.x;
+        var rotation = rotationRate * direction;
+
+        if (rb.linearVelocity == Vector3.zero)
+        {
+            transform.Rotate(new Vector3(rotation, 0, 0) * Time.deltaTime);
+        }
     }
 
     public override void WhileMoveNotHeld()
     {
     }
-    public override void OnMoveCanceled() { }
+    public override void OnMoveCanceled()
+    {
+    }
     #endregion
 
 
