@@ -8,6 +8,7 @@
  */
 
 using NaughtyAttributes;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -109,9 +110,27 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
-        if (possessable.ghostSpawnPoint != null)
+        //to decide where ghost exits the possessable
+        if (possessable.ghostExitPoints != null)
         {
-            PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostSpawnPoint.position;
+            //go through spawn points until one of them doesn't collide
+            for (int i = 0; i < possessable.ghostExitPoints.Count; i++)
+            {
+                Collider[] collisions = Physics.OverlapSphere(possessable.ghostExitPoints[i].transform.position, 0.2f);
+
+                //no collision = use this point
+                if (collisions.Length <= 0)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
+                    break;
+                }
+                
+                //if all of them collide, just use the last backup exit point
+                if (i == possessable.ghostExitPoints.Count - 1)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
+                }
+            }
         }
 
         //make transition not crazy

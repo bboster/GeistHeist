@@ -1,10 +1,11 @@
 /*
  * Author: Jacob Bateman
- * Contributors:
+ * Contributors: Toby
  * Creation: 10/21/25
- * Last Edited: 10/21/25
+ * Last Edited: 10/27/25
  * Summary: Stores data for a level that needs to carry over between scene reloads
  */
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;

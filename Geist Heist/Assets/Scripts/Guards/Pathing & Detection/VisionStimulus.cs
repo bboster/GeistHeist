@@ -1,16 +1,17 @@
 /*
  * Author: Jacob Bateman
- * Contributors:
+ * Contributors: Joshua Kelly
  * Creation: 10/02/25
- * Last Edited: 10/07/25
+ * Last Edited: 10/28/25
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
 using System.Collections;
-using UnityEngine;
 using GuardUtilities;
 using NaughtyAttributes;
 using Unity.Cinemachine;
+using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class VisionStimulus : Stimulus
 {
@@ -37,6 +38,10 @@ public class VisionStimulus : Stimulus
     [ShowIf("showProgrammingValues")]
     [SerializeField] private Transform raycastSpawn;
 
+    [ShowIf("showProgrammingValues")]
+    [SerializeField] private Light spotLight;
+    [ShowIf("showProgrammingValues")]
+    [SerializeField] private Collider visionCollider;
 
     [ShowIf("showProgrammingValues")]
     [SerializeField] private GuardController parentController;
@@ -50,8 +55,16 @@ public class VisionStimulus : Stimulus
     }
 
     private void OnTriggerStay(Collider other)
+
+
+    private void OnValidate()
     {
-        if(timer != null)
+        SyncLightToCollider();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (timer != null)
         {
             StopCoroutine(timer);
             timer = null;
@@ -75,9 +88,9 @@ public class VisionStimulus : Stimulus
                 if (info.collider != null)
                     Debug.Log(info.collider.gameObject.name);
             }
-            else if(obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
+            else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
             {
-                if(obj.gameObject.TryGetComponent(out Rigidbody rb))
+                if (obj.gameObject.TryGetComponent(out Rigidbody rb))
                 {
                     Vector3 velocityCheck = rb.linearVelocity.Abs();
 
@@ -96,13 +109,13 @@ public class VisionStimulus : Stimulus
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.TryGetComponent(out PossessableObject obj))
+        if (other.gameObject.TryGetComponent(out PossessableObject obj))
         {
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
             {
                 timer = StartCoroutine(VisionBreakTimer());
             }
-            else if(obj.Equals(PlayerManager.Instance.CurrentObject))
+            else if (obj.Equals(PlayerManager.Instance.CurrentObject))
             {
                 playerObjectSeen = false;
             }
@@ -132,7 +145,7 @@ public class VisionStimulus : Stimulus
 
     private void ActionDetected()
     {
-        if(playerObjectSeen == true)
+        if (playerObjectSeen == true)
         {
             parentController.RecieveStimulus(this, stateToChangeTo);
         }
@@ -147,5 +160,36 @@ public class VisionStimulus : Stimulus
     {
         PossessableObject.OnActionPerformed -= ActionDetected;
         PossessableObject.OnObjectLeft -= ObjectLeft;
+    }
+
+    [Button("Sync Light to Collider")]
+    private void SyncLightToCollider()
+    {
+        if (spotLight == null)
+        {
+            Debug.LogWarning("No spotlight assigned on VisionStimulus.");
+            return;
+        }
+
+        Collider col = GetComponent<Collider>();
+        if (col == null)
+        {
+            Debug.LogWarning("No collider found on VisionStimulus.");
+            return;
+        }
+
+        if (col is MeshCollider meshCol && meshCol.sharedMesh != null)
+        {
+            Bounds bounds = meshCol.sharedMesh.bounds;
+
+            float coneHeight = bounds.size.z * transform.localScale.z;
+            float coneRadius = Mathf.Max(bounds.size.x, bounds.size.y) * 0.5f * transform.localScale.x;
+
+            spotLight.range = coneHeight * 5;
+            spotLight.spotAngle = Mathf.Rad2Deg * Mathf.Atan(coneRadius / coneHeight) * 2f;
+            spotLight.innerSpotAngle = spotLight.spotAngle * 0.8f;
+
+            Debug.Log($"[VisionStimulus] Synced spotlight from MeshCollider -> Range: {spotLight.range}, Angle: {spotLight.spotAngle}");
+        }
     }
 }
