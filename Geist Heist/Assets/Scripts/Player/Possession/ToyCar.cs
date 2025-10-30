@@ -24,10 +24,12 @@ public class ToyCar : IInputHandler
     [SerializeField] private float maxSpeedToZoom = 1;
     [Tooltip("How much hold charges up by per second.")]
     [SerializeField] private float chargeRate;
-
-    [Header("Speedometer seconds")]
     [Tooltip("When not held, how much hold charges down by per second.")]
     [SerializeField] private float chargeLossRate;
+    [Tooltip("Force there to be time between zooms")]
+    [SerializeField] private float delayBetweenZooms = 1;
+
+    [Header("Speedometer seconds")]
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
 
     //realtime hold strength
@@ -40,6 +42,7 @@ public class ToyCar : IInputHandler
     private Coroutine freezeCoroutine;
     //activates when ghost is leaving an object
     private bool IsLeaving = false;
+    private bool hasLaunchedThisPossession = false;
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
@@ -55,11 +58,13 @@ public class ToyCar : IInputHandler
 
     public override void OnPossessionStart()
     {
+        hasLaunchedThisPossession = false;
         chargeMeter.OnPossessionStarted();
     }
 
     public override void OnPossessionEnded()
     {
+        currentStrength = minStrength;
     }
 
     // Called every frame while player is possessing.
@@ -77,6 +82,7 @@ public class ToyCar : IInputHandler
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
             rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
             physicsEnabled = false;
+            hasLaunchedThisPossession = true;
         }
     }
 
@@ -87,7 +93,10 @@ public class ToyCar : IInputHandler
 
     public override void WhileActionHeld(float secondsHeld)
     {
-        if (rb.linearVelocity == Vector3.zero)
+        if (secondsHeld < delayBetweenZooms && hasLaunchedThisPossession)
+            return;
+
+        if (rb.linearVelocity.magnitude <= 0.5f)
         {
             // Will be clamped later
             currentStrength += chargeRate * Time.deltaTime;
@@ -96,7 +105,7 @@ public class ToyCar : IInputHandler
 
     public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        if (rb.linearVelocity.magnitude <= 0)
+        if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
             if (freezeCoroutine == null)
             {
@@ -104,10 +113,8 @@ public class ToyCar : IInputHandler
             }
         }
 
-        //Debug.Log(secondsNotHeld);
-
         // dont update the speedometer for a sec..
-        if (secondsNotHeld < delayToUpdateChargeMeter)
+        if (secondsNotHeld < delayToUpdateChargeMeter && hasLaunchedThisPossession)
             return;
 
         currentStrength = Mathf.Max(

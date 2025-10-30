@@ -50,6 +50,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnPossessionEnded()
     {
+        currentStrength = minStrength;
     }
 
     public override void WhilePossessingUpdate()

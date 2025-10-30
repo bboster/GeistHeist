@@ -144,9 +144,10 @@ MonoBehaviour:
   minStrength: 3
   maxStrength: 21
   maxSpeedToZoom: 1
-  chargeRate: 3
-  chargeLossRates: 0
-  delayToUpdateSpeedometer: 0.25
+  chargeRate: 5
+  chargeLossRate: 7
+  delayBetweenZooms: 0.5
+  delayToUpdateChargeMeter: 0.25
   chargeMeter: {fileID: 2299211873282198318}
 --- !u!54 &2667771672078999720
 Rigidbody:
@@ -189,7 +190,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
   CinemachineCamera: {fileID: 8636809632817563645}
   hasTimer: 1
-  timerRechargeInterval: 2
   maxChargePercentage: 100
   timerRechargePercentage: 10
   timerDischargePercentage: 10
