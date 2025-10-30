@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5174798721385706603}
   - component: {fileID: 2130920210833853230}
-  - component: {fileID: 4083369487621555691}
+  - component: {fileID: 3804342911933699424}
   m_Layer: 6
   m_Name: CollectibleTemplate
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 6805773382780425253}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.7, y: 2.62, z: 17.04}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -55,8 +55,8 @@ CapsuleCollider:
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &4083369487621555691
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3804342911933699424
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,8 +65,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6805773382780425253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b7a76a9694e0db4a9fc41b7ebf828e5, type: 3}
+  m_Script: {fileID: 11500000, guid: ce5d0aa4adaa3c540aa04be48283ba54, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OptionalCollectableHubDisplay
+  m_EditorClassIdentifier: Assembly-CSharp::OptionalCollectable
+  CollectionParticlePrefab: {fileID: 8306819529709543630, guid: 4bea46a42db08834591f5241d94c19f7, type: 3}
   ThisCollectable: 0
-  DebugAlwaysDisplay: 0
+  CollectableModel: {fileID: 0}

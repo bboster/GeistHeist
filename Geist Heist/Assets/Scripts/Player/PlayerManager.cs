@@ -1,13 +1,14 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 10/23/25
+ * Last Modified: 10/29/25
  * 
  * Brief Description: dont put this script on the player.
  * handles possession and such.
  */
 
 using NaughtyAttributes;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -42,7 +43,10 @@ public class PlayerManager : Singleton<PlayerManager>
         Cursor.lockState = CursorLockMode.Locked;
 
         playerCOF = PlayerGhostObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
-        LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+        if (GameManager.Instance.Player == null)
+            Debug.Log("PlayerStart is null in gamemanager");
+        else
+            LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
     }
 
     public void InitializePlayerManager()
@@ -60,6 +64,17 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessObject(PossessableObject possessable)
     {
+        if(possessable == null)
+        {
+            Debug.LogError("Possessable is null");
+            return;
+        }
+        if (PlayerGhostObject == null)
+        {
+            Debug.LogError("Player Ghost Object is null");
+            return;
+        }
+
         //make transition not crazy
         possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
         possessableCOF.HorizontalAxis.Value = playerCOF.HorizontalAxis.Value;
@@ -79,14 +94,43 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessGhost(PossessableObject possessable)
     {
+        if (possessable == null)
+        {
+            Debug.LogError("Possessable is null");
+            return;
+        }
+        if (PlayerGhostObject == null)
+        {
+            Debug.LogError("Player Ghost Object is null");
+            return;
+        }
+
         if (!possessable.CanUnPossess)
         {
             return;
         }
 
-        if (possessable.ghostSpawnPoint != null)
+        //to decide where ghost exits the possessable
+        if (possessable.ghostExitPoints != null)
         {
-            PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostSpawnPoint.position;
+            //go through spawn points until one of them doesn't collide
+            for (int i = 0; i < possessable.ghostExitPoints.Count; i++)
+            {
+                Collider[] collisions = Physics.OverlapSphere(possessable.ghostExitPoints[i].transform.position, 0.2f);
+
+                //no collision = use this point
+                if (collisions.Length <= 0)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
+                    break;
+                }
+                
+                //if all of them collide, just use the last backup exit point
+                if (i == possessable.ghostExitPoints.Count - 1)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
+                }
+            }
         }
 
         //make transition not crazy
@@ -125,9 +169,9 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionNotHeld.AddListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.AddListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.AddListener(input.OnInteractStarted);
-        InputEvents.PossessHeld.AddListener(input.WhileInteractHeld);
-        InputEvents.PossessCanceled.AddListener(input.OnInteractCanceled);
+        InputEvents.InteractStarted.AddListener(input.OnInteractStarted);
+        InputEvents.InteractHeld.AddListener(input.WhileInteractHeld);
+        InputEvents.InteractCanceled.AddListener(input.OnInteractCanceled);
     }
 
     public void DeRegisterInputs(PossessableObject possessable)
@@ -143,15 +187,17 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionNotHeld.RemoveListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.RemoveListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.RemoveListener(input.OnInteractStarted);
-        InputEvents.PossessHeld.RemoveListener(input.WhileInteractHeld);
-        InputEvents.PossessCanceled.RemoveListener(input.OnInteractCanceled);
+        InputEvents.InteractStarted.RemoveListener(input.OnInteractStarted);
+        InputEvents.InteractHeld.RemoveListener(input.WhileInteractHeld);
+        InputEvents.InteractCanceled.RemoveListener(input.OnInteractCanceled);
     }
 
     private void Update()
     {
         if (CurrentObject != null)
             CurrentObject.WhilePossessingUpdate();
+        if (currentInputHandler != null)
+            currentInputHandler.WhilePossessingUpdate();
     }
 
 

@@ -22,13 +22,13 @@ public class SurprisedBehavior : Behavior
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
+        //ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     public override void StopBehavior()
     {
         base.StopBehavior();
-        ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
+        //ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     #endregion
