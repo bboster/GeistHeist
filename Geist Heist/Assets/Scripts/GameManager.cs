@@ -28,20 +28,16 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject GuardManagerPrefab;
     [SerializeField, Required] GameObject BillboardUIManagerPrefab;
     [SerializeField, Required] GameObject LevelManagerPrefab;
+    [SerializeField, Required] GameObject DailougeManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject CooldownManagerPrefab;
-    //[SerializeField, Required] GameObject InteractionCanvasPrefab;
-    [SerializeField, Required] GameObject TimerCanvasPrefab;
     [SerializeField, Required] GameObject PauseMenuPrefab;
 
     [Header("Other Constants")]
     [SerializeField, Required] GameObject CameraPrefab;
     [SerializeField, Required] GameObject PlayerPrefab;
     [Required] public Transform PlayerStart;
-
-    //[HideInInspector] public GameObject InteractionCanvas;
-    [HideInInspector] public Slider TimerSlider;
 
     [Header("Debug")]
     [ReadOnly] public bool IsPaused = false;
@@ -122,13 +118,10 @@ public class GameManager : Singleton<GameManager>
         Instantiate(ShaderManagerPrefab);
         Instantiate(CooldownManagerPrefab);
         Instantiate(LevelManagerPrefab);
+        Instantiate(DailougeManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
-
-        var timerCanvas = Instantiate(TimerCanvasPrefab);
-        TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
-        TimerSlider.gameObject.SetActive(false);
 
         Instantiate(PauseMenuPrefab);
 
