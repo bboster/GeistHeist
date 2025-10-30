@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
   CinemachineCamera: {fileID: 6933669320086577963}
+  ghostExitPoints: []
   hasTimer: 1
   maxChargePercentage: 100
   timerRechargePercentage: 10
@@ -118,6 +119,7 @@ MonoBehaviour:
   OnTimerUpdate:
     m_PersistentCalls:
       m_Calls: []
+  IsMoving: 0
   possessableCanvas: {fileID: 0}
   showSeconds: 1
   hideSeconds: 0.3
@@ -193,8 +195,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2874937476590195754}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.13273385, y: 0.6945371, z: -0.13273385, w: 0.69453704}
-  m_LocalPosition: {x: -4.8066792, y: 1.9068686, z: 0.00000047683716}
+  m_LocalRotation: {x: 0.15434232, y: 0.000000012423952, z: -0.0000000019407973, w: 0.98801744}
+  m_LocalPosition: {x: 0, y: 1.9068686, z: -5.954438}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -269,10 +271,10 @@ MonoBehaviour:
       Radius: 7
       Height: 5
     Center:
-      Radius: 5
+      Radius: 6
       Height: 2.25
     Bottom:
-      Radius: 4
+      Radius: 6
       Height: 0.1
     SplineCurvature: 0.5
   RecenteringTarget: 2
@@ -349,7 +351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
   CollideAgainst:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 959
   IgnoreTag: 
   TransparentLayers:
     serializedVersion: 2
