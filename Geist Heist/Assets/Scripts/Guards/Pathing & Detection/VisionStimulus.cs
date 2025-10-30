@@ -54,15 +54,12 @@ public class VisionStimulus : Stimulus
         PossessableObject.OnObjectLeft += ObjectLeft;
     }
 
-    private void OnTriggerStay(Collider other)
-
-
     private void OnValidate()
     {
         SyncLightToCollider();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (timer != null)
         {
