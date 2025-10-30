@@ -28,6 +28,15 @@ public class GuardCoroutineManager : MonoBehaviour
         signalReciever.TimerCoroutine = StartCoroutine(BehaviorTimer(timerLength, signalReciever));
     }
 
+    /// <summary>
+    /// Starts a possessable search timer
+    /// </summary>
+    /// <param name="timerLength"></param>
+    /// <param name="signalReciever"></param>
+    public void StartPossessableSearchTimer(float timerLength, PossessableSearchBehavior signalReciever)
+    {
+        signalReciever.TimerCoroutine = StartCoroutine(PossessableSearchTimer(timerLength, signalReciever));
+    }
 
     /// <summary>
     /// Stops a behavior timer
@@ -51,6 +60,19 @@ public class GuardCoroutineManager : MonoBehaviour
     {
         yield return new WaitForSeconds(timerLength);
 
+        signalReciever.StopBehavior();
+    }
+
+    /// <summary>
+    /// Runs a timer for a behavior
+    /// </summary>
+    /// <param name="timerLength"></param>
+    /// <param name="signalReciever"></param>
+    /// <returns></returns>
+    public IEnumerator PossessableSearchTimer(float timerLength, PossessableSearchBehavior signalReciever)
+    {
+        yield return new WaitForSeconds(timerLength);
+        signalReciever.TimerComplete = true;
         signalReciever.StopBehavior();
     }
 }

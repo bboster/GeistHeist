@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/7/25
+ * Last Modified: 10/27/25
  * 
  * Brief Description: Handles third person movement and interaction. 
  * This script should only be used for the ghost
@@ -35,10 +35,6 @@ public class ThirdPersonInputHandler : IInputHandler
     [Tooltip("Higher number: longer interactable distance from object")]
     [SerializeField, Foldout("Interaction")] private float interactRayLength = 5;
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
-    private GameObject lastObjectLookedAt;
-    private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
-
-    //private GameObject interactableCanvas => GameManager.Instance.InteractionCanvas;
 
     [Header("Between Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
@@ -49,6 +45,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public static Action<GuardStates> OnPossessObject;
 
+    private GameObject lastObjectLookedAt;
+    private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
+    private float frameCountSinceLastInteraction;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -59,7 +58,7 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
     // WhilePossessingUpdate is called once per frame
-    void Update()
+    public override void WhilePossessingUpdate()
     {
         TryTurnOnInteractablePrompt();
     }
@@ -81,16 +80,15 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
     }
 
-    public override void WhileActionNotHeld()
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        //throw new NotImplementedException();
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
     }
 
@@ -166,8 +164,13 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void OnInteractStarted()
     {
+        if (Time.frameCount - frameCountSinceLastInteraction <= 3)
+            return;
+
         var result = GetBestInteractableSphereCast();
         if (result == null) return;
+
+        frameCountSinceLastInteraction = Time.time;
 
         var allInteractables = result.GetComponentsInChildren<IInteractable>();
 
@@ -234,11 +237,11 @@ public class ThirdPersonInputHandler : IInputHandler
         }
     }
 
-    public override void WhileInteractHeld()
+    public override void WhileInteractHeld(float secondsHeld)
     {
     }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractCanceled(float secondsHeld)
     {
     }
 
@@ -267,7 +270,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         
     }
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
@@ -287,7 +290,7 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
 
-    public override void OnMoveCanceled(){}
+    public override void OnMoveCanceled(float secondsHeld) {}
     #endregion
 
     private void OnDrawGizmos()
