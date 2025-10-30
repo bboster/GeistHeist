@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
   CinemachineCamera: {fileID: 6933669320086577963}
+  ghostExitPoints: []
   hasTimer: 1
   maxChargePercentage: 100
   timerRechargePercentage: 10
@@ -118,6 +119,7 @@ MonoBehaviour:
   OnTimerUpdate:
     m_PersistentCalls:
       m_Calls: []
+  IsMoving: 0
   possessableCanvas: {fileID: 0}
   showSeconds: 1
   hideSeconds: 0.3
@@ -717,12 +719,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vending Machine Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 1108840346302473861, guid: 9c745ed607871d5468850584fc531e86, type: 3}
+    - target: {fileID: 854293634016286674, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1108840346302473861, guid: 9c745ed607871d5468850584fc531e86, type: 3}
-      propertyPath: m_LocalPosition.z
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4331414674891715746, guid: 9c745ed607871d5468850584fc531e86, type: 3}
@@ -805,21 +807,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7912095340210317922, guid: 9c745ed607871d5468850584fc531e86, type: 3}
-      propertyPath: m_LocalPosition.z
+    - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8303213893348085824, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8303213893348085824, guid: 9c745ed607871d5468850584fc531e86, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 8575200198184065595, guid: 9c745ed607871d5468850584fc531e86, type: 3}
-      propertyPath: HideWhenNotHeld
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
