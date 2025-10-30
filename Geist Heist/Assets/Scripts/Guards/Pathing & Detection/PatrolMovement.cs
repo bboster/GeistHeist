@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 9/18/25
+ * Last Edited: 10/27/25
  * Summary: Runs the behavior for the patrol movement type for enemies. BehaviorLoop runs every frame
  * and controls when certain aspects of the behavior are triggered. 
  */
@@ -10,64 +10,58 @@
 using System.Collections;
 using UnityEngine;
 
-public class PatrolMovement : EnemyMovement
+[CreateAssetMenu(fileName = "New Patrol Behavior", menuName = "Guard Behaviors/New Patrol Behavior")]
+public class PatrolMovement : GuardMovement
 {
     private int currentPathIndex = 0;
 
     [Header("Patrol Behavior Values")]
     [SerializeField] private PatrolPath currentPatrolPath;
 
-    #region Start and Stop Behavior
-
-    /// <summary>
-    /// Starts the behavior. Should be called by the controller when a behavior starts or changes.
-    /// </summary>
-    public override void StartBehavior()
+    public override void InitializeBehavior(GameObject selfRef)
     {
-        currentLoop = StartCoroutine(BehaviorLoop());
+        base.InitializeBehavior(selfRef);
+        currentPatrolPath = selfRef.GetComponent<GuardController>().Path;
         MoveToPoint(GetNextPoint());
         thisAgent.isStopped = false;
     }
 
     /// <summary>
-    /// Overrides the default StopBehavior function to pause all movement the enemy is doing.
-    /// </summary>
-    public override void StopBehavior()
-    {
-        if (currentLoop == null)
-            return;
-
-        thisAgent.isStopped = true;
-
-        StopCoroutine(currentLoop);
-        currentLoop = null;
-    }
-
-    #endregion
-
-    /// <summary>
     /// Controls the overall logic for the behavior.
     /// </summary>
     /// <returns></returns>
-    protected override IEnumerator BehaviorLoop()
+    public override IEnumerator BehaviorLoop()
     {
         for(; ; )
         {
             if (CheckPathCompletion() == true && calculatingMovement == false)
             {
-                calculatingMovement = true;
-                MoveToPoint(GetNextPoint());
-                thisAgent.isStopped = false;
+                CalculateMovement();
+            }
+            else if(thisAgent.hasPath == false && calculatingMovement == false)
+            {
+                CalculateMovement();
             }
             else
             {
                 calculatingMovement = false;
-                //Debug.Log(gameObject.name + " IS PATROLLING");
             }
 
             yield return new WaitForEndOfFrame();
         }
     }
+
+    /// <summary>
+    /// Calculates and sets the path for the next point on the patrol path
+    /// </summary>
+    private void CalculateMovement()
+    {
+        calculatingMovement = true;
+        MoveToPoint(GetNextPoint());
+        thisAgent.isStopped = false;
+    }    
+
+    #region Path Functions
 
     /// <summary>
     /// Gets the next point on the patrol path.
@@ -91,5 +85,12 @@ public class PatrolMovement : EnemyMovement
             currentPathIndex = 0;
         else
             currentPathIndex++;
+    }
+
+    #endregion
+
+    ~PatrolMovement()
+    {
+        currentPatrolPath = null;
     }
 }

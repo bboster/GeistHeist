@@ -1,19 +1,22 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 9/18/25
+ * Last Modified: 10/29/25
  * 
  * Brief Description: dont put this script on the player.
  * handles possession and such.
  */
 
 using NaughtyAttributes;
+using System.Linq;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [HideInInspector]
     public PossessableObject PlayerGhostObject;
     [ReadOnly]
     public PossessableObject CurrentObject;
@@ -23,9 +26,34 @@ public class PlayerManager : Singleton<PlayerManager>
     private InputEvents inputEvents => InputEvents.Instance;
     private Camera camera;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private CinemachineOrbitalFollow possessableCOF;
+    private CinemachineOrbitalFollow playerCOF;
+
+    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
+        if (PlayerGhostObject == null)
+            PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
+
+        CurrentObject = PlayerGhostObject;
+        RegisterInputs(PlayerGhostObject);
+        camera = Camera.main;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        playerCOF = PlayerGhostObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+        if (GameManager.Instance.Player == null)
+            Debug.Log("PlayerStart is null in gamemanager");
+        else
+            LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+    }
+
+    public void InitializePlayerManager()
+    {
+        if (PlayerGhostObject == null)
+            PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
+
         CurrentObject = PlayerGhostObject;
         RegisterInputs(PlayerGhostObject);
         camera = Camera.main;
@@ -36,25 +64,87 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessObject(PossessableObject possessable)
     {
+        if(possessable == null)
+        {
+            Debug.LogError("Possessable is null");
+            return;
+        }
+        if (PlayerGhostObject == null)
+        {
+            Debug.LogError("Player Ghost Object is null");
+            return;
+        }
+
+        //make transition not crazy
+        possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+        possessableCOF.HorizontalAxis.Value = playerCOF.HorizontalAxis.Value;
+
         possessable.CinemachineCamera.gameObject.SetActive(true);
         PlayerGhostObject.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(false);
 
         RegisterInputs(possessable);
 
-        CurrentObject = possessable;
+        if (CurrentObject != null) CurrentObject.OnPossessionEnded();
+        possessable.OnPossessionStart();
 
-        DeRegisterInputs(PlayerGhostObject);
+        DeRegisterInputs(CurrentObject);
+        CurrentObject = possessable;
     }
 
     public void PossessGhost(PossessableObject possessable)
     {
+        if (possessable == null)
+        {
+            Debug.LogError("Possessable is null");
+            return;
+        }
+        if (PlayerGhostObject == null)
+        {
+            Debug.LogError("Player Ghost Object is null");
+            return;
+        }
+
+        if (!possessable.CanUnPossess)
+        {
+            return;
+        }
+
+        //to decide where ghost exits the possessable
+        if (possessable.ghostExitPoints != null)
+        {
+            //go through spawn points until one of them doesn't collide
+            for (int i = 0; i < possessable.ghostExitPoints.Count; i++)
+            {
+                Collider[] collisions = Physics.OverlapSphere(possessable.ghostExitPoints[i].transform.position, 0.2f);
+
+                //no collision = use this point
+                if (collisions.Length <= 0)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
+                    break;
+                }
+                
+                //if all of them collide, just use the last backup exit point
+                if (i == possessable.ghostExitPoints.Count - 1)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
+                }
+            }
+        }
+
+        //make transition not crazy
+        possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+        playerCOF.HorizontalAxis.Value = possessableCOF.HorizontalAxis.Value;
+
         PlayerGhostObject.CinemachineCamera.gameObject.SetActive(true);
         possessable.CinemachineCamera.gameObject.SetActive(false);
         PlayerGhostObject.gameObject.SetActive(true);
 
-
         RegisterInputs(PlayerGhostObject);
+
+        possessable.OnPossessionEnded();
+        PlayerGhostObject.OnPossessionStart();
 
         CurrentObject = PlayerGhostObject;
 
@@ -65,8 +155,9 @@ public class PlayerManager : Singleton<PlayerManager>
     {
 
         var input = possessable.InputHandler;
-        InputEvents.MoveStarted.AddListener(input.OnMoveStarted);
+        InputEvents.MoveStarted.AddListener(input.OnMoveStarted);   
         InputEvents.MoveHeld.AddListener(input.WhileMoveHeld);
+        InputEvents.MoveNotHeld.AddListener(input.WhileMoveNotHeld);
         InputEvents.MoveCanceled.AddListener(input.OnMoveCanceled);
 
         /*InputEvents.JumpStarted.AddListener(input.OnJumpStarted);
@@ -75,31 +166,39 @@ public class PlayerManager : Singleton<PlayerManager>
 
         InputEvents.ActionStarted.AddListener(input.OnActionStarted);
         InputEvents.ActionHeld.AddListener(input.WhileActionHeld);
+        InputEvents.ActionNotHeld.AddListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.AddListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.AddListener(input.OnPossessStarted);
-        InputEvents.PossessHeld.AddListener(input.WhilePossessHeld);
-        InputEvents.PossessCanceled.AddListener(input.OnPossessCanceled);
-
-        // camera is really bad pls refactor it.
-        //var cam = possessable.CameraInputHandler;
-        //InputEvents.LookUpdate.AddListener(LookUpdate);
+        InputEvents.InteractStarted.AddListener(input.OnInteractStarted);
+        InputEvents.InteractHeld.AddListener(input.WhileInteractHeld);
+        InputEvents.InteractCanceled.AddListener(input.OnInteractCanceled);
     }
 
     public void DeRegisterInputs(PossessableObject possessable)
     {
-
         var input = possessable.InputHandler;
         InputEvents.MoveStarted.RemoveListener(input.OnMoveStarted);
         InputEvents.MoveHeld.RemoveListener(input.WhileMoveHeld);
+        InputEvents.MoveNotHeld.RemoveListener(input.WhileMoveNotHeld);
         InputEvents.MoveCanceled.RemoveListener(input.OnMoveCanceled);
 
         InputEvents.ActionStarted.RemoveListener(input.OnActionStarted);
         InputEvents.ActionHeld.RemoveListener(input.WhileActionHeld);
+        InputEvents.ActionNotHeld.RemoveListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.RemoveListener(input.OnActionCanceled);
 
-        InputEvents.PossessStarted.RemoveListener(input.OnPossessStarted);
-        InputEvents.PossessHeld.RemoveListener(input.WhilePossessHeld);
-        InputEvents.PossessCanceled.RemoveListener(input.OnPossessCanceled);
+        InputEvents.InteractStarted.RemoveListener(input.OnInteractStarted);
+        InputEvents.InteractHeld.RemoveListener(input.WhileInteractHeld);
+        InputEvents.InteractCanceled.RemoveListener(input.OnInteractCanceled);
     }
+
+    private void Update()
+    {
+        if (CurrentObject != null)
+            CurrentObject.WhilePossessingUpdate();
+        if (currentInputHandler != null)
+            currentInputHandler.WhilePossessingUpdate();
+    }
+
+
 }

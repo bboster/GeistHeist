@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby S, Sky B, Cade Naylor, Jay Embry
- * Creation Date: 9/16/25
- * Last Modified: 9/16/25
+ * Creation Date: ???
+ * Last Modified: 10/17/25
  * 
  * Brief Description: General use utility functions that can be
  * applied to any project. 
@@ -10,10 +10,13 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -35,6 +38,57 @@ public static class StaticUtilities
             .normalized;
     }
 
+    public static void StopAndStartCoroutine(ref Coroutine coroutineInstance, IEnumerator coroutineToPlay)
+    {
+        // If using this code in other projects, replace GuardCoroutineManager with a different singleton
+        if (coroutineInstance != null)
+            GuardCoroutineManager.instance.StopCoroutine(coroutineInstance);
+
+        coroutineInstance = GuardCoroutineManager.instance.StartCoroutine(coroutineToPlay);
+    }
+
+    #endregion
+
+    #region Components
+
+    // Stole ts from the internet
+    public static T CopyComponent<T>(this T original, GameObject destination) where T : Component
+    {
+        System.Type type = original.GetType();
+        
+        Component copy = destination.GetOrAddComponent<T>();
+
+        FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (FieldInfo field in fields)
+        {
+            field.SetValue(copy, field.GetValue(original));
+        }
+
+        // Get all properties
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (PropertyInfo property in properties)
+        {
+            if (property.CanWrite)
+            {
+                property.SetValue(copy, property.GetValue(original));
+            }
+        }
+
+        return copy as T;
+    }
+
+    public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
+    {
+        T component = gameObject.GetComponent<T>();
+
+        if (component == null)
+        {
+            component = gameObject.AddComponent<T>();
+        }
+
+        return component;
+    }
+
     #endregion
 
     #region VFX
@@ -43,9 +97,9 @@ public static class StaticUtilities
     /// Instiates a particle system, and destroys it after its done playing.
     /// If a particle is set to loop, it will play forever
     /// </summary>
-    public static void PlayAndDestroyParticle(GameObject particleSystemPrefab, Vector3 position, Vector3? scale=null, Quaternion? rotation=null)
+    public static GameObject PlayAndDestroyParticle(GameObject particleSystemPrefab, Vector3 position, Vector3? scale=null, Quaternion? rotation=null)
     {
-        if(particleSystemPrefab == null) return;
+        if(particleSystemPrefab == null) return null;
         scale = scale ?? Vector3.one;
         rotation = rotation ?? Quaternion.identity;
 
@@ -54,7 +108,7 @@ public static class StaticUtilities
         if (ps == null)
         {
             Debug.LogWarning("Tried to spawn a particle, but no ParticleSystem was attached");
-            return;
+            return null;
         }
 
         // Build
@@ -62,13 +116,14 @@ public static class StaticUtilities
         if(!ps.main.playOnAwake)
             ps.Play();
 
+
         // Destroy
         if (!ps.main.loop)
         {
-            float time = ps.main.startLifetime.constantMax;
-            GameObject.Destroy(particleGameObject, ps.main.duration);
+            float timeToDestroy = Mathf.Max(ps.main.startLifetime.constantMax, ps.main.duration);
+            GameObject.Destroy(particleGameObject, timeToDestroy);
         }
-           
+        return particleGameObject;
     }
 
     #endregion
@@ -98,14 +153,14 @@ public static class StaticUtilities
         canvasgroup.ignoreParentGroups = ignoreParentGroups ?? canvasgroup.ignoreParentGroups;
     }
 
-    public static void EnableCursor()
+    public static void ShowCursor()
     {
         UnityEngine.Cursor.visible = true;
         // Free mouse if editor, locked to window if in a build. For the sake of debugging because oh my god
         UnityEngine.Cursor.lockState = Application.isEditor ? CursorLockMode.None : CursorLockMode.Confined;
     }
 
-    public static void DisableCursor()
+    public static void HideCursor()
     {
         UnityEngine.Cursor.visible = false;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
@@ -137,8 +192,32 @@ public static class StaticUtilities
 
     #endregion
 
+    #region Transform
+
+    /// <summary>
+    /// Rotates the transform so the forward vector points AWAY from worldPosition
+    /// </summary>
+    public static void LookAway(this Transform transform, Vector3 worldPosition)
+    {
+        // Weird equation but it does indeed make it look away
+        transform.LookAt(2 * transform.position - worldPosition);
+    }
+
+    /// <summary>
+    /// Rotates the transform so the forward vector points AWAY from target
+    /// </summary>
+    public static void LookAway(this Transform transform, Transform target)
+    {
+        // Calls the other function
+        transform.LookAway(target.position);
+    }
+
+   
+
+    #endregion
+
     #region Vectors
-    
+
     public static Vector3 Average(this Vector3[] vectors)
     {
         Vector3 total = Vector3.zero;
@@ -180,6 +259,58 @@ public static class StaticUtilities
     {
         vector.z = z;
         return vector;
+    }
+
+    #endregion
+
+    #region Math
+
+    public static float InverseLerpUnclamped(float a, float b, float value)
+    {
+        if (a != b)
+        {
+            return (value - a) / (b - a);
+        }
+
+        return 0f;
+    }
+
+    public static float InverseLerpAngle(float a, float b, float value)
+    {
+        // this is an AWFUL way to do this bro 
+        while (a < 0 || b < 0 || value < 0)
+        {
+            a += 180;
+            b += 180;
+            value += 180;
+        }
+
+        a = Mathf.Repeat(a, 360);
+        b = Mathf.Repeat(b, 360);
+        value = Mathf.Repeat(value, 360);
+
+        //Debug.Log($"a: {Mathf.Round(a)} b: {Mathf.Round(b)} value:{Mathf.Round(value)} t: {Mathf.Round(Mathf.InverseLerp(a, b, value) * 100) / 100}");
+
+        return Mathf.InverseLerp(a, b, value);
+    }
+
+    public static float InverseLerpAngleUnclamped(float a, float b, float value)
+    {
+        // this is an AWFUL way to do this bro 
+        while (a < 0 || b < 0 || value < 0)
+        {
+            a += 180;
+            b += 180;
+            value += 180;
+        }
+
+        a = Mathf.Repeat(a, 360);
+        b = Mathf.Repeat(b, 360);
+        value = Mathf.Repeat(value, 360);
+
+        //Debug.Log($"a: {Mathf.Round(a)} b: {Mathf.Round(b)} value:{Mathf.Round(value)} t: {Mathf.Round(InverseLerpUnclamped(a, b, value) * 100) / 100}");
+
+        return InverseLerpUnclamped(a, b, value);
     }
 
     #endregion
@@ -240,6 +371,13 @@ public static class StaticUtilities
             result[i] = list.ElementAt(i);
         }
         return result;
+    }
+
+    public static bool IsNullOrEmpty<T>(this ICollection<T> array)
+    {
+        if (array == null) return true;
+        if (array.Count == 0) return true;
+        return false;
     }
 
     #endregion
