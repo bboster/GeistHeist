@@ -86,6 +86,13 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("Advancing to level: " + sceneName);
     }
 
+    public void NextLevel(int sceneNum)
+    {
+        //currentLevel++;
+        SceneManager.LoadScene(sceneNum);
+        Debug.Log("Advancing to level: " + sceneNum);
+    }
+
     /// <summary>
     /// Spawns the player into the level
     /// </summary>
@@ -94,8 +101,6 @@ public class GameManager : Singleton<GameManager>
     {
         /*Player = Instantiate(PlayerPrefab, LevelManager.Instance.SpawnLocation, Quaternion.identity);*/
         //PlayerManager.Instance.InitializePlayerManager();
-
-        
 
         return Task.CompletedTask;
     }
