@@ -45,7 +45,9 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnPossessionStart()
     {
-        chargeMeter.OnPossessionStarted();
+
+        if (chargeMeter != null)
+            chargeMeter.OnPossessionStarted();
     }
 
     public override void OnPossessionEnded()
