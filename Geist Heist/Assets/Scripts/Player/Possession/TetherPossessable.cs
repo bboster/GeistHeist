@@ -42,6 +42,11 @@ public class TetherPossessable : IInputHandler
         StopCoroutine(victoryAnimation);
     }
 
+
+    public override void WhilePossessingUpdate()
+    {
+    }
+
     //TODO: replace this with something else
     IEnumerator LoadNextSceneCooldown()
     {
@@ -60,16 +65,15 @@ public class TetherPossessable : IInputHandler
     {
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
     }
 
-    public override void WhileActionNotHeld()
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        throw new NotImplementedException();
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
     }
 
@@ -80,10 +84,10 @@ public class TetherPossessable : IInputHandler
     {
     }
 
-    public override void WhileInteractHeld()
+    public override void WhileInteractHeld(float secondsHeld)
     { }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractCanceled(float secondsHeld)
     {
     }
     #endregion
@@ -93,14 +97,15 @@ public class TetherPossessable : IInputHandler
     {
 
     }
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
     }
 
     public override void WhileMoveNotHeld()
     {
     }
-    public override void OnMoveCanceled() { }
+    public override void OnMoveCanceled(float secondsHeld) { }
+
 
     #endregion
 }

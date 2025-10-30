@@ -1,24 +1,29 @@
 /*
  * Author: Jacob Bateman
- * Contributors:
+ * Contributors: Joshua Kelly
  * Creation: 10/02/25
- * Last Edited: 10/07/25
+ * Last Edited: 10/28/25
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
-using UnityEngine;
+using System.Collections;
 using GuardUtilities;
 using NaughtyAttributes;
+using Unity.Cinemachine;
+using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class VisionStimulus : Stimulus
 {
     #region Variable Declarations
 
+    private bool hasSeenPlayer = false;
+    private bool playerObjectSeen = false;
+    private Coroutine timer;
+
     [Header("Progamming")]
     [Tooltip("Controls whether or not certain variables are displayed")]
     [SerializeField] private bool showProgrammingValues;
-
-    private bool hasSeenPlayer = false;
 
     [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
     [ShowIf("showProgrammingValues")]
@@ -27,45 +32,104 @@ public class VisionStimulus : Stimulus
     [ShowIf("showProgrammingValues")]
     [SerializeField] private int recoveryBehaviorIndex;
     [ShowIf("showProgrammingValues")]
+    [SerializeField] private float visionBreakTimer;
+    [ShowIf("showProgrammingValues")]
     [SerializeField] private LayerMask raycastLayer;
     [ShowIf("showProgrammingValues")]
     [SerializeField] private Transform raycastSpawn;
+
+    [ShowIf("showProgrammingValues")]
+    [SerializeField] private Light spotLight;
+    [ShowIf("showProgrammingValues")]
+    [SerializeField] private Collider visionCollider;
 
     [ShowIf("showProgrammingValues")]
     [SerializeField] private GuardController parentController;
 
     #endregion
 
-    private void OnTriggerEnter(Collider other)
+    private void Awake()
     {
-        if (other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == false)
+        PossessableObject.OnActionPerformed += ActionDetected;
+        PossessableObject.OnObjectLeft += ObjectLeft;
+    }
+
+    private void OnValidate()
+    {
+        SyncLightToCollider();
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (timer != null)
         {
-            Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
-
-            Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
-            float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 2;
-
-            /*Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer);*/
-            GuardDebug.PersistentRay(spawnLocation, direction, 2, GetComponent<GuardDebugger>());
-
-            if (!Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer))
+            StopCoroutine(timer);
+            timer = null;
+        }
+        else if (other.gameObject.TryGetComponent(out PossessableObject obj))
+        {
+            if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
             {
                 hasSeenPlayer = true;
-                TriggerStimulus();
-            }
+                Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
 
-            if(info.collider != null)
-                Debug.Log(info.collider.gameObject.name);
+                Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
+                float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 2;
+
+                if (!Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer))
+                {
+                    hasSeenPlayer = true;
+                    TriggerStimulus();
+                }
+
+                if (info.collider != null)
+                    Debug.Log(info.collider.gameObject.name);
+            }
+            else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
+            {
+                if (obj.gameObject.TryGetComponent(out Rigidbody rb))
+                {
+                    Vector3 velocityCheck = rb.linearVelocity.Abs();
+
+                    //If there's a better way to check if a possessable is moving please leave a note in the review
+                    if (velocityCheck.x > 1 || velocityCheck.y > 1 || velocityCheck.z > 1)
+                    {
+                        TriggerStimulus();
+                        return;
+                    }
+                }
+
+                playerObjectSeen = true;
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name.Equals("3rd Person Player") && hasSeenPlayer == true)
+        if (other.gameObject.TryGetComponent(out PossessableObject obj))
         {
-            hasSeenPlayer = false;
-            parentController.OnVisionBroken();
+            if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
+            {
+                timer = StartCoroutine(VisionBreakTimer());
+            }
+            else if (obj.Equals(PlayerManager.Instance.CurrentObject))
+            {
+                playerObjectSeen = false;
+            }
         }
+    }
+
+    /// <summary>
+    /// Controls how long the player must be out of the vision cone before it enters search state
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator VisionBreakTimer()
+    {
+        yield return new WaitForSeconds(visionBreakTimer);
+
+        hasSeenPlayer = false;
+        parentController.OnVisionBroken();
+        timer = null;
     }
 
     /// <summary>
@@ -74,5 +138,55 @@ public class VisionStimulus : Stimulus
     public override void TriggerStimulus()
     {
         parentController.RecieveStimulus(this, stateToChangeTo);
+    }
+
+    private void ActionDetected()
+    {
+        if (playerObjectSeen == true)
+        {
+            parentController.RecieveStimulus(this, stateToChangeTo);
+        }
+    }
+
+    private void ObjectLeft()
+    {
+        playerObjectSeen = false;
+    }
+
+    private void OnDisable()
+    {
+        PossessableObject.OnActionPerformed -= ActionDetected;
+        PossessableObject.OnObjectLeft -= ObjectLeft;
+    }
+
+    [Button("Sync Light to Collider")]
+    private void SyncLightToCollider()
+    {
+        if (spotLight == null)
+        {
+            Debug.LogWarning("No spotlight assigned on VisionStimulus.");
+            return;
+        }
+
+        Collider col = GetComponent<Collider>();
+        if (col == null)
+        {
+            Debug.LogWarning("No collider found on VisionStimulus.");
+            return;
+        }
+
+        if (col is MeshCollider meshCol && meshCol.sharedMesh != null)
+        {
+            Bounds bounds = meshCol.sharedMesh.bounds;
+
+            float coneHeight = bounds.size.z * transform.localScale.z;
+            float coneRadius = Mathf.Max(bounds.size.x, bounds.size.y) * 0.5f * transform.localScale.x;
+
+            spotLight.range = coneHeight * 5;
+            spotLight.spotAngle = Mathf.Rad2Deg * Mathf.Atan(coneRadius / coneHeight) * 2f;
+            spotLight.innerSpotAngle = spotLight.spotAngle * 0.8f;
+
+            Debug.Log($"[VisionStimulus] Synced spotlight from MeshCollider -> Range: {spotLight.range}, Angle: {spotLight.spotAngle}");
+        }
     }
 }

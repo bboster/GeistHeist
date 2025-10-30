@@ -11,6 +11,7 @@ using System.ComponentModel;
 using UnityEngine;
 using GuardUtilities;
 using NaughtyAttributes;
+using UnityEngine.Events;
 
 public class GuardController : MonoBehaviour
 {
@@ -21,12 +22,16 @@ public class GuardController : MonoBehaviour
     [Header("Design Values")]
     [SerializeField] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
+    [Tooltip("The location a guard will return to by default")]
+    [Required] public Transform ReturnLocation;
+    [Tooltip("The rotation the guard should face by default, match this to its placement in the level")]
+    public float DefaultRotation;
 
     [Header("Behaviors")]
-    [SerializeField, Tooltip("Default behavior for the enemy")]
-    private Behavior defaultBehavior;
+    [Tooltip("Default behavior for the enemy")]
+    [Required] public Behavior DefaultBehavior;
 
-    [SerializeField]private Behavior currentBehavior;
+    [SerializeField] public Behavior currentBehavior;
 
     private Coroutine activeBehaviorLoop;
 
@@ -38,7 +43,10 @@ public class GuardController : MonoBehaviour
     [ShowIf("showProgrammingValues")]
     [SerializeField] private Animator animator;
 
+
     public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
+
+    [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted= new();
 
     #endregion
 
@@ -73,7 +81,7 @@ public class GuardController : MonoBehaviour
         if (CheckBehaviors() == false)
             return false;
 
-        currentBehavior = Instantiate(defaultBehavior);
+        currentBehavior = Instantiate(DefaultBehavior);
         StartBehavior();
 
         return true;
@@ -87,7 +95,7 @@ public class GuardController : MonoBehaviour
     /// <exception cref="Exception"></exception>
     private bool CheckBehaviors()
     {
-        if (defaultBehavior == null)
+        if (DefaultBehavior == null)
         {
             Debug.LogError(gameObject.name + " HAS NO DEFAULT BEHAVIOR");
             return false;
@@ -140,21 +148,22 @@ public class GuardController : MonoBehaviour
     /// <summary>
     /// Starts the currently selected behavior
     /// </summary>
-    private void StartBehavior()
+    public void StartBehavior()
     {
         if (currentBehavior != null)
         {
             currentBehavior.InitializeBehavior(gameObject);
-            GetComponent<StateText>().ChangeText(currentBehavior.StateName);
+            //GetComponent<StateText>().ChangeText(currentBehavior.StateName);
             currentPriority = currentBehavior.Priority;
             activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
+            OnBehaviorStarted.Invoke(currentBehavior.StateName);
         }
     }
 
     /// <summary>
     /// Stops the currently running behavior
     /// </summary>
-    private void StopBehavior()
+    public void StopBehavior()
     {
         if(currentBehavior != null)
             currentBehavior.StopBehavior();

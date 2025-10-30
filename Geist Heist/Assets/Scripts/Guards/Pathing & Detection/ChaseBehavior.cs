@@ -21,13 +21,13 @@ public class ChaseBehavior : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
+        //ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     public override void StopBehavior()
     {
         base.StopBehavior();
-        ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
+        //ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     #endregion
@@ -60,12 +60,12 @@ public class ChaseBehavior : GuardMovement
     /// <returns></returns>
     private Vector3 GetPlayerLocation()
     {
-        return GameObject.Find("3rd Person Player").transform.position; //REPLACE WITH CENTRALIZED REFERENCE FROM A MANAGER ONCE ABLE.
+        return PlayerManager.Instance.CurrentObject.transform.position;
     }
 
     ~ChaseBehavior()
     {
-        if(selfRef != null)
-            ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
+        /*if(selfRef != null)
+            ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;*/
     }
 }

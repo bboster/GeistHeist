@@ -11,13 +11,19 @@ using System.Collections;
 using UnityEngine;
 using GuardUtilities;
 using UnityEngine.AI;
+using NaughtyAttributes;
 
 public class Behavior : ScriptableObject
 {
     #region Variable Declarations
 
+    [Header("Base Behavior Values")]
+    [SerializeField] private bool showBaseValues;
     [Tooltip("The speed the guard will travel at while performing this behavior")]
-    [SerializeField] private float speed;
+    [SerializeField, ShowIf("showBaseValues")] private float speed;
+    [ShowIf("showBaseValues")] public GuardStates StateName;
+    [ShowIf("showBaseValues")] public Priority Priority;
+    [ShowIf("showBaseValues")] public RuntimeAnimatorController stateController;
 
     protected GameObject selfRef;
 
@@ -25,11 +31,7 @@ public class Behavior : ScriptableObject
     public Coroutine behaviorLoop;
     public Coroutine TimerCoroutine;
 
-    public GuardStates StateName;
 
-    public Priority Priority;
-
-    public RuntimeAnimatorController stateController;
 
     #endregion
 

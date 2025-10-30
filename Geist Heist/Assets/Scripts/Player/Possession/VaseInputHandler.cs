@@ -12,12 +12,15 @@ using UnityEngine.UI;
 public class VaseInputHandler : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
-    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
 
 
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
+    }
+
+    public override void WhilePossessingUpdate()
+    {
     }
 
     public override void OnPossessionStart()
@@ -35,17 +38,16 @@ public class VaseInputHandler : IInputHandler
         //throw new System.NotImplementedException();
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
         //throw new System.NotImplementedException();
     }
 
-    public override void WhileActionNotHeld()
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        //throw new System.NotImplementedException();
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
         //throw new System.NotImplementedException();
     }
@@ -61,10 +63,10 @@ public class VaseInputHandler : IInputHandler
         }
     }
 
-    public override void WhileInteractHeld()
+    public override void WhileInteractHeld(float secondsHeld)
     { }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractCanceled(float secondsHeld)
     {
     }
     #endregion
@@ -74,14 +76,16 @@ public class VaseInputHandler : IInputHandler
     {
 
     }
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
     }
 
     public override void WhileMoveNotHeld()
     {
     }
-    public override void OnMoveCanceled() { }
+    public override void OnMoveCanceled(float secondsHeld) { }
+
+    
     #endregion
 }
 
