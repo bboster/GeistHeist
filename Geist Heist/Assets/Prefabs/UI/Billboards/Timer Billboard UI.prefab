@@ -58,14 +58,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4838274, g: 0.9121363, b: 1, a: 1}
+  m_Color: {r: 0.83020264, g: 0.8193182, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 1946255419, guid: 10faf9e346d0d6049952c26fd976ea22, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8482070701596677487}
   - component: {fileID: 3370593984643578784}
-  - component: {fileID: 7344013473883149354}
+  - component: {fileID: 4087506285693337579}
   m_Layer: 5
   m_Name: TimerBackground
   m_TagString: Untagged
@@ -121,7 +121,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3118170403359840889}
   m_CullTransparentMesh: 1
---- !u!114 &7344013473883149354
+--- !u!114 &4087506285693337579
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,9 +130,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3118170403359840889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -141,13 +141,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 10912, guid: 0000000000000000f000000000000000, type: 0}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Sprite: {fileID: -523032865, guid: 10faf9e346d0d6049952c26fd976ea22, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &3973337247040009502
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,3 +284,35 @@ MonoBehaviour:
   CurrentAlpha: 1
   hideSeconds: 0.2
   opacityWhenUnpossessed: 0.5
+  percentToHide: 0.08
+  timerFill: {fileID: 1137790626835069270}
+  timerFillGradient:
+    serializedVersion: 2
+    key0: {r: 0.83020264, g: 0.8193182, b: 1, a: 1}
+    key1: {r: 0.755654, g: 0.7399908, b: 1, a: 1}
+    key2: {r: 1, g: 0.78431374, b: 0.6313726, a: 0}
+    key3: {r: 0.83020264, g: 0.8193182, b: 1, a: 0}
+    key4: {r: 1, g: 0.78431374, b: 0.6313726, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 16384
+    ctime1: 27957
+    ctime2: 49151
+    ctime3: 49151
+    ctime4: 49151
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: 0
+    m_NumColorKeys: 4
+    m_NumAlphaKeys: 2

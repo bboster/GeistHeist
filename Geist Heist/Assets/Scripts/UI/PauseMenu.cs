@@ -53,6 +53,9 @@ public class PauseMenu : MonoBehaviour
         quitToHubButton.onClick.AddListener(OnGoToHubButtonClicked);
         quitToMainMenuButton.onClick.AddListener(OnGoToMainMenuButtonClicked);
 
+        resetSaveButton.onClick.AddListener(ResetSaveDataButtonClicked);
+        restartLevelButton.onClick.AddListener(RestartLevelButtonClicked);
+
         ClosePauseMenu();
     }
 

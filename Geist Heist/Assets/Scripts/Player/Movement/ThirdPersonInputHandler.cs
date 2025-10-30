@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/7/25
+ * Last Modified: 10/27/25
  * 
  * Brief Description: Handles third person movement and interaction. 
  * This script should only be used for the ghost
@@ -58,7 +58,7 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
     // WhilePossessingUpdate is called once per frame
-    void Update()
+    public override void WhilePossessingUpdate()
     {
         TryTurnOnInteractablePrompt();
     }
@@ -80,16 +80,15 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
     }
 
-    public override void WhileActionNotHeld()
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        //throw new NotImplementedException();
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
     }
 
@@ -238,11 +237,11 @@ public class ThirdPersonInputHandler : IInputHandler
         }
     }
 
-    public override void WhileInteractHeld()
+    public override void WhileInteractHeld(float secondsHeld)
     {
     }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractCanceled(float secondsHeld)
     {
     }
 
@@ -271,7 +270,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         
     }
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
@@ -291,7 +290,7 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
 
-    public override void OnMoveCanceled(){}
+    public override void OnMoveCanceled(float secondsHeld) {}
     #endregion
 
     private void OnDrawGizmos()

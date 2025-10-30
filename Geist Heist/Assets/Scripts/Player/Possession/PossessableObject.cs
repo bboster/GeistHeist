@@ -19,16 +19,13 @@ using System.Collections.Generic;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
-    [HideInInspector] private IInputHandler inputHandler;
+    
     [Required] public CinemachineCamera CinemachineCamera;
     
     [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
     public List<Transform> ghostExitPoints;
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
-    [Tooltip("The time in seconds between each percentage update.")]
-    [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargeInterval = 2f;
     [SerializeField] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
     [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargePercentage = 10;
@@ -47,6 +44,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField, Required, ShowAssetPreview(16, 16)] private Material UnpossessedMaterial;
 
     [HideInInspector] public bool CanUnPossess = true;
+    public IInputHandler InputHandler => GetInputHandler();
+    private IInputHandler inputHandler;
+
     private Coroutine unpossessCoroutine=null;
     private MeshRenderer meshRenderer;
 
@@ -76,6 +76,15 @@ public class PossessableObject : MonoBehaviour, IInteractable
             meshRenderer.material = UnpossessedMaterial;
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
+
+        if(possessableCanvas == null)
+            possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
+
+        if (possessableCanvas != null)
+        {
+            possessableCanvasGroup = possessableCanvas.gameObject.GetOrAddComponent<CanvasGroup>();
+            possessableCanvas.gameObject.SetActive(false);
+        }
     }
 
     public IInputHandler GetInputHandler()
@@ -94,6 +103,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
+        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
+
         gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
 
@@ -123,6 +134,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
+        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
+
         if (!CanUnPossess)
         {
             Debug.LogError("Trying to unpossess early");
@@ -211,5 +224,43 @@ public class PossessableObject : MonoBehaviour, IInteractable
             dischargeCoroutine = null;
         }
     }
+    #endregion
+
+    #region Canvas
+
+    [Header("Canvas settings")]
+    [SerializeField] private Canvas possessableCanvas;
+    [SerializeField] private float showSeconds = 1;
+    [SerializeField] private float hideSeconds = 0.3f;
+
+    private CanvasGroup possessableCanvasGroup;
+    private Coroutine fadeOpacityCoroutine;
+
+    private IEnumerator ShowAndEnableCanvas()
+    {
+        if (possessableCanvas == null)
+            yield break;
+
+        possessableCanvas.gameObject.SetActive(true);
+        while(possessableCanvasGroup.alpha < 1)
+        {
+            possessableCanvasGroup.alpha += Time.deltaTime / showSeconds;
+            yield return null;
+        }
+    }
+
+    private IEnumerator HideAndDisableCanvas()
+    {
+        if (possessableCanvas == null)
+            yield break;
+
+        while (possessableCanvasGroup.alpha > 0)
+        {
+            possessableCanvasGroup.alpha -= Time.deltaTime / hideSeconds;
+            yield return null;
+        }
+        possessableCanvas.gameObject.SetActive(false);
+    }
+
     #endregion
 }

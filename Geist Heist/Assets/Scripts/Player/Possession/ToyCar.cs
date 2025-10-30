@@ -4,9 +4,9 @@ using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 /*
- * Contributors: Sky
+ * Contributors: Sky, Toby
  * Creation Date: 10/2/25
- * Last Modified: 10/7/25
+ * Last Modified: 10/27/25
  * 
  * Brief Description: Input Handler for the Toy Car, handles movement and actions for the Toy Car
  */
@@ -20,8 +20,18 @@ public class ToyCar : IInputHandler
     [SerializeField] private float minStrength;
     [Tooltip("Strength that a full hold would do- the MOST the car can move forward when interacting.")]
     [SerializeField] private float maxStrength;
+    [Tooltip("Max speed for car to be already be going able to go.")]
+    [SerializeField] private float maxSpeedToZoom = 1;
     [Tooltip("How much hold charges up by per second.")]
     [SerializeField] private float chargeRate;
+    [Tooltip("When not held, how much hold charges down by per second.")]
+    [SerializeField] private float chargeLossRate;
+    [Tooltip("Force there to be time between zooms")]
+    [SerializeField] private float delayBetweenZooms = 1;
+
+    [Header("Speedometer seconds")]
+    [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
+
     [Tooltip("How much moving rotates by per second.")]
     [SerializeField] private float rotationRate;
     //realtime hold strength
@@ -34,73 +44,96 @@ public class ToyCar : IInputHandler
     private Coroutine freezeCoroutine;
     //activates when ghost is leaving an object
     private bool IsLeaving = false;
+    private bool hasLaunchedThisPossession = false;
 
-
-    [SerializeField] private Image ChargeUI;
-    [SerializeField] private GameObject Images;
+    [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
     private void Start()
     {
         thirdPersoncinemachineCamera.SetActive(false);
         rb = gameObject.GetComponent<Rigidbody>();
-        possessableObject = GetComponent<PossessableObject>();  
+        possessableObject = GetComponent<PossessableObject>();
+
+        if (chargeMeter == null)
+            chargeMeter = GetComponentInChildren<ToyCarSpeedometerUI>();
     }
 
+    public override void OnPossessionStart()
+    {
+        hasLaunchedThisPossession = false;
+        chargeMeter.OnPossessionStarted();
+    }
+
+    public override void OnPossessionEnded()
+    {
+        currentStrength = minStrength;
+    }
+
+    // Called every frame while player is possessing.
+    public override void WhilePossessingUpdate()
+    {
+        chargeMeter.UpdateCharge(currentStrength, maxStrength);
+    }
+    
     private void FixedUpdate()
     {
         //consistent speed for car
         if (physicsEnabled)
         {
+            Debug.Log("clamping strength");
+            currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
             rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
             physicsEnabled = false;
+            hasLaunchedThisPossession = true;
         }
     }
 
     #region action
     public override void OnActionStarted()
     {
-        if (rb.linearVelocity == Vector3.zero)
-        {
-            currentStrength = minStrength;
-            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
-            Images.SetActive(true);
-        }
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
-        if (rb.linearVelocity == Vector3.zero)
+        if (secondsHeld < delayBetweenZooms && hasLaunchedThisPossession)
+            return;
+
+        if (rb.linearVelocity.magnitude <= 0.5f)
         {
+            // Will be clamped later
             currentStrength += chargeRate * Time.deltaTime;
-
-            if (currentStrength > maxStrength)
-            {
-                currentStrength = maxStrength;
-            }
-
-            ChargeUI.fillAmount = (currentStrength - minStrength) / (maxStrength - minStrength);
         }
     }
 
-    public override void WhileActionNotHeld()
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        if (rb.linearVelocity == Vector3.zero)
+        if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
             if (freezeCoroutine == null)
             {
                 freezeCoroutine = StartCoroutine(ReFreezeConstraints());
             }
         }
+
+        // dont update the speedometer for a sec..
+        if (secondsNotHeld < delayToUpdateChargeMeter && hasLaunchedThisPossession)
+            return;
+
+        currentStrength = Mathf.Max(
+            currentStrength - (Time.deltaTime * chargeLossRate),
+            minStrength);
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
-        if (rb.linearVelocity == Vector3.zero)
+        // Fake charge amount calculation (this is a failsafe, sanity thing)
+        //currentStrength = Mathf.Min((secondsHeld * chargeRate) + minStrength, maxStrength);
+
+        if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
             UnFreezePosition();
             //for fixed update to handle physics better
             physicsEnabled = true;
-            Images.SetActive(false);
         }
     }
 
@@ -142,7 +175,6 @@ public class ToyCar : IInputHandler
         {
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;
-            Images.SetActive(false);
             if (freezeCoroutine == null)
             { 
                 freezeCoroutine = StartCoroutine(ReFreezeConstraints());
@@ -150,30 +182,20 @@ public class ToyCar : IInputHandler
         }
     }
 
-    public override void WhileInteractHeld()
+    public override void WhileInteractHeld(float secondsHeld)
     { }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractCanceled(float secondsHeld)
     {
     }
 
-    public override void OnPossessionStart()
-    {
-        IsLeaving = false;
-    }
-
-    public override void OnPossessionEnded()
-    {
-        Images.SetActive(false);
-    }
     #endregion
 
     #region Move
     public override void OnMoveStarted()
     {
     }
-
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
         var direction = InputEvents.Instance.InputDirection2D.x;
         var rotation = rotationRate * direction;
@@ -187,9 +209,7 @@ public class ToyCar : IInputHandler
     public override void WhileMoveNotHeld()
     {
     }
-    public override void OnMoveCanceled()
-    {
-    }
+    public override void OnMoveCanceled(float secondsHeld) { }
     #endregion
 
 
@@ -204,5 +224,7 @@ public class ToyCar : IInputHandler
         Gizmos.color = Color.green;
         Gizmos.DrawRay(gameObject.transform.position, gameObject.transform.forward);
     }
+
+    
 }
 
