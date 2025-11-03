@@ -9,7 +9,6 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class SoundStimulus : Stimulus
 {
     private GuardController contactedGuard;
@@ -21,7 +20,14 @@ public class SoundStimulus : Stimulus
         StartCoroutine(SoundLength());
     }
 
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.TryGetComponent(out GuardController guard))
+        {
+            contactedGuard = guard;
+            TriggerStimulus();
+        }
+    }
 
     /// <summary>
     /// Sends the stimulus to the guard recieving it
