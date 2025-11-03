@@ -47,7 +47,10 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnPossessionStart()
     {
-        chargeMeter.OnPossessionStarted();
+        if (chargeMeter == null)
+            chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();
+
+        chargeMeter?.OnPossessionStarted();
         hasThrownThisPossession = false;
     }
 

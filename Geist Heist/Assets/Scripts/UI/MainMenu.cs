@@ -54,15 +54,21 @@ public class MainMenu : MonoBehaviour
         howToPlayPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
 
+        // Main Menu
         newGameButton.onClick.AddListener(OnNewGameButtonClicked);
         continueGameButton.onClick.AddListener(OnContinueButtonClicked);
         creditsButton.onClick.AddListener(OnCreditsButtonClicked);
         howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
         quitGameButton.onClick.AddListener(OnQuitButtonClicked);
 
+        // Credits
         closeCreditsButton.onClick.AddListener(OnCreditsBackButtonClicked);
-
+        
+        // How to Play
         closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
+
+        // Confirmation Popup
+        confirmationPopup.HideConfirmationPopup();
     }
 
     /// <summary>
