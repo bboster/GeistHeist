@@ -167,8 +167,17 @@ public class ThirdPersonInputHandler : IInputHandler
            .transform.gameObject;
     }
 
+    float timeOfLastInteract = -1;
+
     public override void OnInteractStarted()
     {
+        if(Time.time - timeOfLastInteract <= 0.1f)
+        {
+            Debug.LogError("Pressing interact multiple times");
+            return;
+        }
+        timeOfLastInteract = Time.time;
+
         Debug.Log("Interactions happening");
 
         var result = GetBestInteractableSphereCast();

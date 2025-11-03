@@ -64,7 +64,14 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessObject(PossessableObject possessable)
     {
-        if(possessable == null)
+        // TODO: delete this after duplicating inputs is fixed
+        if (Time.time - possessable.timeOfLastInteraction <= 0.1f)
+        {
+            Debug.LogError("Trying to possess early on " + gameObject.name);
+            return;
+        }
+
+        if (possessable == null)
         {
             Debug.LogError("Possessable is null");
             return;
