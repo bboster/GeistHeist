@@ -97,7 +97,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     void IInteractable.Interact()
     {
+        // TODO: delete this after duplicating inputs is fixed
+        if (Time.time - timeOfLastInteraction <= 0.1f)
+        {
+            Debug.LogError("Trying to unpossess early");
+            return;
+        }
         timeOfLastInteraction = Time.time;
+
         PlayerManager.Instance.PossessObject(this);
     }
 
@@ -106,15 +113,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
+        timeOfLastInteraction = Time.time;
+
         StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
 
         gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
 
         SetPossessionMaterial();
-
-        Debug.Log("Waiting for unpossess");
-        StartCoroutine(WaitForUnpossess());
 
         if (hasTimer)
         {
@@ -134,11 +140,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
-        if (!CanUnPossess)
+        //if (!CanUnPossess)
+        // TODO: delete this after duplicating inputs is fixed
+        if (Time.time - timeOfLastInteraction <= 0.1f)
         {
             Debug.LogError("Trying to unpossess early");
             return;
         }
+        timeOfLastInteraction = Time.time;
 
         StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
 
@@ -170,14 +179,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
         
         // Nothing right now
         
-    }
-
-    public IEnumerator WaitForUnpossess()
-    {
-        CanUnPossess = false;
-        yield return new WaitForSeconds(0.1f);
-        CanUnPossess = true;
-        unpossessCoroutine = null;
     }
 
     #region Timer
