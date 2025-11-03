@@ -31,7 +31,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject DailougeManagerPrefab;
 
     [Header("Canvases")]
-    [SerializeField, Required] GameObject CooldownManagerPrefab;
     [SerializeField, Required] GameObject PauseMenuPrefab;
 
     [Header("Other Constants")]
@@ -116,7 +115,6 @@ public class GameManager : Singleton<GameManager>
         Instantiate(GuardCoroutineManagerPrefab);
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
-        Instantiate(CooldownManagerPrefab);
         Instantiate(LevelManagerPrefab);
         Instantiate(DailougeManagerPrefab);
 
