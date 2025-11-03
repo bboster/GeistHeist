@@ -57,7 +57,8 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void WhilePossessingUpdate()
     {
-        chargeMeter.UpdateCharge(currentStrength, maxStrength);
+        if (chargeMeter != null)
+            chargeMeter.UpdateCharge(currentStrength, maxStrength);
         //Images.SetActive(false);
     }
 
