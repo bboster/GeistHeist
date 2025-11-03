@@ -55,8 +55,9 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void WhilePossessingUpdate()
     {
+        if (chargeMeter == null) chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();
+
         chargeMeter.UpdateCharge(currentStrength, maxStrength);
-        //Images.SetActive(false);
     }
 
     #region action
