@@ -36,8 +36,8 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField, Foldout("Interaction")] private float interactRayLength = 5;
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
 
-    [Header("Between Possession Cooldown Variables")]
-    [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
+    //[Header("Between Possession Cooldown Variables")]
+    //[SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
 
     [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
@@ -53,8 +53,9 @@ public class ThirdPersonInputHandler : IInputHandler
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
-        //layerToInclude = LayerMask.GetMask("Interactable");
-        CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
+        /*if(CooldownManager.Instance != null) 
+            CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
+        */
     }
 
     // WhilePossessingUpdate is called once per frame
@@ -66,8 +67,11 @@ public class ThirdPersonInputHandler : IInputHandler
     // for the player / ghost: this means ENTERING ghost mode
     public override void OnPossessionStart()
     {
-        CooldownManager.Instance.StartCooldown();
-        TurnOnCooldownCanvas();
+        if(CooldownManager.Instance != null)
+        {
+            CooldownManager.Instance.StartCooldown();
+            //TurnOnCooldownCanvas();
+        }
     }
 
     // for the player / ghost: this means EXITING ghost mode
@@ -248,6 +252,7 @@ public class ThirdPersonInputHandler : IInputHandler
     #endregion
 
     #region Cooldown
+    /*
     private void OnCooldownFinished()
     {
         if(cooldownCanvas != null)
@@ -262,7 +267,7 @@ public class ThirdPersonInputHandler : IInputHandler
         {
             cooldownCanvas.gameObject.SetActive(true);
         }
-    }
+    }*/
     #endregion
 
     #region Move
