@@ -45,7 +45,9 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnPossessionStart()
     {
-        chargeMeter.OnPossessionStarted();
+
+        if (chargeMeter != null)
+            chargeMeter.OnPossessionStarted();
     }
 
     public override void OnPossessionEnded()
@@ -55,7 +57,8 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void WhilePossessingUpdate()
     {
-        chargeMeter.UpdateCharge(currentStrength, maxStrength);
+        if (chargeMeter != null)
+            chargeMeter.UpdateCharge(currentStrength, maxStrength);
         //Images.SetActive(false);
     }
 
