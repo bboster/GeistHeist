@@ -47,7 +47,6 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private GameObject lastObjectLookedAt;
     private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
-    private float frameCountSinceLastInteraction;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -130,9 +129,15 @@ public class ThirdPersonInputHandler : IInputHandler
             Vector3 interactPos = result.transform.position;
             bool ray = Physics.Raycast(playerPos, interactPos - interactPos, out RaycastHit hit, Vector3.Distance(playerPos, interactPos), layerToInclude);
             if (drawInteractRay) Debug.DrawLine(playerPos, interactPos,
-                                ray && hit.transform.gameObject != result.transform.gameObject ? Color.red : Color.green);
+                                    ray && hit.transform.gameObject != result.transform.gameObject ? Color.red : Color.green);
             if (ray && hit.transform.gameObject != result.transform.gameObject)
                 continue;
+
+            // Test if its been interacted with already this frame
+            // TODO: this is a bandaid solution delete it when inputs stop getting duplicated.
+            if(possessableObject != null &&
+                Time.time - possessableObject.timeOfLastInteraction <= 0.1f)
+                    continue;
 
             filteredResults.Add(result);
         }
@@ -164,13 +169,10 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void OnInteractStarted()
     {
-        if (Time.frameCount - frameCountSinceLastInteraction <= 3)
-            return;
+        Debug.Log("Interactions happening");
 
         var result = GetBestInteractableSphereCast();
         if (result == null) return;
-
-        frameCountSinceLastInteraction = Time.time;
 
         var allInteractables = result.GetComponentsInChildren<IInteractable>();
 

@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/28/25
+ * Last Modified: 11/3/25
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -21,27 +21,28 @@ public class PossessableObject : MonoBehaviour, IInteractable
 {
     
     [Required] public CinemachineCamera CinemachineCamera;
+    [SerializeField] private bool isGhost = false; // is there a better way to do this? really just used for 
     
     [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
-    public List<Transform> ghostExitPoints;
+    [HideIf(nameof(isGhost))] public List<Transform> ghostExitPoints;
+
     [Header("Timer Variables")]
     [SerializeField] private bool hasTimer;
-    [SerializeField] public float maxChargePercentage = 100;
+    [SerializeField, ShowIf(nameof(hasTimer))] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
     [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargePercentage = 10;
     [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
     [SerializeField, ShowIf(nameof(hasTimer))] private float timerDischargePercentage = 10;
 
-
     private Coroutine dischargeCoroutine = null;
     private Coroutine rechargeCoroutine;
 
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
-    public Transform ghostSpawnPoint;
+    [HideIf(nameof(isGhost))] public Transform ghostSpawnPoint;
 
     [Header("Materials")]
-    [SerializeField, Required, ShowAssetPreview(16, 16)] private Material PossessedMaterial;
-    [SerializeField, Required, ShowAssetPreview(16, 16)] private Material UnpossessedMaterial;
+    [HideIf(nameof(isGhost)), SerializeField, Required, ShowAssetPreview(16, 16)] private Material PossessedMaterial;
+    [HideIf(nameof(isGhost)), SerializeField, Required, ShowAssetPreview(16, 16)] private Material UnpossessedMaterial;
 
     [HideInInspector] public bool CanUnPossess = true;
     public IInputHandler InputHandler => GetInputHandler();
@@ -53,9 +54,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [ReadOnly] private float currentTimerPercentage = 100f;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
 
+    // delete this when inputs dont get duplicated
+    [HideInInspector]
+    public float timeOfLastInteraction = -1;
+
     #region Guard Detection Variables
 
-    public bool IsMoving = false;
+    [HideInInspector] public bool IsMoving = false;
 
     public static Action OnActionPerformed;
     public static Action OnObjectLeft;
@@ -65,17 +70,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     void Start()
     {
-        if (ghostExitPoints.Count == 0)
+        if (ghostExitPoints.IsNullOrEmpty())
         {
-            Debug.Log("No exit points set for " + this);
+            Debug.LogWarning("No exit points set for " + gameObject.name);
         }
 
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
-        if (UnpossessedMaterial != null)
-            meshRenderer.material = UnpossessedMaterial;
-        else
-            Debug.LogWarning("No unpossession material for " + gameObject.name);
+        SetUnpossessionMaterial();
 
         if(possessableCanvas == null)
             possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
@@ -95,6 +97,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     void IInteractable.Interact()
     {
+        timeOfLastInteraction = Time.time;
         PlayerManager.Instance.PossessObject(this);
     }
 
@@ -108,13 +111,10 @@ public class PossessableObject : MonoBehaviour, IInteractable
         gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
 
-        if(PossessedMaterial != null)
-            meshRenderer.material = PossessedMaterial;
-        else
-            Debug.LogWarning("No possession material for "+gameObject.name);
+        SetPossessionMaterial();
 
-        if (unpossessCoroutine == null)
-            unpossessCoroutine = StartCoroutine(WaitForUnpossess());
+        Debug.Log("Waiting for unpossess");
+        StartCoroutine(WaitForUnpossess());
 
         if (hasTimer)
         {
@@ -134,18 +134,15 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
-        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
-
         if (!CanUnPossess)
         {
             Debug.LogError("Trying to unpossess early");
             return;
         }
 
-        if (PossessedMaterial != null)
-            meshRenderer.material = UnpossessedMaterial;
-        else
-            Debug.LogWarning("No unpossession material for " + gameObject.name);
+        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
+
+        SetUnpossessionMaterial();
 
         InputHandler.OnPossessionEnded();
         OnObjectLeft?.Invoke();
@@ -178,7 +175,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     public IEnumerator WaitForUnpossess()
     {
         CanUnPossess = false;
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.1f);
         CanUnPossess = true;
         unpossessCoroutine = null;
     }
@@ -260,6 +257,26 @@ public class PossessableObject : MonoBehaviour, IInteractable
             yield return null;
         }
         possessableCanvas.gameObject.SetActive(false);
+    }
+
+    #endregion
+
+    #region VFX
+
+    public void SetPossessionMaterial()
+    {
+        if (PossessedMaterial != null)
+            meshRenderer.material = PossessedMaterial;
+        else if (!isGhost)
+            Debug.LogWarning("No possession material for " + gameObject.name);
+    }
+
+    public void SetUnpossessionMaterial()
+    {
+        if (UnpossessedMaterial != null)
+            meshRenderer.material = UnpossessedMaterial;
+        else if (!isGhost)
+            Debug.LogWarning("No unpossession material for " + gameObject.name);
     }
 
     #endregion

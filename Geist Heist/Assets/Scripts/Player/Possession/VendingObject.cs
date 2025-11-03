@@ -11,7 +11,7 @@ using UnityEngine.UI;
 * TODO: a lot of this code is copy pasted directly from ToyCar.cs
 */
 [RequireComponent(typeof(PossessableObject))]
-public class VendingObject : IInputHandler, IInteractable
+public class VendingObject : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private Transform CanSpawnPoint;
@@ -39,12 +39,12 @@ public class VendingObject : IInputHandler, IInteractable
     void Start()
     {
         possessableObject = GetComponent<PossessableObject>();
-        if(chargeMeter == null)
-            chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();   
+        if(chargeMeter == null) chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();   
     }
 
     public override void OnPossessionStart()
     {
+        if (chargeMeter == null) chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();
         chargeMeter.OnPossessionStarted();
     }
 
@@ -143,10 +143,6 @@ public class VendingObject : IInputHandler, IInteractable
 
     #endregion
 
-    void IInteractable.Interact()
-    {
-        //PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
-    }
 
     public void OnDrawGizmos()
     {
