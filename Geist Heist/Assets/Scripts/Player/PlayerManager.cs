@@ -13,7 +13,6 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput))]
 public class PlayerManager : Singleton<PlayerManager>
 {
     [HideInInspector]
