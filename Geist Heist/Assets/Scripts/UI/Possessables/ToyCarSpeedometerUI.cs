@@ -23,6 +23,10 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
     [SerializeField] private float shakeStrength = 15;
     [SerializeField] private float shakeSpeed = 3;
 
+    [SerializeField] private bool UseDifferentAngleForTicker = false;
+    [SerializeField, ShowIf(nameof(UseDifferentAngleForTicker))] private float maxTickerAngle;
+    [SerializeField, ShowIf(nameof(UseDifferentAngleForTicker))] private float minTickerAngle; 
+
     [Header("Opacity Settings")]
     [SerializeField] private bool HideWhenNotHeld = true;
     [SerializeField, ShowIf(nameof(HideWhenNotHeld))] private float SecondsToShow = 0.15f;
@@ -68,11 +72,16 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
         z_angle = Mathf.LerpAngle(pointerTransform.eulerAngles.z, z_angle, Time.deltaTime * 10);
 
         // Apply angle
-        pointerTransform.eulerAngles = pointerTransform.eulerAngles.WithZ(z_angle);
+        float real_t = StaticUtilities.InverseLerpAngleUnclamped(minAngle, maxAngle, z_angle);
+        fillImage.fillAmount = real_t;
 
-        fillImage.fillAmount = StaticUtilities.InverseLerpAngleUnclamped (minAngle, maxAngle, z_angle);
-
-        //Debug.Log($"fill amount: {fillImage.fillAmount}, z angle: {z_angle}");
+        if (UseDifferentAngleForTicker)
+        {
+            float ticker_t_angle = Mathf.LerpAngle(minTickerAngle, maxTickerAngle, real_t);
+            pointerTransform.eulerAngles = pointerTransform.eulerAngles.WithZ(ticker_t_angle);
+        }
+        else
+            pointerTransform.eulerAngles = pointerTransform.eulerAngles.WithZ(z_angle);
 
         lastHeldTime = heldTime;
     }
@@ -81,28 +90,25 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
     {
         // Change opacity if applicable
         if (!HideWhenNotHeld)
-        {
             return 1;
-        }
 
         float a;
 
-        if(heldTime <= 0)
-        {
+        if (heldTime <= 0)
             return 0;
-        }
         // if charge is decreasing
         else if (heldTime < lastHeldTime)
-        {
             a = currentOpacity - (Time.deltaTime / SecondsToHide);
-        }
         // if charge is increasing
         else
-        {
             a = heldTime / SecondsToShow;
-        }
 
         a = Mathf.Clamp(a, 0, 1);
         return Mathf.Lerp(currentOpacity, a, Time.deltaTime * 10);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        UpdateCharge((Time.time/4) % 1.1f, 1);
     }
 }

@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation Date: 10/20/2025
- * Last Modified: 11/3/2025
+ * Last Modified: 10/20/2025
  * 
  * Brief Description: Handles UI elements for the pause menu.
  * Also listens to escape key input to open and close it.
@@ -34,10 +34,10 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] private Button restartLevelButton;
     [SerializeField, Required] private Button resetSaveButton;
 
-    // this is a bandaid fix. hopefully this variable will be removed.
     private static float timeOfLastPause;
 
-    public void Start()
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
         // disable going to hub if you are at the hub
         if(SceneManager.GetActiveScene().buildIndex == HubScene)
@@ -49,26 +49,18 @@ public class PauseMenu : MonoBehaviour
 
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
 
-        // Main buttons
         continueGameButton.onClick.AddListener(OnContinueGameButtonClicked);
         quitToHubButton.onClick.AddListener(OnGoToHubButtonClicked);
         quitToMainMenuButton.onClick.AddListener(OnGoToMainMenuButtonClicked);
 
-        // Debug buttons
         resetSaveButton.onClick.AddListener(ResetSaveDataButtonClicked);
         restartLevelButton.onClick.AddListener(RestartLevelButtonClicked);
-
-        // Brings canvas to front of screen. 
-        transform.SetAsLastSibling();
 
         ClosePauseMenu();
     }
 
     public void OpenPauseMenu()
     {
-        if(confirmationPopup == null)
-            confirmationPopup = GetComponentInChildren<ConfirmationPopup>();
-
         confirmationPopup.HideConfirmationPopup();
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.IsPaused = true;
@@ -79,9 +71,6 @@ public class PauseMenu : MonoBehaviour
 
     public void ClosePauseMenu()
     {
-        if (confirmationPopup == null)
-            confirmationPopup = GetComponentInChildren<ConfirmationPopup>();
-
         confirmationPopup.HideConfirmationPopup();
         Debug.Log("Pause Menu closed");
         GameManager.Instance.IsPaused = false;

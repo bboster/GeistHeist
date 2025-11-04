@@ -96,7 +96,12 @@ public class ToyCar : IInputHandler
     public override void WhileActionHeld(float secondsHeld)
     {
         if (secondsHeld < delayBetweenZooms && hasLaunchedThisPossession)
+        {
+            currentStrength = Mathf.Max(
+                currentStrength - (Time.deltaTime * chargeLossRate),
+                minStrength);
             return;
+        }
 
         if (rb.linearVelocity.magnitude <= 0.5f)
         {

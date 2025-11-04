@@ -1,7 +1,7 @@
 /*
  * Contributors:  Josh, Toby, Jacob
  * Creation Date: 10/1/25
- * Last Modified: 11/3/25
+ * Last Modified: 10/21/25
  * 
  * Brief Description: Instantiates managers scripts that are required for scene to function.
  * Keeps track of game state, such as level.
@@ -13,7 +13,6 @@ using Unity.Cinemachine;
 using UnityEngine.UI;
 using System;
 using System.Threading.Tasks;
-using UnityEngine.InputSystem.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -32,13 +31,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject DailougeManagerPrefab;
 
     [Header("Canvases")]
+    [SerializeField, Required] GameObject CooldownManagerPrefab;
     [SerializeField, Required] GameObject PauseMenuPrefab;
 
     [Header("Other Constants")]
-    [SerializeField, Required] GameObject EventSystemPrefab; // for detecting UI input events (unity thing, not us).
     [SerializeField, Required] GameObject CameraPrefab;
-
-    [Header("Player Variables")]
     [SerializeField, Required] GameObject PlayerPrefab;
     [Required] public Transform PlayerStart;
 
@@ -119,16 +116,14 @@ public class GameManager : Singleton<GameManager>
         Instantiate(GuardCoroutineManagerPrefab);
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
+        Instantiate(CooldownManagerPrefab);
         Instantiate(LevelManagerPrefab);
         Instantiate(DailougeManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
 
-        Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
-
-        if (GameObject.FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
-            Instantiate(EventSystemPrefab);
+        Instantiate(PauseMenuPrefab);
 
         return Task.CompletedTask;
     }
