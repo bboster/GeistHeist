@@ -33,7 +33,7 @@ public class ToyCar : IInputHandler
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
 
     [Tooltip("How much moving rotates by per second.")]
-    [SerializeField] private float rotationRate;
+    [SerializeField] private float rotationRate = 30;
     //realtime hold strength
     private float currentStrength;
 
