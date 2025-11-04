@@ -47,6 +47,9 @@ public class StateText : IBillboardUI
             case GuardStates.surprised:
                 stateText.text = "SURPRISED";
                 break;
+            case GuardStates.concussed:
+                stateText.text = "STUNNED";
+                break;
             case GuardStates.search:
                 stateText.text = "SEARCH";
                 break;
