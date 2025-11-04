@@ -13,8 +13,9 @@ using UnityEngine;
 using UnityEngine.Events;
  using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.SceneManagement;
 
-public class InputEvents : Singleton<InputEvents>
+public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 {
     // Events
 
@@ -74,16 +75,20 @@ public class InputEvents : Singleton<InputEvents>
     #endregion
 
     private PlayerInput playerInput;
-    private InputAction Move, /*Jump,*/ Look, Pause, Action, Interact;
+    public InputAction Move, /*Jump,*/ Look, Pause, Action, Interact;
 
 
-    private Transform movementOrigin;
+    private Transform movementOrigin => GetCamera();
+    private Transform _movementOrigin;
 
     private void Start()
     {
-        movementOrigin = Camera.main.transform;
+        if (Instance != this)
+            return;
+
         playerInput = GetComponent<PlayerInput>();
         InitializeActions();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void InitializeActions()
@@ -177,14 +182,29 @@ public class InputEvents : Singleton<InputEvents>
         ActionCanceled.RemoveAllListeners();
         InteractCanceled.RemoveAllListeners();
     }
-    private void OnDisable()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("On Disable");
+        //Debug.Log("On Disable");
         Move?.Reset();   
         //Jump.Reset();
         Pause?.Reset();
         Action?.Reset();
         Interact?.Reset();
         Look?.Reset();
+
+        RemoveAllListeners();
     }
+
+    #region Camera
+
+    Transform GetCamera()
+    {
+        if (_movementOrigin == null)
+            _movementOrigin = Camera.main.transform;
+
+        return _movementOrigin;
+
+    }
+
+    #endregion
 }
