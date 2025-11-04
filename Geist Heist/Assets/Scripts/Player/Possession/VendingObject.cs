@@ -25,14 +25,16 @@ public class VendingObject : IInputHandler, IInteractable
     /*[Dropdown("balancing")]*/[SerializeField] private float chargeLossRate;
     /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
     /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
+    [Tooltip("Force there to be time between can throws")]
+    [SerializeField] private float delayBetweenThrows = 1f;
     [SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
 
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
 
-
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
     private PossessableObject possessableObject;
+    private bool hasThrownThisPossession;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -45,20 +47,22 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnPossessionStart()
     {
+        if (chargeMeter == null)
+            chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();
 
-        if (chargeMeter != null)
-            chargeMeter.OnPossessionStarted();
+        chargeMeter?.OnPossessionStarted();
+        hasThrownThisPossession = false;
     }
 
     public override void OnPossessionEnded()
     {
         currentStrength = minStrength;
+        hasThrownThisPossession = false;
     }
 
     public override void WhilePossessingUpdate()
     {
-        if (chargeMeter != null)
-            chargeMeter.UpdateCharge(currentStrength, maxStrength);
+        chargeMeter.UpdateCharge(currentStrength, maxStrength);
         //Images.SetActive(false);
     }
 
@@ -70,11 +74,15 @@ public class VendingObject : IInputHandler, IInteractable
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
             temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength, ForceMode.Impulse);
+            hasThrownThisPossession = true; 
         }
     }
 
     public override void WhileActionHeld(float secondsHeld)
     {
+        if (secondsHeld < delayBetweenThrows && hasThrownThisPossession)
+            return;
+
         if (!Tap)
         {
             // Will be clamped later (dont clamp now for charge ui animations)
@@ -84,6 +92,9 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void OnActionCanceled(float secondsHeld)
     {
+        if (secondsHeld < delayBetweenThrows && hasThrownThisPossession)
+            return;
+
         if (!Tap)
         {
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
@@ -92,6 +103,7 @@ public class VendingObject : IInputHandler, IInteractable
             Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
             tempLaunch.y = launchDirection.y;
             temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
+            hasThrownThisPossession = true;
         }
 
         PossessableObject.OnActionPerformed?.Invoke();

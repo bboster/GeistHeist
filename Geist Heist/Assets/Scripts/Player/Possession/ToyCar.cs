@@ -33,7 +33,7 @@ public class ToyCar : IInputHandler
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
 
     [Tooltip("How much moving rotates by per second.")]
-    [SerializeField] private float rotationRate;
+    [SerializeField] private float rotationRate = 30;
     //realtime hold strength
     private float currentStrength;
 
@@ -96,7 +96,12 @@ public class ToyCar : IInputHandler
     public override void WhileActionHeld(float secondsHeld)
     {
         if (secondsHeld < delayBetweenZooms && hasLaunchedThisPossession)
+        {
+            currentStrength = Mathf.Max(
+                currentStrength - (Time.deltaTime * chargeLossRate),
+                minStrength);
             return;
+        }
 
         if (rb.linearVelocity.magnitude <= 0.5f)
         {

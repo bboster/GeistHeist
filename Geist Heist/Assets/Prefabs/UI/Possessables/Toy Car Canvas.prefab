@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6366010194109779482}
   - component: {fileID: 7651094545784525949}
   - component: {fileID: 6327520632308235901}
-  - component: {fileID: 6831525037373236310}
   m_Layer: 5
   m_Name: Toy Car Canvas
   m_TagString: Untagged
@@ -103,18 +102,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!225 &6831525037373236310
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1613171770634289741}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
 --- !u!1001 &3192998327181379299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -123,6 +110,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6671983893449034794}
     m_Modifications:
+    - target: {fileID: 740382940733169971, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: m_Alpha
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 740382940733169971, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_Interactable
       value: 0
@@ -151,9 +142,41 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -55.45453
       objectReference: {fileID: 0}
+    - target: {fileID: 3181534525798250846, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.5906737
+      objectReference: {fileID: 0}
+    - target: {fileID: 3315332518171418223, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9916968
+      objectReference: {fileID: 0}
+    - target: {fileID: 3315332518171418223, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3315332518171418223, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3315332518171418223, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.12859839
+      objectReference: {fileID: 0}
     - target: {fileID: 5961405962273672736, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_Name
       value: Toy Car Speedometer
+      objectReference: {fileID: 0}
+    - target: {fileID: 5969620198072603526, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: maxAngle
+      value: -86
+      objectReference: {fileID: 0}
+    - target: {fileID: 5969620198072603526, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: shakeSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5969620198072603526, guid: 65747143fce5523488645e37eb14252d, type: 3}
+      propertyPath: shakeStrength
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 6261010495706913277, guid: 65747143fce5523488645e37eb14252d, type: 3}
       propertyPath: m_Pivot.x
