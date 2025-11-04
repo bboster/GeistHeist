@@ -185,6 +185,7 @@ public class ThirdPersonInputHandler : IInputHandler
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
         }
         LookAtInteractableStop(lastObjectLookedAt);
+        lastObjectLookedAt = null;
     }
 
     /// <summary>
