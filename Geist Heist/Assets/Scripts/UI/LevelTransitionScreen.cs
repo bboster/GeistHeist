@@ -49,7 +49,7 @@ public class LevelTransitionScreen : MonoBehaviour
 
         GameManager.Instance.NextLevel(_sceneToLoad);
 
-        yield return new WaitForSeconds(fadeInSeconds);
+        yield return new WaitForSeconds(waitingSeconds);
 
         yield return FadeOut();
 
