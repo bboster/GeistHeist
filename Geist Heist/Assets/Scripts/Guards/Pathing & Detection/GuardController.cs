@@ -110,6 +110,8 @@ public class GuardController : MonoBehaviour
     /// <param name="newBehavior"></param>
     public void ChangeBehavior(GuardStates state)
     {
+        Debug.Log(state);
+
         StopBehavior();
         currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
         StartBehavior();

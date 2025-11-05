@@ -61,15 +61,16 @@ public class VisionStimulus : Stimulus
 
     private void OnTriggerStay(Collider other)
     {
-        if (timer != null)
-        {
-            StopCoroutine(timer);
-            timer = null;
-        }
-        else if (other.gameObject.TryGetComponent(out PossessableObject obj))
+        if (other.gameObject.TryGetComponent(out PossessableObject obj))
         {
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
             {
+                if (timer != null)
+                {
+                    StopCoroutine(timer);
+                    timer = null;
+                }
+
                 hasSeenPlayer = true;
                 Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
 
@@ -87,6 +88,12 @@ public class VisionStimulus : Stimulus
             }
             else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
             {
+                if (timer != null)
+                {
+                    StopCoroutine(timer);
+                    timer = null;
+                }
+
                 if (obj.gameObject.TryGetComponent(out Rigidbody rb))
                 {
                     Vector3 velocityCheck = rb.linearVelocity.Abs();
@@ -110,7 +117,15 @@ public class VisionStimulus : Stimulus
         {
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
             {
-                timer = StartCoroutine(VisionBreakTimer());
+                Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
+
+                Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
+                float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 2;
+
+                if (!Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer))
+                {
+                    timer = StartCoroutine(VisionBreakTimer());
+                }
             }
             else if (obj.Equals(PlayerManager.Instance.CurrentObject))
             {

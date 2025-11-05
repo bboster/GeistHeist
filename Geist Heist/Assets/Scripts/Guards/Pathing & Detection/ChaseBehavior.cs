@@ -21,6 +21,9 @@ public class ChaseBehavior : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
+
+        MoveToPoint(GetPlayerLocation());
+        thisAgent.isStopped = false;
         //ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
