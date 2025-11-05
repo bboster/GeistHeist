@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6619922811575612609}
   - component: {fileID: 3766234151599777126}
-  - component: {fileID: 394508922801512852}
   - component: {fileID: 8812605823724619764}
   m_Layer: 0
   m_Name: Input Manager
@@ -50,22 +49,53 @@ MonoBehaviour:
   pauseKey: Pause
   lookKey: Look
   actionKey: Action
-  escapeObjectKey: Escape Object
+  interactKey: Interact
   _sensitivity: 0.25
---- !u!114 &394508922801512852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6627305255009072721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15d338489e8bd2f48957cfdf995b589f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
-  PlayerGhostObject: {fileID: 0}
-  CurrentObject: {fileID: 0}
+  Move:
+    m_Name: Move
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 407790be-412c-4f7d-bbc8-a5e2b86b2459
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Look:
+    m_Name: Look
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 8e0ca305-a137-41d9-9e49-995f1c27b801
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Pause:
+    m_Name: Pause
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: cbd6a46e-0123-4a8e-8b84-ea22c72e1067
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Action:
+    m_Name: Action
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 7a00fd45-9778-4c9a-9314-b94bc8a16696
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Interact:
+    m_Name: Interact
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 879b9db9-6d4a-448d-91f8-bcbfb76f1efc
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &8812605823724619764
 MonoBehaviour:
   m_ObjectHideFlags: 0

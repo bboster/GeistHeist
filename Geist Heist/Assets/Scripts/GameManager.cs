@@ -20,6 +20,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Managers")]
     [SerializeField, Required] GameObject InputManagerPrefab;
+    [SerializeField, Required] GameObject PlayerManagerPrefab;
     //[SerializeField, Required] GameObject CoolDownManagerPrefab; TODO: waiting until sky finishes refactoring it
     [SerializeField, Required] GameObject SaveDataManagerPrefab;
     [SerializeField, Required] GameObject GuardCoroutineManagerPrefab;
@@ -112,6 +113,7 @@ public class GameManager : Singleton<GameManager>
     public Task InstantiateManagers()
     {
         Instantiate(InputManagerPrefab);
+        Instantiate(PlayerManagerPrefab);
         Instantiate(SaveDataManagerPrefab);
         Instantiate(GuardCoroutineManagerPrefab);
         Instantiate(BehaviourDatabasePrefab);
