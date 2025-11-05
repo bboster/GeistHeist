@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3795089960160624269}
+  - component: {fileID: 5864543792313619494}
   m_Layer: 6
-  m_Name: GhostSpawnPoint
+  m_Name: GhostExitPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,6 +32,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5515047247052653093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5864543792313619494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189563065294266653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b3fe61085f9b94186df4016697fd94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AddGizmo
 --- !u!1 &726645532892400056
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,8 +121,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
   CinemachineCamera: {fileID: 8220346955714794214}
+  ghostExitPoints:
+  - {fileID: 3795089960160624269}
   hasTimer: 1
-  timerRechargeInterval: 2
   maxChargePercentage: 100
   timerRechargePercentage: 10
   timerDischargePercentage: 10
@@ -120,6 +134,7 @@ MonoBehaviour:
   OnTimerUpdate:
     m_PersistentCalls:
       m_Calls: []
+  IsMoving: 0
   possessableCanvas: {fileID: 0}
   showSeconds: 1
   hideSeconds: 0.3
@@ -612,6 +627,10 @@ PrefabInstance:
     - target: {fileID: 2910049095808949807, guid: fef15e67847f6be43b86c08171a1a787, type: 3}
       propertyPath: m_Name
       value: Vase Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4999564223826260826, guid: fef15e67847f6be43b86c08171a1a787, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.753273
       objectReference: {fileID: 0}
     - target: {fileID: 6082014655618213943, guid: fef15e67847f6be43b86c08171a1a787, type: 3}
       propertyPath: possessable

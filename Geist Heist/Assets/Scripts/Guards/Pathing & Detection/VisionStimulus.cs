@@ -101,6 +101,12 @@ public class VisionStimulus : Stimulus
                     //If there's a better way to check if a possessable is moving please leave a note in the review
                     if (velocityCheck.x > 1 || velocityCheck.y > 1 || velocityCheck.z > 1)
                     {
+                        if (timer != null)
+                        {
+                            StopCoroutine(timer);
+                            timer = null;
+                        }
+
                         TriggerStimulus();
                         return;
                     }
@@ -159,6 +165,12 @@ public class VisionStimulus : Stimulus
     {
         if (playerObjectSeen == true)
         {
+            if (timer != null)
+            {
+                StopCoroutine(timer);
+                timer = null;
+            }
+
             parentController.RecieveStimulus(this, stateToChangeTo);
         }
     }
