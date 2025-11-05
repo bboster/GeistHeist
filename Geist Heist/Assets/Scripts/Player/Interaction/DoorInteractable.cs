@@ -13,7 +13,7 @@ using UnityEngine.Events;
 
 public class DoorInteractable : MonoBehaviour, IInteractable
 {
-    [SerializeField][Scene] private string sceneName;
+    [SerializeField][Scene] private int sceneName;
 
     [InfoBox("The loading screen is the parent that manages the loading card\n\nThe loading card should be level-specific, so have one for each level.")]
     // TODO: can this be moved to some cached/shared confirmation canvas? so we dont have to respawn it everytime.
