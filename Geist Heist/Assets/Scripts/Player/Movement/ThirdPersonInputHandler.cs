@@ -36,6 +36,9 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField, Foldout("Interaction")] private float interactRayLength = 5;
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
 
+    //May need to be included in the future but isn't nessecary atm
+    //[SerializeField, Foldout("Interaction")] LayerMask obstacleLayer;
+
     [Header("Between Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
 
@@ -53,7 +56,6 @@ public class ThirdPersonInputHandler : IInputHandler
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
-        //layerToInclude = LayerMask.GetMask("Interactable");
         CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
     }
 
@@ -128,11 +130,18 @@ public class ThirdPersonInputHandler : IInputHandler
             // Test if there is a wall between player and the object
             Vector3 playerPos = gameObject.transform.position;
             Vector3 interactPos = result.transform.position;
-            bool ray = Physics.Raycast(playerPos, interactPos - interactPos, out RaycastHit hit, Vector3.Distance(playerPos, interactPos), layerToInclude);
+            Vector3 direction = (interactPos - playerPos).normalized;
+            float distance = Vector3.Distance(playerPos, interactPos);
+
+            //raycast is sent from the player 
+            bool ray = Physics.Raycast(playerPos, direction, out RaycastHit hit, distance, layerToInclude);
             if (drawInteractRay) Debug.DrawLine(playerPos, interactPos,
                                 ray && hit.transform.gameObject != result.transform.gameObject ? Color.red : Color.green);
             if (ray && hit.transform.gameObject != result.transform.gameObject)
+            {
+                Debug.Log("Raycast hit a wall");
                 continue;
+            }
 
             filteredResults.Add(result);
         }
