@@ -22,7 +22,7 @@ public class ConfirmationPopup : MonoBehaviour
     [SerializeField] private bool hideOnCreation = true; 
 
     private CanvasGroup canvasGroup;
-    private float oldTimeScale;
+    private float oldTimeScale=1;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -38,6 +38,13 @@ public class ConfirmationPopup : MonoBehaviour
         if(canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
+        // shelving this for now, but i think its important
+        /*if(InputEvents.Instance != null)
+        {
+            InputEvents.PauseStarted.AddListener(HideConfirmationPopup);
+        }
+
+        GameManager.Instance.IsPaused = true;*/
         StaticUtilities.ShowCursor();
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0f;
@@ -62,6 +69,14 @@ public class ConfirmationPopup : MonoBehaviour
 
     public void HideConfirmationPopup()
     {
+        // if player isnt in the pause menu rn
+        /*if(InputEvents.Instance != null && !InputEvents.PausePressed)
+        {
+            GameManager.Instance.IsPaused = false;
+            Time.timeScale = oldTimeScale;
+            StaticUtilities.HideCursor();
+        }*/
+
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
