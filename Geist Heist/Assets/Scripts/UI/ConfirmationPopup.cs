@@ -1,13 +1,14 @@
 /*
  * Contributors: Toby
  * Creation Date: 10/20/25
- * Last Modified: 10/27/25
+ * Last Modified: 11/5/25
  * 
  * Brief Description: Resusable & modular UI popup for confirming the users choice.
  */
 
 using NaughtyAttributes;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,6 +24,10 @@ public class ConfirmationPopup : MonoBehaviour
 
     private CanvasGroup canvasGroup;
     private float oldTimeScale=1;
+    private float lastFadeSecondsUsed = -1;
+    private Coroutine fadeOpacityCoroutine;
+
+    private UnityAction afterCancelClicked = null;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,10 +38,16 @@ public class ConfirmationPopup : MonoBehaviour
             StaticUtilities.DisableCanvasGroup(canvasGroup);
     }
 
-    public void OpenConfirmationPopup(string? text = null, UnityAction? OnConfirmationButtonClicked = null, UnityAction? OnCancelButtonClicked = null)
+    /// <summary>
+    /// Opens confirmation window, can add custom behaviour to the respective buttons
+    /// </summary>
+    /// <param name="fadeSeconds">If greater than 0, fades in and out</param>
+    public void OpenConfirmationPopup(string? text = null, UnityAction? OnConfirmationButtonClicked = null, UnityAction? OnCancelButtonClicked = null, float fadeSeconds = -1)
     {
         if(canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
+
+        lastFadeSecondsUsed = fadeSeconds;
 
         // shelving this for now, but i think its important
         /*if(InputEvents.Instance != null)
@@ -54,17 +65,25 @@ public class ConfirmationPopup : MonoBehaviour
             confirmationText.text = text;
         }
 
+        // Cancel Button
         cancelButton.onClick.RemoveAllListeners();
         cancelButton.onClick.AddListener(OnCancelButtonPressed);
-        if (OnCancelButtonClicked != null)
-            cancelButton.onClick.AddListener(OnCancelButtonClicked);
+        //if (OnCancelButtonClicked != null)
+        //cancelButton.onClick.AddListener(OnCancelButtonClicked);
+        afterCancelClicked = OnCancelButtonClicked;
+            
+            
 
+        // Confirm button
         confirmButton.onClick.RemoveAllListeners();
         confirmButton.onClick.AddListener(OnConfirmButtonClicked); // may be redundant to remove this listener and then immediately add it back but idk else to do it.
         if(OnConfirmationButtonClicked != null)
             confirmButton.onClick.AddListener(OnConfirmationButtonClicked);
 
-        StaticUtilities.EnableCanvasGroup(canvasGroup);
+        if (lastFadeSecondsUsed > 0)
+            StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, FadeToVisible());
+        else
+            StaticUtilities.EnableCanvasGroup(canvasGroup);
     }
 
     public void HideConfirmationPopup()
@@ -80,13 +99,20 @@ public class ConfirmationPopup : MonoBehaviour
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
-        StaticUtilities.DisableCanvasGroup(canvasGroup);
+        if (lastFadeSecondsUsed > 0)
+            StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, FadeToHiddenVisible());
+        else
+        {
+            StaticUtilities.DisableCanvasGroup(canvasGroup);
+            if(afterCancelClicked != null)
+                afterCancelClicked();
+        }
     }
 
     void OnCancelButtonPressed()
     {
         Time.timeScale = oldTimeScale;
-        StaticUtilities.DisableCanvasGroup(canvasGroup);
+        HideConfirmationPopup();
     }
 
     void OnConfirmButtonClicked()
@@ -95,4 +121,41 @@ public class ConfirmationPopup : MonoBehaviour
         StaticUtilities.DisableCanvasGroup(canvasGroup);
     }
 
+    #region fade opacity
+
+    private IEnumerator FadeToVisible()
+    {
+        StaticUtilities.EnableCanvasGroup(canvasGroup, alpha : 0);
+
+        float timeStarted = Time.unscaledTime;
+        float t = 0;
+        while(t < 1)
+        {
+            t = (Time.unscaledTime - timeStarted) / lastFadeSecondsUsed;
+            canvasGroup.alpha = t;
+            yield return null;
+        }
+    }
+
+    private IEnumerator FadeToHiddenVisible()
+    {
+        if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
+
+        float timeStarted = Time.unscaledTime;
+        float t = 0;
+        while (t < 1)
+        {
+            t = (Time.unscaledTime - timeStarted) / lastFadeSecondsUsed;
+            canvasGroup.alpha = 1-t;
+            yield return null;
+        }
+
+        StaticUtilities.DisableCanvasGroup(canvasGroup);
+
+        if (afterCancelClicked != null)
+            afterCancelClicked();
+    }
+
+
+    #endregion
 }
