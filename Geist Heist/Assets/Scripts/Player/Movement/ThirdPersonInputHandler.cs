@@ -54,7 +54,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         //layerToInclude = LayerMask.GetMask("Interactable");
-        CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
+        //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
     }
 
     // WhilePossessingUpdate is called once per frame
@@ -66,8 +66,8 @@ public class ThirdPersonInputHandler : IInputHandler
     // for the player / ghost: this means ENTERING ghost mode
     public override void OnPossessionStart()
     {
-        CooldownManager.Instance.StartCooldown();
-        TurnOnCooldownCanvas();
+        //CooldownManager.Instance.StartCooldown();
+        //TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means EXITING ghost mode
@@ -246,24 +246,6 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
-    #endregion
-
-    #region Cooldown
-    private void OnCooldownFinished()
-    {
-        if(cooldownCanvas != null)
-        {
-            cooldownCanvas.gameObject.SetActive(false);
-        }
-    }
-
-    private void TurnOnCooldownCanvas()
-    {
-        if (CooldownManager.Instance.IsCooldownActive && cooldownCanvas != null)
-        {
-            cooldownCanvas.gameObject.SetActive(true);
-        }
-    }
     #endregion
 
     #region Move
