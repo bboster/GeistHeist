@@ -39,6 +39,15 @@ public class GuardCoroutineManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Starts a path progress coroutine
+    /// </summary>
+    /// <param name="signalReciever"></param>
+    public void StartPathProgress(GuardMovement signalReciever)
+    {
+
+    }
+
+    /// <summary>
     /// Stops a behavior timer
     /// </summary>
     /// <param name="stopRef"></param>
@@ -48,6 +57,15 @@ public class GuardCoroutineManager : MonoBehaviour
         {
             StopCoroutine(stopRef);
         }
+    }
+
+    /// <summary>
+    /// Stops a path progress coroutine
+    /// </summary>
+    /// <param name="signalReciever"></param>
+    public void StopPathProgress(GuardMovement signalReciever)
+    {
+
     }
 
     /// <summary>

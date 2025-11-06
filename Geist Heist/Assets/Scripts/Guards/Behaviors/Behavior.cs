@@ -17,13 +17,11 @@ public class Behavior : ScriptableObject
 {
     #region Variable Declarations
 
-    [Header("Base Behavior Values")]
-    [SerializeField] private bool showBaseValues;
     [Tooltip("The speed the guard will travel at while performing this behavior")]
-    [SerializeField, ShowIf("showBaseValues")] private float speed;
-    [ShowIf("showBaseValues")] public GuardStates StateName;
-    [ShowIf("showBaseValues")] public Priority Priority;
-    [ShowIf("showBaseValues")] public RuntimeAnimatorController stateController;
+    [SerializeField, Foldout("Base Values")] private float speed;
+    [Foldout("Base Values")] public GuardStates StateName;
+    [Foldout("Base Values")] public Priority Priority;
+    [Foldout("Base Values")] public RuntimeAnimatorController stateController;
 
     protected GameObject selfRef;
 
