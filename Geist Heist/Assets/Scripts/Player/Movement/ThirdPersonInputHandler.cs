@@ -36,6 +36,9 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField, Foldout("Interaction")] private float interactRayLength = 5;
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
 
+    //May need to be included in the future but isn't nessecary atm
+    //[SerializeField, Foldout("Interaction")] LayerMask obstacleLayer;
+
     [Header("Between Possession Cooldown Variables")]
     [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
 
@@ -54,7 +57,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         rigidbody = GetComponent<Rigidbody>();
         //layerToInclude = LayerMask.GetMask("Interactable");
-        CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
+        //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
     }
 
     // WhilePossessingUpdate is called once per frame
@@ -66,8 +69,8 @@ public class ThirdPersonInputHandler : IInputHandler
     // for the player / ghost: this means ENTERING ghost mode
     public override void OnPossessionStart()
     {
-        CooldownManager.Instance.StartCooldown();
-        TurnOnCooldownCanvas();
+        //CooldownManager.Instance.StartCooldown();
+        //TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means EXITING ghost mode
@@ -128,11 +131,18 @@ public class ThirdPersonInputHandler : IInputHandler
             // Test if there is a wall between player and the object
             Vector3 playerPos = gameObject.transform.position;
             Vector3 interactPos = result.transform.position;
-            bool ray = Physics.Raycast(playerPos, interactPos - interactPos, out RaycastHit hit, Vector3.Distance(playerPos, interactPos), layerToInclude);
+            Vector3 direction = (interactPos - playerPos).normalized;
+            float distance = Vector3.Distance(playerPos, interactPos);
+
+            //raycast is sent from the player 
+            bool ray = Physics.Raycast(playerPos, direction, out RaycastHit hit, distance, layerToInclude);
             if (drawInteractRay) Debug.DrawLine(playerPos, interactPos,
                                 ray && hit.transform.gameObject != result.transform.gameObject ? Color.red : Color.green);
             if (ray && hit.transform.gameObject != result.transform.gameObject)
+            {
+                Debug.Log("Raycast hit a wall");
                 continue;
+            }
 
             filteredResults.Add(result);
         }
@@ -246,24 +256,6 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
-    #endregion
-
-    #region Cooldown
-    private void OnCooldownFinished()
-    {
-        if(cooldownCanvas != null)
-        {
-            cooldownCanvas.gameObject.SetActive(false);
-        }
-    }
-
-    private void TurnOnCooldownCanvas()
-    {
-        if (CooldownManager.Instance.IsCooldownActive && cooldownCanvas != null)
-        {
-            cooldownCanvas.gameObject.SetActive(true);
-        }
-    }
     #endregion
 
     #region Move
