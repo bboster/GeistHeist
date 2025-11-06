@@ -43,7 +43,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
 
     [Header("Components")]
-    [SerializeField, Required] private MeshRenderer plyaerModel;
+    [SerializeField, Required] private MeshRenderer playerModel;
 
     [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
@@ -62,7 +62,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
-        modelStartYPosition = plyaerModel.transform.position.y;
+        modelStartYPosition = playerModel.transform.position.y;
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
@@ -319,7 +319,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
-        plyaerModel.transform.position = plyaerModel.transform.position.WithY(height);
+        playerModel.transform.position = playerModel.transform.position.WithY(height);
     }
 
     #endregion
