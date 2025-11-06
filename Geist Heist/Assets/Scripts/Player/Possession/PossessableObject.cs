@@ -83,6 +83,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (possessableCanvas != null)
         {
             possessableCanvasGroup = possessableCanvas.gameObject.GetOrAddComponent<CanvasGroup>();
+            possessableCanvasGroup.alpha = 0;
             possessableCanvas.gameObject.SetActive(false);
         }
     }
