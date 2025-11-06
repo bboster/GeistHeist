@@ -23,31 +23,34 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [Required] public CinemachineCamera CinemachineCamera;
     
     [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
-    public List<Transform> ghostExitPoints;
+    [HideIf(nameof(isGhost))] public List<Transform> ghostExitPoints;
+
     [Header("Timer Variables")]
-    [SerializeField] private bool hasTimer;
-    [SerializeField] public float maxChargePercentage = 100;
+    [SerializeField, HideIf(nameof(isGhost))] private bool hasTimer;
+    [SerializeField, HideIf(nameof(isGhost))] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer))] private float timerRechargePercentage = 10;
+    [SerializeField, ShowIf(nameof(hasTimer)), HideIf(nameof(isGhost))] private float timerRechargePercentage = 10;
     [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer))] private float timerDischargePercentage = 10;
-
-
-    private Coroutine dischargeCoroutine = null;
-    private Coroutine rechargeCoroutine;
+    [SerializeField, ShowIf(nameof(hasTimer)), HideIf(nameof(isGhost))] private float timerDischargePercentage = 10;
 
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
-    public Transform ghostSpawnPoint;
+    [HideIf(nameof(isGhost))] public Transform ghostSpawnPoint;
 
     [Header("Materials")]
-    [SerializeField, Required, ShowAssetPreview(16, 16)] private Material PossessedMaterial;
-    [SerializeField, Required, ShowAssetPreview(16, 16)] private Material UnpossessedMaterial;
+    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] private Material PossessedMaterial;
+    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] private Material UnpossessedMaterial;
+
+    [Header("Other")]
+    [SerializeField] private bool isGhost = false;
 
     [HideInInspector] public bool CanUnPossess = true;
     public IInputHandler InputHandler => GetInputHandler();
     private IInputHandler inputHandler;
 
+    private Coroutine dischargeCoroutine = null;
+    private Coroutine rechargeCoroutine;
     private Coroutine unpossessCoroutine=null;
+
     private MeshRenderer meshRenderer;
 
     [ReadOnly] private float currentTimerPercentage = 100f;
@@ -55,7 +58,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     #region Guard Detection Variables
 
-    public bool IsMoving = false;
+    [ReadOnly] public bool IsMoving = false;
 
     public static Action OnActionPerformed;
     public static Action OnObjectLeft;
