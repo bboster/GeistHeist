@@ -20,13 +20,18 @@ public class LevelTransitionScreen : MonoBehaviour
     [SerializeField] private float fadeOutSeconds = 0.5f;
 
     /*[SerializeField, Required]*/ CanvasGroup group;
-    private string _sceneToLoad;
+    private int _sceneToLoad;
     private GameObject animationObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void StartTransition(string sceneToLoad, GameObject animationPrefab)
     {
-        if(group == null)
+        StartTransition(SceneManager.GetSceneByName(sceneToLoad).buildIndex, animationPrefab);
+    }
+
+    public void StartTransition(int sceneToLoad, GameObject animationPrefab)
+    {
+        if (group == null)
             group = GetComponent<CanvasGroup>();
 
         DontDestroyOnLoad(this);
@@ -47,9 +52,9 @@ public class LevelTransitionScreen : MonoBehaviour
 
         yield return FadeIn();
 
-        GameManager.Instance.NextLevel(_sceneToLoad);
+        SceneManager.LoadScene(_sceneToLoad);
 
-        yield return new WaitForSeconds(fadeInSeconds);
+        yield return new WaitForSecondsRealtime(waitingSeconds);
 
         yield return FadeOut();
 
@@ -58,11 +63,11 @@ public class LevelTransitionScreen : MonoBehaviour
 
     private IEnumerator FadeIn()
     {
-        float startTime = Time.time;
+        float startTime = Time.unscaledTime;
         float time;
         do
         {
-            time = Time.time - startTime;
+            time = Time.unscaledTime - startTime;
             float t = time / fadeInSeconds;
 
             group.alpha = t;
@@ -74,11 +79,11 @@ public class LevelTransitionScreen : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
-        float startTime = Time.time;
+        float startTime = Time.unscaledTime;
         float time;
         do
         {
-            time = Time.time - startTime;
+            time = Time.unscaledTime - startTime;
             float t = time / fadeInSeconds;
 
             group.alpha =  1- t;
