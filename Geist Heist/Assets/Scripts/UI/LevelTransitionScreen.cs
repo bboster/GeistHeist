@@ -63,11 +63,11 @@ public class LevelTransitionScreen : MonoBehaviour
 
     private IEnumerator FadeIn()
     {
-        float startTime = Time.time;
+        float startTime = Time.unscaledTime;
         float time;
         do
         {
-            time = Time.time - startTime;
+            time = Time.unscaledTime - startTime;
             float t = time / fadeInSeconds;
 
             group.alpha = t;
@@ -79,11 +79,11 @@ public class LevelTransitionScreen : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
-        float startTime = Time.time;
+        float startTime = Time.unscaledTime;
         float time;
         do
         {
-            time = Time.time - startTime;
+            time = Time.unscaledTime - startTime;
             float t = time / fadeInSeconds;
 
             group.alpha =  1- t;
