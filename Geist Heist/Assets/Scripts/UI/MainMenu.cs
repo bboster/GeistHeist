@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby Schamberger
  * Creation: 10/20/25
- * Last Edited: 10/20/25
+ * Last Edited: 11/5/25
  * Summary: Handles button functionality for main menu.
  * The player will be prompted to delete their save if they press new game after having save data.
  */
@@ -14,11 +14,16 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField, BoxGroup("Hub Scene"), Scene] private int HubScene;
+    [SerializeField, BoxGroup("Hub Scene")] private GameObject HubSceneLoadingCardPrefab;
+
+    [SerializeField, BoxGroup("New Game Scene"), Scene] private int NewGameScene; // making it seperate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
+    [SerializeField, BoxGroup("New Game Scene")] private GameObject NewSceneLoadingCardPrefab;
+    [SerializeField, BoxGroup("New Game Scene")] string confirmNewGameText = "Are you sure? Continuing will delete your progress.";
+
     [Header("Settings")]
-    [SerializeField, Scene] private int HubScene;
-    [SerializeField, Scene] private int NewGameScene; // making it seperate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
     [SerializeField, Required] private ConfirmationPopup confirmationPopup;
-    [SerializeField] string confirmNewGameText = "Are you sure? Continuing will delete your progress.";
+    [SerializeField, Required] private GameObject loadingScreenPrefab;
 
     [Header("Main Page")]
     [SerializeField, Required] private Button newGameButton;
@@ -77,10 +82,22 @@ public class MainMenu : MonoBehaviour
     void LoadNewGame()
     {
         SaveDataManager.Instance.ClearSaveFile();
-        SceneManager.LoadScene(NewGameScene);
+        LoadScene(NewGameScene, NewSceneLoadingCardPrefab);
     }
 
-#region Button OnClicked
+    void LoadScene(int sceneToLoad, GameObject loadingCardPrefab)
+    {
+        if (loadingScreenPrefab == null)
+        {
+            Debug.LogError("No transition card set on " + gameObject.name);
+            GameManager.Instance.NextLevel(sceneToLoad);
+            return;
+        }
+        var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
+        levelTransition.StartTransition(sceneToLoad, loadingCardPrefab);
+    }
+
+#region Buttons OnClicked
 
     # region Main Page
     void OnNewGameButtonClicked()
@@ -100,7 +117,8 @@ public class MainMenu : MonoBehaviour
 
     void OnContinueButtonClicked()
     {
-        SceneManager.LoadScene(HubScene);
+        //SceneManager.LoadScene(HubScene);
+        LoadScene(HubScene, NewSceneLoadingCardPrefab);
     }
 
     void OnCreditsButtonClicked()
@@ -155,4 +173,10 @@ public class MainMenu : MonoBehaviour
 
     #endregion
 
+
+    #region Level transition
+
+    
+
+    #endregion
 }

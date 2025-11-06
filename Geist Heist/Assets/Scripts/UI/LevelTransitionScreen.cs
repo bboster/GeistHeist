@@ -20,13 +20,18 @@ public class LevelTransitionScreen : MonoBehaviour
     [SerializeField] private float fadeOutSeconds = 0.5f;
 
     /*[SerializeField, Required]*/ CanvasGroup group;
-    private string _sceneToLoad;
+    private int _sceneToLoad;
     private GameObject animationObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void StartTransition(string sceneToLoad, GameObject animationPrefab)
     {
-        if(group == null)
+        StartTransition(SceneManager.GetSceneByName(sceneToLoad).buildIndex, animationPrefab);
+    }
+
+    public void StartTransition(int sceneToLoad, GameObject animationPrefab)
+    {
+        if (group == null)
             group = GetComponent<CanvasGroup>();
 
         DontDestroyOnLoad(this);
@@ -47,9 +52,9 @@ public class LevelTransitionScreen : MonoBehaviour
 
         yield return FadeIn();
 
-        GameManager.Instance.NextLevel(_sceneToLoad);
+        SceneManager.LoadScene(_sceneToLoad);
 
-        yield return new WaitForSeconds(fadeInSeconds);
+        yield return new WaitForSeconds(waitingSeconds);
 
         yield return FadeOut();
 
