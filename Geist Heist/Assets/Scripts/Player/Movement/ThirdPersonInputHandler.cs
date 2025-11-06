@@ -27,7 +27,13 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
-    
+
+    [Tooltip("Approximate degrees per second")]
+    [Foldout ("Animation Settings"), SerializeField] private float rotationSpeed = 60f;
+    [Tooltip("How much up/down player goes. value of 0.1 will go -0.1 to +0.1. total height of 0.2")]
+    [Foldout ("Animation Settings"), SerializeField] private float hoverHeight = 0.2f;
+    [Foldout ("Animation Settings"), SerializeField] private float hoverSpeed = 0.75f;
+
     [Header("Interaction")]
     // Scene transition specific variables
     [SerializeField, Foldout("Interaction")] private GameObject thirdPersonCinemachineCamera;
@@ -36,11 +42,8 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField, Foldout("Interaction")] private float interactRayLength = 5;
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
 
-    //May need to be included in the future but isn't nessecary atm
-    //[SerializeField, Foldout("Interaction")] LayerMask obstacleLayer;
-
-    [Header("Between Possession Cooldown Variables")]
-    [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
+    [Header("Components")]
+    [SerializeField, Required] private MeshRenderer playerModel;
 
     [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
@@ -51,11 +54,16 @@ public class ThirdPersonInputHandler : IInputHandler
     private GameObject lastObjectLookedAt;
     private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
     private float frameCountSinceLastInteraction;
+    private Vector3 positionLastFrame;
+    private float modelStartYPosition;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
+        positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
+        modelStartYPosition = playerModel.transform.position.y;
+
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
     }
@@ -64,6 +72,9 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void WhilePossessingUpdate()
     {
         TryTurnOnInteractablePrompt();
+
+        RotatePlayer();
+        HoverBob();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -284,6 +295,33 @@ public class ThirdPersonInputHandler : IInputHandler
 
 
     public override void OnMoveCanceled(float secondsHeld) {}
+    #endregion
+
+    #region Other
+
+    private void RotatePlayer()
+    {
+        Vector3 diff = (transform.position - positionLastFrame).WithY(0);
+
+        // if not moved significantly enough. Intentionally don't record position last frame
+        if (Mathf.Approximately(diff.magnitude, 0) || transform.position == positionLastFrame)
+            return;
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(diff), Time.deltaTime * rotationSpeed);
+
+        //transform.forward = diff.normalized;
+        Debug.Log(diff);
+
+        positionLastFrame = transform.position;
+    }
+
+    private void HoverBob() // squarepants
+    {
+        float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
+
+        playerModel.transform.position = playerModel.transform.position.WithY(height);
+    }
+
     #endregion
 
     private void OnDrawGizmos()
