@@ -53,7 +53,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     private MeshRenderer meshRenderer;
 
-    [ReadOnly] private float currentTimerPercentage = 100f;
+    [ReadOnly] private float currentTimerPercentage;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
 
     #region Guard Detection Variables
@@ -68,6 +68,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     void Start()
     {
+        currentTimerPercentage = maxChargePercentage;
+
         if (ghostExitPoints.Count == 0)
         {
             Debug.Log("No exit points set for " + this);
