@@ -6603,6 +6603,30 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: chargeMeter
+      value: 
+      objectReference: {fileID: 814683605}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: maxStrength
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: minStrength
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: CanSpawnPoint
+      value: 
+      objectReference: {fileID: 1256932738}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: launchDirection.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338812846202371703, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+      propertyPath: strengthGrowthRate
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 8481462798018066213, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -27581,6 +27605,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6caafbd4837e4614c923004316db9ed5, type: 3}
+--- !u!114 &814683605 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 997101140974406555, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 225392224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dc9536c61d9246478144dbcda620c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToyCarSpeedometerUI
 --- !u!1001 &819255915
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42093,6 +42128,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3bdd522e272d1a488cd274acfe87b22, type: 3}
+--- !u!4 &1256932738 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5666847361361511280, guid: 2cf6ee659ec8a4d4dba96f85504ecf04, type: 3}
+  m_PrefabInstance: {fileID: 225392224}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1256975032
 PrefabInstance:
   m_ObjectHideFlags: 0
