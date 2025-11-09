@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
 using GuardUtilities;
@@ -28,6 +29,8 @@ public class GuardController : MonoBehaviour
     [Required] public Transform ReturnLocation;
     [Tooltip("The rotation the guard should face by default, match this to its placement in the level")]
     public float DefaultRotation;
+    [Tooltip("The time between each footstep sound effect")]
+    [SerializeField] private float footstepDelay;
 
     [Header("Behaviors")]
     [Tooltip("Default behavior for the enemy")]
@@ -93,35 +96,50 @@ public class GuardController : MonoBehaviour
         return true;
     }
 
+    #region SFX Functions
+
     private void Start()
     {
         //only for sfx for now
         guardWalkSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
         guardRunSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+
+        StartCoroutine(SoundEffectPlayer());
     }
 
-    private void Update()
+    /// <summary>
+    /// Plays footstep sound effects while in certain behaviors
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator SoundEffectPlayer()
     {
-        //only for sfx for now
-        guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
-        guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+        for(; ; )
+        {
+            //only for sfx for now
+            guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+            guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
 
-        if (currentBehavior.StateName == GuardStates.chase)
-        {
-            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            guardRunSFX.start();
-        }
-        else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
-        {
-            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            guardWalkSFX.start();
-        }
-        else
-        {
-            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            if (currentBehavior.StateName == GuardStates.chase)
+            {
+                guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                guardRunSFX.start();
+            }
+            else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
+            {
+                guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                guardWalkSFX.start();
+            }
+            else
+            {
+                guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            }
+
+            yield return new WaitForSeconds(footstepDelay);
         }
     }
+
+    #endregion
 
     #region Behavior Functions
 
