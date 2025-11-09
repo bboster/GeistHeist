@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 2667771672078999720}
   - component: {fileID: 7862096149762473002}
   - component: {fileID: 6480417976091650489}
+  - component: {fileID: -7755143116239034038}
   m_Layer: 10
   m_Name: Toy Car
   m_TagString: Untagged
@@ -252,12 +253,13 @@ MonoBehaviour:
   - {fileID: 3357184530691594301}
   - {fileID: 5536483881057553636}
   hasTimer: 1
-  maxChargePercentage: 100
-  timerRechargePercentage: 10
+  maxChargePercentage: 150
+  timerRechargePercentage: 20
   timerDischargePercentage: 10
   ghostSpawnPoint: {fileID: 5454552123015739937}
   PossessedMaterial: {fileID: 2100000, guid: 7f215450e14de644d82bf78622e04701, type: 2}
   UnpossessedMaterial: {fileID: 2100000, guid: 85687a2e1ab634342855b4e1bcf96f17, type: 2}
+  isGhost: 0
   CanUnPossess: 0
   OnTimerUpdate:
     m_PersistentCalls:
@@ -285,6 +287,19 @@ MonoBehaviour:
   bakeKeys: []
   bakeValues: []
   outlineFillMaterial: {fileID: 0}
+--- !u!114 &-7755143116239034038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3402368958818299834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37c98284e2a096b46b95d5b8d2631a3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardStunner
+  stunVelocityThreshold: 1
 --- !u!1 &3730085914283258334
 GameObject:
   m_ObjectHideFlags: 0

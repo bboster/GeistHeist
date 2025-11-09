@@ -313,6 +313,38 @@ public static class StaticUtilities
         return InverseLerpUnclamped(a, b, value);
     }
 
+    /// <summary>
+    /// Sin clamped between 0 and 1 (instead of -1 and 1)
+    /// </summary>
+    public static float Sin01(float x)
+    {
+        return (MathF.Sin(x) + 1) / 2;
+    }
+
+    /// <summary>
+    /// Sin clamped between a and b (instead of -1 and 1)
+    /// </summary>
+    public static float SinRange(float x, float a, float b)
+    {
+        return Mathf.Lerp(a, b, Sin01(x));
+    }
+
+    /// <summary>
+    /// Cos clamped between 0 and 1 (instead of -1 and 1)
+    /// </summary>
+    public static float Cos01(float x)
+    {
+        return (MathF.Cos(x) + 1) / 2;
+    }
+
+    /// <summary>
+    /// Cos clamped between a and b (instead of -1 and 1)
+    /// </summary>
+    public static float CosRange(float x, float a, float b)
+    {
+        return Mathf.Lerp(a, b, Cos01(x));
+    }
+
     #endregion
 
     #region Lists
