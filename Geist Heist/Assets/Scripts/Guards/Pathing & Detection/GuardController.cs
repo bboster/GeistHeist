@@ -103,39 +103,42 @@ public class GuardController : MonoBehaviour
         //only for sfx for now
         guardWalkSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
         guardRunSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardRun);
-
-        StartCoroutine(SoundEffectPlayer());
     }
 
     /// <summary>
     /// Plays footstep sound effects while in certain behaviors
     /// </summary>
     /// <returns></returns>
-    private IEnumerator SoundEffectPlayer()
+    private void Update()
     {
-        for(; ; )
-        {
-            //only for sfx for now
-            guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
-            guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+        //only for sfx for now
+        guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+        guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
 
-            if (currentBehavior.StateName == GuardStates.chase)
+        if (currentBehavior.StateName == GuardStates.chase)
+        {
+            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            PLAYBACK_STATE playbackState;
+            guardRunSFX.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
             {
-                guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 guardRunSFX.start();
             }
-            else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
+        }
+        else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
+        {
+            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            PLAYBACK_STATE playbackState;
+            guardWalkSFX.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
             {
-                guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 guardWalkSFX.start();
             }
-            else
-            {
-                guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            }
-
-            yield return new WaitForSeconds(footstepDelay);
+        }
+        else
+        {
+            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
     }
 
@@ -229,6 +232,9 @@ public class GuardController : MonoBehaviour
             StopCoroutine(activeBehaviorLoop);
             activeBehaviorLoop = null;
         }
+
+        guardRunSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        guardWalkSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
 
     #endregion
