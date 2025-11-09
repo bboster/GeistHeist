@@ -93,14 +93,14 @@ public class GuardController : MonoBehaviour
         return true;
     }
 
-    private void start()
+    private void Start()
     {
         //only for sfx for now
         guardWalkSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
         guardRunSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardRun);
     }
 
-    private void update()
+    private void Update()
     {
         //only for sfx for now
         guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
