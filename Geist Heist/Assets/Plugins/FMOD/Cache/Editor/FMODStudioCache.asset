@@ -230,6 +230,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1106
   Exists: 1
+--- !u!114 &-7727074890919897055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/GuardRun
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/GuardRun
+  Guid:
+    Data1: 1398213192
+    Data2: 1278063435
+    Data3: 1641760925
+    Data4: -917233557
+  Banks:
+  - {fileID: -90112965375533042}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 325
 --- !u!114 &-7683158611172191669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,6 +832,33 @@ MonoBehaviour:
   lastModified: 638974211424918320
   FileSizes: []
   Exists: 1
+--- !u!114 &-3735171510452563169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/PlayerSpotted
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/PlayerSpotted
+  Guid:
+    Data1: 881976811
+    Data2: 1161300441
+    Data3: 84693945
+    Data4: 1706922085
+  Banks:
+  - {fileID: -90112965375533042}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 893
 --- !u!114 &-3569295369194531938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1357,7 +1411,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Enemy.bank
   Name: Enemy
   StudioPath: bank:/Enemy
-  lastModified: 638980188245811992
+  lastModified: 638980200235907518
   FileSizes: []
   Exists: 1
 --- !u!114 &11400000
@@ -1387,13 +1441,17 @@ MonoBehaviour:
   - {fileID: -4075276508097149521}
   - {fileID: 8244299996133331959}
   - {fileID: -7572545779530361141}
+  - {fileID: -7727074890919897055}
+  - {fileID: 4922104111605798985}
+  - {fileID: 1265877697830718310}
+  - {fileID: -3735171510452563169}
   EditorParameters: []
   MasterBanks:
   - {fileID: 5744426184563608607}
   StringsBanks:
   - {fileID: 4969733762845489091}
   cacheVersion: 131849
-  cacheTime: 0
+  cacheTime: 638980200235907518
   SerializableEventsDict:
   - key: event:/Interface/PossessionLow
     index: 0
@@ -1405,6 +1463,14 @@ MonoBehaviour:
     index: 3
   - key: event:/Player/PossessionEnter
     index: 4
+  - key: event:/Enemy/GuardRun
+    index: 5
+  - key: event:/Enemy/GuardWalk
+    index: 6
+  - key: event:/Enemy/GuardReactions
+    index: 7
+  - key: event:/Enemy/PlayerSpotted
+    index: 8
 --- !u!114 &272656179473779345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1559,6 +1625,34 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1074
   Exists: 1
+--- !u!114 &1265877697830718310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/GuardReactions
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/GuardReactions
+  Guid:
+    Data1: 1947795366
+    Data2: 1194022120
+    Data3: 656864420
+    Data4: 553575479
+  Banks:
+  - {fileID: -90112965375533042}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 8473600745547691909}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &1764969171468204256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1865,6 +1959,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 50
   Length: 19056
+--- !u!114 &4922104111605798985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemy/GuardWalk
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Enemy/GuardWalk
+  Guid:
+    Data1: -2099017591
+    Data2: 1295407081
+    Data3: 1891629992
+    Data4: 269422218
+  Banks:
+  - {fileID: -90112965375533042}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 650
 --- !u!114 &4969733762845489091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2355,6 +2476,33 @@ MonoBehaviour:
   FileSizes:
   - Name: Desktop
     Value: 506
+  Exists: 1
+--- !u!114 &8473600745547691909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/GuardReactions/GuardReact
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: GuardReact
+  StudioPath: 
+  Min: 0
+  Max: 2
+  Default: 0
+  ID:
+    data1: 1450012519
+    data2: 2649559329
+  Type: 2
+  IsGlobal: 0
+  Labels:
+  - Gasp
+  - Value B
+  - Value C
   Exists: 1
 --- !u!114 &8787835663204950775
 MonoBehaviour:
