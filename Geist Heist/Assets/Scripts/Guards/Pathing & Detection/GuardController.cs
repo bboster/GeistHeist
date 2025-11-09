@@ -12,6 +12,8 @@ using UnityEngine;
 using GuardUtilities;
 using NaughtyAttributes;
 using UnityEngine.Events;
+using FMODUnity;
+using FMOD.Studio;
 
 public class GuardController : MonoBehaviour
 {
@@ -47,6 +49,10 @@ public class GuardController : MonoBehaviour
     public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
     [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted= new();
+
+    //sfx
+    private EventInstance guardWalkSFX;
+    private EventInstance guardRunSFX;
 
     #endregion
 
@@ -85,6 +91,36 @@ public class GuardController : MonoBehaviour
         StartBehavior();
 
         return true;
+    }
+
+    private void start()
+    {
+        //only for sfx for now
+        guardWalkSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
+        guardRunSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+    }
+
+    private void update()
+    {
+        //only for sfx for now
+        guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+        guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+
+        if (currentBehavior.StateName == GuardStates.chase)
+        {
+            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            guardRunSFX.start();
+        }
+        else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
+        {
+            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            guardWalkSFX.start();
+        }
+        else
+        {
+            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
     }
 
     #region Behavior Functions

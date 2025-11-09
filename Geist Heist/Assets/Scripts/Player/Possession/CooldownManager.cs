@@ -8,6 +8,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using FMODUnity;
+using FMOD.Studio;
 
 public class CooldownManager : Singleton<CooldownManager>
 {
@@ -23,6 +25,10 @@ public class CooldownManager : Singleton<CooldownManager>
 
     public bool IsCooldownActive => currentCooldownTime > 0;
 
+    //sfx
+    private EventInstance possessionLow;
+    private EventInstance possessionOut;
+
     // Called in GameManager
     public void Start()
     {
@@ -32,6 +38,9 @@ public class CooldownManager : Singleton<CooldownManager>
         cooldownSlider.gameObject.SetActive(false);
 
         UpdateSlider();
+
+        possessionLow = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
+        possessionOut = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
     }
 
     void Update()
@@ -41,6 +50,8 @@ public class CooldownManager : Singleton<CooldownManager>
             currentCooldownTime -= Time.deltaTime;
             if(currentCooldownTime <= 0)
             {
+                possessionOut.start();
+
                 StopCooldown();
                 return;
             }

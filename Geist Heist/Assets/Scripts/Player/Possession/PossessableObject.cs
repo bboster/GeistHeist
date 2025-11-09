@@ -16,6 +16,8 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FMODUnity;
+using FMOD.Studio;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
@@ -56,6 +58,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [ReadOnly] private float currentTimerPercentage;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
 
+    //sfx
+    private EventInstance possessionEnter;
+
+    private EventInstance possessionLow;
+    private EventInstance possessionOut;
+    private EventInstance possessionRefill;
+
     #region Guard Detection Variables
 
     [ReadOnly] public bool IsMoving = false;
@@ -91,6 +100,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvasGroup.alpha = 0;
             possessableCanvas.gameObject.SetActive(false);
         }
+
+        possessionEnter = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+
+        possessionLow = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
+        possessionOut = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
+        possessionRefill = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
     }
 
     public IInputHandler GetInputHandler()
@@ -109,6 +124,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
+        possessionEnter.start(); //this is playing both on entering and exiting a possessable
+
         StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
 
         gameObject.SetActive(true);
@@ -154,6 +171,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
         InputHandler.OnPossessionEnded();
+        possessionOut.start();
         OnObjectLeft?.Invoke();
 
         if (hasTimer)
@@ -184,7 +202,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
     public IEnumerator WaitForUnpossess()
     {
         CanUnPossess = false;
+
         yield return new WaitForEndOfFrame();
+
         CanUnPossess = true;
         unpossessCoroutine = null;
     }
@@ -208,6 +228,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     private IEnumerator StartRecharge()
     {
+        possessionRefill.start();
+
         if (!hasTimer)
             yield break;
 
