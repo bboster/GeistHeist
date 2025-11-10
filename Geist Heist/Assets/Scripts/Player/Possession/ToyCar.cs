@@ -139,7 +139,6 @@ public class ToyCar : IInputHandler
             UnFreezePosition();
             //for fixed update to handle physics better
             physicsEnabled = true;
-            StartCoroutine(ResetChargeMeter());
         }
     }
 
@@ -223,12 +222,6 @@ public class ToyCar : IInputHandler
     {
         rb.constraints = RigidbodyConstraints.None;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
-    }
-
-    private IEnumerator ResetChargeMeter()
-    {
-        yield return new WaitForSeconds(0.1f);
-        currentStrength = minStrength;
     }
 
     private void OnDrawGizmos()
