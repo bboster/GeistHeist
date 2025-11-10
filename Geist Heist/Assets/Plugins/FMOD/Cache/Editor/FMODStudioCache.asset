@@ -255,7 +255,7 @@ MonoBehaviour:
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
-  MaxDistance: 50
+  MaxDistance: 40
   Length: 325
 --- !u!114 &-7683158611172191669
 MonoBehaviour:
@@ -857,7 +857,7 @@ MonoBehaviour:
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
-  MaxDistance: 20
+  MaxDistance: 40
   Length: 893
 --- !u!114 &-3569295369194531938
 MonoBehaviour:
@@ -1195,6 +1195,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1074
   Exists: 1
+--- !u!114 &-1378237237292106760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Menu
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BGM/Menu
+  Guid:
+    Data1: -1351341237
+    Data2: 1272859659
+    Data3: -1652231807
+    Data4: 259282112
+  Banks:
+  - {fileID: 7720285621285776408}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 129880
 --- !u!114 &-1315190235137789076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1411,7 +1438,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Enemy.bank
   Name: Enemy
   StudioPath: bank:/Enemy
-  lastModified: 638982985734243003
+  lastModified: 638983772170328931
   FileSizes: []
   Exists: 1
 --- !u!114 &11400000
@@ -1445,13 +1472,17 @@ MonoBehaviour:
   - {fileID: 4922104111605798985}
   - {fileID: 1265877697830718310}
   - {fileID: -3735171510452563169}
+  - {fileID: -1378237237292106760}
+  - {fileID: 7238885142891713820}
+  - {fileID: 4336578528888123141}
+  - {fileID: 4034111276205390828}
   EditorParameters: []
   MasterBanks:
   - {fileID: 5744426184563608607}
   StringsBanks:
   - {fileID: 4969733762845489091}
   cacheVersion: 131849
-  cacheTime: 638982985734243003
+  cacheTime: 638983801965418024
   SerializableEventsDict:
   - key: event:/Interface/PossessionLow
     index: 0
@@ -1471,6 +1502,14 @@ MonoBehaviour:
     index: 7
   - key: event:/Enemy/PlayerSpotted
     index: 8
+  - key: event:/BGM/Menu
+    index: 9
+  - key: event:/BGM/Hub
+    index: 10
+  - key: event:/BGM/Level
+    index: 11
+  - key: event:/BGM/Globe
+    index: 12
 --- !u!114 &272656179473779345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1651,7 +1690,7 @@ MonoBehaviour:
   Parameters:
   - {fileID: 8473600745547691909}
   MinDistance: 1
-  MaxDistance: 20
+  MaxDistance: 40
   Length: 0
 --- !u!114 &1764969171468204256
 MonoBehaviour:
@@ -1892,6 +1931,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 506
   Exists: 1
+--- !u!114 &4034111276205390828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Globe
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BGM/Globe
+  Guid:
+    Data1: 1919586790
+    Data2: 1085500124
+    Data3: -912142970
+    Data4: -1142664027
+  Banks:
+  - {fileID: 7720285621285776408}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 66037
 --- !u!114 &4137019591551456752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1912,6 +1978,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 506
   Exists: 1
+--- !u!114 &4336578528888123141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Level
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BGM/Level
+  Guid:
+    Data1: 1191376871
+    Data2: 1109206024
+    Data3: -369540468
+    Data4: 207324428
+  Banks:
+  - {fileID: 7720285621285776408}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 92917
 --- !u!114 &4432249888800648698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1984,7 +2077,7 @@ MonoBehaviour:
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
-  MaxDistance: 50
+  MaxDistance: 40
   Length: 630
 --- !u!114 &4969733762845489091
 MonoBehaviour:
@@ -2001,10 +2094,10 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638979663087986330
+  lastModified: 638983801965418024
   FileSizes:
   - Name: 
-    Value: 1486
+    Value: 1644
   Exists: 1
 --- !u!114 &5016498384002374832
 MonoBehaviour:
@@ -2068,7 +2161,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638979663087976217
+  lastModified: 638983801965372526
   FileSizes: []
   Exists: 1
 --- !u!114 &6240831428062149490
@@ -2302,6 +2395,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 10
   Length: 19056
+--- !u!114 &7238885142891713820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Hub
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BGM/Hub
+  Guid:
+    Data1: -1353868606
+    Data2: 1097908701
+    Data3: -165911906
+    Data4: -560908504
+  Banks:
+  - {fileID: 7720285621285776408}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 66037
 --- !u!114 &7311800368060650295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2391,7 +2511,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 638974213771112904
+  lastModified: 638983801965209054
   FileSizes: []
   Exists: 1
 --- !u!114 &7938498445196905006

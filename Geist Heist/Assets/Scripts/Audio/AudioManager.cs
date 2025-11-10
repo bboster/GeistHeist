@@ -6,6 +6,12 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance { get; private set; }
 
+    [Header("Volume")]
+    [Range(0, 1)]
+    public float masterVol = 1;
+
+    private Bus masterBus;
+
     //Sets AudioManager instance in the scene
     private void Awake()
     {
@@ -15,6 +21,13 @@ public class AudioManager : MonoBehaviour
             Debug.Log("There is more than one AudioManager in the scene");
         }
         instance = this;
+
+        masterBus = RuntimeManager.GetBus("bus:/");
+    }
+
+    private void Update()
+    {
+        masterBus.setVolume(masterVol);
     }
 
     //Plays a non-looping event WITHOUT 3d Attributes
@@ -70,5 +83,16 @@ public class AudioManager : MonoBehaviour
         //TODO
         //ADD A FADE EFFECT ON EVERY SOUND TO MAKE IT FADE OUT OVER A HALF SECOND INSTEAD OF CUTTING THE SHORT
         //UNLESS MUSIC HAS SPECIAL TRANSITIONS BETWEEN SCENES, THEY SHOULD FOLLOW THE SAME RULE AS ABOVE
+    }
+
+    //Band-aid fix for the sfx playing in the pause menu
+    public void PauseSFX()
+    {
+        masterVol = 0;
+    }
+
+    public void UnpauseSFX()
+    {
+        masterVol = 1;
     }
 }

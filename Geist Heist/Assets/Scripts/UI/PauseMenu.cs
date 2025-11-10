@@ -67,6 +67,7 @@ public class PauseMenu : MonoBehaviour
         pauseScreenParent.gameObject.SetActive(true);
         Time.timeScale = 0f;
         StaticUtilities.ShowCursor();
+        AudioManager.instance.PauseSFX();
     }
 
     public void ClosePauseMenu()
@@ -77,6 +78,7 @@ public class PauseMenu : MonoBehaviour
         pauseScreenParent.gameObject.SetActive(false);
         Time.timeScale = 1.0f;
         StaticUtilities.HideCursor();
+        AudioManager.instance.UnpauseSFX();
     }
 
     /// <summary>

@@ -5,6 +5,13 @@ using System.Collections.Generic;
 
 public class FMODEvents : MonoBehaviour
 {
+    [field: Header("BGM")]
+    [field: SerializeField] public EventReference LevelBGM { get; private set; }
+    [field: SerializeField] public EventReference GlobeBGM { get; private set; }
+    [field: SerializeField] public EventReference HubBGM { get; private set; }
+    [field: SerializeField] public EventReference MenuBGM { get; private set; }
+
+
     [field: Header("Enemy SFX")]
     [field: SerializeField] public EventReference GuardReactions { get; private set; }
     [field: SerializeField] public EventReference GuardRun { get; private set; }

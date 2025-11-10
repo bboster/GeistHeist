@@ -269,4 +269,10 @@ public class GuardController : MonoBehaviour
     }
 
     #endregion
+
+    public void OnDestroy()
+    {
+        guardRunSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        guardWalkSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+    }
 }
