@@ -1,3 +1,5 @@
+
+
 /*
  * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
@@ -21,6 +23,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 {
     
     [Required] public CinemachineCamera CinemachineCamera;
+    [Required] public Transform cameraAnchor;
     
     [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
     [HideIf(nameof(isGhost))] public List<Transform> ghostExitPoints;
