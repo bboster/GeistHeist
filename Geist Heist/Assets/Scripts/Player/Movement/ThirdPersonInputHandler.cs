@@ -313,9 +313,6 @@ public class ThirdPersonInputHandler : IInputHandler
 
         targetRotation = Quaternion.LookRotation(diff);
 
-        //transform.forward = diff.normalized;
-        Debug.Log(diff);
-
         positionLastFrame = transform.position;
     }
 
