@@ -176,7 +176,7 @@ public class ToyCar : IInputHandler
     /// </summary>
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess) 
+        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess && rb.linearVelocity == Vector3.zero) 
         {
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;
