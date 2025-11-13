@@ -50,7 +50,7 @@ public class ToyCar : IInputHandler
 
     private void Start()
     {
-        thirdPersoncinemachineCamera.SetActive(false);
+        //thirdPersoncinemachineCamera.SetActive(false);
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();
 

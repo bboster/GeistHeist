@@ -3,7 +3,7 @@
 /*
  * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/28/25
+ * Last Modified: 11/12/2025
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -21,10 +21,12 @@ using System.Collections.Generic;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    
-    [Required] public CinemachineCamera CinemachineCamera;
-    [Required] public Transform cameraAnchor;
-    
+    [Header("Camera Settings")]
+    [Tooltip("If true, camera will be overridden with the CinemachineCamera on this object")]
+    [HideIf(nameof(isGhost))] public bool HasCustomCameraBehavior;
+    [Required, ShowIf(nameof(showCinemachineCamera))] public CinemachineCamera CinemachineCamera;
+    [Required, HideIf(nameof(HasCustomCameraBehavior))] public Transform cameraAnchor;
+
     [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
     [HideIf(nameof(isGhost))] public List<Transform> ghostExitPoints;
 
@@ -32,9 +34,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField, HideIf(nameof(isGhost))] private bool hasTimer;
     [SerializeField, HideIf(nameof(isGhost))] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer)), HideIf(nameof(isGhost))] private float timerRechargePercentage = 10;
+    [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerRechargePercentage = 10;
     [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer)), HideIf(nameof(isGhost))] private float timerDischargePercentage = 10;
+    [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerDischargePercentage = 10;
 
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
     [HideIf(nameof(isGhost))] public Transform ghostSpawnPoint;
@@ -68,6 +70,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     #endregion
 
+    #region Inspector Debug
+
+    private bool showCinemachineCamera => isGhost || HasCustomCameraBehavior;
+    private bool hasTimerAndIsNotGhost => isGhost == false && hasTimer;
+
+    #endregion
 
     void Start()
     {
