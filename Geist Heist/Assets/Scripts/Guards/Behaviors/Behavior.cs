@@ -19,17 +19,21 @@ public class Behavior : ScriptableObject
 
     [Tooltip("The speed the guard will travel at while performing this behavior")]
     [SerializeField, Foldout("Base Values")] private float speed;
+    [Tooltip("The name of the state this behavior executes")]
     [Foldout("Base Values")] public GuardStates StateName;
+    [Tooltip("Controls what states this behavior can override")]
     [Foldout("Base Values")] public Priority Priority;
+    [Tooltip("The animator controller for the behavior. Can be left blank if there are no animations")]
     [Foldout("Base Values")] public RuntimeAnimatorController stateController;
 
+    [Tooltip("Reference to the gameObject")]
     protected GameObject selfRef;
+    [Tooltip("Reference to the guard's controller script")]
+    protected GuardController contRef;
 
     protected Coroutine currentLoop;
     public Coroutine behaviorLoop;
     public Coroutine TimerCoroutine;
-
-
 
     #endregion
 
@@ -45,6 +49,7 @@ public class Behavior : ScriptableObject
             selfRef.GetComponent<Animator>().runtimeAnimatorController = stateController;
         }
 
+        contRef = selfRef.GetComponent<GuardController>();
         selfRef.GetComponent<NavMeshAgent>().speed = speed;
     }
 
