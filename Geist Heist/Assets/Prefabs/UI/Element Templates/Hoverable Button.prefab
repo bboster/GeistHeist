@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4627027416864514134}
   - component: {fileID: 1930547669378637484}
   - component: {fileID: 8920466925526762815}
+  - component: {fileID: 4547680801274082901}
   - component: {fileID: 4728054709059538163}
   m_Layer: 5
   m_Name: Hoverable Button
@@ -68,7 +69,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1563756125, guid: def9dd1cadc598147b6cca685e67f873, type: 3}
+  m_Sprite: {fileID: 195510932, guid: def9dd1cadc598147b6cca685e67f873, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -78,6 +79,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4547680801274082901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4801289806046254294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e9848568ee4eb04e91f02b99e123b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoverButtonChangeFontColor
+  button: {fileID: 4728054709059538163}
+  targetText: {fileID: 8495994692891549496}
+  unhoveredTopColor: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 1}
+  unhoveredBottomColor: {r: 0.8666667, g: 0.6313726, b: 1, a: 1}
+  hoveredTopColor: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 1}
+  hoveredBottomColor: {r: 1, g: 0.90588236, b: 0.6313726, a: 1}
 --- !u!114 &4728054709059538163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,7 +206,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1290512671, guid: def9dd1cadc598147b6cca685e67f873, type: 3}
+  m_Sprite: {fileID: -397076585, guid: def9dd1cadc598147b6cca685e67f873, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -264,8 +283,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button's Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d12f7472d833b7c4482a9e09c9f96ae2, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: d12f7472d833b7c4482a9e09c9f96ae2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 01191c79a16327643a065e93d1775c04, type: 2}
+  m_sharedMaterial: {fileID: -4674951621053596194, guid: 01191c79a16327643a065e93d1775c04, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
