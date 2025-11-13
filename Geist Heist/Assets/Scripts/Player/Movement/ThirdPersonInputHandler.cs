@@ -29,7 +29,8 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float slowDownFactor = 0.1f;
     [SerializeField] private float stepRayUpperHeight = 0.3f;
     [SerializeField] private float stepRayLowerHeight = -0.9f;
-    [SerializeField] private float stepDistance = 0.1f;
+    [SerializeField] private float stepRayUpperLength = 0.35f;
+    [SerializeField] private float stepRayLowerLength = 0.7f;
     [SerializeField] private float stepSmooth = 2f;
 
     [Tooltip("Approximate degrees per second")]
@@ -333,9 +334,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void StepClimb()
     {
-        if (Physics.Raycast(stepRayLower.transform.position, transform.forward, out RaycastHit hitLower, stepDistance))
+        if (Physics.Raycast(stepRayLower.transform.position, transform.forward, out RaycastHit hitLower, stepRayLowerLength))
         {
-            if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, out RaycastHit hitUpper, stepDistance * 2))
+            if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, out RaycastHit hitUpper, stepRayUpperLength))
             {
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
                 playerModel.transform.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
@@ -352,8 +353,8 @@ public class ThirdPersonInputHandler : IInputHandler
         Gizmos.DrawWireSphere(gameObject.transform.position, interactSphereCastRadius);
         Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength));
         Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength), interactSphereCastRadius);
-        Gizmos.DrawLine(stepRayUpper.transform.position, stepRayUpper.transform.position + stepRayUpper.transform.forward * (stepDistance * 2));
-        Gizmos.DrawLine(stepRayLower.transform.position, stepRayLower.transform.position + stepRayLower.transform.forward * stepDistance);
+        Gizmos.DrawLine(stepRayUpper.transform.position, stepRayUpper.transform.position + stepRayUpper.transform.forward * stepRayUpperLength);
+        Gizmos.DrawLine(stepRayLower.transform.position, stepRayLower.transform.position + stepRayLower.transform.forward * stepRayLowerLength);
 
     }
 
