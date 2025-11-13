@@ -27,6 +27,10 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
+    [SerializeField] private float stepRayUpperHeight = 0.3f;
+    [SerializeField] private float stepRayLowerHeight = -0.9f;
+    [SerializeField] private float stepDistance = 0.1f;
+    [SerializeField] private float stepSmooth = 2f;
 
     [Tooltip("Approximate degrees per second")]
     [Foldout ("Animation Settings"), SerializeField] private float rotationSpeed = 60f;
@@ -44,6 +48,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
     [Header("Components")]
     [SerializeField, Required] private MeshRenderer playerModel;
+    [SerializeField] private GameObject stepRayUpper;
+    [SerializeField] private GameObject stepRayLower;
 
     [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
@@ -63,6 +69,8 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
         modelStartYPosition = playerModel.transform.position.y;
+        stepRayUpper.transform.localPosition = new Vector3(stepRayUpper.transform.localPosition.x, stepRayUpperHeight, stepRayUpper.transform.localPosition.z);
+        stepRayLower.transform.localPosition = new Vector3(stepRayLower.transform.localPosition.x, stepRayLowerHeight, stepRayLower.transform.localPosition.z);
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
@@ -75,6 +83,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
         RotatePlayer();
         HoverBob();
+        StepClimb();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -322,6 +331,18 @@ public class ThirdPersonInputHandler : IInputHandler
         playerModel.transform.position = playerModel.transform.position.WithY(height);
     }
 
+    private void StepClimb()
+    {
+        if (Physics.Raycast(stepRayLower.transform.position, transform.forward, out RaycastHit hitLower, stepDistance))
+        {
+            if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, out RaycastHit hitUpper, stepDistance * 2))
+            {
+                rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+                playerModel.transform.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+            }
+        }
+    }
+
     #endregion
 
     private void OnDrawGizmos()
@@ -331,7 +352,9 @@ public class ThirdPersonInputHandler : IInputHandler
         Gizmos.DrawWireSphere(gameObject.transform.position, interactSphereCastRadius);
         Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength));
         Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength), interactSphereCastRadius);
-  
+        Gizmos.DrawLine(stepRayUpper.transform.position, stepRayUpper.transform.position + stepRayUpper.transform.forward * (stepDistance * 2));
+        Gizmos.DrawLine(stepRayLower.transform.position, stepRayLower.transform.position + stepRayLower.transform.forward * stepDistance);
+
     }
 
    
