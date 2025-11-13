@@ -342,6 +342,24 @@ public class ThirdPersonInputHandler : IInputHandler
                 playerModel.transform.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
             }
         }
+
+        if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayLowerLength))
+        {
+            if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayUpperLength))
+            {
+                rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+                playerModel.transform.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+            }
+        }
+
+        if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayLowerLength))
+        {
+            if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayUpperLength))
+            {
+                rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+                playerModel.transform.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+            }
+        }
     }
 
     #endregion
