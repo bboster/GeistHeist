@@ -16,6 +16,8 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FMOD.Studio;
+using FMODUnity;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
@@ -56,6 +58,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [ReadOnly] private float currentTimerPercentage;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
 
+    private EventInstance possessionEnter;
+
+    private EventInstance possessionLow;
+    private EventInstance possessionOut;
+    private EventInstance possessionRefill;
+
     #region Guard Detection Variables
 
     [ReadOnly] public bool IsMoving = false;
@@ -91,6 +99,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvasGroup.alpha = 0;
             possessableCanvas.gameObject.SetActive(false);
         }
+
+        possessionEnter = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+
+        possessionLow = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
+        possessionOut = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
+        possessionRefill = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
     }
 
     public IInputHandler GetInputHandler()
@@ -109,6 +123,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
+        possessionEnter.start();
+
         StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
 
         gameObject.SetActive(true);
@@ -213,10 +229,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         while(currentTimerPercentage < maxChargePercentage)
         {
+            possessionRefill.start();
+
             currentTimerPercentage = Mathf.Min(currentTimerPercentage + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
             OnTimerUpdate.Invoke(currentTimerPercentage);
             yield return null;
         }
+
+        possessionRefill.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
 
     private void OnTimerFinished()
@@ -229,6 +249,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
             StopCoroutine(dischargeCoroutine);
             dischargeCoroutine = null;
         }
+
+        possessionOut.start();
     }
     #endregion
 
