@@ -12,6 +12,8 @@ using UnityEngine;
 using GuardUtilities;
 using NaughtyAttributes;
 using UnityEngine.Events;
+using FMOD.Studio;
+using FMODUnity;
 
 public class GuardController : MonoBehaviour
 {
@@ -19,34 +21,32 @@ public class GuardController : MonoBehaviour
 
     private bool changingBehaviors = false;
 
-    [Header("Design Values")]
-    [SerializeField] private PatrolPath path;
+    [SerializeField, BoxGroup("Design Values")] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
     [Tooltip("The location a guard will return to by default")]
-    [Required] public Transform ReturnLocation;
+    [Required, BoxGroup("Design Values")] public Transform ReturnLocation;
     [Tooltip("The rotation the guard should face by default, match this to its placement in the level")]
-    public float DefaultRotation;
+    [BoxGroup("Design Values")] public float DefaultRotation;
 
-    [Header("Behaviors")]
-    [Tooltip("Default behavior for the enemy")]
-    [Required] public Behavior DefaultBehavior;
+    [Tooltip("Default behavior for the enemy"), Expandable]
+    [Required, BoxGroup("Behaviors")] public Behavior DefaultBehavior;
 
-    [SerializeField] public Behavior currentBehavior;
+    [Expandable]
+    [SerializeField, BoxGroup("Behaviors")] public Behavior currentBehavior;
 
     private Coroutine activeBehaviorLoop;
 
-    [SerializeField] private Priority currentPriority;
+    [SerializeField, BoxGroup("Behaviors")] private Priority currentPriority;
 
-    [Header("Programming")]
-    [SerializeField] private bool showProgrammingValues;
-
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private Animator animator;
 
-
-    public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
+    [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
     [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted= new();
+
+    private EventInstance guardWalkSFX;
+    private EventInstance guardRunSFX;
 
     #endregion
 
@@ -86,6 +86,55 @@ public class GuardController : MonoBehaviour
 
         return true;
     }
+
+    #region SFX Functions
+
+    private void Start()
+    {
+        //only for sfx for now
+        guardWalkSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
+        guardRunSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+    }
+
+    /// <summary>
+    /// Plays footstep sound effects while in certain behaviors
+    /// </summary>
+    /// <returns></returns>
+    private void Update()
+    {
+        //only for sfx for now
+        guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+        guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+
+        if (currentBehavior.StateName == GuardStates.chase)
+        {
+            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            PLAYBACK_STATE playbackState;
+            guardRunSFX.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+            {
+                guardRunSFX.start();
+            }
+        }
+        else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
+        {
+            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            PLAYBACK_STATE playbackState;
+            guardWalkSFX.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+            {
+                guardWalkSFX.start();
+            }
+        }
+        else
+        {
+            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+    }
+
+    #endregion
+
 
     #region Behavior Functions
 
