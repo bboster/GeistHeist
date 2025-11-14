@@ -10,6 +10,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using GuardUtilities;
+using FMOD.Studio;
+using FMODUnity;
 
 [CreateAssetMenu(fileName = "New Surprised Behavior", menuName = "Guard Behaviors/New Surprised Behavior")]
 public class SurprisedBehavior : Behavior
@@ -32,11 +34,17 @@ public class SurprisedBehavior : Behavior
     /// <returns></returns>
     public override IEnumerator BehaviorLoop()
     {
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.GuardReactions);
+
+
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
 
         thisAgent.isStopped = true;
         yield return new WaitForSeconds(reactionLength); //REPLACE THIS WITH SOMETHING TO TIE IN ANIMATIONS LATER
         thisAgent.isStopped = false;
+
         contRef.ChangeBehavior(GuardStates.chase);
+
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.PlayerSpotted);
     }
 }
