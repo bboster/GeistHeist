@@ -12,6 +12,8 @@ using UnityEngine;
 using GuardUtilities;
 using NaughtyAttributes;
 using UnityEngine.Events;
+using FMOD.Studio;
+using FMODUnity;
 
 public class GuardController : MonoBehaviour
 {
@@ -42,6 +44,9 @@ public class GuardController : MonoBehaviour
     [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
     [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted= new();
+
+    private EventInstance guardWalkSFX;
+    private EventInstance guardRunSFX;
 
     #endregion
 
@@ -81,6 +86,55 @@ public class GuardController : MonoBehaviour
 
         return true;
     }
+
+    #region SFX Functions
+
+    private void Start()
+    {
+        //only for sfx for now
+        guardWalkSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
+        guardRunSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+    }
+
+    /// <summary>
+    /// Plays footstep sound effects while in certain behaviors
+    /// </summary>
+    /// <returns></returns>
+    private void Update()
+    {
+        //only for sfx for now
+        guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+        guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+
+        if (currentBehavior.StateName == GuardStates.chase)
+        {
+            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            PLAYBACK_STATE playbackState;
+            guardRunSFX.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+            {
+                guardRunSFX.start();
+            }
+        }
+        else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
+        {
+            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            PLAYBACK_STATE playbackState;
+            guardWalkSFX.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+            {
+                guardWalkSFX.start();
+            }
+        }
+        else
+        {
+            guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+    }
+
+    #endregion
+
 
     #region Behavior Functions
 
