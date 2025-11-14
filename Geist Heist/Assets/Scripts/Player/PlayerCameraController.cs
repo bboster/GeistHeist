@@ -27,12 +27,6 @@ public class PlayerCameraController : MonoBehaviour
         tempCameraPivot = new GameObject("Temp camera pivot").transform;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /// <summary>
     /// Sets camera follow point to a temporary transform and lerps that anchor to the new one.
     /// </summary>
