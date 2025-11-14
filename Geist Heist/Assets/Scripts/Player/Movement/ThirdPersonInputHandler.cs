@@ -56,6 +56,7 @@ public class ThirdPersonInputHandler : IInputHandler
     private float frameCountSinceLastInteraction;
     private Vector3 positionLastFrame;
     private float modelStartYPosition;
+    private Quaternion targetRotation;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -301,16 +302,16 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void RotatePlayer()
     {
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
         Vector3 diff = (transform.position - positionLastFrame).WithY(0);
 
         // if not moved significantly enough. Intentionally don't record position last frame
-        if (Mathf.Approximately(diff.magnitude, 0) || transform.position == positionLastFrame)
+        //if (Mathf.Approximately(diff.magnitude, 0) || transform.position == positionLastFrame)
+        if (diff.magnitude < 0.1 || transform.position == positionLastFrame)
             return;
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(diff), Time.deltaTime * rotationSpeed);
-
-        //transform.forward = diff.normalized;
-        Debug.Log(diff);
+        targetRotation = Quaternion.LookRotation(diff);
 
         positionLastFrame = transform.position;
     }
