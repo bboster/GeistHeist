@@ -21,32 +21,27 @@ public class GuardController : MonoBehaviour
 
     private bool changingBehaviors = false;
 
-    [Header("Design Values")]
-    [SerializeField] private PatrolPath path;
+    [SerializeField, BoxGroup("Design Values")] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
     [Tooltip("The location a guard will return to by default")]
-    [Required] public Transform ReturnLocation;
+    [Required, BoxGroup("Design Values")] public Transform ReturnLocation;
     [Tooltip("The rotation the guard should face by default, match this to its placement in the level")]
-    public float DefaultRotation;
+    [BoxGroup("Design Values")] public float DefaultRotation;
 
-    [Header("Behaviors")]
-    [Tooltip("Default behavior for the enemy")]
-    [Required] public Behavior DefaultBehavior;
+    [Tooltip("Default behavior for the enemy"), Expandable]
+    [Required, BoxGroup("Behaviors")] public Behavior DefaultBehavior;
 
-    [SerializeField] public Behavior currentBehavior;
+    [Expandable]
+    [SerializeField, BoxGroup("Behaviors")] public Behavior currentBehavior;
 
     private Coroutine activeBehaviorLoop;
 
-    [SerializeField] private Priority currentPriority;
+    [SerializeField, BoxGroup("Behaviors")] private Priority currentPriority;
 
-    [Header("Programming")]
-    [SerializeField] private bool showProgrammingValues;
-
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private Animator animator;
 
-
-    public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
+    [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
     [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted= new();
 
