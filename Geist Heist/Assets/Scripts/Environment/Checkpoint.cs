@@ -1,8 +1,8 @@
 /*
  * Author: Jacob Bateman
- * Contributors:
+ * Contributors: Toby
  * Creation: 10/21/25
- * Last Edited: 10/21/25
+ * Last Edited: 11/14/25
  * Summary: Handles in-level checkpoint logic
  */
 using UnityEngine;
