@@ -22,7 +22,7 @@ public class Behavior : ScriptableObject
     [Tooltip("The name of the state this behavior executes")]
     [Foldout("Base Values")] public GuardStates StateName;
     [Tooltip("Controls what states this behavior can override")]
-    [Foldout("Base Values")] public Priority Priority;
+    [Foldout("Base Values"), MaxValue(10), MinValue(1)] public int Priority;
     [Tooltip("The animator controller for the behavior. Can be left blank if there are no animations")]
     [Foldout("Base Values")] public RuntimeAnimatorController stateController;
 

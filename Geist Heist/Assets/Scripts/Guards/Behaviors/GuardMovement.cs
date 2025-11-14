@@ -24,7 +24,7 @@ public class GuardMovement : Behavior
 
 #if UNITY_EDITOR
     [ProgressBar("Path Completion", 100, EColor.Blue)]
-    public float pathProgress;
+    public float PathProgress;
     [HideInInspector] public Coroutine ProgressCoroutine;
     private MonoBehaviour coroutineRunner;
 #endif
@@ -46,33 +46,12 @@ public class GuardMovement : Behavior
     protected void MoveToPoint(Vector3 destination)
     {
         thisAgent.SetDestination(destination);
-    }
 
 #if UNITY_EDITOR
-    /// <summary>
-    /// Updates the progress bar to display progress along a path
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator PathProgress()
-    {
-        float pathDistance = 0;
-
-        if(thisAgent.path != null)
-        {
-            for (int i = 1; i < thisAgent.path.corners.Length; i++)
-            {
-                pathDistance += Vector3.Distance(thisAgent.path.corners[i - 1], thisAgent.path.corners[i]);
-            }
-
-            for (; ; )
-            {
-
-                pathProgress = (pathDistance - thisAgent.remainingDistance) / pathDistance;
-                yield return new WaitForEndOfFrame();
-            }
-        }
-    }
+        GuardDebugger debugger = selfRef.GetComponent<GuardDebugger>();
+        debugger.StartCoroutine(debugger.PathProgressBarCoroutine(thisAgent, this));
 #endif
+    }
 
     /// <summary>
     /// Checks to see if the enemy has reached the end of its path.

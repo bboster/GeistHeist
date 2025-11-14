@@ -27,7 +27,7 @@ public class PossessableSearchBehavior : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        SearchLocation = selfRef.GetComponent<GuardController>().SearchLocation;
+        SearchLocation = contRef.SearchLocation;
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;
@@ -48,7 +48,7 @@ public class PossessableSearchBehavior : GuardMovement
 
             if (behaviorComplete)
             {
-                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.patrol);
+                contRef.ChangeBehavior(GuardStates.patrol);
             }
 
             yield return new WaitForEndOfFrame();
@@ -78,6 +78,6 @@ public class PossessableSearchBehavior : GuardMovement
         SearchLocation = Vector3.zero;
 
         if (timerComplete == true)
-            selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.chase);
+            contRef.ChangeBehavior(GuardStates.chase);
     }
 }

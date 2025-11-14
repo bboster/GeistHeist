@@ -22,13 +22,6 @@ public class SurprisedBehavior : Behavior
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        //ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
-    }
-
-    public override void StopBehavior()
-    {
-        base.StopBehavior();
-        //ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     #endregion
@@ -44,6 +37,6 @@ public class SurprisedBehavior : Behavior
         thisAgent.isStopped = true;
         yield return new WaitForSeconds(reactionLength); //REPLACE THIS WITH SOMETHING TO TIE IN ANIMATIONS LATER
         thisAgent.isStopped = false;
-        selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.chase);
+        contRef.ChangeBehavior(GuardStates.chase);
     }
 }

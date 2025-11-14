@@ -21,29 +21,25 @@ public class VisionStimulus : Stimulus
     private bool playerObjectSeen = false;
     private Coroutine timer;
 
-    [Header("Progamming")]
-    [Tooltip("Controls whether or not certain variables are displayed")]
-    [SerializeField] private bool showProgrammingValues;
-
     [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private int behaviorIndex;
     [Tooltip("The index of the behavior to activate when the enemy loses track of the player during a chase.")]
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private int recoveryBehaviorIndex;
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private float visionBreakTimer;
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private LayerMask raycastLayer;
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private Transform raycastSpawn;
 
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private Light spotLight;
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private Collider visionCollider;
 
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private GuardController parentController;
 
     #endregion

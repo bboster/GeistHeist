@@ -24,7 +24,6 @@ public class StunnedBehavior : Behavior
         yield return new WaitForSeconds(stunLength); //REPLACE THIS WITH SOMETHING TO TIE IN ANIMATIONS LATER
         thisAgent.isStopped = false;
 
-        GuardController gc = selfRef.GetComponent<GuardController>();
-        gc.ChangeBehavior(gc.DefaultBehavior.StateName);
+        contRef.ChangeBehavior(contRef.DefaultBehavior.StateName);
     }
 }
