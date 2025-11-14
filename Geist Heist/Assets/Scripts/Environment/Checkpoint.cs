@@ -13,12 +13,16 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // dont even bother if player already has this checkpoint
+        if (LevelManager.Instance.IsCheckpointCurrent(this))
+            return;
+
         if(other.gameObject.TryGetComponent(out PossessableObject obj))
         {
             if (obj == PlayerManager.Instance.CurrentObject)
             {
-                Debug.Log($"Checkpoint: '{gameObject.name}' Reached");
-                LevelManager.Instance.UpdateCheckpoint(spawnLocation.position);
+                Debug.Log($"Checkpoint: '{gameObject.name}' Reached by {other.gameObject.name}");
+                LevelManager.Instance.UpdateCheckpoint(spawnLocation.position, this);
                 PlayerHUDManager.Instance.CheckpointAnimationRef.OpenCheckpointAnimation();
             }
         }

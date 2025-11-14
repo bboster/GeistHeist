@@ -25,8 +25,8 @@ public class CheckpointAnimation : MonoBehaviour
     private Coroutine ellipsesAnimationCoroutine;
     private int currentEllipses = 1;
 
-    private const float MAX_ELLIPSES = 3;
-    private const float MIN_ELLIPSES = 1;
+    private const int MAX_ELLIPSES = 3; // ...
+    private const int MIN_ELLIPSES = 1; // .
 
     private void Start()
     {
@@ -48,6 +48,7 @@ public class CheckpointAnimation : MonoBehaviour
             // because alpha is also 0->1, no lerp is needed 
             t += Time.unscaledDeltaTime / fadeSeconds;
 
+            // avoids looking weird if jumping between checkpoints
             if(t> savingGroup.alpha)
                 savingGroup.alpha = t;
 
@@ -59,10 +60,11 @@ public class CheckpointAnimation : MonoBehaviour
         yield return new WaitForSecondsRealtime(persistSeconds);
 
         float timeStarted = Time.unscaledTime;
+        t = 0;
         while (t < 1)
         {
             // different t calculation lol
-            t = (timeStarted-Time.unscaledTime) / fadeSeconds;
+            t = (Time.unscaledTime - timeStarted) / fadeSeconds;
             savingGroup.alpha = 1-t;
 
             yield return null;
@@ -74,18 +76,23 @@ public class CheckpointAnimation : MonoBehaviour
     {
         do
         {
-            // increase ellipses amount
-            currentEllipses = (int)(Mathf.Repeat(currentEllipses + 1, MAX_ELLIPSES - MIN_ELLIPSES) + MIN_ELLIPSES); // dogass unreadable code but it makes me feel smart
+            // increase ellipses amount, loop around
+            currentEllipses++;
+            if (currentEllipses > MAX_ELLIPSES) 
+                currentEllipses = MIN_ELLIPSES;
 
             string ellipses = "";
             for (int _ = 0; _ < currentEllipses; _++)
                 ellipses += ".";
 
             savingText.text = baseSavingText + ellipses;
+            Debug.Log(baseSavingText + ellipses);
+            Debug.Log(currentEllipses);
 
-            yield return new WaitForSeconds(secondsBetweenDots);
+            yield return new WaitForSecondsRealtime(secondsBetweenDots);
         }
-        while (checkpointAnimationCoroutine != null);
+        //while (checkpointAnimationCoroutine != null);
+        while (savingGroup.alpha > 0);
 
 
 
