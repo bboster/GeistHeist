@@ -17,7 +17,9 @@ public class Checkpoint : MonoBehaviour
         {
             if (obj == PlayerManager.Instance.CurrentObject)
             {
+                Debug.Log($"Checkpoint: '{gameObject.name}' Reached");
                 LevelManager.Instance.UpdateCheckpoint(spawnLocation.position);
+                PlayerHUDManager.Instance.CheckpointAnimationRef.OpenCheckpointAnimation();
             }
         }
     }
