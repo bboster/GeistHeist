@@ -21,10 +21,15 @@ public static class SettingsProfile
     private const float DEFAULT_SFX_VOLUME = 100;
     private const float DEFAULT_VOCALS_VOLUME = 100;
 
+    // Player Pref Keys
+    private static string 
+
     // Current variables
     public static bool Invert_Look;
 
     // TODO: BRIGHTNESS NOT IMPLEMENTED
     private static float lookSensitivy, brightness, 
         masterVolume, musicVolume, sfxVolume, vocalVolume;
+
+    public 
 }
