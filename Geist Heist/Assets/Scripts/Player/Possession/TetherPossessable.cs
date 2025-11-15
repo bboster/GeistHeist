@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation: 10/2/2025
- * Last Edited: 10/2/25
+ * Last Edited: 11/15/2025
  * Summary: Tether possessable. Progresses player to next level
  * 
  * TODO: An animation for when tether is collected, i suppose
