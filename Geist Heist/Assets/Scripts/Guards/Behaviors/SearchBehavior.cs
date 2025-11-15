@@ -60,6 +60,12 @@ public class SearchBehavior : GuardMovement
     {
         GuardCoroutineManager.instance.StartBehaviorTimer(searchLength, this);
         contRef.GetAnimator().SetTrigger("LookingAround");
+
+        progress = 0;
+
+#if UNITY_EDITOR
+        selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
+#endif
     }
 
     /// <summary>

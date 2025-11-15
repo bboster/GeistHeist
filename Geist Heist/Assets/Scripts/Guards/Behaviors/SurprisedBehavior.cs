@@ -30,6 +30,11 @@ public class SurprisedBehavior : Behavior
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
 
         thisAgent.isStopped = true;
+
+#if UNITY_EDITOR
+        selfRef.GetComponent<GuardDebugger>().StartDebugProgress(reactionLength, this);
+#endif
+
         yield return new WaitForSeconds(reactionLength); //REPLACE THIS WITH SOMETHING TO TIE IN ANIMATIONS LATER
         thisAgent.isStopped = false;
 

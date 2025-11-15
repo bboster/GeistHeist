@@ -21,6 +21,11 @@ public class StunnedBehavior : Behavior
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
 
         thisAgent.isStopped = true;
+
+#if UNITY_EDITOR
+        selfRef.GetComponent<GuardDebugger>().StartDebugProgress(stunLength, this);
+#endif
+
         yield return new WaitForSeconds(stunLength); //REPLACE THIS WITH SOMETHING TO TIE IN ANIMATIONS LATER
         thisAgent.isStopped = false;
 

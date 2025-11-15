@@ -61,9 +61,9 @@ public class GuardDebugger : MonoBehaviour
 
                 for (; ; )
                 {
-                    reciever.PathProgress = ((pathDistance - agent.remainingDistance) / pathDistance) * 100;
+                    reciever.progress = ((pathDistance - agent.remainingDistance) / pathDistance) * 100;
 
-                    if (reciever.PathProgress >= 100)
+                    if (reciever.progress >= 100)
                         break;
 
                     yield return new WaitForEndOfFrame();
@@ -72,6 +72,35 @@ public class GuardDebugger : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
         }
+    }
+
+    /// <summary>
+    /// Starts a progress bar
+    /// </summary>
+    /// <param name="duration"></param>
+    /// <param name=""></param>
+    /// <returns></returns>
+    public void StartDebugProgress(float duration, Behavior reciever)
+    {
+        StartCoroutine(ProgressTimer(duration, reciever));
+    }
+
+    /// <summary>
+    /// Runs a generic progress bar
+    /// </summary>
+    /// <param name="duration"></param>
+    /// <param name="reciever"></param>
+    /// <returns></returns>
+    private IEnumerator ProgressTimer(float duration, Behavior reciever)
+    {
+        for (int i = 0; i < duration * 10; i++)
+        {
+            reciever.progress = (i / (duration * 10)) * 100;
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        reciever.progress = 0;
     }
 }
 #endif

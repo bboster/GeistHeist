@@ -23,8 +23,8 @@ public class GuardMovement : Behavior
     protected NavMeshAgent thisAgent;
 
 #if UNITY_EDITOR
-    [ProgressBar("Path Completion", 100, EColor.Blue)]
-    public float PathProgress;
+    //[ProgressBar("Path Completion", 100, EColor.Blue)]
+    //public float PathProgress;
     [HideInInspector] public Coroutine ProgressCoroutine;
 #endif
 

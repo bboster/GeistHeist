@@ -17,6 +17,9 @@ public class Behavior : ScriptableObject
 {
     #region Variable Declarations
 
+    [ProgressBar(100f, EColor.Blue)]
+    public float progress;
+
     [Tooltip("The speed the guard will travel at while performing this behavior")]
     [SerializeField, Foldout("Base Values")] private float speed;
     [Tooltip("The name of the state this behavior executes")]
