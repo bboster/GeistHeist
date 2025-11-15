@@ -1,3 +1,14 @@
+#if UNITY_EDITOR
+
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 10/02/25
+ * Last Edited: 11/15/25
+ * Summary: Has miscellaneous debugging functions for the guard, will be expanded as required.
+ * NOTE: ONLY COMPILES FOR EDITOR, NOT FOR BUILD
+ */
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -55,15 +66,12 @@ public class GuardDebugger : MonoBehaviour
                     if (reciever.PathProgress >= 100)
                         break;
 
-
                     yield return new WaitForEndOfFrame();
                 }
 
                 yield return new WaitForEndOfFrame();
             }
-
-
-
         }
     }
 }
+#endif

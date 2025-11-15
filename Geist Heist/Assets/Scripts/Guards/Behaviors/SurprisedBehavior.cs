@@ -19,15 +19,6 @@ public class SurprisedBehavior : Behavior
     [Tooltip("The length that the guard will pause before chasing after seeing the player")]
     [SerializeField] private float reactionLength;
 
-    #region Initialize Function and StopBehavior
-
-    public override void InitializeBehavior(GameObject selfRef)
-    {
-        base.InitializeBehavior(selfRef);
-    }
-
-    #endregion
-
     /// <summary>
     /// Runs the logic for the behavior.
     /// </summary>
@@ -35,7 +26,6 @@ public class SurprisedBehavior : Behavior
     public override IEnumerator BehaviorLoop()
     {
         AudioManager.instance.PlayOneShot(FMODEvents.instance.GuardReactions);
-
 
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
 

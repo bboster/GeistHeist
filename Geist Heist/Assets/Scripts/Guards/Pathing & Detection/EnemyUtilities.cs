@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 10/07/25
+ * Last Edited: 11/15/25
  * Summary: Holds data that needs to be accessed by multiple scripts that the enemies utilize.
  */
 
@@ -17,6 +17,7 @@ namespace GuardUtilities
 
     public class GuardDebug
     {
+#if UNITY_EDITOR
         /// <summary>
         /// Creates a persistent debug ray for the guard's vision cast
         /// </summary>
@@ -28,6 +29,7 @@ namespace GuardUtilities
         {
             debug.DrawRay(start, direction);
         }
+#endif
     }
 }
 

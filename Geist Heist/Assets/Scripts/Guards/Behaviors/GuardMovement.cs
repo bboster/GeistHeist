@@ -26,7 +26,6 @@ public class GuardMovement : Behavior
     [ProgressBar("Path Completion", 100, EColor.Blue)]
     public float PathProgress;
     [HideInInspector] public Coroutine ProgressCoroutine;
-    private MonoBehaviour coroutineRunner;
 #endif
 
     /// <summary>

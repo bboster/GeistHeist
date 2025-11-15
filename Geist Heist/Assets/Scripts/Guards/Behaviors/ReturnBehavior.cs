@@ -27,7 +27,6 @@ public class ReturnBehavior : GuardMovement
             MoveToPoint(contRef.Path.GetPoint(0).position);
             thisAgent.isStopped = false;
         }
-
     }
 
     public override IEnumerator BehaviorLoop()

@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 10/02/25
+ * Last Edited: 11/15/25
  * Summary: Handles initialization of the enemy and activating/deactivating and switching behaviors.
  */
 
@@ -135,7 +135,6 @@ public class GuardController : MonoBehaviour
 
     #endregion
 
-
     #region Behavior Functions
 
     /// <summary>
@@ -159,7 +158,7 @@ public class GuardController : MonoBehaviour
     /// <param name="newBehavior"></param>
     public void ChangeBehavior(GuardStates state)
     {
-        Debug.Log(state);
+        //Debug.Log(state);
 
         StopBehavior();
         currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
@@ -206,7 +205,6 @@ public class GuardController : MonoBehaviour
         if (currentBehavior != null)
         {
             currentBehavior.InitializeBehavior(gameObject);
-            //GetComponent<StateText>().ChangeText(currentBehavior.StateName);
             currentPriority = currentBehavior.Priority;
             activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
             OnBehaviorStarted.Invoke(currentBehavior.StateName);
