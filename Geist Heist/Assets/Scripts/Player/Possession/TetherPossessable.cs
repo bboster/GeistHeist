@@ -19,7 +19,7 @@ using UnityEngine.SceneManagement;
 public class TetherPossessable : IInputHandler
 {
     [SerializeField] private GameObject CollectionParticlePrefab;
-    [SerializeField,Required] private GameObject thirdPersoncinemachineCamera;
+    [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [Tooltip("Loads this scene")]
     [SerializeField, Scene] private string HubScene = "Lobby";
 
@@ -27,7 +27,8 @@ public class TetherPossessable : IInputHandler
 
     private void Start()
     {
-        thirdPersoncinemachineCamera.SetActive(false);
+        if(thirdPersoncinemachineCamera != null)
+            thirdPersoncinemachineCamera.SetActive(false);
     }
 
     public override void OnPossessionStart()
