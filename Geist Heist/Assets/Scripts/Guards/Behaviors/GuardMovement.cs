@@ -6,6 +6,8 @@
  * Summary: Contains utility functions for enemies to use while running movement behavior.
  */
 
+using NaughtyAttributes;
+using NUnit.Framework.Constraints;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -19,6 +21,13 @@ public class GuardMovement : Behavior
     [SerializeField] private float moveCompletionThreshold;
 
     protected NavMeshAgent thisAgent;
+
+#if UNITY_EDITOR
+    [ProgressBar("Path Completion", 100, EColor.Blue)]
+    public float pathProgress;
+    [HideInInspector] public Coroutine ProgressCoroutine;
+    private MonoBehaviour coroutineRunner;
+#endif
 
     /// <summary>
     /// Initializes the behavior.
@@ -38,6 +47,32 @@ public class GuardMovement : Behavior
     {
         thisAgent.SetDestination(destination);
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Updates the progress bar to display progress along a path
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator PathProgress()
+    {
+        float pathDistance = 0;
+
+        if(thisAgent.path != null)
+        {
+            for (int i = 1; i < thisAgent.path.corners.Length; i++)
+            {
+                pathDistance += Vector3.Distance(thisAgent.path.corners[i - 1], thisAgent.path.corners[i]);
+            }
+
+            for (; ; )
+            {
+
+                pathProgress = (pathDistance - thisAgent.remainingDistance) / pathDistance;
+                yield return new WaitForEndOfFrame();
+            }
+        }
+    }
+#endif
 
     /// <summary>
     /// Checks to see if the enemy has reached the end of its path.

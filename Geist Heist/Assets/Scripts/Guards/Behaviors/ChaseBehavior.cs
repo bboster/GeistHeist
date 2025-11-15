@@ -24,13 +24,11 @@ public class ChaseBehavior : GuardMovement
 
         MoveToPoint(GetPlayerLocation());
         thisAgent.isStopped = false;
-        //ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     public override void StopBehavior()
     {
         base.StopBehavior();
-        //ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
     }
 
     #endregion
@@ -45,7 +43,7 @@ public class ChaseBehavior : GuardMovement
         {
             if (CheckPathCompletion() == true)
             {
-                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.attack);
+                contRef.ChangeBehavior(GuardStates.attack);
             }
             else
             {
@@ -64,11 +62,5 @@ public class ChaseBehavior : GuardMovement
     private Vector3 GetPlayerLocation()
     {
         return PlayerManager.Instance.CurrentObject.transform.position;
-    }
-
-    ~ChaseBehavior()
-    {
-        /*if(selfRef != null)
-            ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;*/
     }
 }
