@@ -19,7 +19,10 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField, Required] public CanvasGroup settingsGroup;
     [SerializeField, Required] private PauseMenu pauseMenu;
 
+    [Header("Non-settings buttons")]
     [SerializeField, Required] private Button exitSettingsButton;
+    [SerializeField, Required] private Button resetToDefaultsButton;
+    [SerializeField] private string resetToDefaultsConfirmationText = "Reset all settings?";
 
     [Header("Individual Settings attributes")]
     [SerializeField] private SliderSettingsAttributes lookSensitivityAttributes;
@@ -69,6 +72,7 @@ public class SettingsMenu : MonoBehaviour
     {
         AddComponentListeners();
         exitSettingsButton.onClick.AddListener(CloseSettingsMenu);
+        resetToDefaultsButton.onClick.AddListener(OnResetToDefaultsButtonPressed);
     }
 
     public void OpenSettingsMenu()
@@ -89,6 +93,21 @@ public class SettingsMenu : MonoBehaviour
         InputEvents.PauseStartedOverride = null;
         pauseMenu.OpenPauseMenu();
     }
+
+    #region Misc Buttons
+
+    private void OnResetToDefaultsButtonPressed()
+    {
+        pauseMenu.confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetToDefaultsButtonPressed);
+    }
+
+    private void OnConfirmResetToDefaultsButtonPressed()
+    {
+        SettingsProfile.ResetToDefaults();
+        RefreshAllSettingsUI();
+    }
+
+    #endregion
 
     #region Input Handling
     private void AddComponentListeners()

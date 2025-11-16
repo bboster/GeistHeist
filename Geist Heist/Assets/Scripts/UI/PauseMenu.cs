@@ -29,7 +29,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] private Button quitToMainMenuButton; 
 
     [Header("Exit Confirmations")]
-    [SerializeField, Required] private ConfirmationPopup confirmationPopup;
+    [SerializeField, Required] public ConfirmationPopup confirmationPopup;
     [SerializeField] private string exitToHubText = "Are you sure you want to exit to the hub?\nYou will lose all progress in the current level";
     [SerializeField] private string exitToMainMenuText = "Are you sure you want to exit to the main menu?\nYou will lose all progress in the current level";
 

@@ -90,4 +90,17 @@ public static class SettingsProfile
         PlayerPrefs.SetFloat(SFX_VOLUME_KEY, SFXVolume);
         PlayerPrefs.SetFloat(VOCALS_VOLUME_KEY, VocalsVolume);
     }
+
+    public static void ResetToDefaults()
+    {
+        Debug.Log("Reseting all game settings to defaults");
+        LookSensitivy = DEFAULT_LOOK_SENSITIVITY;
+        InvertLook = DEFAULT_INVERT_LOOK;
+        Brightness = DEFAULT_BRIGHTNESS;
+        MasterVolume = DEFAULT_MASTER_VOLUME;
+        MusicVolume = DEFAULT_MUSIC_VOLUME;
+        SFXVolume = DEFAULT_SFX_VOLUME;
+        VocalsVolume = DEFAULT_VOCALS_VOLUME;
+        SaveCurrentSettings();
+    }
 }
