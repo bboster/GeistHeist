@@ -23,13 +23,14 @@ public class AudioManager : Singleton<AudioManager>
     {
         base.Awake();
         masterBus = RuntimeManager.GetBus("bus:/");
-        musicBus = RuntimeManager.GetBus("bus://Music");
-        sfxBus = RuntimeManager.GetBus("bus://SoundEffects");
-        vocalsBus = RuntimeManager.GetBus("bus://Vocals");
+        musicBus = RuntimeManager.GetBus("bus:/Music");
+        sfxBus = RuntimeManager.GetBus("bus:/SoundEffects");
+        vocalsBus = RuntimeManager.GetBus("bus:/Vocals");
     }
     private void Start()
     {
         GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);
+        UpdateAllVolumes();
     }
 
     #region Volume Update Handling
