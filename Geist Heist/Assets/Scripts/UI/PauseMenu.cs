@@ -71,10 +71,9 @@ public class PauseMenu : MonoBehaviour
             settingsMenu.CloseSettingsMenu();
 
         Debug.Log("Pause Menu Opened");
-        GameManager.Instance.IsPaused = true;
+        GameManager.Instance.PauseGame();
         pauseScreenParent.gameObject.SetActive(true);
         StaticUtilities.EnableCanvasGroup(pauseGroup);
-        Time.timeScale = 0f;
         StaticUtilities.ShowCursor();
     }
 
@@ -82,9 +81,8 @@ public class PauseMenu : MonoBehaviour
     {
         confirmationPopup.HideConfirmationPopup();
         Debug.Log("Pause Menu closed");
-        GameManager.Instance.IsPaused = false;
+        GameManager.Instance.UnpauseGame();
         pauseScreenParent.gameObject.SetActive(false);
-        Time.timeScale = 1.0f;
         StaticUtilities.HideCursor();
     }
 
@@ -99,7 +97,7 @@ public class PauseMenu : MonoBehaviour
 
         timeOfLastPause = Time.unscaledTime;
 
-        GameManager.Instance.IsPaused = !GameManager.Instance.IsPaused;
+        GameManager.Instance.TogglePause();
         Debug.Log("Pause pressed");
 
         if (GameManager.Instance.IsPaused)

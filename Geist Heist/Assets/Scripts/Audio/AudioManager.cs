@@ -1,33 +1,35 @@
+/*
+ * Contributors: Joe C, Toby
+ * Creation Date: ?
+ * Last Modified: 11/15/2025
+ * 
+ * Brief Description: 
+ */
+
 using FMODUnity;
 using UnityEngine;
 using FMOD.Studio;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singleton<AudioManager> 
 {
-    public static AudioManager instance { get; private set; }
-
-    [Header("Volume")]
-    [Range(0, 1)]
-    public float masterVol = 1;
-
     private Bus masterBus;
+    private float getPausedTime => GameManager.Instance.IsPaused ? 0 : 1;
 
-    //Sets AudioManager instance in the scene
-    private void Awake()
+    //Sets AudioManager Instance in the scene
+    protected override void Awake()
     {
-
-        if (instance != null)
-        {
-            Debug.Log("There is more than one AudioManager in the scene");
-        }
-        instance = this;
-
+        base.Awake();
         masterBus = RuntimeManager.GetBus("bus:/");
     }
-
-    private void Update()
+    private void Start()
     {
-        masterBus.setVolume(masterVol);
+        GameManager.Instance.OnPauseChanged.AddListener(UpdateMasterVolume);
+    }
+
+    public void UpdateMasterVolume()
+    {
+        //Debug.Log(SettingsProfile.MasterVolumeTransformed + " * " + getPausedTime);
+        masterBus.setVolume(SettingsProfile.MasterVolumeTransformed * getPausedTime);
     }
 
     //Plays a non-looping event WITHOUT 3d Attributes
@@ -83,16 +85,5 @@ public class AudioManager : MonoBehaviour
         //TODO
         //ADD A FADE EFFECT ON EVERY SOUND TO MAKE IT FADE OUT OVER A HALF SECOND INSTEAD OF CUTTING THE SHORT
         //UNLESS MUSIC HAS SPECIAL TRANSITIONS BETWEEN SCENES, THEY SHOULD FOLLOW THE SAME RULE AS ABOVE
-    }
-
-    //Band-aid fix for the sfx playing in the pause menu
-    public void PauseSFX()
-    {
-        masterVol = 0;
-    }
-
-    public void UnpauseSFX()
-    {
-        masterVol = 1;
     }
 }

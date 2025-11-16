@@ -94,7 +94,8 @@ public class SettingsMenu : MonoBehaviour
     private void AddComponentListeners()
     {
         lookSensitivityAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(lookSensitivityAttributes, ref SettingsProfile.LookSensitivy, 
-            minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY));
+            minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY,
+            onSettingsUpdatedCallback:AudioManager.Instance.UpdateMasterVolume));
         invertLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertLookAttributes, ref SettingsProfile.InvertLook));
         brightnessAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(brightnessAttributes, ref SettingsProfile.LookSensitivy,
             minValue: SettingsProfile.MIN_BRIGHTNESS, maxValue: SettingsProfile.MAX_BRIGHTNESS));
@@ -107,7 +108,7 @@ public class SettingsMenu : MonoBehaviour
     /// <summary>
     /// Set settings variable in SettingsProfile
     /// </summary>
-    private void OnSliderValueChanged(SliderSettingsAttributes sliderAttributes, ref float settingsProfileVariable, UnityAction<float> onSettingsUpdatedCallback=null,
+    private void OnSliderValueChanged(SliderSettingsAttributes sliderAttributes, ref float settingsProfileVariable, UnityAction onSettingsUpdatedCallback=null,
         float minValue=0, float maxValue=100)
     {
         // Extra math because you dont know what the max and min values of the slider (in unity inspector) are going to be:
@@ -122,13 +123,13 @@ public class SettingsMenu : MonoBehaviour
         sliderAttributes.RefreshTextOnly(realValue);
 
         if (onSettingsUpdatedCallback != null)
-            onSettingsUpdatedCallback(realValue);
+            onSettingsUpdatedCallback();
     }
 
     /// <summary>
     /// Set settings variable in SettingsProfile
     /// </summary>
-    private void OnToggleValueChanged(ToggleSettingsAttributes toggleAttributes, ref bool settingsProfileVariable, UnityAction<bool> onSettingsUpdatedCallback = null)
+    private void OnToggleValueChanged(ToggleSettingsAttributes toggleAttributes, ref bool settingsProfileVariable, UnityAction onSettingsUpdatedCallback = null)
     {
         bool realValue = toggleAttributes.ToggleComponent.isOn;
 
@@ -138,7 +139,7 @@ public class SettingsMenu : MonoBehaviour
         //toggleAttributes.RefreshComponent(realValue);
 
         if (onSettingsUpdatedCallback != null)
-            onSettingsUpdatedCallback(realValue);
+            onSettingsUpdatedCallback();
     }
     #endregion
 
