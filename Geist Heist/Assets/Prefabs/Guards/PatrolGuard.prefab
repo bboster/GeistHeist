@@ -159,7 +159,6 @@ MonoBehaviour:
   DefaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
-  showProgrammingValues: 0
   animator: {fileID: 8501832552835297838}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
@@ -639,6 +638,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7601226680800833775, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7601226680800833775, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5d12f5d22e2867e4fb5459b70489299e, type: 2}
@@ -685,6 +688,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9013638940889411661, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6380891739477289876}
+    - targetCorrespondingSourceObject: {fileID: 9013638940889411661, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1271529071443720037}
   m_SourcePrefab: {fileID: 100100000, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
 --- !u!1 &3565940870479334912 stripped
 GameObject:
@@ -751,6 +757,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfc40b9b93513c04cb7c2f849916d456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardDebugger
+--- !u!114 &1271529071443720037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3565940870479334912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.DecalProjector
+  m_Material: {fileID: 2100000, guid: e888b971296d4bc4c82962a4a29f46e8, type: 2}
+  m_DrawDistance: 1000
+  m_FadeScale: 0.9
+  m_StartAngleFade: 180
+  m_EndAngleFade: 180
+  m_UVScale: {x: 1, y: 1}
+  m_UVBias: {x: 0, y: 0}
+  m_RenderingLayerMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ScaleMode: 0
+  m_Offset: {x: 0, y: 0, z: 0.5}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_FadeFactor: 1
+  version: 1
+  m_DecalLayerMask: 1
 --- !u!4 &5467543623775934886 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9aa3636e4c20d854fa11b29e8d8be846, type: 3}
