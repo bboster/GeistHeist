@@ -62,6 +62,8 @@ public class GameManager : Singleton<GameManager>
         if (this == null || gameObject == null) 
             return;
 
+        SettingsProfile.ReadSavedSettings();
+
         // All of these should be singletons, which destroy themselves if they already exist, 
         // so its okay if we dont check if this doesnt exist first
         InstantiateManagers();

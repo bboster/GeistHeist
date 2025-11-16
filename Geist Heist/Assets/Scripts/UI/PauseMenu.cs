@@ -19,11 +19,14 @@ public class PauseMenu : MonoBehaviour
 
     [Header("Misc Components")]
     [SerializeField, Required] private RectTransform pauseScreenParent;
+    [SerializeField, Required] public CanvasGroup pauseGroup;
+    [SerializeField, Required] public SettingsMenu settingsMenu;
 
     [Header("Buttons")]
     [SerializeField, Required] private Button continueGameButton; 
+    [SerializeField, Required] private Button openSettingsButton; 
     [SerializeField, Required] private Button quitToHubButton; 
-    [SerializeField, Required] private Button quitToMainMenuButton;
+    [SerializeField, Required] private Button quitToMainMenuButton; 
 
     [Header("Exit Confirmations")]
     [SerializeField, Required] private ConfirmationPopup confirmationPopup;
@@ -50,6 +53,7 @@ public class PauseMenu : MonoBehaviour
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
 
         continueGameButton.onClick.AddListener(OnContinueGameButtonClicked);
+        openSettingsButton.onClick.AddListener(OnOpenSettingsButtonClicked);
         quitToHubButton.onClick.AddListener(OnGoToHubButtonClicked);
         quitToMainMenuButton.onClick.AddListener(OnGoToMainMenuButtonClicked);
 
@@ -62,9 +66,14 @@ public class PauseMenu : MonoBehaviour
     public void OpenPauseMenu()
     {
         confirmationPopup.HideConfirmationPopup();
+
+        if(settingsMenu.settingsGroup.alpha > 0)
+            settingsMenu.CloseSettingsMenu();
+
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.IsPaused = true;
         pauseScreenParent.gameObject.SetActive(true);
+        StaticUtilities.EnableCanvasGroup(pauseGroup);
         Time.timeScale = 0f;
         StaticUtilities.ShowCursor();
     }
@@ -106,6 +115,12 @@ public class PauseMenu : MonoBehaviour
     {
         ClosePauseMenu() ;
     }
+
+    void OnOpenSettingsButtonClicked()
+    {
+        settingsMenu.OpenSettingsMenu();
+    }
+
     void OnGoToHubButtonClicked()
     {
         confirmationPopup.OpenConfirmationPopup(exitToHubText, OnConfirmQuitToHubButtonClicked);

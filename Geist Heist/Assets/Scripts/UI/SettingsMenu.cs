@@ -4,15 +4,33 @@
  * Last Edited: 11/15/25
  * 
  * Description: Manages UI elements and settings data.
+ * Settings variables are stored and accessed in SettingsProfile.cs
  */
 
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
 {
+    [Header("Menu Components")]
+    [SerializeField, Required] public CanvasGroup settingsGroup;
+    [SerializeField, Required] private PauseMenu pauseMenu;
+
+    [SerializeField, Required] private Button exitSettingsButton;
+
+    [Header("Individual Settings attributes")]
+    [SerializeField] private SliderSettingsAttributes lookSensitivityAttributes;
+    [SerializeField] private ToggleSettingsAttributes invertLookAttributes; 
+    [SerializeField] private SliderSettingsAttributes brightnessAttributes;
+
+    [SerializeField] private SliderSettingsAttributes masterVolumeAttributes;
+    [SerializeField] private SliderSettingsAttributes musicVolumeAttributes;
+    [SerializeField] private SliderSettingsAttributes sfxVolumeAttributes;
+    [SerializeField] private SliderSettingsAttributes vocalsVolumeAttributes;
+
     #region Attribute variables
     /*
     // Master Volume
@@ -49,19 +67,128 @@ public class SettingsMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        AddComponentListeners();
+        exitSettingsButton.onClick.AddListener(CloseSettingsMenu);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OpenSettingsMenu()
     {
+        RefreshAllSettingsUI();
 
+        StaticUtilities.DisableCanvasGroup(pauseMenu.pauseGroup);
+        StaticUtilities.EnableCanvasGroup(settingsGroup);
+
+        InputEvents.PauseStartedOverride = CloseSettingsMenu;
+    }
+
+    public void CloseSettingsMenu()
+    {
+        Debug.Log("Close settings menu");
+        SettingsProfile.SaveCurrentSettings();
+        StaticUtilities.DisableCanvasGroup(settingsGroup);
+        InputEvents.PauseStartedOverride = null;
+        pauseMenu.OpenPauseMenu();
+    }
+
+    #region Input Handling
+    private void AddComponentListeners()
+    {
+        lookSensitivityAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(lookSensitivityAttributes, ref SettingsProfile.LookSensitivy, 
+            minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY));
+        invertLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertLookAttributes, ref SettingsProfile.InvertLook));
+        brightnessAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(brightnessAttributes, ref SettingsProfile.LookSensitivy,
+            minValue: SettingsProfile.MIN_BRIGHTNESS, maxValue: SettingsProfile.MAX_BRIGHTNESS));
+        masterVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(masterVolumeAttributes, ref SettingsProfile.MasterVolume));
+        musicVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(musicVolumeAttributes, ref SettingsProfile.MusicVolume));
+        sfxVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(sfxVolumeAttributes, ref SettingsProfile.SFXVolume));
+        vocalsVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(vocalsVolumeAttributes, ref SettingsProfile.VocalsVolume));
+    }
+
+    /// <summary>
+    /// Set settings variable in SettingsProfile
+    /// </summary>
+    private void OnSliderValueChanged(SliderSettingsAttributes sliderAttributes, ref float settingsProfileVariable, UnityAction<float> onSettingsUpdatedCallback=null,
+        float minValue=0, float maxValue=100)
+    {
+        // Extra math because you dont know what the max and min values of the slider (in unity inspector) are going to be:
+        var slider = sliderAttributes.SliderComponent;
+        float t = Mathf.InverseLerp(slider.minValue, slider.maxValue, slider.value);
+        float realValue = Mathf.Lerp(minValue, maxValue, t);
+
+        // Apply it to settings profile.
+        settingsProfileVariable = realValue;
+
+        // sliderAttributes.RefreshComponent(realValue, t); // conflicts with current input
+        sliderAttributes.RefreshTextOnly(realValue);
+
+        if (onSettingsUpdatedCallback != null)
+            onSettingsUpdatedCallback(realValue);
+    }
+
+    /// <summary>
+    /// Set settings variable in SettingsProfile
+    /// </summary>
+    private void OnToggleValueChanged(ToggleSettingsAttributes toggleAttributes, ref bool settingsProfileVariable, UnityAction<bool> onSettingsUpdatedCallback = null)
+    {
+        bool realValue = toggleAttributes.ToggleComponent.isOn;
+
+        // apply to settings profile
+        settingsProfileVariable = realValue;
+
+        //toggleAttributes.RefreshComponent(realValue);
+
+        if (onSettingsUpdatedCallback != null)
+            onSettingsUpdatedCallback(realValue);
+    }
+    #endregion
+
+    /// <summary>
+    /// Makes all settings UI match their current values
+    /// </summary>
+    public void RefreshAllSettingsUI()
+    {
+        // Assumes SettingsProfile.ReadSavedSettings has already run 
+
+        lookSensitivityAttributes.RefreshComponent(SettingsProfile.LookSensitivy, SettingsProfile.LookSensitivityTransformed);
+        invertLookAttributes.RefreshComponent(SettingsProfile.InvertLook);
+        brightnessAttributes.RefreshComponent(SettingsProfile.Brightness, SettingsProfile.BrightnessTransformed);
+
+        masterVolumeAttributes.RefreshComponent(SettingsProfile.MasterVolume, SettingsProfile.MasterVolumeTransformed);
+        musicVolumeAttributes.RefreshComponent(SettingsProfile.MusicVolume, SettingsProfile.MusicVolumeTransformed);
+        sfxVolumeAttributes.RefreshComponent(SettingsProfile.SFXVolume, SettingsProfile.SFXVolumeTransformed);
+        vocalsVolumeAttributes.RefreshComponent(SettingsProfile.VocalsVolume, SettingsProfile.VocalsVolumeTransformed);
     }
 }
 
-public class SettingsAttributes
+/// <summary>
+/// Default values are stored in settings profile.
+/// </summary>
+[System.Serializable]
+public class SliderSettingsAttributes
 {
     //[Range(0, 100)] public float DefaulValue = 100;
-    [Required] public Slider SliderComponent;
-    [Required] public TMP_Text OutputTextComponent;
+    [AllowNesting, Required] public Slider SliderComponent;
+    [AllowNesting, Required] public TMP_Text OutputTextComponent;
+
+    public void RefreshComponent(float currentValue, float currentValueTransformed)
+    {
+        SliderComponent.value = currentValueTransformed;
+        RefreshTextOnly(currentValue);
+    }
+
+    public void RefreshTextOnly(float currentValue)
+    {
+        OutputTextComponent.text = Mathf.RoundToInt(currentValue).ToString();
+    }
+}
+
+[System.Serializable]
+public class ToggleSettingsAttributes
+{
+    [AllowNesting, Required] public Toggle ToggleComponent;
+
+    public void RefreshComponent(bool currentValue)
+    {
+        ToggleComponent.isOn = currentValue;
+    }
 }

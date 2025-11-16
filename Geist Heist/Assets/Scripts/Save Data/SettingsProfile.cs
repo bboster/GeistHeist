@@ -4,14 +4,16 @@
  * Last Edited: 11/15/25
  * 
  * Description: Static class that holds settings data for all scripts to use. 
- * Saves and loads its variables via PlayerPrefs
+ * Saves and loads its variables via PlayerPrefs.
+ * 
+ * I want designers to touch this script
  */
 
 using UnityEngine;
 
 public static class SettingsProfile
 {
-    // hard coded values: 
+    // default values
     private const float DEFAULT_LOOK_SENSITIVITY = 100;
     private const bool DEFAULT_INVERT_LOOK = false;
     private const float DEFAULT_BRIGHTNESS = 80; 
@@ -21,15 +23,71 @@ public static class SettingsProfile
     private const float DEFAULT_SFX_VOLUME = 100;
     private const float DEFAULT_VOCALS_VOLUME = 100;
 
-    // Player Pref Keys
-    private static string 
+    // other values
+    public const float MIN_LOOK_SENSITIVITY = 1;
+    public const float MAX_LOOK_SENSITIVITY = 150;
+
+    public const float MIN_BRIGHTNESS = 20;
+    public const float MAX_BRIGHTNESS = 100;
+
+    #region Player Pref Keys
+
+    /* These could be ints and that would be faster, but I'm keeping them 
+       as strings for now for legibility and to avoid any mixups. */
+    //TODO: if performance is a problem, convert string keys to ints.
+
+    private const string LOOK_SENSITIVITY_KEY = "Look Sensitivity";
+    private const string INVERT_LOOK_KEY = "Invert Look";
+    private const string BRIGHTNESS_KEY = "Brightness";
+    private const string MASTER_VOLUME_KEY = "Master volume";
+    private const string MUSIC_VOLUME_KEY = "Music volume";
+    private const string SFX_VOLUME_KEY = "SFX volume";
+    private const string VOCALS_VOLUME_KEY = "Vocals volume";
+
+    #endregion
 
     // Current variables
-    public static bool Invert_Look;
+    public static bool InvertLook;
 
     // TODO: BRIGHTNESS NOT IMPLEMENTED
-    private static float lookSensitivy, brightness, 
-        masterVolume, musicVolume, sfxVolume, vocalVolume;
+    public static float LookSensitivy, Brightness, 
+        MasterVolume, MusicVolume, SFXVolume, VocalsVolume;
 
-    public 
+    public static float LookSensitivityTransformed => Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, LookSensitivy);
+    public static float BrightnessTransformed => Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, Brightness);
+    public static float MasterVolumeTransformed => MasterVolume / 100;
+    public static float MusicVolumeTransformed => MusicVolume / 100;
+    public static float SFXVolumeTransformed => SFXVolume / 100;
+    public static float VocalsVolumeTransformed => VocalsVolume / 100;
+
+    /// <summary>
+    /// Reads settings from PlayerPrefs and updates its public 
+    /// variables. 
+    /// Called in gamemanager, before managers are spawned.
+    /// </summary>
+    public static void ReadSavedSettings()
+    {
+        LookSensitivy = PlayerPrefs.GetFloat(LOOK_SENSITIVITY_KEY, DEFAULT_LOOK_SENSITIVITY);
+        InvertLook = PlayerPrefs.GetInt(INVERT_LOOK_KEY, DEFAULT_INVERT_LOOK ? 1 : 0) == 1; // Playerprefs cant store bools, so just store an int
+        Brightness = PlayerPrefs.GetFloat(BRIGHTNESS_KEY, DEFAULT_BRIGHTNESS);
+
+        MasterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_MASTER_VOLUME);
+        MusicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, DEFAULT_MUSIC_VOLUME);
+        SFXVolume = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_SFX_VOLUME);
+        VocalsVolume = PlayerPrefs.GetFloat(VOCALS_VOLUME_KEY, DEFAULT_VOCALS_VOLUME);
+    }
+
+    public static void SaveCurrentSettings()
+    {
+        Debug.Log("Saving current settings profile to settings profile");
+
+        PlayerPrefs.SetFloat(LOOK_SENSITIVITY_KEY, LookSensitivy);
+        PlayerPrefs.SetInt(INVERT_LOOK_KEY, InvertLook ? 1 : 0); // Playerprefs cant store bools, so just store an int
+        PlayerPrefs.SetFloat(BRIGHTNESS_KEY, Brightness);
+
+        PlayerPrefs.SetFloat(MASTER_VOLUME_KEY, MasterVolume);
+        PlayerPrefs.SetFloat(MUSIC_VOLUME_KEY, MusicVolume);
+        PlayerPrefs.SetFloat(SFX_VOLUME_KEY, SFXVolume);
+        PlayerPrefs.SetFloat(VOCALS_VOLUME_KEY, VocalsVolume);
+    }
 }
