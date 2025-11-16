@@ -45,7 +45,7 @@ public class SearchBehavior : GuardMovement
 
             if (behaviorComplete)
             {
-                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.patrol);
+                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.returnToPath);
             }
 
             yield return new WaitForEndOfFrame();
