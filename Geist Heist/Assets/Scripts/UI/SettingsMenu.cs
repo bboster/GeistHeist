@@ -94,15 +94,24 @@ public class SettingsMenu : MonoBehaviour
     private void AddComponentListeners()
     {
         lookSensitivityAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(lookSensitivityAttributes, ref SettingsProfile.LookSensitivy, 
-            minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY,
-            onSettingsUpdatedCallback:AudioManager.Instance.UpdateMasterVolume));
+            minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY));
+
         invertLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertLookAttributes, ref SettingsProfile.InvertLook));
+
         brightnessAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(brightnessAttributes, ref SettingsProfile.LookSensitivy,
             minValue: SettingsProfile.MIN_BRIGHTNESS, maxValue: SettingsProfile.MAX_BRIGHTNESS));
+
         masterVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(masterVolumeAttributes, ref SettingsProfile.MasterVolume));
+        masterVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => AudioManager.Instance.UpdateMusicVolume());
+
         musicVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(musicVolumeAttributes, ref SettingsProfile.MusicVolume));
+        musicVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => AudioManager.Instance.UpdateMusicVolume());
+
         sfxVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(sfxVolumeAttributes, ref SettingsProfile.SFXVolume));
+        sfxVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => AudioManager.Instance.UpdateSFXVolume());
+
         vocalsVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(vocalsVolumeAttributes, ref SettingsProfile.VocalsVolume));
+        vocalsVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => AudioManager.Instance.UpdateVocalsVolume());
     }
 
     /// <summary>

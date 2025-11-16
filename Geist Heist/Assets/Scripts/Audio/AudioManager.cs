@@ -13,6 +13,9 @@ using FMOD.Studio;
 public class AudioManager : Singleton<AudioManager> 
 {
     private Bus masterBus;
+    private Bus musicBus;
+    private Bus sfxBus;
+    private Bus vocalsBus;
     private float getPausedTime => GameManager.Instance.IsPaused ? 0 : 1;
 
     //Sets AudioManager Instance in the scene
@@ -20,17 +23,43 @@ public class AudioManager : Singleton<AudioManager>
     {
         base.Awake();
         masterBus = RuntimeManager.GetBus("bus:/");
+        musicBus = RuntimeManager.GetBus("bus://Music");
+        sfxBus = RuntimeManager.GetBus("bus://SoundEffects");
+        vocalsBus = RuntimeManager.GetBus("bus://Vocals");
     }
     private void Start()
     {
-        GameManager.Instance.OnPauseChanged.AddListener(UpdateMasterVolume);
+        GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);
     }
 
+    #region Volume Update Handling
+
+    public void UpdateAllVolumes()
+    {
+        UpdateMasterVolume();
+        UpdateMusicVolume();
+        UpdateSFXVolume();
+        UpdateVocalsVolume();
+    }
     public void UpdateMasterVolume()
     {
-        //Debug.Log(SettingsProfile.MasterVolumeTransformed + " * " + getPausedTime);
         masterBus.setVolume(SettingsProfile.MasterVolumeTransformed * getPausedTime);
     }
+
+    public void UpdateMusicVolume()
+    {
+        musicBus.setVolume(SettingsProfile.MusicVolumeTransformed * getPausedTime);
+    }
+    public void UpdateSFXVolume()
+    {
+        sfxBus.setVolume(SettingsProfile.SFXVolumeTransformed * getPausedTime);
+    }
+    public void UpdateVocalsVolume()
+    {
+        vocalsBus.setVolume(SettingsProfile.VocalsVolumeTransformed * getPausedTime);
+    }
+
+    #endregion
 
     //Plays a non-looping event WITHOUT 3d Attributes
     public void PlayOneShot(EventReference sound)
