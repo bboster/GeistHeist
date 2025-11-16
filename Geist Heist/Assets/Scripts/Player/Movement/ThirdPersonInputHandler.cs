@@ -61,6 +61,7 @@ public class ThirdPersonInputHandler : IInputHandler
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
+        targetRotation = transform.rotation;
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
         modelStartYPosition = playerModel.transform.position.y;
@@ -302,7 +303,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void RotatePlayer()
     {
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        if(transform.rotation != targetRotation)
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
         Vector3 diff = (transform.position - positionLastFrame).WithY(0);
 

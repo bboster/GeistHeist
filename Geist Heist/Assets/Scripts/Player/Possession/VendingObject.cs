@@ -13,7 +13,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PossessableObject))]
 public class VendingObject : IInputHandler, IInteractable
 {
-    [SerializeField] private GameObject thirdPersoncinemachineCamera;
+    //[SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private Transform CanSpawnPoint;
     [SerializeField] private GameObject CanPrefab;
 
@@ -124,10 +124,7 @@ public class VendingObject : IInputHandler, IInteractable
     #region Interact
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess)
-        {
-            PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
-        }
+        PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
     }
 
     public override void WhileInteractHeld(float secondsHeld)
