@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation: 11/15/2025
- * Last Edited: 11/15/25
+ * Last Edited: 11/17/25
  * 
  * Description: Manages UI elements and settings data.
  * Settings variables are stored and accessed in SettingsProfile.cs
@@ -113,9 +113,11 @@ public class SettingsMenu : MonoBehaviour
     private void AddComponentListeners()
     {
         lookSensitivityAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(lookSensitivityAttributes, ref SettingsProfile.LookSensitivy, 
-            minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY));
+            minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY,
+            onSettingsUpdatedCallback:PlayerManager.Instance.UpdateCamerasSensitivity));
 
-        invertLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertLookAttributes, ref SettingsProfile.InvertLook));
+        invertLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertLookAttributes, ref SettingsProfile.InvertLook,
+            onSettingsUpdatedCallback: PlayerManager.Instance.UpdateCamerasInvertLook));
 
         brightnessAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(brightnessAttributes, ref SettingsProfile.LookSensitivy,
             minValue: SettingsProfile.MIN_BRIGHTNESS, maxValue: SettingsProfile.MAX_BRIGHTNESS));

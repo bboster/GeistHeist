@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation Date: 10/20/2025
- * Last Modified: 10/20/2025
+ * Last Modified: 11/17/2025
  * 
  * Brief Description: Handles UI elements for the pause menu.
  * Also listens to escape key input to open and close it.

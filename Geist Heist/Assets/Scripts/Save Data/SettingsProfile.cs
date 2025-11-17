@@ -26,6 +26,7 @@ public static class SettingsProfile
     // other values
     public const float MIN_LOOK_SENSITIVITY = 1;
     public const float MAX_LOOK_SENSITIVITY = 150;
+    private const float DEFAULT_LOOK_SENSITIVITY_TRANSFORMED = 1; // Real value, used in game
 
     public const float MIN_BRIGHTNESS = 20;
     public const float MAX_BRIGHTNESS = 100;
@@ -53,7 +54,10 @@ public static class SettingsProfile
     public static float LookSensitivy, Brightness, 
         MasterVolume, MusicVolume, SFXVolume, VocalsVolume;
 
-    public static float LookSensitivityTransformed => Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, LookSensitivy);
+    // Transform sensitivity so that, by default, sensitivity
+    public static float LookSensitivityTransformed =>
+        Mathf.LerpUnclamped(0.1f, DEFAULT_LOOK_SENSITIVITY_TRANSFORMED,
+            /* t: */ StaticUtilities.InverseLerpUnclamped(MIN_LOOK_SENSITIVITY, DEFAULT_LOOK_SENSITIVITY, LookSensitivy)); 
     public static float BrightnessTransformed => Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, Brightness);
     public static float MasterVolumeTransformed => MasterVolume / 100;
     public static float MusicVolumeTransformed => MusicVolume / 100;
