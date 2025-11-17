@@ -62,6 +62,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [ReadOnly] private float currentTimerPercentage;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
+    [HideInInspector] public bool PauseDischargeTimer = false;
 
     private EventInstance possessionEnter;
 
@@ -225,8 +226,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         while(currentTimerPercentage > 0)
         {
-            currentTimerPercentage = Mathf.Max(currentTimerPercentage - (timerDischargePercentage * Time.deltaTime), 0);
-            OnTimerUpdate.Invoke(currentTimerPercentage);
+            if (!PauseDischargeTimer)
+            {
+                currentTimerPercentage = Mathf.Max(currentTimerPercentage - (timerDischargePercentage * Time.deltaTime), 0);
+                OnTimerUpdate.Invoke(currentTimerPercentage);
+            }
+
             yield return null;
         }
 
