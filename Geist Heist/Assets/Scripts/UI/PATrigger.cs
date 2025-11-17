@@ -27,12 +27,12 @@ public class PATrigger : MonoBehaviour
 
     private IEnumerator FillText()
     {
-        DailougeManager.Instance.ResizingTextbox.SetActive(true);
+        DailougeManager.Instance.PAholder.SetActive(true);
         int temp = 0;
-        DailougeManager.Instance.Textbox.text = "";
-        while (DailougeManager.Instance.Textbox.text.Length < Text.Length)
+        DailougeManager.Instance.PATextbox.text = "";
+        while (DailougeManager.Instance.PATextbox.text.Length < Text.Length)
         {
-            DailougeManager.Instance.Textbox.text += Text.Substring(temp, 1);
+            DailougeManager.Instance.PATextbox.text += Text.Substring(temp, 1);
             temp++;
             yield return new WaitForSeconds(.05f);
         }
@@ -43,6 +43,6 @@ public class PATrigger : MonoBehaviour
     //this is just in case we have to have it called somewhere else for the audio clip ending when that gets implemented
     private void clearBox()
     {
-        DailougeManager.Instance.ResizingTextbox.SetActive(false);
+        DailougeManager.Instance.PAholder.SetActive(false);
     }
 }
