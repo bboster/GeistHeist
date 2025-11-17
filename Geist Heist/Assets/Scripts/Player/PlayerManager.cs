@@ -24,9 +24,9 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private InputEvents inputEvents => InputEvents.Instance;
     private Camera camera;
+    private CinemachineCamera mainCinemachineCamera;
+    private PlayerCameraController mainPlayerCameraController;
 
-    private CinemachineOrbitalFollow possessableCOF;
-    private CinemachineOrbitalFollow playerCOF;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -37,11 +37,13 @@ public class PlayerManager : Singleton<PlayerManager>
         CurrentObject = PlayerGhostObject;
         RegisterInputs(PlayerGhostObject);
         camera = Camera.main;
+        mainCinemachineCamera = PlayerGhostObject.CinemachineCamera;
+        PlayerGhostObject.CinemachineCamera.transform.SetParent(null);
+        mainPlayerCameraController = mainCinemachineCamera.GetComponent<PlayerCameraController>();
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        playerCOF = PlayerGhostObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
         if (GameManager.Instance.PlayerStart == null)
             Debug.Log("PlayerStart is null in gamemanager");
         else
@@ -74,12 +76,7 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
-        //make transition not crazy
-        possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
-        possessableCOF.HorizontalAxis.Value = playerCOF.HorizontalAxis.Value;
-
-        possessable.CinemachineCamera.gameObject.SetActive(true);
-        PlayerGhostObject.CinemachineCamera.gameObject.SetActive(false);
+        SwapCameras(PlayerGhostObject,possessable);
         PlayerGhostObject.gameObject.SetActive(false);
 
         RegisterInputs(possessable);
@@ -132,12 +129,7 @@ public class PlayerManager : Singleton<PlayerManager>
             }
         }
 
-        //make transition not crazy
-        possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
-        playerCOF.HorizontalAxis.Value = possessableCOF.HorizontalAxis.Value;
-
-        PlayerGhostObject.CinemachineCamera.gameObject.SetActive(true);
-        possessable.CinemachineCamera.gameObject.SetActive(false);
+        SwapCameras(possessable, PlayerGhostObject);
         PlayerGhostObject.gameObject.SetActive(true);
 
         RegisterInputs(PlayerGhostObject);
@@ -148,6 +140,30 @@ public class PlayerManager : Singleton<PlayerManager>
         CurrentObject = PlayerGhostObject;
 
         DeRegisterInputs(possessable);
+    }
+
+    private void SwapCameras(PossessableObject oldObject, PossessableObject newObject)
+    {
+        // if both possessables dont have special behaviour
+        if (oldObject == null || (!oldObject.HasCustomCameraBehavior && !newObject.HasCustomCameraBehavior))
+        {
+            //mainCinemachineCamera.Follow = newObject.cameraAnchor;
+            mainPlayerCameraController.SetAnchorPoint(newObject.cameraAnchor);
+            return;
+        }
+        if (oldObject.HasCustomCameraBehavior || newObject.HasCustomCameraBehavior)
+        {
+            // Get rotation values
+            var newOrbitalFollow = newObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+            var oldOrbitalFollow = oldObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+
+            newOrbitalFollow.HorizontalAxis.Value = oldOrbitalFollow.HorizontalAxis.Value;
+
+            newObject.CinemachineCamera.gameObject.SetActive(true);
+            oldObject.CinemachineCamera.gameObject.SetActive(false);
+        }
+        
+
     }
 
     public void RegisterInputs(PossessableObject possessable)
