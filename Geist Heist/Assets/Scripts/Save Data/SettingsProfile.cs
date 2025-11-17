@@ -30,6 +30,7 @@ public static class SettingsProfile
 
     public const float MIN_BRIGHTNESS = 20;
     public const float MAX_BRIGHTNESS = 100;
+    private const float DEFAULT_BRIGHTNESS_TRANSFORMED = 1; // Real value, used in game
 
     #region Player Pref Keys
 
@@ -58,7 +59,10 @@ public static class SettingsProfile
     public static float LookSensitivityTransformed =>
         Mathf.LerpUnclamped(0.1f, DEFAULT_LOOK_SENSITIVITY_TRANSFORMED,
             /* t: */ StaticUtilities.InverseLerpUnclamped(MIN_LOOK_SENSITIVITY, DEFAULT_LOOK_SENSITIVITY, LookSensitivy)); 
-    public static float BrightnessTransformed => Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, Brightness);
+    //public static float BrightnessTransformed => Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, Brightness);
+    public static float BrightnessTransformed => 
+        Mathf.LerpUnclamped(0.1f, DEFAULT_BRIGHTNESS_TRANSFORMED,
+            /* t: */ StaticUtilities.InverseLerpUnclamped(MIN_LOOK_SENSITIVITY, DEFAULT_LOOK_SENSITIVITY, LookSensitivy));
     public static float MasterVolumeTransformed => MasterVolume / 100;
     public static float MusicVolumeTransformed => MusicVolume / 100;
     public static float SFXVolumeTransformed => SFXVolume / 100;
