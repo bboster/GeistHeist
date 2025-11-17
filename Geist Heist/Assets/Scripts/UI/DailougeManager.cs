@@ -1,3 +1,11 @@
+/*
+ * Contributors:  Brenden
+ * Creation Date: 10/28/25
+ * Last Modified: 11/17/25
+ * 
+ * Brief Description: Instantiates and keeps the textboxes and canvuses of the
+ * Dialogue and PA system
+ */
 using JetBrains.Annotations;
 using UnityEngine;
 
