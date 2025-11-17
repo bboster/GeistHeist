@@ -30,7 +30,7 @@ public static class SettingsProfile
 
     public const float MIN_BRIGHTNESS = 20;
     public const float MAX_BRIGHTNESS = 100;
-    private const float DEFAULT_BRIGHTNESS_TRANSFORMED = 1; // Real value, used in game
+    private const float DEFAULT_BRIGHTNESS_TRANSFORMED = 0; // Real value, used in game (0 because it does not add or subtract brightness by default)
 
     #region Player Pref Keys
 
