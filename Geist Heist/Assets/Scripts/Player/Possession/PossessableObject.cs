@@ -1,7 +1,9 @@
+
+
 /*
  * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/28/25
+ * Last Modified: 11/12/2025
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -16,12 +18,17 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FMOD.Studio;
+using FMODUnity;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    
-    [Required] public CinemachineCamera CinemachineCamera;
-    
+    [Header("Camera Settings")]
+    [Tooltip("If true, camera will be overridden with the CinemachineCamera on this object")]
+    [HideIf(nameof(isGhost))] public bool HasCustomCameraBehavior;
+    [Required, ShowIf(nameof(showCinemachineCamera))] public CinemachineCamera CinemachineCamera;
+    [Required, HideIf(nameof(HasCustomCameraBehavior))] public Transform cameraAnchor;
+
     [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
     [HideIf(nameof(isGhost))] public List<Transform> ghostExitPoints;
 
@@ -29,9 +36,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField, HideIf(nameof(isGhost))] private bool hasTimer;
     [SerializeField, HideIf(nameof(isGhost))] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer)), HideIf(nameof(isGhost))] private float timerRechargePercentage = 10;
+    [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerRechargePercentage = 10;
     [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer)), HideIf(nameof(isGhost))] private float timerDischargePercentage = 10;
+    [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerDischargePercentage = 10;
 
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
     [HideIf(nameof(isGhost))] public Transform ghostSpawnPoint;
@@ -56,6 +63,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [ReadOnly] private float currentTimerPercentage;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
 
+    private EventInstance possessionEnter;
+
+    private EventInstance possessionLow;
+    private EventInstance possessionOut;
+    private EventInstance possessionRefill;
+
     #region Guard Detection Variables
 
     [ReadOnly] public bool IsMoving = false;
@@ -65,6 +78,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     #endregion
 
+    #region Inspector Debug
+
+    private bool showCinemachineCamera => isGhost || HasCustomCameraBehavior;
+    private bool hasTimerAndIsNotGhost => isGhost == false && hasTimer;
+
+    #endregion
 
     void Start()
     {
@@ -91,6 +110,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvasGroup.alpha = 0;
             possessableCanvas.gameObject.SetActive(false);
         }
+
+        possessionEnter = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+
+        possessionLow = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
+        possessionOut = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
+        possessionRefill = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
     }
 
     public IInputHandler GetInputHandler()
@@ -109,6 +134,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
+        possessionEnter.start();
+
         StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
 
         gameObject.SetActive(true);
@@ -213,10 +240,14 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         while(currentTimerPercentage < maxChargePercentage)
         {
+            possessionRefill.start();
+
             currentTimerPercentage = Mathf.Min(currentTimerPercentage + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
             OnTimerUpdate.Invoke(currentTimerPercentage);
             yield return null;
         }
+
+        possessionRefill.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
 
     private void OnTimerFinished()
@@ -229,6 +260,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
             StopCoroutine(dischargeCoroutine);
             dischargeCoroutine = null;
         }
+
+        possessionOut.start();
     }
     #endregion
 

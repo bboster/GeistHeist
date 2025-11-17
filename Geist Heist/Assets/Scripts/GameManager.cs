@@ -34,6 +34,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject PauseMenuPrefab;
+    [SerializeField, Required] GameObject GeneralHUDPrefab;
 
     [Header("Other Constants")]
     [SerializeField, Required] GameObject EventSystemPrefab; // for detecting UI input events (unity thing, not us).
@@ -128,6 +129,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
 
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
+        Instantiate(GeneralHUDPrefab);
 
         if (GameObject.FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
             Instantiate(EventSystemPrefab);
