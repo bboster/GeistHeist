@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8501832552835297838}
   - component: {fileID: 361628737643626503}
   - component: {fileID: 3730158199903042911}
+  - component: {fileID: 3867680252188939617}
   m_Layer: 0
   m_Name: StationaryGuard
   m_TagString: Untagged
@@ -235,6 +236,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &3867680252188939617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121252902873117158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfc40b9b93513c04cb7c2f849916d456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardDebugger
 --- !u!1 &735619524292305938
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,9 +719,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisionStimulus
   stimulusType: 0
-  priority: 2
+  priority: 9
   stateToChangeTo: 4
-  showProgrammingValues: 1
   behaviorIndex: 1
   recoveryBehaviorIndex: 0
   visionBreakTimer: 0.2
