@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation: 10/2/2025
- * Last Edited: 10/2/25
+ * Last Edited: 11/15/2025
  * Summary: Tether possessable. Progresses player to next level
  * 
  * TODO: An animation for when tether is collected, i suppose
@@ -19,7 +19,7 @@ using UnityEngine.SceneManagement;
 public class TetherPossessable : IInputHandler
 {
     [SerializeField] private GameObject CollectionParticlePrefab;
-    [SerializeField,Required] private GameObject thirdPersoncinemachineCamera;
+    [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [Tooltip("Loads this scene")]
     [SerializeField, Scene] private string HubScene = "Lobby";
 
@@ -27,7 +27,8 @@ public class TetherPossessable : IInputHandler
 
     private void Start()
     {
-        thirdPersoncinemachineCamera.SetActive(false);
+        if(thirdPersoncinemachineCamera != null)
+            thirdPersoncinemachineCamera.SetActive(false);
     }
 
     public override void OnPossessionStart()
@@ -40,6 +41,11 @@ public class TetherPossessable : IInputHandler
         // Not sure if this code will ever get reached (hopefully not), but im keeping it to be safe
         Debug.Log("Canceling victory");
         StopCoroutine(victoryAnimation);
+    }
+
+
+    public override void WhilePossessingUpdate()
+    {
     }
 
     //TODO: replace this with something else
@@ -60,16 +66,15 @@ public class TetherPossessable : IInputHandler
     {
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
     }
 
-    public override void WhileActionNotHeld()
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        throw new NotImplementedException();
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
     }
 
@@ -80,10 +85,10 @@ public class TetherPossessable : IInputHandler
     {
     }
 
-    public override void WhileInteractHeld()
+    public override void WhileInteractHeld(float secondsHeld)
     { }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractCanceled(float secondsHeld)
     {
     }
     #endregion
@@ -93,14 +98,15 @@ public class TetherPossessable : IInputHandler
     {
 
     }
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
     }
 
     public override void WhileMoveNotHeld()
     {
     }
-    public override void OnMoveCanceled() { }
+    public override void OnMoveCanceled(float secondsHeld) { }
+
 
     #endregion
 }

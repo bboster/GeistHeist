@@ -9,7 +9,6 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class SoundStimulus : Stimulus
 {
     private GuardController contactedGuard;
@@ -23,9 +22,9 @@ public class SoundStimulus : Stimulus
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent<GuardController>(out GuardController controller))
+        if(other.gameObject.TryGetComponent(out GuardController guard))
         {
-            contactedGuard = controller;
+            contactedGuard = guard;
             TriggerStimulus();
         }
     }

@@ -1,17 +1,21 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/7/25
+ * Last Modified: 10/27/25
  * 
  * Brief Description: Handles third person movement and interaction. 
  * This script should only be used for the ghost
  */
 
+using GuardUtilities;
+using NaughtyAttributes;
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using NaughtyAttributes;
-using GuardUtilities;
+using UnityEngine.UI;
 //using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
 
 public class ThirdPersonInputHandler : IInputHandler
@@ -24,46 +28,62 @@ public class ThirdPersonInputHandler : IInputHandler
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
 
-    [Header("Sphere Cast Variables")]
-    [SerializeField] private GameObject thirdPersonCinemachineCamera;
-    [SerializeField] private float sphereCastRadius = 10;
-    [SerializeField] private float sphereCastDistance = 1000;
-    private LayerMask layerToInclude;
+    [Tooltip("Approximate degrees per second")]
+    [Foldout ("Animation Settings"), SerializeField] private float rotationSpeed = 60f;
+    [Tooltip("How much up/down player goes. value of 0.1 will go -0.1 to +0.1. total height of 0.2")]
+    [Foldout ("Animation Settings"), SerializeField] private float hoverHeight = 0.2f;
+    [Foldout ("Animation Settings"), SerializeField] private float hoverSpeed = 0.75f;
 
     [Header("Interaction")]
     // Scene transition specific variables
+    [SerializeField, Foldout("Interaction")] private GameObject thirdPersonCinemachineCamera;
+    [SerializeField, Foldout("Interaction")] private float interactSphereCastRadius = 3;
     [Tooltip("Higher number: longer interactable distance from object")]
-    [SerializeField] private float interactableRayLength = 10;
-    private GameObject interactableCanvas => GameManager.Instance.InteractionCanvas;
-    private GameObject lastObjectLookedAt;
+    [SerializeField, Foldout("Interaction")] private float interactRayLength = 5;
+    [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
 
-    [Header("Between Possession Cooldown Variables")]
-    [SerializeField] private Canvas cooldownCanvas => CooldownManager.Instance?.CooldownCanvas.GetComponent<Canvas>();
+    [Header("Components")]
+    [SerializeField, Required] private MeshRenderer playerModel;
+
+    [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
     private Rigidbody rigidbody;
 
     public static Action<GuardStates> OnPossessObject;
 
+    private GameObject lastObjectLookedAt;
+    private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
+    private float frameCountSinceLastInteraction;
+    private Vector3 positionLastFrame;
+    private float modelStartYPosition;
+    private Quaternion targetRotation;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
+        targetRotation = transform.rotation;
+        positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
-        layerToInclude = LayerMask.GetMask("Interactable");
-        CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
+        modelStartYPosition = playerModel.transform.position.y;
+
+        //layerToInclude = LayerMask.GetMask("Interactable");
+        //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
     }
 
     // WhilePossessingUpdate is called once per frame
-    void Update()
+    public override void WhilePossessingUpdate()
     {
-        TurnOnInteractableCanvas();
+        TryTurnOnInteractablePrompt();
+
+        RotatePlayer();
+        HoverBob();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
     public override void OnPossessionStart()
     {
-        CooldownManager.Instance.StartCooldown();
-        TurnOnCooldownCanvas();
+        //CooldownManager.Instance.StartCooldown();
+        //TurnOnCooldownCanvas();
     }
 
     // for the player / ghost: this means EXITING ghost mode
@@ -76,69 +96,179 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
-    public override void WhileActionHeld()
+    public override void WhileActionHeld(float secondsHeld)
     {
     }
 
-    public override void WhileActionNotHeld()
+    public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        //throw new NotImplementedException();
     }
 
-    public override void OnActionCanceled()
+    public override void OnActionCanceled(float secondsHeld)
     {
     }
 
     #endregion
 
-    #region Possess
-    public override void OnInteractStarted()
-    {
-        
-        var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, sphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
+    #region Interact
 
+    private List<RaycastHit> GetAllInteractablesSphereCast()
+    {
+        var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, interactSphereCastRadius, sphereCastDirection, interactRayLength, layerToInclude);
+
+        if (sphereCastResults.IsNullOrEmpty())
+            return null;
+
+        List<RaycastHit> filteredResults = new();
+
+        // Filter all gameobjects
         foreach (var result in sphereCastResults)
         {
-            if (result.transform.TryGetComponent(out IInteractable interactable) && result.transform != this.transform)
+            PossessableObject possessableObject;
+            IInteractable interactable;
+
+            // if object can even be interacted with
+            if (result.transform.TryGetComponent(out possessableObject) == false
+                && result.transform.TryGetComponent(out interactable) == false)
             {
-                if (result.transform.TryGetComponent(out PossessableObject possessableObject) && CooldownManager.Instance.IsCooldownActive)
-                {
-                    return;
-                }
-
-                interactable.Interact(/*result.transform.GetComponent<PossessableObject>()*/);
-                OnPossessObject?.Invoke(GuardStates.returnToPath);
-
-                //Hide button prompt and outline
-                OnInteractableCanvasMissed();
-                break;
+                continue;
             }
+
+            // change this when every interactable has its own cooldown
+            //if (CooldownManager.Instance.IsCooldownActive)
+            //    continue;
+
+            if (result.transform.gameObject == this.gameObject)
+                continue;
+
+            // Test if there is a wall between player and the object
+            Vector3 playerPos = gameObject.transform.position;
+            Vector3 interactPos = result.transform.position;
+            Vector3 direction = (interactPos - playerPos).normalized;
+            float distance = Vector3.Distance(playerPos, interactPos);
+
+            //raycast is sent from the player 
+            bool ray = Physics.Raycast(playerPos, direction, out RaycastHit hit, distance, layerToInclude);
+            if (drawInteractRay) Debug.DrawLine(playerPos, interactPos,
+                                ray && hit.transform.gameObject != result.transform.gameObject ? Color.red : Color.green);
+            if (ray && hit.transform.gameObject != result.transform.gameObject)
+            {
+                Debug.Log("Raycast hit a wall");
+                continue;
+            }
+
+            filteredResults.Add(result);
         }
+
+        if (filteredResults.IsNullOrEmpty()) return null;
+
+        return filteredResults;
     }
 
-    public override void WhileInteractHeld()
+    private GameObject GetBestInteractableSphereCast()
     {
+        // Filter interactables in spherecast
+        var filteredSphereCastResults = GetAllInteractablesSphereCast();
+
+        if(filteredSphereCastResults.IsNullOrEmpty()) return null;
+
+        // Sort by which one the player is looking at most. 
+        return filteredSphereCastResults
+            .Where(r => r.transform.gameObject != this.transform.gameObject)
+            .OrderBy(r => 
+                // Ref: dot product returns value -1 to 1. -1 for completely opposite directions and 1 for perfectly perpendicular.
+                Vector3.Dot(
+                    thirdPersonCinemachineCamera.transform.forward, 
+                    r.transform.position - gameObject.transform.position
+                ))
+           .Last()
+           .transform.gameObject;
     }
 
-    public override void OnInteractCanceled()
+    public override void OnInteractStarted()
     {
-    }
+        if (Time.frameCount - frameCountSinceLastInteraction <= 3)
+            return;
 
-    private void OnCooldownFinished()
-    {
-        if(cooldownCanvas != null)
+        var result = GetBestInteractableSphereCast();
+        if (result == null) return;
+
+        frameCountSinceLastInteraction = Time.time;
+
+        var allInteractables = result.GetComponentsInChildren<IInteractable>();
+
+        foreach(var interactable in allInteractables)
         {
-            cooldownCanvas.gameObject.SetActive(false);
+            if (interactable == null)
+                continue;
+
+            interactable.Interact();
+            
+            if(interactable is PossessableObject)
+                OnPossessObject?.Invoke(GuardStates.returnToPath);
+        }
+        LookAtInteractableStop(lastObjectLookedAt);
+        lastObjectLookedAt = null;
+    }
+
+    /// <summary>
+    /// performs spherecast looking for interactable. Same spherecast as interact button.
+    /// Opens button prompts if possible (through Hide/DisplayInteractUI functions on IInteractable)
+    /// </summary>
+    private void TryTurnOnInteractablePrompt()
+    {
+        var result = GetBestInteractableSphereCast();
+
+        // if looking at something different than last frame
+        if (lastObjectLookedAt != result)
+        {
+            if (lastObjectLookedAt != null)
+                LookAtInteractableStop(lastObjectLookedAt);
+
+            if (result != null)
+                LookAtInteractableStart(result);
+        }
+        lastObjectLookedAt = result;
+    }
+
+    private void LookAtInteractableStart(GameObject obj)
+    {
+        if(obj == null) return;
+
+        if (obj.TryGetComponent<Outline>(out Outline outline))
+            outline.enabled = true;
+
+        var allInteractables = obj.GetComponentsInChildren<IInteractable>();
+        foreach (var interactable in allInteractables)
+        {
+            interactable.DisplayInteractUI();
         }
     }
 
-    private void TurnOnCooldownCanvas()
+    // These two could have been 1 function with a boolean parameter but I like the intuitivity with the names.
+    // They can be condensed tho :P idc that much
+    private void LookAtInteractableStop(GameObject obj)
     {
-        if (CooldownManager.Instance.IsCooldownActive && cooldownCanvas != null)
+        if (obj == null) return;
+
+        if (obj.TryGetComponent<Outline>(out Outline outline))
+            outline.enabled = false;
+
+        var allInteractables = obj.GetComponentsInChildren<IInteractable>();
+        foreach (var interactable in allInteractables)
         {
-            cooldownCanvas.gameObject.SetActive(true);
+            interactable.HideInteractUI();
         }
     }
+
+    public override void WhileInteractHeld(float secondsHeld)
+    {
+    }
+
+    public override void OnInteractCanceled(float secondsHeld)
+    {
+    }
+
     #endregion
 
     #region Move
@@ -146,7 +276,7 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         
     }
-    public override void WhileMoveHeld()
+    public override void WhileMoveHeld(float secondsHeld)
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
@@ -166,70 +296,44 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
 
-    public override void OnMoveCanceled(){}
+    public override void OnMoveCanceled(float secondsHeld) {}
     #endregion
 
-    #region  Interaction
-    public void TurnOnInteractableCanvas()
+    #region Other
+
+    private void RotatePlayer()
     {
-        if (interactableCanvas == null)
-        {
+        if(transform.rotation != targetRotation)
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+        Vector3 diff = (transform.position - positionLastFrame).WithY(0);
+
+        // if not moved significantly enough. Intentionally don't record position last frame
+        //if (Mathf.Approximately(diff.magnitude, 0) || transform.position == positionLastFrame)
+        if (diff.magnitude < 0.1 || transform.position == positionLastFrame)
             return;
-        }
 
-        RaycastHit hit;
-        Vector3 interactableOrigin = transform.position;
-        Vector3 interactableDirection = Camera.main.transform.forward; // moves the raycast with the camera, since the player remains still
+        targetRotation = Quaternion.LookRotation(diff);
 
-        Debug.DrawRay(interactableOrigin, interactableDirection * interactableRayLength, Color.red);
-
-        // TODO: make it a spherecast here.
-        // If you could find a way to generalize this spherecast to be the same as the spherecast in the OnInteractStarted started function that would be huge
-
-        if (Physics.Raycast(interactableOrigin, interactableDirection, out hit, interactableRayLength, layerToInclude))
-        {
-            interactableCanvas.SetActive(true);
-
-            // if switching what youre looking at
-            if(hit.transform.gameObject != lastObjectLookedAt && lastObjectLookedAt != null)
-            {
-                if(lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline)){
-                    outline.enabled = false;
-                }
-            }
-
-            if (hit.transform.TryGetComponent<Outline>(out Outline outline2))
-            {
-                outline2.enabled = true;
-            }
-            lastObjectLookedAt = hit.transform.gameObject;
-        }
-        else
-        {
-           OnInteractableCanvasMissed();
-        }
+        positionLastFrame = transform.position;
     }
 
-    private void OnInteractableCanvasMissed()
+    private void HoverBob() // squarepants
     {
-        interactableCanvas.SetActive(false);
+        float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
-        if (lastObjectLookedAt != null && lastObjectLookedAt.TryGetComponent<Outline>(out Outline outline))
-        {
-            outline.enabled = false;
-        }
-        lastObjectLookedAt = null;
+        playerModel.transform.position = playerModel.transform.position.WithY(height);
     }
 
     #endregion
 
     private void OnDrawGizmos()
     {
-        //var sphereCastResults = Physics.SphereCastAll(thirdPersonCinemachineCamera.transform.position, sphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
+        //var filteredSphereCastResults = Physics.SphereCastAll(thirdPersonCinemachineCamera.transform.position, interactSphereCastRadius, thirdPersonCinemachineCamera.transform.forward, sphereCastDistance, layerToInclude);
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(gameObject.transform.position, sphereCastRadius);
-        Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * sphereCastDistance));
-        Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * sphereCastDistance), sphereCastRadius);
+        Gizmos.DrawWireSphere(gameObject.transform.position, interactSphereCastRadius);
+        Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength));
+        Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength), interactSphereCastRadius);
   
     }
 

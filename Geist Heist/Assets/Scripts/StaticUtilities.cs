@@ -10,11 +10,13 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -36,8 +38,16 @@ public static class StaticUtilities
             .normalized;
     }
 
-    #endregion
+    public static void StopAndStartCoroutine(ref Coroutine coroutineInstance, IEnumerator coroutineToPlay)
+    {
+        // If using this code in other projects, replace GuardCoroutineManager with a different singleton
+        if (coroutineInstance != null)
+            GuardCoroutineManager.instance.StopCoroutine(coroutineInstance);
 
+        coroutineInstance = GuardCoroutineManager.instance.StartCoroutine(coroutineToPlay);
+    }
+
+    #endregion
 
     #region Components
 
@@ -182,7 +192,6 @@ public static class StaticUtilities
 
     #endregion
 
-
     #region Transform
 
     /// <summary>
@@ -254,6 +263,90 @@ public static class StaticUtilities
 
     #endregion
 
+    #region Math
+
+    public static float InverseLerpUnclamped(float a, float b, float value)
+    {
+        if (a != b)
+        {
+            return (value - a) / (b - a);
+        }
+
+        return 0f;
+    }
+
+    public static float InverseLerpAngle(float a, float b, float value)
+    {
+        // this is an AWFUL way to do this bro 
+        while (a < 0 || b < 0 || value < 0)
+        {
+            a += 180;
+            b += 180;
+            value += 180;
+        }
+
+        a = Mathf.Repeat(a, 360);
+        b = Mathf.Repeat(b, 360);
+        value = Mathf.Repeat(value, 360);
+
+        //Debug.Log($"a: {Mathf.Round(a)} b: {Mathf.Round(b)} value:{Mathf.Round(value)} t: {Mathf.Round(Mathf.InverseLerp(a, b, value) * 100) / 100}");
+
+        return Mathf.InverseLerp(a, b, value);
+    }
+
+    public static float InverseLerpAngleUnclamped(float a, float b, float value)
+    {
+        // this is an AWFUL way to do this bro 
+        while (a < 0 || b < 0 || value < 0)
+        {
+            a += 180;
+            b += 180;
+            value += 180;
+        }
+
+        a = Mathf.Repeat(a, 360);
+        b = Mathf.Repeat(b, 360);
+        value = Mathf.Repeat(value, 360);
+
+        //Debug.Log($"a: {Mathf.Round(a)} b: {Mathf.Round(b)} value:{Mathf.Round(value)} t: {Mathf.Round(InverseLerpUnclamped(a, b, value) * 100) / 100}");
+
+        return InverseLerpUnclamped(a, b, value);
+    }
+
+    /// <summary>
+    /// Sin clamped between 0 and 1 (instead of -1 and 1)
+    /// </summary>
+    public static float Sin01(float x)
+    {
+        return (MathF.Sin(x) + 1) / 2;
+    }
+
+    /// <summary>
+    /// Sin clamped between a and b (instead of -1 and 1)
+    /// </summary>
+    public static float SinRange(float x, float a, float b)
+    {
+        return Mathf.Lerp(a, b, Sin01(x));
+    }
+
+    /// <summary>
+    /// Cos clamped between 0 and 1 (instead of -1 and 1)
+    /// </summary>
+    public static float Cos01(float x)
+    {
+        return (MathF.Cos(x) + 1) / 2;
+    }
+
+    /// <summary>
+    /// Cos clamped between a and b (instead of -1 and 1)
+    /// </summary>
+    public static float CosRange(float x, float a, float b)
+    {
+        return Mathf.Lerp(a, b, Cos01(x));
+    }
+
+    #endregion
+
     #region Lists
 
     /// <summary>
@@ -310,6 +403,13 @@ public static class StaticUtilities
             result[i] = list.ElementAt(i);
         }
         return result;
+    }
+
+    public static bool IsNullOrEmpty<T>(this ICollection<T> array)
+    {
+        if (array == null) return true;
+        if (array.Count == 0) return true;
+        return false;
     }
 
     #endregion

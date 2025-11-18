@@ -1,37 +1,122 @@
+
+
 /*
- * Contributors: Toby, Sky
+ * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/10/25
+ * Last Modified: 11/12/2025
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
  *  
- *  TODO:
+ *  TODO: 
  */
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine.Events;
 using NaughtyAttributes;
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using FMOD.Studio;
+using FMODUnity;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
-    [HideInInspector] private IInputHandler inputHandler;
-    [Required] public CinemachineCamera CinemachineCamera;
-    [Header("Timer Variables")]
-    [SerializeField] private bool hasTimer;
-    [SerializeField, ShowIf(nameof(hasTimer))] private float timerTime = 5f;
-    private float currentTimerTime;
-    [SerializeField] private Slider timerSlider => GameManager.Instance.TimerSlider;
-    private Coroutine timerCoroutine;
+    [Header("Camera Settings")]
+    [Tooltip("If true, camera will be overridden with the CinemachineCamera on this object")]
+    [HideIf(nameof(isGhost))] public bool HasCustomCameraBehavior;
+    [Required, ShowIf(nameof(showCinemachineCamera))] public CinemachineCamera CinemachineCamera;
+    [Required, HideIf(nameof(HasCustomCameraBehavior))] public Transform cameraAnchor;
 
-    [HideInInspector] public bool CanUnPossess = true;
-    private Coroutine unpossessCoroutine=null;
+    [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
+    [HideIf(nameof(isGhost))] public List<Transform> ghostExitPoints;
+
+    [Header("Timer Variables")]
+    [SerializeField, HideIf(nameof(isGhost))] private bool hasTimer;
+    [SerializeField, HideIf(nameof(isGhost))] public float maxChargePercentage = 100;
+    [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
+    [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerRechargePercentage = 10;
+    [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
+    [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerDischargePercentage = 10;
 
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
-    public Transform ghostSpawnPoint;
+    [HideIf(nameof(isGhost))] public Transform ghostSpawnPoint;
+
+    [Header("Materials")]
+    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] private Material PossessedMaterial;
+    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] private Material UnpossessedMaterial;
+
+    [Header("Other")]
+    [SerializeField] private bool isGhost = false;
+
+    [HideInInspector] public bool CanUnPossess = true;
+    public IInputHandler InputHandler => GetInputHandler();
+    private IInputHandler inputHandler;
+
+    private Coroutine dischargeCoroutine = null;
+    private Coroutine rechargeCoroutine;
+    private Coroutine unpossessCoroutine=null;
+
+    private MeshRenderer meshRenderer;
+
+    [ReadOnly] private float currentTimerPercentage;
+    [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
+
+    private EventInstance possessionEnter;
+
+    private EventInstance possessionLow;
+    private EventInstance possessionOut;
+    private EventInstance possessionRefill;
+
+    #region Guard Detection Variables
+
+    [ReadOnly] public bool IsMoving = false;
+
+    public static Action OnActionPerformed;
+    public static Action OnObjectLeft;
+
+    #endregion
+
+    #region Inspector Debug
+
+    private bool showCinemachineCamera => isGhost || HasCustomCameraBehavior;
+    private bool hasTimerAndIsNotGhost => isGhost == false && hasTimer;
+
+    #endregion
+
+    void Start()
+    {
+        currentTimerPercentage = maxChargePercentage;
+
+        if (ghostExitPoints.Count == 0)
+        {
+            Debug.Log("No exit points set for " + this);
+        }
+
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
+
+        if (UnpossessedMaterial != null)
+            meshRenderer.material = UnpossessedMaterial;
+        else
+            Debug.LogWarning("No unpossession material for " + gameObject.name);
+
+        if(possessableCanvas == null)
+            possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
+
+        if (possessableCanvas != null)
+        {
+            possessableCanvasGroup = possessableCanvas.gameObject.GetOrAddComponent<CanvasGroup>();
+            possessableCanvasGroup.alpha = 0;
+            possessableCanvas.gameObject.SetActive(false);
+        }
+
+        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+
+        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
+        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
+        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
+    }
 
     public IInputHandler GetInputHandler()
     {
@@ -49,23 +134,31 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionStart()
     {
+        possessionEnter.start();
+
+        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
+
+        gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
 
+        if(PossessedMaterial != null)
+            meshRenderer.material = PossessedMaterial;
+        else
+            Debug.LogWarning("No possession material for "+gameObject.name);
 
         if (unpossessCoroutine == null)
             unpossessCoroutine = StartCoroutine(WaitForUnpossess());
 
         if (hasTimer)
         {
-            timerSlider?.gameObject.SetActive(true);
+            if(rechargeCoroutine != null)
+            {
+                StopCoroutine(rechargeCoroutine);
+                rechargeCoroutine = null;
+            }
 
-            currentTimerTime = timerTime;
-            if(timerCoroutine == null)
-                timerCoroutine = StartCoroutine(TimerCountdown());
-        }
-        else
-        {
-            timerSlider?.gameObject.SetActive(false);
+            if(dischargeCoroutine == null)
+                dischargeCoroutine = StartCoroutine(StartDischarge());
         }
     }
 
@@ -74,23 +167,34 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
+        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
+
         if (!CanUnPossess)
         {
             Debug.LogError("Trying to unpossess early");
             return;
         }
 
+        if (PossessedMaterial != null)
+            meshRenderer.material = UnpossessedMaterial;
+        else
+            Debug.LogWarning("No unpossession material for " + gameObject.name);
+
         InputHandler.OnPossessionEnded();
+        OnObjectLeft?.Invoke();
 
-        if (timerCoroutine != null)
+        if (hasTimer)
         {
-            StopCoroutine(timerCoroutine);
-            timerCoroutine = null;
-        }
+            if (dischargeCoroutine != null)
+            {
+                StopCoroutine(dischargeCoroutine);
+                dischargeCoroutine = null;
+            }
 
-        if (timerSlider != null)
-        {
-            ResetTimer();
+            if(rechargeCoroutine == null)
+            {
+                rechargeCoroutine = StartCoroutine(StartRecharge());
+            }
         }
     }
 
@@ -114,48 +218,87 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     #region Timer
     
-    private IEnumerator TimerCountdown()
+    private IEnumerator StartDischarge()
     {
         if (!hasTimer)
             yield break;
 
-        currentTimerTime = timerTime;
-
-        while(currentTimerTime > 0)
+        while(currentTimerPercentage > 0)
         {
-            currentTimerTime -= Time.deltaTime;
-            UpdateSlider();
+            currentTimerPercentage = Mathf.Max(currentTimerPercentage - (timerDischargePercentage * Time.deltaTime), 0);
+            OnTimerUpdate.Invoke(currentTimerPercentage);
             yield return null;
         }
 
         OnTimerFinished();
     }
 
-    private void UpdateSlider()
+    private IEnumerator StartRecharge()
     {
-        if (timerSlider != null)
+        if (!hasTimer)
+            yield break;
+
+        while(currentTimerPercentage < maxChargePercentage)
         {
-            timerSlider.value = currentTimerTime / timerTime;
+            possessionRefill.start();
+
+            currentTimerPercentage = Mathf.Min(currentTimerPercentage + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
+            OnTimerUpdate.Invoke(currentTimerPercentage);
+            yield return null;
         }
+
+        possessionRefill.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
 
     private void OnTimerFinished()
     {
         PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
 
-        if (timerCoroutine != null)
+        if (dischargeCoroutine != null)
         {
-            StopCoroutine(timerCoroutine);
-            timerCoroutine = null;
+            OnTimerUpdate.Invoke(currentTimerPercentage);
+            StopCoroutine(dischargeCoroutine);
+            dischargeCoroutine = null;
         }
 
-        ResetTimer();
+        possessionOut.start();
+    }
+    #endregion
+
+    #region Canvas
+
+    [Header("Canvas settings")]
+    [SerializeField] private Canvas possessableCanvas;
+    [SerializeField] private float showSeconds = 1;
+    [SerializeField] private float hideSeconds = 0.3f;
+
+    private CanvasGroup possessableCanvasGroup;
+    private Coroutine fadeOpacityCoroutine;
+
+    private IEnumerator ShowAndEnableCanvas()
+    {
+        if (possessableCanvas == null)
+            yield break;
+
+        possessableCanvas.gameObject.SetActive(true);
+        while(possessableCanvasGroup.alpha < 1)
+        {
+            possessableCanvasGroup.alpha += Time.deltaTime / showSeconds;
+            yield return null;
+        }
     }
 
-    private void ResetTimer()
+    private IEnumerator HideAndDisableCanvas()
     {
-        currentTimerTime = timerTime;
-        timerSlider.gameObject.SetActive(false);
+        if (possessableCanvas == null)
+            yield break;
+
+        while (possessableCanvasGroup.alpha > 0)
+        {
+            possessableCanvasGroup.alpha -= Time.deltaTime / hideSeconds;
+            yield return null;
+        }
+        possessableCanvas.gameObject.SetActive(false);
     }
 
     #endregion

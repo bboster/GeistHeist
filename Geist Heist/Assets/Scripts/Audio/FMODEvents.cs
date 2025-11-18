@@ -1,18 +1,35 @@
+
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
 using System.Collections.Generic;
 
-//[CreateAssetMenu(fileName = "New Sound Event Bank", menuName = "Database/Create New Sound Event Bank"), System.Serializable]
 public class FMODEvents : MonoBehaviour
 {
-    //One list of events for each Bank in FMOD Studio
-    //This is to choose the only the necessary banks in a scene to help with loading, not all sound effects need to be loaded on the main menu
-    public List<SoundEvent> BGMBank;
-    public List<SoundEvent> EnemyBank;
-    public List<SoundEvent> EnvironmentBank;
-    public List<SoundEvent> InterfaceBank;
-    public List<SoundEvent> PlayerBank;
+    [field: Header("BGM")]
+    [field: SerializeField] public EventReference LevelBGM { get; private set; }
+    [field: SerializeField] public EventReference GlobeBGM { get; private set; }
+    [field: SerializeField] public EventReference HubBGM { get; private set; }
+    [field: SerializeField] public EventReference MenuBGM { get; private set; }
+
+
+    [field: Header("Enemy SFX")]
+    [field: SerializeField] public EventReference GuardReactions { get; private set; }
+    [field: SerializeField] public EventReference GuardRun { get; private set; }
+    [field: SerializeField] public EventReference GuardWalk { get; private set; }
+    [field: SerializeField] public EventReference PlayerSpotted { get; private set; }
+
+    [field: Header("Environment SFX")]
+
+    [field: Header("Interface SFX")]
+    [field: SerializeField] public EventReference PossessionLow { get; private set; }
+    [field: SerializeField] public EventReference PossessionOut { get; private set; }
+    [field: SerializeField] public EventReference PossessionRefill { get; private set; }
+
+    [field: Header("Interface SFX")]
+    [field: SerializeField] public EventReference PossessionEnter { get; private set; }
+    [field: SerializeField] public EventReference PossessionExit { get; private set; }
+
 
     public static FMODEvents instance { get; private set; }
 
@@ -24,4 +41,5 @@ public class FMODEvents : MonoBehaviour
         }
         instance = this;
     }
+
 }

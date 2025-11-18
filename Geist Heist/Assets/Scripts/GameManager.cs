@@ -1,7 +1,7 @@
 /*
- * Contributors:  Josh, Toby
+ * Contributors:  Josh, Toby, Jacob
  * Creation Date: 10/1/25
- * Last Modified: 10/9/25
+ * Last Modified: 11/3/25
  * 
  * Brief Description: Instantiates managers scripts that are required for scene to function.
  * Keeps track of game state, such as level.
@@ -12,6 +12,9 @@ using NaughtyAttributes;
 using Unity.Cinemachine;
 using UnityEngine.UI;
 using System;
+using System.Threading.Tasks;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.Events;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -19,6 +22,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Managers")]
     [SerializeField, Required] GameObject InputManagerPrefab;
+    [SerializeField, Required] GameObject PlayerManagerPrefab;
     //[SerializeField, Required] GameObject CoolDownManagerPrefab; TODO: waiting until sky finishes refactoring it
     [SerializeField, Required] GameObject SaveDataManagerPrefab;
     [SerializeField, Required] GameObject GuardCoroutineManagerPrefab;
@@ -26,21 +30,25 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject ShaderManagerPrefab;
     [SerializeField, Required] GameObject GuardManagerPrefab;
     [SerializeField, Required] GameObject BillboardUIManagerPrefab;
+    [SerializeField, Required] GameObject LevelManagerPrefab;
+    [SerializeField, Required] GameObject DailougeManagerPrefab;
 
     [Header("Canvases")]
-    [SerializeField, Required] GameObject CooldownManagerPrefab;
-    [SerializeField, Required] GameObject InteractionCanvasPrefab;
-    [SerializeField, Required] GameObject TimerCanvasPrefab;
     [SerializeField, Required] GameObject PauseMenuPrefab;
+    [SerializeField, Required] GameObject GeneralHUDPrefab;
 
     [Header("Other Constants")]
+    [SerializeField, Required] GameObject EventSystemPrefab; // for detecting UI input events (unity thing, not us).
     [SerializeField, Required] GameObject CameraPrefab;
 
-    [HideInInspector] public GameObject InteractionCanvas;
-    [HideInInspector] public Slider TimerSlider;
+    [Header("Player Variables")]
+    [SerializeField, Required] GameObject PlayerPrefab;
+    [Required] public Transform PlayerStart;
 
-    [Header("Debug")]
-    [ReadOnly] public bool IsPaused = false;
+    public bool IsPaused { get; private set; } = false;
+    public UnityEvent OnPauseChanged = new();
+
+    public GameObject Player;
 
     public static Action OnInitialize;
 
@@ -48,29 +56,20 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
 
+        if (this == null)
+            return;
+
         // this can be destroyed bc it is a singleton
         if (this == null || gameObject == null) 
             return;
 
+        SettingsProfile.ReadSavedSettings();
+
         // All of these should be singletons, which destroy themselves if they already exist, 
         // so its okay if we dont check if this doesnt exist first
+        InstantiateManagers();
 
-        Instantiate(InputManagerPrefab);
-        Instantiate(SaveDataManagerPrefab);
-        Instantiate(GuardCoroutineManagerPrefab);
-        Instantiate(BehaviourDatabasePrefab);
-        Instantiate(ShaderManagerPrefab);
-        Instantiate(CooldownManagerPrefab);
-
-        Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
-        Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
-
-        var timerCanvas = Instantiate(TimerCanvasPrefab);
-        TimerSlider = timerCanvas.GetComponentInChildren<Slider>();
-        TimerSlider.gameObject.SetActive(false);
-
-        InteractionCanvas = Instantiate(InteractionCanvasPrefab);
-        Instantiate(PauseMenuPrefab);
+        SpawnPlayer();
 
         // I saw a designer not understand why the camera wasnt working (they didnt have a cinemachine brain / the right settings on it).
         // So this should kinda streamline things.
@@ -88,6 +87,7 @@ public class GameManager : Singleton<GameManager>
     /*[SerializeField] private GameObject blockingWall;
     public static int currentLevel = 0;*/
 
+    #region Level Progression
     public void NextLevel(string sceneName)
     {
         //currentLevel++;
@@ -95,32 +95,86 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("Advancing to level: " + sceneName);
     }
 
-    /*public void LoadCurrentLevel()
+    public void NextLevel(int sceneNum)
     {
-        Debug.Log("Loading level: " + currentLevel);
-        if (currentLevel >= 1)
-        { 
-            if (SceneManager.GetActiveScene().name == "Lobby")
-            {
-                    RemoveBlockingWall();
-            }
-            else
-                Debug.LogWarning("No more levels to load or invalid level index.");
-        }
-    }*/
+        //currentLevel++;
+        SceneManager.LoadScene(sceneNum);
+        Debug.Log("Advancing to level: " + sceneNum);
+    }
 
-    // This functionality already exists in HubLevelGate.cs
-    /*private void RemoveBlockingWall()
+    /// <summary>
+    /// Spawns the player into the level
+    /// </summary>
+    /// <returns></returns>
+    public Task SpawnPlayer()
     {
-        if (blockingWall != null)
-        {
-            blockingWall.SetActive(false);
-            Debug.Log("Lobby blocking wall removed.");
-        }
-        else
-        {
-            Debug.LogWarning($"Lobby blocking wall '{blockingWall}' not found.");
-        }
-    }*/
+        /*Player = Instantiate(PlayerPrefab, LevelManager.Instance.SpawnLocation, Quaternion.identity);*/
+        //PlayerManager.Instance.InitializePlayerManager();
 
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Resets the level on player death
+    /// </summary>
+    public void DeathReset()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    #endregion
+
+    #region Initialization
+
+    /// <summary>
+    /// Instantiates all managers the game depends on
+    /// </summary>
+    /// <returns></returns>
+    public Task InstantiateManagers()
+    {
+        Instantiate(InputManagerPrefab);
+        Instantiate(PlayerManagerPrefab);
+        Instantiate(SaveDataManagerPrefab);
+        Instantiate(GuardCoroutineManagerPrefab);
+        Instantiate(BehaviourDatabasePrefab);
+        Instantiate(ShaderManagerPrefab);
+        Instantiate(LevelManagerPrefab);
+        Instantiate(DailougeManagerPrefab);
+
+        Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
+        Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
+
+        Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
+        Instantiate(GeneralHUDPrefab);
+
+        if (GameObject.FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
+            Instantiate(EventSystemPrefab);
+
+        return Task.CompletedTask;
+    }
+
+    #endregion
+
+    #region Game Manipulation
+
+    public void PauseGame()
+    {
+        IsPaused = true;
+        Time.timeScale = 0;
+        OnPauseChanged.Invoke();
+    }
+
+    public void UnpauseGame()
+    {
+        IsPaused = false;
+        Time.timeScale = 1;
+        OnPauseChanged.Invoke();
+    }
+
+    public void TogglePause()
+    {
+        if (IsPaused) UnpauseGame();
+        else PauseGame();
+    }
+    #endregion
 }

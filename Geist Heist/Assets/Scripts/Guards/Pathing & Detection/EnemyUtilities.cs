@@ -12,8 +12,8 @@ using UnityEngine.Rendering.UI;
 
 namespace GuardUtilities
 {
-    public enum Priority { low, medium, high, highest }
-    public enum GuardStates { none, patrol, chase, attack, surprised, search, visionBreak, returnToPath, concussed }
+    public enum Priority { low, medium, high, highest, stunned }
+    public enum GuardStates { idle, patrol, chase, attack, surprised, search, visionBreak, returnToPath, concussed, possessableSearch, frozen }
 
     public class GuardDebug
     {
