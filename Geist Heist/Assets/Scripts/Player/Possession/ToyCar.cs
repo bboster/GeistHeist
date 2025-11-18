@@ -13,8 +13,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PossessableObject))]
 public class ToyCar : IInputHandler
 {
-    [SerializeField] private GameObject thirdPersoncinemachineCamera;
-
     [Header("Design Variables")]
     [Tooltip("Strength that a tap would do- the LEAST the car can move forward when interacting.")]
     [SerializeField] private float minStrength;
@@ -50,7 +48,6 @@ public class ToyCar : IInputHandler
 
     private void Start()
     {
-        thirdPersoncinemachineCamera.SetActive(false);
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();
 
@@ -176,7 +173,7 @@ public class ToyCar : IInputHandler
     /// </summary>
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess) 
+        if (possessableObject.CanUnPossess) 
         {
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;

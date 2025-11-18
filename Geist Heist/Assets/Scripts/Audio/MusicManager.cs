@@ -13,10 +13,10 @@ public class MusicManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        menuBGM = AudioManager.instance.CreateEventInstance(FMODEvents.instance.MenuBGM);
-        globeBGM = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GlobeBGM);
-        hubBGM = AudioManager.instance.CreateEventInstance(FMODEvents.instance.HubBGM);
-        levelBGM = AudioManager.instance.CreateEventInstance(FMODEvents.instance.LevelBGM);
+        menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.MenuBGM);
+        globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GlobeBGM);
+        hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.HubBGM);
+        levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.LevelBGM);
 
         StopAll();
         if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Main Menu")))
