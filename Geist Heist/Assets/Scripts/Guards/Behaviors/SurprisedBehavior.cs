@@ -41,7 +41,7 @@ public class SurprisedBehavior : Behavior
     /// <returns></returns>
     public override IEnumerator BehaviorLoop()
     {
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.GuardReactions);
+        AudioManager.Instance.PlayOneShot(FMODEvents.instance.GuardReactions);
 
 
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
@@ -51,7 +51,7 @@ public class SurprisedBehavior : Behavior
         thisAgent.isStopped = false;
         selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.chase);
 
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.PlayerSpotted);
+        AudioManager.Instance.PlayOneShot(FMODEvents.instance.PlayerSpotted);
 
     }
 }

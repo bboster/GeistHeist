@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 10/29/25
+ * Last Modified: 11/17/25
  * 
  * Brief Description: dont put this script on the player.
  * handles possession and such.
@@ -24,8 +24,9 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private InputEvents inputEvents => InputEvents.Instance;
     private Camera camera;
-    private CinemachineCamera mainCinemachineCamera;
+    [HideInInspector] public CinemachineCamera mainCinemachineCamera;
     private PlayerCameraController mainPlayerCameraController;
+    private CinemachineCamera currentCamera; // may be mainCinemachineCamera sometimes
 
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
@@ -36,10 +37,14 @@ public class PlayerManager : Singleton<PlayerManager>
 
         CurrentObject = PlayerGhostObject;
         RegisterInputs(PlayerGhostObject);
+
         camera = Camera.main;
         mainCinemachineCamera = PlayerGhostObject.CinemachineCamera;
         PlayerGhostObject.CinemachineCamera.transform.SetParent(null);
         mainPlayerCameraController = mainCinemachineCamera.GetComponent<PlayerCameraController>();
+        currentCamera = mainCinemachineCamera;
+        UpdateCamerasInvertLook();
+        UpdateCamerasSensitivity();
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -149,9 +154,9 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             //mainCinemachineCamera.Follow = newObject.cameraAnchor;
             mainPlayerCameraController.SetAnchorPoint(newObject.cameraAnchor);
-            return;
+            currentCamera = mainCinemachineCamera;
         }
-        if (oldObject.HasCustomCameraBehavior || newObject.HasCustomCameraBehavior)
+        else if (oldObject.HasCustomCameraBehavior || newObject.HasCustomCameraBehavior)
         {
             // Get rotation values
             var newOrbitalFollow = newObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
@@ -161,9 +166,11 @@ public class PlayerManager : Singleton<PlayerManager>
 
             newObject.CinemachineCamera.gameObject.SetActive(true);
             oldObject.CinemachineCamera.gameObject.SetActive(false);
-        }
-        
 
+            currentCamera = newObject.CinemachineCamera;
+        }
+        UpdateCameraSensitivity(currentCamera);
+        UpdateCameraInvertLook(currentCamera);
     }
 
     public void RegisterInputs(PossessableObject possessable)
@@ -215,5 +222,67 @@ public class PlayerManager : Singleton<PlayerManager>
             currentInputHandler.WhilePossessingUpdate();
     }
 
+    #region Camera Sensitivity
+
+    // all relevant to settings and settingsmenu.cs
+
+    public void UpdateCamerasSensitivity()
+    {
+        UpdateCameraSensitivity(mainCinemachineCamera);
+        if(currentCamera != mainCinemachineCamera)
+            UpdateCameraSensitivity(currentCamera);
+    }
+
+    private void UpdateCameraSensitivity(CinemachineCamera cam)
+    {
+        var controller = cam.GetComponent<CinemachineInputAxisController>();
+        if(controller == null)
+        {
+            Debug.LogWarning($"{cam.gameObject.name} has not CinemachineInputAxisController. cant update sensitivity");
+            return;
+        }
+       
+        // apply sensitivity to every axis (yes it HAS to be iterated for some reason)
+        foreach (var c in controller.Controllers) 
+        {
+            Debug.Log(c.Name);
+            c.Input.LegacyGain = Mathf.Sign(c.Input.LegacyGain) * SettingsProfile.LookSensitivityTransformed;
+            c.Input.Gain = Mathf.Sign(c.Input.Gain) * SettingsProfile.LookSensitivityTransformed;
+        }
+    }
+
+    public void UpdateCamerasInvertLook()
+    {
+        UpdateCameraInvertLook(mainCinemachineCamera);
+        if (currentCamera != mainCinemachineCamera)
+            UpdateCameraInvertLook(currentCamera);
+    }
+
+    private void UpdateCameraInvertLook(CinemachineCamera cam)
+    {
+        var controller = cam.GetComponent<CinemachineInputAxisController>();
+        if (controller == null)
+        {
+            Debug.LogWarning($"{cam.gameObject.name} has not CinemachineInputAxisController. Can't update inverted look");
+            return;
+        }
+
+        // apply sensitivity to every axis (yes it HAS to be iterated for some reason)
+        foreach (var c in controller.Controllers)
+        {
+            var axisName = c.Name;
+            // horrible and hard-coded but there is not a better way to do this (that I could find)
+            if (axisName == "Look Orbit Y" || axisName == "Mouse Y" || axisName == "Gamepad Right Stick Y") // Adjust axis names as needed
+            {
+                Debug.Log("inverting look for "+c.Name);
+                c.Input.Gain       = (SettingsProfile.InvertLook ? 1 : -1) * SettingsProfile.LookSensitivityTransformed;
+                c.Input.LegacyGain = (SettingsProfile.InvertLook ? -1 : 1) * SettingsProfile.LookSensitivityTransformed;
+            }
+        }
+    }
+
+    // wonder if it would be worth it to make a different script for camera controlling
+
+    #endregion
 
 }

@@ -1,3 +1,10 @@
+/*
+ * Contributors:  Brenden
+ * Creation Date: 10/28/25
+ * Last Modified: 10/28/25
+ * 
+ * Brief Description: Used to start the text box of the dailogue system
+ */
 using System.Collections;
 using UnityEngine;
 
