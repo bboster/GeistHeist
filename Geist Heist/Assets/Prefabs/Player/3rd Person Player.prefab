@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 787425798878491247}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0.5}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -62,6 +62,7 @@ Transform:
   m_Children:
   - {fileID: 4163485625400632306}
   - {fileID: 5377319028356563650}
+  - {fileID: 9198153872864973550}
   m_Father: {fileID: 8762889882606682532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1752873029236376262
@@ -248,10 +249,10 @@ MonoBehaviour:
   speedPickup: 3
   slowDownFactor: 0.1
   stepRayUpperHeight: -0.3
-  stepRayLowerHeight: -0.9
-  stepRayUpperLength: 0.4
-  stepRayLowerLength: 0.7
-  stepSmooth: 20
+  stepRayLowerHeight: -0.8
+  stepRayUpperLength: 0.8
+  stepRayLowerLength: 1.55
+  stepSmooth: 15
   rotationSpeed: 30
   hoverHeight: 0.1
   hoverSpeed: 3
@@ -264,6 +265,7 @@ MonoBehaviour:
   playerModel: {fileID: 8754484748706083896}
   stepRayUpper: {fileID: 787425798878491247}
   stepRayLower: {fileID: 8804012565187145666}
+  stepRayTop: {fileID: 7627108030336543030}
   drawInteractRay: 1
 --- !u!1 &5789115753528163449
 GameObject:
@@ -689,6 +691,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraController
   transitionSeconds: 0.5
+--- !u!1 &7627108030336543030
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9198153872864973550}
+  m_Layer: 0
+  m_Name: StepRayTop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9198153872864973550
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7627108030336543030}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2210782550424938703}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8757810822543875983
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,7 +779,7 @@ Transform:
   m_GameObject: {fileID: 8804012565187145666}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.9, z: 0.5}
+  m_LocalPosition: {x: 0, y: -0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -839,6 +872,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1eff83f8180e53c40a94a7b4c4ba1e77, type: 3}
       propertyPath: m_Name
       value: TEMP_Ollie
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1eff83f8180e53c40a94a7b4c4ba1e77, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -51,6 +51,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField, Required] private MeshRenderer playerModel;
     [SerializeField] private GameObject stepRayUpper;
     [SerializeField] private GameObject stepRayLower;
+    [SerializeField] private GameObject stepRayTop;
 
     [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
@@ -64,6 +65,7 @@ public class ThirdPersonInputHandler : IInputHandler
     private Vector3 positionLastFrame;
     private float modelStartYPosition;
     private Quaternion targetRotation;
+    private bool isStepping = false;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -330,6 +332,10 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void HoverBob() // squarepants
     {
+        if(isStepping)
+        {
+            return;
+        }
         float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
         playerModel.transform.position = playerModel.transform.position.WithY(height);
@@ -337,30 +343,43 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void StepClimb()
     {
-        if (Physics.Raycast(stepRayLower.transform.position, transform.forward, out RaycastHit hitLower, stepRayLowerLength))
+        // Assume there is a wall or something
+        if (Physics.Raycast(stepRayTop.transform.position, transform.forward, 2f)
+            || Physics.Raycast(stepRayTop.transform.position, transform.TransformDirection(1.5f, 0f, 1f), 1.75f)
+            || Physics.Raycast(stepRayTop.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), 1.75f))
         {
-            if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, out RaycastHit hitUpper, stepRayUpperLength))
+            return;
+        }
+
+        // raycast near the players feet/bottom of the rigidbody
+        // straight ahead raycast
+        if (Physics.Raycast(stepRayLower.transform.position, transform.forward, stepRayLowerLength))
+        {
+            // if the upper raycast doesn't hit anything then we can assume this is something the player can step over
+            if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, stepRayUpperLength))
             {
+                isStepping = true;
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
-                playerModel.transform.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
             }
         }
 
+        // diagonal right raycast
         if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayLowerLength))
         {
             if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayUpperLength))
             {
+                isStepping = true;
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
-                playerModel.transform.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
             }
         }
 
+        // diagonal left raycast
         if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayLowerLength))
         {
             if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayUpperLength))
             {
+                isStepping = true;
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
-                playerModel.transform.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
             }
         }
     }
@@ -374,8 +393,9 @@ public class ThirdPersonInputHandler : IInputHandler
         Gizmos.DrawWireSphere(gameObject.transform.position, interactSphereCastRadius);
         Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength));
         Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength), interactSphereCastRadius);
-        Gizmos.DrawLine(stepRayUpper.transform.position, stepRayUpper.transform.position + stepRayUpper.transform.forward * stepRayUpperLength);
-        Gizmos.DrawLine(stepRayLower.transform.position, stepRayLower.transform.position + stepRayLower.transform.forward * stepRayLowerLength);
+        Gizmos.DrawLine(stepRayUpper.transform.position, stepRayUpper.transform.position + stepRayUpper.transform.forward * stepRayUpperLength); // step ray upper
+        Gizmos.DrawLine(stepRayLower.transform.position, stepRayLower.transform.position + stepRayLower.transform.forward * stepRayLowerLength); // step ray lower
+        Gizmos.DrawLine(stepRayTop.transform.position, stepRayTop.transform.position + stepRayTop.transform.forward * 2f); // step ray top
 
     }
 
