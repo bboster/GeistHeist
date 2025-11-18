@@ -12,15 +12,13 @@ using NaughtyAttributes;
 
 public abstract class Stimulus : MonoBehaviour
 {
-
     public enum StimulusType { sight, sound, sightBreak, proximity }
     [Header("Stimulus Values")]
     [Tooltip("The type of sense this is")]
     [SerializeField] protected StimulusType stimulusType;
 
-
     [Tooltip("The priority the stimulus has compared to other stimuli and behaviors")]
-    [SerializeField] protected Priority priority;
+    [SerializeField] protected int priority;
 
     [Tooltip("The state this stimulus should send the guard to")]
     [SerializeField] protected GuardStates stateToChangeTo;
@@ -31,7 +29,7 @@ public abstract class Stimulus : MonoBehaviour
     /// Returns the priority of the stimulus
     /// </summary>
     /// <returns></returns>
-    public Priority GetPriority()
+    public int GetPriority()
     {
         return priority;
     }
