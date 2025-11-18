@@ -41,7 +41,7 @@ public class ChaseBehavior : GuardMovement
     {
         for(; ; )
         {
-            if (CheckPathCompletion() == true)
+            if (CheckPathCompletion() == true) //Consider changing this to be a distance check rather than a path completion check
             {
                 contRef.ChangeBehavior(GuardStates.attack);
             }

@@ -17,17 +17,16 @@ public class ReturnBehavior : GuardMovement
     {
         base.InitializeBehavior(selfRef);
 
-        if(selfRef.GetComponent<GuardController>().DefaultBehavior.StateName == GuardStates.idle)
+        if(contRef.DefaultBehavior.StateName == GuardStates.idle)
         {
-            MoveToPoint(selfRef.GetComponent<GuardController>().ReturnLocation.position);
+            MoveToPoint(contRef.ReturnLocation.position);
             thisAgent.isStopped = false;
         }
         else
         {
-            MoveToPoint(selfRef.GetComponent<GuardController>().Path.GetPoint(0).position);
+            MoveToPoint(contRef.Path.GetPoint(0).position);
             thisAgent.isStopped = false;
         }
-
     }
 
     public override IEnumerator BehaviorLoop()
@@ -37,7 +36,7 @@ public class ReturnBehavior : GuardMovement
             if (CheckPathCompletion() == true)
             {
                 thisAgent.ResetPath();
-                selfRef.GetComponent<GuardController>().ChangeBehavior(selfRef.GetComponent<GuardController>().DefaultBehavior.StateName);
+                contRef.ChangeBehavior(contRef.DefaultBehavior.StateName);
             }
 
             yield return new WaitForEndOfFrame();
