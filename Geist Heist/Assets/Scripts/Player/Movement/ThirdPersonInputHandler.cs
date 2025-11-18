@@ -364,8 +364,9 @@ public class ThirdPersonInputHandler : IInputHandler
             if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, stepRayUpperLength))
             {
                 isStepping = true;
-                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
+                
             }
         }
 
@@ -375,8 +376,9 @@ public class ThirdPersonInputHandler : IInputHandler
             if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayUpperLength))
             {
                 isStepping = true;
-                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
+                
             }
         }
 
@@ -386,8 +388,9 @@ public class ThirdPersonInputHandler : IInputHandler
             if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayUpperLength))
             {
                 isStepping = true;
-                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
+                
             }
         }
     }
