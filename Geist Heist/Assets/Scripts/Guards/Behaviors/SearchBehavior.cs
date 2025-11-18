@@ -24,7 +24,7 @@ public class SearchBehavior : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        SearchLocation = selfRef.GetComponent<GuardController>().SearchLocation;
+        SearchLocation = contRef.SearchLocation;
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;
@@ -45,7 +45,7 @@ public class SearchBehavior : GuardMovement
 
             if (behaviorComplete)
             {
-                selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.returnToPath);
+                contRef.ChangeBehavior(GuardStates.patrol);
             }
 
             yield return new WaitForEndOfFrame();
@@ -59,7 +59,13 @@ public class SearchBehavior : GuardMovement
     private void StartSearch()
     {
         GuardCoroutineManager.instance.StartBehaviorTimer(searchLength, this);
-        selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
+        contRef.GetAnimator().SetTrigger("LookingAround");
+
+        progress = 0;
+
+#if UNITY_EDITOR
+        selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
+#endif
     }
 
     /// <summary>
@@ -70,7 +76,7 @@ public class SearchBehavior : GuardMovement
         base.StopBehavior();
         GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;
-        selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
+        contRef.GetAnimator().SetTrigger("LookingAround");
         SearchLocation = Vector3.zero;
     }
 }
