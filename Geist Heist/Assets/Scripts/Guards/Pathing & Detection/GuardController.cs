@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 10/02/25
+ * Last Edited: 11/15/25
  * Summary: Handles initialization of the enemy and activating/deactivating and switching behaviors.
  */
 
@@ -36,14 +36,14 @@ public class GuardController : MonoBehaviour
 
     private Coroutine activeBehaviorLoop;
 
-    [SerializeField, BoxGroup("Behaviors")] private Priority currentPriority;
+    [SerializeField, BoxGroup("Behaviors")] private int currentPriority;
 
     [Foldout("Programming Values")]
     [SerializeField] private Animator animator;
 
     [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
-    [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted= new();
+    [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted = new();
 
     private EventInstance guardWalkSFX;
     private EventInstance guardRunSFX;
@@ -135,7 +135,6 @@ public class GuardController : MonoBehaviour
 
     #endregion
 
-
     #region Behavior Functions
 
     /// <summary>
@@ -159,7 +158,7 @@ public class GuardController : MonoBehaviour
     /// <param name="newBehavior"></param>
     public void ChangeBehavior(GuardStates state)
     {
-        Debug.Log(state);
+        //Debug.Log(state);
 
         StopBehavior();
         currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
@@ -171,7 +170,7 @@ public class GuardController : MonoBehaviour
     /// </summary>
     /// <param name="state"></param>
     /// <param name="priority"></param>
-    public void ChangeBehaviorConditional(GuardStates state, Priority priority)
+    public void ChangeBehaviorConditional(GuardStates state, int priority)
     {
         if(priority > currentPriority)
         {
@@ -189,7 +188,9 @@ public class GuardController : MonoBehaviour
         if (currentBehavior.StateName == GuardStates.returnToPath)
             return;
 
-        ChangeBehavior(GuardStates.visionBreak);
+        Behavior b = Singleton<BehaviorDatabase>.Instance.GetBehavior(GuardStates.visionBreak);
+
+        ChangeBehaviorConditional(GuardStates.visionBreak, b.Priority);
     }
 
     #endregion
@@ -204,7 +205,6 @@ public class GuardController : MonoBehaviour
         if (currentBehavior != null)
         {
             currentBehavior.InitializeBehavior(gameObject);
-            //GetComponent<StateText>().ChangeText(currentBehavior.StateName);
             currentPriority = currentBehavior.Priority;
             activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
             OnBehaviorStarted.Invoke(currentBehavior.StateName);
