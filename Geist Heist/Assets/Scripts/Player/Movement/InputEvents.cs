@@ -45,6 +45,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static UnityEvent<float> InteractCanceled = new();
 
     public static UnityEvent PauseStarted = new UnityEvent();
+    public static UnityAction PauseStartedOverride = null;
 
     public static UnityEvent<Vector2> LookUpdate = new UnityEvent<Vector2>();
 
@@ -109,7 +110,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         //Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
         Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted, ref actionTimeStarted);
         Interact.started += ctx => InputActionStarted(ref InteractPressed, InteractStarted);
-        Pause.started += ctx => PauseStarted.Invoke();
+        Pause.started += ctx => OnPauseStarted();
 
         Move.canceled += ctx => InputActionCanceled(ref MovePressed, MoveCanceled, MoveHeldTime);
         //Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
@@ -156,6 +157,13 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         pressedFlag = false;
     }
 
+    void OnPauseStarted()
+    {
+        if (PauseStartedOverride != null)
+            PauseStartedOverride();
+        else
+            PauseStarted.Invoke();
+    }
     private void FixedUpdate()
     {
         if (GameManager.Instance.IsPaused)

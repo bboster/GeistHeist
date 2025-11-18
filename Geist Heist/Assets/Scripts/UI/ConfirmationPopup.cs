@@ -25,6 +25,7 @@ public class ConfirmationPopup : MonoBehaviour
     private CanvasGroup canvasGroup;
     private float oldTimeScale=1;
     private float lastFadeSecondsUsed = -1;
+    private UnityAction lastPauseStartedOverride;
     private Coroutine fadeOpacityCoroutine;
 
     private UnityAction afterCancelClicked = null;
@@ -38,6 +39,8 @@ public class ConfirmationPopup : MonoBehaviour
             StaticUtilities.DisableCanvasGroup(canvasGroup);
     }
 
+
+
     /// <summary>
     /// Opens confirmation window, can add custom behaviour to the respective buttons
     /// </summary>
@@ -49,13 +52,9 @@ public class ConfirmationPopup : MonoBehaviour
 
         lastFadeSecondsUsed = fadeSeconds;
 
-        // shelving this for now, but i think its important
-        /*if(InputEvents.Instance != null)
-        {
-            InputEvents.PauseStarted.AddListener(HideConfirmationPopup);
-        }
+        // Press esc to close popup
+        InputEvents.PauseStartedOverride = HideConfirmationPopup;
 
-        GameManager.Instance.IsPaused = true;*/
         StaticUtilities.ShowCursor();
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0f;
@@ -88,13 +87,7 @@ public class ConfirmationPopup : MonoBehaviour
 
     public void HideConfirmationPopup()
     {
-        // if player isnt in the pause menu rn
-        /*if(InputEvents.Instance != null && !InputEvents.PausePressed)
-        {
-            GameManager.Instance.IsPaused = false;
-            Time.timeScale = oldTimeScale;
-            StaticUtilities.HideCursor();
-        }*/
+        InputEvents.PauseStartedOverride = lastPauseStartedOverride;
 
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
