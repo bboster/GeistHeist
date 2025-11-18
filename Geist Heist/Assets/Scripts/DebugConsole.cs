@@ -14,11 +14,14 @@ public class DebugConsole : MonoBehaviour
 
     private bool noClipToggle = false;
     private bool godToggle = false;
+    private bool cameraToggle = false;
+    private bool freezeToggle = false;
 
     private void Start()
     {
         Console.SetActive(false);
         InputEvents.DebugStarted.AddListener(ToggleConsole);
+        Player = FindFirstObjectByType<ThirdPersonInputHandler>().gameObject;
     }
 
 
@@ -51,21 +54,25 @@ public class DebugConsole : MonoBehaviour
     public void CallFunction()
     {
         string Command = inputs.text;
-        TextArea.text = TextArea.text + "\n" + Command;
+
         if(Command.ToLower() == "nc")
         {
             Debug.Log("no clip");
             noClipToggle = !noClipToggle;
             //make the play no clip
+            TextArea.text = TextArea.text + "\n" + Command + " " + noClipToggle;
         }
         else if(Command.ToLower() == "god")
         {
             Debug.Log("God");
             godToggle = !godToggle;
+            GameManager.Instance.InGodMode = godToggle;
+            TextArea.text = TextArea.text + "\n" + Command + " " + godToggle;
         }
         else if(Command.ToLower() == "dc")
         {
             Debug.Log("Detatch Camera");
+            TextArea.text = TextArea.text + "\n" + Command + " " + cameraToggle;
         }
         else if(Command.ToLower() == "ls")
         {
@@ -74,6 +81,7 @@ public class DebugConsole : MonoBehaviour
         else if(Command.ToLower() == "freeze")
         {
             Debug.Log("Freeze");
+            TextArea.text = TextArea.text + "\n" + Command + " " + freezeToggle;
         }
         else if(Command.ToLower() == "help")
         {
