@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation: 10/2/2025
- * Last Edited: 10/2/25
+ * Last Edited: 11/15/2025
  * Summary: Tether possessable. Progresses player to next level
  * 
  * TODO: An animation for when tether is collected, i suppose
@@ -19,7 +19,7 @@ using UnityEngine.SceneManagement;
 public class TetherPossessable : IInputHandler
 {
     [SerializeField] private GameObject CollectionParticlePrefab;
-    [SerializeField,Required] private GameObject thirdPersoncinemachineCamera;
+    [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [Tooltip("Loads this scene")]
     [SerializeField, Scene] private string HubScene = "Lobby";
 
@@ -27,7 +27,8 @@ public class TetherPossessable : IInputHandler
 
     private void Start()
     {
-        thirdPersoncinemachineCamera.SetActive(false);
+        if(thirdPersoncinemachineCamera != null)
+            thirdPersoncinemachineCamera.SetActive(false);
     }
 
     public override void OnPossessionStart()
