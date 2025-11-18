@@ -351,6 +351,11 @@ public class ThirdPersonInputHandler : IInputHandler
             return;
         }
 
+          var moveInput = InputEvents.Instance.FirstPersonInputDirection;
+        if (moveInput.sqrMagnitude < 0.001f)
+            return;
+
+
         // raycast near the players feet/bottom of the rigidbody
         // straight ahead raycast
         if (Physics.Raycast(stepRayLower.transform.position, transform.forward, stepRayLowerLength))
@@ -359,6 +364,7 @@ public class ThirdPersonInputHandler : IInputHandler
             if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, stepRayUpperLength))
             {
                 isStepping = true;
+                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
             }
         }
@@ -369,6 +375,7 @@ public class ThirdPersonInputHandler : IInputHandler
             if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayUpperLength))
             {
                 isStepping = true;
+                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
             }
         }
@@ -379,6 +386,7 @@ public class ThirdPersonInputHandler : IInputHandler
             if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayUpperLength))
             {
                 isStepping = true;
+                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
                 rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
             }
         }
