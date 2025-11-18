@@ -13,12 +13,12 @@ using UnityEngine.Events;
 
 public class DialougeManager : Singleton<DialougeManager>
 {
-    [SerializeField] private GameObject TextboxPrefab;
+    [SerializeField] private GameObject DialogueTextboxPrefab;
     [SerializeField] private GameObject PAPrefab;
     [SerializeField] private float secondsBetweenLetters;
 
-    private GameObject ResizingTextbox;
-    private TMPro.TMP_Text Textbox;
+    private GameObject DialogueCanvas;
+    private TMPro.TMP_Text DialogueTextbox;
 
     private GameObject PAholder;
     private TMPro.TMP_Text PATextbox;
@@ -27,16 +27,18 @@ public class DialougeManager : Singleton<DialougeManager>
 
     private void Start()
     {
-        ResizingTextbox = Instantiate(TextboxPrefab);
-        Textbox = ResizingTextbox.GetComponentInChildren<TMPro.TMP_Text>();
+        DialogueCanvas = Instantiate(DialogueTextboxPrefab);
+        DialogueTextbox = DialogueCanvas.GetComponentInChildren<TMPro.TMP_Text>();
 
         PAholder = Instantiate(PAPrefab);
         PATextbox = PAholder.GetComponentInChildren<TMPro.TMP_Text>();
+
+        
     }
 
     public void DisplayText_Dialogue(string text, float stayLength, UnityAction onDialogueEndCallback=null)
     {
-        StaticUtilities.StopAndStartCoroutine(ref typingCoroutine, FillText(text, stayLength, Textbox, onDialogueEndCallback: onDialogueEndCallback));
+        StaticUtilities.StopAndStartCoroutine(ref typingCoroutine, FillText(text, stayLength, DialogueTextbox, onDialogueEndCallback: onDialogueEndCallback));
     }
 
     public void DisplayText_PASystem(string text, float stayLength, UnityAction onDialogueEndCallback = null)
