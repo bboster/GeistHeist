@@ -7,27 +7,43 @@
  */
 
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Rendering.Universal;
 
 public class PostProcessingManager : MonoBehaviour
 {
-    private PostProcessVolume ppVolume;
-    private PostProcessProfile ppProfile;
+    private Volume volume;
+    private VolumeProfile volumeProfile;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        ppVolume = GetComponent<PostProcessVolume>();
-        ppProfile = ppVolume.profile;
-
+        UpdateBrightness();
     }
+
 
     /// <summary>
     /// Update game brightness to reflect value in SettingsProfile
     /// </summary>
     public void UpdateBrightness()
     {
+        if(volume == null || volumeProfile == null)
+        {
+            volume = GetComponentInChildren<Volume>();
 
+            // make a copy of the volume, so we can edit it in runtime and not get a million github changes
+            volumeProfile = Instantiate(volume.profile);
+            volume.profile = volumeProfile;
+
+            UpdateBrightness();
+        }
+
+        if(volumeProfile.TryGet<ColorAdjustments>(out ColorAdjustments colorAdjustment))
+        {
+            colorAdjustment.postExposure.overrideState = true;
+            colorAdjustment.postExposure.value = SettingsProfile.BrightnessTransformed;
+        }
+            // color adjustment -> post exposure
     }
 
 }
