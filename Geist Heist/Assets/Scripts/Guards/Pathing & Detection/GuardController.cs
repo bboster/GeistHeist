@@ -142,6 +142,11 @@ public class GuardController : MonoBehaviour
         }
         else
         {
+            if (particleSystem != null && particleSystem.isPlaying)
+            {
+                particleSystem.Stop(false);
+            }
+
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
