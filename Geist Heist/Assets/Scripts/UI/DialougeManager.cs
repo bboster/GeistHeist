@@ -33,7 +33,8 @@ public class DialougeManager : Singleton<DialougeManager>
         PAholder = Instantiate(PAPrefab);
         PATextbox = PAholder.GetComponentInChildren<TMPro.TMP_Text>();
 
-        
+        DialogueCanvas.SetActive(false);
+        PAholder.SetActive(false);
     }
 
     public void DisplayText_Dialogue(string text, float stayLength, UnityAction onDialogueEndCallback=null)

@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Josh
  * Creation: 10/1/25
- * Last Edited: 10/2/25
+ * Last Edited: 11/18/25
  * Summary: Manages player save data. Allows save and loading functionality.
  * Singleton, dont destroy on load
  */
@@ -42,17 +42,13 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         LoadData();
     }
 
-    public void MarkSceneAsCompleted(string sceneName, bool autoSave=true)
+
+    #region Collectables
+
+    public bool IsCollectableCollected(Collectable collectable)
     {
         EnsureSaveData();
-
-        if (IsLevelCompleted(sceneName))
-            Debug.Log("This level has already been completed");
-        else
-            currentSaveDta.ScenesCompleted.Add(sceneName);
-
-        if (autoSave)
-            SaveData();
+        return currentSaveDta.CollectablesCollected.Contains((int)collectable);
     }
 
     public void MarkCollectableAsCollected(Collectable collectable, bool autoSave = true)
@@ -60,12 +56,21 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         EnsureSaveData();
 
         if (IsCollectableCollected(collectable))
-            Debug.Log("Collectable has already been collected");
+            Debug.Log($"{collectable.ToString()} has already been collected");
         else
             currentSaveDta.CollectablesCollected.Add((int)collectable);
 
         if (autoSave)
             SaveData();
+    }
+
+    #endregion
+
+    #region Hats
+    public int EquipedHat()
+    {
+        EnsureSaveData();
+        return currentSaveDta.CollectableWearing;
     }
 
     public void MarkCollectableAsWorn(Collectable collectable, bool autoSave = true)
@@ -76,17 +81,41 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             SaveData();
     }
 
-    public int EquipedHat()
+    /// <returns>True if collectable is one currently being worn</returns>
+    public bool IsHatEqupped(Collectable collectable)
     {
         EnsureSaveData();
-        return currentSaveDta.CollectableWearing;
+
+        // if wearing none
+        if ((int)currentSaveDta.CollectableWearing <= 0 && (int)collectable <= 0) return true;
+
+        return (int)collectable == currentSaveDta.CollectableWearing;
     }
 
+#endregion
 
+    #region Level Completion
+
+    /// <summary>
+    /// Return true if level is stored in list of saved completed levels
+    /// </summary>
     public bool IsLevelCompleted(string sceneName)
     {
         EnsureSaveData();
         return currentSaveDta.ScenesCompleted.Contains(sceneName);
+    }
+
+    public void MarkSceneAsCompleted(string sceneName, bool autoSave = true)
+    {
+        EnsureSaveData();
+
+        if (IsLevelCompleted(sceneName))
+            Debug.Log("This level has already been completed");
+        else
+            currentSaveDta.ScenesCompleted.Add(sceneName);
+
+        if (autoSave)
+            SaveData();
     }
 
     /// <summary>
@@ -100,11 +129,38 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             .Count();
     }
 
-    public bool IsCollectableCollected(Collectable collectable)
+    #endregion
+
+    #region Flavor Text
+
+    /// <summary>
+    /// Return true if level is stored in list of saved completed levels
+    /// </summary>
+    public bool IsFlavorTextRead(string text)
     {
         EnsureSaveData();
-        return currentSaveDta.CollectablesCollected.Contains((int)collectable);
+        int hash = text.GetHashCode();
+        Debug.Log($"Read display text: {hash}: {currentSaveDta.FlavorTextsRead.Contains(hash)}");
+        return currentSaveDta.FlavorTextsRead.Contains(hash);
     }
+
+    public void MarkFlavorTextAsRead(string text, bool autoSave = true)
+    {
+        EnsureSaveData();
+
+        int hash = text.GetHashCode();
+        Debug.Log($"Saving display text: {hash}");
+
+        if (IsFlavorTextRead(text))
+            Debug.LogWarning("This flavor text was already read (is there duplicate text across multiple objects?)");
+        else
+            currentSaveDta.FlavorTextsRead.Add(hash);
+
+        if (autoSave)
+            SaveData();
+    }
+
+    #endregion 
 
     #region File Manipulation
 
@@ -285,6 +341,9 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
         if (currentSaveDta.CollectablesCollected == null)
             currentSaveDta.CollectablesCollected = new List<int>();
+
+        if (currentSaveDta.FlavorTextsRead == null)
+            currentSaveDta.FlavorTextsRead = new();
     }
 
     #endregion

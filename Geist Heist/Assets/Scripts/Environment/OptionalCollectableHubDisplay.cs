@@ -41,7 +41,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
 
     #region Interaction
-    public void Interact()
+    void IInteractable.Interact()
     {
         if (SaveDataManager.Instance.EquipedHat() == (int)ThisCollectable)
         {
