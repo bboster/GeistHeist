@@ -111,11 +111,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvas.gameObject.SetActive(false);
         }
 
-        possessionEnter = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
 
-        possessionLow = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
-        possessionOut = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
-        possessionRefill = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
+        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
+        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
+        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
     }
 
     public IInputHandler GetInputHandler()

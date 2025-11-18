@@ -3,7 +3,7 @@
 // Author :            Kyle Grenier
 // Creation Date :     09/29/2021
 //
-// Brief Description : Defines a class with a single instance.
+// Brief Description : Defines a class with a single Instance.
 
 note from toby: this is the most excessive piece of code ive ever seen i think 
 its so funny.

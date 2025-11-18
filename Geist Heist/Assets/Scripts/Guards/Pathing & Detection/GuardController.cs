@@ -92,8 +92,8 @@ public class GuardController : MonoBehaviour
     private void Start()
     {
         //only for sfx for now
-        guardWalkSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
-        guardRunSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+        guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
+        guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardRun);
     }
 
     /// <summary>
