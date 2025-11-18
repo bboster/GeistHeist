@@ -6,12 +6,14 @@
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
-using System.Collections;
+using FMOD;
 using GuardUtilities;
 using NaughtyAttributes;
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.ProBuilder.Shapes;
 
 public class VisionStimulus : Stimulus
 {
@@ -52,6 +54,11 @@ public class VisionStimulus : Stimulus
     {
         PossessableObject.OnActionPerformed += ActionDetected;
         PossessableObject.OnObjectLeft += ObjectLeft;
+    }
+
+    private void Start()
+    {
+        GenerateVisionMesh();
     }
 
     private void OnValidate()
@@ -140,6 +147,28 @@ public class VisionStimulus : Stimulus
         }
     }
 
+    private void GenerateVisionMesh()
+    {
+        Mesh visionMesh = new Mesh();
+
+        Vector3[] vertices = new Vector3[3];
+        Vector2[] uv = new Vector2[3];
+        int[] triangles = new int[3];
+
+        Mesh coneMesh = GetComponent<Mesh>();
+
+        float coneHeight = coneMesh.bounds.size.z * transform.localScale.z;
+        float coneRadius = Mathf.Max(coneMesh.bounds.size.x, coneMesh.bounds.size.y) * 0.5f * transform.localScale.x;
+
+        vertices[0] = coneMesh.vertices[0];
+        vertices[1] = new Vector3(vertices[0].x + coneRadius, 0, vertices[0].z + coneHeight);
+        vertices[1] = new Vector3(vertices[0].x - coneRadius, 0, vertices[0].z + coneHeight);
+
+        visionMesh.vertices = vertices;
+        visionMesh.uv = uv;
+        visionMesh.triangles = triangles;
+    }
+
     /// <summary>
     /// Controls how long the player must be out of the vision cone before it enters search state
     /// </summary>
@@ -191,14 +220,14 @@ public class VisionStimulus : Stimulus
     {
         if (spotLight == null)
         {
-            Debug.LogWarning("No spotlight assigned on VisionStimulus.");
+            UnityEngine.Debug.LogWarning("No spotlight assigned on VisionStimulus.");
             return;
         }
 
         Collider col = GetComponent<Collider>();
         if (col == null)
         {
-            Debug.LogWarning("No collider found on VisionStimulus.");
+            UnityEngine.Debug.LogWarning("No collider found on VisionStimulus.");
             return;
         }
 
@@ -213,7 +242,7 @@ public class VisionStimulus : Stimulus
             spotLight.spotAngle = Mathf.Rad2Deg * Mathf.Atan(coneRadius / coneHeight) * 2f;
             spotLight.innerSpotAngle = spotLight.spotAngle * 0.8f;
 
-            Debug.Log($"[VisionStimulus] Synced spotlight from MeshCollider -> Range: {spotLight.range}, Angle: {spotLight.spotAngle}");
+            UnityEngine.Debug.Log($"[VisionStimulus] Synced spotlight from MeshCollider -> Range: {spotLight.range}, Angle: {spotLight.spotAngle}");
         }
     }
 }
