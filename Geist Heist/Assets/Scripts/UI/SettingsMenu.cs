@@ -34,6 +34,9 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private SliderSettingsAttributes sfxVolumeAttributes;
     [SerializeField] private SliderSettingsAttributes vocalsVolumeAttributes;
 
+    private PostProcessingManager ppManager; // lol peepeeManager
+
+
     #region Attribute variables
     /*
     // Master Volume
@@ -70,8 +73,10 @@ public class SettingsMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        ppManager = Camera.main.GetComponentInChildren<PostProcessingManager>();
+
         AddComponentListeners();
-        exitSettingsButton.onClick.AddListener(CloseSettingsMenu);
+        exitSettingsButton.onClick.AddListener(() => CloseSettingsMenu(true));
         resetToDefaultsButton.onClick.AddListener(OnResetToDefaultsButtonPressed);
     }
 
@@ -82,13 +87,12 @@ public class SettingsMenu : MonoBehaviour
         StaticUtilities.DisableCanvasGroup(pauseMenu.pauseGroup);
         StaticUtilities.EnableCanvasGroup(settingsGroup);
 
-        InputEvents.PauseStartedOverride = CloseSettingsMenu;
+        InputEvents.PauseStartedOverride = () => CloseSettingsMenu(true);
     }
 
-    public void CloseSettingsMenu()
+    public void CloseSettingsMenu(bool saveSettings = true)
     {
         Debug.Log("Close settings menu");
-        SettingsProfile.SaveCurrentSettings();
         StaticUtilities.DisableCanvasGroup(settingsGroup);
         InputEvents.PauseStartedOverride = null;
         pauseMenu.OpenPauseMenu();
@@ -119,8 +123,9 @@ public class SettingsMenu : MonoBehaviour
         invertLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertLookAttributes, ref SettingsProfile.InvertLook,
             onSettingsUpdatedCallback: PlayerManager.Instance.UpdateCamerasInvertLook));
 
-        brightnessAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(brightnessAttributes, ref SettingsProfile.LookSensitivy,
-            minValue: SettingsProfile.MIN_BRIGHTNESS, maxValue: SettingsProfile.MAX_BRIGHTNESS));
+        brightnessAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(brightnessAttributes, ref SettingsProfile.Brightness,
+            minValue: SettingsProfile.MIN_BRIGHTNESS, maxValue: SettingsProfile.MAX_BRIGHTNESS,
+            onSettingsUpdatedCallback: ppManager.UpdateBrightness));
 
         masterVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(masterVolumeAttributes, ref SettingsProfile.MasterVolume));
         masterVolumeAttributes.SliderComponent.onValueChanged.AddListener((float _) => AudioManager.Instance.UpdateMusicVolume());
@@ -154,6 +159,8 @@ public class SettingsMenu : MonoBehaviour
 
         if (onSettingsUpdatedCallback != null)
             onSettingsUpdatedCallback();
+
+        SettingsProfile.SaveCurrentSettings();
     }
 
     /// <summary>
@@ -180,9 +187,11 @@ public class SettingsMenu : MonoBehaviour
     {
         // Assumes SettingsProfile.ReadSavedSettings has already run 
 
-        lookSensitivityAttributes.RefreshComponent(SettingsProfile.LookSensitivy, SettingsProfile.LookSensitivityTransformed);
+
+
+        lookSensitivityAttributes.RefreshComponent(SettingsProfile.LookSensitivy, SettingsProfile.LookSensitityScalar);
         invertLookAttributes.RefreshComponent(SettingsProfile.InvertLook);
-        brightnessAttributes.RefreshComponent(SettingsProfile.Brightness, SettingsProfile.BrightnessTransformed);
+        brightnessAttributes.RefreshComponent(SettingsProfile.Brightness, SettingsProfile.BrightnessScalar);
 
         masterVolumeAttributes.RefreshComponent(SettingsProfile.MasterVolume, SettingsProfile.MasterVolumeTransformed);
         musicVolumeAttributes.RefreshComponent(SettingsProfile.MusicVolume, SettingsProfile.MusicVolumeTransformed);
