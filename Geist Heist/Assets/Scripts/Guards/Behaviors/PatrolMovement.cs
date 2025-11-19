@@ -21,7 +21,7 @@ public class PatrolMovement : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        currentPatrolPath = selfRef.GetComponent<GuardController>().Path;
+        currentPatrolPath = contRef.Path;
         MoveToPoint(GetNextPoint());
         thisAgent.isStopped = false;
     }

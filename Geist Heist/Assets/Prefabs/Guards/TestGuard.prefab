@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8501832552835297838}
   - component: {fileID: 361628737643626503}
   - component: {fileID: 3730158199903042911}
+  - component: {fileID: 8913956414186607306}
   m_Layer: 0
   m_Name: TestGuard
   m_TagString: Untagged
@@ -159,7 +160,6 @@ MonoBehaviour:
   DefaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
-  showProgrammingValues: 0
   animator: {fileID: 8501832552835297838}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
@@ -237,6 +237,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &8913956414186607306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121252902873117158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfc40b9b93513c04cb7c2f849916d456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardDebugger
 --- !u!1 &428579917205608964
 GameObject:
   m_ObjectHideFlags: 0
@@ -712,9 +724,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisionStimulus
   stimulusType: 0
-  priority: 2
+  priority: 9
   stateToChangeTo: 4
-  showProgrammingValues: 1
   behaviorIndex: 1
   recoveryBehaviorIndex: 0
   visionBreakTimer: 1

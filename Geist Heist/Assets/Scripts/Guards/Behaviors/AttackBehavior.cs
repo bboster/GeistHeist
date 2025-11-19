@@ -4,6 +4,7 @@
  * Creation: 9/18/25
  * Last Edited: 9/18/25
  * Summary: Handles behavior for the enemy when it is attacking the player.
+ * TO DO: Replace marked lines when animations are implemented
  */
 
 using UnityEngine;
@@ -32,7 +33,7 @@ public class AttackBehavior : Behavior
         {
             if(performingAttack == true)
             {
-                Debug.Log("Player Caught");
+                //Debug.Log("Player Caught");
                 GameManager.Instance.DeathReset();
                 performingAttack = false; //This should be removed later and the variable should be changed by an animation keyframe.
                 yield return new WaitForSeconds(attackLength);

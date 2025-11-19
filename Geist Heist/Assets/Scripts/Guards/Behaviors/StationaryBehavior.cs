@@ -44,7 +44,7 @@ public class StationaryBehavior : Behavior
         selfRef.GetComponent<NavMeshAgent>().enabled = false;
 
         Vector3 rotation = selfRef.transform.rotation.eulerAngles;
-        rotation.y = selfRef.GetComponent<GuardController>().DefaultRotation - selfRef.transform.rotation.eulerAngles.y;
+        rotation.y = contRef.DefaultRotation - selfRef.transform.rotation.eulerAngles.y;
 
         selfRef.transform.Rotate(rotation);
     }
@@ -63,7 +63,7 @@ public class StationaryBehavior : Behavior
     public override IEnumerator BehaviorLoop()
     {
         Vector3 rotation = selfRef.transform.rotation.eulerAngles;
-        rotation.y = selfRef.GetComponent<GuardController>().DefaultRotation - selfRef.transform.rotation.eulerAngles.y;
+        rotation.y = contRef.DefaultRotation - selfRef.transform.rotation.eulerAngles.y;
 
         selfRef.transform.Rotate(rotation);
 
