@@ -137,6 +137,7 @@ MonoBehaviour:
   OnTimerUpdate:
     m_PersistentCalls:
       m_Calls: []
+  PauseDischargeTimer: 0
   IsMoving: 0
   possessableCanvas: {fileID: 0}
   showSeconds: 1
@@ -153,14 +154,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28218af6fffcc904882945e308d20c16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VendingObject
-  thirdPersoncinemachineCamera: {fileID: 0}
   CanSpawnPoint: {fileID: 3232091217144684036}
   CanPrefab: {fileID: 2652521570684091903, guid: 6927a51dfcbc2f7468bcae6a92d9ce22, type: 3}
   maxStrength: 100
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
+  launchDirection: {x: 12, y: 3, z: 12}
   Tap: 0
   delayBetweenThrows: 1
   tapStrength: 0
@@ -665,11 +665,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431527996575148174, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_Alpha
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4209206591424057506, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_FillAmount
-      value: 0.19753937
+      value: 0.19753967
       objectReference: {fileID: 0}
     - target: {fileID: 4209206591424057506, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_FillOrigin
@@ -769,7 +769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9656474
+      value: -0.96564746
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_LocalRotation.x
@@ -781,7 +781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.25985593
+      value: 0.2598558
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_AnchoredPosition.x
