@@ -13,10 +13,10 @@ using UnityEngine;
 
 public static class SettingsProfile
 {
-    // default values
+    // Default Display values
     private const float DEFAULT_LOOK_SENSITIVITY = 100;
     private const bool DEFAULT_INVERT_LOOK = false;
-    private const float DEFAULT_BRIGHTNESS = 80; 
+    private const float DEFAULT_BRIGHTNESS = 50; 
 
     private const float DEFAULT_MASTER_VOLUME = 100;
     private const float DEFAULT_MUSIC_VOLUME = 100;
@@ -28,8 +28,11 @@ public static class SettingsProfile
     public const float MAX_LOOK_SENSITIVITY = 150;
     private const float DEFAULT_LOOK_SENSITIVITY_TRANSFORMED = 1; // Real value, used in game
 
-    public const float MIN_BRIGHTNESS = 20;
+    public const float MIN_BRIGHTNESS = 0;
     public const float MAX_BRIGHTNESS = 100;
+    private const float DEFAULT_BRIGHTNESS_TRANSFORMED = 0; // Real value, used in game (0 because it does not add or subtract brightness by default)
+    private const float MIN_BRIGHTNESS_TRANSFORMED = -1;
+    private const float MAX_BRIGHTNESS_TRANSFORMED = 1;
 
     #region Player Pref Keys
 
@@ -54,11 +57,14 @@ public static class SettingsProfile
     public static float LookSensitivy, Brightness, 
         MasterVolume, MusicVolume, SFXVolume, VocalsVolume;
 
-    // Transform sensitivity so that, by default, sensitivity
+    // Technical values:
+    public static float LookSensitityScalar =>
+        Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, LookSensitivy);
     public static float LookSensitivityTransformed =>
         Mathf.LerpUnclamped(0.1f, DEFAULT_LOOK_SENSITIVITY_TRANSFORMED,
             /* t: */ StaticUtilities.InverseLerpUnclamped(MIN_LOOK_SENSITIVITY, DEFAULT_LOOK_SENSITIVITY, LookSensitivy)); 
-    public static float BrightnessTransformed => Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, Brightness);
+    public static float BrightnessScalar => Mathf.InverseLerp(MIN_BRIGHTNESS, MAX_BRIGHTNESS, Brightness);
+    public static float BrightnessTransformed => Mathf.Lerp(MIN_BRIGHTNESS_TRANSFORMED, MAX_BRIGHTNESS_TRANSFORMED, BrightnessScalar);
     public static float MasterVolumeTransformed => MasterVolume / 100;
     public static float MusicVolumeTransformed => MusicVolume / 100;
     public static float SFXVolumeTransformed => SFXVolume / 100;
@@ -85,6 +91,7 @@ public static class SettingsProfile
     {
         Debug.Log("Saving current settings profile to settings profile");
 
+        Debug.Log(LookSensitivy);
         PlayerPrefs.SetFloat(LOOK_SENSITIVITY_KEY, LookSensitivy);
         PlayerPrefs.SetInt(INVERT_LOOK_KEY, InvertLook ? 1 : 0); // Playerprefs cant store bools, so just store an int
         PlayerPrefs.SetFloat(BRIGHTNESS_KEY, Brightness);
