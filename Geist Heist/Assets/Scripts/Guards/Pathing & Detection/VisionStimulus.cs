@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors: Joshua Kelly
  * Creation: 10/02/25
- * Last Edited: 10/28/25
+ * Last Edited: 11/15/25
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
@@ -21,29 +21,25 @@ public class VisionStimulus : Stimulus
     private bool playerObjectSeen = false;
     private Coroutine timer;
 
-    [Header("Progamming")]
-    [Tooltip("Controls whether or not certain variables are displayed")]
-    [SerializeField] private bool showProgrammingValues;
-
     [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private int behaviorIndex;
     [Tooltip("The index of the behavior to activate when the enemy loses track of the player during a chase.")]
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private int recoveryBehaviorIndex;
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private float visionBreakTimer;
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private LayerMask raycastLayer;
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private Transform raycastSpawn;
 
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private Light spotLight;
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private Collider visionCollider;
 
-    [ShowIf("showProgrammingValues")]
+    [Foldout("Programming Values")]
     [SerializeField] private GuardController parentController;
 
     #endregion
@@ -59,40 +55,32 @@ public class VisionStimulus : Stimulus
         SyncLightToCollider();
     }
 
+    #region Trigger Functions
+
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.TryGetComponent(out PossessableObject obj))
         {
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
             {
-                if (timer != null)
-                {
-                    StopCoroutine(timer);
-                    timer = null;
-                }
+                StopTimer();
 
                 hasSeenPlayer = true;
-                Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
 
-                Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
-                float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 2;
-
-                if (!Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer))
+                if (!VisionCast(other.gameObject, out RaycastHit info))
                 {
                     hasSeenPlayer = true;
                     TriggerStimulus();
                 }
 
+#if UNITY_EDITOR
                 if (info.collider != null)
                     Debug.Log(info.collider.gameObject.name);
+#endif
             }
             else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
             {
-                if (timer != null)
-                {
-                    StopCoroutine(timer);
-                    timer = null;
-                }
+                StopTimer();
 
                 if (obj.gameObject.TryGetComponent(out Rigidbody rb))
                 {
@@ -123,12 +111,7 @@ public class VisionStimulus : Stimulus
         {
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
             {
-                Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, other.gameObject.transform.position.y, raycastSpawn.position.z);
-
-                Vector3 direction = -(spawnLocation - other.gameObject.transform.position);
-                float distance = Vector3.Distance(raycastSpawn.position, other.gameObject.transform.position) + 2;
-
-                if (!Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer))
+                if (!VisionCast(other.gameObject))
                 {
                     timer = StartCoroutine(VisionBreakTimer());
                 }
@@ -137,6 +120,59 @@ public class VisionStimulus : Stimulus
             {
                 playerObjectSeen = false;
             }
+        }
+    }
+
+    #endregion
+
+    #region Vision Raycast
+
+    /// <summary>
+    /// Handles the raycast to detect whether or not the target can be seen
+    /// </summary>
+    /// <returns></returns>
+    private bool VisionCast(GameObject target)
+    {
+        //Starts the raycast at the raycast spawn location of the guard
+        Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, target.transform.position.y, raycastSpawn.position.z);
+
+        //Calculates the direction pointing toward the seen object
+        Vector3 direction = -(spawnLocation - target.transform.position);
+        float distance = Vector3.Distance(raycastSpawn.position, target.transform.position) + 2; //Calculates the distance to raycast
+
+        return Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer); ;
+    }
+
+    /// <summary>
+    /// Handles the raycast to detect whether or not the target can be seen
+    /// </summary>
+    /// <returns></returns>
+    private bool VisionCast(GameObject target, out RaycastHit hit)
+    {
+        //Starts the raycast at the raycast spawn location of the guard
+        Vector3 spawnLocation = new Vector3(raycastSpawn.position.x, target.transform.position.y, raycastSpawn.position.z);
+
+        //Calculates the direction pointing toward the seen object
+        Vector3 direction = -(spawnLocation - target.transform.position);
+        float distance = Vector3.Distance(raycastSpawn.position, target.transform.position) + 2; //Calculates the distance to raycast
+
+        bool targetHit = Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer);
+        hit = info;
+
+        return targetHit;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Stops the vision break timer if running
+    /// </summary>
+    private void StopTimer()
+    {
+        if (timer != null)
+        {
+            StopCoroutine(timer);
+            timer = null;
         }
     }
 
