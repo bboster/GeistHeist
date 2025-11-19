@@ -68,7 +68,7 @@ public class PauseMenu : MonoBehaviour
         confirmationPopup.HideConfirmationPopup();
 
         if(settingsMenu.settingsGroup.alpha > 0)
-            settingsMenu.CloseSettingsMenu();
+            settingsMenu.CloseSettingsMenu(saveSettings: false);
 
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.PauseGame();
