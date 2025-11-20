@@ -83,7 +83,6 @@ public class DebugConsole : MonoBehaviour
         }
         else if(Command.ToLower().Substring(0,2) == "ls")
         {
-            //Still a little buggy
             Debug.Log("Load Scene");
             int Temp;
             if(int.TryParse(Command.Substring(3, Command.Length - 3), out Temp))
@@ -105,7 +104,7 @@ public class DebugConsole : MonoBehaviour
         else if(Command.ToLower() == "help")
         {
             TextArea.text = TextArea.text + "\n" + Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
-                "\nLoad Scene: ls <Scene Name/Scnene Index> \nSpawn Item: spawn <Item Name/Item Index>";
+                "\nLoad Scene: ls <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index>";
             Debug.Log("Help");
         }
         else if(Command.Length > 4)
