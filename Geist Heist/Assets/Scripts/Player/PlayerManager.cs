@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Sky
  * Creation Date: 9/16/25
- * Last Modified: 10/29/25
+ * Last Modified: 11/17/25
  * 
  * Brief Description: dont put this script on the player.
  * handles possession and such.
@@ -23,10 +23,11 @@ public class PlayerManager : Singleton<PlayerManager>
     public IInputHandler currentInputHandler => CurrentObject?.InputHandler;
 
     private InputEvents inputEvents => InputEvents.Instance;
-    private Camera camera;
+    public Camera camera;
+    [HideInInspector] public CinemachineCamera mainCinemachineCamera;
+    private PlayerCameraController mainPlayerCameraController;
+    private PlayerCameraController currentCameraController; // may be mainCinemachineCamera sometimes
 
-    private CinemachineOrbitalFollow possessableCOF;
-    private CinemachineOrbitalFollow playerCOF;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -36,12 +37,17 @@ public class PlayerManager : Singleton<PlayerManager>
 
         CurrentObject = PlayerGhostObject;
         RegisterInputs(PlayerGhostObject);
+
         camera = Camera.main;
+        mainCinemachineCamera = PlayerGhostObject.CinemachineCamera;
+        PlayerGhostObject.CinemachineCamera.transform.SetParent(null);
+        mainPlayerCameraController = mainCinemachineCamera.GetComponent<PlayerCameraController>();
+        currentCameraController = mainPlayerCameraController;
+        currentCameraController.UpdateAllSettings();
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        playerCOF = PlayerGhostObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
         if (GameManager.Instance.PlayerStart == null)
             Debug.Log("PlayerStart is null in gamemanager");
         else
@@ -74,12 +80,7 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
-        //make transition not crazy
-        possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
-        possessableCOF.HorizontalAxis.Value = playerCOF.HorizontalAxis.Value;
-
-        possessable.CinemachineCamera.gameObject.SetActive(true);
-        PlayerGhostObject.CinemachineCamera.gameObject.SetActive(false);
+        SwapCameras(PlayerGhostObject,possessable);
         PlayerGhostObject.gameObject.SetActive(false);
 
         RegisterInputs(possessable);
@@ -132,12 +133,7 @@ public class PlayerManager : Singleton<PlayerManager>
             }
         }
 
-        //make transition not crazy
-        possessableCOF = possessable.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
-        playerCOF.HorizontalAxis.Value = possessableCOF.HorizontalAxis.Value;
-
-        PlayerGhostObject.CinemachineCamera.gameObject.SetActive(true);
-        possessable.CinemachineCamera.gameObject.SetActive(false);
+        SwapCameras(possessable, PlayerGhostObject);
         PlayerGhostObject.gameObject.SetActive(true);
 
         RegisterInputs(PlayerGhostObject);
@@ -148,6 +144,32 @@ public class PlayerManager : Singleton<PlayerManager>
         CurrentObject = PlayerGhostObject;
 
         DeRegisterInputs(possessable);
+    }
+
+    private void SwapCameras(PossessableObject oldObject, PossessableObject newObject)
+    {
+        // if both possessables dont have special behaviour
+        if (oldObject == null || (!oldObject.HasCustomCameraBehavior && !newObject.HasCustomCameraBehavior))
+        {
+            //mainCinemachineCamera.Follow = newObject.cameraAnchor;
+            mainPlayerCameraController.SetAnchorPoint(newObject.cameraAnchor);
+            currentCameraController = mainPlayerCameraController;
+        }
+        else if (oldObject.HasCustomCameraBehavior || newObject.HasCustomCameraBehavior)
+        {
+            // Get rotation values
+            var newOrbitalFollow = newObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+            var oldOrbitalFollow = oldObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+
+            newOrbitalFollow.HorizontalAxis.Value = oldOrbitalFollow.HorizontalAxis.Value;
+
+            newObject.CinemachineCamera.gameObject.SetActive(true);
+            oldObject.CinemachineCamera.gameObject.SetActive(false);
+
+            currentCameraController = newObject.GetComponent<PlayerCameraController>();
+        }
+
+        currentCameraController.UpdateAllSettings();
     }
 
     public void RegisterInputs(PossessableObject possessable)
@@ -199,5 +221,27 @@ public class PlayerManager : Singleton<PlayerManager>
             currentInputHandler.WhilePossessingUpdate();
     }
 
+    #region Camera Sensitivity
+
+    // all relevant to settings and settingsmenu.cs
+
+    public void UpdateCamerasSensitivity()
+    {
+        mainPlayerCameraController.UpdateCameraSensitivity();
+        if (currentCameraController != mainPlayerCameraController)
+            currentCameraController.UpdateCameraSensitivity();
+    }
+
+    public void UpdateCamerasInvertLook()
+    {
+        mainPlayerCameraController.UpdateCameraInvertLook();
+        if (currentCameraController != mainPlayerCameraController)
+            currentCameraController. UpdateCameraInvertLook();
+    }
+
+
+    // wonder if it would be worth it to make a different script for camera controlling
+
+    #endregion
 
 }

@@ -13,8 +13,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PossessableObject))]
 public class ToyCar : IInputHandler
 {
-    [SerializeField] private GameObject thirdPersoncinemachineCamera;
-
     [Header("Design Variables")]
     [Tooltip("Strength that a tap would do- the LEAST the car can move forward when interacting.")]
     [SerializeField] private float minStrength;
@@ -50,7 +48,6 @@ public class ToyCar : IInputHandler
 
     private void Start()
     {
-        thirdPersoncinemachineCamera.SetActive(false);
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();
 
@@ -73,6 +70,16 @@ public class ToyCar : IInputHandler
     public override void WhilePossessingUpdate()
     {
         chargeMeter.UpdateCharge(currentStrength, maxStrength);
+
+        //pause timer if car is moving
+        if (rb.linearVelocity == Vector3.zero)
+        {
+            possessableObject.PauseDischargeTimer = false;
+        }
+        else
+        {
+            possessableObject.PauseDischargeTimer = true;
+        }
     }
     
     private void FixedUpdate()
@@ -83,6 +90,7 @@ public class ToyCar : IInputHandler
             Debug.Log("clamping strength");
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
             rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
+            possessableObject.PauseDischargeTimer = true;
             physicsEnabled = false;
             hasLaunchedThisPossession = true;
         }
@@ -176,7 +184,7 @@ public class ToyCar : IInputHandler
     /// </summary>
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess) 
+        if (possessableObject.CanUnPossess && rb.linearVelocity == Vector3.zero) 
         {
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
             IsLeaving = true;

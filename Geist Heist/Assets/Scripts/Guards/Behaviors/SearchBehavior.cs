@@ -1,0 +1,82 @@
+/*
+ * Author: Jacob Bateman
+ * Contributors:
+ * Creation: 10/02/25
+ * Last Edited: 10/02/25
+ * Summary: Search behavior that runs when the guard hears something
+ */
+
+using GuardUtilities;
+using UnityEngine;
+using System.Collections;
+
+[CreateAssetMenu(fileName = "New Search Behavior", menuName = "Guard Behaviors/New Search Behavior")]
+public class SearchBehavior : GuardMovement
+{
+    private bool atSearchLocation = false;
+    private bool searching = false;
+    private bool behaviorComplete = false;
+
+    [SerializeField] private float searchLength;
+
+    public Vector3 SearchLocation;
+
+    public override void InitializeBehavior(GameObject selfRef)
+    {
+        base.InitializeBehavior(selfRef);
+        SearchLocation = contRef.SearchLocation;
+        MoveToPoint(SearchLocation);
+        thisAgent.isStopped = false;
+        behaviorComplete = false;
+    }
+    
+    /// <summary>
+    /// Controls the overall logic for the behavior.
+    /// </summary>
+    /// <returns></returns>
+    public override IEnumerator BehaviorLoop()
+    {
+        for (; ; )
+        {
+            if (CheckPathCompletion() == true && searching == false)
+            {
+                StartSearch();
+            }
+
+            if (behaviorComplete)
+            {
+                contRef.ChangeBehavior(GuardStates.patrol);
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    /// <summary>
+    /// Runs the search behavior
+    /// </summary>
+    /// <returns></returns>
+    private void StartSearch()
+    {
+        GuardCoroutineManager.instance.StartBehaviorTimer(searchLength, this);
+        contRef.GetAnimator().SetTrigger("LookingAround");
+
+        progress = 0;
+
+#if UNITY_EDITOR
+        selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
+#endif
+    }
+
+    /// <summary>
+    /// Stops the behaviors loop
+    /// </summary>
+    public override void StopBehavior()
+    {
+        base.StopBehavior();
+        GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
+        behaviorComplete = true;
+        contRef.GetAnimator().SetTrigger("LookingAround");
+        SearchLocation = Vector3.zero;
+    }
+}
