@@ -14,12 +14,19 @@ using NaughtyAttributes;
 using UnityEngine.Events;
 using FMOD.Studio;
 using FMODUnity;
+using UnityEngine.AI;
+using UnityEditor.ShaderGraph.Internal;
 
 public class GuardController : MonoBehaviour
 {
     #region Variable Declarations
 
     private bool changingBehaviors = false;
+    private NavMeshAgent thisAgent;
+    private float defaultAngularSpeed;
+    private float defaultAcceleration;
+    [HideInInspector] public float AngularSpeed;
+    [HideInInspector] public float Acceleration;
 
     [SerializeField, BoxGroup("Design Values")] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
@@ -91,6 +98,10 @@ public class GuardController : MonoBehaviour
 
     private void Start()
     {
+        thisAgent = GetComponent<NavMeshAgent>();
+        defaultAngularSpeed = thisAgent.angularSpeed;
+        defaultAcceleration = thisAgent.acceleration;
+
         //only for sfx for now
         guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
         guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardRun);
@@ -102,6 +113,8 @@ public class GuardController : MonoBehaviour
     /// <returns></returns>
     private void Update()
     {
+        FastRotate();
+
         //only for sfx for now
         guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
         guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
@@ -132,8 +145,24 @@ public class GuardController : MonoBehaviour
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
     }
-
     #endregion
+
+    /// <summary>
+    /// Makes the guard rotate faster
+    /// </summary>
+    private void FastRotate()
+    {
+        if (thisAgent.updateRotation)
+        {
+            thisAgent.angularSpeed = AngularSpeed;
+            thisAgent.acceleration = Acceleration;
+        }
+        else
+        {
+            thisAgent.angularSpeed = defaultAngularSpeed;
+            thisAgent.acceleration = defaultAcceleration;
+        }
+    }
 
     #region Behavior Functions
 
