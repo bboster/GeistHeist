@@ -44,8 +44,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [HideIf(nameof(isGhost))] public Transform ghostSpawnPoint;
 
     [Header("Materials")]
-    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] private Material PossessedMaterial;
-    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] private Material UnpossessedMaterial;
+    [Tooltip("Material on possessable when it is possessed.")]
+    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] public Material PossessedMaterial;
+    [Tooltip("Material on possessable when it is UNpossessed.")]
+    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] public Material UnpossessedMaterial;
+    [Tooltip("Material on possessable when it is used or when Ollie enters the possessable while a guard is in chase state.")]
+    [SerializeField, Required, ShowAssetPreview(16, 16)] public Material VisiblePossessionMaterial;
 
     [Header("Other")]
     [SerializeField] private bool isGhost = false;
@@ -58,7 +62,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private Coroutine rechargeCoroutine;
     private Coroutine unpossessCoroutine=null;
 
-    private MeshRenderer meshRenderer;
+    [HideInInspector] public MeshRenderer meshRenderer;
 
     [ReadOnly] private float currentTimerPercentage;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();

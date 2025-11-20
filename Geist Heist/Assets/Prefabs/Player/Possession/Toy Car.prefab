@@ -175,7 +175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce5a59bec215204c951fd62fed21df0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ToyCar
-  thirdPersoncinemachineCamera: {fileID: 0}
   minStrength: 3
   maxStrength: 21
   maxSpeedToZoom: 1
@@ -261,11 +260,14 @@ MonoBehaviour:
   ghostSpawnPoint: {fileID: 5454552123015739937}
   PossessedMaterial: {fileID: 2100000, guid: 7f215450e14de644d82bf78622e04701, type: 2}
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
+  VisiblePossessionMaterial: {fileID: 2100000, guid: 6cbcb27d84e370041b4968a2fb5c77cf, type: 2}
   isGhost: 0
   CanUnPossess: 0
+  meshRenderer: {fileID: 0}
   OnTimerUpdate:
     m_PersistentCalls:
       m_Calls: []
+  PauseDischargeTimer: 0
   IsMoving: 0
   possessableCanvas: {fileID: 0}
   showSeconds: 1
@@ -768,6 +770,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1148149316958636690}
     m_Modifications:
+    - target: {fileID: 165967241164658828, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.9916968
+      objectReference: {fileID: 0}
+    - target: {fileID: 165967241164658828, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.12859838
+      objectReference: {fileID: 0}
     - target: {fileID: 983731252585344803, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_Layer
       value: 10
@@ -779,6 +789,10 @@ PrefabInstance:
     - target: {fileID: 1613171770634289741, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740881634172135376, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
+      propertyPath: m_Alpha
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6536208597510328459, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_Layer

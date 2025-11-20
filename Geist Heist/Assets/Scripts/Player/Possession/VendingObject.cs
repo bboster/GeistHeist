@@ -71,6 +71,11 @@ public class VendingObject : IInputHandler, IInteractable
     {
         if (Tap)
         {
+            if (possessableObject.VisiblePossessionMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
+            }
+
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
             temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength, ForceMode.Impulse);
@@ -104,6 +109,11 @@ public class VendingObject : IInputHandler, IInteractable
             tempLaunch.y = launchDirection.y;
             temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
             hasThrownThisPossession = true;
+        }
+
+        if (possessableObject.PossessedMaterial != null)
+        {
+            possessableObject.meshRenderer.material = possessableObject.PossessedMaterial;
         }
 
         PossessableObject.OnActionPerformed?.Invoke();
