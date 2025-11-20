@@ -28,11 +28,11 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
-    [SerializeField] private float stepRayUpperHeight = 0.3f;
-    [SerializeField] private float stepRayLowerHeight = -0.9f;
-    [SerializeField] private float stepRayUpperLength = 0.35f;
-    [SerializeField] private float stepRayLowerLength = 0.7f;
-    [SerializeField] private float stepSmooth = 2f;
+    //[SerializeField] private float stepRayUpperHeight = 0.3f;
+    //[SerializeField] private float stepRayLowerHeight = -0.9f;
+    //[SerializeField] private float stepRayUpperLength = 0.35f;
+    //[SerializeField] private float stepRayLowerLength = 0.7f;
+    //[SerializeField] private float stepSmooth = 2f;
 
     [Tooltip("Approximate degrees per second")]
     [Foldout ("Animation Settings"), SerializeField] private float rotationSpeed = 60f;
@@ -50,9 +50,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
     [Header("Components")]
     [SerializeField, Required] private MeshRenderer playerModel;
-    [SerializeField] private GameObject stepRayUpper;
-    [SerializeField] private GameObject stepRayLower;
-    [SerializeField] private GameObject stepRayTop;
+    //[SerializeField] private GameObject stepRayUpper;
+    //[SerializeField] private GameObject stepRayLower;
+    //[SerializeField] private GameObject stepRayTop;
 
     [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
@@ -66,7 +66,7 @@ public class ThirdPersonInputHandler : IInputHandler
     private Vector3 positionLastFrame;
     private float modelStartYPosition;
     private Quaternion targetRotation;
-    private bool isStepping = false;
+    //private bool isStepping = false;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -75,8 +75,8 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
         modelStartYPosition = playerModel.transform.position.y;
-        stepRayUpper.transform.localPosition = new Vector3(stepRayUpper.transform.localPosition.x, stepRayUpperHeight, stepRayUpper.transform.localPosition.z);
-        stepRayLower.transform.localPosition = new Vector3(stepRayLower.transform.localPosition.x, stepRayLowerHeight, stepRayLower.transform.localPosition.z);
+        //stepRayUpper.transform.localPosition = new Vector3(stepRayUpper.transform.localPosition.x, stepRayUpperHeight, stepRayUpper.transform.localPosition.z);
+        //stepRayLower.transform.localPosition = new Vector3(stepRayLower.transform.localPosition.x, stepRayLowerHeight, stepRayLower.transform.localPosition.z);
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
@@ -89,7 +89,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
         RotatePlayer();
         HoverBob();
-        StepClimb();
+        //StepClimb();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -335,68 +335,64 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void HoverBob() // squarepants
     {
-        if(isStepping)
-        {
-            return;
-        }
         float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
         playerModel.transform.position = playerModel.transform.position.WithY(height);
     }
 
-    private void StepClimb()
-    {
-        // Assume there is a wall or something
-        if (Physics.Raycast(stepRayTop.transform.position, transform.forward, 2f)
-            || Physics.Raycast(stepRayTop.transform.position, transform.TransformDirection(1.5f, 0f, 1f), 1.75f)
-            || Physics.Raycast(stepRayTop.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), 1.75f))
-        {
-            return;
-        }
+    //private void StepClimb()
+    //{
+    //    // Assume there is a wall or something
+    //    if (Physics.Raycast(stepRayTop.transform.position, transform.forward, 2f)
+    //        || Physics.Raycast(stepRayTop.transform.position, transform.TransformDirection(1.5f, 0f, 1f), 1.75f)
+    //        || Physics.Raycast(stepRayTop.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), 1.75f))
+    //    {
+    //        return;
+    //    }
 
-          var moveInput = InputEvents.Instance.FirstPersonInputDirection;
-        if (moveInput.sqrMagnitude < 0.001f)
-            return;
+    //      var moveInput = InputEvents.Instance.FirstPersonInputDirection;
+    //    if (moveInput.sqrMagnitude < 0.001f)
+    //        return;
 
 
-        // raycast near the players feet/bottom of the rigidbody
-        // straight ahead raycast
-        if (Physics.Raycast(stepRayLower.transform.position, transform.forward, stepRayLowerLength))
-        {
-            // if the upper raycast doesn't hit anything then we can assume this is something the player can step over
-            if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, stepRayUpperLength))
-            {
-                isStepping = true;
-                rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
-                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
+    //    // raycast near the players feet/bottom of the rigidbody
+    //    // straight ahead raycast
+    //    if (Physics.Raycast(stepRayLower.transform.position, transform.forward, stepRayLowerLength))
+    //    {
+    //        // if the upper raycast doesn't hit anything then we can assume this is something the player can step over
+    //        if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, stepRayUpperLength))
+    //        {
+    //            isStepping = true;
+    //            rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+    //            rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
                 
-            }
-        }
+    //        }
+    //    }
 
-        // diagonal right raycast
-        if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayLowerLength))
-        {
-            if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayUpperLength))
-            {
-                isStepping = true;
-                rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
-                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
+    //    // diagonal right raycast
+    //    if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayLowerLength))
+    //    {
+    //        if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayUpperLength))
+    //        {
+    //            isStepping = true;
+    //            rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+    //            rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
                 
-            }
-        }
+    //        }
+    //    }
 
-        // diagonal left raycast
-        if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayLowerLength))
-        {
-            if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayUpperLength))
-            {
-                isStepping = true;
-                rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
-                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
+    //    // diagonal left raycast
+    //    if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayLowerLength))
+    //    {
+    //        if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayUpperLength))
+    //        {
+    //            isStepping = true;
+    //            rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+    //            rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
                 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     #endregion
 
@@ -407,9 +403,9 @@ public class ThirdPersonInputHandler : IInputHandler
         Gizmos.DrawWireSphere(gameObject.transform.position, interactSphereCastRadius);
         Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength));
         Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength), interactSphereCastRadius);
-        Gizmos.DrawLine(stepRayUpper.transform.position, stepRayUpper.transform.position + stepRayUpper.transform.forward * stepRayUpperLength); // step ray upper
-        Gizmos.DrawLine(stepRayLower.transform.position, stepRayLower.transform.position + stepRayLower.transform.forward * stepRayLowerLength); // step ray lower
-        Gizmos.DrawLine(stepRayTop.transform.position, stepRayTop.transform.position + stepRayTop.transform.forward * 2f); // step ray top
+        //Gizmos.DrawLine(stepRayUpper.transform.position, stepRayUpper.transform.position + stepRayUpper.transform.forward * stepRayUpperLength); // step ray upper
+        //Gizmos.DrawLine(stepRayLower.transform.position, stepRayLower.transform.position + stepRayLower.transform.forward * stepRayLowerLength); // step ray lower
+        //Gizmos.DrawLine(stepRayTop.transform.position, stepRayTop.transform.position + stepRayTop.transform.forward * 2f); // step ray top
 
     }
 
