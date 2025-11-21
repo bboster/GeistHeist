@@ -15,6 +15,9 @@ public class DebugConsole : MonoBehaviour
     [SerializeField] GameObject cameraGO;
     [SerializeField] GameObject[] Prefabs;
 
+    [SerializeField] GameObject FreeCamPrefab;
+    public GameObject FreeCamInstance;
+
     private bool noClipToggle = false;
     private bool godToggle = false;
     private bool cameraToggle = false;
@@ -26,6 +29,7 @@ public class DebugConsole : MonoBehaviour
         InputEvents.DebugStarted.AddListener(ToggleConsole);
         Player = FindFirstObjectByType<ThirdPersonInputHandler>().gameObject;
         cameraGO = FindFirstObjectByType<Camera>().gameObject;
+        FreeCamInstance = Instantiate(FreeCamPrefab, cameraGO.transform.position, Quaternion.identity);
     }
 
 
@@ -77,9 +81,17 @@ public class DebugConsole : MonoBehaviour
         }
         else if(Command.ToLower() == "dc")
         {
-            //still haven't implemented
             Debug.Log("Detatch Camera");
+            cameraToggle = !cameraToggle;
             TextArea.text = TextArea.text + "\n" + Command + " " + cameraToggle;
+            if (cameraToggle)
+            {
+                PlayerManager.Instance.PossessFreecam(FreeCamInstance.gameObject.GetComponent<PossessableObject>());
+            }
+            else
+            {
+                PlayerManager.Instance.PossessGhost(FreeCamInstance.gameObject.GetComponent<PossessableObject>());
+            }
         }
         else if(Command.ToLower().Substring(0,2) == "ls")
         {

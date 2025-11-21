@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEditor.Rendering;
+using System.IO;
 
 public class FreeCamMode : IInputHandler
 {
@@ -24,6 +25,7 @@ public class FreeCamMode : IInputHandler
     {
 
         cameraGO = FindFirstObjectByType<Camera>().gameObject;
+        rb = gameObject.GetComponent<Rigidbody>();
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
@@ -85,20 +87,30 @@ public class FreeCamMode : IInputHandler
     }
     public override void WhileMoveHeld(float secondsHeld)
     {
-        var direction = InputEvents.Instance.FirstPersonInputDirection;
+        /*var direction = InputEvents.Instance.FirstPersonInputDirection;
 
         var a = rb.linearVelocity;
         var b = (direction * speed);
 
         var horizontalVelocity = Vector3.Lerp(rb.linearVelocity, (direction * speed), speedPickup * Time.fixedDeltaTime);
+        Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);*/
+        var direction = InputEvents.Instance.FirstPersonInputDirection.WithY(cameraGO.transform.forward.y);
+
+        var a = rb.linearVelocity.WithY(0);
+        var b = (direction * speed);
+
+        var horizontalVelocity = Vector3.Lerp(rb.linearVelocity, (direction * speed), speedPickup * Time.fixedDeltaTime);
         Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);
+
+
+        rb.linearVelocity = horizontalVelocity;
 
     }
 
     public override void WhileMoveNotHeld()
     {
         // Maintains y velocity
-        rb.linearVelocity = Vector3.MoveTowards(rb.linearVelocity, new Vector3(0, rb.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
+        rb.linearVelocity = Vector3.zero; //Vector3.MoveTowards(rb.linearVelocity, new Vector3(0, rb.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
     }
 
 
