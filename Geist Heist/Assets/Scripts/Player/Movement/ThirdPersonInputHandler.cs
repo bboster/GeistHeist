@@ -95,15 +95,6 @@ public class ThirdPersonInputHandler : IInputHandler
         //HoverBob();
         //StepClimb();
         onSlope = OnSlope();
-
-        if (onSlope)
-        {
-            Debug.Log("I'm sloping");
-        }
-        else
-        {
-            Debug.Log("No slope");
-        }
     }
 
     // for the player / ghost: this means ENTERING ghost mode
