@@ -10,10 +10,10 @@ using FMOD;
 using GuardUtilities;
 using NaughtyAttributes;
 using System.Collections;
+using System.Net.NetworkInformation;
 using Unity.Cinemachine;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
-using UnityEngine.ProBuilder.Shapes;
 
 public class VisionStimulus : Stimulus
 {
@@ -35,6 +35,10 @@ public class VisionStimulus : Stimulus
     [SerializeField] private LayerMask raycastLayer;
     [Foldout("Programming Values")]
     [SerializeField] private Transform raycastSpawn;
+    [Foldout("Programming Values")]
+    [SerializeField] private GameObject visionRenderer;
+    [Foldout("Programming Values")]
+    [SerializeField] private int rayCount;
 
     [Foldout("Programming Values")]
     [SerializeField] private Light spotLight;
@@ -54,7 +58,7 @@ public class VisionStimulus : Stimulus
 
     private void Start()
     {
-        GenerateVisionMesh();
+        //GenerateVisionMesh(); THIS FUNCTION IS EVIL RIGHT NOW
     }
 
     private void OnValidate()
@@ -82,7 +86,7 @@ public class VisionStimulus : Stimulus
 
 #if UNITY_EDITOR
                 if (info.collider != null)
-                    Debug.Log(info.collider.gameObject.name);
+                    UnityEngine.Debug.Log(info.collider.gameObject.name);
 #endif
             }
             else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
@@ -132,27 +136,55 @@ public class VisionStimulus : Stimulus
 
     #endregion
 
+#if UNITY_EDITOR
     private void GenerateVisionMesh()
     {
         Mesh visionMesh = new Mesh();
+        visionRenderer.GetComponent<MeshFilter>().mesh = visionMesh;
 
-        Vector3[] vertices = new Vector3[3];
-        Vector2[] uv = new Vector2[3];
-        int[] triangles = new int[3];
-
-        Mesh coneMesh = GetComponent<Mesh>();
-
+        //Calculates the angle of the vision cone
+        Mesh coneMesh = GetComponent<MeshFilter>().mesh;
         float coneHeight = coneMesh.bounds.size.z * transform.localScale.z;
         float coneRadius = Mathf.Max(coneMesh.bounds.size.x, coneMesh.bounds.size.y) * 0.5f * transform.localScale.x;
+        float fov = Mathf.Rad2Deg * Mathf.Atan(coneRadius / coneHeight) * 2f;
 
+        float angle = 0f;
+        float angleIncrease = fov / rayCount;
+
+        Vector3[] vertices = new Vector3[rayCount + 2];
+        Vector2[] uv = new Vector2[vertices.Length];
+        int[] triangles = new int[rayCount * 3];
+
+        //Fills the vertices for a triangular mesh
         vertices[0] = coneMesh.vertices[0];
-        vertices[1] = new Vector3(vertices[0].x + coneRadius, 0, vertices[0].z + coneHeight);
-        vertices[1] = new Vector3(vertices[0].x - coneRadius, 0, vertices[0].z + coneHeight);
+
+        int vIndex = 1;
+        int tIndex = 0;
+        for (int i = 0; i <= rayCount; i++) //Calculates the vertex positions
+        {
+            float angleInRad = angle * (Mathf.PI / 180f);
+            Vector3 vertex = new Vector3(Mathf.Cos(angleInRad), Mathf.Sin(angleInRad)) * coneHeight;
+            vertex += vertices[0];
+            vertices[vIndex] = vertex;
+
+            if(i > 0)
+            {
+                triangles[tIndex + 0] = 0;
+                triangles[tIndex + 1] = vIndex - 1;
+                triangles[tIndex + 2] = vIndex;
+
+                tIndex += 3;
+            }
+
+            vIndex++;
+            angle -= angleIncrease;
+        }
 
         visionMesh.vertices = vertices;
         visionMesh.uv = uv;
         visionMesh.triangles = triangles;
     }
+#endif
 
     #region Vision Raycast
 
