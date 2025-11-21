@@ -14,12 +14,19 @@ using NaughtyAttributes;
 using UnityEngine.Events;
 using FMOD.Studio;
 using FMODUnity;
+using UnityEngine.AI;
+//using UnityEditor.ShaderGraph.Internal;
 
 public class GuardController : MonoBehaviour
 {
     #region Variable Declarations
 
     private bool changingBehaviors = false;
+    private NavMeshAgent thisAgent;
+    private float defaultAngularSpeed;
+    private float defaultAcceleration;
+    [HideInInspector] public float AngularSpeed;
+    [HideInInspector] public float Acceleration;
 
     [SerializeField, BoxGroup("Design Values")] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
@@ -47,6 +54,8 @@ public class GuardController : MonoBehaviour
 
     private EventInstance guardWalkSFX;
     private EventInstance guardRunSFX;
+
+    private ParticleSystem particleSystem;
 
     #endregion
 
@@ -91,9 +100,15 @@ public class GuardController : MonoBehaviour
 
     private void Start()
     {
+        thisAgent = GetComponent<NavMeshAgent>();
+        defaultAngularSpeed = thisAgent.angularSpeed;
+        defaultAcceleration = thisAgent.acceleration;
+
         //only for sfx for now
         guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
         guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+
+        particleSystem = GetComponentInChildren<ParticleSystem>();
     }
 
     /// <summary>
@@ -102,12 +117,19 @@ public class GuardController : MonoBehaviour
     /// <returns></returns>
     private void Update()
     {
+        FastRotate();
+
         //only for sfx for now
         guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
         guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
 
         if (currentBehavior.StateName == GuardStates.chase)
         {
+            if (particleSystem != null && !particleSystem.isPlaying)
+            {
+                particleSystem.Play(false);
+            }
+
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             PLAYBACK_STATE playbackState;
             guardRunSFX.getPlaybackState(out playbackState);
@@ -118,6 +140,11 @@ public class GuardController : MonoBehaviour
         }
         else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
         {
+            if (particleSystem != null && particleSystem.isPlaying)
+            {
+                particleSystem.Stop(false);
+            }
+
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             PLAYBACK_STATE playbackState;
             guardWalkSFX.getPlaybackState(out playbackState);
@@ -128,12 +155,33 @@ public class GuardController : MonoBehaviour
         }
         else
         {
+            if (particleSystem != null && particleSystem.isPlaying)
+            {
+                particleSystem.Stop(false);
+            }
+
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
     }
-
     #endregion
+
+    /// <summary>
+    /// Makes the guard rotate faster
+    /// </summary>
+    private void FastRotate()
+    {
+        if (thisAgent.updateRotation)
+        {
+            thisAgent.angularSpeed = AngularSpeed;
+            thisAgent.acceleration = Acceleration;
+        }
+        else
+        {
+            thisAgent.angularSpeed = defaultAngularSpeed;
+            thisAgent.acceleration = defaultAcceleration;
+        }
+    }
 
     #region Behavior Functions
 
