@@ -55,6 +55,8 @@ public class GuardController : MonoBehaviour
     private EventInstance guardWalkSFX;
     private EventInstance guardRunSFX;
 
+    private ParticleSystem particleSystem;
+
     #endregion
 
     #region Getters
@@ -105,6 +107,8 @@ public class GuardController : MonoBehaviour
         //only for sfx for now
         guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
         guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+
+        particleSystem = GetComponentInChildren<ParticleSystem>();
     }
 
     /// <summary>
@@ -121,6 +125,11 @@ public class GuardController : MonoBehaviour
 
         if (currentBehavior.StateName == GuardStates.chase)
         {
+            if (particleSystem != null && !particleSystem.isPlaying)
+            {
+                particleSystem.Play(false);
+            }
+
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             PLAYBACK_STATE playbackState;
             guardRunSFX.getPlaybackState(out playbackState);
@@ -131,6 +140,11 @@ public class GuardController : MonoBehaviour
         }
         else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
         {
+            if (particleSystem != null && particleSystem.isPlaying)
+            {
+                particleSystem.Stop(false);
+            }
+
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             PLAYBACK_STATE playbackState;
             guardWalkSFX.getPlaybackState(out playbackState);
@@ -141,6 +155,11 @@ public class GuardController : MonoBehaviour
         }
         else
         {
+            if (particleSystem != null && particleSystem.isPlaying)
+            {
+                particleSystem.Stop(false);
+            }
+
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
