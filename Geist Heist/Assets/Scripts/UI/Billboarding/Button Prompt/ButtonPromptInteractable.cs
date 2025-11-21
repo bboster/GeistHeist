@@ -13,6 +13,7 @@
  */
 
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -34,14 +35,28 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
     void IInteractable.Interact()
     {/* do nothing */}
 
-    void IInteractable.DisplayInteractUI()
+    void IInteractable.OnPlayerLookStart()
     {
+        /*int parentsDisabled =
+            transform
+            .GetComponentsInParent<IInteractable>() // parent's Interactables
+            .Select(i => i.IsInteractable() == false) // filter by uninteractable
+            .Count();// > 0; // overengineered but i love lambda so much
+        Debug.Log($"{parentsDisabled} parents disabled");*/
+        var parent_interactable = transform.GetComponentInParent < IInteractable> ();
+        if(parent_interactable.IsInteractable() == false)
+        {
+            Debug.Log("Parent uninteractable");
+            billboardUI.Hide();
+            return;
+        }
+
         // UpdateButtonPrompt changes the text depending on if its a controller / keyboard. 
         // This is redundant now but will be important later.
         billboardUI.UpdateButtonPrompt();
         billboardUI.Show();
     }
-    void IInteractable.HideInteractUI()
+    void IInteractable.OnPlayerLookStop()
     {
         billboardUI.Hide();
     }
