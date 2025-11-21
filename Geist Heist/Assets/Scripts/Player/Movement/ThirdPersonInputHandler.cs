@@ -67,6 +67,8 @@ public class ThirdPersonInputHandler : IInputHandler
     private float modelStartYPosition;
     private Quaternion targetRotation;
     //private bool isStepping = false;
+    private RaycastHit slopeHit;
+    private bool onSlope;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -90,6 +92,7 @@ public class ThirdPersonInputHandler : IInputHandler
         RotatePlayer();
         HoverBob();
         //StepClimb();
+        onSlope = OnSlope();
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -295,17 +298,35 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
-        var a = rigidbody.linearVelocity.WithY(0);
-        var b = (direction * speed);
-
         var horizontalVelocity = Vector3.Lerp(rigidbody.linearVelocity.WithY(0), (direction* speed), speedPickup*Time.fixedDeltaTime);
         Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);
 
-        rigidbody.linearVelocity = horizontalVelocity.WithY(rigidbody.linearVelocity.y);
+        if (onSlope)
+        {
+            Vector3 velocityOnSlope = Vector3.ProjectOnPlane(horizontalVelocity, slopeHit.normal);
+            horizontalVelocity = velocityOnSlope;
+            if(rigidbody.linearVelocity.y > 0)
+            {
+                rigidbody.linearVelocity = horizontalVelocity + new Vector3(0f, 2f, 0f);
+            }
+            else
+            {
+                rigidbody.linearVelocity = horizontalVelocity;
+            }
+            
+        }
+        else
+        {
+            rigidbody.linearVelocity = horizontalVelocity.WithY(rigidbody.linearVelocity.y);
+        }
     }
 
     public override void WhileMoveNotHeld()
     {
+        if (onSlope)
+        {
+            rigidbody.linearVelocity = Vector3.zero;
+        }
         // Maintains y velocity
         rigidbody.linearVelocity = Vector3.MoveTowards(rigidbody.linearVelocity, new Vector3(0, rigidbody.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
     }
@@ -340,6 +361,22 @@ public class ThirdPersonInputHandler : IInputHandler
         playerModel.transform.position = playerModel.transform.position.WithY(height);
     }
 
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 1.5f))
+        {
+            if (slopeHit.normal != Vector3.up)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
     //private void StepClimb()
     //{
     //    // Assume there is a wall or something
@@ -365,7 +402,7 @@ public class ThirdPersonInputHandler : IInputHandler
     //            isStepping = true;
     //            rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
     //            rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
-                
+
     //        }
     //    }
 
@@ -377,7 +414,7 @@ public class ThirdPersonInputHandler : IInputHandler
     //            isStepping = true;
     //            rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
     //            rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
-                
+
     //        }
     //    }
 
@@ -389,7 +426,7 @@ public class ThirdPersonInputHandler : IInputHandler
     //            isStepping = true;
     //            rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
     //            rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
-                
+
     //        }
     //    }
     //}
