@@ -28,6 +28,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
+    [SerializeField, UnityEngine.Range(0f, 1f)] private float slopeTransitionSmooth = 0.15f;
     //[SerializeField] private float stepRayUpperHeight = 0.3f;
     //[SerializeField] private float stepRayLowerHeight = -0.9f;
     //[SerializeField] private float stepRayUpperLength = 0.35f;
@@ -69,6 +70,7 @@ public class ThirdPersonInputHandler : IInputHandler
     //private bool isStepping = false;
     private RaycastHit slopeHit;
     private bool onSlope;
+    private Vector3 lastMoveDirection = Vector3.zero;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -90,9 +92,18 @@ public class ThirdPersonInputHandler : IInputHandler
         TryTurnOnInteractablePrompt();
 
         RotatePlayer();
-        HoverBob();
+        //HoverBob();
         //StepClimb();
         onSlope = OnSlope();
+
+        if (onSlope)
+        {
+            Debug.Log("I'm sloping");
+        }
+        else
+        {
+            Debug.Log("No slope");
+        }
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -298,27 +309,32 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
-        var horizontalVelocity = Vector3.Lerp(rigidbody.linearVelocity.WithY(0), (direction* speed), speedPickup*Time.fixedDeltaTime);
-        Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);
+        // calculate flat ground movement direction
+        Vector3 flatDesired = direction * speed;
 
+        // calculate slope direction if on slope
+        Vector3 slopeDesired = flatDesired;
         if (onSlope)
         {
-            Vector3 velocityOnSlope = Vector3.ProjectOnPlane(horizontalVelocity, slopeHit.normal);
-            horizontalVelocity = velocityOnSlope;
-            if(rigidbody.linearVelocity.y > 0)
-            {
-                rigidbody.linearVelocity = horizontalVelocity + new Vector3(0f, 2f, 0f);
-            }
-            else
-            {
-                rigidbody.linearVelocity = horizontalVelocity;
-            }
-            
+            Vector3 slopeDirection = Vector3.ProjectOnPlane(flatDesired, slopeHit.normal);
+            slopeDesired = slopeDirection * (speed * 0.5f);
         }
-        else
-        {
-            rigidbody.linearVelocity = horizontalVelocity.WithY(rigidbody.linearVelocity.y);
-        }
+
+        // Smoothly blend between flat and slope direction
+        Vector3 blendedDesired = Vector3.Lerp(flatDesired, slopeDesired, onSlope ? slopeTransitionSmooth : 0f);
+
+        // Lerp current horizontal velocity towards blended desired velocity
+        Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
+        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, blendedDesired, speedPickup * Time.fixedDeltaTime);
+
+        // clamp to max velocity
+        newHorizontal = Vector3.ClampMagnitude(newHorizontal, maxVelocity);
+
+        // apply new velocity while maintaining current y velocity
+        rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
+
+        // store last move direction for next frame
+        lastMoveDirection = blendedDesired;
     }
 
     public override void WhileMoveNotHeld()
