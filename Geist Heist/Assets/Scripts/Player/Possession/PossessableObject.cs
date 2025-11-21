@@ -112,6 +112,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvas.gameObject.SetActive(false);
         }
 
+        if(AudioManager.Instance == null)
+        {
+            Debug.LogError("No audio manager in scene");
+            return;
+        }
+
         possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
 
         possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionLow);

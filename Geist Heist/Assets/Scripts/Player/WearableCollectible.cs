@@ -4,17 +4,20 @@ using UnityEditor;
 using UnityEngine;
 
 /*
- * Contributors: Joshua Kelly
+ * Contributors: Joshua Kelly, Toby
  * Creation Date: 10/23/25
- * Last Modified: 10/27/25
+ * Last Modified: 11/18/25
  * 
  * Brief Description: Handles the display of the currently equipped wearable (like hats).
  * Do NOT attach this to the player prefab directly.
  */
 public class WearableCollectible : MonoBehaviour
 {
+    [SerializeField, Required] private GameObject wearableNode;
+
+    [Header("Debug")]
     private CollectableRegistry Registry;
-    private Collectable currentHat;
+    [ReadOnly] public Collectable currentHat; 
     private Collectable previousHat;
 
     private void OnValidate()
@@ -34,26 +37,21 @@ public class WearableCollectible : MonoBehaviour
         EquipHat(currentHat);
     }
 
-    public void EquipHat(Collectable newCollectable)
+    public void EquipHat(Collectable newCollectable, bool debug=false)
     {
+        if(!debug)
+            SaveDataManager.Instance.MarkCollectableAsWorn(newCollectable);
+
         previousHat = currentHat;
         // Update the current reference
         currentHat = newCollectable;
 
-        // Get the correct mesh *each time*
-        MeshRenderer meshPrefab = Registry.GetMesh(currentHat);
-        if (meshPrefab == null)
-        {
-            Debug.LogWarning($"No mesh prefab found for {currentHat}.");
-            return;
-        }
-
         // Find the Wearable node
-        GameObject wearableNode = GameObject.Find("Wearable");
         if (wearableNode == null)
         {
-            Debug.LogError("No 'Wearable' object found in the scene or player hierarchy!");
-            return;
+            wearableNode = this.gameObject;
+            //Debug.LogError("No 'Wearable' object found in the scene or player hierarchy!");
+            //return;
         }
 
         // Destroy any existing hat
@@ -68,7 +66,16 @@ public class WearableCollectible : MonoBehaviour
             DestroyImmediate(child.gameObject); // or Destroy(child.gameObject) at runtime
         }
 
-        // Instantiate the new hat
+        // Instantiate the new hat if it isnt none
+
+        // Get the correct mesh *each time*
+        MeshRenderer meshPrefab = Registry.GetMesh(currentHat);
+        if (meshPrefab == null)
+        {
+            Debug.LogWarning($"No mesh prefab found for {currentHat}.");
+            return;
+        }
+
         MeshRenderer hat = Instantiate(meshPrefab, wearableTransform);
         hat.transform.localPosition = Vector3.zero;
         hat.transform.localRotation = Quaternion.identity;
@@ -106,6 +113,7 @@ public class WearableCollectible : MonoBehaviour
 
     #region Debug Tools
 #if UNITY_EDITOR
+    [Header("Debug Only")]
     [SerializeField] private Collectable PreviewCollectable;
 
     [Button("Preview Hat")]
@@ -121,7 +129,7 @@ public class WearableCollectible : MonoBehaviour
             }
         }
 
-        EquipHat(PreviewCollectable);
+        EquipHat(PreviewCollectable, debug:true);
     }
 #endif
     #endregion
