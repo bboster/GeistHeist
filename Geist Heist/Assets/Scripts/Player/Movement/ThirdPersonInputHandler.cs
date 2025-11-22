@@ -323,9 +323,6 @@ public class ThirdPersonInputHandler : IInputHandler
 
         // apply new velocity while maintaining current y velocity
         rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
-
-        // store last move direction for next frame
-        lastMoveDirection = blendedDesired;
     }
 
     public override void WhileMoveNotHeld()
