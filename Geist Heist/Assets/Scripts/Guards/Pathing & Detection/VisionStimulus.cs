@@ -39,6 +39,10 @@ public class VisionStimulus : Stimulus
     [SerializeField] private GameObject visionRenderer;
     [Foldout("Programming Values")]
     [SerializeField] private int rayCount;
+    [Foldout("Programming Values")]
+    [SerializeField] private Transform coneOrigin;
+    [Foldout("Programming Values")]
+    [SerializeField] private Transform coneForwardExtent;
 
     [Foldout("Programming Values")]
     [SerializeField] private Light spotLight;
@@ -58,7 +62,7 @@ public class VisionStimulus : Stimulus
 
     private void Start()
     {
-        //GenerateVisionMesh(); THIS FUNCTION IS EVIL RIGHT NOW
+        GenerateVisionMesh(); //THIS FUNCTION IS EVIL RIGHT NOW
     }
 
     private void OnValidate()
@@ -140,10 +144,12 @@ public class VisionStimulus : Stimulus
     private void GenerateVisionMesh()
     {
         Mesh visionMesh = new Mesh();
+        visionMesh.name = "visualizerMesh";
         visionRenderer.GetComponent<MeshFilter>().mesh = visionMesh;
 
         //Calculates the angle of the vision cone
         Mesh coneMesh = GetComponent<MeshFilter>().mesh;
+
         float coneHeight = coneMesh.bounds.size.z * transform.localScale.z;
         float coneRadius = Mathf.Max(coneMesh.bounds.size.x, coneMesh.bounds.size.y) * 0.5f * transform.localScale.x;
         float fov = Mathf.Rad2Deg * Mathf.Atan(coneRadius / coneHeight) * 2f;
@@ -156,14 +162,14 @@ public class VisionStimulus : Stimulus
         int[] triangles = new int[rayCount * 3];
 
         //Fills the vertices for a triangular mesh
-        vertices[0] = coneMesh.vertices[0];
+        vertices[0] = transform.InverseTransformPoint(coneOrigin.position);
 
         int vIndex = 1;
         int tIndex = 0;
         for (int i = 0; i <= rayCount; i++) //Calculates the vertex positions
         {
             float angleInRad = angle * (Mathf.PI / 180f);
-            Vector3 vertex = new Vector3(Mathf.Cos(angleInRad), Mathf.Sin(angleInRad)) * coneHeight;
+            Vector3 vertex = new Vector3(Mathf.Cos(angleInRad), Mathf.Sin(angleInRad));
             vertex += vertices[0];
             vertices[vIndex] = vertex;
 
