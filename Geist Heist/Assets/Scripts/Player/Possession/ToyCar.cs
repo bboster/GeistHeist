@@ -198,6 +198,12 @@ public class ToyCar : IInputHandler
         if (possessableObject.CanUnPossess && rb.linearVelocity == Vector3.zero) 
         {
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
+
+            if (possessableObject.UnpossessedMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
+            }
+
             IsLeaving = true;
             if (freezeCoroutine == null)
             { 

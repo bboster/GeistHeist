@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 /*
@@ -30,11 +31,14 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
 
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
+    [Tooltip("How long it takes for the visible material to go back to possession material.")]
+    [SerializeField] private float delayToUpdateMaterialVisibility = 0.5f;
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
     private PossessableObject possessableObject;
     private bool hasThrownThisPossession;
+    private Coroutine materialCountdownCoroutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -109,11 +113,20 @@ public class VendingObject : IInputHandler, IInteractable
             tempLaunch.y = launchDirection.y;
             temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
             hasThrownThisPossession = true;
+
+            if (possessableObject.VisiblePossessionMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
+            }
         }
 
         if (possessableObject.PossessedMaterial != null)
         {
-            possessableObject.meshRenderer.material = possessableObject.PossessedMaterial;
+
+            if (materialCountdownCoroutine == null)
+            {
+                materialCountdownCoroutine = StartCoroutine(MaterialReplaceCountdown());
+            }
         }
 
         PossessableObject.OnActionPerformed?.Invoke();
@@ -134,6 +147,12 @@ public class VendingObject : IInputHandler, IInteractable
     #region Interact
     public override void OnInteractStarted()
     {
+        if (materialCountdownCoroutine != null)
+        {
+            StopCoroutine(materialCountdownCoroutine);
+            materialCountdownCoroutine = null;
+        }
+
         PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
     }
 
@@ -200,5 +219,21 @@ public class VendingObject : IInputHandler, IInteractable
                 );
             prevy = y;
         } */
+    }
+
+    /// <summary>
+    /// Counts down and replaces visible material of the vending machine with the possessed material
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator MaterialReplaceCountdown()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delayToUpdateMaterialVisibility);
+            possessableObject.meshRenderer.material = possessableObject.PossessedMaterial;
+            materialCountdownCoroutine = null;
+            break;
+        }
+        yield return null;
     }
 }
