@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation Date: 10/20/2025
- * Last Modified: 11/17/2025
+ * Last Modified: 11/20/2025
  * 
  * Brief Description: Handles UI elements for the pause menu.
  * Also listens to escape key input to open and close it.
@@ -21,10 +21,15 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] private RectTransform pauseScreenParent;
     [SerializeField, Required] public CanvasGroup pauseGroup;
     [SerializeField, Required] public SettingsMenu settingsMenu;
+    [SerializeField, Required] public GeneralTab generalTab;
+
+    [Header("Tab Navigation Buttons")]
+    [SerializeField, Required] private Toggle openInfoToggle;
+    [SerializeField, Required] private Toggle openControlsToggle;
+    [SerializeField, Required] private Toggle openSettingsToggle;
 
     [Header("Buttons")]
     [SerializeField, Required] private Button continueGameButton; 
-    [SerializeField, Required] private Button openSettingsButton; 
     [SerializeField, Required] private Button quitToHubButton; 
     [SerializeField, Required] private Button quitToMainMenuButton; 
 
@@ -52,8 +57,13 @@ public class PauseMenu : MonoBehaviour
 
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
 
+
+        //openSettingsToggle.OnSubmit.AddListener(OnOpenSettingsButtonSelected);
+        openInfoToggle.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenInfoButtonSelected(); });
+        openControlsToggle.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenControlsButtonSelected(); });
+        openSettingsToggle.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenSettingsButtonSelected(); });
+
         continueGameButton.onClick.AddListener(OnContinueGameButtonClicked);
-        openSettingsButton.onClick.AddListener(OnOpenSettingsButtonClicked);
         quitToHubButton.onClick.AddListener(OnGoToHubButtonClicked);
         quitToMainMenuButton.onClick.AddListener(OnGoToMainMenuButtonClicked);
 
@@ -67,8 +77,8 @@ public class PauseMenu : MonoBehaviour
     {
         confirmationPopup.HideConfirmationPopup();
 
-        if(settingsMenu.settingsGroup.alpha > 0)
-            settingsMenu.CloseSettingsMenu(saveSettings: false);
+        if(settingsMenu.canvasGroup.alpha > 0)
+            settingsMenu.CloseTab();
 
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.PauseGame();
@@ -106,17 +116,29 @@ public class PauseMenu : MonoBehaviour
             ClosePauseMenu() ;
     }
 
-#region UI Buttons
+    #region Tab Navigation Buttons
+
+    void OnOpenInfoButtonSelected()
+    {
+        Debug.LogError("no code yet");
+    }
+
+    void OnOpenControlsButtonSelected()
+    {
+        Debug.LogError("no code yet");
+    }
+
+    void OnOpenSettingsButtonSelected()
+    {
+        settingsMenu.OpenTab();
+    }
+
+    #endregion
 
     #region Main Buttons
     void OnContinueGameButtonClicked()
     {
         ClosePauseMenu() ;
-    }
-
-    void OnOpenSettingsButtonClicked()
-    {
-        settingsMenu.OpenSettingsMenu();
     }
 
     void OnGoToHubButtonClicked()
@@ -157,8 +179,6 @@ public class PauseMenu : MonoBehaviour
         SaveDataManager.Instance.ClearSaveFile();
         Debug.Log("Save data cleared");
     }
-
-    #endregion
 
     #endregion
 

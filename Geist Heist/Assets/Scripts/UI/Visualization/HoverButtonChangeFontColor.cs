@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby Schamberger
  * Creation: 11/6/25
- * Last Edited: 11/6/25
+ * Last Edited: 11/20/25
  * Summary: Change the color of a font text when user hover overs a selectable (button).
  * Designed for vertical gradients rn. Can be updated to do multiple colors with an enum.
  */
@@ -14,7 +14,6 @@ using UnityEngine.UI;
 
 public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField, Required] private Button button;
     [SerializeField, Required] private TMP_Text targetText;
 
     [Header("Unhovered color")]
@@ -27,10 +26,14 @@ public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, I
 
     void Start()
     {
-        OnPointerExit(null);
+        OnPointerExit();
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData) => OnPointerEnter();
+    public void OnPointerExit(PointerEventData eventData) => OnPointerExit();
+
+
+    public void OnPointerExit()
     {
         VertexGradient vg;
         vg.topLeft = unhoveredTopColor;
@@ -42,7 +45,7 @@ public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, I
         targetText.colorGradient = vg;
     }
 
-    void OnPointerEnter(PointerEventData data)
+    void OnPointerEnter()
     {
         VertexGradient vg;
         vg.topLeft = hoveredTopColor;
@@ -54,8 +57,16 @@ public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, I
         targetText.colorGradient = vg;
     }
 
-    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
+    [Button]
+    void PreviewUnhoveredState()
     {
-        OnPointerEnter(eventData);
+        OnPointerExit(null);
     }
+
+    [Button]
+    void PreviewHoveredState()
+    {
+        OnPointerEnter(null);
+    }
+
 }
