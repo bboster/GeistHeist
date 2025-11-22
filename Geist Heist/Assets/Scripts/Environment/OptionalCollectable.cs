@@ -32,11 +32,12 @@ public class OptionalCollectable : MonoBehaviour
 
     private CollectableRegistry Registry;
     private Collider childCollider;
+    private ParticleSystem particleSystem;
 
     private void Awake()
     {
-
         childCollider = GetComponentInChildren<Collider>();
+        particleSystem = GetComponentInChildren<ParticleSystem>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -81,6 +82,11 @@ public class OptionalCollectable : MonoBehaviour
         Vector3 startPos = transform.position;
         Vector3 startEulers = transform.eulerAngles;
         Vector3 startScale = transform.localScale;
+
+        if (particleSystem != null)
+        {
+            particleSystem.Stop(false);
+        }
 
         // Sideflips
         float timeStarted = Time.time;
