@@ -29,6 +29,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
     [SerializeField, UnityEngine.Range(0f, 1f)] private float slopeTransitionSmooth = 0.15f;
+    [SerializeField] private float slopeModifier = 0.75f;
     //[SerializeField] private float stepRayUpperHeight = 0.3f;
     //[SerializeField] private float stepRayLowerHeight = -0.9f;
     //[SerializeField] private float stepRayUpperLength = 0.35f;
@@ -95,6 +96,16 @@ public class ThirdPersonInputHandler : IInputHandler
         //HoverBob();
         //StepClimb();
         onSlope = OnSlope();
+
+        if (onSlope)
+        {
+            // freeze the Z and all rotation of the rigidbody
+            rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        }
+        else
+        {
+            rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -308,7 +319,7 @@ public class ThirdPersonInputHandler : IInputHandler
         if (onSlope)
         {
             Vector3 slopeDirection = Vector3.ProjectOnPlane(flatDesired, slopeHit.normal);
-            slopeDesired = slopeDirection * (speed * 0.5f);
+            slopeDesired = slopeDirection * (speed * slopeModifier);
         }
 
         // Smoothly blend between flat and slope direction
@@ -321,8 +332,22 @@ public class ThirdPersonInputHandler : IInputHandler
         // clamp to max velocity
         newHorizontal = Vector3.ClampMagnitude(newHorizontal, maxVelocity);
 
-        // apply new velocity while maintaining current y velocity
-        rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
+        if (onSlope)
+        {
+            Vector3 desiredOnPlane = Vector3.ProjectOnPlane(newHorizontal, slopeHit.normal);
+
+            Vector3 normalVelocity = Vector3.Project(rigidbody.linearVelocity, slopeHit.normal);
+
+            if(Vector3.Dot(normalVelocity, slopeHit.normal) < -0.05f)
+            {
+                normalVelocity = Vector3.zero;
+            }
+            rigidbody.linearVelocity = desiredOnPlane + normalVelocity;
+        }
+        else
+        {
+            rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
+        }
     }
 
     public override void WhileMoveNotHeld()
