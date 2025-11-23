@@ -121,7 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0419aec6580122146a1979e34ee5434d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableObject
+  HasCustomCameraBehavior: 0
   CinemachineCamera: {fileID: 0}
+  cameraAnchor: {fileID: 0}
   ghostExitPoints:
   - {fileID: 3795089960160624269}
   hasTimer: 1
@@ -131,11 +133,15 @@ MonoBehaviour:
   ghostSpawnPoint: {fileID: 3795089960160624269}
   PossessedMaterial: {fileID: 2100000, guid: 7f215450e14de644d82bf78622e04701, type: 2}
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
+  VisiblePossessionMaterial: {fileID: 2100000, guid: 5ef373c1ed4ed484cb05f46e2898a25a, type: 2}
+  VisibleUnPossessedMaterial: {fileID: 3804580865180825762, guid: 6292997158b857a4596f2ec04b101584, type: 3}
   isGhost: 0
   CanUnPossess: 1
+  meshRenderer: {fileID: 0}
   OnTimerUpdate:
     m_PersistentCalls:
       m_Calls: []
+  PauseDischargeTimer: 0
   IsMoving: 0
   possessableCanvas: {fileID: 0}
   showSeconds: 1
@@ -513,7 +519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4999564223826260826, guid: fef15e67847f6be43b86c08171a1a787, type: 3}
       propertyPath: m_FillAmount
-      value: 0.73192406
+      value: 0.17752028
       objectReference: {fileID: 0}
     - target: {fileID: 6082014655618213943, guid: fef15e67847f6be43b86c08171a1a787, type: 3}
       propertyPath: possessable
