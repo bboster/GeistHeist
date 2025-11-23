@@ -20,6 +20,8 @@ public class PauseMenu : MonoBehaviour
     [Header("Misc Components")]
     [SerializeField, Required] private RectTransform pauseScreenParent;
     [SerializeField, Required] public CanvasGroup pauseGroup;
+
+    [Header("Tabs")]
     [SerializeField, Required] public SettingsMenu settingsMenu;
     [SerializeField, Required] public GeneralTab generalTab;
 
@@ -82,6 +84,10 @@ public class PauseMenu : MonoBehaviour
 
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.PauseGame();
+
+        // general tabis default tab
+        generalTab.OpenTab();
+
         pauseScreenParent.gameObject.SetActive(true);
         StaticUtilities.EnableCanvasGroup(pauseGroup);
         StaticUtilities.ShowCursor();
@@ -120,7 +126,7 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenInfoButtonSelected()
     {
-        Debug.LogError("no code yet");
+        generalTab.OpenTab();
     }
 
     void OnOpenControlsButtonSelected()

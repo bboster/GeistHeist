@@ -19,18 +19,19 @@ public class GeneralTab : PauseMenuTab
     [SerializeField] private string defaultStageNameText = "Current Wing: [SCENE_NAME]";
 
     private OptionalCollectable[] allCollectables;
-    private int collectablesCollected => allCollectables.Where(c => c.IsCollected).Count();
+    private int numCollectablesCollected => allCollectables.Where(c => c.IsCollected).Count();
 
-    private void Start()
-    {
-        allCollectables = Object.FindObjectsByType<OptionalCollectable>(FindObjectsSortMode.None);
-    }
-
+    /// <summary>
+    /// RefreshUI is automatically called when generaltab is opened
+    /// </summary>
     public override void RefreshUI()
     {
+        if (allCollectables == null)
+            allCollectables = Object.FindObjectsByType<OptionalCollectable>(FindObjectsSortMode.None);
+
         // Count of collectables
-        if(allCollectables.Count() != 0)
-            collectablesCollectedText.text = $"{defaultCollectedText} {collectablesCollected} / {allCollectables.Count()}";
+        if (allCollectables.Count() != 0)
+            collectablesCollectedText.text = $"{defaultCollectedText} {numCollectablesCollected} / {allCollectables.Count()}";
         else
             collectablesCollectedText.gameObject.SetActive(false);
 

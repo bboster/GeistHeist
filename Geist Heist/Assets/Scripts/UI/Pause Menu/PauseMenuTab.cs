@@ -17,12 +17,13 @@ public class PauseMenuTab : MonoBehaviour
 
     public virtual void OpenTab()
     {
+        RefreshUI();
         if (currentOpenTab == this) return;
 
-        currentOpenTab.CloseTab();
-        currentOpenTab = this;
+        if(currentOpenTab != null)
+            currentOpenTab.CloseTab();
 
-        RefreshUI();
+        currentOpenTab = this;
 
         StaticUtilities.EnableCanvasGroup(canvasGroup);
 

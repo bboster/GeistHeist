@@ -34,16 +34,12 @@ public class OptionalCollectable : MonoBehaviour
     private Collider childCollider;
     private ParticleSystem particleSystem;
 
-    [ReadOnly] public bool IsCollected;
+    public bool IsCollected => SaveDataManager.Instance.IsCollectableCollected(ThisCollectable);
 
     private void Awake()
     {
         childCollider = GetComponentInChildren<Collider>();
         particleSystem = GetComponentInChildren<ParticleSystem>();
-    }
-    private void Start()
-    {
-        IsCollected = SaveDataManager.Instance.IsCollectableCollected(ThisCollectable);
     }
 
     private void OnTriggerEnter(Collider other)

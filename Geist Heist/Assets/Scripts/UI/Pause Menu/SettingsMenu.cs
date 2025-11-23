@@ -16,7 +16,7 @@ using UnityEngine.UI;
 public class SettingsMenu : PauseMenuTab
 {
     [Header("Non-settings buttons")]
-    [SerializeField, Required] private Button exitSettingsButton;
+    //[SerializeField, Required] private Button exitSettingsButton;
     [SerializeField, Required] private Button resetToDefaultsButton;
     [SerializeField] private string resetToDefaultsConfirmationText = "Reset all settings?";
 
@@ -72,7 +72,7 @@ public class SettingsMenu : PauseMenuTab
         ppManager = Camera.main.GetComponentInChildren<PostProcessingManager>();
 
         AddComponentListeners();
-        exitSettingsButton.onClick.AddListener(() => CloseTab());
+        //exitSettingsButton.onClick.AddListener(() => CloseTab());
         resetToDefaultsButton.onClick.AddListener(OnResetToDefaultsButtonPressed);
     }
 

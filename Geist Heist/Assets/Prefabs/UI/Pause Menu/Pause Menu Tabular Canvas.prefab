@@ -679,12 +679,13 @@ MonoBehaviour:
   pauseScreenParent: {fileID: 444959215771597309}
   pauseGroup: {fileID: 3957722871870928866}
   settingsMenu: {fileID: 1466535427208426167}
-  openInfoToggle: {fileID: 0}
-  openControlsToggle: {fileID: 0}
-  openSettingsToggle: {fileID: 0}
-  continueGameButton: {fileID: 0}
-  quitToHubButton: {fileID: 0}
-  quitToMainMenuButton: {fileID: 0}
+  generalTab: {fileID: 5895298553346777642}
+  openInfoToggle: {fileID: 2650398528357683045}
+  openControlsToggle: {fileID: 7909935253735264791}
+  openSettingsToggle: {fileID: 5276770100462236252}
+  continueGameButton: {fileID: 985228003483591635}
+  quitToHubButton: {fileID: 5557148560673750252}
+  quitToMainMenuButton: {fileID: 5165944967521641607}
   confirmationPopup: {fileID: 5759203136524687862}
   exitToHubText: 'Are you sure you want to exit to the hub?
 
@@ -1524,6 +1525,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4627027416864514134, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
   m_PrefabInstance: {fileID: 444857074447509620}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5165944967521641607 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4728054709059538163, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
+  m_PrefabInstance: {fileID: 444857074447509620}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &901733234542604319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1630,6 +1642,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4627027416864514134, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
   m_PrefabInstance: {fileID: 901733234542604319}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5557148560673750252 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4728054709059538163, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
+  m_PrefabInstance: {fileID: 901733234542604319}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &2486478923995141803
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2413,6 +2436,10 @@ PrefabInstance:
       propertyPath: pauseMenu
       value: 
       objectReference: {fileID: 3023089016019077419}
+    - target: {fileID: 5967695215935121354, guid: 937386b08481454438a200b98c2ff34a, type: 3}
+      propertyPath: canvasGroup
+      value: 
+      objectReference: {fileID: 3226928533673460081}
     - target: {fileID: 6195283959899009911, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2431,7 +2458,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7657235897803936780, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       propertyPath: m_Alpha
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8005372702364669004, guid: 937386b08481454438a200b98c2ff34a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8467287156843594003, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2468,6 +2499,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8428920588254434664, guid: 937386b08481454438a200b98c2ff34a, type: 3}
+    - {fileID: 8005372702364669004, guid: 937386b08481454438a200b98c2ff34a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 937386b08481454438a200b98c2ff34a, type: 3}
@@ -2482,6 +2514,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a665032cb30c4b4d8fbc69faf1f1645, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsMenu
+--- !u!225 &3226928533673460081 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 7657235897803936780, guid: 937386b08481454438a200b98c2ff34a, type: 3}
+  m_PrefabInstance: {fileID: 5083346945369757053}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4850613547646282760 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 422065471403309429, guid: 937386b08481454438a200b98c2ff34a, type: 3}
@@ -2601,6 +2638,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4627027416864514134, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
   m_PrefabInstance: {fileID: 5490265160234004256}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &985228003483591635 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4728054709059538163, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
+  m_PrefabInstance: {fileID: 5490265160234004256}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &5688386405087144079
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2940,6 +2988,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e193232ffa055e4ea61dbb411e4dbea, type: 3}
+--- !u!114 &2650398528357683045 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4782567843575517709, guid: 8e193232ffa055e4ea61dbb411e4dbea, type: 3}
+  m_PrefabInstance: {fileID: 7392381119187656040}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!224 &2783650757999590718 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4627027416864514134, guid: 8e193232ffa055e4ea61dbb411e4dbea, type: 3}
