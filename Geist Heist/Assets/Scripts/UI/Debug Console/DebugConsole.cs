@@ -1,3 +1,10 @@
+/*
+ * Contributors: Brenden
+ * Creation Date: 10/21/25
+ * Last Modified: 11/23/25
+ * 
+ * Brief Description: handles the commands from the debug console
+ */
 using System;
 using TMPro;
 using UnityEngine;
@@ -61,91 +68,90 @@ public class DebugConsole : MonoBehaviour
 
     public void CallFunction()
     {
-        string Command = inputs.text;
+        string Command = inputs.text.ToLower();
 
-        if(Command.ToLower() == "nc")
+        if(Command == "nc")
         {
-            Debug.Log("no clip");
-            noClipToggle = !noClipToggle;
-            Player.GetComponent<CapsuleCollider>().enabled = !noClipToggle;
-            Player.GetComponentInChildren<SphereCollider>().enabled = !noClipToggle;
-            Player.GetComponent<Rigidbody>().useGravity = !noClipToggle;
+            NoClip();
             TextArea.text = TextArea.text + "\n" + Command + " " + noClipToggle;
         }
-        else if(Command.ToLower() == "god")
+        else if(Command == "god")
         {
-            Debug.Log("God");
-            godToggle = !godToggle;
-            GameManager.Instance.InGodMode = godToggle;
+            GodMode();
             TextArea.text = TextArea.text + "\n" + Command + " " + godToggle;
         }
-        else if(Command.ToLower() == "dc")
+        else if(Command == "dc")
         {
-            Debug.Log("Detatch Camera");
-            cameraToggle = !cameraToggle;
+            FreeCam();
             TextArea.text = TextArea.text + "\n" + Command + " " + cameraToggle;
-            if (cameraToggle)
-            {
-                PlayerManager.Instance.PossessFreecam(FreeCamInstance.gameObject.GetComponent<PossessableObject>());
-            }
-            else
-            {
-                PlayerManager.Instance.PossessGhost(FreeCamInstance.gameObject.GetComponent<PossessableObject>());
-            }
         }
-        else if(Command.ToLower().Substring(0,2) == "ls")
+        else if(Command.Substring(0, 2) == "ls")
         {
-            Debug.Log("Load Scene");
-            int Temp;
-            if(int.TryParse(Command.Substring(3, Command.Length - 3), out Temp))
+            if(Command.Length >= 4)
             {
-                SceneManager.LoadScene(Temp);
+                LoadNewScene(Command.Substring(3, Command.Length - 3));
+                TextArea.text = TextArea.text + "\n" + "Scene Failed to load, Please input a valid scene";
             }
             else
             {
-
-                SceneManager.LoadScene(Command.Substring(3, Command.Length - 3));
+                TextArea.text = TextArea.text + "\n" + Command + " Invalid Scene name or index, Please input a valid scene";
             }
+            
         }
-        else if(Command.ToLower() == "freeze")
+        else if(Command == "freeze")
         {
             //waiting for jacob to implement
             Debug.Log("Freeze");
             TextArea.text = TextArea.text + "\n" + Command + " " + freezeToggle;
         }
-        else if(Command.ToLower() == "help")
+        else if(Command == "help")
         {
             TextArea.text = TextArea.text + "\n" + Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
-                "\nLoad Scene: ls <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index>";
-            Debug.Log("Help");
+                "\nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value>";
         }
         else if(Command.Length > 4)
         {
-            if (Command.ToLower().Substring(0, 5) == "spawn")
+            if (Command.Substring(0, 5) == "spawn")
             {
-                int Temp;
-                string PostString = Command.Substring(6,Command.Length - 6);
-                Debug.Log("Spawn Item");
-                if (int.TryParse(PostString, out Temp))
+                if(Command.Length >= 7)
                 {
-                    Instantiate(Prefabs[0], cameraGO.transform.position, Quaternion.identity);
+                    spawnItem(Command.Substring(6, Command.Length - 6));
                 }
                 else
                 {
-                    if(PostString.ToLower() == "vase")
+                    TextArea.text = TextArea.text + "\n" + Command + " Invalid item, Please input a valid item";
+                }
+            }
+            else if (Command.Substring(0, 5) == "scene")
+            {
+                if (Command.Length >= 7)
+                {
+                    LoadNewScene(Command.Substring(6, Command.Length - 6));
+                    TextArea.text = TextArea.text + "\n" + "Scene Failed to load, Please input a valid scene";
+                }
+                else
+                {
+                    TextArea.text = TextArea.text + "\n" + Command + " Invalid Scene name or index, Please input a valid scene";
+                }
+            }
+            else if (Command.Substring(0, 5) == "speed")
+            {
+                if (Command.Length >= 7)
+                {
+                    int Temp;
+                    if (int.TryParse(Command.Substring(6, Command.Length - 6), out Temp))
                     {
-                        Instantiate(Prefabs[0], cameraGO.transform.position, Quaternion.identity);
+                        PlayerSpeed(Temp);
                     }
-                    else if (PostString.ToLower() == "vending" || PostString.ToLower() == "vending machine")
+                    else
                     {
-                        Instantiate(Prefabs[1], cameraGO.transform.position, Quaternion.identity);
-                    }
-                    else if (PostString.ToLower() == "car")
-                    {
-                        Instantiate(Prefabs[2], cameraGO.transform.position, Quaternion.identity);
+                        TextArea.text = TextArea.text + "\n" + Command + " Please put a number after the command";
                     }
                 }
-                Instantiate(Prefabs[0]);
+                else
+                {
+                    TextArea.text = TextArea.text + "\n" + Command + " Please put the speed number after the command";
+                }
             }
             else if(Command.Length != 0)
             {
@@ -158,5 +164,76 @@ public class DebugConsole : MonoBehaviour
         }
         inputs.text = "";
         inputs.ActivateInputField();
+    }
+
+    private void NoClip()
+    {
+        noClipToggle = !noClipToggle;
+        Player.GetComponent<CapsuleCollider>().enabled = !noClipToggle;
+        Player.GetComponentInChildren<SphereCollider>().enabled = !noClipToggle;
+        Player.GetComponent<Rigidbody>().useGravity = !noClipToggle;
+    }
+
+    private void GodMode()
+    {
+        godToggle = !godToggle;
+        GameManager.Instance.InGodMode = godToggle;
+    }
+
+    private void FreeCam()
+    {
+        cameraToggle = !cameraToggle;
+        if (cameraToggle)
+        {
+            PlayerManager.Instance.PossessFreecam(FreeCamInstance.gameObject.GetComponent<PossessableObject>());
+        }
+        else
+        {
+            PlayerManager.Instance.PossessGhost(FreeCamInstance.gameObject.GetComponent<PossessableObject>());
+        }
+    }
+
+    private void LoadNewScene(String sceneName)
+    {
+        int Temp;
+        if (int.TryParse(sceneName, out Temp))
+        {
+            SceneManager.LoadScene(Temp);
+        }
+        else
+        {
+
+            SceneManager.LoadScene(sceneName);
+        }
+    }
+
+    private void spawnItem(String itemName)
+    {
+        int Temp;
+        if (int.TryParse(itemName, out Temp))
+        {
+            Instantiate(Prefabs[0], cameraGO.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            if (itemName == "vase")
+            {
+                Instantiate(Prefabs[0], cameraGO.transform.position, Quaternion.identity);
+            }
+            else if (itemName == "vending" || itemName == "vending machine")
+            {
+                Instantiate(Prefabs[1], cameraGO.transform.position, Quaternion.identity);
+            }
+            else if (itemName == "car" || itemName == "toy car")
+            {
+                Instantiate(Prefabs[2], cameraGO.transform.position, Quaternion.identity);
+            }
+        }
+        Instantiate(Prefabs[0]);
+    }
+
+    private void PlayerSpeed(float Speed)
+    {
+        Player.GetComponent<ThirdPersonInputHandler>().speed = Speed;
     }
 }

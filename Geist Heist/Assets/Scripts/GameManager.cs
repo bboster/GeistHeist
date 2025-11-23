@@ -40,6 +40,7 @@ public class GameManager : Singleton<GameManager>
     [Header("Other Constants")]
     [SerializeField, Required] GameObject EventSystemPrefab; // for detecting UI input events (unity thing, not us).
     [SerializeField, Required] GameObject CameraPrefab;
+    [SerializeField] GameObject DebugConsolePrefab;
 
     [Header("Player Variables")]
     [SerializeField, Required] GameObject PlayerPrefab;
@@ -153,6 +154,7 @@ public class GameManager : Singleton<GameManager>
 
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
         Instantiate(GeneralHUDPrefab);
+        Instantiate(DebugConsolePrefab);
 
         if (GameObject.FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
             Instantiate(EventSystemPrefab);
