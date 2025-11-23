@@ -110,6 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106f1fa16ba86d84db2deff1bdbd7fca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WearableCollectible
+  wearableNode: {fileID: 0}
+  currentHat: 0
   PreviewCollectable: 0
 --- !u!1 &3233496734506821444
 GameObject:
@@ -178,6 +180,7 @@ MonoBehaviour:
   OnTimerUpdate:
     m_PersistentCalls:
       m_Calls: []
+  PauseDischargeTimer: 0
   IsMoving: 0
   possessableCanvas: {fileID: 0}
   showSeconds: 1
@@ -248,11 +251,8 @@ MonoBehaviour:
   maxVelocity: 12
   speedPickup: 3
   slowDownFactor: 0.1
-  stepRayUpperHeight: -0.3
-  stepRayLowerHeight: -0.8
-  stepRayUpperLength: 0.8
-  stepRayLowerLength: 1.55
-  stepSmooth: 15
+  slopeTransitionSmooth: 0.5
+  slopeModifier: 1
   rotationSpeed: 30
   hoverHeight: 0.1
   hoverSpeed: 3
@@ -263,9 +263,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1217
   playerModel: {fileID: 8754484748706083896}
-  stepRayUpper: {fileID: 787425798878491247}
-  stepRayLower: {fileID: 8804012565187145666}
-  stepRayTop: {fileID: 7627108030336543030}
   drawInteractRay: 1
 --- !u!1 &5789115753528163449
 GameObject:

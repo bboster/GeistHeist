@@ -28,8 +28,8 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
-    [SerializeField, UnityEngine.Range(0f, 1f)] private float slopeTransitionSmooth = 0.15f;
-    [SerializeField] private float slopeModifier = 0.75f;
+    [SerializeField, UnityEngine.Range(0f, 1f)] private float slopeTransitionSmooth = 0.5f;
+    [SerializeField] private float slopeModifier = 1f;
     //[SerializeField] private float stepRayUpperHeight = 0.3f;
     //[SerializeField] private float stepRayLowerHeight = -0.9f;
     //[SerializeField] private float stepRayUpperLength = 0.35f;
