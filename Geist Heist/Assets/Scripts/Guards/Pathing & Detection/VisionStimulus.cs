@@ -173,7 +173,10 @@ public class VisionStimulus : Stimulus
         vertices[0] = visionRenderer.transform.InverseTransformPoint(coneOrigin.position);
 
         //Starts a ray at the right side of the vision cone so that it can sweep left for collisions
-        Vector3 raySweep = new Vector3(coneOrigin.position.x + coneRadius, transform.position.y, coneOrigin.position.z + coneHeight);
+        //Vector3 raySweep = new Vector3(coneOrigin.position.x + coneRadius, transform.position.y, coneOrigin.position.z + coneHeight);
+        Vector3 raySweep = (-transform.right * coneRadius) - (-transform.forward * coneHeight);
+        raySweep.y = transform.position.y;
+        //raySweep = transform.TransformPoint(raySweep);
 
         int vIndex = 1;
         int tIndex = 0;
@@ -181,16 +184,16 @@ public class VisionStimulus : Stimulus
         {
             Vector3 vertex;
 
-            Vector3 dir = (transform.forward * coneHeight);
-            dir.x += raySweep.x;
+            UnityEngine.Debug.DrawRay(coneOrigin.position, raySweep, Color.green, 1f);
+
             //Sets the position of the vertex depending on whether it collided with an environment object
-            if (Physics.Raycast(coneOrigin.position, dir, out RaycastHit hit, coneHeight, layer))
+            if (Physics.Raycast(coneOrigin.position, raySweep, out RaycastHit hit, coneHeight, layer))
             {
-                vertex = transform.InverseTransformPoint(hit.point);
+                vertex = visionRenderer.transform.InverseTransformPoint(hit.point);
             }
             else
             {
-                vertex = transform.InverseTransformPoint(raySweep);
+                vertex =  visionRenderer.transform.InverseTransformPoint(raySweep);
             }
 
             //vertex += vertices[0];
@@ -208,7 +211,14 @@ public class VisionStimulus : Stimulus
 
             UnityEngine.Debug.DrawLine(coneOrigin.position, raySweep, Color.red);
             vIndex++;
-            raySweep.x -= coneDiameter / rayCount; //Increments the z coordinate of the sweeping ray so that it moves left along the cone
+
+            Vector3 p1 = (-transform.right * coneRadius) + (-transform.forward * coneHeight);
+            Vector3 p2 = (transform.right * coneRadius) + (transform.forward * coneHeight);
+            Vector3 triBase = p2 - p1;
+            triBase.y = 0;
+
+            //Sweeps the raycast a given distance along the base of the triangular visualizer. NewPoint = OldPoint + distance * unit vector of the base
+            raySweep = raySweep + (coneDiameter / rayCount) * Vector3.Normalize(triBase);
         }
 
         visionMesh.vertices = vertices;
