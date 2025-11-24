@@ -244,4 +244,29 @@ public class PlayerManager : Singleton<PlayerManager>
 
     #endregion
 
+
+    public void PossessFreecam(PossessableObject possessable)
+    {
+        if (possessable == null)
+        {
+            Debug.LogError("Possessable is null");
+            return;
+        }
+        if (PlayerGhostObject == null)
+        {
+            Debug.LogError("Player Ghost Object is null");
+            return;
+        }
+
+        SwapCameras(PlayerGhostObject, possessable);
+        //PlayerGhostObject.gameObject.SetActive(false);
+
+        RegisterInputs(possessable);
+
+        if (CurrentObject != null) CurrentObject.OnPossessionEnded();
+        possessable.OnPossessionStart();
+
+        DeRegisterInputs(CurrentObject);
+        CurrentObject = possessable;
+    }
 }

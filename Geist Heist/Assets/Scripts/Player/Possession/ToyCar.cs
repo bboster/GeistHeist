@@ -75,6 +75,11 @@ public class ToyCar : IInputHandler
         if (rb.linearVelocity == Vector3.zero)
         {
             possessableObject.PauseDischargeTimer = false;
+
+            if (possessableObject.UnpossessedMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
+            }
         }
         else
         {
@@ -90,6 +95,12 @@ public class ToyCar : IInputHandler
             Debug.Log("clamping strength");
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
             rb.AddForce(gameObject.transform.forward * currentStrength, ForceMode.Impulse);
+            
+            if (possessableObject.VisiblePossessionMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
+            }
+
             possessableObject.PauseDischargeTimer = true;
             physicsEnabled = false;
             hasLaunchedThisPossession = true;
@@ -187,6 +198,12 @@ public class ToyCar : IInputHandler
         if (possessableObject.CanUnPossess && rb.linearVelocity == Vector3.zero) 
         {
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
+
+            if (possessableObject.UnpossessedMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
+            }
+
             IsLeaving = true;
             if (freezeCoroutine == null)
             { 
