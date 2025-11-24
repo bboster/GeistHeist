@@ -26,10 +26,10 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.L))
+        /*if(Input.GetKeyDown(KeyCode.L))
         {
             SceneManager.LoadScene("CheckpointTestScene");
-        }
+        }*/
     }
 
 #endif
