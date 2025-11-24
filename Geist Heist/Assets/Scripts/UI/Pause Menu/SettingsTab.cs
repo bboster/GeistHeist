@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation: 11/15/2025
- * Last Edited: 11/20/25
+ * Last Edited: 11/24/25
  * 
  * Description: Manages UI elements and settings data.
  * Settings variables are stored and accessed in SettingsProfile.cs
@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class SettingsMenu : PauseMenuTab
+public class SettingsTab : PauseMenuTab
 {
     [Header("Non-settings buttons")]
     //[SerializeField, Required] private Button exitSettingsButton;
@@ -67,8 +67,9 @@ public class SettingsMenu : PauseMenuTab
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         ppManager = Camera.main.GetComponentInChildren<PostProcessingManager>();
 
         AddComponentListeners();

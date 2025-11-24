@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation Date: 10/20/2025
- * Last Modified: 11/20/2025
+ * Last Modified: 11/24/2025
  * 
  * Brief Description: Handles UI elements for the pause menu.
  * Also listens to escape key input to open and close it.
@@ -22,13 +22,9 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] public CanvasGroup pauseGroup;
 
     [Header("Tabs")]
-    [SerializeField, Required] public SettingsMenu settingsMenu;
+    [SerializeField, Required] public SettingsTab settingsTab;
+    [SerializeField, Required] public ControlsTab controlsTab;
     [SerializeField, Required] public GeneralTab generalTab;
-
-    [Header("Tab Navigation Buttons")]
-    [SerializeField, Required] private Toggle openInfoToggle;
-    [SerializeField, Required] private Toggle openControlsToggle;
-    [SerializeField, Required] private Toggle openSettingsToggle;
 
     [Header("Buttons")]
     [SerializeField, Required] private Button continueGameButton; 
@@ -59,11 +55,10 @@ public class PauseMenu : MonoBehaviour
 
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
 
-
-        //openSettingsToggle.OnSubmit.AddListener(OnOpenSettingsButtonSelected);
-        openInfoToggle.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenInfoButtonSelected(); });
-        openControlsToggle.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenControlsButtonSelected(); });
-        openSettingsToggle.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenSettingsButtonSelected(); });
+        // tab buttons
+        generalTab .toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenInfoButtonSelected(); });
+        controlsTab.toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenControlsButtonSelected(); });
+        settingsTab.toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenSettingsButtonSelected(); });
 
         continueGameButton.onClick.AddListener(OnContinueGameButtonClicked);
         quitToHubButton.onClick.AddListener(OnGoToHubButtonClicked);
@@ -79,8 +74,8 @@ public class PauseMenu : MonoBehaviour
     {
         confirmationPopup.HideConfirmationPopup();
 
-        if(settingsMenu.canvasGroup.alpha > 0)
-            settingsMenu.CloseTab();
+        if(settingsTab.canvasGroup.alpha > 0)
+            settingsTab.CloseTab();
 
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.PauseGame();
@@ -131,12 +126,12 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenControlsButtonSelected()
     {
-        Debug.LogError("no code yet");
+        controlsTab.OpenTab();
     }
 
     void OnOpenSettingsButtonSelected()
     {
-        settingsMenu.OpenTab();
+        settingsTab.OpenTab();
     }
 
     #endregion

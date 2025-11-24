@@ -7,13 +7,20 @@
 
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PauseMenuTab : MonoBehaviour
 {
     public static PauseMenuTab currentOpenTab;
 
     [SerializeField, Required] public CanvasGroup canvasGroup;
+    [SerializeField, Required] public Toggle toggleButton;
     protected PauseMenu pauseMenu;
+
+    protected virtual void Start()
+    {
+        //toggleButton.onValueChanged.AddListener(OpenTab());
+    }
 
     public virtual void OpenTab()
     {
@@ -33,6 +40,7 @@ public class PauseMenuTab : MonoBehaviour
 
     public virtual void CloseTab()
     {
+        toggleButton.isOn = false;
         StaticUtilities.DisableCanvasGroup(canvasGroup);
         //InputEvents.PauseStartedOverride = null;
         //pauseMenu.OpenPauseMenu();
