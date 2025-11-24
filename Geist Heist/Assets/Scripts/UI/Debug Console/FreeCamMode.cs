@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEditor.Rendering;
+//using UnityEditor.Rendering;
 using System.IO;
 
 public class FreeCamMode : IInputHandler
