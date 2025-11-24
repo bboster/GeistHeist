@@ -32,6 +32,7 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
+    [SerializeField] private ParticleSystem possessableParticle;
 
     private PossessableObject possessableObject;
     private bool hasThrownThisPossession;
@@ -52,12 +53,14 @@ public class VendingObject : IInputHandler, IInteractable
 
         chargeMeter?.OnPossessionStarted();
         hasThrownThisPossession = false;
+        possessableParticle.Play();
     }
 
     public override void OnPossessionEnded()
     {
         currentStrength = minStrength;
         hasThrownThisPossession = false;
+        possessableParticle.Stop();
     }
 
     public override void WhilePossessingUpdate()
