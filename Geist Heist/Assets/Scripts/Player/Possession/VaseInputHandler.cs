@@ -12,7 +12,6 @@ using UnityEngine.UI;
 public class VaseInputHandler : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
-    [SerializeField] ParticleSystem possessableParticles;
     private PossessableObject possessableObject;
 
     private void Start()
@@ -27,12 +26,11 @@ public class VaseInputHandler : IInputHandler
 
     public override void OnPossessionStart()
     {
-        possessableParticles.Play();
+
     }
 
     public override void OnPossessionEnded()
     {
-        possessableParticles.Stop();
     }
 
     #region action
