@@ -47,10 +47,9 @@ public class GuardController : MonoBehaviour
 
     [Foldout("Programming Values")]
     [SerializeField] private Animator animator;
-    [SerializeField] private GameObject dustParticles;
-    [SerializeField] private GameObject smokeParticlesL; 
-    [SerializeField] private GameObject smokeParticlesR;
-    [SerializeField] private GameObject waveParticles;
+    [SerializeField] private ParticleSystem dustParticles;
+    [SerializeField] private ParticleSystem smokeParticlesL; 
+    [SerializeField] private ParticleSystem smokeParticlesR;
 
     [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
@@ -125,11 +124,16 @@ public class GuardController : MonoBehaviour
 
         if (currentBehavior.StateName == GuardStates.chase)
         {
-            if (dustParticles != null && !dustParticles.GetComponentInChildren<ParticleSystem>().isPlaying)
+            if (dustParticles != null && !dustParticles.isPlaying)
             {
-                dustParticles.GetComponentInChildren<ParticleSystem>().Play();
-                smokeParticlesL.GetComponentInChildren<ParticleSystem>().Play();
-                smokeParticlesR.GetComponentInChildren<ParticleSystem>().Play();
+                dustParticles.Play();
+            }
+
+            if ((smokeParticlesL != null && smokeParticlesR != null) && (!smokeParticlesL.isPlaying && !smokeParticlesR.isPlaying))
+            {
+                smokeParticlesL.Play();
+                smokeParticlesR.Play();
+
             }
 
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -142,11 +146,16 @@ public class GuardController : MonoBehaviour
         }
         else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
         {
-            if (dustParticles != null && dustParticles.GetComponentInChildren<ParticleSystem>().isPlaying)
+            if (dustParticles != null && dustParticles.isPlaying)
             {
-                dustParticles.GetComponentInChildren<ParticleSystem>().Stop();
-                smokeParticlesL.GetComponentInChildren<ParticleSystem>().Stop();
-                smokeParticlesR.GetComponentInChildren<ParticleSystem>().Stop();
+                dustParticles.Stop();
+
+            }
+
+            if ((smokeParticlesL != null && smokeParticlesR != null) && (smokeParticlesL.isPlaying && smokeParticlesR.isPlaying))
+            {
+                smokeParticlesL.Stop();
+                smokeParticlesR.Stop();
 
             }
 
@@ -160,11 +169,11 @@ public class GuardController : MonoBehaviour
         }
         else
         {
-            if (dustParticles != null && dustParticles.GetComponentInChildren<ParticleSystem>().isPlaying)
+            if (dustParticles != null && dustParticles.isPlaying)
             {
-                dustParticles.GetComponentInChildren<ParticleSystem>().Stop();
-                smokeParticlesL.GetComponentInChildren<ParticleSystem>().Stop();
-                smokeParticlesR.GetComponentInChildren<ParticleSystem>().Stop();
+                dustParticles.Stop();
+                smokeParticlesL.Stop();
+                smokeParticlesR.Stop();
             }
 
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
