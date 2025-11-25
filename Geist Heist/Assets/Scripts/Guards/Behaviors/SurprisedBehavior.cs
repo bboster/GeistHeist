@@ -19,39 +19,27 @@ public class SurprisedBehavior : Behavior
     [Tooltip("The length that the guard will pause before chasing after seeing the player")]
     [SerializeField] private float reactionLength;
 
-    #region Initialize Function and StopBehavior
-
-    public override void InitializeBehavior(GameObject selfRef)
-    {
-        base.InitializeBehavior(selfRef);
-        //ThirdPersonInputHandler.OnPossessObject += selfRef.GetComponent<GuardController>().ChangeBehavior;
-    }
-
-    public override void StopBehavior()
-    {
-        base.StopBehavior();
-        //ThirdPersonInputHandler.OnPossessObject -= selfRef.GetComponent<GuardController>().ChangeBehavior;
-    }
-
-    #endregion
-
     /// <summary>
     /// Runs the logic for the behavior.
     /// </summary>
     /// <returns></returns>
     public override IEnumerator BehaviorLoop()
     {
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.GuardReactions);
-
+        AudioManager.Instance.PlayOneShot(FMODEvents.instance.GuardReactions);
 
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
 
         thisAgent.isStopped = true;
+
+#if UNITY_EDITOR
+        selfRef.GetComponent<GuardDebugger>().StartDebugProgress(reactionLength, this);
+#endif
+
         yield return new WaitForSeconds(reactionLength); //REPLACE THIS WITH SOMETHING TO TIE IN ANIMATIONS LATER
         thisAgent.isStopped = false;
-        selfRef.GetComponent<GuardController>().ChangeBehavior(GuardStates.chase);
 
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.PlayerSpotted);
+        contRef.ChangeBehavior(GuardStates.chase);
 
+        AudioManager.Instance.PlayOneShot(FMODEvents.instance.PlayerSpotted);
     }
 }

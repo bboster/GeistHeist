@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 /*
@@ -13,7 +14,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PossessableObject))]
 public class VendingObject : IInputHandler, IInteractable
 {
-    [SerializeField] private GameObject thirdPersoncinemachineCamera;
+    //[SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private Transform CanSpawnPoint;
     [SerializeField] private GameObject CanPrefab;
 
@@ -30,11 +31,14 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
 
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
+    [Tooltip("How long it takes for the visible material to go back to possession material.")]
+    [SerializeField] private float delayToUpdateMaterialVisibility = 0.5f;
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
     private PossessableObject possessableObject;
     private bool hasThrownThisPossession;
+    private Coroutine materialCountdownCoroutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -71,6 +75,11 @@ public class VendingObject : IInputHandler, IInteractable
     {
         if (Tap)
         {
+            if (possessableObject.VisiblePossessionMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
+            }
+
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
             temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength, ForceMode.Impulse);
@@ -104,6 +113,20 @@ public class VendingObject : IInputHandler, IInteractable
             tempLaunch.y = launchDirection.y;
             temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
             hasThrownThisPossession = true;
+
+            if (possessableObject.VisiblePossessionMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
+            }
+        }
+
+        if (possessableObject.PossessedMaterial != null)
+        {
+
+            if (materialCountdownCoroutine == null)
+            {
+                materialCountdownCoroutine = StartCoroutine(MaterialReplaceCountdown());
+            }
         }
 
         PossessableObject.OnActionPerformed?.Invoke();
@@ -124,10 +147,13 @@ public class VendingObject : IInputHandler, IInteractable
     #region Interact
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess)
+        if (materialCountdownCoroutine != null)
         {
-            PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+            StopCoroutine(materialCountdownCoroutine);
+            materialCountdownCoroutine = null;
         }
+
+        PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
     }
 
     public override void WhileInteractHeld(float secondsHeld)
@@ -193,5 +219,21 @@ public class VendingObject : IInputHandler, IInteractable
                 );
             prevy = y;
         } */
+    }
+
+    /// <summary>
+    /// Counts down and replaces visible material of the vending machine with the possessed material
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator MaterialReplaceCountdown()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delayToUpdateMaterialVisibility);
+            possessableObject.meshRenderer.material = possessableObject.PossessedMaterial;
+            materialCountdownCoroutine = null;
+            break;
+        }
+        yield return null;
     }
 }

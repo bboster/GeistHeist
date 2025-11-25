@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors:
  * Creation: 9/16/25
- * Last Edited: 10/02/25
+ * Last Edited: 11/15/25
  * Summary: Handles initialization of the enemy and activating/deactivating and switching behaviors.
  */
 
@@ -14,12 +14,19 @@ using NaughtyAttributes;
 using UnityEngine.Events;
 using FMOD.Studio;
 using FMODUnity;
+using UnityEngine.AI;
+//using UnityEditor.ShaderGraph.Internal;
 
 public class GuardController : MonoBehaviour
 {
     #region Variable Declarations
 
     private bool changingBehaviors = false;
+    private NavMeshAgent thisAgent;
+    private float defaultAngularSpeed;
+    private float defaultAcceleration;
+    [HideInInspector] public float AngularSpeed;
+    [HideInInspector] public float Acceleration;
 
     [SerializeField, BoxGroup("Design Values")] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
@@ -36,18 +43,19 @@ public class GuardController : MonoBehaviour
 
     private Coroutine activeBehaviorLoop;
 
-    [SerializeField, BoxGroup("Behaviors")] private Priority currentPriority;
+    [SerializeField, BoxGroup("Behaviors")] private int currentPriority;
 
     [Foldout("Programming Values")]
     [SerializeField] private Animator animator;
 
     [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
-    [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted= new();
+    [HideInInspector] public UnityEvent<GuardStates> OnBehaviorStarted = new();
 
     private EventInstance guardWalkSFX;
     private EventInstance guardRunSFX;
 
+    private ParticleSystem particleSystem;
     #endregion
 
     #region Getters
@@ -91,9 +99,15 @@ public class GuardController : MonoBehaviour
 
     private void Start()
     {
+        thisAgent = GetComponent<NavMeshAgent>();
+        defaultAngularSpeed = thisAgent.angularSpeed;
+        defaultAcceleration = thisAgent.acceleration;
+
         //only for sfx for now
-        guardWalkSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
-        guardRunSFX = AudioManager.instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+        guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
+        guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+
+        particleSystem = GetComponentInChildren<ParticleSystem>();
     }
 
     /// <summary>
@@ -102,12 +116,19 @@ public class GuardController : MonoBehaviour
     /// <returns></returns>
     private void Update()
     {
+        FastRotate();
+
         //only for sfx for now
         guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
         guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
 
         if (currentBehavior.StateName == GuardStates.chase)
         {
+            if (particleSystem != null && !particleSystem.isPlaying)
+            {
+                particleSystem.Play(false);
+            }
+
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             PLAYBACK_STATE playbackState;
             guardRunSFX.getPlaybackState(out playbackState);
@@ -118,6 +139,11 @@ public class GuardController : MonoBehaviour
         }
         else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
         {
+            if (particleSystem != null && particleSystem.isPlaying)
+            {
+                particleSystem.Stop(false);
+            }
+
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             PLAYBACK_STATE playbackState;
             guardWalkSFX.getPlaybackState(out playbackState);
@@ -128,13 +154,33 @@ public class GuardController : MonoBehaviour
         }
         else
         {
+            if (particleSystem != null && particleSystem.isPlaying)
+            {
+                particleSystem.Stop(false);
+            }
+
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
     }
-
     #endregion
 
+    /// <summary>
+    /// Makes the guard rotate faster
+    /// </summary>
+    private void FastRotate()
+    {
+        if (thisAgent.updateRotation)
+        {
+            thisAgent.angularSpeed = AngularSpeed;
+            thisAgent.acceleration = Acceleration;
+        }
+        else
+        {
+            thisAgent.angularSpeed = defaultAngularSpeed;
+            thisAgent.acceleration = defaultAcceleration;
+        }
+    }
 
     #region Behavior Functions
 
@@ -159,7 +205,7 @@ public class GuardController : MonoBehaviour
     /// <param name="newBehavior"></param>
     public void ChangeBehavior(GuardStates state)
     {
-        Debug.Log(state);
+        //Debug.Log(state);
 
         StopBehavior();
         currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
@@ -171,7 +217,7 @@ public class GuardController : MonoBehaviour
     /// </summary>
     /// <param name="state"></param>
     /// <param name="priority"></param>
-    public void ChangeBehaviorConditional(GuardStates state, Priority priority)
+    public void ChangeBehaviorConditional(GuardStates state, int priority)
     {
         if(priority > currentPriority)
         {
@@ -189,7 +235,9 @@ public class GuardController : MonoBehaviour
         if (currentBehavior.StateName == GuardStates.returnToPath)
             return;
 
-        ChangeBehavior(GuardStates.visionBreak);
+        Behavior b = Singleton<BehaviorDatabase>.Instance.GetBehavior(GuardStates.visionBreak);
+
+        ChangeBehaviorConditional(GuardStates.visionBreak, b.Priority);
     }
 
     #endregion
@@ -204,7 +252,6 @@ public class GuardController : MonoBehaviour
         if (currentBehavior != null)
         {
             currentBehavior.InitializeBehavior(gameObject);
-            //GetComponent<StateText>().ChangeText(currentBehavior.StateName);
             currentPriority = currentBehavior.Priority;
             activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
             OnBehaviorStarted.Invoke(currentBehavior.StateName);

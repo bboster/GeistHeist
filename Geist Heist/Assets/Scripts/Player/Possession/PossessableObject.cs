@@ -1,7 +1,9 @@
+
+
 /*
  * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/28/25
+ * Last Modified: 11/12/2025
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -18,12 +20,16 @@ using System.Collections;
 using System.Collections.Generic;
 using FMOD.Studio;
 using FMODUnity;
+using GuardUtilities;
 
 public class PossessableObject : MonoBehaviour, IInteractable
 {
-    
-    [Required] public CinemachineCamera CinemachineCamera;
-    
+    [Header("Camera Settings")]
+    [Tooltip("If true, camera will be overridden with the CinemachineCamera on this object")]
+    [HideIf(nameof(isGhost))] public bool HasCustomCameraBehavior;
+    [Required, ShowIf(nameof(showCinemachineCamera))] public CinemachineCamera CinemachineCamera;
+    [Required, HideIf(nameof(HasCustomCameraBehavior))] public Transform cameraAnchor;
+
     [Tooltip("Locations where the ghost could exit the possessable. Keep above exit point as last as a backup. NOT NEEDED FOR GHOST OR TETHERS.")]
     [HideIf(nameof(isGhost))] public List<Transform> ghostExitPoints;
 
@@ -31,21 +37,28 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [SerializeField, HideIf(nameof(isGhost))] private bool hasTimer;
     [SerializeField, HideIf(nameof(isGhost))] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer)), HideIf(nameof(isGhost))] private float timerRechargePercentage = 10;
+    [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerRechargePercentage = 10;
     [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
-    [SerializeField, ShowIf(nameof(hasTimer)), HideIf(nameof(isGhost))] private float timerDischargePercentage = 10;
+    [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerDischargePercentage = 10;
 
     [Tooltip("Location where the ghost spawns after leaving the possessable.")]
     [HideIf(nameof(isGhost))] public Transform ghostSpawnPoint;
 
     [Header("Materials")]
-    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] private Material PossessedMaterial;
-    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] private Material UnpossessedMaterial;
+    [Tooltip("Material on possessable when it is possessed.")]
+    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] public Material PossessedMaterial;
+    [Tooltip("Material on possessable when it is UNpossessed.")]
+    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] public Material UnpossessedMaterial;
+    [Tooltip("Material on possessable when it is used or when Ollie enters the possessable while a guard is in chase state.")]
+    [SerializeField, Required, ShowAssetPreview(16, 16)] public Material VisiblePossessionMaterial;
+    [Tooltip("Material on possessable when a guard sees the possessable in chase state but possessable is NOT possessed.")]
+    [SerializeField, Required, ShowAssetPreview(16, 16)] public Material VisibleUnPossessedMaterial;
 
     [Header("Other")]
     [SerializeField] private bool isGhost = false;
 
     [HideInInspector] public bool CanUnPossess = true;
+    private bool possessionIsSafe = true;
     public IInputHandler InputHandler => GetInputHandler();
     private IInputHandler inputHandler;
 
@@ -53,13 +66,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     private Coroutine rechargeCoroutine;
     private Coroutine unpossessCoroutine=null;
 
-    private MeshRenderer meshRenderer;
+    [HideInInspector] public MeshRenderer meshRenderer;
 
     [ReadOnly] private float currentTimerPercentage;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
+    [HideInInspector] public bool PauseDischargeTimer = false;
 
     private EventInstance possessionEnter;
-
     private EventInstance possessionLow;
     private EventInstance possessionOut;
     private EventInstance possessionRefill;
@@ -71,11 +84,106 @@ public class PossessableObject : MonoBehaviour, IInteractable
     public static Action OnActionPerformed;
     public static Action OnObjectLeft;
 
+    private PlayerManager playerManager;
+
+    /// <summary>
+    /// using this for unsafe material changing
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        //if interaction is vision cone
+        if (other.transform.GetComponent<VisionStimulus>() != null)
+        {
+            GuardController GC = other.transform.GetComponentInParent<GuardController>();
+
+            //if it is a guard in chase state + possessed
+            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject != playerManager.PlayerGhostObject)
+            {
+                possessionIsSafe = false;
+                if (VisiblePossessionMaterial != null)
+                {
+                    this.meshRenderer.material = VisiblePossessionMaterial;
+                }
+            }
+
+            //if it is a guard in chase state + UNpossessed
+            else if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject == playerManager.PlayerGhostObject)
+            {
+                possessionIsSafe = false;
+                if (VisibleUnPossessedMaterial != null)
+                {
+                    this.meshRenderer.material = VisibleUnPossessedMaterial;
+                }
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        //if interaction is vision cone
+        if (other.transform.GetComponent<VisionStimulus>() != null)
+        {
+            GuardController GC = other.transform.GetComponentInParent<GuardController>();
+
+            //if it is a guard in chase state + possessed
+            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject != playerManager.PlayerGhostObject)
+            {
+                if (VisiblePossessionMaterial != null)
+                {
+                    this.meshRenderer.material = VisiblePossessionMaterial;
+                }
+            }
+
+            //if it is a guard in chase state + UNpossessed
+            else if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject == playerManager.PlayerGhostObject)
+            {
+                if (VisibleUnPossessedMaterial != null)
+                {
+                    this.meshRenderer.material = VisibleUnPossessedMaterial;
+                }
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        //if interaction is vision cone
+        if (other.transform.GetComponent<VisionStimulus>() != null)
+        {
+            //if player is still inside
+            if (playerManager.CurrentObject != playerManager.PlayerGhostObject)
+            {
+                possessionIsSafe = true;
+                if (PossessedMaterial != null)
+                {
+                    this.meshRenderer.material = PossessedMaterial;
+                }
+            }
+            //is player is not possessing
+            else if (playerManager.CurrentObject == playerManager.PlayerGhostObject)
+            {
+                possessionIsSafe = true;
+                if (UnpossessedMaterial != null)
+                {
+                    this.meshRenderer.material = UnpossessedMaterial;
+                }
+            }
+        }
+    }
+
     #endregion
 
+    #region Inspector Debug
+
+    private bool showCinemachineCamera => isGhost || HasCustomCameraBehavior;
+    private bool hasTimerAndIsNotGhost => isGhost == false && hasTimer;
+
+    #endregion
 
     void Start()
     {
+        playerManager = FindObjectOfType<PlayerManager>();
         currentTimerPercentage = maxChargePercentage;
 
         if (ghostExitPoints.Count == 0)
@@ -100,11 +208,17 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvas.gameObject.SetActive(false);
         }
 
-        possessionEnter = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+        if(AudioManager.Instance == null)
+        {
+            Debug.LogError("No audio manager in scene");
+            return;
+        }
 
-        possessionLow = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
-        possessionOut = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
-        possessionRefill = AudioManager.instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
+        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+
+        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
+        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
+        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
     }
 
     public IInputHandler GetInputHandler()
@@ -130,7 +244,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
 
-        if(PossessedMaterial != null)
+        if(PossessedMaterial != null && possessionIsSafe)
             meshRenderer.material = PossessedMaterial;
         else
             Debug.LogWarning("No possession material for "+gameObject.name);
@@ -164,7 +278,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             return;
         }
 
-        if (PossessedMaterial != null)
+        if (UnpossessedMaterial != null && possessionIsSafe)
             meshRenderer.material = UnpossessedMaterial;
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
@@ -214,8 +328,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         while(currentTimerPercentage > 0)
         {
-            currentTimerPercentage = Mathf.Max(currentTimerPercentage - (timerDischargePercentage * Time.deltaTime), 0);
-            OnTimerUpdate.Invoke(currentTimerPercentage);
+            if (!PauseDischargeTimer)
+            {
+                currentTimerPercentage = Mathf.Max(currentTimerPercentage - (timerDischargePercentage * Time.deltaTime), 0);
+                OnTimerUpdate.Invoke(currentTimerPercentage);
+            }
+
             yield return null;
         }
 

@@ -14,6 +14,7 @@ using UnityEngine.UI;
 using System;
 using System.Threading.Tasks;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.Events;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -39,13 +40,16 @@ public class GameManager : Singleton<GameManager>
     [Header("Other Constants")]
     [SerializeField, Required] GameObject EventSystemPrefab; // for detecting UI input events (unity thing, not us).
     [SerializeField, Required] GameObject CameraPrefab;
+    [SerializeField] GameObject DebugConsolePrefab;
 
     [Header("Player Variables")]
     [SerializeField, Required] GameObject PlayerPrefab;
     [Required] public Transform PlayerStart;
 
-    [Header("Debug")]
-    [ReadOnly] public bool IsPaused = false;
+    public bool IsPaused { get; private set; } = false;
+    public UnityEvent OnPauseChanged = new();
+
+    [HideInInspector] public bool InGodMode;
 
     public GameObject Player;
 
@@ -58,9 +62,13 @@ public class GameManager : Singleton<GameManager>
         if (this == null)
             return;
 
+        InGodMode = false;
+
         // this can be destroyed bc it is a singleton
         if (this == null || gameObject == null) 
             return;
+
+        SettingsProfile.ReadSavedSettings();
 
         // All of these should be singletons, which destroy themselves if they already exist, 
         // so its okay if we dont check if this doesnt exist first
@@ -84,6 +92,7 @@ public class GameManager : Singleton<GameManager>
     /*[SerializeField] private GameObject blockingWall;
     public static int currentLevel = 0;*/
 
+    #region Level Progression
     public void NextLevel(string sceneName)
     {
         //currentLevel++;
@@ -111,6 +120,21 @@ public class GameManager : Singleton<GameManager>
     }
 
     /// <summary>
+    /// Resets the level on player death
+    /// </summary>
+    public void DeathReset()
+    {
+        if (!InGodMode)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
+    #endregion
+
+    #region Initialization
+
+    /// <summary>
     /// Instantiates all managers the game depends on
     /// </summary>
     /// <returns></returns>
@@ -130,6 +154,7 @@ public class GameManager : Singleton<GameManager>
 
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
         Instantiate(GeneralHUDPrefab);
+        Instantiate(DebugConsolePrefab);
 
         if (GameObject.FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
             Instantiate(EventSystemPrefab);
@@ -137,41 +162,28 @@ public class GameManager : Singleton<GameManager>
         return Task.CompletedTask;
     }
 
-    /// <summary>
-    /// Resets the level on player death
-    /// </summary>
-    /// <returns></returns>
-    public void DeathReset()
+    #endregion
+
+    #region Game Manipulation
+
+    public void PauseGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        IsPaused = true;
+        Time.timeScale = 0;
+        OnPauseChanged.Invoke();
     }
 
-    /*public void LoadCurrentLevel()
+    public void UnpauseGame()
     {
-        Debug.Log("Loading level: " + currentLevel);
-        if (currentLevel >= 1)
-        { 
-            if (SceneManager.GetActiveScene().name == "Lobby")
-            {
-                    RemoveBlockingWall();
-            }
-            else
-                Debug.LogWarning("No more levels to load or invalid level index.");
-        }
-    }*/
+        IsPaused = false;
+        Time.timeScale = 1;
+        OnPauseChanged.Invoke();
+    }
 
-    // This functionality already exists in HubLevelGate.cs
-    /*private void RemoveBlockingWall()
+    public void TogglePause()
     {
-        if (blockingWall != null)
-        {
-            blockingWall.SetActive(false);
-            Debug.Log("Lobby blocking wall removed.");
-        }
-        else
-        {
-            Debug.LogWarning($"Lobby blocking wall '{blockingWall}' not found.");
-        }
-    }*/
-
+        if (IsPaused) UnpauseGame();
+        else PauseGame();
+    }
+    #endregion
 }

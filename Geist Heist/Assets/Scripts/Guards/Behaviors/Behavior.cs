@@ -17,12 +17,19 @@ public class Behavior : ScriptableObject
 {
     #region Variable Declarations
 
+    [ProgressBar(100f, EColor.Blue)]
+    public float progress;
+
     [Tooltip("The speed the guard will travel at while performing this behavior")]
     [SerializeField, Foldout("Base Values")] private float speed;
+    [Tooltip("The speed the guard will rotate at")]
+    [Foldout("Base Values")] public float rotationSpeed;
+    [Tooltip("How fast the rotation gets up to speed")]
+    [Foldout("Base Values")] public float rotationAcceleration;
     [Tooltip("The name of the state this behavior executes")]
     [Foldout("Base Values")] public GuardStates StateName;
     [Tooltip("Controls what states this behavior can override")]
-    [Foldout("Base Values")] public Priority Priority;
+    [Foldout("Base Values"), MaxValue(10), MinValue(1)] public int Priority;
     [Tooltip("The animator controller for the behavior. Can be left blank if there are no animations")]
     [Foldout("Base Values")] public RuntimeAnimatorController stateController;
 
@@ -50,6 +57,8 @@ public class Behavior : ScriptableObject
         }
 
         contRef = selfRef.GetComponent<GuardController>();
+        contRef.AngularSpeed = rotationSpeed;
+        contRef.Acceleration = rotationAcceleration;
         selfRef.GetComponent<NavMeshAgent>().speed = speed;
     }
 
