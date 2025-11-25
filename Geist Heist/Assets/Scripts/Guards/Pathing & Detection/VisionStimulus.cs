@@ -146,6 +146,9 @@ public class VisionStimulus : Stimulus
 
     #endregion
 
+    /// <summary>
+    /// Renders the deformable vision cone.
+    /// </summary>
     private void VisionMesh()
     {
         Mesh visionMesh = new Mesh();
@@ -217,86 +220,6 @@ public class VisionStimulus : Stimulus
         visionMesh.uv = uv;
         visionMesh.triangles = triangles;
         visionMesh.RecalculateBounds();
-    }
-
-    /// <summary>
-    /// Generates the mesh that visualizes the guard's vision cone as a 2D triangle
-    /// </summary>
-    private void GenerateVisionMesh()
-    {
-        Mesh visionMesh = new Mesh();
-        visionMesh.name = "visualizerMesh";
-        visionRenderer.GetComponent<MeshFilter>().mesh = visionMesh;
-
-        //Calculates the angle of the vision cone
-        Mesh coneMesh = GetComponent<MeshFilter>().mesh;
-
-        //Gets the bounds of the cone mesh and uses it to determine various useful measurements
-        Bounds coneBounds = GetComponent<MeshRenderer>().bounds;
-        float coneHeight = Mathf.Abs(coneOrigin.position.z - coneForwardExtent.position.z);
-        float coneRadius = coneBounds.size.x * 0.5f;
-        float coneDiameter = coneBounds.size.x;
-        diameter = coneDiameter; //REMOVE THIS LINE
-
-        Vector3[] vertices = new Vector3[rayCount + 2]; //Sizes the vertices array to be the amount we need given our ray casts
-        Vector2[] uv = new Vector2[vertices.Length];
-        int[] triangles = new int[rayCount * 3];
-
-        //Sets the first vertice (the point of the triangle) to be where the cone starts at the guard
-        vertices[0] = visionRenderer.transform.InverseTransformPoint(coneOrigin.position);
-
-        //Starts a ray at the right side of the vision cone so that it can sweep left for collisions
-        //Vector3 raySweep = new Vector3(coneOrigin.position.x + coneRadius, transform.position.y, coneOrigin.position.z + coneHeight);
-        Vector3 raySweep = (-transform.right * coneRadius) - (-transform.forward * coneHeight);
-        raySweep.y = transform.position.y;
-        //raySweep = transform.TransformPoint(raySweep);
-
-        int vIndex = 1;
-        int tIndex = 0;
-        for (int i = 0; i <= rayCount; i++) //Calculates the vertex positions
-        {
-            Vector3 vertex;
-
-            UnityEngine.Debug.DrawRay(coneOrigin.position, raySweep, Color.green, 1f);
-
-            //Sets the position of the vertex depending on whether it collided with an environment object
-            if (Physics.Raycast(coneOrigin.position, raySweep, out RaycastHit hit, coneHeight, layer))
-            {
-                vertex = visionRenderer.transform.InverseTransformPoint(hit.point);
-            }
-            else
-            {
-                vertex =  visionRenderer.transform.InverseTransformPoint(raySweep);
-            }
-
-            //vertex += vertices[0];
-            vertices[vIndex] = vertex;
-
-            //Defines the triangles given the vertex just created
-            if(i > 0)
-            {
-                triangles[tIndex + 0] = 0;
-                triangles[tIndex + 1] = vIndex - 1;
-                triangles[tIndex + 2] = vIndex;
-
-                tIndex += 3;
-            }
-
-            UnityEngine.Debug.DrawLine(coneOrigin.position, raySweep, Color.red);
-            vIndex++;
-
-            Vector3 p1 = (-transform.right * coneRadius) + (-transform.forward * coneHeight);
-            Vector3 p2 = (transform.right * coneRadius) + (transform.forward * coneHeight);
-            Vector3 triBase = p2 - p1;
-            triBase.y = 0;
-
-            //Sweeps the raycast a given distance along the base of the triangular visualizer. NewPoint = OldPoint + distance * unit vector of the base
-            raySweep = raySweep + (coneDiameter / rayCount) * Vector3.Normalize(triBase);
-        }
-
-        visionMesh.vertices = vertices;
-        visionMesh.uv = uv;
-        visionMesh.triangles = triangles;
     }
 
     private void Update()
