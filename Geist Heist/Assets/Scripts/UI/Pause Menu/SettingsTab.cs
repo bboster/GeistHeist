@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
  * Creation: 11/15/2025
- * Last Edited: 11/17/25
+ * Last Edited: 11/24/25
  * 
  * Description: Manages UI elements and settings data.
  * Settings variables are stored and accessed in SettingsProfile.cs
@@ -13,14 +13,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class SettingsMenu : MonoBehaviour
+public class SettingsTab : PauseMenuTab
 {
-    [Header("Menu Components")]
-    [SerializeField, Required] public CanvasGroup settingsGroup;
-    [SerializeField, Required] private PauseMenu pauseMenu;
-
     [Header("Non-settings buttons")]
-    [SerializeField, Required] private Button exitSettingsButton;
+    //[SerializeField, Required] private Button exitSettingsButton;
     [SerializeField, Required] private Button resetToDefaultsButton;
     [SerializeField] private string resetToDefaultsConfirmationText = "Reset all settings?";
 
@@ -71,31 +67,25 @@ public class SettingsMenu : MonoBehaviour
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected /*override*/ void Start()
     {
+        //base.Start();
         ppManager = Camera.main.GetComponentInChildren<PostProcessingManager>();
 
         AddComponentListeners();
-        exitSettingsButton.onClick.AddListener(() => CloseSettingsMenu(true));
+        //exitSettingsButton.onClick.AddListener(() => CloseTab());
         resetToDefaultsButton.onClick.AddListener(OnResetToDefaultsButtonPressed);
     }
 
-    public void OpenSettingsMenu()
+    public override void OpenTab()
     {
-        RefreshAllSettingsUI();
-
-        StaticUtilities.DisableCanvasGroup(pauseMenu.pauseGroup);
-        StaticUtilities.EnableCanvasGroup(settingsGroup);
-
-        InputEvents.PauseStartedOverride = () => CloseSettingsMenu(true);
+        base.OpenTab();
     }
 
-    public void CloseSettingsMenu(bool saveSettings = true)
+    public override void CloseTab()
     {
-        Debug.Log("Close settings menu");
-        StaticUtilities.DisableCanvasGroup(settingsGroup);
-        InputEvents.PauseStartedOverride = null;
-        pauseMenu.OpenPauseMenu();
+        SettingsProfile.SaveCurrentSettings();
+        base.CloseTab();
     }
 
     #region Misc Buttons
@@ -108,7 +98,7 @@ public class SettingsMenu : MonoBehaviour
     private void OnConfirmResetToDefaultsButtonPressed()
     {
         SettingsProfile.ResetToDefaults();
-        RefreshAllSettingsUI();
+        RefreshUI();
     }
 
     #endregion
@@ -183,11 +173,9 @@ public class SettingsMenu : MonoBehaviour
     /// <summary>
     /// Makes all settings UI match their current values
     /// </summary>
-    public void RefreshAllSettingsUI()
+    public override void RefreshUI()
     {
         // Assumes SettingsProfile.ReadSavedSettings has already run 
-
-
 
         lookSensitivityAttributes.RefreshComponent(SettingsProfile.LookSensitivy, SettingsProfile.LookSensitityScalar);
         invertLookAttributes.RefreshComponent(SettingsProfile.InvertLook);
