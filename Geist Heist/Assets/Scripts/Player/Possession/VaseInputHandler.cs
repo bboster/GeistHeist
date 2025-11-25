@@ -13,11 +13,12 @@ public class VaseInputHandler : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] ParticleSystem possessableParticles;
-
+    private PossessableObject possessableObject;
 
     private void Start()
     {
         //thirdPersoncinemachineCamera.SetActive(false);
+        possessableObject = GetComponent<PossessableObject>();
     }
 
     public override void WhilePossessingUpdate()
