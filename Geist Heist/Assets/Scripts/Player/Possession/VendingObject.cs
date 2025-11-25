@@ -40,6 +40,9 @@ public class VendingObject : IInputHandler, IInteractable
     private bool hasThrownThisPossession;
     private Coroutine materialCountdownCoroutine;
 
+    [SerializeField] TrajectoryPredictor TP;
+    [SerializeField] GameObject LR;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
@@ -84,7 +87,9 @@ public class VendingObject : IInputHandler, IInteractable
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
             temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength, ForceMode.Impulse);
             hasThrownThisPossession = true; 
+
         }
+        LR.SetActive(true);
     }
 
     public override void WhileActionHeld(float secondsHeld)
@@ -96,6 +101,9 @@ public class VendingObject : IInputHandler, IInteractable
         {
             // Will be clamped later (dont clamp now for charge ui animations)
             currentStrength += Time.deltaTime * strengthGrowthRate;
+            Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
+            tempLaunch.y = launchDirection.y;
+            TP.PredictTrajectory(currentStrength, CanPrefab.GetComponent<Rigidbody>().mass, tempLaunch, CanSpawnPoint.transform.position, CanPrefab.GetComponent<Rigidbody>().linearDamping, .025f);
         }
     }
 
@@ -106,6 +114,7 @@ public class VendingObject : IInputHandler, IInteractable
 
         if (!Tap)
         {
+            LR.SetActive(false);
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
 
             GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
