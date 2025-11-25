@@ -17,14 +17,10 @@ public class PauseMenuTab : MonoBehaviour
     [SerializeField, Required] public Toggle toggleButton;
     protected PauseMenu pauseMenu;
 
-    protected virtual void Start()
-    {
-        //toggleButton.onValueChanged.AddListener(OpenTab());
-    }
-
     public virtual void OpenTab()
     {
         RefreshUI();
+        toggleButton.isOn = true;
         if (currentOpenTab == this) return;
 
         if(currentOpenTab != null)

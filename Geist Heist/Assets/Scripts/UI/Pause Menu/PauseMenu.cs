@@ -82,6 +82,8 @@ public class PauseMenu : MonoBehaviour
 
         // general tabis default tab
         generalTab.OpenTab();
+        controlsTab.CloseTab();
+        settingsTab.CloseTab();
 
         pauseScreenParent.gameObject.SetActive(true);
         StaticUtilities.EnableCanvasGroup(pauseGroup);

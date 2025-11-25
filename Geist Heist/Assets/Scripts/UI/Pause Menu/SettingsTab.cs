@@ -67,9 +67,9 @@ public class SettingsTab : PauseMenuTab
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected override void Start()
+    protected /*override*/ void Start()
     {
-        base.Start();
+        //base.Start();
         ppManager = Camera.main.GetComponentInChildren<PostProcessingManager>();
 
         AddComponentListeners();

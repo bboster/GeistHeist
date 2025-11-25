@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby Schamberger
  * Creation: 11/6/25
- * Last Edited: 11/20/25
+ * Last Edited: 11/24/25
  * Summary: Change the color of a font text when user hover overs a selectable (button).
  * Designed for vertical gradients rn. Can be updated to do multiple colors with an enum.
  */
@@ -24,28 +24,23 @@ public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, I
     [SerializeField] private Color hoveredTopColor = Color.white;
     [SerializeField] private Color hoveredBottomColor = Color.white;
 
+    private Toggle toggle;
+
     void Start()
     {
+        // may be null in many cases.
+        toggle = GetComponent<Toggle>();
+
+        if (toggle != null)
+            toggle.onValueChanged.AddListener((isOn) => UpdateForToggle());
+
         OnPointerExit();
     }
 
     public void OnPointerEnter(PointerEventData eventData) => OnPointerEnter();
     public void OnPointerExit(PointerEventData eventData) => OnPointerExit();
 
-
-    public void OnPointerExit()
-    {
-        VertexGradient vg;
-        vg.topLeft = unhoveredTopColor;
-        vg.topRight = unhoveredTopColor;
-
-        vg.bottomLeft = unhoveredBottomColor;
-        vg.bottomRight = unhoveredBottomColor;
-        
-        targetText.colorGradient = vg;
-    }
-
-    void OnPointerEnter()
+    public void SetHoveringGradient()
     {
         VertexGradient vg;
         vg.topLeft = hoveredTopColor;
@@ -55,6 +50,31 @@ public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, I
         vg.bottomRight = hoveredBottomColor;
 
         targetText.colorGradient = vg;
+    }
+
+    public void SetUnhoveringGradient()
+    {
+        VertexGradient vg;
+        vg.topLeft = unhoveredTopColor;
+        vg.topRight = unhoveredTopColor;
+
+        vg.bottomLeft = unhoveredBottomColor;
+        vg.bottomRight = unhoveredBottomColor;
+
+        targetText.colorGradient = vg;
+    }
+
+    public void OnPointerExit()
+    {
+        if (toggle == null)
+            SetUnhoveringGradient();
+        else
+            UpdateForToggle();
+    }
+
+    void OnPointerEnter()
+    {
+        SetHoveringGradient();
     }
 
     [Button]
@@ -69,4 +89,16 @@ public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, I
         OnPointerEnter(null);
     }
 
+    /// <summary>
+    /// Update gradient to be on/off based on toggle state
+    /// </summary>
+    public void UpdateForToggle()
+    {
+        if (toggle == null) return;
+
+        if (toggle.isOn)
+            SetHoveringGradient();
+        else
+            SetUnhoveringGradient();
+    }
 }
