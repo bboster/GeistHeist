@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 10/27/25
+ * Last Modified: 11/18/25
  * 
  * Brief Description: Handles third person movement and interaction. 
  * This script should only be used for the ghost
@@ -13,6 +13,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+//using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ using UnityEngine.UI;
 public class ThirdPersonInputHandler : IInputHandler
 {
     [Header("Design Variables")]
-    [SerializeField] private float speed = 3;
+    [SerializeField] public float speed = 3;
     [SerializeField] private float maxVelocity = 10;
     [Tooltip("Higher number: reaches desired speed faster")]
     [SerializeField] private float speedPickup = 3;
@@ -128,15 +129,15 @@ public class ThirdPersonInputHandler : IInputHandler
             IInteractable interactable;
 
             // if object can even be interacted with
-            if (result.transform.TryGetComponent(out possessableObject) == false
-                && result.transform.TryGetComponent(out interactable) == false)
+            if (result.transform.TryGetComponent(out interactable) == false &&
+                result.transform.TryGetComponent(out possessableObject) == false
+                )
             {
                 continue;
             }
 
-            // change this when every interactable has its own cooldown
-            //if (CooldownManager.Instance.IsCooldownActive)
-            //    continue;
+            if (interactable.IsInteractable() == false)
+                continue;
 
             if (result.transform.gameObject == this.gameObject)
                 continue;
@@ -213,7 +214,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     /// <summary>
     /// performs spherecast looking for interactable. Same spherecast as interact button.
-    /// Opens button prompts if possible (through Hide/DisplayInteractUI functions on IInteractable)
+    /// Opens button prompts if possible (through Hide/OnPlayerLookStart functions on IInteractable)
     /// </summary>
     private void TryTurnOnInteractablePrompt()
     {
@@ -241,7 +242,8 @@ public class ThirdPersonInputHandler : IInputHandler
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
         {
-            interactable.DisplayInteractUI();
+            // Display Interact UI, most of the time
+            interactable.OnPlayerLookStart();
         }
     }
 
@@ -257,7 +259,8 @@ public class ThirdPersonInputHandler : IInputHandler
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
         {
-            interactable.HideInteractUI();
+            // Hide interact UI, most of the time
+            interactable.OnPlayerLookStop();
         }
     }
 
