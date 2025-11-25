@@ -56,7 +56,6 @@ public class GuardController : MonoBehaviour
     private EventInstance guardRunSFX;
 
     private ParticleSystem particleSystem;
-
     #endregion
 
     #region Getters

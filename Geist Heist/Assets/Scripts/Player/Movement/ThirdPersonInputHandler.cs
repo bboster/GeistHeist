@@ -22,7 +22,7 @@ using UnityEngine.UI;
 public class ThirdPersonInputHandler : IInputHandler
 {
     [Header("Design Variables")]
-    [SerializeField] private float speed = 3;
+    [SerializeField] public float speed = 3;
     [SerializeField] private float maxVelocity = 10;
     [Tooltip("Higher number: reaches desired speed faster")]
     [SerializeField] private float speedPickup = 3;
