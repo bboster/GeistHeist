@@ -52,6 +52,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
     [Header("Components")]
     [SerializeField, Required] private MeshRenderer playerModel;
+    [SerializeField] private ParticleSystem OllieParticles;
+    
     //[SerializeField] private GameObject stepRayUpper;
     //[SerializeField] private GameObject stepRayLower;
     //[SerializeField] private GameObject stepRayTop;
@@ -305,7 +307,7 @@ public class ThirdPersonInputHandler : IInputHandler
     #region Move
     public override void OnMoveStarted()
     {
-        
+        OllieParticles.Play();
     }
     public override void WhileMoveHeld(float secondsHeld)
     {
@@ -361,7 +363,10 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
 
-    public override void OnMoveCanceled(float secondsHeld) {}
+    public override void OnMoveCanceled(float secondsHeld) 
+    {
+        OllieParticles.Stop();
+    }
     #endregion
 
     #region Other
