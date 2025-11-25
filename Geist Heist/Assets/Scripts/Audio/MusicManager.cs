@@ -23,7 +23,7 @@ public class MusicManager : MonoBehaviour
         {
             menuBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("HubGreybox")))
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Pre-Exhibit 1 Hub")))
         {
             hubBGM.start();
         }
