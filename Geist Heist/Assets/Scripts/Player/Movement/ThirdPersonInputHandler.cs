@@ -18,6 +18,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 //using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
+using FMODUnity;
+using FMOD.Studio;
 
 public class ThirdPersonInputHandler : IInputHandler
 {
@@ -75,6 +77,8 @@ public class ThirdPersonInputHandler : IInputHandler
     private bool onSlope;
     private Vector3 lastMoveDirection = Vector3.zero;
 
+    private EventInstance playerMoveSFX;
+
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
@@ -87,11 +91,15 @@ public class ThirdPersonInputHandler : IInputHandler
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
+
+        playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PlayerMovement);
     }
 
     // WhilePossessingUpdate is called once per frame
     public override void WhilePossessingUpdate()
     {
+        playerMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, rigidbody));
+
         TryTurnOnInteractablePrompt();
 
         RotatePlayer();
@@ -308,6 +316,8 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnMoveStarted()
     {
         OllieParticles.Play();
+
+        playerMoveSFX.start();
     }
     public override void WhileMoveHeld(float secondsHeld)
     {
@@ -354,6 +364,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void WhileMoveNotHeld()
     {
+        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+
         if (onSlope)
         {
             rigidbody.linearVelocity = Vector3.zero;
@@ -365,6 +377,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void OnMoveCanceled(float secondsHeld) 
     {
+        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+
         OllieParticles.Stop();
     }
     #endregion
