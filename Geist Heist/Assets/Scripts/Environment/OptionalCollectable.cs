@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Josh
  * Creation: 9/30/25
- * Last Edited: 11/20/2025
+ * Last Edited: 10/27/2025
  * Summary: Collectable object. saves to player data.
  * 
  * TODO: make a vfx/shader/material for if player is replaying level, and this collectable has already been collected
@@ -33,8 +33,6 @@ public class OptionalCollectable : MonoBehaviour
     private CollectableRegistry Registry;
     private Collider childCollider;
     private ParticleSystem particleSystem;
-
-    public bool IsCollected => SaveDataManager.Instance.IsCollectableCollected(ThisCollectable);
 
     private void Awake()
     {
