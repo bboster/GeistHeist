@@ -106,7 +106,7 @@ public class VendingObject : IInputHandler, IInteractable
             currentStrength += Time.deltaTime * strengthGrowthRate;
             Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
             tempLaunch.y = launchDirection.y;
-            TP.PredictTrajectory(currentStrength, CanPrefab.GetComponent<Rigidbody>().mass, tempLaunch, CanSpawnPoint.transform.position, CanPrefab.GetComponent<Rigidbody>().linearDamping, .025f);
+            TP.PredictTrajectory(currentStrength, CanPrefab.GetComponent<Rigidbody>().mass, CanSpawnPoint.transform.forward, CanSpawnPoint.transform.localPosition, CanPrefab.GetComponent<Rigidbody>().linearDamping, .025f);
         }
     }
 
@@ -123,7 +123,7 @@ public class VendingObject : IInputHandler, IInteractable
             GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
             Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
             tempLaunch.y = launchDirection.y;
-            temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
+            temp.GetComponent<Rigidbody>().AddForce(CanSpawnPoint.transform.forward * currentStrength);
             hasThrownThisPossession = true;
 
             if (possessableObject.VisiblePossessionMaterial != null)

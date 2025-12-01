@@ -11,8 +11,8 @@ public class TrajectoryPredictor : MonoBehaviour
 
     public void PredictTrajectory(float launchStrength, float mass, Vector3 Direction, Vector3 position, float drag, float increment)
     {
-        Vector3 velocity = Direction.normalized * (launchStrength / mass);
-        Vector3 p1 = position;
+        Vector3 velocity = Direction * (launchStrength / mass);
+        Vector3 p1 = trajectoryLine.transform.position;
         Vector3 nextPosition;
         float overlap;
 
