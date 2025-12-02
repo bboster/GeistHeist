@@ -2585,6 +2585,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlavorTextInteractable
   DisplayText: This one requires Stone_Collectable
+  secondsUntilCloseText: 10
+  AlwaysAppear: 0
   chanceToAppear: 1
   requiredScenesCompleted: []
   requiredScenesNotCompleted: []
@@ -4334,6 +4336,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlavorTextInteractable
   DisplayText: This text requires no hat
+  secondsUntilCloseText: 10
+  AlwaysAppear: 0
   chanceToAppear: 1
   requiredScenesCompleted: []
   requiredScenesNotCompleted: []
@@ -4570,6 +4574,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2095711018976434512, guid: 04499e4acc33b0a428ac5ad9bd3ca9e6, type: 3}
+      propertyPath: AlwaysAppear
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2095711018976434512, guid: 04499e4acc33b0a428ac5ad9bd3ca9e6, type: 3}
+      propertyPath: RequireSpecificHat
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2955228840112610207, guid: 04499e4acc33b0a428ac5ad9bd3ca9e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.44518995
