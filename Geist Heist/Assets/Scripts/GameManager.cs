@@ -141,7 +141,7 @@ public class GameManager : Singleton<GameManager>
     public Task InstantiateManagers()
     {
         Instantiate(InputManagerPrefab);
-        Instantiate(PlayerManagerPrefab);
+        Instantiate(PlayerManagerPrefab).GetComponent<PlayerManager>().Initialize() ;
         Instantiate(SaveDataManagerPrefab);
         Instantiate(GuardCoroutineManagerPrefab);
         Instantiate(BehaviourDatabasePrefab);

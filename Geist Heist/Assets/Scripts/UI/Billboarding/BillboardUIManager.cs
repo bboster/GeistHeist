@@ -50,7 +50,7 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
     {
         foreach (var uiAnchorPair in billboardUIPoints)
         {
-            if (uiAnchorPair == null || uiAnchorPair.Item1 == null || uiAnchorPair.Item2)
+            if (uiAnchorPair == null || uiAnchorPair.Item1 == null || uiAnchorPair.Item2 == null)
             {
                 Debug.Log("removing null billboard ui element");
                 billboardUIPoints.Remove(uiAnchorPair);
@@ -101,6 +101,10 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
 
     public Tuple<Transform, IBillboardUI> RegisterAndInitializeBillboardUIPoint(Transform worldPoint, IBillboardUI UIElement, GameObject SourceGameObject)
     {
+        BillboardUIPoint billboardPoint = worldPoint.GetComponent<BillboardUIPoint>();
+        if(billboardPoint != null)
+            billboardPoint.billboardUI = UIElement;
+
         if (billboardUIPoints.Select(b=>b.Item1).Contains(worldPoint))
         {
             Debug.LogWarning($"Two billboard ui elements are initialized for point: {worldPoint.name}.");

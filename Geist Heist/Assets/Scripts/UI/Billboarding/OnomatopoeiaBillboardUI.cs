@@ -52,8 +52,7 @@ public class OnomatopoeiaBillboardUI : IBillboardUI
             textbox.fontStyle = FontStyles.Bold;
         if (italics)
             textbox.fontStyle = textbox.fontStyle | FontStyles.Italic;
-
-
     }
+
 
 }

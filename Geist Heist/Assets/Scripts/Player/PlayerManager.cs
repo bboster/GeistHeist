@@ -30,7 +30,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
-    void Start()
+    public void Initialize()
     {
         if (PlayerGhostObject == null)
             PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
