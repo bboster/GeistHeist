@@ -28,6 +28,8 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
+    [SerializeField, UnityEngine.Range(0f, 1f)] private float slopeTransitionSmooth = 0.5f;
+    [SerializeField] private float slopeModifier = 1f;
 
     [Tooltip("Approximate degrees per second")]
     [Foldout ("Animation Settings"), SerializeField] private float rotationSpeed = 60f;
@@ -58,6 +60,8 @@ public class ThirdPersonInputHandler : IInputHandler
     private Vector3 positionLastFrame;
     private float modelStartYPosition;
     private Quaternion targetRotation;
+    private bool onSlope = false;
+    private RaycastHit slopeHit;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -77,7 +81,18 @@ public class ThirdPersonInputHandler : IInputHandler
         TryTurnOnInteractablePrompt();
 
         RotatePlayer();
-        HoverBob();
+        //HoverBob();
+        onSlope = OnSlope();
+
+        if (onSlope)
+        {
+            // freeze the Z and all rotation of the rigidbody
+            rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        }
+        else
+        {
+            rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -283,17 +298,51 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
-        var a = rigidbody.linearVelocity.WithY(0);
-        var b = (direction * speed);
+        // calculate flat ground movement direction
+        Vector3 flatDesired = direction * speed;
 
-        var horizontalVelocity = Vector3.Lerp(rigidbody.linearVelocity.WithY(0), (direction* speed), speedPickup*Time.fixedDeltaTime);
-        Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);
+        // calculate slope direction if on slope
+        Vector3 slopeDesired = flatDesired;
+        if (onSlope)
+        {
+            Vector3 slopeDirection = Vector3.ProjectOnPlane(flatDesired, slopeHit.normal);
+            slopeDesired = slopeDirection * (speed * slopeModifier);
+        }
 
-        rigidbody.linearVelocity = horizontalVelocity.WithY(rigidbody.linearVelocity.y);
+        // Smoothly blend between flat and slope direction
+        Vector3 blendedDesired = Vector3.Lerp(flatDesired, slopeDesired, onSlope ? slopeTransitionSmooth : 0f);
+
+        // Lerp current horizontal velocity towards blended desired velocity
+        Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
+        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, blendedDesired, speedPickup * Time.fixedDeltaTime);
+
+        // clamp to max velocity
+        newHorizontal = Vector3.ClampMagnitude(newHorizontal, maxVelocity);
+
+        if (onSlope)
+        {
+            Vector3 desiredOnPlane = Vector3.ProjectOnPlane(newHorizontal, slopeHit.normal);
+
+            Vector3 normalVelocity = Vector3.Project(rigidbody.linearVelocity, slopeHit.normal);
+
+            if (Vector3.Dot(normalVelocity, slopeHit.normal) < -0.05f)
+            {
+                normalVelocity = Vector3.zero;
+            }
+            rigidbody.linearVelocity = desiredOnPlane + normalVelocity;
+        }
+        else
+        {
+            rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
+        }
     }
 
     public override void WhileMoveNotHeld()
     {
+        if (onSlope)
+        {
+            rigidbody.linearVelocity = Vector3.zero;
+        }
         // Maintains y velocity
         rigidbody.linearVelocity = Vector3.MoveTowards(rigidbody.linearVelocity, new Vector3(0, rigidbody.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
     }
@@ -326,6 +375,22 @@ public class ThirdPersonInputHandler : IInputHandler
         float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
         playerModel.transform.position = playerModel.transform.position.WithY(height);
+    }
+
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 1.5f))
+        {
+            if (slopeHit.normal != Vector3.up)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
     }
 
     #endregion
