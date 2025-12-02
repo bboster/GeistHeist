@@ -27,6 +27,10 @@ public class ToyCar : IInputHandler
     [Tooltip("Force there to be time between zooms")]
     [SerializeField] private float delayBetweenZooms = 1;
 
+    [Header("VFX")]
+    [SerializeField] private float minVelocityForOnomatopoeia = 10;
+    [SerializeField] private string OnomatopoeiaText = "bonk!";
+
     [Header("Speedometer seconds")]
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
 
@@ -69,6 +73,7 @@ public class ToyCar : IInputHandler
     // Called every frame while player is possessing.
     public override void WhilePossessingUpdate()
     {
+
         chargeMeter.UpdateCharge(currentStrength, maxStrength);
 
         //pause timer if car is moving

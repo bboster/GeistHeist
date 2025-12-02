@@ -41,8 +41,6 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
     {
         billboardUICanvas = GetComponent<Canvas>() ;
         _camera = Camera.main;
-
-        SpawnOnomatopoeia("test", PlayerManager.Instance.CurrentObject.transform.position, lifetime:10);
     }
 
     // Set the worldspace -> UI position of each billboard 

@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 7862096149762473002}
   - component: {fileID: 6480417976091650489}
   - component: {fileID: -7755143116239034038}
+  - component: {fileID: 1301648962284644490}
   m_Layer: 10
   m_Name: Toy Car
   m_TagString: Untagged
@@ -181,6 +182,8 @@ MonoBehaviour:
   chargeRate: 8
   chargeLossRate: 105
   delayBetweenZooms: 0.5
+  minVelocityForOnomatopoeia: 10
+  OnomatopoeiaText: bonk!
   delayToUpdateChargeMeter: 0.25
   rotationRate: 45
   chargeMeter: {fileID: 2299211873282198318}
@@ -305,6 +308,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardStunner
   stunVelocityThreshold: 1
+--- !u!114 &1301648962284644490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3402368958818299834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ea24babacec1ea4a8fe30ad3228824b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SuddenVelocityChangeDetector
+  minVelocityForRegister: 10
+  maxVelocityToBeStopped: 0.2
+  recordVelocityAtStart: 0
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 385
+  OnStopDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBounceDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnJultDetected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3969884678775893338
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,15 +803,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 29515035773009853, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_FillAmount
-      value: 0.44260126
+      value: 0.97820854
       objectReference: {fileID: 0}
     - target: {fileID: 165967241164658828, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99540675
+      value: -0.7535159
       objectReference: {fileID: 0}
     - target: {fileID: 165967241164658828, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.09573613
+      value: 0.6574297
       objectReference: {fileID: 0}
     - target: {fileID: 983731252585344803, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_Layer
