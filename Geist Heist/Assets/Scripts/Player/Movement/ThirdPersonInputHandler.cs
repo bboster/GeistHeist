@@ -341,6 +341,11 @@ public class ThirdPersonInputHandler : IInputHandler
         playerModel.transform.position = playerModel.transform.position.WithY(height);
     }
 
+    private void OnDestroy()
+    {
+        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+
     #endregion
 
     private void OnDrawGizmos()
