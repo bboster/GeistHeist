@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using FMODUnity;
 using FMOD.Studio;
 
-public class MusicManager : MonoBehaviour
+public class MusicManager : Singleton<MusicManager>
 {
     private EventInstance levelBGM;
     private EventInstance hubBGM;

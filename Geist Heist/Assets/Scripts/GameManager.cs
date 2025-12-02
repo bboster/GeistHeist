@@ -32,6 +32,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject BillboardUIManagerPrefab;
     [SerializeField, Required] GameObject LevelManagerPrefab;
     [SerializeField, Required] GameObject DailougeManagerPrefab;
+    [SerializeField, Required] GameObject AudioManagerPrefab;
+    [SerializeField, Required] GameObject MusicManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject PauseMenuPrefab;
@@ -41,6 +43,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject EventSystemPrefab; // for detecting UI input events (unity thing, not us).
     [SerializeField, Required] GameObject CameraPrefab;
     [SerializeField] GameObject DebugConsolePrefab;
+    [SerializeField] GameObject FMODEventsPrefab;
 
     [Header("Player Variables")]
     [SerializeField, Required] GameObject PlayerPrefab;
@@ -148,6 +151,8 @@ public class GameManager : Singleton<GameManager>
         Instantiate(ShaderManagerPrefab);
         Instantiate(LevelManagerPrefab);
         Instantiate(DailougeManagerPrefab);
+        Instantiate(AudioManagerPrefab);
+        Instantiate(MusicManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
@@ -155,6 +160,9 @@ public class GameManager : Singleton<GameManager>
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
         Instantiate(GeneralHUDPrefab);
         Instantiate(DebugConsolePrefab);
+        Instantiate(FMODEventsPrefab);
+
+
 
         if (GameObject.FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
             Instantiate(EventSystemPrefab);
