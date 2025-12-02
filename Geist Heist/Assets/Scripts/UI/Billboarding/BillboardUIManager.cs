@@ -1,7 +1,7 @@
 /*
  * Contributors:  Toby
- * Creation Date: 10/9/25
- * Last Modified: 10/16/25
+ * Creation Date: 10/9/2025
+ * Last Modified: 12/2/2025
  * 
  * Brief Description: Manages Billboard UI objects.
  * Put this script on a canvas
@@ -11,6 +11,7 @@
  * - always faces the player
  */
 
+using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
 {
     [Tooltip("If false, calculates by player position. If true, calculates by camera position.")]
     [SerializeField] bool CalculateScalingByCameraPosition = false;
+
+    [SerializeField, Required] private GameObject onomatopoeiaPrefab;
 
     // NOT a dictionary because there could maybe be multiple ui elements at one anchor point
     //                    World Point, UI object
@@ -95,5 +98,10 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
 
         UIElement.OnInitialize(SourceGameObject);
         UIElement.ToggleVisibility(!UIElement.HideByDefault);
+    }
+
+    public void SpawnOnomatopoeia(string text, Vector3 worldPosition, float lifetime = 1.5f, float scale = 1)
+    {
+
     }
 }

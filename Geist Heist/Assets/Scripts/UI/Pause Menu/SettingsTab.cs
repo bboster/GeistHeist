@@ -32,7 +32,6 @@ public class SettingsTab : PauseMenuTab
 
     private PostProcessingManager ppManager; // lol peepeeManager
 
-
     #region Attribute variables
     /*
     // Master Volume
