@@ -14,7 +14,6 @@ using UnityEngine.UI;
 
 public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField, Required] private Button button;
     [SerializeField, Required] private TMP_Text targetText;
 
     [Header("Unhovered color")]

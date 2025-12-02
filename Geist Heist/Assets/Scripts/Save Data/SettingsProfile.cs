@@ -91,7 +91,6 @@ public static class SettingsProfile
     {
         Debug.Log("Saving current settings profile to settings profile");
 
-        Debug.Log(LookSensitivy);
         PlayerPrefs.SetFloat(LOOK_SENSITIVITY_KEY, LookSensitivy);
         PlayerPrefs.SetInt(INVERT_LOOK_KEY, InvertLook ? 1 : 0); // Playerprefs cant store bools, so just store an int
         PlayerPrefs.SetFloat(BRIGHTNESS_KEY, Brightness);
