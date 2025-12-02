@@ -30,6 +30,13 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField] private float speedPickup = 3;
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
     [SerializeField] private float slowDownFactor = 0.1f;
+    [SerializeField, UnityEngine.Range(0f, 1f)] private float slopeTransitionSmooth = 0.5f;
+    [SerializeField] private float slopeModifier = 1f;
+    //[SerializeField] private float stepRayUpperHeight = 0.3f;
+    //[SerializeField] private float stepRayLowerHeight = -0.9f;
+    //[SerializeField] private float stepRayUpperLength = 0.35f;
+    //[SerializeField] private float stepRayLowerLength = 0.7f;
+    //[SerializeField] private float stepSmooth = 2f;
 
     [Tooltip("Approximate degrees per second")]
     [Foldout ("Animation Settings"), SerializeField] private float rotationSpeed = 60f;
@@ -47,6 +54,11 @@ public class ThirdPersonInputHandler : IInputHandler
 
     [Header("Components")]
     [SerializeField, Required] private MeshRenderer playerModel;
+    [SerializeField] private ParticleSystem OllieParticles;
+    
+    //[SerializeField] private GameObject stepRayUpper;
+    //[SerializeField] private GameObject stepRayLower;
+    //[SerializeField] private GameObject stepRayTop;
 
     [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
@@ -60,6 +72,10 @@ public class ThirdPersonInputHandler : IInputHandler
     private Vector3 positionLastFrame;
     private float modelStartYPosition;
     private Quaternion targetRotation;
+    //private bool isStepping = false;
+    private RaycastHit slopeHit;
+    private bool onSlope;
+    private Vector3 lastMoveDirection = Vector3.zero;
 
     private EventInstance playerMoveSFX;
 
@@ -70,6 +86,8 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
         modelStartYPosition = playerModel.transform.position.y;
+        //stepRayUpper.transform.localPosition = new Vector3(stepRayUpper.transform.localPosition.x, stepRayUpperHeight, stepRayUpper.transform.localPosition.z);
+        //stepRayLower.transform.localPosition = new Vector3(stepRayLower.transform.localPosition.x, stepRayLowerHeight, stepRayLower.transform.localPosition.z);
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
@@ -85,7 +103,19 @@ public class ThirdPersonInputHandler : IInputHandler
         TryTurnOnInteractablePrompt();
 
         RotatePlayer();
-        HoverBob();
+        //HoverBob();
+        //StepClimb();
+        onSlope = OnSlope();
+
+        if (onSlope)
+        {
+            // freeze the Z and all rotation of the rigidbody
+            rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        }
+        else
+        {
+            rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -293,13 +323,43 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
-        var a = rigidbody.linearVelocity.WithY(0);
-        var b = (direction * speed);
+        // calculate flat ground movement direction
+        Vector3 flatDesired = direction * speed;
 
-        var horizontalVelocity = Vector3.Lerp(rigidbody.linearVelocity.WithY(0), (direction* speed), speedPickup*Time.fixedDeltaTime);
-        Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);
+        // calculate slope direction if on slope
+        Vector3 slopeDesired = flatDesired;
+        if (onSlope)
+        {
+            Vector3 slopeDirection = Vector3.ProjectOnPlane(flatDesired, slopeHit.normal);
+            slopeDesired = slopeDirection * (speed * slopeModifier);
+        }
 
-        rigidbody.linearVelocity = horizontalVelocity.WithY(rigidbody.linearVelocity.y);
+        // Smoothly blend between flat and slope direction
+        Vector3 blendedDesired = Vector3.Lerp(flatDesired, slopeDesired, onSlope ? slopeTransitionSmooth : 0f);
+
+        // Lerp current horizontal velocity towards blended desired velocity
+        Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
+        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, blendedDesired, speedPickup * Time.fixedDeltaTime);
+
+        // clamp to max velocity
+        newHorizontal = Vector3.ClampMagnitude(newHorizontal, maxVelocity);
+
+        if (onSlope)
+        {
+            Vector3 desiredOnPlane = Vector3.ProjectOnPlane(newHorizontal, slopeHit.normal);
+
+            Vector3 normalVelocity = Vector3.Project(rigidbody.linearVelocity, slopeHit.normal);
+
+            if(Vector3.Dot(normalVelocity, slopeHit.normal) < -0.05f)
+            {
+                normalVelocity = Vector3.zero;
+            }
+            rigidbody.linearVelocity = desiredOnPlane + normalVelocity;
+        }
+        else
+        {
+            rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
+        }
     }
 
     public override void WhileMoveNotHeld()
@@ -310,7 +370,6 @@ public class ThirdPersonInputHandler : IInputHandler
         {
             rigidbody.linearVelocity = Vector3.zero;
         }
-
         // Maintains y velocity
         rigidbody.linearVelocity = Vector3.MoveTowards(rigidbody.linearVelocity, new Vector3(0, rigidbody.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
     }
@@ -322,9 +381,6 @@ public class ThirdPersonInputHandler : IInputHandler
 
         OllieParticles.Stop();
     }
-
-    public override void OnMoveCanceled(float secondsHeld) {}
-
     #endregion
 
     #region Other
@@ -353,6 +409,76 @@ public class ThirdPersonInputHandler : IInputHandler
         playerModel.transform.position = playerModel.transform.position.WithY(height);
     }
 
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 1.5f))
+        {
+            if (slopeHit.normal != Vector3.up)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    //private void StepClimb()
+    //{
+    //    // Assume there is a wall or something
+    //    if (Physics.Raycast(stepRayTop.transform.position, transform.forward, 2f)
+    //        || Physics.Raycast(stepRayTop.transform.position, transform.TransformDirection(1.5f, 0f, 1f), 1.75f)
+    //        || Physics.Raycast(stepRayTop.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), 1.75f))
+    //    {
+    //        return;
+    //    }
+
+    //      var moveInput = InputEvents.Instance.FirstPersonInputDirection;
+    //    if (moveInput.sqrMagnitude < 0.001f)
+    //        return;
+
+
+    //    // raycast near the players feet/bottom of the rigidbody
+    //    // straight ahead raycast
+    //    if (Physics.Raycast(stepRayLower.transform.position, transform.forward, stepRayLowerLength))
+    //    {
+    //        // if the upper raycast doesn't hit anything then we can assume this is something the player can step over
+    //        if (!Physics.Raycast(stepRayUpper.transform.position, transform.forward, stepRayUpperLength))
+    //        {
+    //            isStepping = true;
+    //            rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+    //            rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
+
+    //        }
+    //    }
+
+    //    // diagonal right raycast
+    //    if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayLowerLength))
+    //    {
+    //        if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(1.5f, 0f, 1f), stepRayUpperLength))
+    //        {
+    //            isStepping = true;
+    //            rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+    //            rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
+
+    //        }
+    //    }
+
+    //    // diagonal left raycast
+    //    if(Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayLowerLength))
+    //    {
+    //        if(!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(-1.5f, 0f, 1f), stepRayUpperLength))
+    //        {
+    //            isStepping = true;
+    //            rigidbody.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
+    //            rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x, 0, rigidbody.linearVelocity.z);
+
+    //        }
+    //    }
+    //}
+
     #endregion
 
     private void OnDrawGizmos()
@@ -362,7 +488,10 @@ public class ThirdPersonInputHandler : IInputHandler
         Gizmos.DrawWireSphere(gameObject.transform.position, interactSphereCastRadius);
         Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength));
         Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength), interactSphereCastRadius);
-  
+        //Gizmos.DrawLine(stepRayUpper.transform.position, stepRayUpper.transform.position + stepRayUpper.transform.forward * stepRayUpperLength); // step ray upper
+        //Gizmos.DrawLine(stepRayLower.transform.position, stepRayLower.transform.position + stepRayLower.transform.forward * stepRayLowerLength); // step ray lower
+        //Gizmos.DrawLine(stepRayTop.transform.position, stepRayTop.transform.position + stepRayTop.transform.forward * 2f); // step ray top
+
     }
 
    
