@@ -6,14 +6,12 @@
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
-using FMOD;
+using System.Collections;
 using GuardUtilities;
 using NaughtyAttributes;
-using System.Collections;
-using System.Net.NetworkInformation;
 using Unity.Cinemachine;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class VisionStimulus : Stimulus
 {
@@ -35,16 +33,6 @@ public class VisionStimulus : Stimulus
     [SerializeField] private LayerMask raycastLayer;
     [Foldout("Programming Values")]
     [SerializeField] private Transform raycastSpawn;
-    [Foldout("Programming Values")]
-    [SerializeField] private GameObject visionRenderer;
-    [Foldout("Programming Values")]
-    [SerializeField] private int rayCount;
-    [Foldout("Programming Values")]
-    [SerializeField] private Transform coneOrigin;
-    [Foldout("Programming Values")]
-    [SerializeField] private Transform coneForwardExtent;
-    [Foldout("Programming Values")]
-    [SerializeField] private LayerMask layer;
 
     [Foldout("Programming Values")]
     [SerializeField] private Light spotLight;
@@ -54,21 +42,12 @@ public class VisionStimulus : Stimulus
     [Foldout("Programming Values")]
     [SerializeField] private GuardController parentController;
 
-    //TEMP DEBUG VARS
-    private Vector3 sweeper;
-    private float diameter;
-
     #endregion
 
     private void Awake()
     {
         PossessableObject.OnActionPerformed += ActionDetected;
         PossessableObject.OnObjectLeft += ObjectLeft;
-    }
-
-    private void Start()
-    {
-        //GenerateVisionMesh(); //THIS FUNCTION IS EVIL RIGHT NOW
     }
 
     private void OnValidate()
@@ -96,7 +75,7 @@ public class VisionStimulus : Stimulus
 
 #if UNITY_EDITOR
                 if (info.collider != null)
-                    UnityEngine.Debug.Log(info.collider.gameObject.name);
+                    Debug.Log(info.collider.gameObject.name);
 #endif
             }
             else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
@@ -145,88 +124,6 @@ public class VisionStimulus : Stimulus
     }
 
     #endregion
-
-    /// <summary>
-    /// Renders the deformable vision cone.
-    /// </summary>
-    private void VisionMesh()
-    {
-        Mesh visionMesh = new Mesh();
-        visionMesh.name = "visualizerMesh";
-        visionRenderer.GetComponent<MeshFilter>().mesh = visionMesh;
-
-        //Calculates the angle of the vision cone
-        Mesh coneMesh = GetComponent<MeshFilter>().mesh;
-
-        //Gets the bounds of the cone mesh and uses it to determine various useful measurements
-        Bounds coneBounds = GetComponent<MeshRenderer>().bounds;
-        float coneHeight = Vector3.Distance(coneOrigin.position, coneForwardExtent.position);
-        float coneRadius = coneBounds.size.x * 0.5f;
-        float coneDiameter = coneBounds.size.x;
-        diameter = coneDiameter; //REMOVE THIS LINE
-
-        Vector3[] vertices = new Vector3[rayCount + 2]; //Sizes the vertices array to be the amount we need given our ray casts
-        Vector2[] uv = new Vector2[vertices.Length];
-        int[] triangles = new int[rayCount * 3];
-
-        //Sets the first vertice (the point of the triangle) to be where the cone starts at the guard
-        vertices[0] = visionRenderer.transform.InverseTransformPoint(coneOrigin.position);
-
-        Vector3 raySweep = ((-transform.right * coneRadius) + (-transform.forward * coneHeight)) + coneOrigin.position;
-
-        int vIndex = 1;
-        int tIndex = 0;
-
-        for (int i = 0; i <= rayCount; i++) //Calculates the vertex positions
-        {
-            UnityEngine.Debug.DrawLine(coneOrigin.position, raySweep);
-
-            Vector3 vertex;
-            raySweep.y = 0;
-
-            if(Physics.Raycast(coneOrigin.position, raySweep, out RaycastHit hit, coneHeight, layer))
-            {
-                vertex = transform.InverseTransformPoint(hit.point);
-            }
-            else
-            {
-                vertex = transform.InverseTransformPoint(raySweep);
-            }
-
-            vertices[vIndex] = vertex;
-
-            //Defines the triangles given the vertex just created
-            if (i > 0)
-            {
-                triangles[tIndex + 0] = 0;
-                triangles[tIndex + 1] = vIndex - 1;
-                triangles[tIndex + 2] = vIndex;
-
-                tIndex += 3;
-            }
-
-            vIndex++;
-
-            Vector3 p1 = (-coneForwardExtent.right * coneRadius) + coneForwardExtent.position;
-            Vector3 p2 = (coneForwardExtent.right * coneRadius) + coneForwardExtent.position;
-            Vector3 dir = p2 - p1;
-            dir.y = 0;
-
-            //Sweeps the raycast a given distance along the base of the triangular visualizer. NewPoint = OldPoint + distance * unit vector of the base
-            raySweep = raySweep - (coneDiameter / rayCount) * Vector3.Normalize(-dir);
-        }
-
-        visionMesh.vertices = vertices;
-        visionMesh.uv = uv;
-        visionMesh.triangles = triangles;
-        visionMesh.RecalculateBounds();
-    }
-
-    private void Update()
-    {
-        //GenerateVisionMesh();
-        VisionMesh();
-    }
 
     #region Vision Raycast
 
@@ -330,14 +227,14 @@ public class VisionStimulus : Stimulus
     {
         if (spotLight == null)
         {
-            UnityEngine.Debug.LogWarning("No spotlight assigned on VisionStimulus.");
+            Debug.LogWarning("No spotlight assigned on VisionStimulus.");
             return;
         }
 
         Collider col = GetComponent<Collider>();
         if (col == null)
         {
-            UnityEngine.Debug.LogWarning("No collider found on VisionStimulus.");
+            Debug.LogWarning("No collider found on VisionStimulus.");
             return;
         }
 
@@ -352,7 +249,7 @@ public class VisionStimulus : Stimulus
             spotLight.spotAngle = Mathf.Rad2Deg * Mathf.Atan(coneRadius / coneHeight) * 2f;
             spotLight.innerSpotAngle = spotLight.spotAngle * 0.8f;
 
-            UnityEngine.Debug.Log($"[VisionStimulus] Synced spotlight from MeshCollider -> Range: {spotLight.range}, Angle: {spotLight.spotAngle}");
+            Debug.Log($"[VisionStimulus] Synced spotlight from MeshCollider -> Range: {spotLight.range}, Angle: {spotLight.spotAngle}");
         }
     }
 }
