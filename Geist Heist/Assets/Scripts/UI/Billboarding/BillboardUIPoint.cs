@@ -15,7 +15,7 @@ using UnityEngine.Events;
 public class BillboardUIPoint : MonoBehaviour
 {
     [SerializeField, Required] private GameObject UIObjectPrefab;
-    [SerializeField, Required] private GameObject SourceGameObject;
+    [SerializeField] private GameObject SourceGameObject;
 
     [HideInInspector] public IBillboardUI billboardUI;
 
@@ -27,7 +27,9 @@ public class BillboardUIPoint : MonoBehaviour
     {
         if(SourceGameObject == null)
         {
-            Debug.LogError("sourceGameObject has not been set for "+gameObject.name);
+            // commented out because... i dont think i care, actually...
+            // this error check should be in the IBillboardUI's initialize function. and only if its relevant.
+            //Debug.LogError("sourceGameObject has not been set for "+gameObject.name);
         }
 
         billboardUI = Instantiate(UIObjectPrefab).GetComponent<IBillboardUI>();

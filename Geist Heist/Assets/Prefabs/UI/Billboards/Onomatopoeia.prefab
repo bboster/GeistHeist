@@ -102,7 +102,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -10
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -146,6 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 601487371832119756}
   - component: {fileID: 3258532358513657966}
+  - component: {fileID: 1317056169926960480}
   - component: {fileID: 3155519618586655552}
   m_Layer: 0
   m_Name: Onomatopoeia
@@ -182,6 +183,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6483610362573815863}
   m_CullTransparentMesh: 1
+--- !u!114 &1317056169926960480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6483610362573815863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eb00ef1680d24a4e9e4c798640db186, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicBillboardUI
+  MirrorBillboard: 1
+  HideByDefault: 0
+  closeScaleDistance: 15
+  closeScale: 1
+  farScaleDistance: 20
+  farScale: 0.9
+  fadeInCorners: 1
+  closeXEdgePercentToFade: 0.05
+  farXEdgePercentToFade: 0.15
+  closeYEdgePercentToFade: 0.02
+  farYEdgePercentToFade: 0.1
+  closeOpacityDistance: 20
+  closeOpacity: 1
+  farOpacityDistance: 22
+  farOpacity: 0
+  IsVisible: 1
+  CurrentAlpha: 1
 --- !u!225 &3155519618586655552
 CanvasGroup:
   m_ObjectHideFlags: 0
