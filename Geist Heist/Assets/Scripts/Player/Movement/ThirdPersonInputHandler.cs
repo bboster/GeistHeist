@@ -18,6 +18,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 //using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
+using FMODUnity;
+using FMOD.Studio;
 
 public class ThirdPersonInputHandler : IInputHandler
 {
@@ -59,6 +61,8 @@ public class ThirdPersonInputHandler : IInputHandler
     private float modelStartYPosition;
     private Quaternion targetRotation;
 
+    private EventInstance playerMoveSFX;
+
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
@@ -66,6 +70,8 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
         modelStartYPosition = playerModel.transform.position.y;
+
+        playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PlayerMovement);
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
@@ -277,10 +283,12 @@ public class ThirdPersonInputHandler : IInputHandler
     #region Move
     public override void OnMoveStarted()
     {
-        
+        playerMoveSFX.start();
     }
     public override void WhileMoveHeld(float secondsHeld)
     {
+        playerMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
+
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
         var a = rigidbody.linearVelocity.WithY(0);
@@ -295,11 +303,16 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void WhileMoveNotHeld()
     {
         // Maintains y velocity
+        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+
         rigidbody.linearVelocity = Vector3.MoveTowards(rigidbody.linearVelocity, new Vector3(0, rigidbody.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
     }
 
 
-    public override void OnMoveCanceled(float secondsHeld) {}
+    public override void OnMoveCanceled(float secondsHeld)
+    {
+        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
     #endregion
 
     #region Other
