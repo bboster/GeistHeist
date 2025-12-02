@@ -16,7 +16,6 @@ public class FlavorTextInteractable : MonoBehaviour, IInteractable
 {
     [InfoBox("Flavor text can only be read once per save file. Reset your save file if you are debugging.")]
     [SerializeField, ResizableTextArea] private string DisplayText = "";
-    [SerializeField] private float secondsUntilClose = 10;
 
     // guys i went REALLY overboard but i am having so much fun
     [InfoBox("If conditions are left blank/default, then flavor text can always appear")]
@@ -48,7 +47,7 @@ public class FlavorTextInteractable : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        DialougeManager.Instance.DisplayText_Dialogue(DisplayText, secondsUntilClose, onDialogueEndCallback: OnFlavorTextEnd);
+        DialougeManager.Instance.DisplayText_Dialogue(DisplayText, 3, onDialogueEndCallback: OnFlavorTextEnd);
         SaveDataManager.Instance.MarkFlavorTextAsRead(DisplayText, autoSave: true);
         DisableTextInteractable();
     }
