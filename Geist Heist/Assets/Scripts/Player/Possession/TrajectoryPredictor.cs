@@ -12,7 +12,7 @@ public class TrajectoryPredictor : MonoBehaviour
     public void PredictTrajectory(float launchStrength, float mass, Vector3 Direction, Vector3 position, float drag, float increment)
     {
         Vector3 velocity = Direction * (launchStrength / mass);
-        Vector3 p1 = trajectoryLine.transform.position;
+        Vector3 p1 = position;
         Vector3 nextPosition;
         float overlap;
 
@@ -21,18 +21,18 @@ public class TrajectoryPredictor : MonoBehaviour
         for (int i = 1; i < maxPoints; i++)
         {
             velocity = CalculateNewVelocity(velocity, drag, increment);
-            nextPosition = position + velocity * increment;
+            nextPosition = p1 + (velocity * increment);
 
-            overlap = Vector3.Distance(position, nextPosition) * rayOverlap;
+            overlap = Vector3.Distance(p1, nextPosition) * rayOverlap;
 
-            if (Physics.Raycast(position, velocity.normalized, out RaycastHit hit, overlap))
+            if (Physics.Raycast(p1, velocity.normalized, out RaycastHit hit, overlap))
             {
                 UpdateLineRender(i, (i - 1, hit.point));
                 break;
             }
 
-            position = nextPosition;
-            UpdateLineRender(maxPoints, (i, position));
+            p1 = nextPosition;
+            UpdateLineRender(maxPoints, (i, p1));
         }
         /*Vector3 velocity = launchStrength / mass * Direction;
         Vector3 p1 = position;

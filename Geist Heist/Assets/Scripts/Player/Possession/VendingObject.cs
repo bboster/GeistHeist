@@ -65,6 +65,7 @@ public class VendingObject : IInputHandler, IInteractable
     {
         currentStrength = minStrength;
         hasThrownThisPossession = false;
+        LR.SetActive(false);
     }
 
     public override void WhilePossessingUpdate()
