@@ -20,6 +20,8 @@ public class PATrigger : MonoBehaviour
         if (other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             //play audio clip here joey
+            AudioManager.Instance.PlayOneShot(FMODEvents.instance.PAJingle);
+
             alreadyTriggered = true;
             DialougeManager.Instance.DisplayText_PASystem(Text, stayLength);
         }
