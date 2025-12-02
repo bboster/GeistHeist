@@ -47,9 +47,6 @@ public class GuardController : MonoBehaviour
 
     [Foldout("Programming Values")]
     [SerializeField] private Animator animator;
-    [SerializeField] private ParticleSystem dustParticles;
-    [SerializeField] private ParticleSystem smokeParticlesL;
-    [SerializeField] private ParticleSystem smokeParticlesR;
 
     [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
@@ -58,6 +55,7 @@ public class GuardController : MonoBehaviour
     private EventInstance guardWalkSFX;
     private EventInstance guardRunSFX;
 
+    private ParticleSystem particleSystem;
     #endregion
 
     #region Getters
@@ -108,6 +106,8 @@ public class GuardController : MonoBehaviour
         //only for sfx for now
         guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
         guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+
+        particleSystem = GetComponentInChildren<ParticleSystem>();
     }
 
     /// <summary>
@@ -124,16 +124,9 @@ public class GuardController : MonoBehaviour
 
         if (currentBehavior.StateName == GuardStates.chase)
         {
-            if (dustParticles != null && !dustParticles.isPlaying)
+            if (particleSystem != null && !particleSystem.isPlaying)
             {
-                dustParticles.Play();
-            }
-
-            if ((smokeParticlesL != null && smokeParticlesR != null) && (!smokeParticlesL.isPlaying && !smokeParticlesR.isPlaying))
-            {
-                smokeParticlesL.Play();
-                smokeParticlesR.Play();
-
+                particleSystem.Play(false);
             }
 
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -146,16 +139,9 @@ public class GuardController : MonoBehaviour
         }
         else if (currentBehavior.StateName == GuardStates.patrol || currentBehavior.StateName == GuardStates.returnToPath)
         {
-            if (dustParticles != null && dustParticles.isPlaying)
+            if (particleSystem != null && particleSystem.isPlaying)
             {
-                dustParticles.Stop();
-            }
-
-            if ((smokeParticlesL != null && smokeParticlesR != null) && (smokeParticlesL.isPlaying && smokeParticlesR.isPlaying))
-            {
-                smokeParticlesL.Stop();
-                smokeParticlesR.Stop();
-
+                particleSystem.Stop(false);
             }
 
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -168,15 +154,9 @@ public class GuardController : MonoBehaviour
         }
         else
         {
-            if (dustParticles != null && dustParticles.isPlaying)
+            if (particleSystem != null && particleSystem.isPlaying)
             {
-                dustParticles.Stop();
-            }
-
-            if ((smokeParticlesL != null && smokeParticlesR != null) && (smokeParticlesL.isPlaying && smokeParticlesR.isPlaying))
-            {
-                smokeParticlesL.Stop();
-                smokeParticlesR.Stop();
+                particleSystem.Stop(false);
             }
 
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -231,7 +211,7 @@ public class GuardController : MonoBehaviour
         currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
         StartBehavior();
     }
-
+    
     /// <summary>
     /// Swaps the currently running behavior if priority is higher
     /// </summary>
@@ -239,7 +219,7 @@ public class GuardController : MonoBehaviour
     /// <param name="priority"></param>
     public void ChangeBehaviorConditional(GuardStates state, int priority)
     {
-        if (priority > currentPriority)
+        if(priority > currentPriority)
         {
             StopBehavior();
             currentBehavior = Instantiate(Singleton<BehaviorDatabase>.Instance.GetBehavior(state));
@@ -283,10 +263,10 @@ public class GuardController : MonoBehaviour
     /// </summary>
     public void StopBehavior()
     {
-        if (currentBehavior != null)
+        if(currentBehavior != null)
             currentBehavior.StopBehavior();
 
-        if (activeBehaviorLoop != null)
+        if(activeBehaviorLoop != null)
         {
             StopCoroutine(activeBehaviorLoop);
             activeBehaviorLoop = null;
@@ -303,7 +283,7 @@ public class GuardController : MonoBehaviour
     /// <param name="stimulus"></param>
     public void RecieveStimulus(Stimulus stimulus, GuardStates stateToChangeTo)
     {
-        if (stimulus.GetPriority() > currentPriority)
+        if(stimulus.GetPriority() > currentPriority)
         {
             ChangeBehavior(stateToChangeTo);
         }
@@ -317,7 +297,7 @@ public class GuardController : MonoBehaviour
     /// <param name="stimulusLocation"></param>
     public void RecieveStimulus(Stimulus stimulus, GuardStates stateToChangeTo, Vector3 stimulusLocation)
     {
-        if (stimulus.GetPriority() > currentPriority)
+        if(stimulus.GetPriority() > currentPriority)
         {
             SearchLocation = stimulusLocation;
             ChangeBehavior(stateToChangeTo);
