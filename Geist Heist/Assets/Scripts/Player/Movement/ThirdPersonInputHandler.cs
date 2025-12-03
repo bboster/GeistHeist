@@ -47,6 +47,11 @@ public class ThirdPersonInputHandler : IInputHandler
 
     [Header("Components")]
     [SerializeField, Required] private MeshRenderer playerModel;
+    [SerializeField] private ParticleSystem OllieParticles;
+    
+    //[SerializeField] private GameObject stepRayUpper;
+    //[SerializeField] private GameObject stepRayLower;
+    //[SerializeField] private GameObject stepRayTop;
 
     [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
@@ -60,8 +65,9 @@ public class ThirdPersonInputHandler : IInputHandler
     private Vector3 positionLastFrame;
     private float modelStartYPosition;
     private Quaternion targetRotation;
-    private bool onSlope = false;
     private RaycastHit slopeHit;
+    private bool onSlope;
+    private Vector3 lastMoveDirection = Vector3.zero;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -70,6 +76,8 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
         modelStartYPosition = playerModel.transform.position.y;
+        //stepRayUpper.transform.localPosition = new Vector3(stepRayUpper.transform.localPosition.x, stepRayUpperHeight, stepRayUpper.transform.localPosition.z);
+        //stepRayLower.transform.localPosition = new Vector3(stepRayLower.transform.localPosition.x, stepRayLowerHeight, stepRayLower.transform.localPosition.z);
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
@@ -292,7 +300,7 @@ public class ThirdPersonInputHandler : IInputHandler
     #region Move
     public override void OnMoveStarted()
     {
-        
+        OllieParticles.Play();
     }
     public override void WhileMoveHeld(float secondsHeld)
     {
@@ -348,7 +356,10 @@ public class ThirdPersonInputHandler : IInputHandler
     }
 
 
-    public override void OnMoveCanceled(float secondsHeld) {}
+    public override void OnMoveCanceled(float secondsHeld) 
+    {
+        OllieParticles.Stop();
+    }
     #endregion
 
     #region Other
@@ -402,7 +413,10 @@ public class ThirdPersonInputHandler : IInputHandler
         Gizmos.DrawWireSphere(gameObject.transform.position, interactSphereCastRadius);
         Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength));
         Gizmos.DrawWireSphere(gameObject.transform.position + (thirdPersonCinemachineCamera.transform.forward * interactRayLength), interactSphereCastRadius);
-  
+        //Gizmos.DrawLine(stepRayUpper.transform.position, stepRayUpper.transform.position + stepRayUpper.transform.forward * stepRayUpperLength); // step ray upper
+        //Gizmos.DrawLine(stepRayLower.transform.position, stepRayLower.transform.position + stepRayLower.transform.forward * stepRayLowerLength); // step ray lower
+        //Gizmos.DrawLine(stepRayTop.transform.position, stepRayTop.transform.position + stepRayTop.transform.forward * 2f); // step ray top
+
     }
 
    
