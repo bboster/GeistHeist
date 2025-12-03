@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby Schamberger
  * Creation: 11/6/25
- * Last Edited: 11/6/25
+ * Last Edited: 11/24/25
  * Summary: Change the color of a font text when user hover overs a selectable (button).
  * Designed for vertical gradients rn. Can be updated to do multiple colors with an enum.
  */
@@ -14,7 +14,6 @@ using UnityEngine.UI;
 
 public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField, Required] private Button button;
     [SerializeField, Required] private TMP_Text targetText;
 
     [Header("Unhovered color")]
@@ -25,24 +24,23 @@ public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, I
     [SerializeField] private Color hoveredTopColor = Color.white;
     [SerializeField] private Color hoveredBottomColor = Color.white;
 
+    private Toggle toggle;
+
     void Start()
     {
-        OnPointerExit(null);
+        // may be null in many cases.
+        toggle = GetComponent<Toggle>();
+
+        if (toggle != null)
+            toggle.onValueChanged.AddListener((isOn) => UpdateForToggle());
+
+        OnPointerExit();
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        VertexGradient vg;
-        vg.topLeft = unhoveredTopColor;
-        vg.topRight = unhoveredTopColor;
+    public void OnPointerEnter(PointerEventData eventData) => OnPointerEnter();
+    public void OnPointerExit(PointerEventData eventData) => OnPointerExit();
 
-        vg.bottomLeft = unhoveredBottomColor;
-        vg.bottomRight = unhoveredBottomColor;
-        
-        targetText.colorGradient = vg;
-    }
-
-    void OnPointerEnter(PointerEventData data)
+    public void SetHoveringGradient()
     {
         VertexGradient vg;
         vg.topLeft = hoveredTopColor;
@@ -54,8 +52,53 @@ public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, I
         targetText.colorGradient = vg;
     }
 
-    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
+    public void SetUnhoveringGradient()
     {
-        OnPointerEnter(eventData);
+        VertexGradient vg;
+        vg.topLeft = unhoveredTopColor;
+        vg.topRight = unhoveredTopColor;
+
+        vg.bottomLeft = unhoveredBottomColor;
+        vg.bottomRight = unhoveredBottomColor;
+
+        targetText.colorGradient = vg;
+    }
+
+    public void OnPointerExit()
+    {
+        if (toggle == null)
+            SetUnhoveringGradient();
+        else
+            UpdateForToggle();
+    }
+
+    void OnPointerEnter()
+    {
+        SetHoveringGradient();
+    }
+
+    [Button]
+    void PreviewUnhoveredState()
+    {
+        OnPointerExit(null);
+    }
+
+    [Button]
+    void PreviewHoveredState()
+    {
+        OnPointerEnter(null);
+    }
+
+    /// <summary>
+    /// Update gradient to be on/off based on toggle state
+    /// </summary>
+    public void UpdateForToggle()
+    {
+        if (toggle == null) return;
+
+        if (toggle.isOn)
+            SetHoveringGradient();
+        else
+            SetUnhoveringGradient();
     }
 }
