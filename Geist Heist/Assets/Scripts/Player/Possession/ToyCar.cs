@@ -45,6 +45,7 @@ public class ToyCar : IInputHandler
     private bool hasLaunchedThisPossession = false;
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
+    [SerializeField] private ParticleSystem possessableParticle;
 
     private void Start()
     {
@@ -59,11 +60,13 @@ public class ToyCar : IInputHandler
     {
         hasLaunchedThisPossession = false;
         chargeMeter.OnPossessionStarted();
+        possessableParticle.Play();
     }
 
     public override void OnPossessionEnded()
     {
         currentStrength = minStrength;
+        possessableParticle.Stop();
     }
 
     // Called every frame while player is possessing.
