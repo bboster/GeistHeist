@@ -24,7 +24,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     // vector3 in parameter is contact point
     public UnityEvent<Vector3> OnStopDetected = new();
     public UnityEvent<Vector3> OnBounceDetected = new();
-    public UnityEvent<Vector3> OnJultDetected = new();
+    public UnityEvent<Vector3> OnJoltDetected = new();
 
     private bool activelyRecordVelocity;
 
@@ -68,11 +68,11 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
             return;
         }
 
-        // detect jult : if it was stopped and suddenly started
+        // detect jolt : if it was stopped and suddenly started
         if(speedBeforeCollision <= maxVelocityToBeStopped && speedAfterCollision >= minVelocityForRegister)
         {
             Debug.Log("sudden jult");
-            OnJultDetected.Invoke(collision.contacts[0].point);
+            OnJoltDetected.Invoke(collision.contacts[0].point);
             return;
         }
 

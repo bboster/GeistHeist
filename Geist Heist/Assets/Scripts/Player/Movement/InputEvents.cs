@@ -86,7 +86,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private Transform movementOrigin => GetCamera();
     private Transform _movementOrigin;
 
-    private void Start()
+    // Start function equivalent. called from GameManager to control execution order.
+    public void Initialize()
     {
         if (Instance != this)
             return;
