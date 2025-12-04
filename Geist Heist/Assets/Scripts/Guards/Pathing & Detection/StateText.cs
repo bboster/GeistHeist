@@ -8,12 +8,22 @@
  */
 
 using GuardUtilities;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StateText : IBillboardUI
 {
-    [SerializeField] private TextMeshProUGUI stateText;
+    [SerializeField] private Image stateImg;
+
+    [SerializeField] private Sprite idleImg;
+    [SerializeField] private Sprite patrolImg;
+    [SerializeField] private Sprite surprisedImg;
+    [SerializeField] private Sprite chaseImg;
+    [SerializeField] private Sprite attackImg;
+    [SerializeField] private Sprite stunnedImg;
+    [SerializeField] private Sprite searchImg;
+    [SerializeField] private Sprite visionBreakImg;
+    [SerializeField] private Sprite returnImg;
 
     public override void OnInitialize(GameObject sourceGameObject)
     {
@@ -33,31 +43,31 @@ public class StateText : IBillboardUI
         switch(state)
         {
             case GuardStates.idle:
-                stateText.text = "IDLE";
+                stateImg.sprite = idleImg;
                 break;
             case GuardStates.patrol:
-                stateText.text = "PATROL";
+                stateImg.sprite = patrolImg;
                 break;
             case GuardStates.chase:
-                stateText.text = "CHASE";
+                stateImg.sprite = chaseImg;
                 break;
             case GuardStates.attack:
-                stateText.text = "ATTACK";
+                stateImg.sprite = attackImg;
                 break;
             case GuardStates.surprised:
-                stateText.text = "SURPRISED";
+                stateImg.sprite = surprisedImg;
                 break;
             case GuardStates.concussed:
-                stateText.text = "STUNNED";
+                stateImg.sprite = stunnedImg;
                 break;
             case GuardStates.search:
-                stateText.text = "SEARCH";
+                stateImg.sprite = searchImg;
                 break;
             case GuardStates.visionBreak:
-                stateText.text = "VISION BREAK";
+                stateImg.sprite = visionBreakImg;
                 break;
             case GuardStates.returnToPath:
-                stateText.text = "RETURN";
+                stateImg.sprite = returnImg;
                 break;
         }
     }

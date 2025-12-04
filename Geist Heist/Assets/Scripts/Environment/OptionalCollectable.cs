@@ -37,6 +37,7 @@ public class OptionalCollectable : MonoBehaviour
 
     public bool IsCollected => SaveDataManager.Instance.IsCollectableCollected(ThisCollectable);
 
+
     private void Awake()
     {
         childCollider = GetComponentInChildren<Collider>();
@@ -298,4 +299,6 @@ public enum Collectable
     VaseCollectible,
 	ToyCarCollectible,
 	ChairCollectible,
+	NewsPaperHat,
+	Hat_Cowboy,
 }

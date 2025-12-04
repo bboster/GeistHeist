@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using FMODUnity;
 using FMOD.Studio;
 
-public class MusicManager : MonoBehaviour
+public class MusicManager : Singleton<MusicManager>
 {
     private EventInstance levelBGM;
     private EventInstance hubBGM;
@@ -23,7 +23,7 @@ public class MusicManager : MonoBehaviour
         {
             menuBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("HubGreybox")))
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Pre-Exhibit 1 Hub")) || SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Post-Exhibit 1 Hub")))
         {
             hubBGM.start();
         }
@@ -31,7 +31,7 @@ public class MusicManager : MonoBehaviour
         {
             globeBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Level 1 Art Exhibit")))
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Level 1 Art Exhibit")) || SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("ParlorRoomRed")) || SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("ParlorRoomOrangeUpdated")))
         {
             levelBGM.start();
         }

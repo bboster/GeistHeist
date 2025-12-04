@@ -642,6 +642,10 @@ PrefabInstance:
       propertyPath: PlayerPrefab
       value: 
       objectReference: {fileID: 3233496734506821444, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+    - target: {fileID: 5936082507384950302, guid: 5d73af633b862454899f2297804d352e, type: 3}
+      propertyPath: PauseMenuPrefab
+      value: 
+      objectReference: {fileID: 3942615522204351889, guid: 560f5270596402c48af1797aae578fe0, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2581,6 +2585,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlavorTextInteractable
   DisplayText: This one requires Stone_Collectable
+  secondsUntilCloseText: 10
+  AlwaysAppear: 0
   chanceToAppear: 1
   requiredScenesCompleted: []
   requiredScenesNotCompleted: []
@@ -4330,6 +4336,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlavorTextInteractable
   DisplayText: This text requires no hat
+  secondsUntilCloseText: 10
+  AlwaysAppear: 0
   chanceToAppear: 1
   requiredScenesCompleted: []
   requiredScenesNotCompleted: []
@@ -4566,6 +4574,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2095711018976434512, guid: 04499e4acc33b0a428ac5ad9bd3ca9e6, type: 3}
+      propertyPath: AlwaysAppear
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2095711018976434512, guid: 04499e4acc33b0a428ac5ad9bd3ca9e6, type: 3}
+      propertyPath: RequireSpecificHat
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2955228840112610207, guid: 04499e4acc33b0a428ac5ad9bd3ca9e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.44518995
