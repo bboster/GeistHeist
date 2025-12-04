@@ -103,8 +103,6 @@ public class MainMenu : MonoBehaviour
     # region Main Page
     void OnNewGameButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
-
         if (!playerHasSignificantSaveData)
         {
             LoadNewGame();
@@ -120,35 +118,27 @@ public class MainMenu : MonoBehaviour
 
     void OnContinueButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
-
         //SceneManager.LoadScene(HubScene);
         LoadScene(HubScene, NewSceneLoadingCardPrefab);
     }
 
     void OnCreditsButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
-
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         StaticUtilities.EnableCanvasGroup(creditsPage);
     }
 
     void OnHowToPlayButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
-
         StaticUtilities.DisableCanvasGroup(creditsPage);
         StaticUtilities.EnableCanvasGroup(howToPlayPage);
     }
 
     void OnQuitButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
-
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
-#else
+    #else
         Application.Quit();
     #endif
     }
@@ -159,8 +149,6 @@ public class MainMenu : MonoBehaviour
 
     void OnConfirmDeleteSaveButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
-
         LoadNewGame();
     }
 
@@ -170,8 +158,6 @@ public class MainMenu : MonoBehaviour
 
     void OnCreditsBackButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
-
         StaticUtilities.DisableCanvasGroup(creditsPage);
     }
 
@@ -181,8 +167,6 @@ public class MainMenu : MonoBehaviour
 
     void OnCloseHowToPlayButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
-
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
     }
 
