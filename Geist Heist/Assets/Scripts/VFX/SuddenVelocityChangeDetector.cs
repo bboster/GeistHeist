@@ -20,7 +20,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     [Tooltip("The highest velocity that can still be considered \"stopped\"")]
     [SerializeField] private float maxVelocityToBeStopped = 0.3f;
     [SerializeField] private bool recordVelocityAtStart;
-    [SerializeField] private LayerMask collisionLayers;
+    //[SerializeField] private LayerMask collisionLayers;
 
     [SerializeField] private bool debugLogSpeeds;
 
