@@ -16,23 +16,27 @@ public class FlavorTextInteractable : MonoBehaviour, IInteractable
 {
     [InfoBox("Flavor text can only be read once per save file. Reset your save file if you are debugging.")]
     [SerializeField, ResizableTextArea] private string DisplayText = "";
+    [SerializeField] private float secondsUntilCloseText = 10;
+
+    [Space(10)]
 
     // guys i went REALLY overboard but i am having so much fun
-    [InfoBox("If conditions are left blank/default, then flavor text can always appear")]
     [Header("Conditions to appear:")]
+    [SerializeField] private bool AlwaysAppear = false;
+    [InfoBox("If conditions are left blank/default, then flavor text can always appear")]
     [Tooltip("0: never appears, 1: appears every time")]
-    [SerializeField, Range(0, 1)] private float chanceToAppear = 1;
+    [SerializeField, Range(0, 1), HideIf(nameof(AlwaysAppear))] private float chanceToAppear = 1;
     [Tooltip("Leave list empty to make it so player can see flavor text without completing any levels")]
-    [SerializeField, Scene] private string[] requiredScenesCompleted;
+    [SerializeField, Scene, HideIf(nameof(AlwaysAppear))] private string[] requiredScenesCompleted;
     [Tooltip("Require player to not have experienced a certain level to display")]
-    [SerializeField, Scene] private string[] requiredScenesNotCompleted;
+    [SerializeField, Scene, HideIf(nameof(AlwaysAppear))] private string[] requiredScenesNotCompleted;
     [Tooltip("Leave list empty to make it so player can see flavor text without collecting anything")]
-    [SerializeField] private Collectable[] requiredCollectables;
+    [SerializeField, HideIf(nameof(AlwaysAppear))] private Collectable[] requiredCollectables;
     [Tooltip("Require player to not collected certain collectables")]
-    [SerializeField] private Collectable[] requiredCollectablesUncollected;
+    [SerializeField, HideIf(nameof(AlwaysAppear))] private Collectable[] requiredCollectablesUncollected;
     [Tooltip("If true, requires a specific hat to be worn")]
-    [SerializeField] private bool RequireSpecificHat = false;
-    [SerializeField, ShowIf(nameof(RequireSpecificHat))] private Collectable requiredHat;
+    [SerializeField, HideIf(nameof(AlwaysAppear))] private bool RequireSpecificHat = false;
+    [SerializeField, ShowIf(nameof(RequireSpecificHat)), HideIf(nameof(AlwaysAppear))] private Collectable requiredHat;
 
     private Outline outline;
     private bool? cached_isInteractable; // decide one time if it is interactable and never again (until scene is reloaded)
@@ -47,7 +51,7 @@ public class FlavorTextInteractable : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        DialougeManager.Instance.DisplayText_Dialogue(DisplayText, 3, onDialogueEndCallback: OnFlavorTextEnd);
+        DialougeManager.Instance.DisplayText_Dialogue(DisplayText, secondsUntilCloseText, onDialogueEndCallback: OnFlavorTextEnd);
         SaveDataManager.Instance.MarkFlavorTextAsRead(DisplayText, autoSave: true);
         DisableTextInteractable();
     }
@@ -76,6 +80,9 @@ public class FlavorTextInteractable : MonoBehaviour, IInteractable
     /// <returns>True if flavor text can be read</returns>
     private bool HasMetConditionsToAppear()
     {
+        if (AlwaysAppear)
+            return true;
+
         if (Random.value > chanceToAppear)
             return false;
 
