@@ -43,7 +43,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static UnityEvent<float> ActionNotHeld = new();
     public static UnityEvent<float> ActionCanceled = new();
 
-    public static UnityEvent InteractStarted = new UnityEvent();
+    public static UnityEvent InteractStarted = new();
     public static UnityEvent<float> InteractHeld = new();
     public static UnityEvent<float> InteractCanceled = new();
 
@@ -89,6 +89,10 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     // Start function equivalent. called from GameManager to control execution order.
     public void Initialize()
     {
+        // this may be before awake has ran...
+        if(Instance != this)
+            base.Awake();
+
         if (Instance != this)
             return;
 

@@ -30,8 +30,10 @@ public class PlayerManager : Singleton<PlayerManager>
 
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
-    public void Initialize()
+    public void Start()
     {
+        // This all used to be start function, mostly just getting variables:
+
         if (PlayerGhostObject == null)
             PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
 
@@ -54,18 +56,6 @@ public class PlayerManager : Singleton<PlayerManager>
             LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
     }
 
-    public void InitializePlayerManager()
-    {
-        if (PlayerGhostObject == null)
-            PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
-
-        CurrentObject = PlayerGhostObject;
-        RegisterInputs(PlayerGhostObject);
-        camera = Camera.main;
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
 
     public void PossessObject(PossessableObject possessable)
     {
@@ -190,6 +180,8 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionNotHeld.AddListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.AddListener(input.OnActionCanceled);
 
+        Debug.Log("Adding interact actions!!");
+
         InputEvents.InteractStarted.AddListener(input.OnInteractStarted);
         InputEvents.InteractHeld.AddListener(input.WhileInteractHeld);
         InputEvents.InteractCanceled.AddListener(input.OnInteractCanceled);
@@ -207,6 +199,8 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionHeld.RemoveListener(input.WhileActionHeld);
         InputEvents.ActionNotHeld.RemoveListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.RemoveListener(input.OnActionCanceled);
+
+        Debug.Log("removing interact on "+possessable.gameObject.name);
 
         InputEvents.InteractStarted.RemoveListener(input.OnInteractStarted);
         InputEvents.InteractHeld.RemoveListener(input.WhileInteractHeld);
