@@ -299,5 +299,5 @@ public enum Collectable
 	ToyCarCollectible,
 	ChairCollectible,
 	NewsPaperHat,
-	CollectibleTemplate,
+	Hat_Cowboy,
 }
