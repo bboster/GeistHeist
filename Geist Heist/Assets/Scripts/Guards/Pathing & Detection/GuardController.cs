@@ -183,6 +183,12 @@ public class GuardController : MonoBehaviour
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
     }
+
+    private void OnDestroy()
+    {
+        guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
     #endregion
 
     /// <summary>
