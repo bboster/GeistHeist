@@ -174,12 +174,15 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     {
 #if UNITY_EDITOR
 
-        if(saveFile == null)
+        if(saveFile == null || string.IsNullOrEmpty(saveFile.text))
         {
             Debug.LogWarning("No save file is present to load");
+            saveFile = null;
             currentSaveDta = new();
             return;
         }
+
+        Debug.Log(saveFile.text);
 
         currentSaveDta = JsonUtility.FromJson<SaveDataFile>(saveFile.text);
 
