@@ -36,6 +36,7 @@ public class OptionalCollectable : MonoBehaviour
 
     public bool IsCollected => SaveDataManager.Instance.IsCollectableCollected(ThisCollectable);
 
+
     private void Awake()
     {
         childCollider = GetComponentInChildren<Collider>();
