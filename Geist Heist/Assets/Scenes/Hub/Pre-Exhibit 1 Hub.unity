@@ -2591,6 +2591,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c80f2077853183e4fbb82ee0a41fb8b9, type: 3}
+--- !u!4 &43402762 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c80f2077853183e4fbb82ee0a41fb8b9, type: 3}
+  m_PrefabInstance: {fileID: 43402761}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &54936849
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9433,16 +9438,25 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!1 &313227177 stripped
+--- !u!1 &313227177
 GameObject:
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 817bd586045b0484e9549498fe1c0fdf, type: 3}
-  m_PrefabInstance: {fileID: 1138093948}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &313227178 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 817bd586045b0484e9549498fe1c0fdf, type: 3}
-  m_PrefabInstance: {fileID: 1138093948}
-  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 313227184}
+  - component: {fileID: 313227183}
+  - component: {fileID: 313227179}
+  - component: {fileID: 313227182}
+  m_Layer: 0
+  m_Name: 
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!114 &313227179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9457,6 +9471,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlavorTextInteractable
   DisplayText: Your mother, father, brother, niece, and (most importantly) yourself
     are all standing together in a group photo.
+  secondsUntilCloseText: 10
+  AlwaysAppear: 0
   chanceToAppear: 1
   requiredScenesCompleted: []
   requiredScenesNotCompleted: []
@@ -9504,6 +9520,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.073624, y: 0.64921117, z: 0.06569482}
   m_Center: {x: 0.00000047502328, y: 0.32460654, z: 0}
+--- !u!4 &313227184
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313227177}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &319366319
 Mesh:
   m_ObjectHideFlags: 0
@@ -11656,11 +11687,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!4 &384279095 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1610688544208696635, guid: 39fa81be3de0c9d42b75a0f089556be6, type: 3}
-  m_PrefabInstance: {fileID: 1316463772}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &386868238
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20231,6 +20257,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlavorTextInteractable
   DisplayText: "It\u2019s your beloved cockatoo, Reginald!"
+  secondsUntilCloseText: 10
+  AlwaysAppear: 0
   chanceToAppear: 1
   requiredScenesCompleted: []
   requiredScenesNotCompleted: []
@@ -29121,6 +29149,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlavorTextInteractable
   DisplayText: 'It''s a picture of your family, all dressed in black. They look sad.
     The plaque reads: Oliver Hubert, 1915-1960.'
+  secondsUntilCloseText: 10
+  AlwaysAppear: 0
   chanceToAppear: 1
   requiredScenesCompleted: []
   requiredScenesNotCompleted: []
@@ -43732,11 +43762,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!4 &1088917450 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2814663247811918067, guid: 882e3dbde86329a4c802cd83690715f8, type: 3}
-  m_PrefabInstance: {fileID: 1124394236}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1090673696
 GameObject:
   m_ObjectHideFlags: 0
@@ -44358,7 +44383,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1182670693}
+  m_Mesh: {fileID: 1805262977}
 --- !u!33 &1098690966
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -50619,7 +50644,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 7f215450e14de644d82bf78622e04701, type: 2}
     - target: {fileID: 8024416891471425332, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
       propertyPath: sceneName
-      value: 10
+      value: Main Menu
       objectReference: {fileID: 0}
     - target: {fileID: 8024416891471425332, guid: a564c7f3ebeca794ca5cfa40141c91a4, type: 3}
       propertyPath: confirmationText
@@ -60671,11 +60696,24 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!1 &1643248016 stripped
+--- !u!1 &1643248016
 GameObject:
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 6827030957300785742, guid: 39fa81be3de0c9d42b75a0f089556be6, type: 3}
-  m_PrefabInstance: {fileID: 1316463772}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1643248021}
+  - component: {fileID: 1643248019}
+  - component: {fileID: 1643248020}
+  m_Layer: 0
+  m_Name: 
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!114 &1643248019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60705,6 +60743,86 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!108 &1643248020
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1643248016}
+  m_Enabled: 1
+  serializedVersion: 11
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
+--- !u!4 &1643248021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1643248016}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1644251181
 GameObject:
   m_ObjectHideFlags: 0
@@ -71939,10 +72057,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 2814663247811918067, guid: 882e3dbde86329a4c802cd83690715f8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1307551725}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 882e3dbde86329a4c802cd83690715f8, type: 3}
 --- !u!4 &2099337233 stripped
@@ -71980,12 +72095,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1212148517}
-  - {fileID: 384279095}
   - {fileID: 674157828}
   - {fileID: 698059022}
-  - {fileID: 1168700248}
-  - {fileID: 313227178}
-  - {fileID: 1855141559}
+  - {fileID: 43402762}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2117249288
@@ -72347,6 +72459,8 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 313227184}
+  - {fileID: 1643248021}
   - {fileID: 777739042}
   - {fileID: 1247084873}
   - {fileID: 103416661}
@@ -72379,16 +72493,13 @@ SceneRoots:
   - {fileID: 1713913922}
   - {fileID: 2102328910}
   - {fileID: 369751110}
-  - {fileID: 1124394236}
   - {fileID: 54936849}
   - {fileID: 2083771477}
-  - {fileID: 562546058}
   - {fileID: 2019273949}
   - {fileID: 635775031}
   - {fileID: 351078531}
   - {fileID: 695478760}
   - {fileID: 717159332}
-  - {fileID: 836770596}
   - {fileID: 266754125}
   - {fileID: 486383259}
   - {fileID: 290135718}
@@ -72399,14 +72510,10 @@ SceneRoots:
   - {fileID: 1393630366}
   - {fileID: 1373328142}
   - {fileID: 538280560}
-  - {fileID: 1904691653}
   - {fileID: 253869350}
   - {fileID: 258988566}
   - {fileID: 412247896}
-  - {fileID: 1100699306}
   - {fileID: 1149223185}
   - {fileID: 525454233}
   - {fileID: 929322839}
   - {fileID: 252039849}
-  - {fileID: 447586628}
-  - {fileID: 1811877164}
