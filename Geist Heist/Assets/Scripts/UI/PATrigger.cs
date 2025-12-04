@@ -7,8 +7,6 @@
  */
 using System.Collections;
 using UnityEngine;
-using FMODUnity;
-using FMOD.Studio;
 
 public class PATrigger : MonoBehaviour
 {
@@ -17,25 +15,11 @@ public class PATrigger : MonoBehaviour
     [SerializeField] float stayLength;
     bool alreadyTriggered;
 
-    private EventInstance voiceline;
-
-    [SerializeField] private int whichLine;
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             //play audio clip here joey
-            AudioManager.Instance.PlayOneShot(FMODEvents.instance.PAJingle);
-
-            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PALines);
-
-            if (whichLine >= 0 && whichLine < 3)
-            {
-                RuntimeManager.StudioSystem.setParameterByName("PA", whichLine);
-                voiceline.start();
-            }
-
             alreadyTriggered = true;
             DialougeManager.Instance.DisplayText_PASystem(Text, stayLength);
         }

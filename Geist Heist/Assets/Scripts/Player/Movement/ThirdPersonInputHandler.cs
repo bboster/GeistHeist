@@ -18,8 +18,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 //using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
-using FMODUnity;
-using FMOD.Studio;
 
 public class ThirdPersonInputHandler : IInputHandler
 {
@@ -77,13 +75,9 @@ public class ThirdPersonInputHandler : IInputHandler
     private bool onSlope;
     private Vector3 lastMoveDirection = Vector3.zero;
 
-    private EventInstance playerMoveSFX;
-
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
-        playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PlayerMovement);
-
         targetRotation = transform.rotation;
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
@@ -314,13 +308,9 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnMoveStarted()
     {
         OllieParticles.Play();
-
-        playerMoveSFX.start();
     }
     public override void WhileMoveHeld(float secondsHeld)
     {
-        playerMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
-
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
         // calculate flat ground movement direction
@@ -376,8 +366,6 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnMoveCanceled(float secondsHeld) 
     {
         OllieParticles.Stop();
-
-        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
     #endregion
 
