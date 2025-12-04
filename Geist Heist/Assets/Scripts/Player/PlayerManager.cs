@@ -180,8 +180,6 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionNotHeld.AddListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.AddListener(input.OnActionCanceled);
 
-        Debug.Log("Adding interact actions!!");
-
         InputEvents.InteractStarted.AddListener(input.OnInteractStarted);
         InputEvents.InteractHeld.AddListener(input.WhileInteractHeld);
         InputEvents.InteractCanceled.AddListener(input.OnInteractCanceled);
@@ -199,8 +197,6 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.ActionHeld.RemoveListener(input.WhileActionHeld);
         InputEvents.ActionNotHeld.RemoveListener(input.WhileActionNotHeld);
         InputEvents.ActionCanceled.RemoveListener(input.OnActionCanceled);
-
-        Debug.Log("removing interact on "+possessable.gameObject.name);
 
         InputEvents.InteractStarted.RemoveListener(input.OnInteractStarted);
         InputEvents.InteractHeld.RemoveListener(input.WhileInteractHeld);

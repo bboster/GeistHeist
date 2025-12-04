@@ -8,6 +8,7 @@
  * Jult: when presumed stopped, and gains sudden velocity
  */
 
+using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,9 +16,9 @@ using UnityEngine.Events;
 public class SuddenVelocityChangeDetector : MonoBehaviour
 {
     [Tooltip("Lowest change in velocity that would be considered a sudden change")]
-    [SerializeField] private float minVelocityForRegister = 10;
+    [SerializeField] private float minVelocityForRegister = 6;
     [Tooltip("The highest velocity that can still be considered \"stopped\"")]
-    [SerializeField] private float maxVelocityToBeStopped = 0.2f;
+    [SerializeField] private float maxVelocityToBeStopped = 0.3f;
     [SerializeField] private bool recordVelocityAtStart;
     [SerializeField] private LayerMask collisionLayers;
 
@@ -31,6 +32,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     private Rigidbody rb;
 
     private Vector3 lastVelocity;
+    private Coroutine RecordVelocityCoroutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -42,11 +44,14 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    IEnumerator RecordVelocity()
     {
-        if (activelyRecordVelocity == false) return;
-
-       lastVelocity = rb.linearVelocity;
+        while (activelyRecordVelocity)
+        {
+            lastVelocity = rb.linearVelocity;
+            yield return null;
+        }
+        RecordVelocityCoroutine = null;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -55,42 +60,55 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
 
         // check if collision layer is in walls layer mask using a BITWISE operation??? (what is happening!!)
         int layer = collision.transform.gameObject.layer;
-        if (collisionLayers == (collisionLayers | (1 << layer))) 
-            return;
+        //if (collisionLayers == (collisionLayers | (1 << layer)))
+        //    return;
 
-        float speedBeforeCollision = lastVelocity.magnitude;
+        Debug.Log("collision good start coroutine");
+        StartCoroutine(AfterCollisionEnter(collision.contacts[0].point));
+    }
+
+    // one frame after, actually.
+    private IEnumerator AfterCollisionEnter(Vector3 impactPoint)
+    {
+        Vector3 cachedLastVelocity = lastVelocity;
+
+        yield return new WaitForEndOfFrame();
+
+        float speedBeforeCollision = cachedLastVelocity.magnitude;
         float speedAfterCollision = rb.linearVelocity.magnitude;
 
+        Debug.Log("collision town " + lastVelocity.magnitude);
+        Debug.Log("speed after collision town " + rb.linearVelocity.magnitude);
+
         // no sighnificant change has happened
-        if(Mathf.Abs(speedBeforeCollision - speedAfterCollision) < minVelocityForRegister)
+        if (Mathf.Abs(speedBeforeCollision - speedAfterCollision) < minVelocityForRegister)
         {
-            Debug.Log("nothing significant happened");
-            return;
+            yield break;
         }
 
         // detect jolt : if it was stopped and suddenly started
-        if(speedBeforeCollision <= maxVelocityToBeStopped && speedAfterCollision >= minVelocityForRegister)
+        if (speedBeforeCollision <= maxVelocityToBeStopped && speedAfterCollision >= minVelocityForRegister)
         {
-            Debug.Log("sudden jult");
-            OnJoltDetected.Invoke(collision.contacts[0].point);
-            return;
+            Debug.Log("sudden jult on "+gameObject.name);
+            OnJoltDetected.Invoke(impactPoint);
+            yield break;
         }
 
         // detect stop: if it was moving and suddenly stopped
-        if(speedBeforeCollision >= minVelocityForRegister && speedAfterCollision <= maxVelocityToBeStopped)
+        if (speedBeforeCollision >= minVelocityForRegister && speedAfterCollision <= maxVelocityToBeStopped)
         {
-            Debug.Log("Stop occured");
-            OnStopDetected.Invoke(collision.contacts[0].point);
-            return;
+            Debug.Log("Stop occured on " + gameObject.name);
+            OnStopDetected.Invoke(impactPoint);
+            yield break;
         }
 
         // detect bounce: if it was moving and suddenly starting moving in opposite direction
-        float dot = Vector3.Dot(lastVelocity.normalized, rb.linearVelocity.normalized); // dot returns 1 if angles are perfectly aligned, -1 if complete opposite directions.
+        float dot = Vector3.Dot(cachedLastVelocity.normalized, rb.linearVelocity.normalized); // dot returns 1 if angles are perfectly aligned, -1 if complete opposite directions.
         if (dot <= 0 && speedBeforeCollision >= minVelocityForRegister && speedAfterCollision >= minVelocityForRegister) // "if the two directions are different, but also very fast"
         {
-            Debug.Log("bounce on it");
-            OnBounceDetected.Invoke(collision.contacts[0].point);
-            return;
+            Debug.Log("bounce detected on "+gameObject.name);
+            OnBounceDetected.Invoke(impactPoint);
+            yield break;
         }
     }
 
@@ -98,10 +116,14 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     {
         lastVelocity = rb.linearVelocity;
         activelyRecordVelocity = true;
+        StaticUtilities.StopAndStartCoroutine(ref RecordVelocityCoroutine, RecordVelocity());
     }
 
     public void StopRecordingVelocity()
     {
         activelyRecordVelocity = false;
+
+        if(RecordVelocityCoroutine!=null)
+            StopCoroutine(RecordVelocityCoroutine);
     }
 }

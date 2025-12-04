@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3011658546865013349}
+  - component: {fileID: 7969322933724289920}
+  - component: {fileID: 2167975466833431987}
   m_Layer: 0
   m_Name: Flashlight
   m_TagString: Untagged
@@ -33,6 +35,46 @@ Transform:
   - {fileID: 950690658185749424}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7969322933724289920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559080604787817476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e7b506a3b55e004083a889bb451069b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardFlashlight
+  OnomatopoeiaText: thunk!
+--- !u!114 &2167975466833431987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559080604787817476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ea24babacec1ea4a8fe30ad3228824b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SuddenVelocityChangeDetector
+  minVelocityForRegister: 3
+  maxVelocityToBeStopped: 0.3
+  recordVelocityAtStart: 1
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 257
+  OnStopDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBounceDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnJoltDetected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6441845934343706139
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,9 +275,6 @@ PrefabInstance:
       addedObject: {fileID: 2272255612147161358}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9a398b0e8fa19740aeb31fba0823749, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7669742728053063069}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9a398b0e8fa19740aeb31fba0823749, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 5948476407373642672}
   m_SourcePrefab: {fileID: 100100000, guid: a9a398b0e8fa19740aeb31fba0823749, type: 3}
 --- !u!1 &8590821004793884119 stripped
@@ -308,21 +347,6 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!114 &7669742728053063069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8590821004793884119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32213394d365d6e46b4c9f50b9318be0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FlashlightLightSync
-  spotLight: {fileID: 2272255612147161358}
-  meshCollider: {fileID: 0}
-  autoSync: 1
 --- !u!114 &5948476407373642672
 MonoBehaviour:
   m_ObjectHideFlags: 0

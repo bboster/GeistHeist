@@ -218,8 +218,6 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public override void OnInteractStarted()
     {
-        Debug.Log("interact started");
-
         if (Time.frameCount - frameCountSinceLastInteraction <= 3)
             return;
 
@@ -229,8 +227,6 @@ public class ThirdPersonInputHandler : IInputHandler
         frameCountSinceLastInteraction = Time.time;
 
         var allInteractables = result.GetComponentsInChildren<IInteractable>();
-
-        Debug.Log("found " + allInteractables.Length);
 
         foreach(var interactable in allInteractables)
         {
