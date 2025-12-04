@@ -4,7 +4,7 @@ using FMODUnity;
 using FMOD.Studio;
 using System.Collections.Generic;
 
-public class FMODEvents : MonoBehaviour
+public class FMODEvents : Singleton<FMODEvents>
 {
     [field: Header("BGM")]
     [field: SerializeField] public EventReference LevelBGM { get; private set; }
@@ -48,6 +48,8 @@ public class FMODEvents : MonoBehaviour
 
     private void Awake()
     {
+        base.Awake();
+        
         if (instance != null)
         {
             Debug.Log("There is more than one FMODEvents in the scene");
