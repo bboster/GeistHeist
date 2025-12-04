@@ -299,5 +299,11 @@ public enum Collectable
 	ToyCarCollectible,
 	ChairCollectible,
 	NewsPaperHat,
-	Hat_Cowboy,
+	
+	
+	
+	
+	
+	CowboyHatColletable,
+	Jester_Hat_Collectable,
 }
