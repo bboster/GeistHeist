@@ -298,4 +298,5 @@ public enum Collectable
     VaseCollectible,
 	ToyCarCollectible,
 	ChairCollectible,
+	NewsPaperHat,
 }

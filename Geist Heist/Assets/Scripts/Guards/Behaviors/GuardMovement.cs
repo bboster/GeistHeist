@@ -46,10 +46,10 @@ public class GuardMovement : Behavior
     {
         thisAgent.SetDestination(destination);
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         GuardDebugger debugger = selfRef.GetComponent<GuardDebugger>();
         debugger.StartCoroutine(debugger.PathProgressBarCoroutine(thisAgent, this));
-#endif
+#endif*/
     }
 
     /// <summary>
