@@ -173,7 +173,7 @@ public class VisionStimulus : Stimulus
         vertices[0] = visionRenderer.transform.InverseTransformPoint(coneOrigin.position);
 
         Vector3 raySweep = ((-coneOrigin.transform.right * coneRadius) + (-coneOrigin.transform.forward * coneHeight)) + coneOrigin.position;
-        raySweep.y = 0;
+        raySweep.y = coneOrigin.position.y;
         
         int vIndex = 1;
         int tIndex = 0;
@@ -183,12 +183,10 @@ public class VisionStimulus : Stimulus
             UnityEngine.Debug.DrawLine(coneOrigin.position, raySweep);
 
             Vector3 vertex;
-            raySweep.y = 0;
 
-            if (Physics.Raycast(coneOrigin.position, raySweep, out RaycastHit hit, coneHeight, layer))
+            if (Physics.Linecast(coneOrigin.position, raySweep, out RaycastHit hit, layer))
             {
                 vertex = visionRenderer.transform.InverseTransformPoint(hit.point);
-                Physics.Linecast();
             }
             else
             {
