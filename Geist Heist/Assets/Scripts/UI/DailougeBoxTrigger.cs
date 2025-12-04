@@ -7,6 +7,8 @@
  */
 using System.Collections;
 using UnityEngine;
+using FMODUnity;
+using FMOD.Studio;
 
 public class DailougeBoxTrigger : MonoBehaviour
 {
@@ -15,12 +17,24 @@ public class DailougeBoxTrigger : MonoBehaviour
     [SerializeField] float stayLength;
     bool alreadyTriggered;
 
+    private EventInstance voiceline;
+
+    [SerializeField] private int whichLine;
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             alreadyTriggered = true;
             DialougeManager.Instance.DisplayText_Dialogue(Text, stayLength);
+
+            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PALines);
+
+            if (whichLine >= 0 && whichLine < 3)
+            {
+                RuntimeManager.StudioSystem.setParameterByName("PA", whichLine);
+                voiceline.start();
+            }
         }
     }
 }
