@@ -160,7 +160,7 @@ public class VisionStimulus : Stimulus
 
         //Gets the bounds of the cone mesh and uses it to determine various useful measurements
         Bounds coneBounds = GetComponent<MeshRenderer>().bounds;
-        float coneHeight = Vector3.Distance(coneOrigin.position, coneForwardExtent.position);
+        float coneHeight = Vector3.Distance(coneOrigin.localPosition, coneForwardExtent.localPosition);
         float coneRadius = coneBounds.size.x * 0.5f;
         float coneDiameter = coneBounds.size.x;
         diameter = coneDiameter; //REMOVE THIS LINE
@@ -172,8 +172,9 @@ public class VisionStimulus : Stimulus
         //Sets the first vertice (the point of the triangle) to be where the cone starts at the guard
         vertices[0] = visionRenderer.transform.InverseTransformPoint(coneOrigin.position);
 
-        Vector3 raySweep = ((-transform.right * coneRadius) + (-transform.forward * coneHeight)) + coneOrigin.position;
-
+        Vector3 raySweep = ((-coneOrigin.transform.right * coneRadius) + (-coneOrigin.transform.forward * coneHeight)) + coneOrigin.position;
+        raySweep.y = 0;
+        
         int vIndex = 1;
         int tIndex = 0;
 
@@ -184,13 +185,15 @@ public class VisionStimulus : Stimulus
             Vector3 vertex;
             raySweep.y = 0;
 
-            if(Physics.Raycast(coneOrigin.position, raySweep, out RaycastHit hit, coneHeight, layer))
+            if (Physics.Raycast(coneOrigin.position, raySweep, out RaycastHit hit, coneHeight, layer))
             {
-                vertex = transform.InverseTransformPoint(hit.point);
+                vertex = visionRenderer.transform.InverseTransformPoint(hit.point);
+                Physics.Linecast();
             }
             else
             {
-                vertex = transform.InverseTransformPoint(raySweep);
+                raySweep.y = coneOrigin.position.y;
+                vertex = visionRenderer.transform.InverseTransformPoint(raySweep);
             }
 
             vertices[vIndex] = vertex;
@@ -210,7 +213,7 @@ public class VisionStimulus : Stimulus
             Vector3 p1 = (-coneForwardExtent.right * coneRadius) + coneForwardExtent.position;
             Vector3 p2 = (coneForwardExtent.right * coneRadius) + coneForwardExtent.position;
             Vector3 dir = p2 - p1;
-            dir.y = 0;
+            dir.y = coneOrigin.position.y;
 
             //Sweeps the raycast a given distance along the base of the triangular visualizer. NewPoint = OldPoint + distance * unit vector of the base
             raySweep = raySweep - (coneDiameter / rayCount) * Vector3.Normalize(-dir);
