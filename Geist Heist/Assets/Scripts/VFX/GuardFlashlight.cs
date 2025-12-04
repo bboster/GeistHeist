@@ -28,5 +28,9 @@ public class GuardFlashlight : MonoBehaviour
     {
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
         BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale: 0.4f);
+
+        //TODO: add thunk sound
+
+        // TODO: add particle
     }
 }

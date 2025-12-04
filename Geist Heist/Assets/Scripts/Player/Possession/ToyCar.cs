@@ -29,6 +29,7 @@ public class ToyCar : IInputHandler
 
     [Header("VFX")]
     [SerializeField] private string OnomatopoeiaText = "Bonk!";
+    [SerializeField] private float OnomatopoeiaScale = 1;
 
     [Header("Speedometer seconds")]
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
@@ -261,7 +262,11 @@ public class ToyCar : IInputHandler
     void OnCrashOrBounceDetected(Vector3 impactPoint)
     {
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange:15, bold:true);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange:15, bold:true, scale:OnomatopoeiaScale);
+
+        //TODO: add Bonk sound
+
+        // TODO: add particle
     }
 
     #endregion

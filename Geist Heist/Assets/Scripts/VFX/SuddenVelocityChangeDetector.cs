@@ -22,6 +22,8 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     [SerializeField] private bool recordVelocityAtStart;
     [SerializeField] private LayerMask collisionLayers;
 
+    [SerializeField] private bool debugLogSpeeds;
+
     // vector3 in parameter is contact point
     public UnityEvent<Vector3> OnStopDetected = new();
     public UnityEvent<Vector3> OnBounceDetected = new();
@@ -32,7 +34,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     private Rigidbody rb;
 
     private Vector3 lastVelocity;
-    private Coroutine RecordVelocityCoroutine;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -46,12 +48,11 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     // Update is called once per frame
     IEnumerator RecordVelocity()
     {
-        while (activelyRecordVelocity && RecordVelocityCoroutine != null)
+        while (activelyRecordVelocity)
         {
             lastVelocity = rb.linearVelocity;
             yield return null;
         }
-        RecordVelocityCoroutine = null;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -76,6 +77,12 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
 
         float speedBeforeCollision = cachedLastVelocity.magnitude;
         float speedAfterCollision = rb.linearVelocity.magnitude;
+
+        if (debugLogSpeeds)
+        {
+            Debug.Log("speed before: " + speedBeforeCollision);
+            Debug.Log("speed after:  " + speedBeforeCollision);
+        }
 
         // no sighnificant change has happened
         if (Mathf.Abs(speedBeforeCollision - speedAfterCollision) < minVelocityForRegister)
@@ -113,14 +120,12 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     {
         lastVelocity = rb.linearVelocity;
         activelyRecordVelocity = true;
-        StaticUtilities.StopAndStartCoroutine(ref RecordVelocityCoroutine, RecordVelocity());
+        StartCoroutine(RecordVelocity());
     }
 
     public void StopRecordingVelocity()
     {
+        // this stops the coroutine
         activelyRecordVelocity = false;
-
-        if(RecordVelocityCoroutine!=null)
-            StopCoroutine(RecordVelocityCoroutine);
     }
 }
