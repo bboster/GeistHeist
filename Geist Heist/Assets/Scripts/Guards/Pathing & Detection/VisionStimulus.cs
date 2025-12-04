@@ -160,7 +160,7 @@ public class VisionStimulus : Stimulus
 
         //Gets the bounds of the cone mesh and uses it to determine various useful measurements
         Bounds coneBounds = GetComponent<MeshRenderer>().bounds;
-        float coneHeight = Vector3.Distance(coneOrigin.localPosition, coneForwardExtent.localPosition);
+        float coneHeight = Vector3.Distance(coneOrigin.position, coneForwardExtent.position);
         float coneRadius = coneBounds.size.x * 0.5f;
         float coneDiameter = coneBounds.size.x;
         diameter = coneDiameter; //REMOVE THIS LINE
