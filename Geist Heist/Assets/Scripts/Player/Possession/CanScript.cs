@@ -9,8 +9,6 @@ public class CanScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.CanBounce, transform.position);
-
         if (firstTime)
         {
             Instantiate(soundStimulus, transform.position, Quaternion.identity);

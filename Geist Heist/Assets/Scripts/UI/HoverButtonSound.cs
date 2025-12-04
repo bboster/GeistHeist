@@ -14,7 +14,7 @@ public class HoverButtonSound : MonoBehaviour, IPointerEnterHandler
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // tysm Toby
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIHover);
+        // TODO: joe delete this debug log and add ur sound
+        Debug.Log("hovered over a button"); 
     }
 }
