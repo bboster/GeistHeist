@@ -46,7 +46,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     // Update is called once per frame
     IEnumerator RecordVelocity()
     {
-        while (activelyRecordVelocity)
+        while (activelyRecordVelocity && RecordVelocityCoroutine != null)
         {
             lastVelocity = rb.linearVelocity;
             yield return null;
@@ -59,7 +59,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
         if (activelyRecordVelocity == false) return;
 
         // check if collision layer is in walls layer mask using a BITWISE operation??? (what is happening!!)
-        int layer = collision.transform.gameObject.layer;
+        //int layer = collision.transform.gameObject.layer;
         //if (collisionLayers == (collisionLayers | (1 << layer)))
         //    return;
 
@@ -76,9 +76,6 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
 
         float speedBeforeCollision = cachedLastVelocity.magnitude;
         float speedAfterCollision = rb.linearVelocity.magnitude;
-
-        Debug.Log("collision town " + lastVelocity.magnitude);
-        Debug.Log("speed after collision town " + rb.linearVelocity.magnitude);
 
         // no sighnificant change has happened
         if (Mathf.Abs(speedBeforeCollision - speedAfterCollision) < minVelocityForRegister)
