@@ -143,19 +143,24 @@ public class GameManager : Singleton<GameManager>
     /// <returns></returns>
     public Task InstantiateManagers()
     {
-        Instantiate(InputManagerPrefab);
-        Instantiate(PlayerManagerPrefab);
+        if (PlayerStart == null)
+            PlayerStart = FindFirstObjectByType<ThirdPersonInputHandler>().transform;
+
+        Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize() ;
+        Instantiate(LevelManagerPrefab); // initialization happens in PlayerManager
         Instantiate(SaveDataManagerPrefab);
         Instantiate(GuardCoroutineManagerPrefab);
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
-        Instantiate(LevelManagerPrefab);
         Instantiate(DailougeManagerPrefab);
         Instantiate(AudioManagerPrefab);
         Instantiate(MusicManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
+
+        Instantiate(PlayerManagerPrefab);//.GetComponent<PlayerManager>().Initialize();
+
 
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
         Instantiate(GeneralHUDPrefab);
