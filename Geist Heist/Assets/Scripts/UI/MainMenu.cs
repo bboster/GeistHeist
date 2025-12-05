@@ -14,10 +14,10 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField, BoxGroup("Hub Scene"), Scene] private int HubScene;
+    [SerializeField, BoxGroup("Hub Scene"), Scene] private string HubScene;
     [SerializeField, BoxGroup("Hub Scene")] private GameObject HubSceneLoadingCardPrefab;
 
-    [SerializeField, BoxGroup("New Game Scene"), Scene] private int NewGameScene; // making it seperate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
+    [SerializeField, BoxGroup("New Game Scene"), Scene] private string NewGameScene; // making it seperate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
     [SerializeField, BoxGroup("New Game Scene")] private GameObject NewSceneLoadingCardPrefab;
     [SerializeField, BoxGroup("New Game Scene")] string confirmNewGameText = "Are you sure? Continuing will delete your progress.";
 
@@ -85,7 +85,7 @@ public class MainMenu : MonoBehaviour
         LoadScene(NewGameScene, NewSceneLoadingCardPrefab);
     }
 
-    void LoadScene(int sceneToLoad, GameObject loadingCardPrefab)
+    void LoadScene(string sceneToLoad, GameObject loadingCardPrefab)
     {
         if (loadingScreenPrefab == null)
         {
@@ -96,6 +96,7 @@ public class MainMenu : MonoBehaviour
         var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
         levelTransition.StartTransition(sceneToLoad, loadingCardPrefab);
     }
+
 
 #region Buttons OnClicked
 
