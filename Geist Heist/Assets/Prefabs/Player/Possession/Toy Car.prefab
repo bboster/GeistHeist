@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 7862096149762473002}
   - component: {fileID: 6480417976091650489}
   - component: {fileID: -7755143116239034038}
-  - component: {fileID: 1151406642262224136}
   m_Layer: 10
   m_Name: Toy Car
   m_TagString: Untagged
@@ -183,8 +182,6 @@ MonoBehaviour:
   chargeRate: 8
   chargeLossRate: 105
   delayBetweenZooms: 0.5
-  OnomatopoeiaText: Bonk!
-  OnomatopoeiaScale: 1
   delayToUpdateChargeMeter: 0.25
   rotationRate: 45
   chargeMeter: {fileID: 2299211873282198318}
@@ -264,7 +261,7 @@ MonoBehaviour:
   timerDischargePercentage: 10
   ghostSpawnPoint: {fileID: 5454552123015739937}
   PossessedMaterial: {fileID: 2100000, guid: 7f215450e14de644d82bf78622e04701, type: 2}
-  UnpossessedMaterial: {fileID: 2100000, guid: a734cd0b2fe88bd4b837c8c28f1336eb, type: 2}
+  UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 2100000, guid: 6cbcb27d84e370041b4968a2fb5c77cf, type: 2}
   VisibleUnPossessedMaterial: {fileID: 3804580865180825762, guid: 6292997158b857a4596f2ec04b101584, type: 3}
   isGhost: 0
@@ -310,31 +307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardStunner
   stunVelocityThreshold: 1
---- !u!114 &1151406642262224136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3402368958818299834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ea24babacec1ea4a8fe30ad3228824b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SuddenVelocityChangeDetector
-  minVelocityForRegister: 3
-  maxVelocityToBeStopped: 0.3
-  recordVelocityAtStart: 0
-  debugLogSpeeds: 0
-  OnStopDetected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnBounceDetected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnJoltDetected:
-    m_PersistentCalls:
-      m_Calls: []
+  isCar: 1
 --- !u!1 &3969884678775893338
 GameObject:
   m_ObjectHideFlags: 0
@@ -882,15 +855,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 29515035773009853, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_FillAmount
-      value: 0.4691874
+      value: 0.080728814
       objectReference: {fileID: 0}
     - target: {fileID: 165967241164658828, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.9984596
+      value: 0.7988814
       objectReference: {fileID: 0}
     - target: {fileID: 165967241164658828, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.055485003
+      value: 0.6014887
       objectReference: {fileID: 0}
     - target: {fileID: 983731252585344803, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_Layer
@@ -906,7 +879,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2740881634172135376, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_Alpha
-      value: 0
+      value: 0.33463618
       objectReference: {fileID: 0}
     - target: {fileID: 6536208597510328459, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
       propertyPath: m_Layer

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
+using FMODUnity;
+using FMOD.Studio;
 /*
  * Contributors: Sky, Toby
  * Creation Date: 10/2/25
@@ -52,8 +54,14 @@ public class ToyCar : IInputHandler
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
     [SerializeField] private ParticleSystem possessableParticle;
 
+    private EventInstance carMoveSFX;
+    private EventInstance carWindSFX;
+
     private void Start()
     {
+        carMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CarGo);
+        carWindSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CarWind);
+
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();
         velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
@@ -83,11 +91,16 @@ public class ToyCar : IInputHandler
     // Called every frame while player is possessing.
     public override void WhilePossessingUpdate()
     {
+        carMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
+        carWindSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
+
         chargeMeter.UpdateCharge(currentStrength, maxStrength);
 
         //pause timer if car is moving
         if (rb.linearVelocity == Vector3.zero)
         {
+            carMoveSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
             possessableObject.PauseDischargeTimer = false;
 
             if (possessableObject.UnpossessedMaterial != null)
@@ -97,6 +110,14 @@ public class ToyCar : IInputHandler
         }
         else
         {
+            //Car movement sound logic
+            PLAYBACK_STATE playbackState;
+            carMoveSFX.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+            {
+                carMoveSFX.start();
+            }
+
             possessableObject.PauseDischargeTimer = true;
         }
     }
@@ -124,6 +145,7 @@ public class ToyCar : IInputHandler
     #region action
     public override void OnActionStarted()
     {
+        carWindSFX.start();
     }
 
     public override void WhileActionHeld(float secondsHeld)
@@ -173,6 +195,8 @@ public class ToyCar : IInputHandler
             //for fixed update to handle physics better
             physicsEnabled = true;
         }
+
+        carWindSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
 
     public IEnumerator ReFreezeConstraints()

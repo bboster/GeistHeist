@@ -140,7 +140,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     {
         EnsureSaveData();
         int hash = text.GetHashCode();
-        Debug.Log($"Read display text: {hash}: {currentSaveDta.FlavorTextsRead.Contains(hash)}");
+        //Debug.Log($"Read display text: {hash}: {currentSaveDta.FlavorTextsRead.Contains(hash)}");
         return currentSaveDta.FlavorTextsRead.Contains(hash);
     }
 
