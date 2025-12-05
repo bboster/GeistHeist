@@ -34,7 +34,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     private Rigidbody rb;
 
     private Vector3 lastVelocity;
-
+    private float timeOfLastSuddenChange;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -71,6 +71,12 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     // one frame after, actually.
     private IEnumerator AfterCollisionEnter(Vector3 impactPoint)
     {
+        if(Time.time - timeOfLastSuddenChange < 0.1f)
+        {
+            Debug.Log("Duplicate collision detected.");
+            yield break;
+        }
+
         Vector3 cachedLastVelocity = lastVelocity;
 
         yield return new WaitForEndOfFrame();
@@ -94,6 +100,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
         if (speedBeforeCollision <= maxVelocityToBeStopped && speedAfterCollision >= minVelocityForRegister)
         {
             Debug.Log("sudden jult on "+gameObject.name);
+            timeOfLastSuddenChange = Time.time;
             OnJoltDetected.Invoke(impactPoint);
             yield break;
         }
@@ -102,6 +109,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
         if (speedBeforeCollision >= minVelocityForRegister && speedAfterCollision <= maxVelocityToBeStopped)
         {
             Debug.Log("Stop occured on " + gameObject.name);
+            timeOfLastSuddenChange = Time.time;
             OnStopDetected.Invoke(impactPoint);
             yield break;
         }
@@ -111,6 +119,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
         if (dot <= 0 && speedBeforeCollision >= minVelocityForRegister && speedAfterCollision >= minVelocityForRegister) // "if the two directions are different, but also very fast"
         {
             Debug.Log("bounce detected on "+gameObject.name);
+            timeOfLastSuddenChange = Time.time;
             OnBounceDetected.Invoke(impactPoint);
             yield break;
         }
