@@ -29,6 +29,7 @@ public class OptionalCollectable : MonoBehaviour
     [SerializeField] private Collectable ThisCollectable;
     [InfoBox("Must be a refence to the model from assets folder, not from in scene")]
     [SerializeField] private GameObject CollectableModel;
+    [SerializeField] private GameObject CollectableSlot;
 
     private CollectableRegistry Registry;
     private Collider childCollider;
@@ -299,5 +300,11 @@ public enum Collectable
 	ToyCarCollectible,
 	ChairCollectible,
 	NewsPaperHat,
-	Hat_Cowboy,
+	
+	
+	
+	
+	
+	CowboyHatColletable,
+	Jester_Hat_Collectable,
 }

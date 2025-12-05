@@ -1,11 +1,32 @@
+/*
+ * Contributors: Brenden(?), Toby
+ * Creation Date: ?
+ * Last Modified: 12/3/2025
+ * 
+ * Brief Description: 
+ */
+
 using System.Collections;
 using UnityEngine;
 
 public class CanScript : MonoBehaviour
 {
-    bool firstTime = true;
 
     [SerializeField] private GameObject soundStimulus;
+
+    [Header("VFX")]
+    [SerializeField] private string OnomatopoeiaText = "clank!";
+
+    bool firstTime = true;
+
+    private SuddenVelocityChangeDetector velocityChangeDetector;
+
+    private void Start()
+    {
+        velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
+        velocityChangeDetector.OnBounceDetected.AddListener(OnCrashOrBounceDetected);
+        velocityChangeDetector.OnStopDetected.AddListener(OnCrashOrBounceDetected);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -17,5 +38,15 @@ public class CanScript : MonoBehaviour
             Debug.Log("Stimulus");
             firstTime = false;
         }
+    }
+
+    void OnCrashOrBounceDetected(Vector3 impactPoint)
+    {
+        Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale:0.4f);
+
+        //TODO: add clank sound
+
+        // TODO: add particle
     }
 }
