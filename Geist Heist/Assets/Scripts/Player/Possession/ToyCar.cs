@@ -29,6 +29,10 @@ public class ToyCar : IInputHandler
     [Tooltip("Force there to be time between zooms")]
     [SerializeField] private float delayBetweenZooms = 1;
 
+    [Header("VFX")]
+    [SerializeField] private string OnomatopoeiaText = "Bonk!";
+    [SerializeField] private float OnomatopoeiaScale = 1;
+
     [Header("Speedometer seconds")]
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
 
@@ -40,6 +44,7 @@ public class ToyCar : IInputHandler
     private Rigidbody rb;
     private bool physicsEnabled = false;
     private PossessableObject possessableObject;
+    SuddenVelocityChangeDetector velocityChangeDetector;
 
     private Coroutine freezeCoroutine;
     //activates when ghost is leaving an object
@@ -59,9 +64,13 @@ public class ToyCar : IInputHandler
 
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();
+        velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
 
         if (chargeMeter == null)
             chargeMeter = GetComponentInChildren<ToyCarSpeedometerUI>();
+
+        velocityChangeDetector.OnBounceDetected.AddListener(OnCrashOrBounceDetected);
+        velocityChangeDetector.OnStopDetected.AddListener(OnCrashOrBounceDetected);
     }
 
     public override void OnPossessionStart()
@@ -69,12 +78,14 @@ public class ToyCar : IInputHandler
         hasLaunchedThisPossession = false;
         chargeMeter.OnPossessionStarted();
         possessableParticle.Play();
+        velocityChangeDetector.StartRecordingVelocity();
     }
 
     public override void OnPossessionEnded()
     {
         currentStrength = minStrength;
         possessableParticle.Stop();
+        velocityChangeDetector.StopRecordingVelocity();
     }
 
     // Called every frame while player is possessing.
@@ -269,7 +280,19 @@ public class ToyCar : IInputHandler
     public override void OnMoveCanceled(float secondsHeld) { }
     #endregion
 
+    #region Onomatopoeias
 
+    void OnCrashOrBounceDetected(Vector3 impactPoint)
+    {
+        Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange:15, bold:true, scale:OnomatopoeiaScale);
+
+        //TODO: add Bonk sound
+
+        // TODO: add particle
+    }
+
+    #endregion
     public void UnFreezePosition()
     {
         rb.constraints = RigidbodyConstraints.None;

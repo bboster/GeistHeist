@@ -32,8 +32,10 @@ public class PlayerManager : Singleton<PlayerManager>
 
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
-    void Start()
+    public void Start()
     {
+        // This all used to be start function, mostly just getting variables:
+
         if (PlayerGhostObject == null)
             PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
 
@@ -59,18 +61,6 @@ public class PlayerManager : Singleton<PlayerManager>
         UpdateListener(CurrentObject);
     }
 
-    public void InitializePlayerManager()
-    {
-        if (PlayerGhostObject == null)
-            PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
-
-        CurrentObject = PlayerGhostObject;
-        RegisterInputs(PlayerGhostObject);
-        camera = Camera.main;
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
 
     public void PossessObject(PossessableObject possessable)
     {

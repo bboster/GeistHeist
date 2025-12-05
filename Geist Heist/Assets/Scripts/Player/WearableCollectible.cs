@@ -34,7 +34,10 @@ public class WearableCollectible : MonoBehaviour
     {
         // Load what the player had equipped last
         currentHat = GetEquippedCollectable(SaveDataManager.Instance.EquipedHat());
-        EquipHat(currentHat);
+
+#if UNITY_EDITOR
+        PreviewHat();
+#endif
     }
 
     public void EquipHat(Collectable newCollectable, bool debug=false)
@@ -130,6 +133,13 @@ public class WearableCollectible : MonoBehaviour
         }
 
         EquipHat(PreviewCollectable, debug:true);
+    }
+
+    [Button("Manual Equip Hat")]
+    private void MarkHatAsWorn()
+    {
+        PreviewHat();
+        SaveDataManager.Instance.MarkCollectableAsWorn(PreviewCollectable);
     }
 #endif
     #endregion
