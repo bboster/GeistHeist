@@ -46,13 +46,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [Header("Materials")]
     [Tooltip("Material on possessable when it is possessed.")]
-    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] public Material PossessedMaterial;
+    [SerializeField, HideIf(nameof(isGhost)), Required, ShowAssetPreview(16, 16)] public Material PossessedMaterial;
     [Tooltip("Material on possessable when it is UNpossessed.")]
-    [SerializeField, Required, ShowAssetPreview(16, 16), HideIf(nameof(isGhost))] public Material UnpossessedMaterial;
+    [SerializeField, HideIf(nameof(isGhost)), Required, ShowAssetPreview(16, 16)] public Material UnpossessedMaterial;
     [Tooltip("Material on possessable when it is used or when Ollie enters the possessable while a guard is in chase state.")]
-    [SerializeField, Required, ShowAssetPreview(16, 16)] public Material VisiblePossessionMaterial;
+    [SerializeField, HideIf(nameof(isGhost)), Required, ShowAssetPreview(16, 16)] public Material VisiblePossessionMaterial;
     [Tooltip("Material on possessable when a guard sees the possessable in chase state but possessable is NOT possessed.")]
-    [SerializeField, Required, ShowAssetPreview(16, 16)] public Material VisibleUnPossessedMaterial;
+    [SerializeField, HideIf(nameof(isGhost)), Required, ShowAssetPreview(16, 16)] public Material VisibleUnPossessedMaterial;
 
     [Header("Other")]
     [SerializeField] private bool isGhost = false;
@@ -84,7 +84,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     public static Action OnActionPerformed;
     public static Action OnObjectLeft;
 
-    private PlayerManager playerManager;
+    private PlayerManager playerManager => PlayerManager.Instance;
 
     /// <summary>
     /// using this for unsafe material changing
@@ -183,7 +183,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     void Start()
     {
-        playerManager = FindObjectOfType<PlayerManager>();
         currentTimerPercentage = maxChargePercentage;
 
         if (ghostExitPoints.Count == 0)

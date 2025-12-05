@@ -174,19 +174,25 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     {
 #if UNITY_EDITOR
 
-        if(saveFile == null || string.IsNullOrEmpty(saveFile.text))
+        try
         {
-            Debug.LogWarning("No save file is present to load");
-            saveFile = null;
-            currentSaveDta = new();
-            return;
+            if (saveFile == null)
+            {
+                Debug.LogWarning("No save file is present to load");
+                currentSaveDta = new();
+                return;
+            }
+
+            currentSaveDta = JsonUtility.FromJson<SaveDataFile>(saveFile.text);
+
+            Debug.Log($"Loaded save file:\n{currentSaveDta.CollectablesCollected.Count} collectables\n{currentSaveDta.ScenesCompleted.Count} levels completed");
         }
 
-        Debug.Log(saveFile.text);
-
-        currentSaveDta = JsonUtility.FromJson<SaveDataFile>(saveFile.text);
-
-        Debug.Log($"Loaded save file:\n{currentSaveDta.CollectablesCollected.Count} collectables\n{currentSaveDta.ScenesCompleted.Count} levels completed");
+        catch
+        {
+            currentSaveDta = new();
+        }
+        
 #else
 
         if (File.Exists(runtimeSavePath))
