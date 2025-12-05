@@ -76,6 +76,7 @@ public class ThirdPersonInputHandler : IInputHandler
     private RaycastHit slopeHit;
     private bool onSlope;
     private Vector3 lastMoveDirection = Vector3.zero;
+    private LayerMask rampLayerMask;
 
     private EventInstance playerMoveSFX;
 
@@ -93,6 +94,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
+        rampLayerMask = LayerMask.GetMask("Ramp");
     }
 
     // WhilePossessingUpdate is called once per frame
@@ -409,7 +411,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private bool OnSlope()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 1.5f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 1.5f, rampLayerMask))
         {
             if (slopeHit.normal != Vector3.up)
             {
