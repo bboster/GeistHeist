@@ -22,9 +22,9 @@ public class StunnedBehavior : Behavior
 
         thisAgent.isStopped = true;
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         selfRef.GetComponent<GuardDebugger>().StartDebugProgress(stunLength, this);
-#endif
+#endif*/
 
         yield return new WaitForSeconds(stunLength); //REPLACE THIS WITH SOMETHING TO TIE IN ANIMATIONS LATER
         thisAgent.isStopped = false;

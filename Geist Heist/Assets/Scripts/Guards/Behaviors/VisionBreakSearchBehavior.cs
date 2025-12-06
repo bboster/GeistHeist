@@ -66,9 +66,9 @@ public class VisionBreakSearchBehavior : GuardMovement
         GuardCoroutineManager.instance.StartBehaviorTimer(searchLength, this);
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
-#endif
+#endif*/
     }
 
     /// <summary>
