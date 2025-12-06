@@ -79,6 +79,11 @@ public class ToyCar : IInputHandler
         chargeMeter.OnPossessionStarted();
         possessableParticle.Play();
         velocityChangeDetector.StartRecordingVelocity();
+
+        if (possessableObject.PossessedMaterial != null)
+        {
+            possessableObject.meshRenderer.material = possessableObject.PossessedMaterial;
+        }
     }
 
     public override void OnPossessionEnded()
@@ -86,6 +91,11 @@ public class ToyCar : IInputHandler
         currentStrength = minStrength;
         possessableParticle.Stop();
         velocityChangeDetector.StopRecordingVelocity();
+
+        if (possessableObject.UnpossessedMaterial != null)
+        {
+            possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
+        }
     }
 
     // Called every frame while player is possessing.
@@ -103,9 +113,9 @@ public class ToyCar : IInputHandler
 
             possessableObject.PauseDischargeTimer = false;
 
-            if (possessableObject.UnpossessedMaterial != null)
+            if (possessableObject.PossessedMaterial != null)
             {
-                possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
+                possessableObject.meshRenderer.material = possessableObject.PossessedMaterial;
             }
         }
         else

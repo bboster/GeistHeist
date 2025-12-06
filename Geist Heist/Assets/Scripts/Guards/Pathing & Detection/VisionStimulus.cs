@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors: Joshua Kelly
  * Creation: 10/02/25
- * Last Edited: 11/15/25
+ * Last Edited: 12/05/25
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
@@ -64,11 +64,6 @@ public class VisionStimulus : Stimulus
     {
         PossessableObject.OnActionPerformed += ActionDetected;
         PossessableObject.OnObjectLeft += ObjectLeft;
-    }
-
-    private void Start()
-    {
-        //GenerateVisionMesh(); //THIS FUNCTION IS EVIL RIGHT NOW
     }
 
     private void OnValidate()
@@ -225,7 +220,6 @@ public class VisionStimulus : Stimulus
 
     private void Update()
     {
-        //GenerateVisionMesh();
         VisionMesh();
     }
 
@@ -242,6 +236,7 @@ public class VisionStimulus : Stimulus
 
         //Calculates the direction pointing toward the seen object
         Vector3 direction = -(spawnLocation - target.transform.position);
+        direction.y = 0;
         float distance = Vector3.Distance(raycastSpawn.position, target.transform.position) + 2; //Calculates the distance to raycast
 
         return Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer); ;
