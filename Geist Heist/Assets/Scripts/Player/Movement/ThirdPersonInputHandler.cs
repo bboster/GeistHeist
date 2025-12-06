@@ -494,5 +494,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
     }
 
+    private void OnDestroy()
+    {
+        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
    
 }
