@@ -1534,6 +1534,68 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 459118685}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &470286419
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1110488051}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.837
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8984878
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.43899852
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 52.08
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+      propertyPath: m_Name
+      value: Tether_Vase
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+--- !u!4 &470286420 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9bee37a34b3baf740aa4ff2367fabbf2, type: 3}
+  m_PrefabInstance: {fileID: 470286419}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &475622881 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4531832246536404840, guid: b77b96ec8c07cd746b6ee30fbed1c3e9, type: 3}
@@ -3260,8 +3322,12 @@ PrefabInstance:
       value: Test Hub Tether Display
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9204418864123355963, guid: 84a2258ad193e664d9029218db041157, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7116384447673086645, guid: 84a2258ad193e664d9029218db041157, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 470286420}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84a2258ad193e664d9029218db041157, type: 3}
 --- !u!4 &1110488051 stripped
@@ -3331,7 +3397,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4075478224240246575, guid: b77b96ec8c07cd746b6ee30fbed1c3e9, type: 3}
       propertyPath: ThisCollectable
-      value: 3
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4531832246536404840, guid: b77b96ec8c07cd746b6ee30fbed1c3e9, type: 3}
       propertyPath: m_Name
@@ -4972,7 +5038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4075478224240246575, guid: b77b96ec8c07cd746b6ee30fbed1c3e9, type: 3}
       propertyPath: ThisCollectable
-      value: 1
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4531832246536404840, guid: b77b96ec8c07cd746b6ee30fbed1c3e9, type: 3}
       propertyPath: m_Name
@@ -5212,7 +5278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38800cd25e1334c45a1e3092994495da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
-  sceneName: 3
+  sceneName: Actual Hub Scene
   loadingScreenPrefab: {fileID: 4996678474793840024, guid: ef6279e25117c4d4ab9e6b822786aca1, type: 3}
   levelLoadingCardPrefab: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
   confirmationText: Go to Hub?
@@ -5952,7 +6018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4075478224240246575, guid: b77b96ec8c07cd746b6ee30fbed1c3e9, type: 3}
       propertyPath: ThisCollectable
-      value: 2
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4531832246536404840, guid: b77b96ec8c07cd746b6ee30fbed1c3e9, type: 3}
       propertyPath: m_Name
