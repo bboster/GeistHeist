@@ -5,6 +5,7 @@
  * Last Edited: 10/09/25
  * Summary: Handles any functions that need to be applied to all of the guards
  */
+using System;
 using UnityEngine;
 
 public class GuardManager : Singleton<GuardManager>
@@ -22,5 +23,10 @@ public class GuardManager : Singleton<GuardManager>
         {
             gc.InitializeGuard();
         }
+    }
+
+    ~GuardManager() 
+    {
+        Array.Clear(guards, 0, guards.Length);
     }
 }
