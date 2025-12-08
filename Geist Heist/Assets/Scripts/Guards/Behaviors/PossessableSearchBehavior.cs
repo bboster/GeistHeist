@@ -63,9 +63,9 @@ public class PossessableSearchBehavior : GuardMovement
     {
         GuardCoroutineManager.instance.StartPossessableSearchTimer(searchLength, this);
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
-#endif
+#endif*/
     }
 
     /// <summary>

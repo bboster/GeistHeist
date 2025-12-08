@@ -63,9 +63,9 @@ public class SearchBehavior : GuardMovement
 
         progress = 0;
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
-#endif
+#endif*/
     }
 
     /// <summary>

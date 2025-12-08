@@ -47,9 +47,9 @@ public class SurprisedBehavior : Behavior
 
         thisAgent.isStopped = true;
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         selfRef.GetComponent<GuardDebugger>().StartDebugProgress(reactionLength, this);
-#endif
+#endif*/
 
         yield return new WaitForSeconds(reactionLength); //REPLACE THIS WITH SOMETHING TO TIE IN ANIMATIONS LATER
         thisAgent.isStopped = false;
