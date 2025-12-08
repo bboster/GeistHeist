@@ -54,6 +54,9 @@ public class VisionStimulus : Stimulus
     [Foldout("Programming Values")]
     [SerializeField] private GuardController parentController;
 
+    private Mesh visionMesh;
+    private Mesh tempMesh;
+
     //TEMP DEBUG VARS
     private Vector3 sweeper;
     private float diameter;
@@ -141,12 +144,19 @@ public class VisionStimulus : Stimulus
 
     #endregion
 
+    #region Vision Cone Renderer
+
     /// <summary>
     /// Renders the deformable vision cone.
     /// </summary>
     private void VisionMesh()
     {
-        Mesh visionMesh = new Mesh();
+        if(visionMesh != null)
+        {
+            MeshCleanup();
+        }
+
+        visionMesh = new Mesh();
         visionMesh.name = "visualizerMesh";
         visionRenderer.GetComponent<MeshFilter>().mesh = visionMesh;
 
@@ -217,6 +227,19 @@ public class VisionStimulus : Stimulus
         visionMesh.triangles = triangles;
         visionMesh.RecalculateBounds();
     }
+
+    /// <summary>
+    /// Function to clean up the generated meshes to ensure 100% that they don't live in memory for too long
+    /// </summary>
+    private void MeshCleanup()
+    {
+        tempMesh = visionMesh;
+        visionMesh = null;
+
+        Destroy(tempMesh);
+    }
+
+    #endregion
 
     private void Update()
     {
