@@ -12,11 +12,13 @@ using UnityEngine.UI;
 public class VaseInputHandler : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
-
+    [SerializeField] ParticleSystem possessableParticles;
+    private PossessableObject possessableObject;
 
     private void Start()
     {
-        thirdPersoncinemachineCamera.SetActive(false);
+        //thirdPersoncinemachineCamera.SetActive(false);
+        possessableObject = GetComponent<PossessableObject>();
     }
 
     public override void WhilePossessingUpdate()
@@ -25,11 +27,12 @@ public class VaseInputHandler : IInputHandler
 
     public override void OnPossessionStart()
     {
-
+        possessableParticles.Play();
     }
 
     public override void OnPossessionEnded()
     {
+        possessableParticles.Stop();
     }
 
     #region action
@@ -57,10 +60,7 @@ public class VaseInputHandler : IInputHandler
     #region Possess
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf)
-        {
-            PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
-        }
+        PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
     }
 
     public override void WhileInteractHeld(float secondsHeld)

@@ -15,6 +15,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     private int previousLevel = -1;
 
     [HideInInspector] public Vector3 SpawnLocation;
+    private Checkpoint currentCheckpoint;
 
     protected override void Awake()
     {
@@ -25,10 +26,10 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.L))
+        /*if(Input.GetKeyDown(KeyCode.L))
         {
             SceneManager.LoadScene("CheckpointTestScene");
-        }
+        }*/
     }
 
 #endif
@@ -53,8 +54,14 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     /// Updates SpawnLocation
     /// </summary>
     /// <param name="location"></param>
-    public void UpdateCheckpoint(Vector3 location)
+    public void UpdateCheckpoint(Vector3 location, Checkpoint checkpoint)
     {
         SpawnLocation = location;
+        currentCheckpoint = checkpoint;
+    }
+
+    public bool IsCheckpointCurrent(Checkpoint checkpoint)
+    {
+        return (checkpoint == currentCheckpoint);
     }
 }

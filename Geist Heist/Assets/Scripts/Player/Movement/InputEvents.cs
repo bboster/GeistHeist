@@ -7,8 +7,10 @@
  * Use other scripts to connect to the unityevents.
  */
 
+using System.Diagnostics;
 using System.Net.Http.Headers;
 using UnityEditor;
+//using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
  using UnityEngine.InputSystem;
@@ -25,6 +27,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     [SerializeField] private string lookKey = "Look";
     [SerializeField] private string actionKey = "Escape Object";
     [SerializeField] private string interactKey = "Interact";
+    [SerializeField] private string debugKey = "DebugConsole";
 
     public static UnityEvent MoveStarted = new UnityEvent();
     public static UnityEvent<float> MoveHeld = new();
@@ -40,11 +43,13 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static UnityEvent<float> ActionNotHeld = new();
     public static UnityEvent<float> ActionCanceled = new();
 
-    public static UnityEvent InteractStarted = new UnityEvent();
+    public static UnityEvent InteractStarted = new();
     public static UnityEvent<float> InteractHeld = new();
     public static UnityEvent<float> InteractCanceled = new();
 
     public static UnityEvent PauseStarted = new UnityEvent();
+    public static UnityEvent DebugStarted = new UnityEvent();
+    public static UnityAction PauseStartedOverride = null;
 
     public static UnityEvent<Vector2> LookUpdate = new UnityEvent<Vector2>();
 
@@ -75,14 +80,19 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     #endregion
 
     private PlayerInput playerInput;
-    public InputAction Move, /*Jump,*/ Look, Pause, Action, Interact;
+    private InputAction Move, /*Jump,*/ Look, Pause, DebugA, Action, Interact;
 
 
     private Transform movementOrigin => GetCamera();
     private Transform _movementOrigin;
 
-    private void Start()
+    // Start function equivalent. called from GameManager to control execution order.
+    public void Initialize()
     {
+        // this may be before awake has ran...
+        if(Instance != this)
+            base.Awake();
+
         if (Instance != this)
             return;
 
@@ -101,6 +111,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         Pause = map.FindAction(pauseKey);
         Action = map.FindAction(actionKey);
         Interact = map.FindAction(interactKey);
+        DebugA = map.FindAction(debugKey);
 
         // Reset all inputs
         RemoveAllListeners();
@@ -109,7 +120,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         //Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
         Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted, ref actionTimeStarted);
         Interact.started += ctx => InputActionStarted(ref InteractPressed, InteractStarted);
-        Pause.started += ctx => PauseStarted.Invoke();
+        Pause.started += ctx => OnPauseStarted();
+        DebugA.started += ctx => {DebugStarted.Invoke(); };
 
         Move.canceled += ctx => InputActionCanceled(ref MovePressed, MoveCanceled, MoveHeldTime);
         //Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
@@ -156,6 +168,13 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         pressedFlag = false;
     }
 
+    void OnPauseStarted()
+    {
+        if (PauseStartedOverride != null)
+            PauseStartedOverride();
+        else
+            PauseStarted.Invoke();
+    }
     private void FixedUpdate()
     {
         if (GameManager.Instance.IsPaused)
@@ -181,6 +200,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         MoveCanceled.RemoveAllListeners();
         ActionCanceled.RemoveAllListeners();
         InteractCanceled.RemoveAllListeners();
+        DebugStarted.RemoveAllListeners();
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -191,6 +211,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         Action?.Reset();
         Interact?.Reset();
         Look?.Reset();
+        DebugA?.Reset();
 
         RemoveAllListeners();
     }

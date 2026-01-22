@@ -29,6 +29,8 @@ public class CollectableRegistry : ScriptableObject
     /// Get the mesh renderer for a given collectable enum
     public MeshRenderer GetMesh(Collectable collectable)
     {
+        if((int)collectable <= 0) return null;
+
         var entry = entries.Find(e => e.collectable == collectable);
         return entry?.meshPrefab?.GetComponent<MeshRenderer>();
     }

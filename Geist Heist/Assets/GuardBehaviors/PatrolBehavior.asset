@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ff212b93dd46f746b3871d6ca849a9c, type: 3}
   m_Name: PatrolBehavior
   m_EditorClassIdentifier: Assembly-CSharp::PatrolMovement
+  progress: 0
   speed: 5
+  rotationSpeed: 270
+  rotationAcceleration: 8
   StateName: 1
-  Priority: 0
-  stateController: {fileID: 0}
+  Priority: 1
+  stateController: {fileID: 9100000, guid: 7c972eb5c4fb62041918c1a9807273e5, type: 2}
   moveCompletionThreshold: 1
   currentPatrolPath: {fileID: 0}

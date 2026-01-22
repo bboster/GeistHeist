@@ -1,6 +1,9 @@
 using NaughtyAttributes;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using FMODUnity;
+using FMOD.Studio;
 /*
 * Contributors: Brenden, Toby
 * Creation Date: 10/1/25
@@ -13,7 +16,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PossessableObject))]
 public class VendingObject : IInputHandler, IInteractable
 {
-    [SerializeField] private GameObject thirdPersoncinemachineCamera;
+    //[SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private Transform CanSpawnPoint;
     [SerializeField] private GameObject CanPrefab;
 
@@ -30,16 +33,24 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
 
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
+    [Tooltip("How long it takes for the visible material to go back to possession material.")]
+    [SerializeField] private float delayToUpdateMaterialVisibility = 0.5f;
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
+    [SerializeField] private ParticleSystem possessableParticle;
 
     private PossessableObject possessableObject;
     private bool hasThrownThisPossession;
+    private Coroutine materialCountdownCoroutine;
+
+    private EventInstance canCharge;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
+        canCharge = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CanCharge);
+
         possessableObject = GetComponent<PossessableObject>();
         if(chargeMeter == null)
             chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();   
@@ -52,12 +63,14 @@ public class VendingObject : IInputHandler, IInteractable
 
         chargeMeter?.OnPossessionStarted();
         hasThrownThisPossession = false;
+        possessableParticle.Play();
     }
 
     public override void OnPossessionEnded()
     {
         currentStrength = minStrength;
         hasThrownThisPossession = false;
+        possessableParticle.Stop();
     }
 
     public override void WhilePossessingUpdate()
@@ -71,10 +84,18 @@ public class VendingObject : IInputHandler, IInteractable
     {
         if (Tap)
         {
+            if (possessableObject.VisiblePossessionMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
+            }
+
+            AudioManager.Instance.PlayOneShot(FMODEvents.instance.CanShot, CanSpawnPoint.transform.position);
+
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
             temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength, ForceMode.Impulse);
-            hasThrownThisPossession = true; 
+            hasThrownThisPossession = true;
+
         }
     }
 
@@ -87,6 +108,7 @@ public class VendingObject : IInputHandler, IInteractable
         {
             // Will be clamped later (dont clamp now for charge ui animations)
             currentStrength += Time.deltaTime * strengthGrowthRate;
+            canCharge.start();
         }
     }
 
@@ -97,6 +119,9 @@ public class VendingObject : IInputHandler, IInteractable
 
         if (!Tap)
         {
+            canCharge.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            AudioManager.Instance.PlayOneShot(FMODEvents.instance.CanShot, CanSpawnPoint.transform.position);
+
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
 
             GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
@@ -104,6 +129,20 @@ public class VendingObject : IInputHandler, IInteractable
             tempLaunch.y = launchDirection.y;
             temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
             hasThrownThisPossession = true;
+
+            if (possessableObject.VisiblePossessionMaterial != null)
+            {
+                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
+            }
+        }
+
+        if (possessableObject.PossessedMaterial != null)
+        {
+
+            if (materialCountdownCoroutine == null)
+            {
+                materialCountdownCoroutine = StartCoroutine(MaterialReplaceCountdown());
+            }
         }
 
         PossessableObject.OnActionPerformed?.Invoke();
@@ -124,10 +163,13 @@ public class VendingObject : IInputHandler, IInteractable
     #region Interact
     public override void OnInteractStarted()
     {
-        if (thirdPersoncinemachineCamera.activeSelf && possessableObject.CanUnPossess)
+        if (materialCountdownCoroutine != null)
         {
-            PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
+            StopCoroutine(materialCountdownCoroutine);
+            materialCountdownCoroutine = null;
         }
+
+        PlayerManager.Instance.PossessGhost(gameObject.transform.GetComponent<PossessableObject>());
     }
 
     public override void WhileInteractHeld(float secondsHeld)
@@ -193,5 +235,21 @@ public class VendingObject : IInputHandler, IInteractable
                 );
             prevy = y;
         } */
+    }
+
+    /// <summary>
+    /// Counts down and replaces visible material of the vending machine with the possessed material
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator MaterialReplaceCountdown()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delayToUpdateMaterialVisibility);
+            possessableObject.meshRenderer.material = possessableObject.PossessedMaterial;
+            materialCountdownCoroutine = null;
+            break;
+        }
+        yield return null;
     }
 }

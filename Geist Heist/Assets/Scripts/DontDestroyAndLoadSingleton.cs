@@ -3,7 +3,7 @@
 // Author :            Kyle Grenier, Toby Schamberger
 // Creation Date :     09/29/2021
 //
-// Brief Description : Defines a class with a single instance. Becomes dont destroy 
+// Brief Description : Defines a class with a single Instance. Becomes dont destroy 
 // on load.
 *****************************************************************************/
 using UnityEngine;
