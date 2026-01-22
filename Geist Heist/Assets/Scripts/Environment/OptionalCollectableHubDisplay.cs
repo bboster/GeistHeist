@@ -58,6 +58,10 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
         Debug.Log($"Attempting to wear: {ThisCollectable}");
 
+        /*
+         * Note: This should be cached.
+         * -Toby
+         */
         WearableCollectible wearableCollectible = FindAnyObjectByType<WearableCollectible>();
         if (wearableCollectible == null)
         {

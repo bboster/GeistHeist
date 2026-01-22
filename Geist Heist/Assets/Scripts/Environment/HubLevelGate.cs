@@ -13,6 +13,12 @@
 using NaughtyAttributes;
 using UnityEngine;
 
+/*
+ * Review notes: i think this code is fine. but we need to reiterate to design to actually use it. 
+ * This code was written specifically to avoid having multiple hub scenes, which is what we ended up doing >:/
+ * -Toby
+ */
+
 public class HubLevelGate : MonoBehaviour
 {
     [InfoBox("If 'Required Level' has been completed -> this object will be disabled.\n\nUse this for blocking off the player in the hub world")]
