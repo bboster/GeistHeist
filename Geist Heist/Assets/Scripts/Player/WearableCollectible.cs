@@ -11,6 +11,17 @@ using UnityEngine;
  * Brief Description: Handles the display of the currently equipped wearable (like hats).
  * Do NOT attach this to the player prefab directly.
  */
+
+/*
+ * Looked it up on the goog, "Collectible" is technically correct spelling, but we spell it "Collectable" everywhere else in the game.
+ * 
+ * I wonder if we should add a position offset variable to the collectable registry, so we can have more control over where each hat goes.
+ * 
+ * Also, this script should be moved to environment folder or the interactables folder, since it is an interactable.
+ * 
+ * -Toby
+ */
+
 public class WearableCollectible : MonoBehaviour
 {
     [SerializeField, Required] private GameObject wearableNode;
@@ -57,13 +68,21 @@ public class WearableCollectible : MonoBehaviour
             //return;
         }
 
-        // Destroy any existing hat
+        /*
+         * transform.GetComponentsInChildren(typeof(Transform));
+         * -Toby
+         */
         Transform wearableTransform = wearableNode.transform;
         int childCount = wearableTransform.childCount;
         Transform[] children = new Transform[childCount];
         for (int i = 0; i < childCount; i++)
             children[i] = wearableTransform.GetChild(i);
 
+        /*
+         * Why are we destroying children just to replace them immediately? 
+         * Just replace the mesh in the current mesh renderer?
+         * -Toby
+         */
         foreach (Transform child in children)
         {
             DestroyImmediate(child.gameObject); // or Destroy(child.gameObject) at runtime
@@ -95,10 +114,15 @@ public class WearableCollectible : MonoBehaviour
         if (previousHat != Collectable.None)
         {
             // Find all OptionalCollectable objects in the scene
+
+            /*
+             * Do not call FindObjectsByType in runtime, it is very slow.
+             * We should run FindObjectsByType in start and cache it to avoid repeated calls.
+             */
             var allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
             foreach (var display in allHubDisplays)
             {
-                Debug.Log($"Attemptin to call display.RespawnMes.{previousHat} in hub display.");
+                Debug.Log($"Attempting to call display.spawnMesh({previousHat}) in hub display.");
                 display.spawnMesh(previousHat); // currentHat = Collectable currently equipped
             }
 
