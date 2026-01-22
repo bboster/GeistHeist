@@ -24,7 +24,7 @@ public class CanScript : MonoBehaviour
     private void Start()
     {
         velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
-        velocityChangeDetector.OnBounceDetected.AddListener(OnCrashOrBounceDetected);
+        velocityChangeDetector.OnBounceDetected.AddListener(OnCrashOrBounceDetected); //These listeners should probably be removed if they aren't removed elsewhere
         velocityChangeDetector.OnStopDetected.AddListener(OnCrashOrBounceDetected);
     }
 
@@ -40,7 +40,7 @@ public class CanScript : MonoBehaviour
         }
     }
 
-    void OnCrashOrBounceDetected(Vector3 impactPoint)
+    void OnCrashOrBounceDetected(Vector3 impactPoint) //Might be worth it to include an access modifier for readability
     {
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
         BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale:0.4f);
