@@ -64,7 +64,7 @@ public class CooldownManager : Singleton<CooldownManager>
 
     private void UpdateSlider()
     {
-        if (cooldownSlider==null)
+        if (cooldownSlider==null) //Same thing as above with the spacing
             return;
         
         if (IsCooldownActive)

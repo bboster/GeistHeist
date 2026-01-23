@@ -35,6 +35,7 @@ public class VaseInputHandler : IInputHandler
         possessableParticles.Stop();
     }
 
+    //I would delete the commented out NotImplementedExceptions
     #region action
     public override void OnActionStarted()
     {
