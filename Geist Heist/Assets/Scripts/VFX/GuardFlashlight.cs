@@ -12,14 +12,14 @@ using UnityEngine;
 public class GuardFlashlight : MonoBehaviour
 {
     [Header("VFX")]
-    [SerializeField] private string OnomatopoeiaText = "thunk!";
+    [SerializeField] private string OnomatopoeiaText = "thunk!"; //Private variables should use camelCase
 
     private SuddenVelocityChangeDetector velocityChangeDetector;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
+        //These listeners should be removed when this script instance is disabled or destroyed
         velocityChangeDetector.OnStopDetected.AddListener(OnCrashOrBounceDetected);
         velocityChangeDetector.OnBounceDetected.AddListener(OnCrashOrBounceDetected);
     }
