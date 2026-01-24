@@ -48,6 +48,7 @@ public class TetherPossessable : IInputHandler
     {
     }
 
+    //REVIEW NOTE: I'm curious what the plan is to replace this and why. I'm not familiar with how this system is currently implemented.
     //TODO: replace this with something else
     IEnumerator LoadNextSceneCooldown()
     {

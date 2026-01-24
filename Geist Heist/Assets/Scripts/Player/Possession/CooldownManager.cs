@@ -18,6 +18,7 @@ public class CooldownManager : Singleton<CooldownManager>
     [SerializeField] private float cooldownTime;
     private float currentCooldownTime=0; //Putting spaces in between symbols like = improves readability
 
+    //I ran a search for all references and found that these two are only referenced in this script and can probably be changed to private
     [HideInInspector] public GameObject CooldownCanvas;
     [HideInInspector] public Slider cooldownSlider;
 

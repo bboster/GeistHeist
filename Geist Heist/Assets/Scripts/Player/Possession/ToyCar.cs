@@ -44,7 +44,7 @@ public class ToyCar : IInputHandler
     private Rigidbody rb;
     private bool physicsEnabled = false;
     private PossessableObject possessableObject;
-    SuddenVelocityChangeDetector velocityChangeDetector;
+    SuddenVelocityChangeDetector velocityChangeDetector; //Access modifier should be added to increase clarity
 
     private Coroutine freezeCoroutine;
     //activates when ghost is leaving an object
