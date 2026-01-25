@@ -19,6 +19,10 @@ using UnityEngine.SceneManagement;
 
 public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 {
+    /*
+     * I hate this script but theres nothing we can do about it.
+     */
+
     // Events
 
     [SerializeField] private string moveKey = "Move";

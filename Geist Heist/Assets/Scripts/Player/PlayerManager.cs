@@ -106,6 +106,11 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
+        /*
+         * @sky Could this be moved to a seperate function for simplicity?
+         * -Toby
+         */
+
         //to decide where ghost exits the possessable
         if (possessable.ghostExitPoints != null)
         {
@@ -121,6 +126,11 @@ public class PlayerManager : Singleton<PlayerManager>
                     break;
                 }
                 
+                /*
+                 * This doesn't have to be in the for loop i think.
+                 * -Toby
+                 */
+
                 //if all of them collide, just use the last backup exit point
                 if (i == possessable.ghostExitPoints.Count - 1)
                 {

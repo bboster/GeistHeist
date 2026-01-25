@@ -328,6 +328,11 @@ public class ThirdPersonInputHandler : IInputHandler
         // calculate flat ground movement direction
         Vector3 flatDesired = direction * speed;
 
+        /*
+         * I'm a little tired atm, so I can't read through this as much as I want to, but it is weird
+         * that you can't move left/right on stairs.
+         */
+
         // calculate slope direction if on slope
         Vector3 slopeDesired = flatDesired;
         if (onSlope)
