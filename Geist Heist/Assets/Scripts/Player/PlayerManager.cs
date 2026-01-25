@@ -128,6 +128,7 @@ public class PlayerManager : Singleton<PlayerManager>
                 
                 /*
                  * This doesn't have to be in the for loop i think.
+                 * could just be the code that runs after the for loop (assuming the for loop finds nothing).
                  * -Toby
                  */
 

@@ -38,11 +38,6 @@ public class DoorInteractable : MonoBehaviour, IInteractable
 
     void OnCancelPressed(GameObject confirmationPopup)
     {
-        /*
-         * Wonder if we could cache this instead of instantiating and destroying it every time? 
-         * Honestly not worth it since our game works fine.
-         * -Toby
-         */
         Destroy(confirmationPopup);
     }
 
