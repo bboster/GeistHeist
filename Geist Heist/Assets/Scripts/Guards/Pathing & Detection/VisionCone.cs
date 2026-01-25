@@ -13,7 +13,7 @@ public class VisionCone : MonoBehaviour
 {
     private bool hasSeenPlayer = false;
 
-    [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
+    [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")] //is there a better system you replace this one with? I can't think of one but you left the note here
     [SerializeField] private int behaviorIndex;
     [Tooltip("The index of the behavior to activate when the enemy loses track of the player during a chase.")]
     [SerializeField] private int recoveryBehaviorIndex;

@@ -75,7 +75,7 @@ public class VisionStimulus : Stimulus
     }
 
     #region Trigger Functions
-
+    //there is a lot in this function without any comments explaining I think I get it but a little commenting even just at the start would be helpful
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.TryGetComponent(out PossessableObject obj))
