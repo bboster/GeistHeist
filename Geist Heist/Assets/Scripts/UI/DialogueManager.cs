@@ -3,15 +3,14 @@
  * Creation Date: 10/28/25
  * Last Modified: 11/17/25
  * 
- * Brief Description: Instantiates and keeps the textboxes and canvuses of the
+ * Brief Description: Instantiates and keeps the textboxes and canvases of the
  * Dialogue and PA system
  */
-using JetBrains.Annotations;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DialougeManager : Singleton<DialougeManager>
+public class DialogueManager : Singleton<DialogueManager>
 {
     [SerializeField] private GameObject DialogueTextboxPrefab;
     [SerializeField] private GameObject PAPrefab;
@@ -49,12 +48,12 @@ public class DialougeManager : Singleton<DialougeManager>
 
     private IEnumerator FillText(string text, float stayLength, TMPro.TMP_Text textbox, UnityAction onDialogueEndCallback = null)
     {
-        DialougeManager.Instance.PAholder.SetActive(true);
+        DialogueManager.Instance.PAholder.SetActive(true);
         int temp = 0;
-        DialougeManager.Instance.PATextbox.text = "";
-        while (DialougeManager.Instance.PATextbox.text.Length < text.Length)
+        DialogueManager.Instance.PATextbox.text = "";
+        while (DialogueManager.Instance.PATextbox.text.Length < text.Length)
         {
-            DialougeManager.Instance.PATextbox.text += text.Substring(temp, 1);
+            DialogueManager.Instance.PATextbox.text += text.Substring(temp, 1);
             temp++;
             yield return new WaitForSeconds(secondsBetweenLetters);
         }
@@ -69,6 +68,6 @@ public class DialougeManager : Singleton<DialougeManager>
     //this is just in case we have to have it called somewhere else for the audio clip ending when that gets implemented
     private void clearBox()
     {
-        DialougeManager.Instance.PAholder.SetActive(false);
+        DialogueManager.Instance.PAholder.SetActive(false);
     }
 }

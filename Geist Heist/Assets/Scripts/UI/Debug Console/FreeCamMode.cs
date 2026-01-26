@@ -1,10 +1,4 @@
-using GuardUtilities;
-using NaughtyAttributes;
-using System.Collections.Generic;
-using System;
 using UnityEngine;
-//using UnityEditor.Rendering;
-using System.IO;
 
 public class FreeCamMode : IInputHandler
 {
@@ -23,7 +17,7 @@ public class FreeCamMode : IInputHandler
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
-
+        //you should be able to grab this from gamemanager instead of start
         cameraGO = FindFirstObjectByType<Camera>().gameObject;
         rb = gameObject.GetComponent<Rigidbody>();
 
@@ -96,8 +90,10 @@ public class FreeCamMode : IInputHandler
         Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);*/
         var direction = InputEvents.Instance.FirstPersonInputDirection.WithY(cameraGO.transform.forward.y);
 
+        /*
         var a = rb.linearVelocity.WithY(0);
         var b = (direction * speed);
+        */
 
         var horizontalVelocity = Vector3.Lerp(rb.linearVelocity, (direction * speed), speedPickup * Time.fixedDeltaTime);
         Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);

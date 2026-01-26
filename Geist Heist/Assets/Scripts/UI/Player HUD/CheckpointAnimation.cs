@@ -10,6 +10,7 @@ using NaughtyAttributes;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+//There’s a lot of fades, maybe add this to static utilities?
 
 public class CheckpointAnimation : MonoBehaviour
 {

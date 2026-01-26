@@ -6,12 +6,8 @@
  * Brief Description: handles the commands from the debug console
  */
 using System;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.Windows;
 
 public class DebugConsole : MonoBehaviour
 {
@@ -34,7 +30,9 @@ public class DebugConsole : MonoBehaviour
     {
         Console.SetActive(false);
         InputEvents.DebugStarted.AddListener(ToggleConsole);
+        //you can use the player in the gamemanager if you wanna
         Player = FindFirstObjectByType<ThirdPersonInputHandler>().gameObject;
+        //same with the camera methinks
         cameraGO = FindFirstObjectByType<Camera>().gameObject;
         FreeCamInstance = Instantiate(FreeCamPrefab, cameraGO.transform.position, Quaternion.identity);
     }
@@ -66,6 +64,7 @@ public class DebugConsole : MonoBehaviour
         }
     }
 
+    //can you comment this + format it with tabs? It's a little hard to parse through
     public void CallFunction()
     {
         string Command = inputs.text.ToLower();
@@ -100,7 +99,7 @@ public class DebugConsole : MonoBehaviour
         }
         else if(Command == "freeze")
         {
-            //waiting for jacob to implement
+            //waiting for jacob to implement - someone should implement this
             Debug.Log("Freeze");
             TextArea.text = TextArea.text + "\n" + Command + " " + freezeToggle;
         }
@@ -109,6 +108,7 @@ public class DebugConsole : MonoBehaviour
             TextArea.text = TextArea.text + "\n" + Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
                 "\nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value>";
         }
+        //getting a little lost, why do we check for length of 4 here?
         else if(Command.Length > 4)
         {
             if (Command.Substring(0, 5) == "spawn")
@@ -122,6 +122,7 @@ public class DebugConsole : MonoBehaviour
                     TextArea.text = TextArea.text + "\n" + Command + " Invalid item, Please input a valid item";
                 }
             }
+            //is this different from "ls"?
             else if (Command.Substring(0, 5) == "scene")
             {
                 if (Command.Length >= 7)
@@ -158,6 +159,7 @@ public class DebugConsole : MonoBehaviour
                 TextArea.text = TextArea.text + "\n" + Command + " No command found, use Help for all commands";
             }
         }
+        //I don't think you need this bc you do the same thing above
         else if(Command.Length != 0)
         {
             TextArea.text = TextArea.text + "\n" + Command + " No command found, use Help for all commands";
@@ -216,6 +218,7 @@ public class DebugConsole : MonoBehaviour
         }
         else
         {
+            //maybe three variables instead of the array indexes? In case they get jumbled/we add more items to spawn
             if (itemName == "vase")
             {
                 Instantiate(Prefabs[0], cameraGO.transform.position, Quaternion.identity);
