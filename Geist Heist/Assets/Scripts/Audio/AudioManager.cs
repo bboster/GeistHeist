@@ -10,12 +10,17 @@ using FMODUnity;
 using UnityEngine;
 using FMOD.Studio;
 
-public class AudioManager : Singleton<AudioManager> 
+public class AudioManager : Singleton<AudioManager>
 {
     private Bus masterBus;
     private Bus musicBus;
     private Bus sfxBus;
     private Bus vocalsBus;
+    /*getPausedTime is actually a volume multiplier so that when the game is paused, all audio is muted, this isn't the same as truly pausing the audio.
+     * If this is the intended effect, I would just recommend changing the variable name to getPausedVolumeMultiplier or something similar for clarity.
+     * Otherwise, if you want to actually pause the audio, I would recommend using the FMOD pause API.
+     * - Josh
+     */
     private float getPausedTime => GameManager.Instance == null ? 1 :       // timescale is 1 if no GameManager (this happens in main menu)
                                    (GameManager.Instance.IsPaused ? 0 : 1); // actual calculation if gamemanger is in scene
 
@@ -23,6 +28,14 @@ public class AudioManager : Singleton<AudioManager>
     protected override void Awake()
     {
         base.Awake();
+
+        /*
+         * RuntimeManager may not be initialized at Awake in some build orders.
+         * Consider wrapping GetBus calls in try/catch or delaying bus acquisition to Start or retrying for a few frames.
+         * Also validate bus handles with bus.isValid() before calling FMOD APIs on them.
+         * - Josh
+         */
+
         masterBus = RuntimeManager.GetBus("bus:/");
         musicBus = RuntimeManager.GetBus("bus:/Music");
         sfxBus = RuntimeManager.GetBus("bus:/SoundEffects");
@@ -30,7 +43,7 @@ public class AudioManager : Singleton<AudioManager>
     }
     private void Start()
     {
-        if(GameManager.Instance != null)
+        if (GameManager.Instance != null)
             GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);
 
         UpdateAllVolumes();
@@ -88,6 +101,16 @@ public class AudioManager : Singleton<AudioManager>
     public static void SetEventParameters(ref EventInstance e, Transform t, Rigidbody r)
     {
         e.set3DAttributes(RuntimeUtils.To3DAttributes(t, r));
+
+        /*
+         * use RuntimeManager.AttachInstanceToGameObject for auto-updating 3D attributes.
+         * 
+         * ex:
+         * RuntimeManager.AttachInstanceToGameObject(e, t.gameObject, r);
+         * 
+         * This lets RuntimeManager update 3D attributes each frame.
+         * - Josh
+         */
     }
 
     //Starts a looping sound effect from an ALREADY EXISTING INSTANCE
@@ -115,6 +138,12 @@ public class AudioManager : Singleton<AudioManager>
 
     private void OnDestroy()
     {
+        /*
+         * Unsubscribe from GameManager.OnPauseChanged here to avoid dangling listeners.
+         * 
+         * ex: if (GameManager.Instance != null) GameManager.Instance.OnPauseChanged.RemoveListener(UpdateAllVolumes);
+         * - Josh
+         */
         //TODO
         //ADD A FADE EFFECT ON EVERY SOUND TO MAKE IT FADE OUT OVER A HALF SECOND INSTEAD OF CUTTING THE SHORT
         //UNLESS MUSIC HAS SPECIAL TRANSITIONS BETWEEN SCENES, THEY SHOULD FOLLOW THE SAME RULE AS ABOVE

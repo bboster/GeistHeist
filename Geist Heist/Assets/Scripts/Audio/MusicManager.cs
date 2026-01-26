@@ -18,6 +18,7 @@ public class MusicManager : Singleton<MusicManager>
         hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.HubBGM);
         levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.LevelBGM);
 
+        //the following if-else block could be changed to a Switch statement -Josh
         StopAll();
         if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Main Menu")))
         {
