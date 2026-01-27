@@ -13,18 +13,12 @@ public class VisionCone : MonoBehaviour
 {
     private bool hasSeenPlayer = false;
 
-    [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")] //is there a better system you replace this one with? I can't think of one but you left the note here
-    [SerializeField] private int behaviorIndex;
-    [Tooltip("The index of the behavior to activate when the enemy loses track of the player during a chase.")]
-    [SerializeField] private int recoveryBehaviorIndex;
-
     [SerializeField] private GuardController parentController;
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
         {
-            //Debug.Log("PLAYER SEEN");
             hasSeenPlayer = true;
             parentController.ChangeBehavior(GuardStates.surprised);
         }
@@ -32,11 +26,10 @@ public class VisionCone : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
+        if (other.gameObject.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
         {
-            //Debug.Log("PLAYER UNSEEN");
             hasSeenPlayer = false;
-            parentController.ChangeBehavior(GuardStates.search); // (Will swap to a proper recovery behavior once that is programmed)
+            parentController.ChangeBehavior(GuardStates.search);
         }
     }
 }

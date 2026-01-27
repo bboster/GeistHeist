@@ -30,7 +30,6 @@ public class StationaryBehavior : Behavior
     [SerializeField] private float rotationTime;*/
 
     #endregion 
-    //are these going to be needed
 
     #region Initialize and Stop Behavior
 
@@ -98,7 +97,6 @@ public class StationaryBehavior : Behavior
         }*/
 
         #endregion
-        //are these going to be needed if not we can remove them
 
         yield return new WaitForEndOfFrame();
     }

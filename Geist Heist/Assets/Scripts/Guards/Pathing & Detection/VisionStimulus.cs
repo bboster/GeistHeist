@@ -75,17 +75,19 @@ public class VisionStimulus : Stimulus
     }
 
     #region Trigger Functions
-    //there is a lot in this function without any comments explaining I think I get it but a little commenting even just at the start would be helpful
+
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out PossessableObject obj))
+        if (other.gameObject.TryGetComponent(out PossessableObject obj)) //Checks if the object detected is the player
         {
+            //if the detected object is the player and the enemy has not alredy seen the player, it executes this condition
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
             {
                 StopTimer();
 
                 hasSeenPlayer = true;
 
+                //Checks if the player can be seen and, if yes, triggers the visions stimulus detection on the guard
                 if (!VisionCast(other.gameObject, out RaycastHit info))
                 {
                     hasSeenPlayer = true;
@@ -97,9 +99,9 @@ public class VisionStimulus : Stimulus
                     UnityEngine.Debug.Log(info.collider.gameObject.name);
 #endif
             }
-            else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
+            else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false) //handles reentering the vision cone
             {
-                StopTimer();
+                StopTimer(); //Stops the timer that would transition the guard into vision break state
 
                 if (obj.gameObject.TryGetComponent(out Rigidbody rb))
                 {
