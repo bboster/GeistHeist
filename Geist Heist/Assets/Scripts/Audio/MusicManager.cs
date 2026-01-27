@@ -19,6 +19,13 @@ public class MusicManager : Singleton<MusicManager>
         levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.LevelBGM);
 
         StopAll();
+
+        /*
+         * Hard-coding the scene names in the code is really scuffed tbh.
+         * Could we make variables for each of the scene names or something?
+         * -Toby
+         */
+
         if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Main Menu")))
         {
             menuBGM.start();

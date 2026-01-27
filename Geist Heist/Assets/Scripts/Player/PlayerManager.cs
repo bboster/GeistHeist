@@ -31,6 +31,11 @@ public class PlayerManager : Singleton<PlayerManager>
     private StudioListener fmodListener;
 
 
+    /*
+     * Change to initialize.
+     * -Toby
+     */
+
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     public void Start()
     {
@@ -177,10 +182,6 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.MoveHeld.AddListener(input.WhileMoveHeld);
         InputEvents.MoveNotHeld.AddListener(input.WhileMoveNotHeld);
         InputEvents.MoveCanceled.AddListener(input.OnMoveCanceled);
-
-        /*InputEvents.JumpStarted.AddListener(input.OnJumpStarted);
-        InputEvents.JumpHeld.AddListener(input.WhileJumpHeld);
-        InputEvents.JumpCanceled.AddListener(input.OnJumpCanceled);*/
 
         InputEvents.ActionStarted.AddListener(input.OnActionStarted);
         InputEvents.ActionHeld.AddListener(input.WhileActionHeld);

@@ -23,7 +23,6 @@ public class GameManager : Singleton<GameManager>
     [Header("Managers")]
     [SerializeField, Required] GameObject InputManagerPrefab;
     [SerializeField, Required] GameObject PlayerManagerPrefab;
-    //[SerializeField, Required] GameObject CoolDownManagerPrefab; TODO: waiting until sky finishes refactoring it
     [SerializeField, Required] GameObject SaveDataManagerPrefab;
     [SerializeField, Required] GameObject GuardCoroutineManagerPrefab;
     [SerializeField, Required] GameObject BehaviourDatabasePrefab;
@@ -96,6 +95,12 @@ public class GameManager : Singleton<GameManager>
     public static int currentLevel = 0;*/
 
     #region Level Progression
+
+    /*
+     * low key don't think these functions should be in GameManager.
+     * I also dont think that "NextLevel" is an appropriate name.
+     * -Toby
+     */
     public void NextLevel(string sceneName)
     {
         //currentLevel++;
@@ -143,9 +148,17 @@ public class GameManager : Singleton<GameManager>
     /// <returns></returns>
     public Task InstantiateManagers()
     {
+        /*
+         * This is not a manager, nor is it being instantiated.
+         * -Toby
+         */
         if (PlayerStart == null)
             PlayerStart = FindFirstObjectByType<ThirdPersonInputHandler>().transform;
 
+        /*
+         * We should give all of these Initialize functions, if possible
+         * -Toby
+         */
         Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize() ;
         Instantiate(LevelManagerPrefab); // initialization happens in PlayerManager
         Instantiate(SaveDataManagerPrefab);

@@ -23,6 +23,7 @@ public class CooldownManager : Singleton<CooldownManager>
 
     public bool IsCooldownActive => currentCooldownTime > 0;
 
+
     // Called in GameManager
     public void Start()
     {

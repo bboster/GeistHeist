@@ -6,6 +6,9 @@ public class GuardCoroutineManager : MonoBehaviour
 {
     public static GuardCoroutineManager instance;
 
+    /*
+     * Please delete this Awake function and make this script inherit from the Singleton<> class.
+     */
     private void Awake()
     {
         if (instance == null)

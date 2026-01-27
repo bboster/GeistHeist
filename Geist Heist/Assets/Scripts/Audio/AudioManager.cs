@@ -28,6 +28,11 @@ public class AudioManager : Singleton<AudioManager>
         sfxBus = RuntimeManager.GetBus("bus:/SoundEffects");
         vocalsBus = RuntimeManager.GetBus("bus:/Vocals");
     }
+
+    /*
+     * Weird Discrepency between using initalize and start in managers.
+     * -Toby
+     */
     private void Start()
     {
         if(GameManager.Instance != null)

@@ -16,6 +16,10 @@ public class PostProcessingManager : MonoBehaviour
     private Volume volume;
     private VolumeProfile volumeProfile;
 
+    /*
+     * Change to initialize
+     * -Toby
+     */
     private void Start()
     {
         UpdateBrightness();

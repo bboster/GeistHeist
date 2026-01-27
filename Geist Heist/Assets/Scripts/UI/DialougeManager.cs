@@ -25,6 +25,10 @@ public class DialougeManager : Singleton<DialougeManager>
 
     private Coroutine typingCoroutine;
 
+    /*
+     * Weird discrepency between start and Initialize for Manager Scripts.
+     * -Toby
+     */
     private void Start()
     {
         DialogueCanvas = Instantiate(DialogueTextboxPrefab);
@@ -60,14 +64,14 @@ public class DialougeManager : Singleton<DialougeManager>
         }
         yield return new WaitForSeconds(stayLength); //this will be replaced with the end of the audio clip eventually
 
-        clearBox();
+        ClearBox();
 
         if(onDialogueEndCallback != null) 
             onDialogueEndCallback();    
     }
 
     //this is just in case we have to have it called somewhere else for the audio clip ending when that gets implemented
-    private void clearBox()
+    private void ClearBox()
     {
         DialougeManager.Instance.PAholder.SetActive(false);
     }
