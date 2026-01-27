@@ -45,7 +45,7 @@ public class SearchBehavior : GuardMovement
 
             if (behaviorComplete)
             {
-                contRef.ChangeBehavior(GuardStates.patrol);
+                contRef.ChangeBehavior(contRef.DefaultBehavior.StateName);
             }
 
             yield return new WaitForEndOfFrame();
@@ -63,9 +63,9 @@ public class SearchBehavior : GuardMovement
 
         progress = 0;
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
-#endif
+#endif*/
     }
 
     /// <summary>

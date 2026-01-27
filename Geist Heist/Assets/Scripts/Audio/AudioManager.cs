@@ -16,7 +16,8 @@ public class AudioManager : Singleton<AudioManager>
     private Bus musicBus;
     private Bus sfxBus;
     private Bus vocalsBus;
-    private float getPausedTime => GameManager.Instance.IsPaused ? 0 : 1;
+    private float getPausedTime => GameManager.Instance == null ? 1 :       // timescale is 1 if no GameManager (this happens in main menu)
+                                   (GameManager.Instance.IsPaused ? 0 : 1); // actual calculation if gamemanger is in scene
 
     //Sets AudioManager Instance in the scene
     protected override void Awake()
@@ -29,7 +30,9 @@ public class AudioManager : Singleton<AudioManager>
     }
     private void Start()
     {
-        GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);
+        if(GameManager.Instance != null)
+            GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);
+
         UpdateAllVolumes();
     }
 

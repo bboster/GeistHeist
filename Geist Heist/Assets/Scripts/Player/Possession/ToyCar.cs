@@ -3,6 +3,8 @@ using System.Collections;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
+using FMODUnity;
+using FMOD.Studio;
 /*
  * Contributors: Sky, Toby
  * Creation Date: 10/2/25
@@ -27,6 +29,10 @@ public class ToyCar : IInputHandler
     [Tooltip("Force there to be time between zooms")]
     [SerializeField] private float delayBetweenZooms = 1;
 
+    [Header("VFX")]
+    [SerializeField] private string OnomatopoeiaText = "Bonk!";
+    [SerializeField] private float OnomatopoeiaScale = 1;
+
     [Header("Speedometer seconds")]
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
 
@@ -38,6 +44,7 @@ public class ToyCar : IInputHandler
     private Rigidbody rb;
     private bool physicsEnabled = false;
     private PossessableObject possessableObject;
+    SuddenVelocityChangeDetector velocityChangeDetector;
 
     private Coroutine freezeCoroutine;
     //activates when ghost is leaving an object
@@ -45,44 +52,82 @@ public class ToyCar : IInputHandler
     private bool hasLaunchedThisPossession = false;
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
+    [SerializeField] private ParticleSystem possessableParticle;
+
+    private EventInstance carMoveSFX;
+    private EventInstance carWindSFX;
 
     private void Start()
     {
+        carMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CarGo);
+        carWindSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CarWind);
+
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();
+        velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
 
         if (chargeMeter == null)
             chargeMeter = GetComponentInChildren<ToyCarSpeedometerUI>();
+
+        velocityChangeDetector.OnBounceDetected.AddListener(OnCrashOrBounceDetected);
+        velocityChangeDetector.OnStopDetected.AddListener(OnCrashOrBounceDetected);
     }
 
     public override void OnPossessionStart()
     {
         hasLaunchedThisPossession = false;
         chargeMeter.OnPossessionStarted();
+        possessableParticle.Play();
+        velocityChangeDetector.StartRecordingVelocity();
+
+        if (possessableObject.PossessedMaterial != null)
+        {
+            possessableObject.meshRenderer.material = possessableObject.PossessedMaterial;
+        }
     }
 
     public override void OnPossessionEnded()
     {
         currentStrength = minStrength;
+        possessableParticle.Stop();
+        velocityChangeDetector.StopRecordingVelocity();
+
+        if (possessableObject.UnpossessedMaterial != null)
+        {
+            possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
+        }
     }
 
     // Called every frame while player is possessing.
     public override void WhilePossessingUpdate()
     {
+        carMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
+        carWindSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
+
         chargeMeter.UpdateCharge(currentStrength, maxStrength);
 
         //pause timer if car is moving
         if (rb.linearVelocity == Vector3.zero)
         {
+            carMoveSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
             possessableObject.PauseDischargeTimer = false;
 
-            if (possessableObject.UnpossessedMaterial != null)
+            if (possessableObject.PossessedMaterial != null)
             {
-                possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
+                possessableObject.meshRenderer.material = possessableObject.PossessedMaterial;
             }
         }
         else
         {
+            //Car movement sound logic
+            PLAYBACK_STATE playbackState;
+            carMoveSFX.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+            {
+                carMoveSFX.start();
+            }
+
             possessableObject.PauseDischargeTimer = true;
         }
     }
@@ -110,6 +155,7 @@ public class ToyCar : IInputHandler
     #region action
     public override void OnActionStarted()
     {
+        carWindSFX.start();
     }
 
     public override void WhileActionHeld(float secondsHeld)
@@ -159,6 +205,8 @@ public class ToyCar : IInputHandler
             //for fixed update to handle physics better
             physicsEnabled = true;
         }
+
+        carWindSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
 
     public IEnumerator ReFreezeConstraints()
@@ -242,7 +290,19 @@ public class ToyCar : IInputHandler
     public override void OnMoveCanceled(float secondsHeld) { }
     #endregion
 
+    #region Onomatopoeias
 
+    void OnCrashOrBounceDetected(Vector3 impactPoint)
+    {
+        Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange:15, bold:true, scale:OnomatopoeiaScale);
+
+        //TODO: add Bonk sound
+
+        // TODO: add particle
+    }
+
+    #endregion
     public void UnFreezePosition()
     {
         rb.constraints = RigidbodyConstraints.None;

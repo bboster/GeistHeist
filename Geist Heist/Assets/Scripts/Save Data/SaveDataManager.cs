@@ -140,7 +140,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     {
         EnsureSaveData();
         int hash = text.GetHashCode();
-        Debug.Log($"Read display text: {hash}: {currentSaveDta.FlavorTextsRead.Contains(hash)}");
+        //Debug.Log($"Read display text: {hash}: {currentSaveDta.FlavorTextsRead.Contains(hash)}");
         return currentSaveDta.FlavorTextsRead.Contains(hash);
     }
 
@@ -174,16 +174,25 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     {
 #if UNITY_EDITOR
 
-        if(saveFile == null)
+        try
         {
-            Debug.LogWarning("No save file is present to load");
-            currentSaveDta = new();
-            return;
+            if (saveFile == null)
+            {
+                Debug.LogWarning("No save file is present to load");
+                currentSaveDta = new();
+                return;
+            }
+
+            currentSaveDta = JsonUtility.FromJson<SaveDataFile>(saveFile.text);
+
+            Debug.Log($"Loaded save file:\n{currentSaveDta.CollectablesCollected.Count} collectables\n{currentSaveDta.ScenesCompleted.Count} levels completed");
         }
 
-        currentSaveDta = JsonUtility.FromJson<SaveDataFile>(saveFile.text);
-
-        Debug.Log($"Loaded save file:\n{currentSaveDta.CollectablesCollected.Count} collectables\n{currentSaveDta.ScenesCompleted.Count} levels completed");
+        catch
+        {
+            currentSaveDta = new();
+        }
+        
 #else
 
         if (File.Exists(runtimeSavePath))

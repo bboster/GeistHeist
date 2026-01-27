@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 421329015279503688}
   - component: {fileID: -5229989608320162015}
   - component: {fileID: 3487713375576966330}
+  - component: {fileID: 3815661978593017410}
   m_Layer: 0
   m_Name: can
   m_TagString: Untagged
@@ -156,6 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CanScript
   soundStimulus: {fileID: 1452868294091368668, guid: eca2fd6e6f6562c4eafe9da2b86dc40e, type: 3}
+  OnomatopoeiaText: clank!
 --- !u!114 &3487713375576966330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,3 +171,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardStunner
   stunVelocityThreshold: 1
+--- !u!114 &3815661978593017410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2652521570684091903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ea24babacec1ea4a8fe30ad3228824b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SuddenVelocityChangeDetector
+  minVelocityForRegister: 3
+  maxVelocityToBeStopped: 0.3
+  recordVelocityAtStart: 0
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 1993
+  OnStopDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBounceDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnJoltDetected:
+    m_PersistentCalls:
+      m_Calls: []

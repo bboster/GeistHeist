@@ -7,6 +7,7 @@
  * handles possession and such.
  */
 
+using FMODUnity;
 using NaughtyAttributes;
 using System.Linq;
 using Unity.Cinemachine;
@@ -23,15 +24,18 @@ public class PlayerManager : Singleton<PlayerManager>
     public IInputHandler currentInputHandler => CurrentObject?.InputHandler;
 
     private InputEvents inputEvents => InputEvents.Instance;
-    public Camera camera;
+    [HideInInspector] public Camera camera;
     [HideInInspector] public CinemachineCamera mainCinemachineCamera;
     private PlayerCameraController mainPlayerCameraController;
     private PlayerCameraController currentCameraController; // may be mainCinemachineCamera sometimes
+    private StudioListener fmodListener;
 
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
-    void Start()
+    public void Start()
     {
+        // This all used to be start function, mostly just getting variables:
+
         if (PlayerGhostObject == null)
             PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
 
@@ -52,20 +56,11 @@ public class PlayerManager : Singleton<PlayerManager>
             Debug.Log("PlayerStart is null in gamemanager");
         else
             LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+
+        fmodListener = camera.GetComponent<StudioListener>();
+        UpdateListener(CurrentObject);
     }
 
-    public void InitializePlayerManager()
-    {
-        if (PlayerGhostObject == null)
-            PlayerGhostObject = GameObject.FindAnyObjectByType<ThirdPersonInputHandler>().GetComponent<PossessableObject>();
-
-        CurrentObject = PlayerGhostObject;
-        RegisterInputs(PlayerGhostObject);
-        camera = Camera.main;
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
 
     public void PossessObject(PossessableObject possessable)
     {
@@ -82,6 +77,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
         SwapCameras(PlayerGhostObject,possessable);
         PlayerGhostObject.gameObject.SetActive(false);
+        UpdateListener(possessable);
 
         RegisterInputs(possessable);
 
@@ -135,6 +131,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
         SwapCameras(possessable, PlayerGhostObject);
         PlayerGhostObject.gameObject.SetActive(true);
+        UpdateListener(PlayerGhostObject);
 
         RegisterInputs(PlayerGhostObject);
 
@@ -219,6 +216,15 @@ public class PlayerManager : Singleton<PlayerManager>
             CurrentObject.WhilePossessingUpdate();
         if (currentInputHandler != null)
             currentInputHandler.WhilePossessingUpdate();
+    }
+
+    private void UpdateListener(PossessableObject currentListener)
+    {
+        // change listener
+        if (fmodListener == null)
+            Debug.LogError("The main camera does not have a FMOD Studio Listener. please remove the current listener and add a FMOD Studio Listener component");
+        else
+            fmodListener.AttenuationObject = currentListener.gameObject;
     }
 
     #region Camera Sensitivity
