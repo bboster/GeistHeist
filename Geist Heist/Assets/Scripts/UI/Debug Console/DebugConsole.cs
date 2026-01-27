@@ -1,10 +1,11 @@
 /*
  * Contributors: Brenden
  * Creation Date: 10/21/25
- * Last Modified: 11/23/25
+ * Last Modified: 1/27/2026
  * 
  * Brief Description: handles the commands from the debug console
  */
+
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,8 +15,6 @@ public class DebugConsole : MonoBehaviour
     [SerializeField] GameObject Console;
     [SerializeField] TMPro.TMP_InputField inputs;
     [SerializeField] TMPro.TMP_Text TextArea;
-    [SerializeField] GameObject Player;
-    [SerializeField] GameObject cameraGO;
     [SerializeField] GameObject[] Prefabs;
 
     [SerializeField] GameObject FreeCamPrefab;
@@ -26,14 +25,14 @@ public class DebugConsole : MonoBehaviour
     private bool cameraToggle = false;
     private bool freezeToggle = false;
 
+    GameObject Player => PlayerManager.Instance.PlayerGhostObject.gameObject;
+
+    GameObject cameraGO => PlayerManager.Instance.camera.gameObject;
+
     private void Start()
     {
         Console.SetActive(false);
         InputEvents.DebugStarted.AddListener(ToggleConsole);
-        //you can use the player in the gamemanager if you wanna
-        Player = FindFirstObjectByType<ThirdPersonInputHandler>().gameObject;
-        //same with the camera methinks
-        cameraGO = FindFirstObjectByType<Camera>().gameObject;
         FreeCamInstance = Instantiate(FreeCamPrefab, cameraGO.transform.position, Quaternion.identity);
     }
 
@@ -64,27 +63,45 @@ public class DebugConsole : MonoBehaviour
         }
     }
 
-    //can you comment this + format it with tabs? It's a little hard to parse through
     public void CallFunction()
     {
         string Command = inputs.text.ToLower();
 
-        if(Command == "nc")
+        inputs.text = "";
+        inputs.ActivateInputField();
+
+        if (Command.IsEmptyOrNull<string>())
+        {
+            Debug.LogWarning("Empty debug command");
+            return;
+        }    
+
+        // noclip
+        if(Command == "nc" || Command == "noclip")
         {
             NoClip();
             TextArea.text = TextArea.text + "\n" + Command + " " + noClipToggle;
+            return;
         }
-        else if(Command == "god")
+
+        // God Mode
+        if(Command == "god")
         {
             GodMode();
             TextArea.text = TextArea.text + "\n" + Command + " " + godToggle;
+            return;
         }
-        else if(Command == "dc")
+
+        // disconnect
+        if(Command == "dc" || Command=="freecam")
         {
             FreeCam();
             TextArea.text = TextArea.text + "\n" + Command + " " + cameraToggle;
+            return;
         }
-        else if(Command.Substring(0, 2) == "ls")
+
+        // Load Scene
+        if(Command.Substring(0, 2) == "ls")
         {
             if(Command.Length >= 4)
             {
@@ -95,77 +112,78 @@ public class DebugConsole : MonoBehaviour
             {
                 TextArea.text = TextArea.text + "\n" + Command + " Invalid Scene name or index, Please input a valid scene";
             }
-            
+            return;
         }
-        else if(Command == "freeze")
+
+        // "scene _..."
+        if (Command.Substring(0, 5) == "scene")
+        {
+            if (Command.Length >= 7)
+            {
+                LoadNewScene(Command.Substring(6, Command.Length - 6));
+                TextArea.text = TextArea.text + "\n" + "Scene Failed to load, Please input a valid scene";
+            }
+            else
+            {
+                TextArea.text = TextArea.text + "\n" + Command + " Invalid Scene name or index, Please input a valid scene";
+            }
+            return;
+        }
+
+        if (Command == "freeze")
         {
             //waiting for jacob to implement - someone should implement this
             Debug.Log("Freeze");
             TextArea.text = TextArea.text + "\n" + Command + " " + freezeToggle;
+            return;
         }
-        else if(Command == "help")
+
+        if(Command == "help")
         {
             TextArea.text = TextArea.text + "\n" + Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
                 "\nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value>";
+            return;
         }
-        //getting a little lost, why do we check for length of 4 here?
-        else if(Command.Length > 4)
+
+        // spawn item
+        if (Command.Substring(0, 5) == "spawn")
         {
-            if (Command.Substring(0, 5) == "spawn")
+            if (Command.Length >= 7)
             {
-                if(Command.Length >= 7)
-                {
-                    spawnItem(Command.Substring(6, Command.Length - 6));
-                }
-                else
-                {
-                    TextArea.text = TextArea.text + "\n" + Command + " Invalid item, Please input a valid item";
-                }
+                spawnItem(Command.Substring(6, Command.Length - 6));
             }
-            //is this different from "ls"?
-            else if (Command.Substring(0, 5) == "scene")
+            else
             {
-                if (Command.Length >= 7)
-                {
-                    LoadNewScene(Command.Substring(6, Command.Length - 6));
-                    TextArea.text = TextArea.text + "\n" + "Scene Failed to load, Please input a valid scene";
-                }
-                else
-                {
-                    TextArea.text = TextArea.text + "\n" + Command + " Invalid Scene name or index, Please input a valid scene";
-                }
+                TextArea.text = TextArea.text + "\n" + Command + " Invalid item, Please input a valid item";
             }
-            else if (Command.Substring(0, 5) == "speed")
-            {
-                if (Command.Length >= 7)
-                {
-                    int Temp;
-                    if (int.TryParse(Command.Substring(6, Command.Length - 6), out Temp))
-                    {
-                        PlayerSpeed(Temp);
-                    }
-                    else
-                    {
-                        TextArea.text = TextArea.text + "\n" + Command + " Please put a number after the command";
-                    }
-                }
-                else
-                {
-                    TextArea.text = TextArea.text + "\n" + Command + " Please put the speed number after the command";
-                }
-            }
-            else if(Command.Length != 0)
-            {
-                TextArea.text = TextArea.text + "\n" + Command + " No command found, use Help for all commands";
-            }
+            return;
         }
-        //I don't think you need this bc you do the same thing above
-        else if(Command.Length != 0)
+
+        // player speed
+        if (Command.Substring(0, 5) == "speed")
         {
-            TextArea.text = TextArea.text + "\n" + Command + " No command found, use Help for all commands";
+            if (Command.Length >= 7)
+            {
+                int Temp;
+                if (int.TryParse(Command.Substring(6, Command.Length - 6), out Temp))
+                {
+                    PlayerSpeed(Temp);
+                }
+                else
+                {
+                    TextArea.text = TextArea.text + "\n" + Command + " Please put a number after the command";
+                }
+            }
+            else
+            {
+                TextArea.text = TextArea.text + "\n" + Command + " Please put the speed number after the command";
+            }
+            return;
         }
-        inputs.text = "";
-        inputs.ActivateInputField();
+
+        TextArea.text = TextArea.text + "\n" + Command + " No command found, use Help for all commands";
+        Debug.LogWarning("no command found found for " + Command);
+
     }
 
     private void NoClip()

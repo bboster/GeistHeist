@@ -10,7 +10,6 @@ using NaughtyAttributes;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-//There’s a lot of fades, maybe add this to static utilities?
 
 public class CheckpointAnimation : MonoBehaviour
 {
@@ -43,34 +42,12 @@ public class CheckpointAnimation : MonoBehaviour
 
     private IEnumerator CheckpointFadeAnimation()
     {
-        float t= savingGroup.alpha; // start with current alpha for edge case where player goes to two checkpoints really quickly
-        while (t < 1)
-        {
-            // because alpha is also 0->1, no lerp is needed 
-            t += Time.unscaledDeltaTime / fadeSeconds;
-
-            // avoids looking weird if jumping between checkpoints
-            if(t> savingGroup.alpha)
-                savingGroup.alpha = t;
-
-            yield return null;
-        }
+        yield return StaticUtilities.FadeToVisible(savingGroup, fadeSeconds);
 
         // wait a sec
-        savingGroup.alpha = 1;
         yield return new WaitForSecondsRealtime(persistSeconds);
 
-        float timeStarted = Time.unscaledTime;
-        t = 0;
-        while (t < 1)
-        {
-            // different t calculation lol
-            t = (Time.unscaledTime - timeStarted) / fadeSeconds;
-            savingGroup.alpha = 1-t;
-
-            yield return null;
-        }
-        savingGroup.alpha = 0;
+        yield return StaticUtilities.FadeToHidden(savingGroup, fadeSeconds);
     }
 
     private IEnumerator EllipsesAnimation()

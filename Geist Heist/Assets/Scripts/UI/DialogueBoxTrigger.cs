@@ -18,6 +18,7 @@ public class DialogueBoxTrigger : MonoBehaviour
 
     private EventInstance voiceline;
 
+    [Header("Advanced")]
     [SerializeField] private int whichLine;
 
     private void OnTriggerEnter(Collider other)

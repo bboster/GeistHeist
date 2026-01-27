@@ -1,3 +1,11 @@
+/*
+ * Contributors: Brenden
+ * Creation:    Fall 2025
+ * Last Edited:  1/27/2026
+ * 
+ * Summary: Free cam for debug mode. Should not be in final game.
+ */
+
 using UnityEngine;
 
 public class FreeCamMode : IInputHandler
@@ -11,14 +19,12 @@ public class FreeCamMode : IInputHandler
     [SerializeField] private float slowDownFactor = 0.1f;
 
     Rigidbody rb;
-    GameObject cameraGO;
+    GameObject cameraGO => PlayerManager.Instance.camera.gameObject;
 
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
-        //you should be able to grab this from gamemanager instead of start
-        cameraGO = FindFirstObjectByType<Camera>().gameObject;
         rb = gameObject.GetComponent<Rigidbody>();
 
         //layerToInclude = LayerMask.GetMask("Interactable");
