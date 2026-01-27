@@ -92,7 +92,7 @@ public class OptionalCollectable : MonoBehaviour
             /* Note: the particle system is automatically destroyed when it is done playing.
              * This code is fine and harmless, but it would be better to change the duration of the original particle.
              */
-            particleSystem.Stop(false);
+            //particleSystem.Stop(false);
         }
 
         // Sideflips
