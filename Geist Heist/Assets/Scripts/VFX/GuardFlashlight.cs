@@ -12,14 +12,13 @@ using UnityEngine;
 public class GuardFlashlight : MonoBehaviour
 {
     [Header("VFX")]
-    [SerializeField] private string OnomatopoeiaText = "thunk!"; //Private variables should use camelCase
+    [SerializeField] private string onomatopoeiaText = "Thunk!"; //Private variables should use camelCase
 
     private SuddenVelocityChangeDetector velocityChangeDetector;
 
     void Start()
     {
         velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
-        //These listeners should be removed when this script instance is disabled or destroyed
         velocityChangeDetector.OnStopDetected.AddListener(OnCrashOrBounceDetected);
         velocityChangeDetector.OnBounceDetected.AddListener(OnCrashOrBounceDetected);
     }
@@ -27,10 +26,9 @@ public class GuardFlashlight : MonoBehaviour
     void OnCrashOrBounceDetected(Vector3 impactPoint)
     {
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale: 0.4f);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(onomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale: 0.4f);
 
         //TODO: add thunk sound
 
         // TODO: add particle
     }
-}
