@@ -8,10 +8,6 @@
  */
 
 using NaughtyAttributes;
-using System;
-using System.IO;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
@@ -48,8 +44,8 @@ public class TetherPossessable : IInputHandler
     {
     }
 
-    //REVIEW NOTE: I'm curious what the plan is to replace this and why. I'm not familiar with how this system is currently implemented.
-    //TODO: replace this with something else
+    
+    //TO DO: adapt this to start on the tether and maybe go to another script when we get an animation, currently changes scenes abruptly
     IEnumerator LoadNextSceneCooldown()
     {
         Debug.Log($"Tether collected! Leaving {SceneManager.GetActiveScene().name} now...");

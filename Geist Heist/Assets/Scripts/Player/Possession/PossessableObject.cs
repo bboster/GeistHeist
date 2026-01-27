@@ -14,12 +14,10 @@ using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.Events;
 using NaughtyAttributes;
-using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using FMOD.Studio;
-using FMODUnity;
 using GuardUtilities;
 
 public class PossessableObject : MonoBehaviour, IInteractable
@@ -35,7 +33,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [Header("Timer Variables")]
     [SerializeField, HideIf(nameof(isGhost))] private bool hasTimer;
-    [SerializeField, HideIf(nameof(isGhost))] public float maxChargePercentage = 100; //Seeing as this isn't referenced outside the script I don't think it needs to be public
+    [SerializeField, HideIf(nameof(isGhost))] private float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
     [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerRechargePercentage = 10;
     [Tooltip("The percentage the timer decreases each interval while the player is possessing.")]
@@ -59,7 +57,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [HideInInspector] public bool CanUnPossess = true;
     private bool possessionIsSafe = true;
-    public IInputHandler InputHandler => GetInputHandler(); //I would consider tagging this with HideInInspector if the InputHandler is assigned through a function
+    private IInputHandler InputHandler => GetInputHandler();
     private IInputHandler inputHandler;
 
     private Coroutine dischargeCoroutine = null;
