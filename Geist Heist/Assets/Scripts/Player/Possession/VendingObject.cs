@@ -119,8 +119,6 @@ public class VendingObject : IInputHandler, IInteractable
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
 
             GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
-            tempLaunch.y = launchDirection.y;
             temp.GetComponent<Rigidbody>().AddForce(CanSpawnPoint.transform.forward * currentStrength);
             hasThrownThisPossession = true;
 
@@ -132,7 +130,6 @@ public class VendingObject : IInputHandler, IInteractable
 
         if (possessableObject.PossessedMaterial != null)
         {
-
             if (materialCountdownCoroutine == null)
             {
                 materialCountdownCoroutine = StartCoroutine(MaterialReplaceCountdown());

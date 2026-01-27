@@ -8,10 +8,11 @@ public class TrajectoryPredictor : MonoBehaviour
     [SerializeField] LineRenderer trajectoryLine;
     [SerializeField] int maxPoints;
     float rayOverlap = 1.1f;
+    [SerializeField] float VelocityChanger;
 
     public void PredictTrajectory(float launchStrength, float mass, Vector3 Direction, Vector3 position, float drag, float increment)
     {
-        Vector3 velocity = Direction * (launchStrength / mass);
+        Vector3 velocity = (Direction * (launchStrength / mass)) / VelocityChanger;
         Vector3 p1 = position;
         Vector3 nextPosition;
         float overlap;
