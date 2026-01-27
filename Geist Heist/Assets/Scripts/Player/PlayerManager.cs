@@ -106,39 +106,7 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
-        /*
-         * @sky Could this be moved to a seperate function for simplicity?
-         * -Toby
-         */
-
-        //to decide where ghost exits the possessable
-        if (possessable.ghostExitPoints != null)
-        {
-            //go through spawn points until one of them doesn't collide
-            for (int i = 0; i < possessable.ghostExitPoints.Count; i++)
-            {
-                Collider[] collisions = Physics.OverlapSphere(possessable.ghostExitPoints[i].transform.position, 0.2f);
-
-                //no collision = use this point
-                if (collisions.Length <= 0)
-                {
-                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
-                    break;
-                }
-                
-                /*
-                 * This doesn't have to be in the for loop i think.
-                 * could just be the code that runs after the for loop (assuming the for loop finds nothing).
-                 * -Toby
-                 */
-
-                //if all of them collide, just use the last backup exit point
-                if (i == possessable.ghostExitPoints.Count - 1)
-                {
-                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
-                }
-            }
-        }
+        CheckGhostExitPoints(possessable);
 
         SwapCameras(possessable, PlayerGhostObject);
         PlayerGhostObject.gameObject.SetActive(true);
@@ -152,6 +120,36 @@ public class PlayerManager : Singleton<PlayerManager>
         CurrentObject = PlayerGhostObject;
 
         DeRegisterInputs(possessable);
+    }
+
+    /// <summary>
+    /// Decides where the ghost exits the possessable, returns the new position
+    /// </summary>
+    /// <param name="possessable"></param>
+    private Vector3 CheckGhostExitPoints(PossessableObject possessable)
+    {
+        if (possessable.ghostExitPoints != null)
+        {
+            //go through spawn points until one of them doesn't collide
+            for (int i = 0; i < possessable.ghostExitPoints.Count; i++)
+            {
+                Collider[] collisions = Physics.OverlapSphere(possessable.ghostExitPoints[i].transform.position, 0.2f);
+
+                //no collision = use this point
+                if (collisions.Length <= 0)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
+                    return possessable.ghostExitPoints[i].position;
+                }
+            }
+
+            //if all of them collide, just use the last backup exit point
+            PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
+            return possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
+        }
+
+        Debug.Log("No ghost exit points available.");
+        return Vector3.zero;
     }
 
     private void SwapCameras(PossessableObject oldObject, PossessableObject newObject)
