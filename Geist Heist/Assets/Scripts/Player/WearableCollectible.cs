@@ -31,6 +31,8 @@ public class WearableCollectible : MonoBehaviour
     [ReadOnly] public Collectable currentHat; 
     private Collectable previousHat;
 
+    private OptionalCollectableHubDisplay[] allHubDisplays;
+
     private void OnValidate()
     {
     }
@@ -45,6 +47,7 @@ public class WearableCollectible : MonoBehaviour
     {
         // Load what the player had equipped last
         currentHat = GetEquippedCollectable(SaveDataManager.Instance.EquipedHat());
+        allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
 
 #if UNITY_EDITOR
         PreviewHat();
@@ -68,10 +71,6 @@ public class WearableCollectible : MonoBehaviour
             //return;
         }
 
-        /*
-         * transform.GetComponentsInChildren(typeof(Transform));
-         * -Toby
-         */
         Transform wearableTransform = wearableNode.transform;
         int childCount = wearableTransform.childCount;
         Transform[] children = new Transform[childCount];
@@ -82,6 +81,11 @@ public class WearableCollectible : MonoBehaviour
          * Why are we destroying children just to replace them immediately? 
          * Just replace the mesh in the current mesh renderer?
          * -Toby
+         * 
+         *  Leaving this note here because I think it raises a valid point. That being said,
+         *  assuming I understand how this system works, I would have to do a substantial rework
+         *  to realize this change.
+         *  -Jacob
          */
         foreach (Transform child in children)
         {
@@ -112,14 +116,7 @@ public class WearableCollectible : MonoBehaviour
     {
         // Move the current hat back to hub instead of destroying
         if (previousHat != Collectable.None)
-        {
-            // Find all OptionalCollectable objects in the scene
-
-            /*
-             * Do not call FindObjectsByType in runtime, it is very slow.
-             * We should run FindObjectsByType in start and cache it to avoid repeated calls.
-             */
-            var allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
+        {            
             foreach (var display in allHubDisplays)
             {
                 Debug.Log($"Attempting to call display.spawnMesh({previousHat}) in hub display.");
