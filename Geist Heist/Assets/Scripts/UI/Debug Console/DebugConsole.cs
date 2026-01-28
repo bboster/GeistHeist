@@ -74,10 +74,17 @@ public class DebugConsole : MonoBehaviour
         {
             Debug.LogWarning("Empty debug command");
             return;
-        }    
+        }
+
+        if (Command == "help")
+        {
+            TextArea.text = TextArea.text + "\n" + Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
+                "\nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value>";
+            return;
+        }
 
         // noclip
-        if(Command == "nc" || Command == "noclip")
+        if (Command == "nc" || Command == "noclip")
         {
             NoClip();
             TextArea.text = TextArea.text + "\n" + Command + " " + noClipToggle;
@@ -135,13 +142,6 @@ public class DebugConsole : MonoBehaviour
             //waiting for jacob to implement - someone should implement this
             Debug.Log("Freeze");
             TextArea.text = TextArea.text + "\n" + Command + " " + freezeToggle;
-            return;
-        }
-
-        if(Command == "help")
-        {
-            TextArea.text = TextArea.text + "\n" + Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
-                "\nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value>";
             return;
         }
 
