@@ -60,7 +60,10 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
         Debug.Log($"Attempting to wear: {ThisCollectable}");
 
-        wearableCollectible = FindAnyObjectByType<WearableCollectible>();
+        if(wearableCollectible == null)
+            wearableCollectible = FindAnyObjectByType<WearableCollectible>();
+
+
         if (wearableCollectible == null)
         {
             Debug.LogWarning("No WearableCollectible instance found in the scene.");
