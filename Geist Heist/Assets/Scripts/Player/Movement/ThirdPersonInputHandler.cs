@@ -83,7 +83,7 @@ public class ThirdPersonInputHandler : IInputHandler
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
-        playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PlayerMovement);
+        playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PlayerMovement);
 
         targetRotation = transform.rotation;
         positionLastFrame = transform.position;

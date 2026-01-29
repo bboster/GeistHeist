@@ -26,9 +26,9 @@ public class PATrigger : MonoBehaviour
         if (other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             //play audio clip here joey
-            AudioManager.Instance.PlayOneShot(FMODEvents.instance.PAJingle);
+            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PAJingle);
 
-            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PALines);
+            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
 
             if (whichLine >= 0 && whichLine < 3)
             {

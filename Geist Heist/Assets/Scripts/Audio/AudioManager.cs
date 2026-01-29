@@ -21,24 +21,17 @@ public class AudioManager : Singleton<AudioManager>
                                    (GameManager.Instance.IsPaused ? 0 : 1); // actual calculation if gamemanger is in scene
 
     //Sets AudioManager Instance in the scene
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
-
-        /*
-         * Also validate bus handles with bus.isValid() before calling FMOD APIs on them.
-         * - Josh
-         */
-
         masterBus = RuntimeManager.GetBus("bus:/");
+        validateBus(masterBus);
         musicBus = RuntimeManager.GetBus("bus:/Music");
+        validateBus(musicBus);
         sfxBus = RuntimeManager.GetBus("bus:/SoundEffects");
+        validateBus(sfxBus);
         vocalsBus = RuntimeManager.GetBus("bus:/Vocals");
+        validateBus(vocalsBus);
 
-        
-    }
-    private void Start()
-    {
         if (GameManager.Instance != null)
             GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);
 

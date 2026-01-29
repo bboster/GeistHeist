@@ -50,17 +50,4 @@ public class FMODEvents : Singleton<FMODEvents>
      *
      * - Josh
      */
-    public static FMODEvents instance { get; private set; }
-
-    private void Awake()
-    {
-        base.Awake();
-        
-        if (instance != null)
-        {
-            Debug.Log("There is more than one FMODEvents in the scene");
-        }
-        instance = this;
-    }
-
 }
