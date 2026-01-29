@@ -17,36 +17,11 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     [HideInInspector] public Vector3 SpawnLocation;
     private Checkpoint currentCheckpoint;
 
-    /*
-     * delete this?
-     * -toby
-     */
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-#if UNITY_EDITOR
-
-    /*
-     * delete this?
-     * -toby
-     */
-    private void Update()
-    {
-        /*if(Input.GetKeyDown(KeyCode.L))
-        {
-            SceneManager.LoadScene("CheckpointTestScene");
-        }*/
-    }
-
-#endif
-
     /// <summary>
     /// Initializes the LevelManager every time a scene is loaded
     /// </summary>
     /// <param name="location"></param>
-    public Task InitializeLevelManager(Vector3 location)
+    public Task Initialize(Vector3 location)
     {
         /*
          * rename this function to Initialize?
@@ -77,8 +52,21 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         return (checkpoint == currentCheckpoint);
     }
 
-    /*
-     * There are some scene transition scripts in gamemanager, can we move them to this script?
-     * -Toby
-     */ 
+    #region Scene Transition Scripts
+
+    public void ChangeScene(string sceneName)
+    {
+        //currentLevel++;
+        SceneManager.LoadScene(sceneName);
+        Debug.Log("Advancing to level: " + sceneName);
+    }
+
+    public void ChangeScene(int sceneNum)
+    {
+        //currentLevel++;
+        SceneManager.LoadScene(sceneNum);
+        Debug.Log("Advancing to level: " + sceneNum);
+    }
+
+    #endregion
 }

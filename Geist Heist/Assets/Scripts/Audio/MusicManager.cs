@@ -6,12 +6,18 @@ using FMOD.Studio;
 
 public class MusicManager : Singleton<MusicManager>
 {
+    [SerializeField] private string hubName;
+    [SerializeField] private string[] levelNames;
+    [SerializeField] private string globeName;
+    [SerializeField] private string menuName;
+    
     private EventInstance levelBGM;
     private EventInstance hubBGM;
     private EventInstance globeBGM;
     private EventInstance menuBGM;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Initialize()
     {
         menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.MenuBGM);
         globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GlobeBGM);
@@ -20,25 +26,19 @@ public class MusicManager : Singleton<MusicManager>
 
         StopAll();
 
-        /*
-         * Hard-coding the scene names in the code is really scuffed tbh.
-         * Could we make variables for each of the scene names or something?
-         * -Toby
-         */
-
-        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Main Menu")))
+        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(menuName)))
         {
             menuBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Actual Hub Scene")))
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(hubName)))
         {
             hubBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Globe")))
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(globeName)))
         {
             globeBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("FINAL Parlour Room")))
+        else
         {
             levelBGM.start();
         }

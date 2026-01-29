@@ -30,12 +30,6 @@ public class PlayerManager : Singleton<PlayerManager>
     private PlayerCameraController currentCameraController; // may be mainCinemachineCamera sometimes
     private StudioListener fmodListener;
 
-
-    /*
-     * Change to initialize.
-     * -Toby
-     */
-
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     public void Start()
     {
@@ -60,7 +54,7 @@ public class PlayerManager : Singleton<PlayerManager>
         if (GameManager.Instance.PlayerStart == null)
             Debug.Log("PlayerStart is null in gamemanager");
         else
-            LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+            LevelManager.Instance.Initialize(GameManager.Instance.PlayerStart.position);
 
         fmodListener = camera.GetComponent<StudioListener>();
         UpdateListener(CurrentObject);

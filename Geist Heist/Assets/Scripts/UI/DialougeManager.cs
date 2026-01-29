@@ -25,11 +25,7 @@ public class DialougeManager : Singleton<DialougeManager>
 
     private Coroutine typingCoroutine;
 
-    /*
-     * Weird discrepency between start and Initialize for Manager Scripts.
-     * -Toby
-     */
-    private void Start()
+    public void Initialize()
     {
         DialogueCanvas = Instantiate(DialogueTextboxPrefab);
         DialogueTextbox = DialogueCanvas.GetComponentInChildren<TMPro.TMP_Text>();

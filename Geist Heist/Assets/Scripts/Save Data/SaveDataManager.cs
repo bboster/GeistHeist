@@ -34,11 +34,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     private string runtimeSavePath;
 
-    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
-    /*
-     * Change to initialize
-     */
-    void Start()
+    public void Initialize()
     {
         runtimeSavePath = Path.Combine(Application.persistentDataPath, $"{_defaultfFileName}.{_fileType}");
         LoadData();

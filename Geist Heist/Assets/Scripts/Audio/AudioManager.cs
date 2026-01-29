@@ -29,11 +29,7 @@ public class AudioManager : Singleton<AudioManager>
         vocalsBus = RuntimeManager.GetBus("bus:/Vocals");
     }
 
-    /*
-     * Weird Discrepency between using initalize and start in managers.
-     * -Toby
-     */
-    private void Start()
+    public void Initialize()
     {
         if(GameManager.Instance != null)
             GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);

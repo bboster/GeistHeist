@@ -42,9 +42,9 @@ public static class StaticUtilities
     {
         // If using this code in other projects, replace GuardCoroutineManager with a different singleton
         if (coroutineInstance != null)
-            GuardCoroutineManager.instance.StopCoroutine(coroutineInstance);
+            GuardCoroutineManager.Instance.StopCoroutine(coroutineInstance);
 
-        coroutineInstance = GuardCoroutineManager.instance.StartCoroutine(coroutineToPlay);
+        coroutineInstance = GuardCoroutineManager.Instance.StartCoroutine(coroutineToPlay);
     }
 
     #endregion
