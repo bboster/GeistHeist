@@ -6,6 +6,7 @@ public class GuardStunner : MonoBehaviour
     [Tooltip("How much velocity this object must have before it can stun a guard")]
     [SerializeField] private float stunVelocityThreshold;
     [SerializeField] private bool isCar;
+    bool canstun = true;
 
     /// <summary>
     /// Triggers stunned state on guard when the object collides with the guard.
@@ -13,7 +14,7 @@ public class GuardStunner : MonoBehaviour
     /// <param name="collision"></param>
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.TryGetComponent(out GuardController gc))
+        if(collision.gameObject.TryGetComponent(out GuardController gc) && canstun)
         {
             Vector3 impactVelocity = gameObject.GetComponent<Rigidbody>().linearVelocity;
 
@@ -24,6 +25,13 @@ public class GuardStunner : MonoBehaviour
                 {
                     AudioManager.Instance.PlayOneShot(FMODEvents.instance.CarBump, collision.transform.position);
                 }
+            }
+        }
+        else
+        {
+            if (!isCar)
+            {
+                canstun = false;
             }
         }
     }

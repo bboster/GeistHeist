@@ -158,6 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CanScript
   soundStimulus: {fileID: 1452868294091368668, guid: eca2fd6e6f6562c4eafe9da2b86dc40e, type: 3}
   OnomatopoeiaText: clank!
+  CanDespawnTimer: 3
 --- !u!114 &3487713375576966330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,9 +185,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea24babacec1ea4a8fe30ad3228824b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SuddenVelocityChangeDetector
-  minVelocityForRegister: 3
-  maxVelocityToBeStopped: 0.3
-  recordVelocityAtStart: 0
+  minVelocityForRegister: 0.1
+  maxVelocityToBeStopped: 0.5
+  recordVelocityAtStart: 1
   debugLogSpeeds: 0
   OnStopDetected:
     m_PersistentCalls:
