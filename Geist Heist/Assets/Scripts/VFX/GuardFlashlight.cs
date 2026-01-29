@@ -32,3 +32,4 @@ public class GuardFlashlight : MonoBehaviour
 
         // TODO: add particle
     }
+}
