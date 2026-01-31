@@ -213,11 +213,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
             return;
         }
 
-        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionEnter);
 
-        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
-        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
-        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
+        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionLow);
+        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionOut);
+        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionRefill);
     }
 
     public IInputHandler GetInputHandler()
