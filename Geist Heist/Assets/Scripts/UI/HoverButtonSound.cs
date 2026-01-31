@@ -15,6 +15,6 @@ public class HoverButtonSound : MonoBehaviour, IPointerEnterHandler
     {
         // tysm Toby
 
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIHover);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIHover);
     }
 }

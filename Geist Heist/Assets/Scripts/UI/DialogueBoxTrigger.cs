@@ -28,7 +28,7 @@ public class DialogueBoxTrigger : MonoBehaviour
             alreadyTriggered = true;
             DialogueManager.Instance.DisplayText_Dialogue(Text, stayLength);
 
-            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PALines);
+            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
 
             if (whichLine >= 0 && whichLine < 3)
             {
