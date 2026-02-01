@@ -105,7 +105,7 @@ public class SettingsTab : PauseMenuTab
     #region Input Handling
     private void AddComponentListeners()
     {
-        lookSensitivityAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(lookSensitivityAttributes, ref SettingsProfile.LookSensitivy, 
+        lookSensitivityAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(lookSensitivityAttributes, ref SettingsProfile.LookSensitivity, 
             minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY,
             onSettingsUpdatedCallback:PlayerManager.Instance.UpdateCamerasSensitivity));
 
@@ -176,7 +176,7 @@ public class SettingsTab : PauseMenuTab
     {
         // Assumes SettingsProfile.ReadSavedSettings has already run 
 
-        lookSensitivityAttributes.RefreshComponent(SettingsProfile.LookSensitivy, SettingsProfile.LookSensitityScalar);
+        lookSensitivityAttributes.RefreshComponent(SettingsProfile.LookSensitivity, SettingsProfile.LookSensitityScalar);
         invertLookAttributes.RefreshComponent(SettingsProfile.InvertLook);
         brightnessAttributes.RefreshComponent(SettingsProfile.Brightness, SettingsProfile.BrightnessScalar);
 

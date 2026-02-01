@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField, BoxGroup("Hub Scene"), Scene] private string HubScene;
     [SerializeField, BoxGroup("Hub Scene")] private GameObject HubSceneLoadingCardPrefab;
 
-    [SerializeField, BoxGroup("New Game Scene"), Scene] private string NewGameScene; // making it seperate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
+    [SerializeField, BoxGroup("New Game Scene"), Scene] private string NewGameScene; // making it separate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
     [SerializeField, BoxGroup("New Game Scene")] private GameObject NewSceneLoadingCardPrefab;
     [SerializeField, BoxGroup("New Game Scene")] string confirmNewGameText = "Are you sure? Continuing will delete your progress.";
 
