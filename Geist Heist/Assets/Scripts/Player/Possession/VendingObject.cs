@@ -49,7 +49,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     void Start()
     {
-        canCharge = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CanCharge);
+        canCharge = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.CanCharge);
 
         possessableObject = GetComponent<PossessableObject>();
         if(chargeMeter == null)
@@ -89,7 +89,7 @@ public class VendingObject : IInputHandler, IInteractable
                 possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
             }
 
-            AudioManager.Instance.PlayOneShot(FMODEvents.instance.CanShot, CanSpawnPoint.transform.position);
+            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.CanShot, CanSpawnPoint.transform.position);
 
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
@@ -120,7 +120,7 @@ public class VendingObject : IInputHandler, IInteractable
         if (!Tap)
         {
             canCharge.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-            AudioManager.Instance.PlayOneShot(FMODEvents.instance.CanShot, CanSpawnPoint.transform.position);
+            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.CanShot, CanSpawnPoint.transform.position);
 
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
 

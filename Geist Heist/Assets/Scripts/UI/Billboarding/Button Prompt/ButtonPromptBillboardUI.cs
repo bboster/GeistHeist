@@ -9,11 +9,9 @@
  */
 
 using NaughtyAttributes;
-using NaughtyAttributes.Test;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class ButtonPromptBillboardUI : IBillboardUI
 {
@@ -60,7 +58,7 @@ public class ButtonPromptBillboardUI : IBillboardUI
     private IEnumerator PopupAnimation()
     {
         // go counter clockwise half the time
-        float randomDirection = UnityEngine.Random.value > 0.5 ? -1 : 1;
+        float randomDirection = Random.value > 0.5 ? -1 : 1;
         float startTime = Time.time;
         float t, z_rot, scalar;
         do
