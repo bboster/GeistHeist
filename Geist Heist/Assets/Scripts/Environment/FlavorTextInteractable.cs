@@ -51,7 +51,7 @@ public class FlavorTextInteractable : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        DialougeManager.Instance.DisplayText_Dialogue(DisplayText, secondsUntilCloseText, onDialogueEndCallback: OnFlavorTextEnd);
+        DialogueManager.Instance.DisplayText_Dialogue(DisplayText, secondsUntilCloseText, onDialogueEndCallback: OnFlavorTextEnd);
         SaveDataManager.Instance.MarkFlavorTextAsRead(DisplayText, autoSave: true);
         DisableTextInteractable();
     }
