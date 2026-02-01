@@ -40,8 +40,8 @@ public class VendingObject : IInputHandler, IInteractable
     private bool hasThrownThisPossession;
     private Coroutine materialCountdownCoroutine;
 
-    [SerializeField] TrajectoryPredictor TP;
-    [SerializeField] GameObject LR;
+    [SerializeField, Required] TrajectoryPredictor trajectoryPredictor;
+    [SerializeField, Required] GameObject LineRenderer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -65,7 +65,7 @@ public class VendingObject : IInputHandler, IInteractable
     {
         currentStrength = minStrength;
         hasThrownThisPossession = false;
-        LR.SetActive(false);
+        LineRenderer.SetActive(false);
     }
 
     public override void WhilePossessingUpdate()
@@ -90,7 +90,7 @@ public class VendingObject : IInputHandler, IInteractable
             hasThrownThisPossession = true; 
 
         }
-        LR.SetActive(true);
+        LineRenderer.SetActive(true);
     }
 
     public override void WhileActionHeld(float secondsHeld)
@@ -104,7 +104,7 @@ public class VendingObject : IInputHandler, IInteractable
             currentStrength += Time.deltaTime * strengthGrowthRate;
             Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
             tempLaunch.y = launchDirection.y;
-            TP.PredictTrajectory(Mathf.Clamp(currentStrength, minStrength, maxStrength), CanPrefab.GetComponent<Rigidbody>().mass, CanSpawnPoint.transform.forward, CanSpawnPoint.transform.position, CanPrefab.GetComponent<Rigidbody>().linearDamping, .025f);
+            trajectoryPredictor.PredictTrajectory(Mathf.Clamp(currentStrength, minStrength, maxStrength), CanPrefab.GetComponent<Rigidbody>().mass, CanSpawnPoint.transform.forward, CanSpawnPoint.transform.position, CanPrefab.GetComponent<Rigidbody>().linearDamping, .025f);
         }
     }
 
@@ -115,7 +115,7 @@ public class VendingObject : IInputHandler, IInteractable
 
         if (!Tap)
         {
-            LR.SetActive(false);
+            LineRenderer.SetActive(false);
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
 
             GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
