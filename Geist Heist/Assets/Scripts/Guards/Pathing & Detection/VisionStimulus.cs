@@ -7,6 +7,7 @@
  */
 
 using FMOD;
+using FMOD.Studio;
 using GuardUtilities;
 using NaughtyAttributes;
 using System.Collections;
@@ -57,6 +58,8 @@ public class VisionStimulus : Stimulus
     private Mesh visionMesh;
     private Mesh tempMesh;
 
+    private EventInstance guardGasp;
+
     //TEMP DEBUG VARS
     private Vector3 sweeper;
     private float diameter;
@@ -67,6 +70,12 @@ public class VisionStimulus : Stimulus
     {
         PossessableObject.OnActionPerformed += ActionDetected;
         PossessableObject.OnObjectLeft += ObjectLeft;
+    }
+
+    private void Start()
+    {
+        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);
+        //guardGasp.set3DAttributes(RuntimeUtils.To3DAttributes(this.GetComponent<transform>(), this.GetComponent<Rigidbody>()));
     }
 
     private void OnValidate()
@@ -318,6 +327,16 @@ public class VisionStimulus : Stimulus
     /// </summary>
     public override void TriggerStimulus()
     {
+        //AudioManager.Instance.PlayOneShot(FMODEvents.Instance.GuardReactions);
+        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);
+
+        PLAYBACK_STATE playbackState;
+        guardGasp.getPlaybackState(out playbackState);
+        if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+        {
+            guardGasp.start();
+        }
+
         parentController.RecieveStimulus(this, stateToChangeTo);
     }
 

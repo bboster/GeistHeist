@@ -19,30 +19,12 @@ public class SurprisedBehavior : Behavior
     [Tooltip("The length that the guard will pause before chasing after seeing the player")]
     [SerializeField] private float reactionLength;
 
-    private EventInstance guardGasp;
-
-    private void Start()
-    {
-        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);
-        //guardGasp.set3DAttributes(RuntimeUtils.To3DAttributes(this.GetComponent<transform>(), this.GetComponent<Rigidbody>()));
-    }
-
     /// <summary>
     /// Runs the logic for the behavior.
     /// </summary>
     /// <returns></returns>
     public override IEnumerator BehaviorLoop()
     {
-        //AudioManager.Instance.PlayOneShot(FMODEvents.Instance.GuardReactions);
-        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);
-
-        PLAYBACK_STATE playbackState;
-        guardGasp.getPlaybackState(out playbackState);
-        if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
-        {
-            guardGasp.start();
-        }
-
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
 
         thisAgent.isStopped = true;
@@ -56,6 +38,6 @@ public class SurprisedBehavior : Behavior
 
         contRef.ChangeBehavior(GuardStates.chase);
 
-        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerSpotted);
+        //AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerSpotted);
     }
 }
