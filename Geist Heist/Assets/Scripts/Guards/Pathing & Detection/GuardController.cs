@@ -106,8 +106,8 @@ public class GuardController : MonoBehaviour
         defaultAcceleration = thisAgent.acceleration;
 
         //only for sfx for now
-        guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
-        guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+        guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardWalk);
+        guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardRun);
     }
 
     /// <summary>

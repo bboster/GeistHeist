@@ -32,7 +32,7 @@ public class CanScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.CanBounce, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.CanBounce, transform.position);
 
         if (firstTime)
         {

@@ -7,7 +7,6 @@
  */
 
 using NaughtyAttributes;
-using UnityEngine;
 
 public class PlayerHUDManager : Singleton<PlayerHUDManager>
 {

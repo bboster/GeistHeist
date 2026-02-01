@@ -12,9 +12,6 @@
  * TODO: swap UI for controller support eventually.
  */
 
-using System.Collections;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
