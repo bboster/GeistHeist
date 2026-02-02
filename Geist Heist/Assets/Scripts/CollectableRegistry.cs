@@ -60,9 +60,12 @@ public class CollectableRegistry : ScriptableObject
     /// Remove an entry (editor-only)
     public void Remove(Collectable collectable)
     {
-        entries.RemoveAll(e => e.collectable == collectable);
-        UnityEditor.EditorUtility.SetDirty(this);
-        UnityEditor.AssetDatabase.SaveAssets();
+        if(entries.Find(e => e.collectable == collectable) != null)
+        {
+            entries.RemoveAll(e => e.collectable == collectable);
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.AssetDatabase.SaveAssets();
+        }
     }
 #endif
 }

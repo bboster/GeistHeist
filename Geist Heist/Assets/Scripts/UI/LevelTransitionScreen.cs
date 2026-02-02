@@ -8,7 +8,6 @@
  * Animation CARD should be handled with an animation component childed to this
  */
 
-using NaughtyAttributes;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,7 +20,6 @@ public class LevelTransitionScreen : MonoBehaviour
 
     /*[SerializeField, Required]*/ CanvasGroup group;
     private string _sceneToLoad;
-    private GameObject animationObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     /*public void StartTransition(string sceneToLoad, GameObject animationPrefab)
@@ -36,9 +34,7 @@ public class LevelTransitionScreen : MonoBehaviour
 
         DontDestroyOnLoad(this);
         _sceneToLoad = sceneToLoad;
-        if (animationPrefab != null)
-            animationObject = Instantiate(animationPrefab, this.transform);
-        else
+        if (animationPrefab == null)
             Debug.LogError("No level transition card set");
 
         StartCoroutine(TitleCardFadeAnimation());

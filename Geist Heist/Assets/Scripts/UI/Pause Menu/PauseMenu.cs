@@ -80,7 +80,7 @@ public class PauseMenu : MonoBehaviour
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.PauseGame();
 
-        // general tabis default tab
+        // general tab is default tab
         generalTab.OpenTab();
         controlsTab.CloseTab();
         settingsTab.CloseTab();
