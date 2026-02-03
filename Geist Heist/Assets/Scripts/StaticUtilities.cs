@@ -315,7 +315,18 @@ public static class StaticUtilities
     #endregion
 
     #region Math
+    
+    /// <summary>
+    /// Returns the positive distance between a and b.
+    /// </summary>
+    public static float Difference(float a, float b)
+    {
+        return Mathf.Abs(a - b);
+    }
 
+    /// <summary>
+    /// Returns inverse lerp (t), where t may be less than 0 or greater than 1
+    /// </summary>
     public static float InverseLerpUnclamped(float a, float b, float value)
     {
         if (a != b)

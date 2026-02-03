@@ -299,8 +299,9 @@ public class ToyCar : IInputHandler
             return;
 
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, bold:true, scale:OnomatopoeiaScale, 
-            animateRotationOverTime:true, randomRotationRange:15);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, bold:true, fontScale:OnomatopoeiaScale, 
+            animateRotationOverTime:true, randomRotationRange:15, 
+            animateScaleOverTime:true);
 
         lastCrashOnomatopoeiaTimeStamp = Time.time;
 
