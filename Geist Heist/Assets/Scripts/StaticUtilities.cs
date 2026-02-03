@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby S, Sky B, Cade Naylor, Jay Embry
  * Creation Date: ???
- * Last Modified: 10/17/25
+ * Last Modified: 1/27/2026
  * 
  * Brief Description: General use utility functions that can be
  * applied to any project. 
@@ -165,6 +165,57 @@ public static class StaticUtilities
         UnityEngine.Cursor.visible = false;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
     }
+
+    public static Coroutine FadeToVisible(CanvasGroup group, float seconds, 
+        UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.instance.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, 
+            afterFadeCallback:afterFadeCallback));
+    }
+
+    public static Coroutine FadeToHidden(CanvasGroup group, float seconds, 
+        UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.instance.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback));
+    }
+
+    public static Coroutine FadeOpacity(CanvasGroup group, float a, float seconds, 
+        UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.instance.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback));
+    }
+
+    private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
+    {
+        float startOpacity = group.alpha;
+
+        float startTime = unscaledTime ? Time.unscaledTime : Time.time;
+        float time = startTime;
+        while(time - startTime < seconds)
+        {
+            time = unscaledTime ? Time.unscaledTime : Time.time;
+            float t = (time - startTime) / seconds;
+
+            group.alpha = Mathf.Lerp(startOpacity, a, t);
+
+            yield return null;
+        }
+        // apply one more time just in case.
+        group.alpha = a;
+
+        if(afterFadeCallback != null)
+            afterFadeCallback();
+    }
+
 
     /// <summary>
     /// Sets the colors of a selectable ui component.
@@ -409,6 +460,13 @@ public static class StaticUtilities
     {
         if (array == null) return true;
         if (array.Count == 0) return true;
+        return false;
+    }
+
+    public static bool IsEmptyOrNull<T>(this string str)
+    {
+        if (str == null) return true;
+        if (str.Length == 0) return true;
         return false;
     }
 

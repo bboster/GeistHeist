@@ -19,11 +19,12 @@ public class MusicManager : Singleton<MusicManager>
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Initialize()
     {
-        menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.MenuBGM);
-        globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GlobeBGM);
-        hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.HubBGM);
-        levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.LevelBGM);
+        menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.MenuBGM);
+        globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GlobeBGM);
+        hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.HubBGM);
+        levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.LevelBGM);
 
+        //the following if-else block could be changed to a Switch statement -Josh
         StopAll();
 
         if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(menuName)))
