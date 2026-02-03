@@ -215,12 +215,10 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         //This is a sound issue, but I think all sound setup should be in its own function for organization, especially since some sounds may need additional lines
         //in the future
-
         possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
-
-        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
-        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
-        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
+        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionLow);
+        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionOut);
+        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionRefill);
     }
 
     public IInputHandler GetInputHandler()
@@ -390,11 +388,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
             yield break;
 
         possessableCanvas.gameObject.SetActive(true);
-        while(possessableCanvasGroup.alpha < 1)
-        {
-            possessableCanvasGroup.alpha += Time.deltaTime / showSeconds;
-            yield return null;
-        }
+
+        yield return StaticUtilities.FadeToVisible(possessableCanvasGroup, showSeconds);
     }
 
     private IEnumerator HideAndDisableCanvas()
@@ -402,11 +397,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (possessableCanvas == null)
             yield break;
 
-        while (possessableCanvasGroup.alpha > 0)
-        {
-            possessableCanvasGroup.alpha -= Time.deltaTime / hideSeconds;
-            yield return null;
-        }
+        yield return StaticUtilities.FadeToVisible(possessableCanvasGroup, hideSeconds);
+
         possessableCanvas.gameObject.SetActive(false);
     }
 

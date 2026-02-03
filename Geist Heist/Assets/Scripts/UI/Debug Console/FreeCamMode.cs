@@ -1,10 +1,12 @@
-using GuardUtilities;
-using NaughtyAttributes;
-using System.Collections.Generic;
-using System;
+/*
+ * Contributors: Brenden
+ * Creation:    Fall 2025
+ * Last Edited:  1/27/2026
+ * 
+ * Summary: Free cam for debug mode. Should not be in final game.
+ */
+
 using UnityEngine;
-//using UnityEditor.Rendering;
-using System.IO;
 
 public class FreeCamMode : IInputHandler
 {
@@ -17,14 +19,12 @@ public class FreeCamMode : IInputHandler
     [SerializeField] private float slowDownFactor = 0.1f;
 
     Rigidbody rb;
-    GameObject cameraGO;
+    GameObject cameraGO => PlayerManager.Instance.camera.gameObject;
 
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
-
-        cameraGO = FindFirstObjectByType<Camera>().gameObject;
         rb = gameObject.GetComponent<Rigidbody>();
 
         //layerToInclude = LayerMask.GetMask("Interactable");
@@ -96,8 +96,10 @@ public class FreeCamMode : IInputHandler
         Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);*/
         var direction = InputEvents.Instance.FirstPersonInputDirection.WithY(cameraGO.transform.forward.y);
 
+        /*
         var a = rb.linearVelocity.WithY(0);
         var b = (direction * speed);
+        */
 
         var horizontalVelocity = Vector3.Lerp(rb.linearVelocity, (direction * speed), speedPickup * Time.fixedDeltaTime);
         Vector3.ClampMagnitude(horizontalVelocity, maxVelocity);

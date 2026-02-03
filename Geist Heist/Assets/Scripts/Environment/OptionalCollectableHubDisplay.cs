@@ -22,6 +22,8 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     [Header("Debug")]
     [SerializeField, OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysDisplay;
 
+    private WearableCollectible wearableCollectible;
+
     #region Unity Lifecycle
     private void OnValidate()
     {
@@ -58,7 +60,10 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
         Debug.Log($"Attempting to wear: {ThisCollectable}");
 
-        WearableCollectible wearableCollectible = FindAnyObjectByType<WearableCollectible>();
+        if(wearableCollectible == null)
+            wearableCollectible = FindAnyObjectByType<WearableCollectible>();
+
+
         if (wearableCollectible == null)
         {
             Debug.LogWarning("No WearableCollectible instance found in the scene.");

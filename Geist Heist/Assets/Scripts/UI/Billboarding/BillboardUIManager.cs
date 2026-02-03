@@ -66,7 +66,6 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
                 continue;
 
             var elem = uiAnchorPair.Item2;
-            var elemRectTransform = elem.rectTransform;
             var elemTransform = elem.transform;
             var anchor = uiAnchorPair.Item1;
 
