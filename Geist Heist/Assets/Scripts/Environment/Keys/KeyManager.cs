@@ -5,8 +5,6 @@
  * Summary:  Runtime-only key manager. Keys are kept in-memory and cleared on scene load. 
  * Call KeyManager.Instance.AddKey(...) from pickups. Use HasKey(...) to check.
  * Keys are NOT consumed on use.
- * 
- * TODO: // Simple enum for keys. Extend with the symbols used in UI.
  */
 using System;
 using System.Collections.Generic;
