@@ -50,6 +50,7 @@ public class ToyCar : IInputHandler
     //activates when ghost is leaving an object
     private bool IsLeaving = false;
     private bool hasLaunchedThisPossession = false;
+    private float lastCrashOnomatopoeiaTimeStamp;
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
     [SerializeField] private ParticleSystem possessableParticle;
@@ -294,8 +295,12 @@ public class ToyCar : IInputHandler
 
     void OnCrashOrBounceDetected(Vector3 impactPoint)
     {
+        if (Time.time - lastCrashOnomatopoeiaTimeStamp < 0.1f)
+            return;
+
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
         BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange:15, bold:true, scale:OnomatopoeiaScale);
+        lastCrashOnomatopoeiaTimeStamp = Time.time;
 
         //TODO: add Bonk sound
 
