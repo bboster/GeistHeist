@@ -20,7 +20,6 @@ public class RotateOverTime : MonoBehaviour
     [SerializeField] private bool z;
     [SerializeField, ShowIf(nameof(z)), Label("Degrees Per Second")] private float zRotationSpeed = 0;
 
-    // Update is called once per frame
     void Update()
     {
         Vector3 delta = new Vector3(

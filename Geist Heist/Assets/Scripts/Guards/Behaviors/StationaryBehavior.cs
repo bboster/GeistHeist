@@ -29,7 +29,7 @@ public class StationaryBehavior : Behavior
     [Tooltip("How long it should take for the guard to rotate from the center to one side")]
     [SerializeField] private float rotationTime;*/
 
-    #endregion
+    #endregion 
 
     #region Initialize and Stop Behavior
 
