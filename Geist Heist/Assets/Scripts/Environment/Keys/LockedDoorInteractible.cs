@@ -104,7 +104,7 @@ public class LockedDoorInteractible : MonoBehaviour, IInteractable
 
         float chosenSign = +1f;
 
-        if (hingeCorner == HingeCorner.FrontRight || hingeCorner == HingeCorner.BackRight)
+        if (hingeCorner == HingeCorner.FrontLeft || hingeCorner == HingeCorner.BackRight)
         {
             chosenSign = -1f; // always open towards the player
         }
