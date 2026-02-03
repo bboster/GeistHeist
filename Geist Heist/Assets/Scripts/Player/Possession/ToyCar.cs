@@ -28,16 +28,18 @@ public class ToyCar : IInputHandler
     [SerializeField] private float chargeLossRate;
     [Tooltip("Force there to be time between zooms")]
     [SerializeField] private float delayBetweenZooms = 1;
+    [Tooltip("How much moving rotates by per second.")]
+    [SerializeField] private float rotationRate = 30;
 
     [Header("VFX")]
     [SerializeField] private string OnomatopoeiaText = "Bonk!";
     [SerializeField] private float OnomatopoeiaScale = 1;
+    [SerializeField] private ParticleSystem possessableParticle;
 
     [Header("Speedometer seconds")]
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
+    [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
-    [Tooltip("How much moving rotates by per second.")]
-    [SerializeField] private float rotationRate = 30;
     //realtime hold strength
     private float currentStrength;
 
@@ -52,8 +54,6 @@ public class ToyCar : IInputHandler
     private bool hasLaunchedThisPossession = false;
     private float lastCrashOnomatopoeiaTimeStamp;
 
-    [SerializeField] private PossessableChargeMeterUI chargeMeter;
-    [SerializeField] private ParticleSystem possessableParticle;
 
     private EventInstance carMoveSFX;
     private EventInstance carWindSFX;
@@ -299,7 +299,9 @@ public class ToyCar : IInputHandler
             return;
 
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange:15, bold:true, scale:OnomatopoeiaScale);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, bold:true, scale:OnomatopoeiaScale, 
+            animateRotationOverTime:true, randomRotationRange:15);
+
         lastCrashOnomatopoeiaTimeStamp = Time.time;
 
         //TODO: add Bonk sound

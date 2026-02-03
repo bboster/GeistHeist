@@ -10,6 +10,7 @@
  */
 
 using NaughtyAttributes;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -31,8 +32,9 @@ public class OnomatopoeiaBillboardUI : IBillboardUI
     }
 
     // Basically an initalization function, called in BillboardUIManager after this is spawned in.
-    public void SetTextProperties(string text, float scale, float randomRotationRange, 
-                                  bool bold, bool italics)
+    public void SetTextProperties(string text, float scale, float randomRotationRange, float lifetime,
+                                  bool bold, bool italics,
+                                  bool animateRotation)
     {
         // apply bold and/or italic tags (you can not set tmps bold attributes with code. its inspector only >:/
         //string styledText = $"{(bold?"<b>":"")}{(italics ? "<i>" : "")}{text}";
@@ -41,7 +43,11 @@ public class OnomatopoeiaBillboardUI : IBillboardUI
 
         // apply settings
         textbox.fontSize = textbox.fontSize * scale;
-        textbox.transform.localEulerAngles = new Vector3(0, 0, Random.Range(-randomRotationRange, randomRotationRange));
+
+        if (animateRotation)
+            StartCoroutine(RotateOverLifetime(lifetime, randomRotationRange));
+        else
+            textbox.transform.localEulerAngles = new Vector3(0, 0, Random.Range(-randomRotationRange, randomRotationRange));
         
         // (Reset and) apply text stylings
         textbox.fontStyle = FontStyles.Normal;
@@ -51,5 +57,23 @@ public class OnomatopoeiaBillboardUI : IBillboardUI
             textbox.fontStyle = textbox.fontStyle | FontStyles.Italic;
     }
 
+    private IEnumerator RotateOverLifetime(float lifetime, float randomRotationRange)
+    {
+        float startRotation = Random.Range(-randomRotationRange, randomRotationRange);
+        float endRotation =   Random.Range(-randomRotationRange, randomRotationRange) + randomRotationRange;
 
+        float timeStarted = Time.time;
+        float timeElapsed = 0;
+        while(timeElapsed < lifetime)
+        {
+            timeElapsed = Time.time - timeStarted;
+            float t = timeElapsed / lifetime;
+
+            float z = Mathf.LerpAngle(startRotation, endRotation, t);
+
+            textbox.transform.localEulerAngles = new Vector3(0, 0, z);
+
+            yield return null;
+        }
+    }
 }

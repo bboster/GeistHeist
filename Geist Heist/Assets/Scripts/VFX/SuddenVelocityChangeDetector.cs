@@ -8,6 +8,7 @@
  * Jult: when presumed stopped, and gains sudden velocity
  */
 
+using NaughtyAttributes;
 using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
@@ -19,10 +20,10 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     [SerializeField] private float minVelocityForRegister = 6;
     [Tooltip("The highest velocity that can still be considered \"stopped\"")]
     [SerializeField] private float maxVelocityToBeStopped = 0.3f;
-    [SerializeField] private bool recordVelocityAtStart;
+    [SerializeField, Foldout("Advanced")] private bool recordVelocityAtStart;
     //[SerializeField] private LayerMask collisionLayers;
 
-    [SerializeField] private bool debugLogSpeeds;
+    [SerializeField, Foldout("Advanced")] private bool debugLogSpeeds;
 
     private const float MIN_SECONDS_BETWEEN_EVENTS = 0.15f;
 
