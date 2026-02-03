@@ -215,7 +215,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         //This is a sound issue, but I think all sound setup should be in its own function for organization, especially since some sounds may need additional lines
         //in the future
-        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionEnter);
         possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionLow);
         possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionOut);
         possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionRefill);

@@ -60,8 +60,8 @@ public class ToyCar : IInputHandler
     private void Start()
     {
         //Same note on sound as in PossessableObject.cs
-        carMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CarGo);
-        carWindSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CarWind);
+        carMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.CarGo);
+        carWindSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.CarWind);
 
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();
