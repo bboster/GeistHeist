@@ -170,9 +170,9 @@ public static class StaticUtilities
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.instance.StopCoroutine(currentCoroutineToCancel);
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.instance.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, 
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, 
             afterFadeCallback:afterFadeCallback));
     }
 
@@ -180,18 +180,18 @@ public static class StaticUtilities
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.instance.StopCoroutine(currentCoroutineToCancel);
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.instance.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback));
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback));
     }
 
     public static Coroutine FadeOpacity(CanvasGroup group, float a, float seconds, 
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.instance.StopCoroutine(currentCoroutineToCancel);
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.instance.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback));
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback));
     }
 
     private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
