@@ -90,7 +90,6 @@ public class VendingObject : IInputHandler, IInteractable
             hasThrownThisPossession = true; 
 
         }
-        LineRenderer.SetActive(true);
     }
 
     public override void WhileActionHeld(float secondsHeld)
@@ -98,6 +97,7 @@ public class VendingObject : IInputHandler, IInteractable
         if (secondsHeld < delayBetweenThrows && hasThrownThisPossession)
             return;
 
+        LineRenderer.SetActive(true);
         if (!Tap)
         {
             // Will be clamped later (dont clamp now for charge ui animations)
