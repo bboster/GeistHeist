@@ -7,10 +7,11 @@
  */
 
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class CanScript : MonoBehaviour
-{
+{       
 
     [SerializeField] private GameObject soundStimulus;
 
@@ -19,6 +20,7 @@ public class CanScript : MonoBehaviour
 
     bool firstTime = true;
 
+    [SerializeField] float CanDespawnTimer;
     private SuddenVelocityChangeDetector velocityChangeDetector;
 
     private void Start()
@@ -37,14 +39,22 @@ public class CanScript : MonoBehaviour
             Instantiate(soundStimulus, transform.position, Quaternion.identity);
             Debug.Log("Stimulus");
             firstTime = false;
+            OnCrashOrBounceDetected(collision.contacts[0].point);
         }
+    }
+
+    private IEnumerator DeleteCanClutter()
+    {
+        yield return new WaitForSeconds(CanDespawnTimer);
+        Destroy(this.gameObject);
     }
 
     void OnCrashOrBounceDetected(Vector3 impactPoint)
     {
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale:0.4f);
 
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale:0.4f);
+        Debug.Log("Clank Spawned");
         //TODO: add clank sound
 
         // TODO: add particle
