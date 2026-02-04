@@ -49,20 +49,21 @@ public class AudioManager : Singleton<AudioManager>
     }
     public void UpdateMasterVolume()
     {
-        masterBus.setVolume(SettingsProfile.MasterVolumeTransformed * getPausedVolumeMultiplier);
+        Debug.Log(SettingsProfile.MasterVolumeScaled);
+        masterBus.setVolume(SettingsProfile.MasterVolumeScaled * getPausedVolumeMultiplier);
     }
 
     public void UpdateMusicVolume()
     {
-        musicBus.setVolume(SettingsProfile.MusicVolumeTransformed * getPausedVolumeMultiplier);
+        musicBus.setVolume(SettingsProfile.MusicVolumeScaled * getPausedVolumeMultiplier);
     }
     public void UpdateSFXVolume()
     {
-        sfxBus.setVolume(SettingsProfile.SFXVolumeTransformed * getPausedVolumeMultiplier);
+        sfxBus.setVolume(SettingsProfile.SFXVolumeScaled * getPausedVolumeMultiplier);
     }
     public void UpdateVocalsVolume()
     {
-        vocalsBus.setVolume(SettingsProfile.VocalsVolumeTransformed * getPausedVolumeMultiplier);
+        vocalsBus.setVolume(SettingsProfile.VocalsVolumeScaled * getPausedVolumeMultiplier);
     }
 
     #endregion
