@@ -13,7 +13,7 @@ using UnityEngine;
 using NaughtyAttributes;
 using FMODUnity;
 
-public class LockedDoorInteractible : MonoBehaviour, IInteractable
+public class LockedDoorInteractable : MonoBehaviour, IInteractable
 {
     public enum HingeCorner
     {
