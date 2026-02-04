@@ -41,6 +41,7 @@ public class SurprisedBehavior : Behavior
         if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
         {
             guardGasp.start();
+            contRef.GuardTalking("Gasp");
         }
 
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();

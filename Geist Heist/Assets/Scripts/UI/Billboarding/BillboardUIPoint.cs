@@ -31,7 +31,7 @@ public class BillboardUIPoint : MonoBehaviour
             return;
 
         billboardUI = Instantiate(UIObjectPrefab).GetComponent<IBillboardUI>();
-        BillboardUIManager.Instance.RegisterAndInitializeBillboardUIPoint(this.transform, billboardUI, SourceGameObject);
+        BillboardUIManager.Instance.RegisterAndInitializeBillboardUIPoint(this.transform, billboardUI, SourceGameObject); 
     }
 
     private void OnDrawGizmos()
