@@ -33,10 +33,6 @@ public class LockedDoorInteractible : MonoBehaviour, IInteractable
     [SerializeField, Min(0f)] private float openAngle = 90f;
     [SerializeField, Min(0.01f)] private float openSeconds = 0.6f;
 
-    [Header("Audio (optional)")]
-    [SerializeField] private FMODUnity.EventReference lockedSfx;
-    [SerializeField] private FMODUnity.EventReference unlockedSfx;
-
     [Header("Debug (Editor only)")]
     [SerializeField] private bool ShowDebugGizmos = true;
 
