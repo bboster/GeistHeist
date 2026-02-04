@@ -137,7 +137,8 @@ public class GameManager : Singleton<GameManager>
          * We should give all of these Initialize functions, if possible
          * -Toby
          */
-        Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize() ;
+        Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize();
+        Instantiate(FMODEventsPrefab);
         Instantiate(LevelManagerPrefab); // initialization happens in PlayerManager
         Instantiate(SaveDataManagerPrefab).GetComponent<SaveDataManager>().Initialize();
         Instantiate(GuardCoroutineManagerPrefab); //Does not require initialization
@@ -156,7 +157,6 @@ public class GameManager : Singleton<GameManager>
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
         Instantiate(GeneralHUDPrefab);
         Instantiate(DebugConsolePrefab);
-        Instantiate(FMODEventsPrefab);
 
         if (FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
             Instantiate(EventSystemPrefab);
