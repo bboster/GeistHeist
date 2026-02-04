@@ -10,27 +10,29 @@ using FMODUnity;
 using UnityEngine;
 using FMOD.Studio;
 
-public class AudioManager : Singleton<AudioManager> 
+public class AudioManager : Singleton<AudioManager>
 {
     private Bus masterBus;
     private Bus musicBus;
     private Bus sfxBus;
     private Bus vocalsBus;
-    private float getPausedTime => GameManager.Instance == null ? 1 :       // timescale is 1 if no GameManager (this happens in main menu)
+    
+    private float getPausedVolumeMultiplier => GameManager.Instance == null ? 1 :       // timescale is 1 if no GameManager (this happens in main menu)
                                    (GameManager.Instance.IsPaused ? 0 : 1); // actual calculation if gamemanger is in scene
 
     //Sets AudioManager Instance in the scene
-    protected override void Awake()
+    protected void Start()
     {
-        base.Awake();
         masterBus = RuntimeManager.GetBus("bus:/");
+        validateBus(masterBus);
         musicBus = RuntimeManager.GetBus("bus:/Music");
+        validateBus(musicBus);
         sfxBus = RuntimeManager.GetBus("bus:/SoundEffects");
+        validateBus(sfxBus);
         vocalsBus = RuntimeManager.GetBus("bus:/Vocals");
-    }
-    private void Start()
-    {
-        if(GameManager.Instance != null)
+        validateBus(vocalsBus);
+
+        if (GameManager.Instance != null)
             GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);
 
         UpdateAllVolumes();
@@ -88,7 +90,7 @@ public class AudioManager : Singleton<AudioManager>
     //Should be called in e's update function
     public static void SetEventParameters(ref EventInstance e, Transform t, Rigidbody r)
     {
-        e.set3DAttributes(RuntimeUtils.To3DAttributes(t, r));
+        RuntimeManager.AttachInstanceToGameObject(e, t.gameObject, r);
     }
 
     //Starts a looping sound effect from an ALREADY EXISTING INSTANCE
@@ -116,8 +118,18 @@ public class AudioManager : Singleton<AudioManager>
 
     private void OnDestroy()
     {
+        if (GameManager.Instance != null) GameManager.Instance.OnPauseChanged.RemoveListener(UpdateAllVolumes);
+
         //TODO
         //ADD A FADE EFFECT ON EVERY SOUND TO MAKE IT FADE OUT OVER A HALF SECOND INSTEAD OF CUTTING THE SHORT
         //UNLESS MUSIC HAS SPECIAL TRANSITIONS BETWEEN SCENES, THEY SHOULD FOLLOW THE SAME RULE AS ABOVE
+    }
+
+    private void validateBus(Bus bus)
+    {
+        if (!bus.isValid())
+        {
+            Debug.LogError("Bus is not valid");
+        }
     }
 }

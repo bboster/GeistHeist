@@ -23,7 +23,7 @@ public class SurprisedBehavior : Behavior
 
     private void Start()
     {
-        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardReactions);
+        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);
         //guardGasp.set3DAttributes(RuntimeUtils.To3DAttributes(this.GetComponent<transform>(), this.GetComponent<Rigidbody>()));
     }
 
@@ -33,8 +33,8 @@ public class SurprisedBehavior : Behavior
     /// <returns></returns>
     public override IEnumerator BehaviorLoop()
     {
-        //AudioManager.Instance.PlayOneShot(FMODEvents.instance.GuardReactions);
-        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardReactions);
+        //AudioManager.Instance.PlayOneShot(FMODEvents.Instance.GuardReactions);
+        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);
 
         PLAYBACK_STATE playbackState;
         guardGasp.getPlaybackState(out playbackState);
@@ -56,6 +56,6 @@ public class SurprisedBehavior : Behavior
 
         contRef.ChangeBehavior(GuardStates.chase);
 
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.PlayerSpotted);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerSpotted);
     }
 }

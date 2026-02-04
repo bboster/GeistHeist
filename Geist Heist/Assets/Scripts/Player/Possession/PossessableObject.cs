@@ -213,11 +213,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
             return;
         }
 
-        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
+        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionEnter);
 
-        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
-        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
-        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
+        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionLow);
+        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionOut);
+        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionRefill);
     }
 
     public IInputHandler GetInputHandler()
@@ -387,11 +387,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
             yield break;
 
         possessableCanvas.gameObject.SetActive(true);
-        while(possessableCanvasGroup.alpha < 1)
-        {
-            possessableCanvasGroup.alpha += Time.deltaTime / showSeconds;
-            yield return null;
-        }
+
+        yield return StaticUtilities.FadeToVisible(possessableCanvasGroup, showSeconds);
     }
 
     private IEnumerator HideAndDisableCanvas()
@@ -399,11 +396,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (possessableCanvas == null)
             yield break;
 
-        while (possessableCanvasGroup.alpha > 0)
-        {
-            possessableCanvasGroup.alpha -= Time.deltaTime / hideSeconds;
-            yield return null;
-        }
+        yield return StaticUtilities.FadeToVisible(possessableCanvasGroup, hideSeconds);
+
         possessableCanvas.gameObject.SetActive(false);
     }
 

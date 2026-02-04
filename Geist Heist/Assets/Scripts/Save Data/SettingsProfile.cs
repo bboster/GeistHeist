@@ -54,15 +54,15 @@ public static class SettingsProfile
     public static bool InvertLook;
 
     // TODO: BRIGHTNESS NOT IMPLEMENTED
-    public static float LookSensitivy, Brightness, 
+    public static float LookSensitivity, Brightness, 
         MasterVolume, MusicVolume, SFXVolume, VocalsVolume;
 
     // Technical values:
     public static float LookSensitityScalar =>
-        Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, LookSensitivy);
+        Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, LookSensitivity);
     public static float LookSensitivityTransformed =>
         Mathf.LerpUnclamped(0.1f, DEFAULT_LOOK_SENSITIVITY_TRANSFORMED,
-            /* t: */ StaticUtilities.InverseLerpUnclamped(MIN_LOOK_SENSITIVITY, DEFAULT_LOOK_SENSITIVITY, LookSensitivy)); 
+            /* t: */ StaticUtilities.InverseLerpUnclamped(MIN_LOOK_SENSITIVITY, DEFAULT_LOOK_SENSITIVITY, LookSensitivity)); 
     public static float BrightnessScalar => Mathf.InverseLerp(MIN_BRIGHTNESS, MAX_BRIGHTNESS, Brightness);
     public static float BrightnessTransformed => Mathf.Lerp(MIN_BRIGHTNESS_TRANSFORMED, MAX_BRIGHTNESS_TRANSFORMED, BrightnessScalar);
     public static float MasterVolumeTransformed => MasterVolume / 100;
@@ -83,7 +83,7 @@ public static class SettingsProfile
     /// </summary>
     public static void ReadSavedSettings()
     {
-        LookSensitivy = PlayerPrefs.GetFloat(LOOK_SENSITIVITY_KEY, DEFAULT_LOOK_SENSITIVITY);
+        LookSensitivity = PlayerPrefs.GetFloat(LOOK_SENSITIVITY_KEY, DEFAULT_LOOK_SENSITIVITY);
         InvertLook = PlayerPrefs.GetInt(INVERT_LOOK_KEY, DEFAULT_INVERT_LOOK ? 1 : 0) == 1; // Playerprefs cant store bools, so just store an int
         Brightness = PlayerPrefs.GetFloat(BRIGHTNESS_KEY, DEFAULT_BRIGHTNESS);
 
@@ -97,7 +97,7 @@ public static class SettingsProfile
     {
         Debug.Log("Saving current settings profile to settings profile");
 
-        PlayerPrefs.SetFloat(LOOK_SENSITIVITY_KEY, LookSensitivy);
+        PlayerPrefs.SetFloat(LOOK_SENSITIVITY_KEY, LookSensitivity);
         PlayerPrefs.SetInt(INVERT_LOOK_KEY, InvertLook ? 1 : 0); // Playerprefs cant store bools, so just store an int
         PlayerPrefs.SetFloat(BRIGHTNESS_KEY, Brightness);
 
@@ -110,7 +110,7 @@ public static class SettingsProfile
     public static void ResetToDefaults()
     {
         Debug.Log("Reseting all game settings to defaults");
-        LookSensitivy = DEFAULT_LOOK_SENSITIVITY;
+        LookSensitivity = DEFAULT_LOOK_SENSITIVITY;
         InvertLook = DEFAULT_INVERT_LOOK;
         Brightness = DEFAULT_BRIGHTNESS;
         MasterVolume = DEFAULT_MASTER_VOLUME;

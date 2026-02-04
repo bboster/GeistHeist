@@ -22,7 +22,7 @@ public class GuardStunner : MonoBehaviour
                 gc.ChangeBehavior(GuardStates.concussed);
                 if (isCar)
                 {
-                    AudioManager.Instance.PlayOneShot(FMODEvents.instance.CarBump, collision.transform.position);
+                    AudioManager.Instance.PlayOneShot(FMODEvents.Instance.CarBump, collision.transform.position);
                 }
             }
         }

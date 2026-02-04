@@ -137,4 +137,11 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
         // this stops the coroutine
         activelyRecordVelocity = false;
     }
+
+    private void OnDestroy()
+    {
+        OnBounceDetected.RemoveAllListeners();
+        OnJoltDetected.RemoveAllListeners();
+        OnStopDetected.RemoveAllListeners();
+    }
 }
