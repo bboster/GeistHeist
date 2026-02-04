@@ -7,7 +7,6 @@
  * No behavior right now, but that is subject to change when controller support is added.
  */
 
-using UnityEngine;
 
 public class ControlsTab : PauseMenuTab
 {

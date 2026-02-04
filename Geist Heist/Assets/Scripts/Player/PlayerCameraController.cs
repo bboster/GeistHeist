@@ -89,7 +89,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (inputAxisController == null)
         {
-            Debug.LogWarning($"{gameObject.name} has not CinemachineInputAxisController. Can't update inverted look");
+            Debug.LogWarning($"{gameObject.name} has no CinemachineInputAxisController. Can't update inverted look");
             return;
         }
 
