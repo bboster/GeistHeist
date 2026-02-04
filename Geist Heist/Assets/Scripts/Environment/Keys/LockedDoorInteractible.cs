@@ -1,11 +1,11 @@
 /*
  * Contributors:Josh
  * Creation:2/2/2026
- * Last Edited: 02/03/2026
+ * Last Edited: 02/04/2026
  * Summary: Locked door that implements the project's IInteractable.
  * Designer picks the hinge corner in the inspector (this is where the hinge is).
- * Door computes pivot from renderers if no explicit hinge provided.
- * Door always swings away from the player (tests sample point on door face opposite hinge).
+ * Door computes pivot from renderers based on the selected hinge corner.
+ * Door swings deterministically: front hinges rotate by -openAngle, back hinges by +openAngle.
  */
 
 using System.Collections;
@@ -26,20 +26,12 @@ public class LockedDoorInteractible : MonoBehaviour, IInteractable
     [Header("Door")]
     [SerializeField] private KeyType requiredKey = KeyType.Circle;
     
-    [Header("Front / Pivot")]
-    [Tooltip("Optional transform that defines the 'front' side of the door. If null, door's local +Z is used as front.")]
-    [SerializeField] private Transform FrontMarker;
-    [Tooltip("Optional explicit hinge transform. If assigned and UseExplicitHinge is true it will be used as pivot.")]
-    [SerializeField] private Transform explicitHinge;
-    [SerializeField] private bool UseExplicitHinge = false;
-   
     [Tooltip("Which corner (local to the door) the HINGE actually sits on")]
     [SerializeField] private HingeCorner hingeCorner = HingeCorner.BackLeft;        
 
     [SerializeField, Min(0f)] private float autoPivotInset = 0f; // small inward offset from bounds edge toward center
     [SerializeField, Min(0f)] private float openAngle = 90f;
     [SerializeField, Min(0.01f)] private float openSeconds = 0.6f;
-
 
     [Header("Audio (optional)")]
     [SerializeField] private FMODUnity.EventReference lockedSfx;
@@ -61,16 +53,14 @@ public class LockedDoorInteractible : MonoBehaviour, IInteractable
 
         if (KeyManager.Instance != null && KeyManager.Instance.HasKey(requiredKey))
         {
-            if (!unlockedSfx.IsNull)
-                AudioManager.Instance.PlayOneShot(unlockedSfx, transform.position);
+            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.DoorOpen, transform.position);
 
             StartCoroutine(OpenDoorRoutine());
             _isOpen = true;
         }
         else
         {
-            if (!lockedSfx.IsNull)
-                AudioManager.Instance.PlayOneShot(lockedSfx, transform.position);
+            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.DoorLocked, transform.position);
 
             Debug.Log($"Door locked. Required key: {requiredKey}");
         }
@@ -80,36 +70,22 @@ public class LockedDoorInteractible : MonoBehaviour, IInteractable
     {
         // Resolve pivot (hinge) world point
         Vector3 pivotWorld;
-        if (UseExplicitHinge && explicitHinge != null)
-            pivotWorld = explicitHinge.position;
-        else
+        if (!_computedPivotWorld.HasValue)
         {
-            if (!_computedPivotWorld.HasValue)
-            {
-                if (TryComputePivotFromRenderers(out var computed))
-                    _computedPivotWorld = computed;
-                else
-                    _computedPivotWorld = transform.position; // fallback
-            }
-            pivotWorld = _computedPivotWorld.Value;
+            if (TryComputePivotFromRenderers(out var computed))
+                _computedPivotWorld = computed;
+            else
+                _computedPivotWorld = transform.position; // fallback
         }
+        pivotWorld = _computedPivotWorld.Value;
 
         Vector3 axis = transform.up;
         float angle = openAngle;
 
-        // Player position (fallback to camera)
-        Vector3 playerPos = PlayerManager.Instance != null && PlayerManager.Instance.CurrentObject != null
-            ? PlayerManager.Instance.CurrentObject.transform.position
-            : (Camera.main != null ? Camera.main.transform.position : pivotWorld + transform.forward);
+        // Determine deterministic sign: front hinges rotate -angle (toward player/front), back hinges +angle (away from player).
+        float chosenSign = (hingeCorner == HingeCorner.FrontLeft || hingeCorner == HingeCorner.FrontRight) ? -1f : +1f;
 
-        float chosenSign = +1f;
-
-        if (hingeCorner == HingeCorner.FrontLeft || hingeCorner == HingeCorner.BackRight)
-        {
-            chosenSign = -1f; // always open towards the player
-        }
         // Animate rotation around pivot
-
         float duration = Mathf.Max(0.0001f, openSeconds);
         float elapsed = 0f;
         float rotated = 0f;
@@ -264,21 +240,16 @@ public class LockedDoorInteractible : MonoBehaviour, IInteractable
     {
         if (!ShowDebugGizmos) return;
 
-        // compute pivot (explicit or computed)
+        // compute pivot (computed)
         Vector3 pivotWorld;
-        if (UseExplicitHinge && explicitHinge != null)
-            pivotWorld = explicitHinge.position;
-        else
+        if (!_computedPivotWorld.HasValue)
         {
-            if (!_computedPivotWorld.HasValue)
-            {
-                if (!TryComputePivotFromRenderers(out var computed))
-                    pivotWorld = transform.position;
-                else
-                    pivotWorld = computed;
-            }
-            else pivotWorld = _computedPivotWorld.Value;
+            if (!TryComputePivotFromRenderers(out var computed))
+                pivotWorld = transform.position;
+            else
+                pivotWorld = computed;
         }
+        else pivotWorld = _computedPivotWorld.Value;
 
         // draw pivot
         Gizmos.color = Color.cyan;
