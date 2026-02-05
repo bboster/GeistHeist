@@ -43,6 +43,13 @@ public class LockedDoorInteractable : MonoBehaviour, IInteractable
     // IInteractable
     public void Interact() => TryOpen();
 
+    public bool IsInteractable()
+    {
+        if (_isOpen) return false;
+        
+        return true;
+    }
+
     public void TryOpen()
     {
         if (_isOpen) return;
