@@ -30,6 +30,8 @@ public class PlayerManager : Singleton<PlayerManager>
     private PlayerCameraController currentCameraController; // may be mainCinemachineCamera sometimes
     private StudioListener fmodListener;
 
+    private GameObject exitPointVisualizer;
+
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     public void Start()
@@ -86,9 +88,9 @@ public class PlayerManager : Singleton<PlayerManager>
 
         DeRegisterInputs(CurrentObject);
         CurrentObject = possessable;
-    }
+}
 
-    public void PossessGhost(PossessableObject possessable)
+public void PossessGhost(PossessableObject possessable)
     {
         if (possessable == null)
         {
@@ -120,6 +122,7 @@ public class PlayerManager : Singleton<PlayerManager>
         CurrentObject = PlayerGhostObject;
 
         DeRegisterInputs(possessable);
+        exitPointVisualizer = null;
     }
 
     /// <summary>
@@ -130,6 +133,8 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         if (possessable.ghostExitPoints != null)
         {
+            exitPointVisualizer = possessable.GetComponentInChildren<ExitPointVisualizer>()?.gameObject;
+
             //go through spawn points until one of them doesn't collide
             for (int i = 0; i < possessable.ghostExitPoints.Count; i++)
             {
@@ -138,12 +143,24 @@ public class PlayerManager : Singleton<PlayerManager>
                 //no collision = use this point
                 if (collisions.Length <= 0)
                 {
+                    if (exitPointVisualizer != null)
+                    {
+                        exitPointVisualizer.transform.position = possessable.ghostExitPoints[i].position;
+                        exitPointVisualizer.SetActive(true);
+                    }
+                    
                     PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
                     return possessable.ghostExitPoints[i].position;
                 }
             }
 
             //if all of them collide, just use the last backup exit point
+            if (exitPointVisualizer != null)
+            {
+                exitPointVisualizer.transform.position = possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
+                exitPointVisualizer.SetActive(true);
+            }
+
             PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
             return possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
         }
