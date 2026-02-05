@@ -34,6 +34,7 @@ public class DoorInteractable : MonoBehaviour, IInteractable
 
         popup.OpenConfirmationPopup(text: confirmationText, fadeSeconds: 0.25f,
             OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfrimPressed(popupCanvas));
+        popup.GetComponentInChildren<LevelConfirmationVisualizer>().Initialize();
     }
 
     void OnCancelPressed(GameObject confirmationPopup)
