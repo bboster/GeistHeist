@@ -28,7 +28,10 @@ public class BillboardUIPoint : MonoBehaviour
     {
         // this is expected behavior is this is an Onomatopoeia point
         if (UIObjectPrefab == null)
+        {
+            Debug.LogError("Prefab null");
             return;
+        }
 
         billboardUI = Instantiate(UIObjectPrefab).GetComponent<IBillboardUI>();
         BillboardUIManager.Instance.RegisterAndInitializeBillboardUIPoint(this.transform, billboardUI, SourceGameObject); 

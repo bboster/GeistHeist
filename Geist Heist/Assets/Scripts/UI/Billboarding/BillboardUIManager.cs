@@ -59,8 +59,8 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
                 return; 
             }
 
-            if (uiAnchorPair.Item2.IsVisible == false)
-                continue;
+            //if (uiAnchorPair.Item2.IsVisible == false)
+            //    continue;
 
             if (PlayerManager.Instance.CurrentObject == null)
                 continue;
@@ -81,8 +81,8 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             Vector3 uiPos = new Vector3(screenPos.x, /*Screen.height - */screenPos.y, screenPos.z);
 
             elem.CalculateAndSetOpacity(playerDistance, uiPos);
-            if (elem.CurrentAlpha == 0)
-                continue; // dont bother with anything else if we dont need to.
+            //if (elem.CurrentAlpha == 0)
+            //    continue; // dont bother with anything else if we dont need to.
 
             // Face camera
             if (elem.MirrorBillboard)
@@ -111,6 +111,7 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
         UIElement.rectTransform.SetParent(billboardUICanvas.transform);
 
         var pair = new Tuple<Transform, IBillboardUI>(worldPoint, UIElement);
+        Debug.Log("new billboard: " + worldPoint.gameObject.name + " : " + UIElement.gameObject.name);
         billboardUIPoints.Add(pair);
 
         UIElement.OnInitialize(SourceGameObject);
