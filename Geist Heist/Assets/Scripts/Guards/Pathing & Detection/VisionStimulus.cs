@@ -117,7 +117,6 @@ public class VisionStimulus : Stimulus
                         }
 
                         TriggerStimulus();
-                        return;
                     }
                 }
 
@@ -130,7 +129,7 @@ public class VisionStimulus : Stimulus
     {
         if (other.gameObject.TryGetComponent(out PossessableObject obj))
         {
-            if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
+            if (obj.Equals(PlayerManager.Instance.CurrentObject) && (hasSeenPlayer == true || playerObjectSeen == true))
             {
                 if (!VisionCast(other.gameObject))
                 {
