@@ -10,15 +10,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class KeyManager : MonoBehaviour
+public class KeyManager : Singleton<KeyManager>
 {
-    public static KeyManager Instance { get; private set; }
 
     public event Action<KeyType> OnKeyCollected;
 
     private readonly HashSet<KeyType> _keys = new HashSet<KeyType>();
-
-    private void Awake()
+    public void Initialize()
     {
         if (Instance != null && Instance != this)
         {
@@ -26,13 +24,11 @@ public class KeyManager : MonoBehaviour
             return;
         }
 
-        Instance = this;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDestroy()
     {
-        if (Instance == this) Instance = null;
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 

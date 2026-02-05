@@ -1,5 +1,5 @@
 /*
- * Contributors:Josh
+ * Contributors:Josh, Toby
  * Creation:2/1/2026
  * Last Edited: 2/1/2026
  * Summary: Allows player to collect keys in the environment. Upon walking into the key,
@@ -46,6 +46,7 @@ public class KeyItem : MonoBehaviour
     }
 
     //NOTE THAT ANIMATION IS TEMPORARY AND SHOULD BE REPLACED LATER
+    //Animations reused from OptionalCollectible; Thanks toby!
 
     #region Animation 
 
