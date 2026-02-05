@@ -2,8 +2,6 @@ using NaughtyAttributes;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using FMODUnity;
-using FMOD.Studio;
 /*
 * Contributors: Brenden, Toby
 * Creation Date: 10/1/25
@@ -37,20 +35,18 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField] private float delayToUpdateMaterialVisibility = 0.5f;
 
     [SerializeField] private PossessableChargeMeterUI chargeMeter;
-    [SerializeField] private ParticleSystem possessableParticle;
 
     private PossessableObject possessableObject;
     private bool hasThrownThisPossession;
     private Coroutine materialCountdownCoroutine;
 
-    private EventInstance canCharge;
+    [SerializeField, Required] TrajectoryPredictor trajectoryPredictor;
+    [SerializeField, Required] GameObject LineRenderer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
-        canCharge = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.CanCharge);
-
         possessableObject = GetComponent<PossessableObject>();
         if(chargeMeter == null)
             chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();   
@@ -63,14 +59,13 @@ public class VendingObject : IInputHandler, IInteractable
 
         chargeMeter?.OnPossessionStarted();
         hasThrownThisPossession = false;
-        possessableParticle.Play();
     }
 
     public override void OnPossessionEnded()
     {
         currentStrength = minStrength;
         hasThrownThisPossession = false;
-        possessableParticle.Stop();
+        LineRenderer.SetActive(false);
     }
 
     public override void WhilePossessingUpdate()
@@ -89,12 +84,10 @@ public class VendingObject : IInputHandler, IInteractable
                 possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
             }
 
-            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.CanShot, CanSpawnPoint.transform.position);
-
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
             temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength, ForceMode.Impulse);
-            hasThrownThisPossession = true;
+            hasThrownThisPossession = true; 
 
         }
     }
@@ -104,11 +97,14 @@ public class VendingObject : IInputHandler, IInteractable
         if (secondsHeld < delayBetweenThrows && hasThrownThisPossession)
             return;
 
+        LineRenderer.SetActive(true);
         if (!Tap)
         {
             // Will be clamped later (dont clamp now for charge ui animations)
             currentStrength += Time.deltaTime * strengthGrowthRate;
-            canCharge.start();
+            Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
+            tempLaunch.y = launchDirection.y;
+            trajectoryPredictor.PredictTrajectory(Mathf.Clamp(currentStrength, minStrength, maxStrength), CanPrefab.GetComponent<Rigidbody>().mass, CanSpawnPoint.transform.forward, CanSpawnPoint.transform.position, CanPrefab.GetComponent<Rigidbody>().linearDamping, .025f);
         }
     }
 
@@ -119,15 +115,11 @@ public class VendingObject : IInputHandler, IInteractable
 
         if (!Tap)
         {
-            canCharge.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.CanShot, CanSpawnPoint.transform.position);
-
+            LineRenderer.SetActive(false);
             currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
 
             GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
-            tempLaunch.y = launchDirection.y;
-            temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
+            temp.GetComponent<Rigidbody>().AddForce(CanSpawnPoint.transform.forward * currentStrength);
             hasThrownThisPossession = true;
 
             if (possessableObject.VisiblePossessionMaterial != null)
@@ -138,7 +130,6 @@ public class VendingObject : IInputHandler, IInteractable
 
         if (possessableObject.PossessedMaterial != null)
         {
-
             if (materialCountdownCoroutine == null)
             {
                 materialCountdownCoroutine = StartCoroutine(MaterialReplaceCountdown());

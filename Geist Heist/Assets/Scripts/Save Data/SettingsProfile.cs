@@ -70,6 +70,12 @@ public static class SettingsProfile
     public static float SFXVolumeTransformed => SFXVolume / 100;
     public static float VocalsVolumeTransformed => VocalsVolume / 100;
 
+    // Log Audio
+    public static float MasterVolumeScaled => MasterVolume == 0 ? 0 : Mathf.Log10(MasterVolume) /2;
+    public static float MusicVolumeScaled => MusicVolume == 0 ? 0 : Mathf.Log10(MusicVolume) /2;
+    public static float SFXVolumeScaled => SFXVolume == 0 ? 0 : Mathf.Log10(SFXVolume) /2;
+    public static float VocalsVolumeScaled => SFXVolume == 0 ? 0 : Mathf.Log10(SFXVolume) /2;
+
     /// <summary>
     /// Reads settings from PlayerPrefs and updates its public 
     /// variables. 
