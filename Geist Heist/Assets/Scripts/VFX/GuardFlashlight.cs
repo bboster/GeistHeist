@@ -12,11 +12,10 @@ using UnityEngine;
 public class GuardFlashlight : MonoBehaviour
 {
     [Header("VFX")]
-    [SerializeField] private string OnomatopoeiaText = "thunk!";
+    [SerializeField] private string onomatopoeiaText = "Thunk!"; //Private variables should use camelCase
 
     private SuddenVelocityChangeDetector velocityChangeDetector;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
@@ -27,7 +26,7 @@ public class GuardFlashlight : MonoBehaviour
     void OnCrashOrBounceDetected(Vector3 impactPoint)
     {
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale: 0.4f);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(onomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale: 0.4f);
 
         //TODO: add thunk sound
 

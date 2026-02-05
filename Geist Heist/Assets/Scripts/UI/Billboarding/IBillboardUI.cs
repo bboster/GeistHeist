@@ -11,7 +11,6 @@
  */
 
 using NaughtyAttributes;
-using TMPro;
 using UnityEngine;
 
 [RequireComponent (typeof(CanvasGroup))]

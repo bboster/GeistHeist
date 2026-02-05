@@ -5,11 +5,11 @@
  * 
  * Brief Description: Used to start the text box of the PA system
  */
-using System.Collections;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
 
+//This script looks very similar to DialogueBoxTrigger, maybe try to combine these scripts into one?
 public class PATrigger : MonoBehaviour
 {
     [SerializeField] string Text;
@@ -26,9 +26,9 @@ public class PATrigger : MonoBehaviour
         if (other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             //play audio clip here joey
-            AudioManager.Instance.PlayOneShot(FMODEvents.instance.PAJingle);
+            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PAJingle);
 
-            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PALines);
+            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
 
             if (whichLine >= 0 && whichLine < 3)
             {
@@ -37,7 +37,7 @@ public class PATrigger : MonoBehaviour
             }
 
             alreadyTriggered = true;
-            DialougeManager.Instance.DisplayText_PASystem(Text, stayLength);
+            DialogueManager.Instance.DisplayText_PASystem(Text, stayLength);
         }
     }
 
