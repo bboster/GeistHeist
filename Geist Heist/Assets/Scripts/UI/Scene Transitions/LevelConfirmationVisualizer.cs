@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelConfirmationVisualizer : MonoBehaviour
 {
@@ -32,13 +33,17 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     [InfoBox("Collectable Models and Materials will be automatically retrieved from the collectable registry")]
     [SerializeField] private List<LevelConfirmCollectableMesh> CollectableMeshes;
 
-    [SerializeField] private float sizeToFitForTether = 5.0f;
-
     [Header("Settings")]
+    [SerializeField] private float sizeToFitForTether = 5.0f;
     [SerializeField] private float sizeToFitForCollectable = 1.0f;
     [SerializeField, Required] private Material notCollectedMaterial;
 
+
+    [Foldout("Advanced"), Required, SerializeField] private Camera renderCamera;
+    [Foldout("Advanced"), Required, SerializeField] private RawImage renderCameraOverlayImage;
+
     private static CollectableRegistry collectableRegistry;
+    private static RenderTexture renderCameraOutputTexture;
 
     /// <summary>
     /// Initialized from kiosk
@@ -57,8 +62,11 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         {
             RefreshCollectable(collectableMesh);
         }
+
+        InitializeRenderCamera();
     }
 
+    #region Viewport Objects
     private void RefreshTether(MeshRenderer tetherMesh)
     {
         ScaleToFitBounds(tetherMesh.GetComponent<MeshFilter>(), sizeToFitForTether);
@@ -100,6 +108,26 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         Vector3 meshSize = mesh.sharedMesh.bounds.extents * 2;
         Vector3 scaledSize = new Vector3(sizeToFit / meshSize.x, sizeToFit / meshSize.y, sizeToFit / meshSize.z);
         mesh.transform.localScale = Vector3.one * scaledSize.Min();
+    }
+
+    #endregion
+
+    private void InitializeRenderCamera()
+    {
+        // manually create a new render texture with code so we dont have one more thing clogging up our github
+
+        if (renderCameraOutputTexture == null)
+        {
+            renderCameraOutputTexture = new RenderTexture(1920, 1080, 24, RenderTextureFormat.ARGB32); // 1920 x 1080 resolution
+            renderCameraOutputTexture.Create();
+        }
+
+        // set render cameras output
+        renderCamera.targetTexture = renderCameraOutputTexture;
+        
+        // apply render texture as overlay
+        renderCameraOverlayImage.texture = renderCameraOutputTexture;
+        renderCameraOverlayImage.GetComponent<CanvasGroup>().alpha = 1; // in inspector, interactability is disabled.
     }
 
     private void OnDrawGizmos()
