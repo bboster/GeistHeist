@@ -55,7 +55,7 @@ public class ConfirmationPopup : MonoBehaviour
         lastFadeSecondsUsed = fadeSeconds;
 
         // Press esc to close popup
-        InputEvents.PauseStartedOverride = HideConfirmationPopup;
+        InputEvents.PauseStartedOverride = OnCancelButtonPressed;
 
         StaticUtilities.ShowCursor();
         oldTimeScale = Time.timeScale;
