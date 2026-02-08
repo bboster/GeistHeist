@@ -29,6 +29,8 @@ public class ConfirmationPopup : MonoBehaviour
 
     private UnityAction afterCancelClicked = null;
 
+    public static bool AnyConfirmationMenuOpen = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
