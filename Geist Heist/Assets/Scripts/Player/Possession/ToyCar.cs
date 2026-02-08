@@ -34,6 +34,7 @@ public class ToyCar : IInputHandler
     [Header("VFX")]
     [SerializeField] private string OnomatopoeiaText = "Bonk!";
     [SerializeField] private float OnomatopoeiaScale = 1;
+    [SerializeField] private float onomatopoeiaLifetime = 1;
     [SerializeField] private ParticleSystem possessableParticle;
 
     [Header("Speedometer seconds")]
@@ -299,7 +300,8 @@ public class ToyCar : IInputHandler
             return;
 
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, bold:true, fontScale:OnomatopoeiaScale, 
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, lifetime: onomatopoeiaLifetime,
+            bold:true, fontScale:OnomatopoeiaScale, 
             animateRotationOverTime:true, randomRotationRange:15, 
             animateScaleOverTime:true);
 
