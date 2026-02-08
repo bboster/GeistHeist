@@ -34,6 +34,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject DailougeManagerPrefab;
     [SerializeField, Required] GameObject AudioManagerPrefab;
     [SerializeField, Required] GameObject MusicManagerPrefab;
+    [SerializeField, Required] GameObject KeyManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject PauseMenuPrefab;
@@ -147,6 +148,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(DailougeManagerPrefab).GetComponent<DialogueManager>().Initialize();
         Instantiate(AudioManagerPrefab).GetComponent<AudioManager>().Initialize();
         Instantiate(MusicManagerPrefab).GetComponent<MusicManager>().Initialize();
+        Instantiate(KeyManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
