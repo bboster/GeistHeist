@@ -7,7 +7,7 @@ using UnityEngine;
 * Brief Description: to display a voiceline of a guard to be able to be read aswell as heard
 */
 
-public class Speechbubble : IBillboardUI
+public class GuardSpeechBubbleBillboard : IBillboardUI
 {
     private CanvasGroup group;
     private GuardController guard;
