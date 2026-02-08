@@ -16,8 +16,9 @@ public class CooldownManager : Singleton<CooldownManager>
     [SerializeField] private GameObject CooldownCanvasPrefab;
     [Tooltip("Refers to the time between possessions before player can possess again")]
     [SerializeField] private float cooldownTime;
-    private float currentCooldownTime=0;
+    private float currentCooldownTime = 0;
 
+    //I ran a search for all references and found that these two are only referenced in this script and can probably be changed to private
     [HideInInspector] public GameObject CooldownCanvas;
     [HideInInspector] public Slider cooldownSlider;
 
@@ -64,7 +65,7 @@ public class CooldownManager : Singleton<CooldownManager>
 
     private void UpdateSlider()
     {
-        if (cooldownSlider==null)
+        if (cooldownSlider == null)
             return;
         
         if (IsCooldownActive)

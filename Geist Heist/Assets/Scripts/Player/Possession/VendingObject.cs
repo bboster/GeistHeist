@@ -20,6 +20,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     private float currentStrength;
 
+    //If the balancing dropdown is no longer being used these comments should be deleted to improve readability
     /*[Dropdown("balancing")]*/[SerializeField] private float maxStrength;
     /*[Dropdown("balancing")]*/[SerializeField] private float minStrength;
     /*[Dropdown("balancing")]*/[SerializeField] private float strengthGrowthRate;
@@ -43,7 +44,6 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField, Required] TrajectoryPredictor trajectoryPredictor;
     [SerializeField, Required] GameObject LineRenderer;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
@@ -71,7 +71,6 @@ public class VendingObject : IInputHandler, IInteractable
     public override void WhilePossessingUpdate()
     {
         chargeMeter.UpdateCharge(currentStrength, maxStrength);
-        //Images.SetActive(false);
     }
 
     #region action
@@ -86,6 +85,8 @@ public class VendingObject : IInputHandler, IInteractable
 
             GameObject temp;
             temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
+            //I would replace launch direction with a Vector obtained in code from the GameObject so that it always points forward relative to the vending machine
+            //If further math needs to be done on it then just do it when needed and it will reduce error when design puts these into the scene
             temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength, ForceMode.Impulse);
             hasThrownThisPossession = true; 
 
@@ -206,7 +207,7 @@ public class VendingObject : IInputHandler, IInteractable
         );
     }
 
-    public void OnDrawGizmosSelected()
+    public void OnDrawGizmosSelected() //Remind me to add a ticket to the backlog for this
     {
         // ok guys i got distracted but i still wanna finish this l8r
         /*Gizmos.color = Color.green;
