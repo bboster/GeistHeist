@@ -13,12 +13,9 @@ public class VaseInputHandler : IInputHandler
 {
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] ParticleSystem possessableParticles;
-    private PossessableObject possessableObject;
 
     private void Start()
-    {
-        //thirdPersoncinemachineCamera.SetActive(false);
-        possessableObject = GetComponent<PossessableObject>();
+    { 
     }
 
     public override void WhilePossessingUpdate()
@@ -38,12 +35,10 @@ public class VaseInputHandler : IInputHandler
     #region action
     public override void OnActionStarted()
     {
-        //throw new System.NotImplementedException();
     }
 
     public override void WhileActionHeld(float secondsHeld)
     {
-        //throw new System.NotImplementedException();
     }
 
     public override void WhileActionNotHeld(float secondsNotHeld)
@@ -52,7 +47,6 @@ public class VaseInputHandler : IInputHandler
 
     public override void OnActionCanceled(float secondsHeld)
     {
-        //throw new System.NotImplementedException();
     }
 
     #endregion

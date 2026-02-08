@@ -24,7 +24,7 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private Coroutine typingCoroutine;
 
-    private void Start()
+    public void Initialize()
     {
         DialogueCanvas = Instantiate(DialogueTextboxPrefab);
         DialogueTextbox = DialogueCanvas.GetComponentInChildren<TMPro.TMP_Text>();
@@ -59,14 +59,14 @@ public class DialogueManager : Singleton<DialogueManager>
         }
         yield return new WaitForSeconds(stayLength); //this will be replaced with the end of the audio clip eventually
 
-        clearBox();
+        ClearBox();
 
         if(onDialogueEndCallback != null) 
             onDialogueEndCallback();    
     }
 
     //this is just in case we have to have it called somewhere else for the audio clip ending when that gets implemented
-    private void clearBox()
+    private void ClearBox()
     {
         DialogueManager.Instance.PAholder.SetActive(false);
     }
