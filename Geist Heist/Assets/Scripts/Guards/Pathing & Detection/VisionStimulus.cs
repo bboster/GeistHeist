@@ -21,6 +21,7 @@ public class VisionStimulus : Stimulus
 
     private bool hasSeenPlayer = false;
     private bool playerObjectSeen = false;
+    private bool actionDetected = false;
     private Coroutine timer;
 
     [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
@@ -115,7 +116,7 @@ public class VisionStimulus : Stimulus
                             StopCoroutine(timer);
                             timer = null;
                         }
-
+                        actionDetected = true;
                         TriggerStimulus();
                     }
                 }
@@ -129,7 +130,7 @@ public class VisionStimulus : Stimulus
     {
         if (other.gameObject.TryGetComponent(out PossessableObject obj))
         {
-            if (obj.Equals(PlayerManager.Instance.CurrentObject) && (hasSeenPlayer == true || playerObjectSeen == true))
+            if (obj.Equals(PlayerManager.Instance.CurrentObject) && (hasSeenPlayer == true || actionDetected == true))
             {
                 if (!VisionCast(other.gameObject))
                 {
@@ -305,6 +306,7 @@ public class VisionStimulus : Stimulus
     /// <returns></returns>
     private IEnumerator VisionBreakTimer()
     {
+        actionDetected = false;
         yield return new WaitForSeconds(visionBreakTimer);
 
         hasSeenPlayer = false;
@@ -324,6 +326,7 @@ public class VisionStimulus : Stimulus
     {
         if (playerObjectSeen == true)
         {
+            actionDetected = true;
             if (timer != null)
             {
                 StopCoroutine(timer);
