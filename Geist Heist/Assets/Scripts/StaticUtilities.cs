@@ -166,32 +166,32 @@ public static class StaticUtilities
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public static Coroutine FadeToVisible(CanvasGroup group, float seconds, 
+    public static Coroutine FadeToVisible(CanvasGroup group, float seconds, bool unscaledTime = true, 
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
             GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, 
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, unscaledTime: unscaledTime,
             afterFadeCallback:afterFadeCallback));
     }
 
-    public static Coroutine FadeToHidden(CanvasGroup group, float seconds, 
+    public static Coroutine FadeToHidden(CanvasGroup group, float seconds, bool unscaledTime = true,
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
             GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback));
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
-    public static Coroutine FadeOpacity(CanvasGroup group, float a, float seconds, 
+    public static Coroutine FadeOpacity(CanvasGroup group, float a, float seconds, bool unscaledTime = true,
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
             GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback));
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
     private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
