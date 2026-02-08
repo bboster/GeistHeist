@@ -28,16 +28,19 @@ public class ToyCar : IInputHandler
     [SerializeField] private float chargeLossRate;
     [Tooltip("Force there to be time between zooms")]
     [SerializeField] private float delayBetweenZooms = 1;
+    [Tooltip("How much moving rotates by per second.")]
+    [SerializeField] private float rotationRate = 30;
 
     [Header("VFX")]
     [SerializeField] private string OnomatopoeiaText = "Bonk!";
     [SerializeField] private float OnomatopoeiaScale = 1;
+    [SerializeField] private float onomatopoeiaLifetime = 1;
+    [SerializeField] private ParticleSystem possessableParticle;
 
     [Header("Speedometer seconds")]
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
+    [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
-    [Tooltip("How much moving rotates by per second.")]
-    [SerializeField] private float rotationRate = 30;
     //realtime hold strength
     private float currentStrength;
 
@@ -50,9 +53,8 @@ public class ToyCar : IInputHandler
     //activates when ghost is leaving an object
     private bool IsLeaving = false;
     private bool hasLaunchedThisPossession = false;
+    private float lastCrashOnomatopoeiaTimeStamp;
 
-    [SerializeField] private PossessableChargeMeterUI chargeMeter;
-    [SerializeField] private ParticleSystem possessableParticle;
 
     private EventInstance carMoveSFX;
     private EventInstance carWindSFX;
@@ -296,8 +298,16 @@ public class ToyCar : IInputHandler
 
     void OnCrashOrBounceDetected(Vector3 impactPoint)
     {
+        if (Time.time - lastCrashOnomatopoeiaTimeStamp < 0.1f)
+            return;
+
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange:15, bold:true, scale:OnomatopoeiaScale);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, lifetime: onomatopoeiaLifetime,
+            bold:true, fontScale:OnomatopoeiaScale, 
+            animateRotationOverTime:true, randomRotationRange:15, 
+            animateScaleOverTime:true);
+
+        lastCrashOnomatopoeiaTimeStamp = Time.time;
 
         //TODO: add Bonk sound
 

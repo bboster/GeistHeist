@@ -52,8 +52,7 @@ public class CanScript : MonoBehaviour
     private void OnCrashOrBounceDetected(Vector3 impactPoint)
     {
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, scale:0.4f);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange: 25, bold: true, fontScale:0.4f);
         Debug.Log("Clank Spawned");
         //TODO: add clank sound
 
