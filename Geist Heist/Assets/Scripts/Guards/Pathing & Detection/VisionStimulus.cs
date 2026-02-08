@@ -116,8 +116,12 @@ public class VisionStimulus : Stimulus
                             StopCoroutine(timer);
                             timer = null;
                         }
-                        actionDetected = true;
-                        TriggerStimulus();
+
+                        if(!VisionCast(other.gameObject))
+                        {
+                            actionDetected = true;
+                            TriggerStimulus();
+                        }
                     }
                 }
 

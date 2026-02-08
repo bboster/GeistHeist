@@ -14,12 +14,10 @@ using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.Events;
 using NaughtyAttributes;
-using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using FMOD.Studio;
-using FMODUnity;
 using GuardUtilities;
 
 public class PossessableObject : MonoBehaviour, IInteractable
@@ -59,12 +57,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [HideInInspector] public bool CanUnPossess = true;
     private bool possessionIsSafe = true;
-    public IInputHandler InputHandler => GetInputHandler();
+    [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
     private IInputHandler inputHandler;
 
     private Coroutine dischargeCoroutine = null;
     private Coroutine rechargeCoroutine;
-    private Coroutine unpossessCoroutine=null;
+    private Coroutine unpossessCoroutine = null;
 
     [HideInInspector] public MeshRenderer meshRenderer;
 
@@ -119,7 +117,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    //I'm not seeing a reason to keep this function if Enter and Exit are being used, but if there's some reason I'm unaware of then this is fine to stay
+    private void OnTriggerStay(Collider other) 
     {
         //if interaction is vision cone
         if (other.transform.GetComponent<VisionStimulus>() != null)
@@ -207,14 +206,16 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvas.gameObject.SetActive(false);
         }
 
+        //It might be worth moving this line into a manager so that we don't get a ton of repeat messages in the console
         if(AudioManager.Instance == null)
         {
             Debug.LogError("No audio manager in scene");
             return;
         }
 
+        //This is a sound issue, but I think all sound setup should be in its own function for organization, especially since some sounds may need additional lines
+        //in the future
         possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionEnter);
-
         possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionLow);
         possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionOut);
         possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionRefill);
@@ -246,7 +247,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if(PossessedMaterial != null && possessionIsSafe)
             meshRenderer.material = PossessedMaterial;
         else
-            Debug.LogWarning("No possession material for "+gameObject.name);
+            Debug.LogWarning("No possession material for " + gameObject.name);
 
         if (unpossessCoroutine == null)
             unpossessCoroutine = StartCoroutine(WaitForUnpossess());

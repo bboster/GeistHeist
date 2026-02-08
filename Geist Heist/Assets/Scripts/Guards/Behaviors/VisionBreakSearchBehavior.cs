@@ -63,7 +63,7 @@ public class VisionBreakSearchBehavior : GuardMovement
     /// <returns></returns>
     private void StartSearch()
     {
-        GuardCoroutineManager.instance.StartBehaviorTimer(searchLength, this);
+        GuardCoroutineManager.Instance.StartBehaviorTimer(searchLength, this);
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
 
 /*#if UNITY_EDITOR
@@ -77,7 +77,7 @@ public class VisionBreakSearchBehavior : GuardMovement
     public override void StopBehavior()
     {
         base.StopBehavior();
-        GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
+        GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
         SearchLocation = Vector3.zero;
