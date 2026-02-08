@@ -44,6 +44,9 @@ public class GuardController : MonoBehaviour
     private Coroutine activeBehaviorLoop;
 
     [SerializeField, BoxGroup("Behaviors")] private int currentPriority;
+    [HideInInspector] public UnityEvent<String> VoiceClipPlayed = new();
+    [HideInInspector] public UnityEvent VoiceClipStopped = new();
+
 
     [Foldout("Programming Values")]
     [SerializeField] private Animator animator;
@@ -182,6 +185,16 @@ public class GuardController : MonoBehaviour
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
+    }
+
+    public void GuardTalking(String Caption)
+    {
+        VoiceClipPlayed.Invoke(Caption);
+    }
+
+    public void GuardStopsTalking()
+    {
+        VoiceClipStopped.Invoke();
     }
 
     private void OnDestroy()

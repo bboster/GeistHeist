@@ -16,9 +16,15 @@ public class PostProcessingManager : MonoBehaviour
     private Volume volume;
     private VolumeProfile volumeProfile;
 
-    private void Start()
+    private void Awake()
+    {
+        GameManager.OnInitialize += Initialize;
+    }
+
+    public void Initialize()
     {
         UpdateBrightness();
+        GameManager.OnInitialize -= Initialize;
     }
 
 
@@ -55,4 +61,8 @@ public class PostProcessingManager : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        GameManager.OnInitialize -= Initialize;
+    }
 }
