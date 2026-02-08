@@ -7,7 +7,7 @@
  * Put this script on a canvas
  * Billboard ui objects do the following:
  * - stays in/ follows a single world point, 
- * - changes scale and opacity based on player proximity
+ * - changes fontScale and opacity based on player proximity
  * - always faces the player
  */
 
@@ -90,7 +90,7 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             else
                 elemTransform.LookAt(_camera.transform);
 
-            // Set scale
+            // Set Scale
             elem.CalculateAndSetScale(playerDistance);
         }
     }
@@ -119,27 +119,6 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
         return pair;
     }
 
-    /// <summary>
-    /// Spawns Onomatopoeia text at set position.
-    /// </summary>
-    /// <param name="randomRotationRange">Degrees that the Onomatopoeia can by randomly rotated by</param>
-    /// <returns>Transform that the Onomatopoeia will be "childed" to.</returns>
-    public Transform SpawnOnomatopoeia(string text, Vector3 worldPosition, 
-                                       float lifetime = 1.5f, float scale = 1, float randomRotationRange=0,
-                                       bool bold = true, bool italics = false)
-    {
-        // TODO: these could be object pooled (but tbh i dont think our games performance is that bad so im not going to bother)
-        var point = Instantiate(onomatopoeiaPointPrefab, worldPosition, Quaternion.identity);
-        var onomatopoeiaBillboard = Instantiate(onomatopoeiaPrefab).GetComponent<OnomatopoeiaBillboardUI>();
-
-        onomatopoeiaBillboard.SetTextProperties(text, scale, randomRotationRange, bold, italics);
-
-        var pair = RegisterAndInitializeBillboardUIPoint(point.transform, onomatopoeiaBillboard, null);
-        StartCoroutine(DestroyBillboardAfterSeconds(pair, lifetime));
-
-        return point.transform;
-    }
-
     private IEnumerator DestroyBillboardAfterSeconds(Tuple<Transform, IBillboardUI> pointAndUI, float seconds)
     {
         yield return new WaitForSeconds(seconds);
@@ -151,4 +130,33 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
 
         // todo: make it fade out probably lol
     }
+
+
+    #region Onomatopoeias
+
+    /// <summary>
+    /// Spawns Onomatopoeia text at set position.
+    /// </summary>
+    /// <param name="randomRotationRange">Degrees that the Onomatopoeia can by randomly rotated by</param>
+    /// <returns>Transform that the Onomatopoeia will be "childed" to.</returns>
+    public Transform SpawnOnomatopoeia(string text, Vector3 worldPosition, 
+                                       float lifetime = 1.5f, float fontScale = 1, float randomRotationRange=0,
+                                       bool bold = true, bool italics = false,
+                                       bool animateRotationOverTime = false, bool animateScaleOverTime = true)
+    {
+        // TODO: these could be object pooled (but tbh i dont think our games performance is that bad so im not going to bother)
+        var point = Instantiate(onomatopoeiaPointPrefab, worldPosition, Quaternion.identity);
+        var onomatopoeiaBillboard = Instantiate(onomatopoeiaPrefab).GetComponent<OnomatopoeiaBillboardUI>();
+
+        onomatopoeiaBillboard.SetTextProperties(text, fontScale, randomRotationRange, lifetime, 
+                                                bold, italics, 
+                                                animateRotationOverTime, animateScaleOverTime);
+
+        var pair = RegisterAndInitializeBillboardUIPoint(point.transform, onomatopoeiaBillboard, null);
+        StartCoroutine(DestroyBillboardAfterSeconds(pair, lifetime));
+
+        return point.transform;
+    }
+
+    #endregion
 }
