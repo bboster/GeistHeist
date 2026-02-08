@@ -12,7 +12,7 @@ using UnityEngine.UI;
 * TODO: a lot of this code is copy pasted directly from ToyCar.cs
 */
 [RequireComponent(typeof(PossessableObject))]
-public class VendingObject : IInputHandler, IInteractable //I think some additional function summaries couldn't hurt in this script just for quick clarity
+public class VendingObject : IInputHandler, IInteractable
 {
     //[SerializeField] private GameObject thirdPersoncinemachineCamera;
     [SerializeField] private Transform CanSpawnPoint;
@@ -31,7 +31,7 @@ public class VendingObject : IInputHandler, IInteractable //I think some additio
     [SerializeField] private float delayBetweenThrows = 1f;
     [SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
 
-    [SerializeField] private float delayToUpdateChargeMeter = 0.25f; //This variable could use a tooltip to explain exactly what it does
+    [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
     [Tooltip("How long it takes for the visible material to go back to possession material.")]
     [SerializeField] private float delayToUpdateMaterialVisibility = 0.5f;
 
@@ -71,7 +71,6 @@ public class VendingObject : IInputHandler, IInteractable //I think some additio
     public override void WhilePossessingUpdate()
     {
         chargeMeter.UpdateCharge(currentStrength, maxStrength);
-        //Images.SetActive(false); This can be deleted since var Images no longer exists in the script
     }
 
     #region action
@@ -192,7 +191,7 @@ public class VendingObject : IInputHandler, IInteractable //I think some additio
 
     #endregion
 
-    void IInteractable.Interact() //If this function is not being used it should be deleted
+    void IInteractable.Interact()
     {
         //PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
     }
