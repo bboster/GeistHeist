@@ -2,22 +2,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class GuardCoroutineManager : MonoBehaviour
+public class GuardCoroutineManager : Singleton<GuardCoroutineManager>
 {
-    public static GuardCoroutineManager instance;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     /// <summary>
     /// Starts a behavior timer
     /// </summary>
