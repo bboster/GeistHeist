@@ -61,7 +61,7 @@ public class PossessableSearchBehavior : GuardMovement
     /// <returns></returns>
     private void StartSearch()
     {
-        GuardCoroutineManager.instance.StartPossessableSearchTimer(searchLength, this);
+        GuardCoroutineManager.Instance.StartPossessableSearchTimer(searchLength, this);
 
 /*#if UNITY_EDITOR
         selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
@@ -76,7 +76,7 @@ public class PossessableSearchBehavior : GuardMovement
         base.StopBehavior();
 
         if(TimerCoroutine != null)
-            GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
+            GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
 
         behaviorComplete = true;
         SearchLocation = Vector3.zero;

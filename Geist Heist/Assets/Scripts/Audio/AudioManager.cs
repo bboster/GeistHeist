@@ -31,7 +31,10 @@ public class AudioManager : Singleton<AudioManager>
         validateBus(sfxBus);
         vocalsBus = RuntimeManager.GetBus("bus:/Vocals");
         validateBus(vocalsBus);
+    }
 
+    public void Initialize()
+    {
         if (GameManager.Instance != null)
             GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);
 
@@ -49,20 +52,21 @@ public class AudioManager : Singleton<AudioManager>
     }
     public void UpdateMasterVolume()
     {
-        masterBus.setVolume(SettingsProfile.MasterVolumeTransformed * getPausedVolumeMultiplier);
+        Debug.Log(SettingsProfile.MasterVolumeScaled);
+        masterBus.setVolume(SettingsProfile.MasterVolumeScaled * getPausedVolumeMultiplier);
     }
 
     public void UpdateMusicVolume()
     {
-        musicBus.setVolume(SettingsProfile.MusicVolumeTransformed * getPausedVolumeMultiplier);
+        musicBus.setVolume(SettingsProfile.MusicVolumeScaled * getPausedVolumeMultiplier);
     }
     public void UpdateSFXVolume()
     {
-        sfxBus.setVolume(SettingsProfile.SFXVolumeTransformed * getPausedVolumeMultiplier);
+        sfxBus.setVolume(SettingsProfile.SFXVolumeScaled * getPausedVolumeMultiplier);
     }
     public void UpdateVocalsVolume()
     {
-        vocalsBus.setVolume(SettingsProfile.VocalsVolumeTransformed * getPausedVolumeMultiplier);
+        vocalsBus.setVolume(SettingsProfile.VocalsVolumeScaled * getPausedVolumeMultiplier);
     }
 
     #endregion

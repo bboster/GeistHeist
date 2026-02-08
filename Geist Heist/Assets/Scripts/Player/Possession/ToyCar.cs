@@ -44,7 +44,7 @@ public class ToyCar : IInputHandler
     private Rigidbody rb;
     private bool physicsEnabled = false;
     private PossessableObject possessableObject;
-    SuddenVelocityChangeDetector velocityChangeDetector;
+    private SuddenVelocityChangeDetector velocityChangeDetector; 
 
     private Coroutine freezeCoroutine;
     //activates when ghost is leaving an object
@@ -59,6 +59,7 @@ public class ToyCar : IInputHandler
 
     private void Start()
     {
+        //Same note on sound as in PossessableObject.cs
         carMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.CarGo);
         carWindSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.CarWind);
 
@@ -101,6 +102,7 @@ public class ToyCar : IInputHandler
     // Called every frame while player is possessing.
     public override void WhilePossessingUpdate()
     {
+        //Note for sound: Cases like this with repeating code should probably call another function that does the repeated bit and takes non-repeat info as parameters
         carMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
         carWindSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
 
@@ -303,6 +305,7 @@ public class ToyCar : IInputHandler
     }
 
     #endregion
+
     public void UnFreezePosition()
     {
         rb.constraints = RigidbodyConstraints.None;
