@@ -31,7 +31,10 @@ public class AudioManager : Singleton<AudioManager>
         validateBus(sfxBus);
         vocalsBus = RuntimeManager.GetBus("bus:/Vocals");
         validateBus(vocalsBus);
+    }
 
+    public void Initialize()
+    {
         if (GameManager.Instance != null)
             GameManager.Instance.OnPauseChanged.AddListener(UpdateAllVolumes);
 
