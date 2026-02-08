@@ -36,6 +36,9 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float sizeToFitForTether = 5.0f;
     [SerializeField] private float sizeToFitForCollectable = 1.0f;
+    [SerializeField] private float tiltAngle = 15;
+    [Tooltip("Seconds to do a full spin")]
+    [SerializeField] private float collectableRotationSeconds = 6;
     [SerializeField, Required] private Material notCollectedMaterial;
 
 
@@ -67,6 +70,8 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     }
 
     #region Viewport Objects
+
+    #region Viewport Objects Initialization
     private void RefreshTether(MeshRenderer tetherMesh)
     {
         ScaleToFitBounds(tetherMesh.GetComponent<MeshFilter>(), sizeToFitForTether);
@@ -109,6 +114,26 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         Vector3 scaledSize = new Vector3(sizeToFit / meshSize.x, sizeToFit / meshSize.y, sizeToFit / meshSize.z);
         mesh.transform.localScale = Vector3.one * scaledSize.Min();
     }
+
+    #endregion
+
+    #region Viewport Objects Animation
+    private void Update()
+    {
+        for(int i=0; i<CollectableMeshes.Count; i++)
+        {
+            var collectableMesh = CollectableMeshes[i];
+            RotateItem(collectableMesh.collectableObject.transform, collectableRotationSeconds, i, tiltAngle);
+        }
+    }
+
+    private void RotateItem(Transform item, float rotateSeconds, float offset, float tilt)
+    {
+        Vector3 rotation = new Vector3(0, (Time.unscaledTime + offset) * 360 / rotateSeconds, tilt);
+        item.localEulerAngles = rotation;
+    }
+
+    #endregion
 
     #endregion
 
