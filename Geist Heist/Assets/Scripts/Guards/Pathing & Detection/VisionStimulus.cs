@@ -116,7 +116,11 @@ public class VisionStimulus : Stimulus
                             timer = null;
                         }
 
-                        TriggerStimulus();
+                        if(!VisionCast(other.gameObject))
+                        {
+                            TriggerStimulus();
+                        }
+
                         return;
                     }
                 }
