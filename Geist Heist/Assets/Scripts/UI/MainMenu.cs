@@ -90,7 +90,7 @@ public class MainMenu : MonoBehaviour
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);
-            GameManager.Instance.NextLevel(sceneToLoad);
+            LevelManager.Instance.ChangeScene(sceneToLoad);
             return;
         }
         var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
