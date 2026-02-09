@@ -41,15 +41,24 @@ public class PostProcessingManager : MonoBehaviour
             volumeProfile = Instantiate(volume.profile);
             volume.profile = volumeProfile;
 
-            UpdateBrightness();
+            //UpdateBrightness();
         }
 
+        // old code that made ollie really glowy
+        /*
         if(volumeProfile.TryGet<ColorAdjustments>(out ColorAdjustments colorAdjustment))
         {
             colorAdjustment.postExposure.overrideState = true;
             colorAdjustment.postExposure.value = SettingsProfile.BrightnessTransformed;
         }
             // color adjustment -> post exposure
+        */
+
+        if (volumeProfile.TryGet<ColorAdjustments>(out ColorAdjustments colorAdjustment))
+        {
+            colorAdjustment.postExposure.overrideState = true;
+            colorAdjustment.postExposure.value = SettingsProfile.BrightnessTransformed;
+        }
     }
 
     private void OnDestroy()
