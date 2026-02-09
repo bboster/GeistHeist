@@ -15,6 +15,7 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Events;
+using UnityEditor;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -23,7 +24,6 @@ public class GameManager : Singleton<GameManager>
     [Header("Managers")]
     [SerializeField, Required] GameObject InputManagerPrefab;
     [SerializeField, Required] GameObject PlayerManagerPrefab;
-    //[SerializeField, Required] GameObject CoolDownManagerPrefab; TODO: waiting until sky finishes refactoring it
     [SerializeField, Required] GameObject SaveDataManagerPrefab;
     [SerializeField, Required] GameObject GuardCoroutineManagerPrefab;
     [SerializeField, Required] GameObject BehaviourDatabasePrefab;
@@ -34,6 +34,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject DailougeManagerPrefab;
     [SerializeField, Required] GameObject AudioManagerPrefab;
     [SerializeField, Required] GameObject MusicManagerPrefab;
+    [SerializeField, Required] GameObject KeyManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject PauseMenuPrefab;
@@ -73,6 +74,9 @@ public class GameManager : Singleton<GameManager>
 
         SettingsProfile.ReadSavedSettings();
 
+        if (PlayerStart == null)
+            PlayerStart = FindFirstObjectByType<ThirdPersonInputHandler>().transform;
+
         // All of these should be singletons, which destroy themselves if they already exist, 
         // so its okay if we dont check if this doesnt exist first
         InstantiateManagers();
@@ -96,19 +100,6 @@ public class GameManager : Singleton<GameManager>
     public static int currentLevel = 0;*/
 
     #region Level Progression
-    public void NextLevel(string sceneName)
-    {
-        //currentLevel++;
-        SceneManager.LoadScene(sceneName);
-        Debug.Log("Advancing to level: " + sceneName);
-    }
-
-    public void NextLevel(int sceneNum)
-    {
-        //currentLevel++;
-        SceneManager.LoadScene(sceneNum);
-        Debug.Log("Advancing to level: " + sceneNum);
-    }
 
     /// <summary>
     /// Spawns the player into the level
@@ -143,33 +134,33 @@ public class GameManager : Singleton<GameManager>
     /// <returns></returns>
     public Task InstantiateManagers()
     {
-        if (PlayerStart == null)
-            PlayerStart = FindFirstObjectByType<ThirdPersonInputHandler>().transform;
-
-        Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize() ;
+        /*
+         * We should give all of these Initialize functions, if possible
+         * -Toby
+         */
+        Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize();
+        Instantiate(FMODEventsPrefab);
         Instantiate(LevelManagerPrefab); // initialization happens in PlayerManager
-        Instantiate(SaveDataManagerPrefab);
-        Instantiate(GuardCoroutineManagerPrefab);
+        Instantiate(SaveDataManagerPrefab).GetComponent<SaveDataManager>().Initialize();
+        Instantiate(GuardCoroutineManagerPrefab); //Does not require initialization
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
-        Instantiate(DailougeManagerPrefab);
-        Instantiate(AudioManagerPrefab);
-        Instantiate(MusicManagerPrefab);
+        Instantiate(DailougeManagerPrefab).GetComponent<DialogueManager>().Initialize();
+        Instantiate(AudioManagerPrefab).GetComponent<AudioManager>().Initialize();
+        Instantiate(MusicManagerPrefab).GetComponent<MusicManager>().Initialize();
+        Instantiate(KeyManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
 
-        Instantiate(PlayerManagerPrefab);//.GetComponent<PlayerManager>().Initialize();
+        Instantiate(PlayerManagerPrefab); //Initializes in Start
 
 
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
         Instantiate(GeneralHUDPrefab);
         Instantiate(DebugConsolePrefab);
-        Instantiate(FMODEventsPrefab);
 
-
-
-        if (GameObject.FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
+        if (FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
             Instantiate(EventSystemPrefab);
 
         return Task.CompletedTask;
