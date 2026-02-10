@@ -141,7 +141,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize();
         Instantiate(FMODEventsPrefab);
         Instantiate(LevelManagerPrefab); // initialization happens in PlayerManager
-        Instantiate(SaveDataManagerPrefab).GetComponent<SaveDataManager>().Initialize();
+        Instantiate(SaveDataManagerPrefab);
         Instantiate(GuardCoroutineManagerPrefab); //Does not require initialization
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
