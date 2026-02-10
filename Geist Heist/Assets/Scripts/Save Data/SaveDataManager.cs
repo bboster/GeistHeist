@@ -34,7 +34,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     private string runtimeSavePath;
 
-    public void Initialize()
+    public void Start()
     {
         runtimeSavePath = Path.Combine(Application.persistentDataPath, $"{_defaultfFileName}.{_fileType}");
         LoadData();
