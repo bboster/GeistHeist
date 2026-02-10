@@ -8,6 +8,7 @@
  * Jult: when presumed stopped, and gains sudden velocity
  */
 
+using NaughtyAttributes;
 using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
@@ -19,22 +20,27 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     [SerializeField] private float minVelocityForRegister = 6;
     [Tooltip("The highest velocity that can still be considered \"stopped\"")]
     [SerializeField] private float maxVelocityToBeStopped = 0.3f;
-    [SerializeField] private bool recordVelocityAtStart;
+    [SerializeField, Foldout("Advanced")] private bool recordVelocityAtStart;
     //[SerializeField] private LayerMask collisionLayers;
 
-    [SerializeField] private bool debugLogSpeeds;
+    [SerializeField, Foldout("Advanced")] private bool debugLogSpeeds;
+
+    private const float MIN_SECONDS_BETWEEN_EVENTS = 0.15f;
 
     // vector3 in parameter is contact point
     public UnityEvent<Vector3> OnStopDetected = new();
     public UnityEvent<Vector3> OnBounceDetected = new();
     public UnityEvent<Vector3> OnJoltDetected = new();
 
+
     private bool activelyRecordVelocity;
 
     private Rigidbody rb;
 
     private Vector3 lastVelocity;
-    private float timeOfLastSuddenChange;
+    private float timeOfLastStop, timeOfLastBounce, timeOfLastJolt = 0;
+    private float timeOfLastSuddenChange => Mathf.Max(Mathf.Max(timeOfLastStop, timeOfLastBounce), timeOfLastJolt);
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -71,7 +77,7 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
     // one frame after, actually.
     private IEnumerator AfterCollisionEnter(Vector3 impactPoint)
     {
-        if(Time.time - timeOfLastSuddenChange < 0.1f)
+        if(Time.time - timeOfLastSuddenChange < MIN_SECONDS_BETWEEN_EVENTS)
         {
             Debug.Log("Duplicate collision detected.");
             yield break;
@@ -97,29 +103,33 @@ public class SuddenVelocityChangeDetector : MonoBehaviour
         }
 
         // detect jolt : if it was stopped and suddenly started
-        if (speedBeforeCollision <= maxVelocityToBeStopped && speedAfterCollision >= minVelocityForRegister)
+        if (speedBeforeCollision <= maxVelocityToBeStopped && speedAfterCollision >= minVelocityForRegister
+            /*&& timeOfLastJolt - Time.time > MIN_SECONDS_BETWEEN_EVENTS*/)
         {
             Debug.Log("sudden jult on "+gameObject.name);
-            timeOfLastSuddenChange = Time.time;
+            timeOfLastJolt = Time.time;
             OnJoltDetected.Invoke(impactPoint);
             yield break;
         }
 
         // detect stop: if it was moving and suddenly stopped
-        if (speedBeforeCollision >= minVelocityForRegister && speedAfterCollision <= maxVelocityToBeStopped)
+        if (speedBeforeCollision >= minVelocityForRegister && speedAfterCollision <= maxVelocityToBeStopped
+            /*&& timeOfLastStop - Time.time > MIN_SECONDS_BETWEEN_EVENTS*/)
         {
             Debug.Log("Stop occured on " + gameObject.name);
-            timeOfLastSuddenChange = Time.time;
+            //timeOfLastSuddenChange = Time.time;
+            timeOfLastStop = Time.time;
             OnStopDetected.Invoke(impactPoint);
             yield break;
         }
 
         // detect bounce: if it was moving and suddenly starting moving in opposite direction
         float dot = Vector3.Dot(cachedLastVelocity.normalized, rb.linearVelocity.normalized); // dot returns 1 if angles are perfectly aligned, -1 if complete opposite directions.
-        if (dot <= 0 && speedBeforeCollision >= minVelocityForRegister && speedAfterCollision >= minVelocityForRegister) // "if the two directions are different, but also very fast"
+        if (dot <= 0 && speedBeforeCollision >= minVelocityForRegister && speedAfterCollision >= minVelocityForRegister // "if the two directions are different, but also very fast"
+            /*&& timeOfLastBounce - Time.time > MIN_SECONDS_BETWEEN_EVENTS*/) 
         {
             Debug.Log("bounce detected on "+gameObject.name);
-            timeOfLastSuddenChange = Time.time;
+            timeOfLastBounce = Time.time;
             OnBounceDetected.Invoke(impactPoint);
             yield break;
         }
