@@ -16,7 +16,7 @@ public static class SettingsProfile
     // Default Display values
     private const float DEFAULT_LOOK_SENSITIVITY = 100;
     private const bool DEFAULT_INVERT_LOOK = false;
-    private const float DEFAULT_BRIGHTNESS = 50; 
+    private const float DEFAULT_BRIGHTNESS = 50; // evaluates to 0
 
     private const float DEFAULT_MASTER_VOLUME = 100;
     private const float DEFAULT_MUSIC_VOLUME = 100;
@@ -30,9 +30,8 @@ public static class SettingsProfile
 
     public const float MIN_BRIGHTNESS = 0;
     public const float MAX_BRIGHTNESS = 100;
-    private const float DEFAULT_BRIGHTNESS_TRANSFORMED = 0; // Real value, used in game (0 because it does not add or subtract brightness by default)
-    private const float MIN_BRIGHTNESS_TRANSFORMED = -1;
-    private const float MAX_BRIGHTNESS_TRANSFORMED = 1;
+    private const float MIN_BRIGHTNESS_TRANSFORMED = -0.5f;
+    private const float MAX_BRIGHTNESS_TRANSFORMED = 0.5f;
 
     #region Player Pref Keys
 
@@ -53,7 +52,6 @@ public static class SettingsProfile
     // Current variables
     public static bool InvertLook;
 
-    // TODO: BRIGHTNESS NOT IMPLEMENTED
     public static float LookSensitivity, Brightness, 
         MasterVolume, MusicVolume, SFXVolume, VocalsVolume;
 
@@ -69,6 +67,12 @@ public static class SettingsProfile
     public static float MusicVolumeTransformed => MusicVolume / 100;
     public static float SFXVolumeTransformed => SFXVolume / 100;
     public static float VocalsVolumeTransformed => VocalsVolume / 100;
+
+    // Log Audio
+    public static float MasterVolumeScaled => MasterVolume == 0 ? 0 : Mathf.Log10(MasterVolume) /2;
+    public static float MusicVolumeScaled => MusicVolume == 0 ? 0 : Mathf.Log10(MusicVolume) /2;
+    public static float SFXVolumeScaled => SFXVolume == 0 ? 0 : Mathf.Log10(SFXVolume) /2;
+    public static float VocalsVolumeScaled => SFXVolume == 0 ? 0 : Mathf.Log10(SFXVolume) /2;
 
     /// <summary>
     /// Reads settings from PlayerPrefs and updates its public 

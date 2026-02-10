@@ -58,7 +58,7 @@ public class SearchBehavior : GuardMovement
     /// <returns></returns>
     private void StartSearch()
     {
-        GuardCoroutineManager.instance.StartBehaviorTimer(searchLength, this);
+        GuardCoroutineManager.Instance.StartBehaviorTimer(searchLength, this);
         contRef.GetAnimator().SetTrigger("LookingAround");
 
         progress = 0;
@@ -74,7 +74,7 @@ public class SearchBehavior : GuardMovement
     public override void StopBehavior()
     {
         base.StopBehavior();
-        GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
+        GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;
         contRef.GetAnimator().SetTrigger("LookingAround");
         SearchLocation = Vector3.zero;

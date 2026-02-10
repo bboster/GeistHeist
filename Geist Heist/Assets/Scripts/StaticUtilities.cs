@@ -42,9 +42,9 @@ public static class StaticUtilities
     {
         // If using this code in other projects, replace GuardCoroutineManager with a different singleton
         if (coroutineInstance != null)
-            GuardCoroutineManager.instance.StopCoroutine(coroutineInstance);
+            GuardCoroutineManager.Instance.StopCoroutine(coroutineInstance);
 
-        coroutineInstance = GuardCoroutineManager.instance.StartCoroutine(coroutineToPlay);
+        coroutineInstance = GuardCoroutineManager.Instance.StartCoroutine(coroutineToPlay);
     }
 
     #endregion
@@ -166,32 +166,32 @@ public static class StaticUtilities
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public static Coroutine FadeToVisible(CanvasGroup group, float seconds, 
+    public static Coroutine FadeToVisible(CanvasGroup group, float seconds, bool unscaledTime = true, 
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.instance.StopCoroutine(currentCoroutineToCancel);
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.instance.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, 
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, unscaledTime: unscaledTime,
             afterFadeCallback:afterFadeCallback));
     }
 
-    public static Coroutine FadeToHidden(CanvasGroup group, float seconds, 
+    public static Coroutine FadeToHidden(CanvasGroup group, float seconds, bool unscaledTime = true,
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.instance.StopCoroutine(currentCoroutineToCancel);
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.instance.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback));
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
-    public static Coroutine FadeOpacity(CanvasGroup group, float a, float seconds, 
+    public static Coroutine FadeOpacity(CanvasGroup group, float a, float seconds, bool unscaledTime = true,
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.instance.StopCoroutine(currentCoroutineToCancel);
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.instance.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback));
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
     private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
@@ -356,7 +356,18 @@ public static class StaticUtilities
     #endregion
 
     #region Math
+    
+    /// <summary>
+    /// Returns the positive distance between a and b.
+    /// </summary>
+    public static float Difference(float a, float b)
+    {
+        return Mathf.Abs(a - b);
+    }
 
+    /// <summary>
+    /// Returns inverse lerp (t), where t may be less than 0 or greater than 1
+    /// </summary>
     public static float InverseLerpUnclamped(float a, float b, float value)
     {
         if (a != b)

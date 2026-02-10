@@ -88,6 +88,8 @@ public class ConfirmationPopup : MonoBehaviour
 
         if (lastFadeSecondsUsed > 0)
             fadeOpacityCoroutine = StaticUtilities.FadeToVisible(canvasGroup, fadeSeconds);
+        else
+            canvasGroup.alpha = 1;
     }
 
     public void HideConfirmationPopup()

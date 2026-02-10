@@ -16,6 +16,8 @@ public class ChaseBehavior : GuardMovement
 {
     private bool attacking = false;
 
+    [SerializeField] private float attackRange;
+
     #region Initialize Function and OnDisable
 
     public override void InitializeBehavior(GameObject selfRef)
@@ -41,9 +43,13 @@ public class ChaseBehavior : GuardMovement
     {
         for(; ; )
         {
-            if (CheckPathCompletion() == true) //Consider changing this to be a distance check rather than a path completion check
+            if (Vector3.Distance(PlayerManager.Instance.CurrentObject.transform.position, selfRef.transform.position) <= attackRange)
             {
                 contRef.ChangeBehavior(GuardStates.attack);
+            }
+            else if(thisAgent.pathStatus == UnityEngine.AI.NavMeshPathStatus.PathInvalid)
+            {
+                contRef.ChangeBehavior(contRef.DefaultBehavior.StateName); //Resets guard if the player is unreachable
             }
             else
             {
