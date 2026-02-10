@@ -30,7 +30,6 @@ public class PlayerManager : Singleton<PlayerManager>
     private PlayerCameraController currentCameraController; // may be mainCinemachineCamera sometimes
     private StudioListener fmodListener;
 
-
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     public void Start()
     {
@@ -55,7 +54,7 @@ public class PlayerManager : Singleton<PlayerManager>
         if (GameManager.Instance.PlayerStart == null)
             Debug.Log("PlayerStart is null in gamemanager");
         else
-            LevelManager.Instance.InitializeLevelManager(GameManager.Instance.PlayerStart.position);
+            LevelManager.Instance.Initialize(GameManager.Instance.PlayerStart.position);
 
         fmodListener = camera.GetComponent<StudioListener>();
         UpdateListener(CurrentObject);
@@ -106,28 +105,7 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
-        //to decide where ghost exits the possessable
-        if (possessable.ghostExitPoints != null)
-        {
-            //go through spawn points until one of them doesn't collide
-            for (int i = 0; i < possessable.ghostExitPoints.Count; i++)
-            {
-                Collider[] collisions = Physics.OverlapSphere(possessable.ghostExitPoints[i].transform.position, 0.2f);
-
-                //no collision = use this point
-                if (collisions.Length <= 0)
-                {
-                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
-                    break;
-                }
-                
-                //if all of them collide, just use the last backup exit point
-                if (i == possessable.ghostExitPoints.Count - 1)
-                {
-                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
-                }
-            }
-        }
+        CheckGhostExitPoints(possessable);
 
         SwapCameras(possessable, PlayerGhostObject);
         PlayerGhostObject.gameObject.SetActive(true);
@@ -141,6 +119,36 @@ public class PlayerManager : Singleton<PlayerManager>
         CurrentObject = PlayerGhostObject;
 
         DeRegisterInputs(possessable);
+    }
+
+    /// <summary>
+    /// Decides where the ghost exits the possessable, returns the new position
+    /// </summary>
+    /// <param name="possessable"></param>
+    private Vector3 CheckGhostExitPoints(PossessableObject possessable)
+    {
+        if (possessable.ghostExitPoints != null)
+        {
+            //go through spawn points until one of them doesn't collide
+            for (int i = 0; i < possessable.ghostExitPoints.Count; i++)
+            {
+                Collider[] collisions = Physics.OverlapSphere(possessable.ghostExitPoints[i].transform.position, 0.2f);
+
+                //no collision = use this point
+                if (collisions.Length <= 0)
+                {
+                    PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
+                    return possessable.ghostExitPoints[i].position;
+                }
+            }
+
+            //if all of them collide, just use the last backup exit point
+            PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
+            return possessable.ghostExitPoints[possessable.ghostExitPoints.Count - 1].position;
+        }
+
+        Debug.Log("No ghost exit points available.");
+        return Vector3.zero;
     }
 
     private void SwapCameras(PossessableObject oldObject, PossessableObject newObject)
@@ -177,10 +185,6 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.MoveHeld.AddListener(input.WhileMoveHeld);
         InputEvents.MoveNotHeld.AddListener(input.WhileMoveNotHeld);
         InputEvents.MoveCanceled.AddListener(input.OnMoveCanceled);
-
-        /*InputEvents.JumpStarted.AddListener(input.OnJumpStarted);
-        InputEvents.JumpHeld.AddListener(input.WhileJumpHeld);
-        InputEvents.JumpCanceled.AddListener(input.OnJumpCanceled);*/
 
         InputEvents.ActionStarted.AddListener(input.OnActionStarted);
         InputEvents.ActionHeld.AddListener(input.WhileActionHeld);

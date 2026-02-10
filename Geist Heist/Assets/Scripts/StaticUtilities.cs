@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby S, Sky B, Cade Naylor, Jay Embry
  * Creation Date: ???
- * Last Modified: 10/17/25
+ * Last Modified: 1/27/2026
  * 
  * Brief Description: General use utility functions that can be
  * applied to any project. 
@@ -42,9 +42,9 @@ public static class StaticUtilities
     {
         // If using this code in other projects, replace GuardCoroutineManager with a different singleton
         if (coroutineInstance != null)
-            GuardCoroutineManager.instance.StopCoroutine(coroutineInstance);
+            GuardCoroutineManager.Instance.StopCoroutine(coroutineInstance);
 
-        coroutineInstance = GuardCoroutineManager.instance.StartCoroutine(coroutineToPlay);
+        coroutineInstance = GuardCoroutineManager.Instance.StartCoroutine(coroutineToPlay);
     }
 
     #endregion
@@ -166,6 +166,57 @@ public static class StaticUtilities
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
     }
 
+    public static Coroutine FadeToVisible(CanvasGroup group, float seconds, bool unscaledTime = true, 
+        UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, unscaledTime: unscaledTime,
+            afterFadeCallback:afterFadeCallback));
+    }
+
+    public static Coroutine FadeToHidden(CanvasGroup group, float seconds, bool unscaledTime = true,
+        UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+    }
+
+    public static Coroutine FadeOpacity(CanvasGroup group, float a, float seconds, bool unscaledTime = true,
+        UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+    }
+
+    private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
+    {
+        float startOpacity = group.alpha;
+
+        float startTime = unscaledTime ? Time.unscaledTime : Time.time;
+        float time = startTime;
+        while(time - startTime < seconds)
+        {
+            time = unscaledTime ? Time.unscaledTime : Time.time;
+            float t = (time - startTime) / seconds;
+
+            group.alpha = Mathf.Lerp(startOpacity, a, t);
+
+            yield return null;
+        }
+        // apply one more time just in case.
+        group.alpha = a;
+
+        if(afterFadeCallback != null)
+            afterFadeCallback();
+    }
+
+
     /// <summary>
     /// Sets the colors of a selectable ui component.
     /// All color parameters are optional, so only set the ones you need to update.
@@ -264,7 +315,18 @@ public static class StaticUtilities
     #endregion
 
     #region Math
+    
+    /// <summary>
+    /// Returns the positive distance between a and b.
+    /// </summary>
+    public static float Difference(float a, float b)
+    {
+        return Mathf.Abs(a - b);
+    }
 
+    /// <summary>
+    /// Returns inverse lerp (t), where t may be less than 0 or greater than 1
+    /// </summary>
     public static float InverseLerpUnclamped(float a, float b, float value)
     {
         if (a != b)
@@ -409,6 +471,13 @@ public static class StaticUtilities
     {
         if (array == null) return true;
         if (array.Count == 0) return true;
+        return false;
+    }
+
+    public static bool IsEmptyOrNull<T>(this string str)
+    {
+        if (str == null) return true;
+        if (str.Length == 0) return true;
         return false;
     }
 

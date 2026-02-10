@@ -16,9 +16,15 @@ public class PostProcessingManager : MonoBehaviour
     private Volume volume;
     private VolumeProfile volumeProfile;
 
-    private void Start()
+    private void Awake()
+    {
+        GameManager.OnInitialize += Initialize;
+    }
+
+    public void Initialize()
     {
         UpdateBrightness();
+        GameManager.OnInitialize -= Initialize;
     }
 
 
@@ -35,15 +41,28 @@ public class PostProcessingManager : MonoBehaviour
             volumeProfile = Instantiate(volume.profile);
             volume.profile = volumeProfile;
 
-            UpdateBrightness();
+            //UpdateBrightness();
         }
 
+        // old code that made ollie really glowy
+        /*
         if(volumeProfile.TryGet<ColorAdjustments>(out ColorAdjustments colorAdjustment))
         {
             colorAdjustment.postExposure.overrideState = true;
             colorAdjustment.postExposure.value = SettingsProfile.BrightnessTransformed;
         }
             // color adjustment -> post exposure
+        */
+
+        if (volumeProfile.TryGet<ColorAdjustments>(out ColorAdjustments colorAdjustment))
+        {
+            colorAdjustment.postExposure.overrideState = true;
+            colorAdjustment.postExposure.value = SettingsProfile.BrightnessTransformed;
+        }
     }
 
+    private void OnDestroy()
+    {
+        GameManager.OnInitialize -= Initialize;
+    }
 }

@@ -9,8 +9,6 @@
  */
 
 using NaughtyAttributes;
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Slider = UnityEngine.UI.Slider;
@@ -33,7 +31,7 @@ public class PossessableTimerBillboardUI : IBillboardUI
     private PossessableObject possessable;
     private CanvasGroup group;
     private Slider slider;
-
+    
     float t;
     public override void OnInitialize(GameObject sourceGameObject)
     {

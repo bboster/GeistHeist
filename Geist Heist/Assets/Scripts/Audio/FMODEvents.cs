@@ -1,8 +1,9 @@
 
-using UnityEngine;
-using FMODUnity;
 using FMOD.Studio;
+using FMODUnity;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.tvOS;
 
 public class FMODEvents : Singleton<FMODEvents>
 {
@@ -44,17 +45,14 @@ public class FMODEvents : Singleton<FMODEvents>
     [field: SerializeField] public EventReference CarGo { get; private set; }
     [field: SerializeField] public EventReference CarBump { get; private set; }
 
-    public static FMODEvents instance { get; private set; }
+    [field: Header("Prop SFX")]
+    [field: SerializeField] public EventReference DoorOpen { get; private set; }
+    [field: SerializeField] public EventReference DoorLocked { get; private set; }
 
-    private void Awake()
-    {
-        base.Awake();
-        
-        if (instance != null)
-        {
-            Debug.Log("There is more than one FMODEvents in the scene");
-        }
-        instance = this;
-    }
 
+    /* Replace the static 'instance' below with 'instant". The generic `Singleton<T>` base already exposes a static `Instance` property.
+     * You will need to replace usages across the codebase to use `FMODEvents.Instance` (could easily be done with find and replace)
+     *
+     * - Josh
+     */
 }

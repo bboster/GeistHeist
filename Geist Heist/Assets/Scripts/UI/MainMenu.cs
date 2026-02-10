@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField, BoxGroup("Hub Scene"), Scene] private string HubScene;
     [SerializeField, BoxGroup("Hub Scene")] private GameObject HubSceneLoadingCardPrefab;
 
-    [SerializeField, BoxGroup("New Game Scene"), Scene] private string NewGameScene; // making it seperate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
+    [SerializeField, BoxGroup("New Game Scene"), Scene] private string NewGameScene; // making it separate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
     [SerializeField, BoxGroup("New Game Scene")] private GameObject NewSceneLoadingCardPrefab;
     [SerializeField, BoxGroup("New Game Scene")] string confirmNewGameText = "Are you sure? Continuing will delete your progress.";
 
@@ -90,7 +90,7 @@ public class MainMenu : MonoBehaviour
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);
-            GameManager.Instance.NextLevel(sceneToLoad);
+            LevelManager.Instance.ChangeScene(sceneToLoad);
             return;
         }
         var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
@@ -103,7 +103,7 @@ public class MainMenu : MonoBehaviour
     # region Main Page
     void OnNewGameButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         if (!playerHasSignificantSaveData)
         {
@@ -120,7 +120,7 @@ public class MainMenu : MonoBehaviour
 
     void OnContinueButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         //SceneManager.LoadScene(HubScene);
         LoadScene(HubScene, NewSceneLoadingCardPrefab);
@@ -128,7 +128,7 @@ public class MainMenu : MonoBehaviour
 
     void OnCreditsButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         StaticUtilities.EnableCanvasGroup(creditsPage);
@@ -136,7 +136,7 @@ public class MainMenu : MonoBehaviour
 
     void OnHowToPlayButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         StaticUtilities.DisableCanvasGroup(creditsPage);
         StaticUtilities.EnableCanvasGroup(howToPlayPage);
@@ -144,7 +144,7 @@ public class MainMenu : MonoBehaviour
 
     void OnQuitButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
@@ -159,7 +159,7 @@ public class MainMenu : MonoBehaviour
 
     void OnConfirmDeleteSaveButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         LoadNewGame();
     }
@@ -170,7 +170,7 @@ public class MainMenu : MonoBehaviour
 
     void OnCreditsBackButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         StaticUtilities.DisableCanvasGroup(creditsPage);
     }
@@ -181,7 +181,7 @@ public class MainMenu : MonoBehaviour
 
     void OnCloseHowToPlayButtonClicked()
     {
-        AudioManager.Instance.PlayOneShot(FMODEvents.instance.UIClick);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
     }
