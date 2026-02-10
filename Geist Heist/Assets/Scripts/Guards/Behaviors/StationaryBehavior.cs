@@ -16,18 +16,15 @@ using UnityEngine.Splines.Interpolators;
 public class StationaryBehavior : Behavior
 {
     private bool isRotatingRight = true;
-
     #region Might Be Used Later
 
-    /*[Header("Rotation Values")]
+    [Header("Rotation Values")]
     [Tooltip("How far left the guard can rotate from 0 degrees.")]
     [SerializeField] private float leftRotationValue;
     [Tooltip("How far right the guard can rotate from 0 degrees.")]
     [SerializeField] private float rightRotationValue;
     [Tooltip("How fast the guard will rotate.")]
-    [SerializeField] private float rotationSpeed;
-    [Tooltip("How long it should take for the guard to rotate from the center to one side")]
-    [SerializeField] private float rotationTime;*/
+    [SerializeField] private float coneRotationSpeed;
 
     #endregion 
 
@@ -62,42 +59,40 @@ public class StationaryBehavior : Behavior
 
     public override IEnumerator BehaviorLoop()
     {
-        Vector3 rotation = selfRef.transform.rotation.eulerAngles;
-        rotation.y = contRef.DefaultRotation - selfRef.transform.rotation.eulerAngles.y;
+        Vector3 rotation = contRef.visionConeRotator.transform.rotation.eulerAngles;
+        //rotation.y = contRef.DefaultRotation - visionCone.transform.rotation.eulerAngles.y;
 
-        selfRef.transform.Rotate(rotation);
+        contRef.visionConeRotator.transform.Rotate(rotation);
 
         #region Might be used later
 
-        /*Vector3 rightRotation = selfRef.transform.rotation.eulerAngles;
-        rightRotation.y += rightRotationValue;
-        Vector3 leftRotation = selfRef.transform.rotation.eulerAngles;
-        leftRotation.y += leftRotationValue;
+        Vector3 rightRotation = contRef.visionConeRotator.transform.rotation.eulerAngles;
+        rightRotation.y += Mathf.Abs(rightRotationValue);
+        Vector3 leftRotation = contRef.visionConeRotator.transform.rotation.eulerAngles;
+        leftRotation.y -= Mathf.Abs(leftRotationValue);
 
         Vector3 rotationGoal = rightRotation;
-        Vector3 rotationDefault = selfRef.transform.rotation.eulerAngles;
+        Vector3 rotationDefault = contRef.visionConeRotator.transform.rotation.eulerAngles;
 
         for (; ;)
         {
-            Vector3 rotation = Vector3.Slerp(rotationDefault, rotationGoal, rotationSpeed * Time.deltaTime);
-            selfRef.transform.Rotate(rotation);
+            Vector3 currentRotation = Vector3.Slerp(rotationDefault, rotationGoal, coneRotationSpeed * Time.deltaTime);
+            contRef.visionConeRotator.transform.Rotate(currentRotation);
 
-            if(selfRef.transform.rotation.eulerAngles.y <= rotationGoal.y && isRotatingRight == true)
+            if(contRef.visionConeRotator.transform.rotation.eulerAngles.y <= rotationGoal.y && isRotatingRight == true)
             {
                 rotationGoal = leftRotation;
                 isRotatingRight = false;
             }
-            else if(selfRef.transform.rotation.eulerAngles.y >= rotationGoal.y && isRotatingRight == false)
+            else if(contRef.visionConeRotator.transform.rotation.eulerAngles.y >= rotationGoal.y && isRotatingRight == false)
             {
                 rotationGoal = rightRotation;
                 isRotatingRight = true;
             }
 
             yield return new WaitForEndOfFrame();
-        }*/
+        }
 
         #endregion
-
-        yield return new WaitForEndOfFrame();
     }
 }

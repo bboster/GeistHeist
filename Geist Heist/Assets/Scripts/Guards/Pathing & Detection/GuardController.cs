@@ -28,6 +28,8 @@ public class GuardController : MonoBehaviour
     [HideInInspector] public float AngularSpeed;
     [HideInInspector] public float Acceleration;
 
+    public GameObject visionConeRotator;
+
     [SerializeField, BoxGroup("Design Values")] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
     [Tooltip("The location a guard will return to by default")]
