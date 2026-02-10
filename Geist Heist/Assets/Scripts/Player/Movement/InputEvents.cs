@@ -7,6 +7,7 @@
  * Use other scripts to connect to the unityevents.
  */
 
+using System.Collections;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using UnityEditor;
@@ -92,6 +93,11 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private InputControlScheme? _gamepadScheme;
     private InputControlScheme? _kbmScheme;
 
+    // Add these fields to the InputEvents class (preferably near other private fields)
+    private InputDevice _currentDevice = null;
+    private bool _canUseControlSwap = true;
+    private WaitForEndOfFrame _endOfFrame = null;
+
     // Start function equivalent. called from GameManager to control execution order.
     public void Initialize()
     {
@@ -105,7 +111,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         InitializeActions();
         CacheControlSchemes();
         
-        // Subscribe to device/scheme changes instead of polling
+        // Subscribe to device/scheme changes
         InputUser.onChange += OnInputUserChanged;
         
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -113,23 +119,38 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     private void OnInputUserChanged(InputUser user, InputUserChange change, InputDevice device)
     {
-        // Ignore device unpair and focus only on scheme/device changes
-        if (change == InputUserChange.DeviceUnpaired || device == null)
+        // Guard: ignore unpairs, null devices, and if swap cooldown active
+        if (device == null || _currentDevice == device || !_canUseControlSwap ||
+            change == InputUserChange.DeviceUnpaired)
+        {
             return;
+        }
 
-        // Only act if this is our player's user
+        // Only act if user is valid and tied to our player
         if (!user.valid || playerInput == null)
             return;
 
-        // Check if we need to switch schemes based on the device used
+        // Switch scheme based on device type
         if (device is Gamepad && _gamepadScheme.HasValue && playerInput.currentControlScheme != _gamepadScheme.Value.name)
         {
             playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, device);
+            _currentDevice = device;
+            _canUseControlSwap = false;
+            StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
         else if ((device is Keyboard || device is Mouse) && _kbmScheme.HasValue && playerInput.currentControlScheme != _kbmScheme.Value.name)
         {
             playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
+            _currentDevice = device;
+            _canUseControlSwap = false;
+            StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
+    }
+
+    private IEnumerator PreventControlSwapUntilEndOfFrame()
+    {
+        yield return _endOfFrame ??= new WaitForEndOfFrame();
+        _canUseControlSwap = true;
     }
 
     private void OnDestroy()
@@ -254,73 +275,22 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         LookUpdate.Invoke(LookDelta);
     }
-
-    private void Update()
-    {
-        // Allow device switching even when paused
-        if (playerInput == null || playerInput.actions == null)
-            return;
-
-        string currentScheme = playerInput.currentControlScheme;
-
-        // If on gamepad scheme, check for keyboard/mouse input
-        if (_gamepadScheme.HasValue && currentScheme == _gamepadScheme.Value.name)
-        {
-            if ((Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) ||
-                (Mouse.current != null && Mouse.current.delta.ReadValue().sqrMagnitude > 0.01f))
-            {
-                if (_kbmScheme.HasValue)
-                {
-                    playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
-                }
-                return;
-            }
-        }
-        // If on keyboard/mouse scheme, check for any gamepad input
-        else if (_kbmScheme.HasValue && currentScheme == _kbmScheme.Value.name)
-        {
-            if (Gamepad.current != null && IsGamepadActive())
-            {
-                if (_gamepadScheme.HasValue)
-                {
-                    playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
-                }
-                return;
-            }
-        }
-
-    }
-
-    private bool IsGamepadActive()
-    {
-        var gamepad = Gamepad.current;
-        if (gamepad == null)
-            return false;
-
-        // Check for any button press or stick/trigger activity
-        foreach (var control in gamepad.allControls)
-        {
-            if (control is ButtonControl button && button.wasPressedThisFrame)
-                return true;
-        }
-        return
-            gamepad.leftStick.ReadValue().sqrMagnitude > 0.15f ||
-            gamepad.rightStick.ReadValue().sqrMagnitude > 0.15f ||
-            gamepad.leftTrigger.ReadValue() > 0.1f ||
-            gamepad.rightTrigger.ReadValue() > 0.1f;
-    }
-
-    private void RemoveAllListeners()
+private void RemoveAllListeners()
     {
         MoveStarted.RemoveAllListeners();
-        ActionStarted.RemoveAllListeners();
-        InteractStarted.RemoveAllListeners();
-        PauseStarted.RemoveAllListeners();
-
+        MoveHeld.RemoveAllListeners();
+        MoveNotHeld.RemoveAllListeners();
         MoveCanceled.RemoveAllListeners();
+        ActionStarted.RemoveAllListeners();
+        ActionHeld.RemoveAllListeners();
+        ActionNotHeld.RemoveAllListeners();
         ActionCanceled.RemoveAllListeners();
+        InteractStarted.RemoveAllListeners();
+        InteractHeld.RemoveAllListeners();
         InteractCanceled.RemoveAllListeners();
+        PauseStarted.RemoveAllListeners();
         DebugStarted.RemoveAllListeners();
+        LookUpdate.RemoveAllListeners();
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -348,4 +318,6 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     }
 
     #endregion
+
+    
 }
