@@ -49,7 +49,7 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Look",
@@ -77,7 +77,7 @@
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KB+M",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -99,7 +99,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KB+M",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -110,7 +110,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KB+M",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -121,7 +121,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KB+M",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -132,10 +132,21 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KB+M",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "51f0adc3-3d6f-452f-a729-1d36e0bf49a7",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "ScaleVector2(x=100,y=100)",
+                    "groups": ";Controller",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
@@ -143,7 +154,18 @@
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KB+M",
+                    "action": "Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53593501-73a6-4731-87f2-149b88cf8786",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controller",
                     "action": "Action",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -154,7 +176,18 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KB+M",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cec8c494-69f6-4d46-8014-df0c290d28bc",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controller",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -165,7 +198,18 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KB+M",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "06136a46-1f9a-4526-9518-d8a0dcd11b5d",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controller",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -176,7 +220,7 @@
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "ScaleVector2(x=100,y=100)",
-                    "groups": ";Gamepad",
+                    "groups": ";Gamepad;Controller",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -187,7 +231,7 @@
                     "path": "<Pointer>/delta",
                     "interactions": "",
                     "processors": "DeltaTimeScale,ScaleVector2(x=0.1,y=0.1)",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": ";Keyboard&Mouse;KB+M",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -198,7 +242,7 @@
                     "path": "<Keyboard>/backquote",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KB+M",
                     "action": "DebugConsole",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -206,5 +250,16 @@
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "KB+M",
+            "bindingGroup": "KB+M",
+            "devices": []
+        },
+        {
+            "name": "Controller",
+            "bindingGroup": "Controller",
+            "devices": []
+        }
+    ]
 }
