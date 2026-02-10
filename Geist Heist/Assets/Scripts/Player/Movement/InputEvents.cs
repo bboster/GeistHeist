@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby, Alec P, Clare G, Sky B, Tyler B
+ * Contributors: Toby, Alec P, Clare G, Sky B, Tyler B, Josh K
  * Creation Date: Spring 2024
- * Last Modified: 10/27/25
+ * Last Modified: 2/10/2026
  * 
  * Connects to PlayerInput map actions and invokes static UnityEvents.
  * Use other scripts to connect to the unityevents.
