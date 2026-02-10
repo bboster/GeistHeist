@@ -16,6 +16,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
 
 public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
@@ -94,7 +95,6 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     // Start function equivalent. called from GameManager to control execution order.
     public void Initialize()
     {
-        // this may be before awake has ran...
         if (Instance != this)
             base.Awake();
 
@@ -104,7 +104,37 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         playerInput = GetComponent<PlayerInput>();
         InitializeActions();
         CacheControlSchemes();
+        
+        // Subscribe to device/scheme changes instead of polling
+        InputUser.onChange += OnInputUserChanged;
+        
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnInputUserChanged(InputUser user, InputUserChange change, InputDevice device)
+    {
+        // Ignore device unpair and focus only on scheme/device changes
+        if (change == InputUserChange.DeviceUnpaired || device == null)
+            return;
+
+        // Only act if this is our player's user
+        if (!user.valid || playerInput == null)
+            return;
+
+        // Check if we need to switch schemes based on the device used
+        if (device is Gamepad && _gamepadScheme.HasValue && playerInput.currentControlScheme != _gamepadScheme.Value.name)
+        {
+            playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, device);
+        }
+        else if ((device is Keyboard || device is Mouse) && _kbmScheme.HasValue && playerInput.currentControlScheme != _kbmScheme.Value.name)
+        {
+            playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        InputUser.onChange -= OnInputUserChanged;
     }
 
     private void CacheControlSchemes()
