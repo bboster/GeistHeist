@@ -6,12 +6,18 @@ using FMOD.Studio;
 
 public class MusicManager : Singleton<MusicManager>
 {
+    [SerializeField] private string hubName;
+    [SerializeField] private string[] levelNames;
+    [SerializeField] private string globeName;
+    [SerializeField] private string menuName;
+    
     private EventInstance levelBGM;
     private EventInstance hubBGM;
     private EventInstance globeBGM;
     private EventInstance menuBGM;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Initialize()
     {
         menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.MenuBGM);
         globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GlobeBGM);
@@ -20,19 +26,20 @@ public class MusicManager : Singleton<MusicManager>
 
         //the following if-else block could be changed to a Switch statement -Josh
         StopAll();
-        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Main Menu")))
+
+        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(menuName)))
         {
             menuBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Actual Hub Scene")))
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(hubName)))
         {
             hubBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Globe")))
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(globeName)))
         {
             globeBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("FINAL Parlour Room")))
+        else
         {
             levelBGM.start();
         }

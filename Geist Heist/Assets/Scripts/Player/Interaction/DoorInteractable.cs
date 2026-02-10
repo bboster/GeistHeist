@@ -47,7 +47,7 @@ public class DoorInteractable : MonoBehaviour, IInteractable
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);
-            GameManager.Instance.NextLevel(sceneName);
+            LevelManager.Instance.ChangeScene(sceneName);
             return;
         }
         var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
