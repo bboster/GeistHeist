@@ -333,7 +333,6 @@ GameObject:
   - component: {fileID: 3529143230881648874}
   - component: {fileID: 528559998752776015}
   - component: {fileID: 2355705643869088645}
-  - component: {fileID: 3811571790820129831}
   m_Layer: 14
   m_Name: Collectable 2
   m_TagString: Untagged
@@ -389,10 +388,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 743654506321680450, guid: ebd3df97937b65f40b13344b20453dbe, type: 3}
-  - {fileID: -2249960132812961191, guid: ebd3df97937b65f40b13344b20453dbe, type: 3}
-  - {fileID: 4167910553179981948, guid: ebd3df97937b65f40b13344b20453dbe, type: 3}
-  - {fileID: 3511325375820423461, guid: ebd3df97937b65f40b13344b20453dbe, type: 3}
+  - {fileID: -876546973899608171, guid: 8bdb26419f750d64eb8717560ce4acb7, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -415,25 +411,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3811571790820129831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4301458526575561296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 7.38
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
 --- !u!1 &5323379908976991320
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,7 +423,6 @@ GameObject:
   - component: {fileID: 9105147041881955825}
   - component: {fileID: 3795642693812896975}
   - component: {fileID: 6533541477800292074}
-  - component: {fileID: 1907593168223409693}
   m_Layer: 14
   m_Name: Collectable 1
   m_TagString: Untagged
@@ -546,25 +522,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1907593168223409693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5323379908976991320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 7.38
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
 --- !u!1 &7123302576926646061
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,7 +662,6 @@ GameObject:
   - component: {fileID: 1409033859836534145}
   - component: {fileID: 685237948982837041}
   - component: {fileID: 5434373973605477231}
-  - component: {fileID: 3503500997457759336}
   m_Layer: 14
   m_Name: Collectable 3
   m_TagString: Untagged
@@ -785,25 +741,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3503500997457759336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7213961706049756034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 7.38
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
 --- !u!1 &7508292700099194344
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,7 +872,8 @@ MonoBehaviour:
   sizeToFitForCollectable: 2
   tiltAngle: 15
   collectableRotationSeconds: 8
-  notCollectedMaterial: {fileID: -3318677452211556784, guid: bf50067c13491734c9357a8a859bd344, type: 3}
+  tetherRotationSeconds: 20
+  notCollectedMaterial: {fileID: -876546973899608171, guid: 8bdb26419f750d64eb8717560ce4acb7, type: 3}
   renderCamera: {fileID: 593068301388323175}
   renderCameraOverlayImage: {fileID: 1037326463120046110}
 --- !u!1 &7545283414420870001
@@ -950,7 +888,6 @@ GameObject:
   - component: {fileID: 3996778871871479025}
   - component: {fileID: 5062323883720420108}
   - component: {fileID: 4004636425506003339}
-  - component: {fileID: 325370589754701629}
   m_Layer: 14
   m_Name: Tether Model
   m_TagString: Untagged
@@ -1050,25 +987,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &325370589754701629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7545283414420870001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 7.38
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
 --- !u!1001 &1017211392042742829
 PrefabInstance:
   m_ObjectHideFlags: 0

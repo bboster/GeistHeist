@@ -39,6 +39,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     [SerializeField] private float tiltAngle = 15;
     [Tooltip("Seconds to do a full spin")]
     [SerializeField] private float collectableRotationSeconds = 6;
+    [SerializeField] private float tetherRotationSeconds = 20;
     [SerializeField, Required] private Material notCollectedMaterial;
 
 
@@ -84,7 +85,9 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         else
         {
             // Set materials to uncollected
-            Array.Fill(tetherMesh.materials, notCollectedMaterial);
+            int count = tetherMesh.materials.Count();
+            var emptyMaterials = Enumerable.Repeat(notCollectedMaterial, count).ToList();
+            tetherMesh.SetMaterials(emptyMaterials);
         }
     }
 
@@ -120,10 +123,18 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     #region Viewport Objects Animation
     private void Update()
     {
-        for(int i=0; i<CollectableMeshes.Count; i++)
+        notCollectedMaterial.SetFloat("_Unscaled_Time", Time.unscaledTime);
+
+        for (int i=0; i<CollectableMeshes.Count; i++)
         {
             var collectableMesh = CollectableMeshes[i];
             RotateItem(collectableMesh.collectableObject.transform, collectableRotationSeconds, i, tiltAngle);
+        }
+
+        for (int i = 0; i < TetherModels.Count; i++)
+        {
+            var tetherMesh = TetherModels[i];
+            RotateItem(tetherMesh.transform, tetherRotationSeconds, 0, 0);
         }
     }
 
