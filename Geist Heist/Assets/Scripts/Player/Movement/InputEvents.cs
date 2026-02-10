@@ -13,7 +13,8 @@ using UnityEditor;
 //using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
- using UnityEngine.InputSystem;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.SceneManagement;
 
@@ -54,7 +55,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     public static UnityEvent<Vector2> LookUpdate = new UnityEvent<Vector2>();
 
-    [SerializeField] private float _sensitivity=1;
+    [SerializeField] private float _sensitivity = 1;
 
     public static bool IsHeld = false;
 
@@ -74,7 +75,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private static float actionTimeReleased = -1;
     public static float MoveHeldTime => MovePressed ? Time.time - moveTimeStarted : 0;
     public static float ActionHeldTime => ActionPressed ? Time.time - actionTimeStarted : 0;
-    public static float ActionReleasedTime => ActionPressed ? 0: Time.time - actionTimeReleased;
+    public static float ActionReleasedTime => ActionPressed ? 0 : Time.time - actionTimeReleased;
     public static float InteractHeldTime => InteractPressed ? Time.time - interactTimeStarted : 0;
 
 
@@ -87,11 +88,14 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private Transform movementOrigin => GetCamera();
     private Transform _movementOrigin;
 
+    private InputControlScheme? _gamepadScheme;
+    private InputControlScheme? _kbmScheme;
+
     // Start function equivalent. called from GameManager to control execution order.
     public void Initialize()
     {
         // this may be before awake has ran...
-        if(Instance != this)
+        if (Instance != this)
             base.Awake();
 
         if (Instance != this)
@@ -99,7 +103,37 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         playerInput = GetComponent<PlayerInput>();
         InitializeActions();
+        CacheControlSchemes();
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void CacheControlSchemes()
+    {
+        if (playerInput?.actions == null)
+            return;
+
+        var controlSchemes = playerInput.actions.controlSchemes;
+        _gamepadScheme = null;
+        _kbmScheme = null;
+
+        foreach (var scheme in controlSchemes)
+        {
+            bool hasGamepad = false;
+            bool hasKeyboardMouse = false;
+
+            foreach (var req in scheme.deviceRequirements)
+            {
+                if (req.controlPath.Contains("Gamepad"))
+                    hasGamepad = true;
+                if (req.controlPath.Contains("Keyboard") || req.controlPath.Contains("Mouse"))
+                    hasKeyboardMouse = true;
+            }
+
+            if (hasGamepad)
+                _gamepadScheme = scheme;
+            if (hasKeyboardMouse)
+                _kbmScheme = scheme;
+        }
     }
 
     void InitializeActions()
@@ -122,7 +156,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted, ref actionTimeStarted);
         Interact.started += ctx => InputActionStarted(ref InteractPressed, InteractStarted);
         Pause.started += ctx => OnPauseStarted();
-        DebugA.started += ctx => {DebugStarted.Invoke(); };
+        DebugA.started += ctx => { DebugStarted.Invoke(); };
 
         Move.canceled += ctx => InputActionCanceled(ref MovePressed, MoveCanceled, MoveHeldTime);
         //Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
@@ -191,6 +225,61 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         LookUpdate.Invoke(LookDelta);
     }
 
+    private void Update()
+    {
+        // Allow device switching even when paused
+        if (playerInput == null || playerInput.actions == null)
+            return;
+
+        string currentScheme = playerInput.currentControlScheme;
+
+        // If on gamepad scheme, check for keyboard/mouse input
+        if (_gamepadScheme.HasValue && currentScheme == _gamepadScheme.Value.name)
+        {
+            if ((Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) ||
+                (Mouse.current != null && Mouse.current.delta.ReadValue().sqrMagnitude > 0.01f))
+            {
+                if (_kbmScheme.HasValue)
+                {
+                    playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
+                }
+                return;
+            }
+        }
+        // If on keyboard/mouse scheme, check for any gamepad input
+        else if (_kbmScheme.HasValue && currentScheme == _kbmScheme.Value.name)
+        {
+            if (Gamepad.current != null && IsGamepadActive())
+            {
+                if (_gamepadScheme.HasValue)
+                {
+                    playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
+                }
+                return;
+            }
+        }
+
+    }
+
+    private bool IsGamepadActive()
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad == null)
+            return false;
+
+        // Check for any button press or stick/trigger activity
+        foreach (var control in gamepad.allControls)
+        {
+            if (control is ButtonControl button && button.wasPressedThisFrame)
+                return true;
+        }
+        return
+            gamepad.leftStick.ReadValue().sqrMagnitude > 0.15f ||
+            gamepad.rightStick.ReadValue().sqrMagnitude > 0.15f ||
+            gamepad.leftTrigger.ReadValue() > 0.1f ||
+            gamepad.rightTrigger.ReadValue() > 0.1f;
+    }
+
     private void RemoveAllListeners()
     {
         MoveStarted.RemoveAllListeners();
@@ -206,7 +295,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         //Debug.Log("On Disable");
-        Move?.Reset();   
+        Move?.Reset();
         //Jump.Reset();
         Pause?.Reset();
         Action?.Reset();
