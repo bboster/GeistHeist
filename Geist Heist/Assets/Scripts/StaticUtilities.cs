@@ -270,7 +270,7 @@ public static class StaticUtilities
 
     public static void ScaleOverTime(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime=true)
     {
-        GuardCoroutineManager.instance.StartCoroutine(ScaleOverTimeCoroutine(transform, startScale, targetScale, seconds, unscaledTime));
+        GuardCoroutineManager.Instance.StartCoroutine(ScaleOverTimeCoroutine(transform, startScale, targetScale, seconds, unscaledTime));
     }
 
     private static IEnumerator ScaleOverTimeCoroutine(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime)
