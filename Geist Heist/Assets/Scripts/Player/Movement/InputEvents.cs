@@ -7,14 +7,13 @@
  * Use other scripts to connect to the unityevents.
  */
 
+using System.Collections;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using UnityEditor;
-//using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
@@ -37,10 +36,6 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static UnityEvent MoveNotHeld = new UnityEvent();
     public static UnityEvent<float> MoveCanceled = new();
 
-    /*public static UnityEvent JumpStarted = new UnityEvent();
-    public static UnityEvent JumpHeld = new UnityEvent();
-    public static UnityEvent JumpCanceled = new UnityEvent();*/
-
     public static UnityEvent ActionStarted = new UnityEvent();
     public static UnityEvent<float> ActionHeld = new();
     public static UnityEvent<float> ActionNotHeld = new();
@@ -57,10 +52,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static UnityEvent<Vector2> LookUpdate = new UnityEvent<Vector2>();
 
     [SerializeField] private float _sensitivity = 1;
-
     public static bool IsHeld = false;
 
-    // Input values and flags
     public Vector2 LookDelta => Look.ReadValue<Vector2>() * _sensitivity;
     public Vector3 FirstPersonInputDirection => (
         (movementOrigin.forward * InputDirection2D.y)
@@ -92,7 +85,10 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private InputControlScheme? _gamepadScheme;
     private InputControlScheme? _kbmScheme;
 
-    // Start function equivalent. called from GameManager to control execution order.
+    private InputDevice _currentDevice = null;
+    private bool _canUseControlSwap = true;
+    private WaitForEndOfFrame _endOfFrame = null;
+
     public void Initialize()
     {
         if (Instance != this)
@@ -113,28 +109,39 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     private void OnInputUserChanged(InputUser user, InputUserChange change, InputDevice device)
     {
-        // Ignore device unpair and focus only on scheme/device changes
-        if (change == InputUserChange.DeviceUnpaired || device == null)
+        if (device == null || _currentDevice == device || !_canUseControlSwap ||
+            change == InputUserChange.DeviceUnpaired)
             return;
 
-        // Only act if this is our player's user
         if (!user.valid || playerInput == null)
             return;
 
-        // Check if we need to switch schemes based on the device used
         if (device is Gamepad && _gamepadScheme.HasValue && playerInput.currentControlScheme != _gamepadScheme.Value.name)
         {
             playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, device);
+            _currentDevice = device;
+            _canUseControlSwap = false;
+            StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
         else if ((device is Keyboard || device is Mouse) && _kbmScheme.HasValue && playerInput.currentControlScheme != _kbmScheme.Value.name)
         {
             playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
+            _currentDevice = device;
+            _canUseControlSwap = false;
+            StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
+    }
+
+    private IEnumerator PreventControlSwapUntilEndOfFrame()
+    {
+        yield return _endOfFrame ??= new WaitForEndOfFrame();
+        _canUseControlSwap = true;
     }
 
     private void OnDestroy()
     {
         InputUser.onChange -= OnInputUserChanged;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void CacheControlSchemes()
@@ -208,7 +215,6 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             return;
 
         timeStartedFlag = Time.time;
-
         pressedFlag = true;
         actionEvent?.Invoke();
     }
@@ -228,7 +234,6 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     void InputActionCanceled(ref bool pressedFlag, UnityEvent<float> actionEvent, float timeHeld, ref float timeStartedFlag)
     {
         timeStartedFlag = Time.time;
-
         actionEvent?.Invoke(timeHeld);
         pressedFlag = false;
     }
@@ -240,6 +245,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         else
             PauseStarted.Invoke();
     }
+
     private void FixedUpdate()
     {
         if (GameManager.Instance.IsPaused)
@@ -257,8 +263,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     private void Update()
     {
-        // Allow device switching even when paused
-        if (playerInput == null || playerInput.actions == null)
+        // Polling-based device switching (catches input not yet in InputUser.onChange)
+        if (playerInput == null || playerInput.actions == null || !_canUseControlSwap)
             return;
 
         string currentScheme = playerInput.currentControlScheme;
@@ -272,6 +278,9 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
                 if (_kbmScheme.HasValue)
                 {
                     playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
+                    _currentDevice = Keyboard.current;
+                    _canUseControlSwap = false;
+                    StartCoroutine(PreventControlSwapUntilEndOfFrame());
                 }
                 return;
             }
@@ -284,11 +293,13 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
                 if (_gamepadScheme.HasValue)
                 {
                     playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
+                    _currentDevice = Gamepad.current;
+                    _canUseControlSwap = false;
+                    StartCoroutine(PreventControlSwapUntilEndOfFrame());
                 }
                 return;
             }
         }
-
     }
 
     private bool IsGamepadActive()
@@ -297,36 +308,36 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         if (gamepad == null)
             return false;
 
-        // Check for any button press or stick/trigger activity
-        foreach (var control in gamepad.allControls)
-        {
-            if (control is ButtonControl button && button.wasPressedThisFrame)
-                return true;
-        }
-        return
-            gamepad.leftStick.ReadValue().sqrMagnitude > 0.15f ||
-            gamepad.rightStick.ReadValue().sqrMagnitude > 0.15f ||
-            gamepad.leftTrigger.ReadValue() > 0.1f ||
-            gamepad.rightTrigger.ReadValue() > 0.1f;
+        return gamepad.leftStick.ReadValue().sqrMagnitude > 0.15f ||
+               gamepad.rightStick.ReadValue().sqrMagnitude > 0.15f ||
+               gamepad.leftTrigger.ReadValue() > 0.1f ||
+               gamepad.rightTrigger.ReadValue() > 0.1f;
     }
 
     private void RemoveAllListeners()
     {
         MoveStarted.RemoveAllListeners();
-        ActionStarted.RemoveAllListeners();
-        InteractStarted.RemoveAllListeners();
-        PauseStarted.RemoveAllListeners();
-
+        MoveHeld.RemoveAllListeners();
+        MoveNotHeld.RemoveAllListeners();
         MoveCanceled.RemoveAllListeners();
+
+        ActionStarted.RemoveAllListeners();
+        ActionHeld.RemoveAllListeners();
+        ActionNotHeld.RemoveAllListeners();
         ActionCanceled.RemoveAllListeners();
+
+        InteractStarted.RemoveAllListeners();
+        InteractHeld.RemoveAllListeners();
         InteractCanceled.RemoveAllListeners();
+
+        PauseStarted.RemoveAllListeners();
         DebugStarted.RemoveAllListeners();
+        LookUpdate.RemoveAllListeners();
     }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //Debug.Log("On Disable");
         Move?.Reset();
-        //Jump.Reset();
         Pause?.Reset();
         Action?.Reset();
         Interact?.Reset();
@@ -344,7 +355,6 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             _movementOrigin = Camera.main.transform;
 
         return _movementOrigin;
-
     }
 
     #endregion
