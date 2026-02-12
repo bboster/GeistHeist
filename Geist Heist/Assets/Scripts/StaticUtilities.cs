@@ -357,7 +357,32 @@ public static class StaticUtilities
         transform.LookAway(target.position);
     }
 
-   
+    public static void ScaleOverTime(Transform transform, Vector3 targetScale, float seconds, bool unscaledTime=true)
+    {
+        ScaleOverTime(transform, transform.localScale, targetScale, seconds);
+    }
+
+    public static void ScaleOverTime(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime=true)
+    {
+        GuardCoroutineManager.Instance.StartCoroutine(ScaleOverTimeCoroutine(transform, startScale, targetScale, seconds, unscaledTime));
+    }
+
+    private static IEnumerator ScaleOverTimeCoroutine(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime)
+    {
+        float startTime = unscaledTime ? Time.unscaledTime : Time.time;
+        float time = startTime;
+        while (time - startTime < seconds)
+        {
+            time = unscaledTime ? Time.unscaledTime : Time.time;
+            float t = (time - startTime) / seconds;
+
+            transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+
+            yield return null;
+        }
+        // apply one more time just in case.
+        transform.localScale = targetScale;
+    }
 
     #endregion
 
@@ -371,6 +396,22 @@ public static class StaticUtilities
             total += v;
         }
         return total / vectors.Length;
+    }
+
+    /// <summary>
+    /// Get the smallest value in a vector
+    /// </summary>
+    public static float Min(this Vector3 vector)
+    {
+        return Mathf.Min(Mathf.Min(vector.x,vector.y),vector.z);
+    }
+
+    /// <summary>
+    /// Get the largest value in a vector
+    /// </summary>
+    public static float Max(this Vector3 vector)
+    {
+        return Mathf.Max(Mathf.Max(vector.x, vector.y), vector.z);
     }
 
     /// <summary>
@@ -573,6 +614,22 @@ public static class StaticUtilities
         if (str == null) return true;
         if (str.Length == 0) return true;
         return false;
+    }
+
+
+
+    #endregion
+
+    #region Linq
+
+    public static void ForEach<T>(this IEnumerable<T> source, UnityAction<T> action)
+    {
+        //source.ThrowIfNull("source");
+        //action.ThrowIfNull("action");
+        foreach (T element in source)
+        {
+            action(element);
+        }
     }
 
     #endregion
