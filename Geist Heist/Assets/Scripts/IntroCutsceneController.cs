@@ -45,6 +45,7 @@ public class IntroCutsceneController : MonoBehaviour
         renderTexture.Create();
 
         player = GetComponent<VideoPlayer>();
+        player.renderMode = VideoRenderMode.RenderTexture;
         player.targetTexture = renderTexture;
 
         outputImage.texture = renderTexture;
