@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class GlobeEndInteractable : MonoBehaviour, IActionable
+public class GlobeEndActionable : MonoBehaviour, IActionable
 {
     [SerializeField] private int endingButtonPresses = 10;
     private Coroutine endCoroutine;
@@ -29,10 +29,14 @@ public class GlobeEndInteractable : MonoBehaviour, IActionable
         }
     }
 
-    /*
-    bool IsActionable()
+    bool IActionable.IsActionable()
     {
-        if (SaveDataManager.Instance.GetLevelsCompletedCount() == )
+        if (SaveDataManager.Instance.AllLevelsCompleted())
+        {
+            return true;
+        }
+
+        return false;
     }
-    */
+    
 }

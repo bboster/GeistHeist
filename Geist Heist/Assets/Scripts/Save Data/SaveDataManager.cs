@@ -26,6 +26,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     [Header("Scene Transition")]
     [SerializeField, Scene] private List<string> ScenesToExcludeFromCompletionCount;
+    [SerializeField, Scene] private List<string> ScenesRequiredForCompletion;
 
     [Header("Debug")]
     [Tooltip("If true, does not save any data")]
@@ -125,6 +126,21 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         return currentSaveDta.ScenesCompleted
             .Where(s => ScenesToExcludeFromCompletionCount.Contains(s) == false)
             .Count();
+    }
+
+    /// <summary>
+    /// Sees if all scenes in required list are completed
+    /// </summary>
+    public bool AllLevelsCompleted()
+    {
+        EnsureSaveData();
+        
+        if (GetLevelsCompletedCount() == ScenesRequiredForCompletion.Count())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     #endregion
