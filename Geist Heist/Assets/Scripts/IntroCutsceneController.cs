@@ -13,6 +13,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class IntroCutsceneController : MonoBehaviour
@@ -28,6 +29,10 @@ public class IntroCutsceneController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI skipText; //THIS NEEDS TO BE SWAPPED OUT WITH CONTROLLER ICONS
     [SerializeField] private float skipTextActiveTime;
 
+    [SerializeField] private RawImage outputImage;
+
+    private RenderTexture renderTexture;
+
     private void Awake()
     {
         if(hubScene == null || hubScene.Length == 0)
@@ -36,7 +41,14 @@ public class IntroCutsceneController : MonoBehaviour
             return;
         }
 
+        renderTexture = new RenderTexture(1920, 1080, 1, RenderTextureFormat.ARGB32);
+        renderTexture.Create();
+
         player = GetComponent<VideoPlayer>();
+        player.targetTexture = renderTexture;
+
+        outputImage.texture = renderTexture;
+
         player.loopPointReached += LoadHub;
 
         map = GetComponent<PlayerInput>().currentActionMap;
