@@ -2,7 +2,7 @@
  * Contributors:Josh
  * Creation: 10/22/205
  * Last Edited: 10/27/205
- * Summary: Registry of collectable types to their mesh prefabs.
+ * Summary: collectableRegistry of collectable types to their mesh prefabs.
  * 
  * TODO: make 
  */
@@ -19,6 +19,11 @@ public class CollectableRegistry : ScriptableObject
     {
         public Collectable collectable;
         public GameObject meshPrefab;
+        
+        public Material[] GetMaterials()
+        {
+            return meshPrefab.GetComponent<MeshRenderer>().sharedMaterials;
+        }
     }
 
     [SerializeField] private List<CollectableEntry> entries = new();
@@ -27,7 +32,7 @@ public class CollectableRegistry : ScriptableObject
     public IReadOnlyList<CollectableEntry> Entries => entries;
 
     /// Get the mesh renderer for a given collectable enum
-    public MeshRenderer GetMesh(Collectable collectable)
+    public MeshRenderer GetMeshRenderer(Collectable collectable)
     {
         if((int)collectable <= 0) return null;
 
@@ -35,8 +40,24 @@ public class CollectableRegistry : ScriptableObject
         return entry?.meshPrefab?.GetComponent<MeshRenderer>();
     }
 
+    public Material[] GetMaterials(Collectable collectable)
+    {
+        if ((int)collectable <= 0) return null;
+
+        var entry = entries.Find(e => e.collectable == collectable);
+        return entry?.GetMaterials();
+    }
+
+    public Mesh GetMesh(Collectable collectable)
+    {
+        if ((int)collectable <= 0) return null;
+
+        var entry = entries.Find(e => e.collectable == collectable);
+        return entry.meshPrefab.GetComponent<MeshFilter>().sharedMesh;
+    }
+
 #if UNITY_EDITOR
-    /// Add or update an entry in the registry (editor-only)
+    /// Add or update an entry in the collectableRegistry (editor-only)
     public void AddOrUpdate(Collectable collectable, GameObject meshPrefab)
     {
         var existing = entries.Find(e => e.collectable == collectable);
