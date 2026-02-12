@@ -284,6 +284,8 @@ public class ToyCar : IInputHandler
 
         if (rb.linearVelocity == Vector3.zero)
         {
+            if (InputEvents.Instance.IsGamepadActive() == true)
+                rotation *= .01f;
             transform.Rotate(new Vector3(rotation, 0, 0) * Time.deltaTime);
         }
     }

@@ -302,7 +302,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         }
     }
 
-    private bool IsGamepadActive()
+    public bool IsGamepadActive()
     {
         var gamepad = Gamepad.current;
         if (gamepad == null)
