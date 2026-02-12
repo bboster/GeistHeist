@@ -3,6 +3,7 @@ using FMOD.Studio;
 using FMODUnity;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.tvOS;
 
 public class FMODEvents : Singleton<FMODEvents>
 {

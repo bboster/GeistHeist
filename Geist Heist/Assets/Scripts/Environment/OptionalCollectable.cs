@@ -181,7 +181,7 @@ public class OptionalCollectable : MonoBehaviour
             return;
         }
 
-        // Queue the collectableRegistry update to happen after import/validation finishes
+        // Queue the registry update to happen after import/validation finishes
         EditorApplication.delayCall += () =>
         {
             if (Registry == null)

@@ -15,7 +15,7 @@ using UnityEngine;
 /*
  * Looked it up on the goog, "Collectible" is technically correct spelling, but we spell it "Collectable" everywhere else in the game.
  * 
- * I wonder if we should add a position offset variable to the collectable collectableRegistry, so we can have more control over where each hat goes.
+ * I wonder if we should add a position offset variable to the collectable registry, so we can have more control over where each hat goes.
  * 
  * Also, this script should be moved to environment folder or the interactables folder, since it is an interactable.
  * 
@@ -95,7 +95,7 @@ public class WearableCollectible : MonoBehaviour
         // Instantiate the new hat if it isnt none
 
         // Get the correct mesh *each time*
-        MeshRenderer meshPrefab = Registry.GetMeshRenderer(currentHat);
+        MeshRenderer meshPrefab = Registry.GetMesh(currentHat);
         if (meshPrefab == null)
         {
             Debug.LogWarning($"No mesh prefab found for {currentHat}.");

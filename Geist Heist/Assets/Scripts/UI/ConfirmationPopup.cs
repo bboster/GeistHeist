@@ -29,8 +29,6 @@ public class ConfirmationPopup : MonoBehaviour
 
     private UnityAction afterCancelClicked = null;
 
-    public static bool AnyConfirmationMenuOpen = false;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -45,7 +43,6 @@ public class ConfirmationPopup : MonoBehaviour
     /// <summary>
     /// Opens confirmation window, can add custom behaviour to the respective buttons
     /// </summary>
-    /// <param name="text">Text prompt that displays at text box (not confirmation button)</param>
     /// <param name="fadeSeconds">If greater than 0, fades in and out</param>
     public void OpenConfirmationPopup(string? text = null, UnityAction? OnConfirmationButtonClicked = null, UnityAction? OnCancelButtonClicked = null, float fadeSeconds = -1)
     {
@@ -55,13 +52,13 @@ public class ConfirmationPopup : MonoBehaviour
         lastFadeSecondsUsed = fadeSeconds;
 
         // Press esc to close popup
-        InputEvents.PauseStartedOverride = OnCancelButtonPressed;
+        InputEvents.PauseStartedOverride = HideConfirmationPopup;
 
         StaticUtilities.ShowCursor();
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0f;
 
-        if(text != null && confirmationText != null)
+        if(text != null)
         {
             confirmationText.text = text;
         }

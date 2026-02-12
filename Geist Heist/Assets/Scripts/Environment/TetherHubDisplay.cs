@@ -21,7 +21,7 @@ public class TetherHubDisplay : MonoBehaviour
 
     public void Start()
     {
-        // TODO: I think it might be better if the tethers meshRenderer/mesh was pulled from some kind of table/dictionary?
+        // TODO: I think it might be better if the tethers model/mesh was pulled from some kind of table/dictionary?
 
         UpdateVisibility();
     }

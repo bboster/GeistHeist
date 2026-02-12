@@ -148,7 +148,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(DailougeManagerPrefab).GetComponent<DialogueManager>().Initialize();
         Instantiate(AudioManagerPrefab).GetComponent<AudioManager>().Initialize();
         Instantiate(MusicManagerPrefab).GetComponent<MusicManager>().Initialize();
-        Instantiate(KeyManagerPrefab).GetComponent<KeyManager>().Initialize();
+        Instantiate(KeyManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
@@ -157,7 +157,7 @@ public class GameManager : Singleton<GameManager>
 
 
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
-        Instantiate(GeneralHUDPrefab).GetComponent<PlayerHUDManager>().Initialize() ;
+        Instantiate(GeneralHUDPrefab);
         Instantiate(DebugConsolePrefab);
 
         if (FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
