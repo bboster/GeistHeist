@@ -6,6 +6,7 @@
  * Brief Description: Shows charge amount for car.
  * Uses a rotating needle to replicate a speedometer.
  * 
+ * This code is obsolete
  */
 
 using NaughtyAttributes;
