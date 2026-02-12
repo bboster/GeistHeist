@@ -14,7 +14,7 @@ using NaughtyAttributes;
 [RequireComponent(typeof(Collider))]
 public class KeyItem : MonoBehaviour
 {
-    [SerializeField] private KeyType keyType;
+    [SerializeField] public KeyType keyType;
     [SerializeField] private GameObject collectionParticlePrefab;
 
     private bool _collected;
