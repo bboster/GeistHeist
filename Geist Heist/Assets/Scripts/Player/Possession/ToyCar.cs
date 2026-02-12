@@ -294,6 +294,20 @@ public class ToyCar : IInputHandler
     public override void OnMoveCanceled(float secondsHeld) { }
     #endregion
 
+    #region Space Bar
+    public override void OnSpaceStarted()
+    {
+    }
+
+    public override void WhileSpaceHeld(float secondsHeld)
+    {
+    }
+
+    public override void OnSpaceCanceled(float secondsHeld)
+    {
+    }
+    #endregion
+
     #region Onomatopoeias
 
     void OnCrashOrBounceDetected(Vector3 impactPoint)

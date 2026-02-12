@@ -106,4 +106,18 @@ public class TetherPossessable : IInputHandler
 
 
     #endregion
+
+    #region Space Bar
+    public override void OnSpaceStarted()
+    {
+    }
+
+    public override void WhileSpaceHeld(float secondsHeld)
+    {
+    }
+
+    public override void OnSpaceCanceled(float secondsHeld)
+    {
+    }
+    #endregion
 }

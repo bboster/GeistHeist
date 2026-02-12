@@ -194,6 +194,11 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.InteractStarted.AddListener(input.OnInteractStarted);
         InputEvents.InteractHeld.AddListener(input.WhileInteractHeld);
         InputEvents.InteractCanceled.AddListener(input.OnInteractCanceled);
+
+        InputEvents.SpaceStarted.AddListener(input.OnSpaceStarted);
+        InputEvents.SpaceHeld.AddListener(input.WhileSpaceHeld);
+        InputEvents.SpaceCanceled.AddListener(input.OnSpaceCanceled);
+
     }
 
     public void DeRegisterInputs(PossessableObject possessable)
@@ -212,6 +217,11 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.InteractStarted.RemoveListener(input.OnInteractStarted);
         InputEvents.InteractHeld.RemoveListener(input.WhileInteractHeld);
         InputEvents.InteractCanceled.RemoveListener(input.OnInteractCanceled);
+
+
+        InputEvents.SpaceStarted.RemoveListener(input.OnSpaceStarted);
+        InputEvents.SpaceHeld.RemoveListener(input.WhileSpaceHeld);
+        InputEvents.SpaceCanceled.RemoveListener(input.OnSpaceCanceled);
     }
 
     private void Update()

@@ -20,7 +20,7 @@ public class GlobePossessable : IInputHandler
     {
         if (globePossessAnimation != null)
         {
-            //globePossessAnimation = StartCoroutine(LoadNextSceneCooldown());
+            globePossessAnimation = StartCoroutine(LoadNextSceneCooldown());
         }
     }
 
@@ -79,13 +79,27 @@ public class GlobePossessable : IInputHandler
 
     #endregion
 
+    #region Space Bar
+    public override void OnSpaceStarted()
+    {
+    }
+
+    public override void WhileSpaceHeld(float secondsHeld)
+    {
+    }
+
+    public override void OnSpaceCanceled(float secondsHeld)
+    {
+    }
+    #endregion
+
     //TO DO: adapt this to start on the tether and maybe go to another script when we get an animation, currently changes scenes abruptly
     IEnumerator LoadNextSceneCooldown()
     {
 
         yield return new WaitForSeconds(1.5f);
 
-        //SceneManager.LoadScene(HubScene);
+        SceneManager.LoadScene(GlobeScene);
         LevelManager.Instance.ChangeScene(GlobeScene);
     }
 }

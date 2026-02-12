@@ -79,6 +79,9 @@ public class ThirdPersonInputHandler : IInputHandler
     private Vector3 lastMoveDirection = Vector3.zero;
     private LayerMask rampLayerMask;
 
+    //ending
+    private GlobeEndActionable globeEndActionable;
+
     private EventInstance playerMoveSFX;
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
@@ -96,8 +99,10 @@ public class ThirdPersonInputHandler : IInputHandler
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
         rampLayerMask = LayerMask.GetMask("Ramp");
+        globeEndActionable = FindFirstObjectByType<GlobeEndActionable>();
     }
 
+    #region Possession
     // WhilePossessingUpdate is called once per frame
     public override void WhilePossessingUpdate()
     {
@@ -121,6 +126,7 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnPossessionEnded()
     {
     }
+    #endregion
 
     #region Action
 
@@ -504,6 +510,28 @@ public class ThirdPersonInputHandler : IInputHandler
     }
     #endregion
 
+    #region Space Bar
+    public override void OnSpaceStarted()
+    {
+        if (globeEndActionable != null)
+        {
+            if (globeEndActionable.EndingActive)
+            {
+                globeEndActionable.endingButtonPresses--;
+                globeEndActionable.currentButtonPresses++;
+            }
+        }
+    }
+
+    public override void WhileSpaceHeld(float secondsHeld)
+    {
+    }
+
+    public override void OnSpaceCanceled(float secondsHeld)
+    {
+    }
+    #endregion
+
     #region Other
 
     private void RotatePlayer()
@@ -619,5 +647,5 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
-   
+
 }
