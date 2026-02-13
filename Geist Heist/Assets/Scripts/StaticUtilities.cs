@@ -128,6 +128,100 @@ public static class StaticUtilities
 
     #endregion
 
+    #region Animations
+
+    /// <summary>
+    /// Smooth transform's current scale to endScale;
+    /// </summary>
+    public static Coroutine AnimateScale(Transform transform, Vector3 endScale, float seconds,
+        bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.Instance.StartCoroutine(AnimateScaleCoroutine(transform, transform.localScale, endScale, seconds, unscaledTime, currentCoroutineToCancel));
+    }
+
+    /// <summary>
+    /// Smooths the transforms scale from startScale to endScale;
+    /// </summary>
+    public static Coroutine AnimateScale(Transform transform, Vector3 startScale, Vector3 endScale, float seconds,
+        bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.Instance.StartCoroutine(AnimateScaleCoroutine(transform, startScale, endScale, seconds, unscaledTime, currentCoroutineToCancel));
+    }
+
+    private static IEnumerator AnimateScaleCoroutine(Transform transform, Vector3 startScale, Vector3 endScale, float seconds,
+        bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
+    {
+        float startTime = unscaledTime ? Time.unscaledTime : Time.time;
+        float time = startTime;
+        while (time - startTime < seconds)
+        {
+            time = unscaledTime ? Time.unscaledTime : Time.time;
+            float t = (time - startTime) / seconds;
+
+            transform.localScale = Vector3.Lerp(startScale, endScale, t);
+
+            yield return null;
+        }
+        // apply one more time just in case.
+        transform.localScale = endScale;
+    }
+
+    /// <summary>
+    /// Smooth current rotation towards endEulerAngles;
+    /// </summary>
+    public static Coroutine AnimateRotation(Transform transform, Vector3 endEulerAngles, float seconds,
+        bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.Instance.StartCoroutine(
+            AnimateRotationCoroutine(transform, transform.rotation, Quaternion.Euler(endEulerAngles), seconds, 
+                                     unscaledTime, currentCoroutineToCancel)
+        );
+    }
+
+    /// <summary>
+    /// Smooth current rotation towards endRotation;
+    /// </summary>
+    public static Coroutine AnimateRotation(Transform transform, Quaternion endRotation, float seconds,
+        bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+
+        return GuardCoroutineManager.Instance.StartCoroutine(
+            AnimateRotationCoroutine(transform, transform.rotation, endRotation, seconds,
+                                     unscaledTime, currentCoroutineToCancel)
+        );
+    }
+
+    private static IEnumerator AnimateRotationCoroutine(Transform transform, Quaternion startRotation, Quaternion endRotation, float seconds,
+        bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
+    {
+        float startTime = unscaledTime ? Time.unscaledTime : Time.time;
+        float time = startTime;
+        while (time - startTime < seconds)
+        {
+            time = unscaledTime ? Time.unscaledTime : Time.time;
+            float t = (time - startTime) / seconds;
+
+            transform.localRotation = Quaternion.Lerp(startRotation, endRotation, t);
+
+            yield return null;
+        }
+        // apply one more time just in case.
+        transform.localRotation = endRotation;
+    }
+
+    #endregion
+
     #region UI
 
     public static void ToggleCanvasGroup(CanvasGroup canvasgroup, bool enabled, float? alpha = null, bool? ignoreParentGroups = null)
@@ -263,7 +357,32 @@ public static class StaticUtilities
         transform.LookAway(target.position);
     }
 
-   
+    public static void ScaleOverTime(Transform transform, Vector3 targetScale, float seconds, bool unscaledTime=true)
+    {
+        ScaleOverTime(transform, transform.localScale, targetScale, seconds);
+    }
+
+    public static void ScaleOverTime(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime=true)
+    {
+        GuardCoroutineManager.Instance.StartCoroutine(ScaleOverTimeCoroutine(transform, startScale, targetScale, seconds, unscaledTime));
+    }
+
+    private static IEnumerator ScaleOverTimeCoroutine(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime)
+    {
+        float startTime = unscaledTime ? Time.unscaledTime : Time.time;
+        float time = startTime;
+        while (time - startTime < seconds)
+        {
+            time = unscaledTime ? Time.unscaledTime : Time.time;
+            float t = (time - startTime) / seconds;
+
+            transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+
+            yield return null;
+        }
+        // apply one more time just in case.
+        transform.localScale = targetScale;
+    }
 
     #endregion
 
@@ -277,6 +396,22 @@ public static class StaticUtilities
             total += v;
         }
         return total / vectors.Length;
+    }
+
+    /// <summary>
+    /// Get the smallest value in a vector
+    /// </summary>
+    public static float Min(this Vector3 vector)
+    {
+        return Mathf.Min(Mathf.Min(vector.x,vector.y),vector.z);
+    }
+
+    /// <summary>
+    /// Get the largest value in a vector
+    /// </summary>
+    public static float Max(this Vector3 vector)
+    {
+        return Mathf.Max(Mathf.Max(vector.x, vector.y), vector.z);
     }
 
     /// <summary>
@@ -479,6 +614,22 @@ public static class StaticUtilities
         if (str == null) return true;
         if (str.Length == 0) return true;
         return false;
+    }
+
+
+
+    #endregion
+
+    #region Linq
+
+    public static void ForEach<T>(this IEnumerable<T> source, UnityAction<T> action)
+    {
+        //source.ThrowIfNull("source");
+        //action.ThrowIfNull("action");
+        foreach (T element in source)
+        {
+            action(element);
+        }
     }
 
     #endregion

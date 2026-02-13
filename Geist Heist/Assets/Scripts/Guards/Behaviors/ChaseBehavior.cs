@@ -43,7 +43,7 @@ public class ChaseBehavior : GuardMovement
     {
         for(; ; )
         {
-            if (Vector3.Distance(GameManager.Instance.Player.transform.position, selfRef.transform.position) <= attackRange)
+            if (Vector3.Distance(PlayerManager.Instance.CurrentObject.transform.position, selfRef.transform.position) <= attackRange)
             {
                 contRef.ChangeBehavior(GuardStates.attack);
             }
