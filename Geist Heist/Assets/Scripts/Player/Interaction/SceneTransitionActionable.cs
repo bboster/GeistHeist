@@ -25,6 +25,8 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
     [SerializeField] private string confirmationText = "Go to _____?";
     [SerializeField, Required] private GameObject confirmationPopupPrefab;
 
+    private static bool anyLevelConfirmScreenOpen = false;
+
     public void Action()
     {
         if(anyLevelConfirmScreenOpen == true)
@@ -40,7 +42,7 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
         ConfirmationPopup popup = popupCanvas.GetComponentInChildren<ConfirmationPopup>();
 
         popup.OpenConfirmationPopup(text: confirmationText, fadeSeconds: 0.25f,
-            OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfrimPressed(popupCanvas));
+            OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfirmPressed(popupCanvas));
 
         popup.GetComponentInParent<LevelConfirmationVisualizer>().Initialize();
     }
