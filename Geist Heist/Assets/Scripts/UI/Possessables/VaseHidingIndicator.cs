@@ -1,7 +1,9 @@
 /*
  * Contributors: Toby
  * Creation Date: 10/29/2025
- * Last Modified: 10/29/2025
+ * Last Modified:  2/12/2026
+ * 
+ * THIS SCRIPT IS OBSOLETE
  * 
  * Opens/closes the an icon based on how much time player has left in possessable. Intended for the vase.
  * For t: 0 means eye open (image shown). 1 means eye closed (image hidden).
@@ -13,22 +15,23 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HidingIndicator : MonoBehaviour
+public class VaseHidingIndicator : PossessionAbilityIcon
 {
     [SerializeField, Required] private Image hidingImage;
-    [SerializeField, Required] private PossessableObject possessable;
 
+    private PossessableObject possessable;
 
-    public void Start()
+    public override void OnPossessionStarted(PossessableObject possessable)
     {
+        this.possessable = possessable;
         hidingImage.fillAmount = 0;
         possessable.OnTimerUpdate.AddListener(OnTimerUpdate);
     }
 
     private void OnTimerUpdate(float percentage)
     {
-        float t = percentage / possessable.maxChargePercentage;
-        hidingImage.fillAmount = 1 - t;
+        //float t = percentage / possessable.maxChargePercentage;
+        hidingImage.fillAmount = 1 - percentage;
     }
     
     private void OnDrawGizmosSelected()
@@ -39,4 +42,6 @@ public class HidingIndicator : MonoBehaviour
         float t = (Time.time / 4) % 1;
         hidingImage.fillAmount = 1-t;
     }
+
+    
 }

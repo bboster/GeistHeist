@@ -245,6 +245,50 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5523711263041610384
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 734244506001169270}
+  - component: {fileID: 7174117327507559600}
+  m_Layer: 5
+  m_Name: Ability Icon Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &734244506001169270
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5523711263041610384}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2340037552245639450}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -40, y: -40}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &7174117327507559600
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5523711263041610384}
+  m_CullTransparentMesh: 1
 --- !u!1 &5895646422344947420
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,7 +377,7 @@ GameObject:
   - component: {fileID: 6721052938016604935}
   - component: {fileID: 4570633237903890905}
   m_Layer: 5
-  m_Name: Possessable UI
+  m_Name: Possessable Toolbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -411,11 +455,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PossessableToolbar
   destroyGameObject: 0
-  uniquePossessableParent: {fileID: 0}
-  cooldownSlider: {fileID: 0}
-  cooldownGroup: {fileID: 0}
-  chargeSlider: {fileID: 0}
-  chargeGroup: {fileID: 0}
+  uniqueIconPossessableParent: {fileID: 734244506001169270}
+  uniqueTextPossessableParent: {fileID: 0}
+  cooldownSlider: {fileID: 2266620494208054008}
+  cooldownGroup: {fileID: 6146574819229817300}
+  chargeSlider: {fileID: 8789249816249807607}
+  chargeGroup: {fileID: 6346129031328035830}
 --- !u!1 &7264247110931952200
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,7 +594,7 @@ MonoBehaviour:
   destroyGameObject: 0
   CheckpointAnimationRef: {fileID: 57454641564049671}
   keyUI: {fileID: 7085260729338105902}
-  possessableToolbar: {fileID: 0}
+  possessableToolbar: {fileID: 4570633237903890905}
 --- !u!223 &4913776883215104787
 Canvas:
   m_ObjectHideFlags: 0
@@ -637,6 +682,7 @@ GameObject:
   - component: {fileID: 2125511983358640364}
   - component: {fileID: 5053410293776541156}
   - component: {fileID: 2266620494208054008}
+  - component: {fileID: 6146574819229817300}
   m_Layer: 5
   m_Name: Timer Spiral
   m_TagString: Untagged
@@ -656,6 +702,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 734244506001169270}
   - {fileID: 4906713317354249482}
   m_Father: {fileID: 1732774166696324744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -753,6 +800,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!225 &6146574819229817300
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8188480114950980676}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &8522145244095875625
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,6 +822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1002845467425448876}
   - component: {fileID: 8789249816249807607}
+  - component: {fileID: 6346129031328035830}
   m_Layer: 5
   m_Name: Charge Slider
   m_TagString: Untagged
@@ -841,6 +901,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!225 &6346129031328035830
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8522145244095875625}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1238473393088091523
 PrefabInstance:
   m_ObjectHideFlags: 0

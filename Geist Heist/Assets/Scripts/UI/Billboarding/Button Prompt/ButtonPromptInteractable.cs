@@ -40,6 +40,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
             .Select(i => i.IsInteractable() == false) // filter by uninteractable
             .Count();// > 0; // overengineered but i love lambda so much
         Debug.Log($"{parentsDisabled} parents disabled");*/
+
         var parent_interactable = transform.GetComponentInParent < IInteractable> ();
         if(parent_interactable.IsInteractable() == false)
         {
@@ -55,6 +56,13 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
     }
     void IInteractable.OnPlayerLookStop()
     {
+        Debug.Log("stopped looking");
         billboardUI.Hide();
+    }
+
+    public bool IsParentInteractable()
+    {
+        var parent_interactable = transform.GetComponentInParent<IInteractable>();
+        return parent_interactable.IsInteractable();
     }
 }

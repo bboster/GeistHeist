@@ -82,8 +82,6 @@ public class OnomatopoeiaBillboardUI : IBillboardUI
 
             textbox.transform.localEulerAngles = new Vector3(0, 0, z);
 
-            Debug.Log("angle: "+z);
-
             yield return new WaitForEndOfFrame();
         }
     }

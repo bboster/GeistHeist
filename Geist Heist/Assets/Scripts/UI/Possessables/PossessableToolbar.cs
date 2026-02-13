@@ -4,17 +4,20 @@
  * Last Modified: 2/12/2026
  * 
  * The possessable UI controller that is operated by every possessable.
+ * Has wrapper functions for the charge bar, timer spiral.
+ * Initializes ability icons and controls text.
  */
 
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PossessableToolbar : Singleton<PossessableToolbar>
 {
     [Header("Unique Possessable Icons")]
     [SerializeField, Required] private RectTransform uniqueIconPossessableParent;
-    [SerializeField, Required] private RectTransform uniqueTextPossessableParent;
+    [SerializeField, Required] private RectTransform uniqueTextPossessableParent; //@TODO
 
     [Header("Cooldown Wheel")]
     [SerializeField, Required] private Slider cooldownSlider;
@@ -25,6 +28,8 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     [SerializeField, Required] private CanvasGroup chargeGroup;
 
     private GameObject currentIcon;
+    private PossessableObject currentPossessable;
+    private UnityAction<float> currentOnTimerUpdate;
 
     /// <summary>
     /// GameManager -> PlayerHUD -> (this) PossessableToolbar
@@ -36,6 +41,35 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
 
         HideChargeSliderBar();
         SetChargeBarValue(1);
+
+        PlayerManager.Instance.OnPossessionObjectChanged.AddListener(OnPossessableObjectChanged);
+
+        OnPossessableObjectChanged(PlayerManager.Instance.CurrentObject);
+    }
+
+    public void OnPossessableObjectChanged(PossessableObject possessable)
+    {
+        // Initialize Cooldown timer wheel
+        if (currentPossessable != null)
+            currentPossessable.OnTimerUpdate.RemoveListener(SetCooldownTimerValue);
+
+        if (possessable == null)
+            return;
+
+        possessable.OnTimerUpdate.AddListener(SetCooldownTimerValue);
+        if (possessable.hasTimer)
+            ShowCooldownTimer();
+        else
+            HideCooldownTimer();
+
+        // Init charge bar
+        if (possessable.HasChargeAbility)
+            ShowChargeSliderBar();
+        else
+            HideChargeSliderBar();
+
+        currentPossessable = possessable;
+        SetIcon(possessable.AbilityIconPrefab, possessable);
     }
 
     #region Unique UI initialization
@@ -44,10 +78,22 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     {
         if(currentIcon != null)
             Destroy(currentIcon);
+            
 
-        Instantiate(iconPrefab, uniqueIconPossessableParent);
+        if(iconPrefab == null)
+        {
+            Debug.LogWarning($"{sourcePossessable.gameObject.name} does not have a set ability icon for the possession toolbar");
+            return;
+        }
 
+        // Childed to uniqueIconPossessableParent
+        currentIcon = Instantiate(iconPrefab, uniqueIconPossessableParent);
 
+        // check if icon has set functionality
+        if(currentIcon.TryGetComponent<PossessionAbilityIcon>(out PossessionAbilityIcon abilityIcon))
+        {
+            abilityIcon.OnPossessionStarted(sourcePossessable);
+        }
     }
 
     #endregion
@@ -61,13 +107,13 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     {
         //StaticUtilities.EnableCanvasGroup(cooldownGroup, interactable: false);
 
-        StaticUtilities.FadeOpacity(cooldownGroup, 1, seconds: 0.25f);
+        StaticUtilities.FadeOpacity(cooldownGroup, 1, seconds: 0.5f);
     }
     public void HideCooldownTimer()
     {
         //StaticUtilities.DisableCanvasGroup(cooldownGroup);
 
-        StaticUtilities.FadeOpacity(cooldownGroup, 0, seconds: 0.25f);
+        StaticUtilities.FadeOpacity(cooldownGroup, 0, seconds: 0.5f);
     }
     #endregion
 
