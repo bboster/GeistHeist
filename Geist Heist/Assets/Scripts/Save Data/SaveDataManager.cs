@@ -134,13 +134,17 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     public bool AllLevelsCompleted()
     {
         EnsureSaveData();
-        
-        if (GetLevelsCompletedCount() == ScenesRequiredForCompletion.Count())
+
+        foreach (var level in ScenesRequiredForCompletion)
         {
-            return true;
+            if (currentSaveDta.ScenesCompleted.Contains(level) == false)
+            {
+                Debug.Log($"Player has not completed game because they need to complete {level}");
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 
     #endregion
