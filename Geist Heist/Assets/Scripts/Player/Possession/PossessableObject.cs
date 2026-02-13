@@ -289,7 +289,17 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         if (hasTimer)
         {
-            StaticUtilities.StopAndStartCoroutine(ref dischargeCoroutine, StartRecharge());
+            if (dischargeCoroutine != null)
+            {
+                StopCoroutine(dischargeCoroutine);
+                dischargeCoroutine = null;
+            }
+
+            if (rechargeCoroutine == null)
+            {
+                rechargeCoroutine = StartCoroutine(StartRecharge());
+            }
+            
         }
     }
 
@@ -319,7 +329,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     bool IInteractable.IsInteractable()
     {
-        return playerManager.CurrentObject != this;
+        // interactable if player isnt possessed
+        return playerManager.CurrentObject == playerManager.PlayerGhostObject;
     }
 
     #endregion

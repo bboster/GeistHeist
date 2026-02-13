@@ -29,7 +29,6 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
 
     private GameObject currentIcon;
     private PossessableObject currentPossessable;
-    private UnityAction<float> currentOnTimerUpdate;
 
     /// <summary>
     /// GameManager -> PlayerHUD -> (this) PossessableToolbar
@@ -79,7 +78,6 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
         if(currentIcon != null)
             Destroy(currentIcon);
             
-
         if(iconPrefab == null)
         {
             Debug.LogWarning($"{sourcePossessable.gameObject.name} does not have a set ability icon for the possession toolbar");

@@ -62,7 +62,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
 
     public bool IsParentInteractable()
     {
-        var parent_interactable = transform.GetComponentInParent<IInteractable>();
+        var parent_interactable = transform.parent.GetComponent<IInteractable>();
         return parent_interactable.IsInteractable();
     }
 }
