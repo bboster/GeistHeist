@@ -156,7 +156,8 @@ public class PlayerManager : Singleton<PlayerManager>
         // if both possessables dont have special behaviour
         if (oldObject == null || (!oldObject.HasCustomCameraBehavior && !newObject.HasCustomCameraBehavior))
         {
-            //mainCinemachineCamera.Follow = newObject.cameraAnchor;
+            //mainCinemachineCamera.Follow = newObject.
+            //;
             mainPlayerCameraController.SetAnchorPoint(newObject.cameraAnchor);
             currentCameraController = mainPlayerCameraController;
         }
@@ -172,6 +173,8 @@ public class PlayerManager : Singleton<PlayerManager>
             oldObject.CinemachineCamera.gameObject.SetActive(false);
 
             currentCameraController = newObject.GetComponent<PlayerCameraController>();
+
+            mainPlayerCameraController.SetAnchorPoint(newObject.cameraAnchor);
         }
 
         currentCameraController.UpdateAllSettings();
@@ -195,9 +198,9 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.InteractHeld.AddListener(input.WhileInteractHeld);
         InputEvents.InteractCanceled.AddListener(input.OnInteractCanceled);
 
-        InputEvents.SpaceStarted.AddListener(input.OnSpaceStarted);
+        /*InputEvents.SpaceStarted.AddListener(input.OnSpaceStarted);
         InputEvents.SpaceHeld.AddListener(input.WhileSpaceHeld);
-        InputEvents.SpaceCanceled.AddListener(input.OnSpaceCanceled);
+        InputEvents.SpaceCanceled.AddListener(input.OnSpaceCanceled); */
 
     }
 
@@ -219,9 +222,9 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.InteractCanceled.RemoveListener(input.OnInteractCanceled);
 
 
-        InputEvents.SpaceStarted.RemoveListener(input.OnSpaceStarted);
+        /* InputEvents.SpaceStarted.RemoveListener(input.OnSpaceStarted);
         InputEvents.SpaceHeld.RemoveListener(input.WhileSpaceHeld);
-        InputEvents.SpaceCanceled.RemoveListener(input.OnSpaceCanceled);
+        InputEvents.SpaceCanceled.RemoveListener(input.OnSpaceCanceled); */
     }
 
     private void Update()

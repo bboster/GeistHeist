@@ -29,7 +29,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     [SerializeField] private string actionKey = "Escape Object";
     [SerializeField] private string interactKey = "Interact";
     [SerializeField] private string debugKey = "DebugConsole";
-    [SerializeField] private string spaceKey = "Space";
+    //[SerializeField] private string spaceKey = "Space";
 
     public static UnityEvent MoveStarted = new UnityEvent();
     public static UnityEvent<float> MoveHeld = new();
@@ -53,9 +53,9 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static UnityEvent DebugStarted = new UnityEvent();
     public static UnityAction PauseStartedOverride = null;
 
-    public static UnityEvent SpaceStarted = new UnityEvent();
+    /*public static UnityEvent SpaceStarted = new UnityEvent();
     public static UnityEvent<float> SpaceHeld = new();
-    public static UnityEvent<float> SpaceCanceled = new();
+    public static UnityEvent<float> SpaceCanceled = new(); */
 
     public static UnityEvent<Vector2> LookUpdate = new UnityEvent<Vector2>();
 
@@ -72,7 +72,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         .normalized;
 
     public Vector2 InputDirection2D => Move.ReadValue<Vector2>();
-    public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed, PausePressed, SpacePressed;
+    public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed, PausePressed/*, SpacePressed*/;
 
     #region Time Held
     private static float moveTimeStarted, actionTimeStarted, interactTimeStarted, spaceTimeStarted = -1; // other inputs can be added but i dont think theyre super necessary.
@@ -81,13 +81,13 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static float ActionHeldTime => ActionPressed ? Time.time - actionTimeStarted : 0;
     public static float ActionReleasedTime => ActionPressed ? 0: Time.time - actionTimeReleased;
     public static float InteractHeldTime => InteractPressed ? Time.time - interactTimeStarted : 0;
-    public static float SpaceHeldTime => SpacePressed ? Time.time - spaceTimeStarted : 0;
+    //public static float SpaceHeldTime => SpacePressed ? Time.time - spaceTimeStarted : 0;
 
 
     #endregion
 
     private PlayerInput playerInput;
-    private InputAction Move, /*Jump,*/ Look, Pause, DebugA, Action, Interact, Space;
+    private InputAction Move, /*Jump,*/ Look, Pause, DebugA, Action, Interact/*, Space*/;
 
 
     private Transform movementOrigin => GetCamera();
@@ -119,7 +119,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         Action = map.FindAction(actionKey);
         Interact = map.FindAction(interactKey);
         DebugA = map.FindAction(debugKey);
-        Space = map.FindAction(spaceKey);
+        //Space = map.FindAction(spaceKey);
 
         // Reset all inputs
         RemoveAllListeners();
@@ -128,7 +128,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         //Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
         Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted, ref actionTimeStarted);
         Interact.started += ctx => InputActionStarted(ref InteractPressed, InteractStarted);
-        Space.started += ctx => InputActionStarted(ref SpacePressed, SpaceStarted, ref spaceTimeStarted);
+        //Space.started += ctx => InputActionStarted(ref SpacePressed, SpaceStarted, ref spaceTimeStarted);
         Pause.started += ctx => OnPauseStarted();
         DebugA.started += ctx => {DebugStarted.Invoke(); };
 
@@ -136,7 +136,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         //Jump.canceled += ctx => InputActionCanceled(ref JumpPressed, JumpCanceled);
         Action.canceled += ctx => InputActionCanceled(ref ActionPressed, ActionCanceled, ActionHeldTime, ref actionTimeReleased);
         Interact.canceled += ctx => InputActionCanceled(ref InteractPressed, InteractCanceled, InteractHeldTime);
-        Space.canceled += ctx => InputActionCanceled(ref SpacePressed, SpaceCanceled, SpaceHeldTime);
+        //Space.canceled += ctx => InputActionCanceled(ref SpacePressed, SpaceCanceled, SpaceHeldTime);
     }
     void InputActionStarted(ref bool pressedFlag, UnityEvent actionEvent, bool ignorePaused = false)
     {
@@ -222,7 +222,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         Interact?.Reset();
         Look?.Reset();
         DebugA?.Reset();
-        Space?.Reset();
+        //Space?.Reset();
 
         RemoveAllListeners();
     }

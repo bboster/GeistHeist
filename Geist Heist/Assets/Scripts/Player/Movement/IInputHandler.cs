@@ -49,9 +49,9 @@ public abstract class IInputHandler : MonoBehaviour
     public abstract void WhileInteractHeld(float secondsHeld);
     public abstract void OnInteractCanceled(float secondsHeld);
 
-    public abstract void OnSpaceStarted();
+    /* public abstract void OnSpaceStarted();
     public abstract void WhileSpaceHeld(float secondsHeld);
-    public abstract void OnSpaceCanceled(float secondsHeld);
+    public abstract void OnSpaceCanceled(float secondsHeld); */
 
 
 
