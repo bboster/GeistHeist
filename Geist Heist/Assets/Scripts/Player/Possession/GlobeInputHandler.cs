@@ -118,13 +118,14 @@ public class GlobeInputHandler : IInputHandler
     public IEnumerator ButtonPressMinigame()
     {
         buttonPressText.enabled = true;
+        int buttonPresses = endingButtonPresses;
 
         while (EndingActive)
         {
             //UI update
             if (currentButtonPresses > 0 && currentButtonPresses < 11)
             {
-                buttonPressText.text = currentButtonPresses.ToString() + " / " + endingButtonPresses.ToString();
+                buttonPressText.text = currentButtonPresses.ToString() + " / " + buttonPresses.ToString();
             }
 
             if (endingButtonPresses <= 0)

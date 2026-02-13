@@ -44,12 +44,14 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
         popup.OpenConfirmationPopup(text: confirmationText, fadeSeconds: 0.25f,
             OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfirmPressed(popupCanvas));
 
-        popup.GetComponentInParent<LevelConfirmationVisualizer>().Initialize();
+        popup.GetComponentInParent<LevelConfirmationVisualizer>()?.Initialize();
     }
 
     void OnCancelPressed(GameObject confirmationPopup)
     {
         anyLevelConfirmScreenOpen = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         Destroy(confirmationPopup);
     }
 
