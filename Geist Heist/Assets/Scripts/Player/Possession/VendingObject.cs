@@ -25,11 +25,11 @@ public class VendingObject : IInputHandler, IInteractable
     /*[Dropdown("balancing")]*/[SerializeField] private float minStrength;
     /*[Dropdown("balancing")]*/[SerializeField] private float strengthGrowthRate;
     /*[Dropdown("balancing")]*/[SerializeField] private float chargeLossRate;
-    /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
-    /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
+    // /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
+    /*[Dropdown("balancing")]*/[//SerializeField] private bool Tap;
     [Tooltip("Force there to be time between can throws")]
     [SerializeField] private float delayBetweenThrows = 1f;
-    [SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
+    //[SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
 
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
     [Tooltip("How long it takes for the visible material to go back to possession material.")]
@@ -76,37 +76,19 @@ public class VendingObject : IInputHandler, IInteractable
     #region action
     public override void OnActionStarted()
     {
-        if (Tap)
-        {
-            if (possessableObject.VisiblePossessionMaterial != null)
-            {
-                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
-            }
 
-            GameObject temp;
-            temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            //I would replace launch direction with a Vector obtained in code from the GameObject so that it always points forward relative to the vending machine
-            //If further math needs to be done on it then just do it when needed and it will reduce error when design puts these into the scene
-            temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength, ForceMode.Impulse);
-            hasThrownThisPossession = true; 
-
-        }
     }
 
     public override void WhileActionHeld(float secondsHeld)
     {
         if (secondsHeld < delayBetweenThrows && hasThrownThisPossession)
             return;
-
         LineRenderer.SetActive(true);
-        if (!Tap)
-        {
-            // Will be clamped later (dont clamp now for charge ui animations)
-            currentStrength += Time.deltaTime * strengthGrowthRate;
-            Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
-            tempLaunch.y = launchDirection.y;
-            trajectoryPredictor.PredictTrajectory(Mathf.Clamp(currentStrength, minStrength, maxStrength), CanPrefab.GetComponent<Rigidbody>().mass, CanSpawnPoint.transform.forward, CanSpawnPoint.transform.position, CanPrefab.GetComponent<Rigidbody>().linearDamping, .025f);
-        }
+        // Will be clamped later (dont clamp now for charge ui animations)
+        currentStrength += Time.deltaTime * strengthGrowthRate;
+        /*Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
+        tempLaunch.y = launchDirection.y;*/
+        trajectoryPredictor.PredictTrajectory(Mathf.Clamp(currentStrength, minStrength, maxStrength), CanPrefab.GetComponent<Rigidbody>().mass, CanSpawnPoint.transform.forward, CanSpawnPoint.transform.position, CanPrefab.GetComponent<Rigidbody>().linearDamping, .025f);
     }
 
     public override void OnActionCanceled(float secondsHeld)
@@ -114,21 +96,18 @@ public class VendingObject : IInputHandler, IInteractable
         if (secondsHeld < delayBetweenThrows && hasThrownThisPossession)
             return;
 
-        if (!Tap)
+        
+        LineRenderer.SetActive(false);
+        currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
+        
+        GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
+        temp.GetComponent<Rigidbody>().AddForce(CanSpawnPoint.transform.forward * currentStrength);
+        hasThrownThisPossession = true;
+
+        if (possessableObject.VisiblePossessionMaterial != null)
         {
-            LineRenderer.SetActive(false);
-            currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
-
-            GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            temp.GetComponent<Rigidbody>().AddForce(CanSpawnPoint.transform.forward * currentStrength);
-            hasThrownThisPossession = true;
-
-            if (possessableObject.VisiblePossessionMaterial != null)
-            {
-                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
-            }
+            possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
         }
-
         if (possessableObject.PossessedMaterial != null)
         {
             if (materialCountdownCoroutine == null)
