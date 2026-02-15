@@ -74,6 +74,9 @@ public class MainMenu : MonoBehaviour
 
         // Confirmation Popup
         confirmationPopup.HideConfirmationPopup();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     /// <summary>
