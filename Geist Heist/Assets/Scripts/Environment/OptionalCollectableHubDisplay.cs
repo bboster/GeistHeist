@@ -51,7 +51,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
             return;
         }
 
-        MeshRenderer meshPrefab = Registry.GetMesh(ThisCollectable);
+        MeshRenderer meshPrefab = Registry.GetMeshRenderer(ThisCollectable);
         if (meshPrefab == null)
         {
             Debug.LogWarning($"No prefab found in Registry for {ThisCollectable}.");
@@ -89,7 +89,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
         if (ThisCollectable != collectableToRespawn)
             return;
 
-        MeshRenderer newMeshPrefab = Registry.GetMesh(ThisCollectable);
+        MeshRenderer newMeshPrefab = Registry.GetMeshRenderer(ThisCollectable);
         if (newMeshPrefab == null)
         {
             Debug.LogWarning($"[{name}] No CollectableModel to respawn for {ThisCollectable}");

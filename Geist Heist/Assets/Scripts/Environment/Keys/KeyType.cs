@@ -16,5 +16,7 @@ public enum KeyType
     Triangle,
     Square,
     Star,
+    Feather,
+    Pentagon
     // add more as needed per wing
 }
