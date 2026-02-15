@@ -296,6 +296,7 @@ public class ToyCar : IInputHandler
     public override void OnMoveCanceled(float secondsHeld) { }
     #endregion
 
+
     #region Onomatopoeias
 
     void OnCrashOrBounceDetected(Vector3 impactPoint)
