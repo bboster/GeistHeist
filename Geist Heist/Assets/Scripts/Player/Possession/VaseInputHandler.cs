@@ -79,7 +79,7 @@ public class VaseInputHandler : IInputHandler
     }
     public override void OnMoveCanceled(float secondsHeld) { }
 
-    
+
     #endregion
 }
 
