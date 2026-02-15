@@ -164,7 +164,8 @@ public class PlayerManager : Singleton<PlayerManager>
         // if both possessables dont have special behaviour
         if (oldObject == null || (!oldObject.HasCustomCameraBehavior && !newObject.HasCustomCameraBehavior))
         {
-            //mainCinemachineCamera.Follow = newObject.cameraAnchor;
+            //mainCinemachineCamera.Follow = newObject.
+            //;
             mainPlayerCameraController.SetAnchorPoint(newObject.cameraAnchor);
             currentCameraController = mainPlayerCameraController;
         }
@@ -180,6 +181,8 @@ public class PlayerManager : Singleton<PlayerManager>
             oldObject.CinemachineCamera.gameObject.SetActive(false);
 
             currentCameraController = newObject.GetComponent<PlayerCameraController>();
+
+            mainPlayerCameraController.SetAnchorPoint(newObject.cameraAnchor);
         }
 
         currentCameraController.UpdateAllSettings();
@@ -202,6 +205,11 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.InteractStarted.AddListener(input.OnInteractStarted);
         InputEvents.InteractHeld.AddListener(input.WhileInteractHeld);
         InputEvents.InteractCanceled.AddListener(input.OnInteractCanceled);
+
+        /*InputEvents.SpaceStarted.AddListener(input.OnSpaceStarted);
+        InputEvents.SpaceHeld.AddListener(input.WhileSpaceHeld);
+        InputEvents.SpaceCanceled.AddListener(input.OnSpaceCanceled); */
+
     }
 
     public void DeRegisterInputs(PossessableObject possessable)
@@ -220,6 +228,11 @@ public class PlayerManager : Singleton<PlayerManager>
         InputEvents.InteractStarted.RemoveListener(input.OnInteractStarted);
         InputEvents.InteractHeld.RemoveListener(input.WhileInteractHeld);
         InputEvents.InteractCanceled.RemoveListener(input.OnInteractCanceled);
+
+
+        /* InputEvents.SpaceStarted.RemoveListener(input.OnSpaceStarted);
+        InputEvents.SpaceHeld.RemoveListener(input.WhileSpaceHeld);
+        InputEvents.SpaceCanceled.RemoveListener(input.OnSpaceCanceled); */
     }
 
     private void Update()
