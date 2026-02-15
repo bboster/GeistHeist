@@ -3,7 +3,7 @@
  * Creation Date: 9/30/25
  * Last Modified: 10/27/25
  * 
- * Brief Description: Controls interactions for the door, changes scene on button press
+ * Brief Description: Changes scene on button press
  */
 
 using UnityEngine;
@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 using NaughtyAttributes;
 using UnityEngine.Events;
 
-public class DoorInteractable : MonoBehaviour, IInteractable
+public class SceneTransitionActionable : MonoBehaviour, IActionable
 {
     [SerializeField][Scene] private string sceneName;
 
@@ -25,23 +25,30 @@ public class DoorInteractable : MonoBehaviour, IInteractable
     [SerializeField] private string confirmationText = "Go to _____?";
     [SerializeField, Required] private GameObject confirmationPopupPrefab;
 
-    public void Interact()
+    private static bool anyLevelConfirmScreenOpen = false;
+
+    public void Action()
     {
         // if i didnt have to spawn this in, that would be cool
         var popupCanvas = Instantiate(confirmationPopupPrefab);
-        
+
         ConfirmationPopup popup = popupCanvas.GetComponentInChildren<ConfirmationPopup>();
 
         popup.OpenConfirmationPopup(text: confirmationText, fadeSeconds: 0.25f,
-            OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfrimPressed(popupCanvas));
+            OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfirmPressed(popupCanvas));
+
+        popup.GetComponentInParent<LevelConfirmationVisualizer>()?.Initialize();
     }
 
     void OnCancelPressed(GameObject confirmationPopup)
     {
+        anyLevelConfirmScreenOpen = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         Destroy(confirmationPopup);
     }
 
-    void OnConfrimPressed(GameObject confirmationPopup)
+    void OnConfirmPressed(GameObject confirmationPopup)
     {
 
         if (loadingScreenPrefab == null)
