@@ -15,7 +15,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ButtonPromptInteractable : MonoBehaviour, IInteractable
+public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionable
 {
     [SerializeField] public string buttonText="E";
 
@@ -57,4 +57,28 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
     {
         billboardUI.Hide();
     }
+
+    void IActionable.OnPlayerLookStart()
+    {
+        var parent_actionable = transform.GetComponentInParent<IActionable>();
+        if (parent_actionable.IsActionable() == false)
+        {
+            Debug.Log("Parent unactionable");
+            billboardUI.Hide();
+            return;
+        }
+
+        // UpdateButtonPrompt changes the text depending on if its a controller / keyboard. 
+        // This is redundant now but will be important later.
+        billboardUI.UpdateButtonPrompt();
+        billboardUI.Show();
+    }
+
+    void IActionable.OnPlayerLookStop()
+    {
+        billboardUI.Hide();
+    }
+
+    public void Action()
+    {/* do nothing */}
 }

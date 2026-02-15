@@ -222,18 +222,17 @@ public class ThirdPersonInputHandler : IInputHandler
         if (obj == null) 
             return;
 
-        //if object is both interactable and actionable, do this code on interactable only
-        if (obj.GetComponent<IInteractable>() != null || obj.GetComponentInChildren<IInteractable>() != null)
-            return;
-
         if (obj.TryGetComponent<Outline>(out Outline outline))
             outline.enabled = true;
 
         var allActionables = obj.GetComponentsInChildren<IActionable>();
         foreach (var actionable in allActionables)
         {
-            // Display Interact UI, most of the time
-            actionable.OnPlayerLookStart();
+            if (actionable.IsActionable())
+            {
+                // Display Interact UI, most of the time
+                actionable.OnPlayerLookStart();
+            }
         }
     }
 
@@ -424,8 +423,12 @@ public class ThirdPersonInputHandler : IInputHandler
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
         {
-            // Display Interact UI, most of the time
-            interactable.OnPlayerLookStart();
+            if (interactable.IsInteractable())
+            {
+                // Display Interact UI, most of the time
+                interactable.OnPlayerLookStart();
+            }
+            
         }
     }
 
