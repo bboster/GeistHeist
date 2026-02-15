@@ -68,12 +68,12 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
             HideChargeSliderBar();
 
         currentPossessable = possessable;
-        SetIcon(possessable.AbilityIconPrefab, possessable);
+        SetAbilityIcon(possessable.AbilityIconPrefab, possessable);
     }
 
-    #region Unique UI initialization
+    #region Unique Ability Icon UI initialization
 
-    public void SetIcon(GameObject iconPrefab, PossessableObject sourcePossessable)
+    public void SetAbilityIcon(GameObject iconPrefab, PossessableObject sourcePossessable)
     {
         if(currentIcon != null)
             Destroy(currentIcon);
