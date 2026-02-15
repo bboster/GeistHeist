@@ -8,6 +8,7 @@
  */
 
 using NaughtyAttributes;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,8 +20,19 @@ public class PlayerShoulderCameraAbilityIcon : PossessionAbilityIcon
 
     public override void OnPossessionStarted(PossessableObject possessable)
     {
-        if (playerShoulderCamera == null)
+        GetPlayerShoulderCamera();
+        outputImage.texture = playerShoulderCamera.OutputRenderTexture;
+    }
+
+    private async void GetPlayerShoulderCamera()
+    {
+        while (playerShoulderCamera == null)
+        {
             playerShoulderCamera = FindFirstObjectByType<PlayerShoulderCamera>();
+            // wait to next frame pretty much
+            await Task.Delay(1);
+        }
+
 
         outputImage.texture = playerShoulderCamera.OutputRenderTexture;
     }
