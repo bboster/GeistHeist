@@ -76,6 +76,50 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4375208022219177336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5297197695439032269}
+  - component: {fileID: 9221339312865156677}
+  m_Layer: 5
+  m_Name: Unique Text Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5297197695439032269
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4375208022219177336}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1829353377095189187}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 64, y: 30}
+  m_SizeDelta: {x: 240, y: 50}
+  m_Pivot: {x: 0, y: 0}
+--- !u!222 &9221339312865156677
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4375208022219177336}
+  m_CullTransparentMesh: 1
 --- !u!1 &5604463621983211227
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,6 +285,7 @@ RectTransform:
   m_Children:
   - {fileID: 2384194318357161297}
   - {fileID: 902397210615009255}
+  - {fileID: 5297197695439032269}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
@@ -301,7 +346,7 @@ MonoBehaviour:
   destroyGameObject: 0
   uniqueIconPossessableParent: {fileID: 819559080169879357}
   uniqueIconPossessableParentGroup: {fileID: 5485552817197584871}
-  uniqueTextPossessableParent: {fileID: 0}
+  uniqueTextPossessableParent: {fileID: 5297197695439032269}
   cooldownSlider: {fileID: 2169468985876668083}
   cooldownGroup: {fileID: 6062446409532978591}
   chargeSlider: {fileID: 8689299636294213308}

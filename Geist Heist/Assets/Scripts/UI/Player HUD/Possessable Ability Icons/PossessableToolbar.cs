@@ -29,6 +29,7 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     [SerializeField, Required] private CanvasGroup chargeGroup;
 
     [SerializeField, ReadOnly] private GameObject currentIcon;
+    [SerializeField, ReadOnly] private GameObject currentText;
     private PossessableObject currentPossessable;
 
     /// <summary>
@@ -70,6 +71,7 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
 
         currentPossessable = possessable;
         SetAbilityIcon(possessable.AbilityIconPrefab, possessable);
+        SetPossessableText(possessable.PossessableTextPrefab, possessable);
     }
 
     #region Unique Ability Icon UI initialization
@@ -96,6 +98,25 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
 
         StaticUtilities.EnableCanvasGroup(uniqueIconPossessableParentGroup, ignoreParentGroups: true,
             interactable: false, blocksRaycasts: false);
+    }
+
+    #endregion
+
+    #region Unique Possessable Text initialization
+
+    public void SetPossessableText(GameObject textPrefab, PossessableObject sourcePossessable)
+    {
+        if (currentText != null)
+            Destroy(currentText);
+
+        if (textPrefab == null)
+        {
+            //Debug.LogWarning($"{sourcePossessable.gameObject.name} does not have a set text for the possession toolbar");
+            return;
+        }
+
+        // Childed to uniqueIconPossessableParent
+        currentText = Instantiate(textPrefab, uniqueTextPossessableParent);
     }
 
     #endregion

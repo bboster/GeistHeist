@@ -54,6 +54,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [Header("UI")]
     public GameObject AbilityIconPrefab;
+    public GameObject PossessableTextPrefab;
     public bool HasChargeAbility;
 
     [Header("Other")]
