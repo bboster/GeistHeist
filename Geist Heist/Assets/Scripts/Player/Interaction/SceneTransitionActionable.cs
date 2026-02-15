@@ -29,6 +29,13 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
     public void Action()
     {
+        if(anyLevelConfirmScreenOpen == true)
+        {
+            Debug.Log("can't open new confirm screen, player is already in a confirmation menu");
+            return;
+        }
+        anyLevelConfirmScreenOpen = true;
+
         // if i didnt have to spawn this in, that would be cool
         var popupCanvas = Instantiate(confirmationPopupPrefab);
 
@@ -50,7 +57,7 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
     void OnConfirmPressed(GameObject confirmationPopup)
     {
-
+        anyLevelConfirmScreenOpen = false;
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);
