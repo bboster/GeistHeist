@@ -47,6 +47,9 @@ public class WearableCollectible : MonoBehaviour
     {
         // Load what the player had equipped last
         currentHat = GetEquippedCollectable(SaveDataManager.Instance.EquipedHat());
+        
+        EquipHat(currentHat);
+        previousHat = Collectable.None;
         allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
 
 #if UNITY_EDITOR
@@ -117,10 +120,11 @@ public class WearableCollectible : MonoBehaviour
         // Move the current hat back to hub instead of destroying
         if (previousHat != Collectable.None)
         {            
-            foreach (var display in allHubDisplays)
+            foreach (var display in allHubDisplays) 
             {
                 Debug.Log($"Attempting to call display.spawnMesh({previousHat}) in hub display.");
                 display.spawnMesh(previousHat); // currentHat = Collectable currently equipped
+                display.GetComponent<OptionalCollectableHubDisplay>().UpdateVisibility();
             }
 
             // No need to destroy currentHat, as it's an enum
