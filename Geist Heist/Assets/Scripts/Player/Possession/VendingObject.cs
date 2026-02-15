@@ -26,7 +26,7 @@ public class VendingObject : IInputHandler, IInteractable
     /*[Dropdown("balancing")]*/[SerializeField] private float strengthGrowthRate;
     /*[Dropdown("balancing")]*/[SerializeField] private float chargeLossRate;
     // /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
-    /*[Dropdown("balancing")]*/[//SerializeField] private bool Tap;
+    /*[Dropdown("balancing")]*///[SerializeField] private bool Tap;
     [Tooltip("Force there to be time between can throws")]
     [SerializeField] private float delayBetweenThrows = 1f;
     //[SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
@@ -180,10 +180,10 @@ public class VendingObject : IInputHandler, IInteractable
         Gizmos.DrawRay(CanSpawnPoint.position, CanSpawnPoint.forward);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(CanSpawnPoint.position, 
+        /*Gizmos.DrawRay(CanSpawnPoint.position, 
             Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward)
             .WithY(launchDirection.y)
-        );
+        );*/
     }
 
     public void OnDrawGizmosSelected() //Remind me to add a ticket to the backlog for this
