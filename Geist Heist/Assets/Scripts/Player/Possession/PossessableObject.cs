@@ -201,7 +201,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
-        if(possessableCanvas == null)
+        /*if(possessableCanvas == null)
             possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
 
         if (possessableCanvas != null)
@@ -209,7 +209,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvasGroup = possessableCanvas.gameObject.GetOrAddComponent<CanvasGroup>();
             possessableCanvasGroup.alpha = 0;
             possessableCanvas.gameObject.SetActive(false);
-        }
+        }*/
 
         //It might be worth moving this line into a manager so that we don't get a ton of repeat messages in the console
         if(AudioManager.Instance == null)
@@ -240,7 +240,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         possessionEnter.start();
 
-        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
+        //StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
 
         gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
@@ -271,7 +271,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
-        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
+        //StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
 
         if (!CanUnPossess)
         {
@@ -388,6 +388,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     }
     #endregion
 
+    /*
     #region Canvas
 
     [Header("Canvas settings")]
@@ -419,4 +420,5 @@ public class PossessableObject : MonoBehaviour, IInteractable
     }
 
     #endregion
+    */
 }

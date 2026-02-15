@@ -151,9 +151,8 @@ public class GameManager : Singleton<GameManager>
 
         Instantiate(PlayerManagerPrefab); //Initializes in Start
 
-
+        Instantiate(GeneralHUDPrefab).GetComponent<PlayerHUDManager>().Initialize();
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
-        Instantiate(GeneralHUDPrefab).GetComponent<PlayerHUDManager>().Initialize() ;
         Instantiate(DebugConsolePrefab);
 
         var inputModule = FindAnyObjectByType(typeof(InputSystemUIInputModule));

@@ -32,7 +32,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private PlayerCameraController currentCameraController; // may be mainCinemachineCamera sometimes
     private StudioListener fmodListener;
 
-    [HideInInspector] public UnityEvent<PossessableObject> OnPossessionObjectChanged = new();
+    [HideInInspector] public static UnityEvent<PossessableObject> OnPossessionObjectChanged = new();
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     public void Start()
@@ -62,6 +62,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
         fmodListener = camera.GetComponent<StudioListener>();
         UpdateListener(CurrentObject);
+
+        OnPossessionObjectChanged.Invoke(CurrentObject);
     }
 
 

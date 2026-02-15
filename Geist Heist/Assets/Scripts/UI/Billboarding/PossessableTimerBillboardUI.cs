@@ -47,7 +47,6 @@ public class PossessableTimerBillboardUI : IBillboardUI
 
     private void OnTimerUpdate(float percentage)
     {
-        Debug.Log("imm upppdateig");
         t = percentage;// / possessable.maxChargePercentage;
         slider.value = t;
         timerFill.color = timerFillGradient.Evaluate(1-t);
@@ -62,10 +61,9 @@ public class PossessableTimerBillboardUI : IBillboardUI
         else
             a = base.CalculateOpacity(playerDistance, UIPosition);
 
-        Debug.Log(a);
+        //Debug.Log($"{a}*{targetOpacity}*{opacityByTimeRemaining}");
 
         // This sounds harsh, but CalculateAndSetOpacity smooths the opacity so its okay
-        Debug.Log($"{a}*{targetOpacity}*{opacityByTimeRemaining}");
         return a * targetOpacity * opacityByTimeRemaining;
     }
 

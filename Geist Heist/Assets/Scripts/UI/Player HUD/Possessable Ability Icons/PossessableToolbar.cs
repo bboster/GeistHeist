@@ -17,6 +17,7 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
 {
     [Header("Unique Possessable Icons")]
     [SerializeField, Required] private RectTransform uniqueIconPossessableParent;
+    [SerializeField, Required] private CanvasGroup uniqueIconPossessableParentGroup;
     [SerializeField, Required] private RectTransform uniqueTextPossessableParent; //@TODO
 
     [Header("Cooldown Wheel")]
@@ -27,7 +28,7 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     [SerializeField, Required] private Slider chargeSlider;
     [SerializeField, Required] private CanvasGroup chargeGroup;
 
-    private GameObject currentIcon;
+    [SerializeField, ReadOnly] private GameObject currentIcon;
     private PossessableObject currentPossessable;
 
     /// <summary>
@@ -41,7 +42,7 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
         HideChargeSliderBar();
         SetChargeBarValue(1);
 
-        PlayerManager.Instance.OnPossessionObjectChanged.AddListener(OnPossessableObjectChanged);
+        PlayerManager.OnPossessionObjectChanged.AddListener(OnPossessableObjectChanged);
 
         OnPossessableObjectChanged(PlayerManager.Instance.CurrentObject);
     }
@@ -92,6 +93,9 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
         {
             abilityIcon.OnPossessionStarted(sourcePossessable);
         }
+
+        StaticUtilities.EnableCanvasGroup(uniqueIconPossessableParentGroup, ignoreParentGroups: true,
+            interactable: false, blocksRaycasts: false);
     }
 
     #endregion
