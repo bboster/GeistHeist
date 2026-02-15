@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 11/18/25
+ * Last Modified: 2/15/26
  * 
  * Brief Description: Handles third person movement and interaction. 
  * This script should only be used for the ghost
@@ -66,7 +66,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public static Action<GuardStates> OnPossessObject;
 
-    private GameObject lastObjectLookedAt;
+    private GameObject lastInteractableLookedAt;
+    private GameObject lastActionableLookedAt;
     private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
     private float frameCountSinceLastInteraction;
     private float frameCountSinceLastAction;
@@ -205,20 +206,25 @@ public class ThirdPersonInputHandler : IInputHandler
         var result = GetBestActionableSphereCast();
 
         // if looking at something different than last frame
-        if (lastObjectLookedAt != result)
+        if (lastActionableLookedAt != result)
         {
-            if (lastObjectLookedAt != null)
-                LookAtActionableStop(lastObjectLookedAt);
+            if (lastActionableLookedAt != null)
+                LookAtActionableStop(lastActionableLookedAt);
 
             if (result != null)
                 LookAtActionableStart(result);
         }
-        lastObjectLookedAt = result;
+        lastActionableLookedAt = result;
     }
 
     private void LookAtActionableStart(GameObject obj)
     {
-        if (obj == null) return;
+        if (obj == null) 
+            return;
+
+        //if object is both interactable and actionable, do this code on interactable only
+        if (obj.GetComponent<IInteractable>() != null || obj.GetComponentInChildren<IInteractable>() != null)
+            return;
 
         if (obj.TryGetComponent<Outline>(out Outline outline))
             outline.enabled = true;
@@ -268,8 +274,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
             actionable.Action();
         }
-        LookAtActionableStop(lastObjectLookedAt);
-        lastObjectLookedAt = null;
+        LookAtActionableStop(lastActionableLookedAt);
+        lastActionableLookedAt = null;
 
     }
 
@@ -384,8 +390,8 @@ public class ThirdPersonInputHandler : IInputHandler
             if(interactable is PossessableObject)
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
         }
-        LookAtInteractableStop(lastObjectLookedAt);
-        lastObjectLookedAt = null;
+        LookAtInteractableStop(lastInteractableLookedAt);
+        lastInteractableLookedAt = null;
     }
 
     /// <summary>
@@ -397,15 +403,15 @@ public class ThirdPersonInputHandler : IInputHandler
         var result = GetBestInteractableSphereCast();
 
         // if looking at something different than last frame
-        if (lastObjectLookedAt != result)
+        if (lastInteractableLookedAt != result)
         {
-            if (lastObjectLookedAt != null)
-                LookAtInteractableStop(lastObjectLookedAt);
+            if (lastInteractableLookedAt != null)
+                LookAtInteractableStop(lastInteractableLookedAt);
 
             if (result != null)
                 LookAtInteractableStart(result);
         }
-        lastObjectLookedAt = result;
+        lastInteractableLookedAt = result;
     }
 
     private void LookAtInteractableStart(GameObject obj)
