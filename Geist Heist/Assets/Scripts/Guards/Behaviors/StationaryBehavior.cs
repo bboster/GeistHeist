@@ -59,42 +59,45 @@ public class StationaryBehavior : Behavior
 
     public override IEnumerator BehaviorLoop()
     {
-        leftRotationValue = contRef.leftRotationValue;
-        rightRotationValue = contRef.rightRotationValue;
+        leftRotationValue = Mathf.Abs(contRef.leftRotationValue);
+        rightRotationValue = Mathf.Abs(contRef.rightRotationValue);
         coneRotationSpeed = contRef.coneRotationSpeed;
 
 
-        Vector3 rotation = contRef.visionConeRotator.transform.rotation.eulerAngles;
+        Vector3 rotation = contRef.visionConeRotator.transform.localRotation.eulerAngles;
         //rotation.y = contRef.DefaultRotation - visionCone.transform.rotation.eulerAngles.y;
 
-        contRef.visionConeRotator.transform.Rotate(rotation);
+        //contRef.visionConeRotator.transform.localRotation = Quaternion.Euler(rotation);
 
         #region Might be used later
 
-        Vector3 rightRotation = contRef.visionConeRotator.transform.rotation.eulerAngles;
-        rightRotation.y += Mathf.Abs(rightRotationValue);
-        Vector3 leftRotationChecker = contRef.visionConeRotator.transform.rotation.eulerAngles;
-        leftRotationChecker.y -= Mathf.Abs(leftRotationValue);
-        leftRotationChecker.y = (leftRotationChecker.y + 360) % 360;
-        Vector3 LeftRotationGoal = contRef.visionConeRotator.transform.rotation.eulerAngles;
-        LeftRotationGoal.y -= Mathf.Abs(leftRotationValue);
+        Vector3 rightRotation = contRef.visionConeRotator.transform.localRotation.eulerAngles;
+        rightRotation.y += rightRotationValue;
+        Vector3 leftRotationChecker = contRef.visionConeRotator.transform.localRotation.eulerAngles;
+        leftRotationChecker.y -= leftRotationValue;
+        leftRotationChecker.y = leftRotationChecker.y + 360;
+        Vector3 LeftRotationGoal = contRef.visionConeRotator.transform.localRotation.eulerAngles;
+        LeftRotationGoal.y -= leftRotationValue;
 
         Vector3 rotationGoal = rightRotation;
-        Vector3 rotationDefault = contRef.visionConeRotator.transform.rotation.eulerAngles;
+        Vector3 rotationDefault = contRef.visionConeRotator.transform.localRotation.eulerAngles;
         Vector3 rotationChecker = rightRotation;
 
         for (; ;)
         {
             Vector3 currentRotation = Vector3.Slerp(rotationDefault, rotationGoal, coneRotationSpeed * Time.deltaTime);
-            contRef.visionConeRotator.transform.Rotate(currentRotation);
+            contRef.visionConeRotator.transform.localRotation = 
+                Quaternion.Euler(currentRotation + contRef.visionConeRotator.transform.localRotation.eulerAngles);
 
-            if(contRef.visionConeRotator.transform.rotation.eulerAngles.y >= rotationChecker.y && isRotatingRight == true && contRef.visionConeRotator.transform.rotation.eulerAngles.y < 180)
+            if(contRef.visionConeRotator.transform.localRotation.eulerAngles.y >= rotationChecker.y && 
+                isRotatingRight == true && contRef.visionConeRotator.transform.localRotation.eulerAngles.y < 180)
             {
                 rotationGoal = LeftRotationGoal;
                 rotationChecker = leftRotationChecker;
                 isRotatingRight = false;
             }
-            else if(contRef.visionConeRotator.transform.rotation.eulerAngles.y <= rotationChecker.y && isRotatingRight == false && contRef.visionConeRotator.transform.rotation.eulerAngles.y >180)
+            else if(contRef.visionConeRotator.transform.localRotation.eulerAngles.y <= rotationChecker.y && 
+                isRotatingRight == false && contRef.visionConeRotator.transform.localRotation.eulerAngles.y >180)
             {
                 rotationGoal = rightRotation;
                 rotationChecker = rightRotation;
