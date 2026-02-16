@@ -21,6 +21,8 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     [SerializeField, Required] private RectTransform uniqueTextPossessableParent; //@TODO
 
     [Header("Cooldown Wheel")]
+    [SerializeField] private Gradient cooldownColors;
+    [SerializeField, Required] private Image cooldownTimerImage;
     [SerializeField, Required] private Slider cooldownSlider;
     [SerializeField, Required] private CanvasGroup cooldownGroup;
 
@@ -125,6 +127,8 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     public void SetCooldownTimerValue(float timeRemainingPercent)
     {
         cooldownSlider.value = timeRemainingPercent;
+
+        cooldownTimerImage.color = cooldownColors.Evaluate(1-timeRemainingPercent);
     }
     public void ShowCooldownTimer()
     {
