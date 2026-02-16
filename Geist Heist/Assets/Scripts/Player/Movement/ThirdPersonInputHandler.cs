@@ -69,6 +69,7 @@ public class ThirdPersonInputHandler : IInputHandler
     private GameObject lastObjectLookedAt;
     private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
     private float frameCountSinceLastInteraction;
+    private float frameCountSinceLastAction;
     private Vector3 positionLastFrame;
     private float modelStartYPosition;
     private Quaternion targetRotation;
@@ -97,10 +98,12 @@ public class ThirdPersonInputHandler : IInputHandler
         rampLayerMask = LayerMask.GetMask("Ramp");
     }
 
+    #region Possession
     // WhilePossessingUpdate is called once per frame
     public override void WhilePossessingUpdate()
     {
         TryTurnOnInteractablePrompt();
+        TryTurnOnActionablePrompt();
 
         RotatePlayer();
         //HoverBob();
@@ -119,10 +122,155 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnPossessionEnded()
     {
     }
+    #endregion
 
     #region Action
+
+    private List<RaycastHit> GetAllActionablesSphereCast()
+    {
+        //kept the same to keep consistent interaction area
+        var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, interactSphereCastRadius, sphereCastDirection, interactRayLength, layerToInclude);
+
+        if (sphereCastResults.IsNullOrEmpty())
+            return null;
+
+        List<RaycastHit> filteredResults = new();
+
+        // Filter all gameobjects
+        foreach (var result in sphereCastResults)
+        {
+            IActionable actionable;
+
+            // if object can even be actioned with
+            if (result.transform.TryGetComponent(out actionable) == false)
+            {
+                continue;
+            }
+
+            if (actionable.IsActionable() == false)
+                continue;
+
+            if (result.transform.gameObject == this.gameObject)
+                continue;
+
+            // Test if there is a wall between player and the object
+            Vector3 playerPos = gameObject.transform.position;
+            Vector3 actionPos = result.transform.position;
+            Vector3 direction = (actionPos - playerPos).normalized;
+            float distance = Vector3.Distance(playerPos, actionPos);
+
+            //raycast is sent from the player 
+            bool ray = Physics.Raycast(playerPos, direction, out RaycastHit hit, distance, layerToInclude);
+            if (drawInteractRay) Debug.DrawLine(playerPos, actionPos,
+                                ray && hit.transform.gameObject != result.transform.gameObject ? Color.red : Color.green);
+            if (ray && hit.transform.gameObject != result.transform.gameObject)
+            {
+                Debug.Log("Raycast hit a wall");
+                continue;
+            }
+
+            filteredResults.Add(result);
+        }
+
+        if (filteredResults.IsNullOrEmpty()) return null;
+
+        return filteredResults;
+    }
+
+    private GameObject GetBestActionableSphereCast()
+    {
+        // Filter interactables in spherecast
+        var filteredSphereCastResults = GetAllActionablesSphereCast();
+
+        if (filteredSphereCastResults.IsNullOrEmpty()) return null;
+
+        // Sort by which one the player is looking at most. 
+        return filteredSphereCastResults
+            .Where(r => r.transform.gameObject != this.transform.gameObject)
+            .OrderBy(r =>
+                // Ref: dot product returns value -1 to 1. -1 for completely opposite directions and 1 for perfectly perpendicular.
+                Vector3.Dot(
+                    thirdPersonCinemachineCamera.transform.forward,
+                    r.transform.position - gameObject.transform.position
+                ))
+           .Last()
+           .transform.gameObject;
+    }
+    /// <summary>
+    /// performs spherecast looking for interactable. Same spherecast as interact button.
+    /// Opens button prompts if possible (through Hide/OnPlayerLookStart functions on IInteractable)
+    /// </summary>
+    private void TryTurnOnActionablePrompt()
+    {
+        var result = GetBestActionableSphereCast();
+
+        // if looking at something different than last frame
+        if (lastObjectLookedAt != result)
+        {
+            if (lastObjectLookedAt != null)
+                LookAtActionableStop(lastObjectLookedAt);
+
+            if (result != null)
+                LookAtActionableStart(result);
+        }
+        lastObjectLookedAt = result;
+    }
+
+    private void LookAtActionableStart(GameObject obj)
+    {
+        if (obj == null) return;
+
+        if (obj.TryGetComponent<Outline>(out Outline outline))
+            outline.enabled = true;
+
+        var allActionables = obj.GetComponentsInChildren<IActionable>();
+        foreach (var actionable in allActionables)
+        {
+            // Display Interact UI, most of the time
+            actionable.OnPlayerLookStart();
+        }
+    }
+
+    // These two could have been 1 function with a boolean parameter but I like the intuitivity with the names.
+    // They can be condensed tho :P idc that much
+    private void LookAtActionableStop(GameObject obj)
+    {
+        if (obj == null) return;
+
+        if (obj.TryGetComponent<Outline>(out Outline outline))
+            outline.enabled = false;
+
+        var allActionables = obj.GetComponentsInChildren<IActionable>();
+        foreach (var actionable in allActionables)
+        {
+            // Hide interact UI, most of the time
+            actionable.OnPlayerLookStop();
+        }
+    }
+
+
     public override void OnActionStarted()
     {
+        if (Time.frameCount - frameCountSinceLastAction <= 3)
+            return;
+
+        var result = GetBestActionableSphereCast();
+        if (result == null) return;
+
+        frameCountSinceLastAction = Time.time;
+
+        var allActionables = result.GetComponentsInChildren<IActionable>();
+
+        foreach (var actionable in allActionables)
+        {
+            if (actionable == null)
+                continue;
+
+            actionable.Action();
+        }
+        LookAtActionableStop(lastObjectLookedAt);
+        lastObjectLookedAt = null;
+
     }
 
     public override void WhileActionHeld(float secondsHeld)
@@ -359,6 +507,7 @@ public class ThirdPersonInputHandler : IInputHandler
     }
     #endregion
 
+
     #region Other
 
     private void RotatePlayer()
@@ -474,5 +623,5 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
-   
+
 }

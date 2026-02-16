@@ -48,13 +48,16 @@ public class PlayerCameraController : MonoBehaviour
         Vector3 startPoint = tempCameraPivot.position;
         float timeStarted = Time.time;
         float timeElapsed = 0;
-        Debug.DrawLine(startPoint, cameraAnchor.position, Color.blue, transitionSeconds * 2);
+        if (cameraAnchor != null)
+            Debug.DrawLine(startPoint, cameraAnchor.position, Color.blue, transitionSeconds * 2);
+
         while (timeElapsed < transitionSeconds)
         {
             timeElapsed = Time.time - timeStarted;
             float t = timeElapsed / transitionSeconds;
 
-            tempCameraPivot.position = Vector3.Lerp(startPoint, cameraAnchor.position, t);
+            if (cameraAnchor != null)
+                tempCameraPivot.position = Vector3.Lerp(startPoint, cameraAnchor.position, t);
             yield return null;
         }
 
