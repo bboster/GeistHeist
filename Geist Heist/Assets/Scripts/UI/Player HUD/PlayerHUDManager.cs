@@ -14,9 +14,11 @@ public class PlayerHUDManager : Singleton<PlayerHUDManager>
     [Required] public CheckpointAnimation CheckpointAnimationRef;
 
     [SerializeField, Required] private KeyUIManager keyUI;
+    [SerializeField, Required] private PossessableToolbar possessableToolbar;
 
     public void Initialize()
     {
         keyUI.Initialize();
+        possessableToolbar.Initialize();
     }
 }

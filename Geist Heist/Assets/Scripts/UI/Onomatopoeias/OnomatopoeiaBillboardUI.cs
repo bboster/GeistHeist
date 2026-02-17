@@ -82,8 +82,6 @@ public class OnomatopoeiaBillboardUI : IBillboardUI
 
             textbox.transform.localEulerAngles = new Vector3(0, 0, z);
 
-            Debug.Log("angle: "+z);
-
             yield return new WaitForEndOfFrame();
         }
     }
@@ -99,8 +97,6 @@ public class OnomatopoeiaBillboardUI : IBillboardUI
             //t = Mathf.Pow(t, 0.25f); // big change at start, slows down
 
             textbox.transform.localScale = Vector3.one * Mathf.Lerp(initialScale, targetScale, t);
-
-            Debug.Log("scale t: " + t);
 
             yield return new WaitForEndOfFrame();
         }
