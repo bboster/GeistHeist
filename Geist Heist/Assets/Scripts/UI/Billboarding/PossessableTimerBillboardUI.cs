@@ -26,7 +26,9 @@ public class PossessableTimerBillboardUI : IBillboardUI
     private bool playerPossessingThis => PlayerManager.Instance.CurrentObject == possessable;
 
     private float targetOpacity => playerPossessingThis ? 1 : opacityWhenUnpossessed;
-    private float opacityByTimeRemaining => (t <= percentToHide || t>= 1 - percentToHide) ? 0 : 1; // dont show if percent is almost 0 or almost full.
+
+    // dont show if percent is almost 0 or almost full.
+    private float opacityByTimeRemaining => (t <= percentToHide || t>= 1 - percentToHide) ? 0 : 1; 
 
     private PossessableObject possessable;
     private CanvasGroup group;
@@ -45,7 +47,7 @@ public class PossessableTimerBillboardUI : IBillboardUI
 
     private void OnTimerUpdate(float percentage)
     {
-        t = percentage / possessable.maxChargePercentage;
+        t = percentage;// / possessable.maxChargePercentage;
         slider.value = t;
         timerFill.color = timerFillGradient.Evaluate(1-t);
     }
@@ -58,6 +60,8 @@ public class PossessableTimerBillboardUI : IBillboardUI
             a = 0;
         else
             a = base.CalculateOpacity(playerDistance, UIPosition);
+
+        //Debug.Log($"{a}*{targetOpacity}*{opacityByTimeRemaining}");
 
         // This sounds harsh, but CalculateAndSetOpacity smooths the opacity so its okay
         return a * targetOpacity * opacityByTimeRemaining;

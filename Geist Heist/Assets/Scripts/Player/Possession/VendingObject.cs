@@ -35,8 +35,6 @@ public class VendingObject : IInputHandler, IInteractable
     [Tooltip("How long it takes for the visible material to go back to possession material.")]
     [SerializeField] private float delayToUpdateMaterialVisibility = 0.5f;
 
-    [SerializeField] private PossessableChargeMeterUI chargeMeter;
-
     private PossessableObject possessableObject;
     private bool hasThrownThisPossession;
     private Coroutine materialCountdownCoroutine;
@@ -48,16 +46,11 @@ public class VendingObject : IInputHandler, IInteractable
     void Start()
     {
         possessableObject = GetComponent<PossessableObject>();
-        if(chargeMeter == null)
-            chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();   
     }
 
     public override void OnPossessionStart()
     {
-        if (chargeMeter == null)
-            chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();
-
-        chargeMeter?.OnPossessionStarted();
+        PossessableToolbar.Instance.SetChargeBarValue(0);
         hasThrownThisPossession = false;
     }
 
@@ -70,7 +63,7 @@ public class VendingObject : IInputHandler, IInteractable
 
     public override void WhilePossessingUpdate()
     {
-        chargeMeter.UpdateCharge(currentStrength, maxStrength);
+        PossessableToolbar.Instance.SetChargeBarValue(currentStrength / maxStrength);
     }
 
     #region action

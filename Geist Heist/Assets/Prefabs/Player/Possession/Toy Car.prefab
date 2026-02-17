@@ -160,7 +160,6 @@ Transform:
   - {fileID: 8698059868396046234}
   - {fileID: 5142991431077681176}
   - {fileID: 2215525678534256016}
-  - {fileID: 4460887975667798625}
   - {fileID: 7152951671500276611}
   - {fileID: 7025609137899611137}
   m_Father: {fileID: 0}
@@ -184,12 +183,11 @@ MonoBehaviour:
   chargeLossRate: 105
   delayBetweenZooms: 0.5
   rotationRate: 45
+  delayToUpdateChargeMeter: 0.25
   OnomatopoeiaText: Bonk!
   OnomatopoeiaScale: 0.5
   onomatopoeiaLifetime: 1
   possessableParticle: {fileID: 5204108424967083764}
-  delayToUpdateChargeMeter: 0.25
-  chargeMeter: {fileID: 2299211873282198318}
 --- !u!65 &1174134053591356350
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -268,6 +266,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 2100000, guid: 6fdada8c18afd5343b3402495ba59159, type: 2}
   VisibleUnPossessedMaterial: {fileID: 3804580865180825762, guid: 6292997158b857a4596f2ec04b101584, type: 3}
+  AbilityIconPrefab: {fileID: 4491390581451361740, guid: 2c1cc0c85f1aab149862c1a9d7334228, type: 3}
+  PossessableTextPrefab: {fileID: 4491390581451361740, guid: 44a053911b752e24ab1558b2e674d348, type: 3}
+  HasChargeAbility: 1
   isGhost: 0
   CanUnPossess: 0
   meshRenderer: {fileID: 0}
@@ -276,9 +277,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &6480417976091650489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -873,159 +871,6 @@ ParticleSystem:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3875062921213393784, guid: 69c87491fb8b91841846ef414b4805a4, type: 3}
   m_PrefabInstance: {fileID: 6104918996988501881}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &7025589008815480395
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1148149316958636690}
-    m_Modifications:
-    - target: {fileID: 29515035773009853, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_FillAmount
-      value: 0.5875823
-      objectReference: {fileID: 0}
-    - target: {fileID: 165967241164658828, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.99228954
-      objectReference: {fileID: 0}
-    - target: {fileID: 165967241164658828, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.123942
-      objectReference: {fileID: 0}
-    - target: {fileID: 983731252585344803, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613171770634289741, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Name
-      value: Toy Car Canvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613171770634289741, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740881634172135376, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6536208597510328459, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6545530925573619606, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6676139087093026231, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 9148187624805484739, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
---- !u!114 &2299211873282198318 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9121925590646871397, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-  m_PrefabInstance: {fileID: 7025589008815480395}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dc9536c61d9246478144dbcda620c98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ToyCarSpeedometerUI
---- !u!224 &4460887975667798625 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6671983893449034794, guid: 4458fdb0e5199e344bfc28e191979c7b, type: 3}
-  m_PrefabInstance: {fileID: 7025589008815480395}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9169062900381163633
 PrefabInstance:
