@@ -30,6 +30,8 @@ public class ToyCar : IInputHandler
     [SerializeField] private float delayBetweenZooms = 1;
     [Tooltip("How much moving rotates by per second.")]
     [SerializeField] private float rotationRate = 30;
+    [BoxGroup("Gamepad Tuning"), Tooltip("Modifies the gamepad's sensitivity while rotating the toy car")]
+    [SerializeField] private float rotationSensitivityMod = 0.01f;
 
     [Header("VFX")]
     [SerializeField] private string OnomatopoeiaText = "Bonk!";
@@ -284,6 +286,8 @@ public class ToyCar : IInputHandler
 
         if (rb.linearVelocity == Vector3.zero)
         {
+            if (InputEvents.Instance.IsGamepadActive() == true)
+                rotation *= rotationSensitivityMod;
             transform.Rotate(new Vector3(rotation, 0, 0) * Time.deltaTime);
         }
     }
