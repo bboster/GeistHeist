@@ -46,14 +46,15 @@ public class WearableCollectible : MonoBehaviour
     private void Start()
     {
         // Load what the player had equipped last
+        allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
         currentHat = GetEquippedCollectable(SaveDataManager.Instance.EquipedHat());
         
         EquipHat(currentHat);
         previousHat = Collectable.None;
-        allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
+        //allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
 
 #if UNITY_EDITOR
-        PreviewHat();
+        //PreviewHat();
 #endif
     }
 
