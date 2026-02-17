@@ -279,6 +279,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 2100000, guid: 77b13f077aed98b40be43da7465abc27, type: 2}
   VisibleUnPossessedMaterial: {fileID: 2100000, guid: a16ac1729dc989a44aa585e93a17689b, type: 2}
+  AbilityIconPrefab: {fileID: 4491390581451361740, guid: aaac540744b225b49994122aaf51474e, type: 3}
+  PossessableTextPrefab: {fileID: 4491390581451361740, guid: 44a053911b752e24ab1558b2e674d348, type: 3}
+  HasChargeAbility: 1
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -287,9 +290,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &8338812846202371703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,7 +314,6 @@ MonoBehaviour:
   tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 6729138879421277377}
   LineRenderer: {fileID: 1951237483183071489}
 --- !u!114 &5015108751406224692

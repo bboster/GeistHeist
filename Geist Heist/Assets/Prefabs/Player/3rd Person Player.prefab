@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4163485625400632306}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: StepRayUpper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2210782550424938703}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: StepRaycasts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2774012598759010100}
   - component: {fileID: 6667701073009503977}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wearable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 7039407254155894154}
   - component: {fileID: 8861427484589388494}
   - component: {fileID: 1189325035245595932}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 3rd Person Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -151,6 +151,7 @@ Transform:
   - {fileID: 4605582320322056963}
   - {fileID: 2210782550424938703}
   - {fileID: 3727635350476935836}
+  - {fileID: 1572426371856117300}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3107868394456876978
@@ -178,6 +179,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 0}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 4491390581451361740, guid: d766fa0c66823034a829913486edc0ac, type: 3}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 1
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -186,9 +190,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!136 &5974260262404806057
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -238,7 +239,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &8861427484589388494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,12 +253,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonInputHandler
   speed: 8.5
-  maxVelocity: 12
+  maxVelocity: 5
   speedPickup: 3
   slowDownFactor: 0.1
-  slopeTransitionSmooth: 0.5
-  slopeModifier: 1
-  rotationSpeed: 30
+  rotationSpeed: 270
   hoverHeight: 0.1
   hoverSpeed: 3
   thirdPersonCinemachineCamera: {fileID: 6503710880496754358}
@@ -293,7 +292,7 @@ GameObject:
   - component: {fileID: 8717023681800411823}
   - component: {fileID: 2413218002076217386}
   - component: {fileID: 228328278749309300}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PURPLE TOP HAT(Clone)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -382,7 +381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4605582320322056963}
   - component: {fileID: 7111922141085564314}
-  m_Layer: 1
+  m_Layer: 3
   m_Name: NoClipCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -440,7 +439,7 @@ GameObject:
   - component: {fileID: 5322224047150630592}
   - component: {fileID: 1437973373096061546}
   - component: {fileID: 3438865857580028797}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CinemachineCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,8 +454,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6503710880496754358}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0072048353, y: 0.99270105, z: -0.07798749, w: 0.09171017}
-  m_LocalPosition: {x: -0.7938471, y: 0.68505275, z: 4.2597656}
+  m_LocalRotation: {x: 0.10922841, y: 0.86029387, z: -0.20761225, w: 0.45261553}
+  m_LocalPosition: {x: -4.3823786, y: 2.7253046, z: 3.0120068}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -539,7 +538,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 169.44348
+    Value: 124.50073
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -549,7 +548,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 3.2016153
+    Value: 22.820707
     Center: 17.5
     Range: {x: -6.7, y: 45}
     Wrap: 0
@@ -716,7 +715,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9198153872864973550}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: StepRayTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -747,7 +746,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2983350911294381107}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Camera Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -822,6 +821,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: OllieParticle
       objectReference: {fileID: 0}
+    - target: {fileID: 5174011860128731526, guid: 03432df30db25c241b96126221e71b3a, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -836,6 +839,88 @@ ParticleSystem:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3875062921213393784, guid: 03432df30db25c241b96126221e71b3a, type: 3}
   m_PrefabInstance: {fileID: 467747278043212260}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4274727058650648699
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8762889882606682532}
+    m_Modifications:
+    - target: {fileID: 2577956161955679644, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.97134215
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.2376859
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -27.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843858180402819991, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: hoverHeight
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843858180402819991, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: playerModel
+      value: 
+      objectReference: {fileID: 7580967344288862039}
+    - target: {fileID: 3843858180402819991, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: fastRotationSpeed
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 4231588160630245968, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_Name
+      value: Shoulder Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157077460436470844, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+      propertyPath: m_Depth
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+--- !u!4 &1572426371856117300 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
+  m_PrefabInstance: {fileID: 4274727058650648699}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7980300333523003580
 PrefabInstance:
@@ -924,6 +1009,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1eff83f8180e53c40a94a7b4c4ba1e77, type: 3}
       propertyPath: m_Name
       value: TEMP_Ollie
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1eff83f8180e53c40a94a7b4c4ba1e77, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1eff83f8180e53c40a94a7b4c4ba1e77, type: 3}
       propertyPath: m_IsActive

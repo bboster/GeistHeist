@@ -12,7 +12,9 @@ using NaughtyAttributes;
 using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
@@ -29,6 +31,8 @@ public class PlayerManager : Singleton<PlayerManager>
     private PlayerCameraController mainPlayerCameraController;
     private PlayerCameraController currentCameraController; // may be mainCinemachineCamera sometimes
     private StudioListener fmodListener;
+
+    [HideInInspector] public static UnityEvent<PossessableObject> OnPossessionObjectChanged = new();
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     public void Start()
@@ -58,6 +62,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
         fmodListener = camera.GetComponent<StudioListener>();
         UpdateListener(CurrentObject);
+
+        OnPossessionObjectChanged.Invoke(CurrentObject);
     }
 
 
@@ -90,6 +96,8 @@ public class PlayerManager : Singleton<PlayerManager>
         possessable.OnPossessionStart();
         CurrentObject = possessable;
         SwapCameras(oldObject, possessable);
+
+        OnPossessionObjectChanged.Invoke(CurrentObject);
     }
 
     public void PossessGhost(PossessableObject possessable)
@@ -127,6 +135,10 @@ public class PlayerManager : Singleton<PlayerManager>
         PlayerGhostObject.OnPossessionStart();
         CurrentObject = PlayerGhostObject;
         SwapCameras(oldObject, PlayerGhostObject);
+
+        DeRegisterInputs(possessable);
+
+        OnPossessionObjectChanged.Invoke(CurrentObject);
     }
 
     /// <summary>
