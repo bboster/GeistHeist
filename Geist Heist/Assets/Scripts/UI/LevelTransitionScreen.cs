@@ -21,6 +21,8 @@ public class LevelTransitionScreen : MonoBehaviour
     /*[SerializeField, Required]*/ CanvasGroup group;
     private string _sceneToLoad;
 
+    private Coroutine fadeCoroutine;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     /*public void StartTransition(string sceneToLoad, GameObject animationPrefab)
     {
@@ -29,64 +31,42 @@ public class LevelTransitionScreen : MonoBehaviour
 
     public void StartTransition(string sceneToLoad, GameObject animationPrefab)
     {
+        Debug.Log("starting transition to " + sceneToLoad);
         if (group == null)
             group = GetComponent<CanvasGroup>();
 
-        DontDestroyOnLoad(this);
         _sceneToLoad = sceneToLoad;
         if (animationPrefab == null)
             Debug.LogError("No level transition card set");
+        else
+            Instantiate(animationPrefab, this.transform);
 
-        StartCoroutine(TitleCardFadeAnimation());
-    }
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
-    private IEnumerator TitleCardFadeAnimation()
-    {
-        // Note that the actual animation will most likely be handled in an animation controller
-
-        Debug.Log("Playing card fade animation. Press any key to skip");
-
-        yield return FadeIn();
-
-        SceneManager.LoadScene(_sceneToLoad);
-
-        yield return new WaitForSecondsRealtime(waitingSeconds);
-
-        yield return FadeOut();
-
-        Destroy(this.gameObject);
+        DontDestroyOnLoad(this);
+        StartCoroutine(FadeIn());
     }
 
     private IEnumerator FadeIn()
     {
-        float startTime = Time.unscaledTime;
-        float time;
-        do
-        {
-            time = Time.unscaledTime - startTime;
-            float t = time / fadeInSeconds;
+        group.alpha = 0;
+        yield return StaticUtilities.FadeOpacity(group, 1, fadeInSeconds);
 
-            group.alpha = t;
+        SceneManager.LoadScene(_sceneToLoad);
+    }
 
-            yield return null;
-        }
-        while (time < fadeInSeconds);
+    void OnSceneLoaded(Scene s, LoadSceneMode lsm)
+    {
+        StartCoroutine(FadeOut());
     }
 
     private IEnumerator FadeOut()
     {
-        float startTime = Time.unscaledTime;
-        float time;
-        do
-        {
-            time = Time.unscaledTime - startTime;
-            float t = time / fadeInSeconds;
+        yield return new WaitForSecondsRealtime(waitingSeconds);
 
-            group.alpha =  1- t;
+        yield return StaticUtilities.FadeOpacity(group, 0, fadeOutSeconds);
 
-            yield return null;
-        }
-        while (time < fadeInSeconds);
+        Destroy(this.gameObject);
     }
 
 #if UNITY_EDITOR
@@ -94,9 +74,9 @@ public class LevelTransitionScreen : MonoBehaviour
     {
         if (Input.anyKeyDown)
         {
-            StopAllCoroutines();
-            SceneManager.LoadScene(_sceneToLoad);
-            Destroy(this.gameObject);
+            //StopAllCoroutines();
+            //SceneManager.LoadScene(_sceneToLoad);
+            //Destroy(this.gameObject);
         }
     }
 #endif
