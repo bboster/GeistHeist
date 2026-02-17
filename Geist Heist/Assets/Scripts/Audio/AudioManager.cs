@@ -52,7 +52,6 @@ public class AudioManager : Singleton<AudioManager>
     }
     public void UpdateMasterVolume()
     {
-        Debug.Log(SettingsProfile.MasterVolumeScaled);
         masterBus.setVolume(SettingsProfile.MasterVolumeScaled * getPausedVolumeMultiplier);
     }
 

@@ -40,7 +40,8 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
             .Select(i => i.IsInteractable() == false) // filter by uninteractable
             .Count();// > 0; // overengineered but i love lambda so much
         Debug.Log($"{parentsDisabled} parents disabled");*/
-        var parent_interactable = transform.GetComponentInParent < IInteractable> ();
+
+        var parent_interactable = transform.GetComponentInParent < IInteractable > ();
         if(parent_interactable.IsInteractable() == false)
         {
             Debug.Log("Parent uninteractable");
@@ -55,6 +56,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
     }
     void IInteractable.OnPlayerLookStop()
     {
+        Debug.Log("stopped looking");
         billboardUI.Hide();
     }
 
@@ -81,4 +83,21 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
 
     public void Action()
     {/* do nothing */}
+    public bool IsParentInteractable()
+    {
+        var parent_interactable = transform.parent.GetComponent<IInteractable>();
+        var parent_actionable   = transform.parent.GetComponent<IActionable>();
+
+        if (parent_interactable != null && parent_actionable != null)
+            return parent_interactable.IsInteractable() && parent_actionable.IsActionable();
+
+        if(parent_interactable != null)
+            return parent_interactable.IsInteractable();
+
+        if (parent_actionable != null)
+            return parent_actionable.IsActionable();
+
+        Debug.LogWarning($"{gameObject.name}'s parent does not have an interactable or actionable component");
+        return false;
+    }
 }
