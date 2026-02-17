@@ -98,8 +98,6 @@ public class OnomatopoeiaBillboardUI : IBillboardUI
 
             textbox.transform.localScale = Vector3.one * Mathf.Lerp(initialScale, targetScale, t);
 
-            Debug.Log("scale t: " + t);
-
             yield return new WaitForEndOfFrame();
         }
     }
