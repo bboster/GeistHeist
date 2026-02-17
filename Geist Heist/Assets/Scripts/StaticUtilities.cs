@@ -698,6 +698,7 @@ public static class StaticUtilities
         if(_coroutineRunner == null)
         {
             var coroutineGameobject = new GameObject();
+            coroutineGameobject.name = "Static Utilities Coroutine Runner";
             _coroutineRunner = coroutineGameobject.AddComponent<StaticUtilitiesCoroutineRunner>();
         }
 
