@@ -26,7 +26,7 @@ public class BillboardUIPoint : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // this is expected behavior is this is an Onomatopoeia point
+        // this is expected behavior if this is an Onomatopoeia point
         if (UIObjectPrefab == null)
         {
             Debug.LogError("Prefab null");

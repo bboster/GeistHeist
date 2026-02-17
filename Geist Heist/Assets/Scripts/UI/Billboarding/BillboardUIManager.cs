@@ -62,7 +62,7 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             //if (uiAnchorPair.Item2.IsVisible == false)
             //    continue;
 
-            if (PlayerManager.Instance.CurrentObject == null)
+            if (PlayerManager.Instance == null || PlayerManager.Instance.CurrentObject == null)
                 continue;
 
             var elem = uiAnchorPair.Item2;
