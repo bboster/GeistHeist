@@ -361,19 +361,17 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         if (!hasTimer)
             yield break;
+        possessionRefill.start();
 
-        while(currentTimerCharge < maxChargePercentage)
+        while (currentTimerCharge < maxChargePercentage)
         {
-            //people didn't like the sound of this and thought it was causing an issue with the game, be free to reset this you have a new sound for it
-            //possessionRefill.start(); 
 
             currentTimerCharge = Mathf.Min(currentTimerCharge + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
             OnTimerUpdate.Invoke(currentTimerChargePercentage);
             yield return null;
         }
 
-        //commented out for the reason above
-        //possessionRefill.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        possessionRefill.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
 
     private void OnTimerFinished()
