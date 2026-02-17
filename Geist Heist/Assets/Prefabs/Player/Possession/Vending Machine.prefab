@@ -370,7 +370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1932495096948173727
 Transform:
   m_ObjectHideFlags: 0
@@ -379,8 +379,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4951548769398627959}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.30394176, y: 0.45700124, z: -0.1696991, w: 0.81851786}
-  m_LocalPosition: {x: 2.140742, y: 0.7838383, z: -0.2648093}
+  m_LocalRotation: {x: 0.11565003, y: 0.8778351, z: -0.3806605, w: 0.2666987}
+  m_LocalPosition: {x: 1.7045767, y: 0.77908677, z: 0.33269477}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -410,7 +410,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 77.65692
     OrthographicSize: 5
     NearClipPlane: 0.01
     FarClipPlane: 1000
@@ -455,15 +455,15 @@ MonoBehaviour:
       Radius: 0.5
       Height: 1
     Center:
-      Radius: 2.5
+      Radius: 1.5
       Height: 0.25
     Bottom:
-      Radius: 2
+      Radius: 1
       Height: 0
     SplineCurvature: 0.5
   RecenteringTarget: 3
   HorizontalAxis:
-    Value: 58.351673
+    Value: 146.20096
     Center: 90
     Range: {x: -10, y: 190}
     Wrap: 0
@@ -473,7 +473,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 156.40535
+    Value: 154.49323
     Center: 17.5
     Range: {x: -10, y: 180}
     Wrap: 0
@@ -592,6 +592,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraController
   transitionSeconds: 0.5
+  maxFov: 100
+  fovSmoothSpeed: 50
+  specialCameraType: 0
 --- !u!1 &6933913120238562490
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,7 +802,7 @@ Transform:
   m_GameObject: {fileID: 9134686643729084617}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 0.494, z: 0}
+  m_LocalPosition: {x: 2.15, y: 0.494, z: 0}
   m_LocalScale: {x: 1, y: 0.33333334, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1077,7 +1080,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4209206591424057506, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_FillAmount
-      value: 0.8812854
+      value: 0.2707251
       objectReference: {fileID: 0}
     - target: {fileID: 4209206591424057506, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_FillOrigin
@@ -1177,7 +1180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.9993711
+      value: -0.9734517
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1189,7 +1192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.03546004
+      value: 0.22889268
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_AnchoredPosition.x
