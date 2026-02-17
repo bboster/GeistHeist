@@ -33,15 +33,14 @@ public class ToyCar : IInputHandler
     [BoxGroup("Gamepad Tuning"), Tooltip("Modifies the gamepad's sensitivity while rotating the toy car")]
     [SerializeField] private float rotationSensitivityMod = 0.01f;
 
+    [Header("Speedometer seconds")]
+    [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
+
     [Header("VFX")]
     [SerializeField] private string OnomatopoeiaText = "Bonk!";
     [SerializeField] private float OnomatopoeiaScale = 1;
     [SerializeField] private float onomatopoeiaLifetime = 1;
     [SerializeField] private ParticleSystem possessableParticle;
-
-    [Header("Speedometer seconds")]
-    [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
-    [SerializeField] private PossessableChargeMeterUI chargeMeter;
 
     //realtime hold strength
     private float currentStrength;
@@ -71,9 +70,6 @@ public class ToyCar : IInputHandler
         possessableObject = GetComponent<PossessableObject>();
         velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
 
-        if (chargeMeter == null)
-            chargeMeter = GetComponentInChildren<ToyCarSpeedometerUI>();
-
         velocityChangeDetector.OnBounceDetected.AddListener(OnCrashOrBounceDetected);
         velocityChangeDetector.OnStopDetected.AddListener(OnCrashOrBounceDetected);
     }
@@ -81,7 +77,7 @@ public class ToyCar : IInputHandler
     public override void OnPossessionStart()
     {
         hasLaunchedThisPossession = false;
-        chargeMeter.OnPossessionStarted();
+
         possessableParticle.Play();
         velocityChangeDetector.StartRecordingVelocity();
 
@@ -110,7 +106,9 @@ public class ToyCar : IInputHandler
         carMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
         carWindSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
 
-        chargeMeter.UpdateCharge(currentStrength, maxStrength);
+        //chargeMeter.UpdateCharge(currentStrength, maxStrength);
+        PossessableToolbar.Instance.SetChargeBarValue(currentStrength / maxStrength);
+
 
         //pause timer if car is moving
         if (rb.linearVelocity == Vector3.zero)
