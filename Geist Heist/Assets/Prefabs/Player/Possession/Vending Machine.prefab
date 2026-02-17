@@ -200,6 +200,8 @@ GameObject:
   - component: {fileID: 8338812846202371703}
   - component: {fileID: 5015108751406224692}
   - component: {fileID: 6729138879421277377}
+  - component: {fileID: 7455586607501772162}
+  - component: {fileID: 6390804688122637169}
   m_Layer: 6
   m_Name: Vending Machine
   m_TagString: Untagged
@@ -276,8 +278,8 @@ MonoBehaviour:
   ghostSpawnPoint: {fileID: 3232091217144684036}
   PossessedMaterial: {fileID: 2100000, guid: 2db4e064d1bb3964a9a05b1c2f2c9000, type: 2}
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
-  VisiblePossessionMaterial: {fileID: 2100000, guid: 5ef373c1ed4ed484cb05f46e2898a25a, type: 2}
-  VisibleUnPossessedMaterial: {fileID: 3804580865180825762, guid: 6292997158b857a4596f2ec04b101584, type: 3}
+  VisiblePossessionMaterial: {fileID: 2100000, guid: 77b13f077aed98b40be43da7465abc27, type: 2}
+  VisibleUnPossessedMaterial: {fileID: 2100000, guid: a16ac1729dc989a44aa585e93a17689b, type: 2}
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -352,6 +354,8 @@ MonoBehaviour:
   VelocityChanger: 50
 --- !u!1 &4951548769398627959
 GameObject:
+--- !u!208 &7455586607501772162
+NavMeshObstacle:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -387,6 +391,17 @@ Transform:
   m_Father: {fileID: 5139431784850570232}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4068432368693259376
+  m_GameObject: {fileID: 2128761672490447748}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.375, y: 0.5, z: 0.375}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &6390804688122637169
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -595,6 +610,20 @@ MonoBehaviour:
   maxFov: 100
   fovSmoothSpeed: 50
   specialCameraType: 0
+  m_GameObject: {fileID: 2128761672490447748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &6933913120238562490
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,7 +1109,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4209206591424057506, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_FillAmount
-      value: 0.2707251
+      value: 0.39944336
       objectReference: {fileID: 0}
     - target: {fileID: 4209206591424057506, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_FillOrigin
@@ -1180,7 +1209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.9734517
+      value: -0.9847656
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1192,7 +1221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.22889268
+      value: 0.17388733
       objectReference: {fileID: 0}
     - target: {fileID: 7212213641432954743, guid: 9c745ed607871d5468850584fc531e86, type: 3}
       propertyPath: m_AnchoredPosition.x
