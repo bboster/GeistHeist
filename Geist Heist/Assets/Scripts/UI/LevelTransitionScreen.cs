@@ -57,6 +57,10 @@ public class LevelTransitionScreen : MonoBehaviour
 
     void OnSceneLoaded(Scene s, LoadSceneMode lsm)
     {
+        // this happens sometimes
+        if (this == null)
+            return;
+
         StartCoroutine(FadeOut());
     }
 
