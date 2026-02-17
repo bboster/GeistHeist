@@ -57,6 +57,9 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         if (collectableRegistry == null)
             collectableRegistry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
 
+        // make a copy of the material, to not flood github
+        notCollectedMaterial = Instantiate(notCollectedMaterial);
+
         foreach (var tetherModel in TetherModels)
         {
             RefreshTether(tetherModel);
