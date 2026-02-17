@@ -3,7 +3,7 @@
 /*
  * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 11/12/2025
+ * Last Modified: 2/12/2026
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -32,7 +32,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [HideIf(nameof(isGhost))] public List<Transform> ghostExitPoints;
 
     [Header("Timer Variables")]
-    [SerializeField, HideIf(nameof(isGhost))] private bool hasTimer;
+    [SerializeField, HideIf(nameof(isGhost))] public bool hasTimer;
     [SerializeField, HideIf(nameof(isGhost))] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
     [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerRechargePercentage = 10;
@@ -52,6 +52,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [Tooltip("Material on possessable when a guard sees the possessable in chase state but possessable is NOT possessed.")]
     [SerializeField, HideIf(nameof(isGhost)), Required, ShowAssetPreview(16, 16)] public Material VisibleUnPossessedMaterial;
 
+    [Header("UI")]
+    public GameObject AbilityIconPrefab;
+    public GameObject PossessableTextPrefab;
+    public bool HasChargeAbility;
+
     [Header("Other")]
     [SerializeField] private bool isGhost = false;
 
@@ -66,7 +71,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     [HideInInspector] public MeshRenderer meshRenderer;
 
-    [ReadOnly] private float currentTimerPercentage;
+    [ReadOnly] private float currentTimerCharge;
+    private float currentTimerChargePercentage => currentTimerCharge / maxChargePercentage;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
     [HideInInspector] public bool PauseDischargeTimer = false;
 
@@ -182,7 +188,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     void Start()
     {
-        currentTimerPercentage = maxChargePercentage;
+        currentTimerCharge = maxChargePercentage;
 
         if (ghostExitPoints.Count == 0)
         {
@@ -196,7 +202,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
-        if(possessableCanvas == null)
+        /*if(possessableCanvas == null)
             possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
 
         if (possessableCanvas != null)
@@ -204,7 +210,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvasGroup = possessableCanvas.gameObject.GetOrAddComponent<CanvasGroup>();
             possessableCanvasGroup.alpha = 0;
             possessableCanvas.gameObject.SetActive(false);
-        }
+        }*/
 
         //It might be worth moving this line into a manager so that we don't get a ton of repeat messages in the console
         if(AudioManager.Instance == null)
@@ -227,10 +233,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
         return inputHandler;
     }
 
-    void IInteractable.Interact()
-    {
-        PlayerManager.Instance.PossessObject(this);
-    }
 
     /// <summary>
     /// Called in PlayerManager when player enters object
@@ -239,7 +241,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         possessionEnter.start();
 
-        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
+        //StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
 
         gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
@@ -270,7 +272,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
-        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
+        //StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
 
         if (!CanUnPossess)
         {
@@ -294,10 +296,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
                 dischargeCoroutine = null;
             }
 
-            if(rechargeCoroutine == null)
+            if (rechargeCoroutine == null)
             {
                 rechargeCoroutine = StartCoroutine(StartRecharge());
             }
+            
         }
     }
 
@@ -319,19 +322,33 @@ public class PossessableObject : MonoBehaviour, IInteractable
         unpossessCoroutine = null;
     }
 
+    #region Interaction
+    void IInteractable.Interact()
+    {
+        PlayerManager.Instance.PossessObject(this);
+    }
+
+    bool IInteractable.IsInteractable()
+    {
+        // interactable if player isnt possessed
+        return playerManager.CurrentObject == playerManager.PlayerGhostObject;
+    }
+
+    #endregion
+
     #region Timer
-    
+
     private IEnumerator StartDischarge()
     {
         if (!hasTimer)
             yield break;
 
-        while(currentTimerPercentage > 0)
+        while(currentTimerCharge > 0)
         {
             if (!PauseDischargeTimer)
             {
-                currentTimerPercentage = Mathf.Max(currentTimerPercentage - (timerDischargePercentage * Time.deltaTime), 0);
-                OnTimerUpdate.Invoke(currentTimerPercentage);
+                currentTimerCharge = Mathf.Max(currentTimerCharge - (timerDischargePercentage * Time.deltaTime), 0);
+                OnTimerUpdate.Invoke(currentTimerChargePercentage);
             }
 
             yield return null;
@@ -345,12 +362,12 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (!hasTimer)
             yield break;
 
-        while(currentTimerPercentage < maxChargePercentage)
+        while(currentTimerCharge < maxChargePercentage)
         {
             possessionRefill.start();
 
-            currentTimerPercentage = Mathf.Min(currentTimerPercentage + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
-            OnTimerUpdate.Invoke(currentTimerPercentage);
+            currentTimerCharge = Mathf.Min(currentTimerCharge + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
+            OnTimerUpdate.Invoke(currentTimerChargePercentage);
             yield return null;
         }
 
@@ -363,7 +380,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         if (dischargeCoroutine != null)
         {
-            OnTimerUpdate.Invoke(currentTimerPercentage);
+            OnTimerUpdate.Invoke(currentTimerChargePercentage);
             StopCoroutine(dischargeCoroutine);
             dischargeCoroutine = null;
         }
@@ -372,6 +389,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     }
     #endregion
 
+    /*
     #region Canvas
 
     [Header("Canvas settings")]
@@ -403,4 +421,5 @@ public class PossessableObject : MonoBehaviour, IInteractable
     }
 
     #endregion
+    */
 }
