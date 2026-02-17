@@ -42,9 +42,9 @@ public static class StaticUtilities
     {
         // If using this code in other projects, replace GuardCoroutineManager with a different singleton
         if (coroutineInstance != null)
-            GuardCoroutineManager.Instance.StopCoroutine(coroutineInstance);
+            CoroutineRunner.StopCoroutine(coroutineInstance);
 
-        coroutineInstance = GuardCoroutineManager.Instance.StartCoroutine(coroutineToPlay);
+        coroutineInstance = CoroutineRunner.StartCoroutine(coroutineToPlay);
     }
 
     #endregion
@@ -137,9 +137,9 @@ public static class StaticUtilities
         bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+            CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(AnimateScaleCoroutine(transform, transform.localScale, endScale, seconds, unscaledTime, currentCoroutineToCancel));
+        return CoroutineRunner.StartCoroutine(AnimateScaleCoroutine(transform, transform.localScale, endScale, seconds, unscaledTime, currentCoroutineToCancel));
     }
 
     /// <summary>
@@ -149,9 +149,9 @@ public static class StaticUtilities
         bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+            CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(AnimateScaleCoroutine(transform, startScale, endScale, seconds, unscaledTime, currentCoroutineToCancel));
+        return CoroutineRunner.StartCoroutine(AnimateScaleCoroutine(transform, startScale, endScale, seconds, unscaledTime, currentCoroutineToCancel));
     }
 
     private static IEnumerator AnimateScaleCoroutine(Transform transform, Vector3 startScale, Vector3 endScale, float seconds,
@@ -179,9 +179,9 @@ public static class StaticUtilities
         bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+            CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(
+        return CoroutineRunner.StartCoroutine(
             AnimateRotationCoroutine(transform, transform.rotation, Quaternion.Euler(endEulerAngles), seconds, 
                                      unscaledTime, currentCoroutineToCancel)
         );
@@ -194,9 +194,9 @@ public static class StaticUtilities
         bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+            CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(
+        return CoroutineRunner.StartCoroutine(
             AnimateRotationCoroutine(transform, transform.rotation, endRotation, seconds,
                                      unscaledTime, currentCoroutineToCancel)
         );
@@ -264,9 +264,9 @@ public static class StaticUtilities
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+            CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, unscaledTime: unscaledTime,
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, unscaledTime: unscaledTime,
             afterFadeCallback:afterFadeCallback));
     }
 
@@ -274,18 +274,18 @@ public static class StaticUtilities
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+            CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
     public static Coroutine FadeOpacity(CanvasGroup group, float a, float seconds, bool unscaledTime = true,
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
-            GuardCoroutineManager.Instance.StopCoroutine(currentCoroutineToCancel);
+            CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return GuardCoroutineManager.Instance.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
     private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
@@ -364,7 +364,7 @@ public static class StaticUtilities
 
     public static void ScaleOverTime(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime=true)
     {
-        GuardCoroutineManager.Instance.StartCoroutine(ScaleOverTimeCoroutine(transform, startScale, targetScale, seconds, unscaledTime));
+        CoroutineRunner.StartCoroutine(ScaleOverTimeCoroutine(transform, startScale, targetScale, seconds, unscaledTime));
     }
 
     private static IEnumerator ScaleOverTimeCoroutine(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime)
@@ -676,5 +676,33 @@ public static class StaticUtilities
         return false;
 #endif
     }
+    #endregion
+
+    #region Static Utilities Utilities
+
+    public class StaticUtilitiesCoroutineRunner : MonoBehaviour
+    {
+        // doesnt need to do anything besides exist
+        private void OnDestroy()
+        {
+            StopAllCoroutines();
+        }
+    }
+
+    private static StaticUtilitiesCoroutineRunner CoroutineRunner => GetCoroutineRunner();
+    private static StaticUtilitiesCoroutineRunner _coroutineRunner;
+
+    private static StaticUtilitiesCoroutineRunner GetCoroutineRunner()
+    {
+        // if no coroutine runner in scene, make one
+        if(_coroutineRunner == null)
+        {
+            var coroutineGameobject = new GameObject();
+            _coroutineRunner = coroutineGameobject.AddComponent<StaticUtilitiesCoroutineRunner>();
+        }
+
+        return _coroutineRunner;
+    }
+
     #endregion
 }
