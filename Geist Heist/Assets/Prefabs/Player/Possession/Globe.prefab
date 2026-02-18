@@ -320,13 +320,11 @@ GameObject:
   - component: {fileID: 8445324199067435655}
   - component: {fileID: 2157304532543136787}
   - component: {fileID: 3838889211129949616}
-  - component: {fileID: 7952603278920290600}
   - component: {fileID: 2426677037278963456}
   - component: {fileID: 275225683614839502}
   - component: {fileID: 6612651163852882797}
   - component: {fileID: 3474600935642791087}
-  - component: {fileID: 3808395953883841324}
-  - component: {fileID: 5303909961969861786}
+  - component: {fileID: 6684309336371515716}
   m_Layer: 0
   m_Name: Globe Object
   m_TagString: Untagged
@@ -348,7 +346,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2672405748642897335}
-  - {fileID: 8596665378422631725}
   m_Father: {fileID: 9047533981336939939}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8445324199067435655
@@ -8942,28 +8939,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7952603278920290600
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7131126409352793401}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &2426677037278963456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9030,60 +9005,28 @@ MonoBehaviour:
   levelLoadingCardPrefab: {fileID: 0}
   confirmationText: Go inside the globe?
   confirmationPopupPrefab: {fileID: 7508292700099194344, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
---- !u!114 &3808395953883841324
-MonoBehaviour:
+--- !u!64 &6684309336371515716
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7131126409352793401}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 049c7e2ee40feb44bb786b790f3c758b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GlobePossessable
-  globeCamera: {fileID: 4688552407103172856}
-  buttonPressText: {fileID: 2662174043878902714}
-  endCutsceneScene: Main Menu
-  endingButtonPresses: 10
-  EndingActive: 0
-  currentButtonPresses: 0
---- !u!114 &5303909961969861786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7131126409352793401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad178c2cb7d35814e86defddb59d8e57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GlobePossessableObject
-  HasCustomCameraBehavior: 0
-  CinemachineCamera: {fileID: 0}
-  cameraAnchor: {fileID: 0}
-  ghostExitPoints: []
-  hasTimer: 0
-  maxChargePercentage: 100
-  timerRechargePercentage: 10
-  timerDischargePercentage: 10
-  ghostSpawnPoint: {fileID: 0}
-  PossessedMaterial: {fileID: 0}
-  UnpossessedMaterial: {fileID: 0}
-  VisiblePossessionMaterial: {fileID: 0}
-  VisibleUnPossessedMaterial: {fileID: 0}
-  isGhost: 0
-  CanUnPossess: 1
-  meshRenderer: {fileID: 0}
-  OnTimerUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  PauseDischargeTimer: 0
-  IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &7401502774690206568
 GameObject:
   m_ObjectHideFlags: 0
@@ -9195,6 +9138,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9047533981336939939}
+  - component: {fileID: 4436706775465931272}
+  - component: {fileID: 2726586055647288813}
   m_Layer: 0
   m_Name: Globe
   m_TagString: Untagged
@@ -9218,15 +9163,70 @@ Transform:
   - {fileID: 5888885162916842107}
   - {fileID: 2144923899599277992}
   - {fileID: 1173200098750633462}
+  - {fileID: 8596665378422631725}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4436706775465931272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7736493930754196892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049c7e2ee40feb44bb786b790f3c758b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobePossessable
+  globeCamera: {fileID: 4688552407103172856}
+  buttonPressText: {fileID: 2662174043878902714}
+  endCutsceneScene: Main Menu
+  endingButtonPresses: 10
+  currentButtonPresses: 0
+  EndingActive: 0
+--- !u!114 &2726586055647288813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7736493930754196892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad178c2cb7d35814e86defddb59d8e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobePossessableObject
+  HasCustomCameraBehavior: 0
+  CinemachineCamera: {fileID: 0}
+  cameraAnchor: {fileID: 0}
+  ghostExitPoints: []
+  hasTimer: 0
+  maxChargePercentage: 100
+  timerRechargePercentage: 10
+  timerDischargePercentage: 10
+  ghostSpawnPoint: {fileID: 0}
+  PossessedMaterial: {fileID: 0}
+  UnpossessedMaterial: {fileID: 0}
+  VisiblePossessionMaterial: {fileID: 0}
+  VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
+  isGhost: 0
+  CanUnPossess: 1
+  meshRenderer: {fileID: 0}
+  OnTimerUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  PauseDischargeTimer: 0
+  IsMoving: 0
 --- !u!1001 &3187218362757136144
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2144923899599277992}
+    m_TransformParent: {fileID: 9047533981336939939}
     m_Modifications:
     - target: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_Name
@@ -9238,7 +9238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: buttonText
@@ -9246,27 +9246,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.069848955
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.074025296
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.07770174
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.575
+      value: 15.728833
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 17.79
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.114
+      value: -17.254053
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9299,7 +9299,7 @@ PrefabInstance:
     - target: {fileID: 8054673630455065609, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: SourceGameObject
       value: 
-      objectReference: {fileID: 7131126409352793401}
+      objectReference: {fileID: 7736493930754196892}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9328,7 +9328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: buttonText
