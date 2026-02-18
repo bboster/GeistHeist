@@ -24,6 +24,7 @@ public class ConfirmationPopup : MonoBehaviour
     private CanvasGroup canvasGroup;
     private float oldTimeScale=1;
     private float lastFadeSecondsUsed = -1;
+    private bool closeMenuOnConfirm;
     private UnityAction lastPauseStartedOverride;
     private Coroutine fadeOpacityCoroutine;
 
@@ -47,19 +48,22 @@ public class ConfirmationPopup : MonoBehaviour
     /// </summary>
     /// <param name="text">Text prompt that displays at text box (not confirmation button)</param>
     /// <param name="fadeSeconds">If greater than 0, fades in and out</param>
-    public void OpenConfirmationPopup(string? text = null, UnityAction? OnConfirmationButtonClicked = null, UnityAction? OnCancelButtonClicked = null, float fadeSeconds = -1)
+    public void OpenConfirmationPopup(string? text = null, UnityAction? OnConfirmationButtonClicked = null, UnityAction? OnCancelButtonClicked = null,
+        float fadeSeconds = -1, bool closeMenuOnConfirm = true, bool freezeTime = true)
     {
         if(canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
         lastFadeSecondsUsed = fadeSeconds;
+        this.closeMenuOnConfirm = closeMenuOnConfirm;
 
         // Press esc to close popup
         InputEvents.PauseStartedOverride = OnCancelButtonPressed;
 
         StaticUtilities.ShowCursor();
         oldTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
+        if(freezeTime)
+            Time.timeScale = 0f;
 
         if(text != null && confirmationText != null)
         {
@@ -132,6 +136,9 @@ public class ConfirmationPopup : MonoBehaviour
     void OnConfirmButtonClicked()
     {
         Time.timeScale = oldTimeScale;
-        StaticUtilities.DisableCanvasGroup(canvasGroup);
+        if (closeMenuOnConfirm)
+        {
+            StaticUtilities.DisableCanvasGroup(canvasGroup);
+        }
     }
 }
