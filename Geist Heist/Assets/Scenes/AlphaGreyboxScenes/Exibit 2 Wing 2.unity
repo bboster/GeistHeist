@@ -1296,6 +1296,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -1304,9 +1307,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 1520571385}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!136 &49470788
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3014,13 +3014,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &99095704
@@ -3049,6 +3045,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -3057,9 +3056,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!65 &99095705
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3410,6 +3406,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -3418,9 +3417,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!136 &103664213
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4618,7 +4614,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 1347721541}
-  possessable: {fileID: 349814912}
 --- !u!114 &173306143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5132,13 +5127,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &186951569
@@ -5167,6 +5158,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -5175,9 +5169,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!65 &186951570
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6658,13 +6649,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &236442387
@@ -6693,6 +6680,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -6701,9 +6691,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!65 &236442388
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6879,6 +6866,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -6887,9 +6877,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!136 &249509092
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6987,7 +6974,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 1099217572}
-  possessable: {fileID: 617442589}
 --- !u!114 &250522168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7285,6 +7271,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -7293,9 +7282,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!136 &261938888
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7504,7 +7490,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 1910915581}
-  possessable: {fileID: 2146444513}
 --- !u!114 &265182672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9681,6 +9666,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -9689,9 +9677,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!136 &349814913
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10413,6 +10398,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 0
   meshRenderer: {fileID: 0}
@@ -10421,9 +10409,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!54 &374545333
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10491,12 +10476,12 @@ MonoBehaviour:
   chargeLossRate: 105
   delayBetweenZooms: 0.5
   rotationRate: 30
+  rotationSensitivityMod: 0.01
+  delayToUpdateChargeMeter: 0.25
   OnomatopoeiaText: Bonk!
   OnomatopoeiaScale: 1
   onomatopoeiaLifetime: 1
   possessableParticle: {fileID: 0}
-  delayToUpdateChargeMeter: 0.25
-  chargeMeter: {fileID: 1560562226}
 --- !u!4 &374545336
 Transform:
   m_ObjectHideFlags: 0
@@ -10693,13 +10678,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &397012440
@@ -10728,6 +10709,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -10736,9 +10720,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!65 &397012441
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11089,31 +11070,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -27.093847
+      value: -30.682377
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.3450527
+      value: 5.385306
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 46.85976
+      value: 45.612007
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.09171004
+      value: 0.45261544
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0072048265
+      value: 0.109228365
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.99270105
+      value: 0.8602939
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.07798751
+      value: -0.20761223
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -12971,31 +12952,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.7938471
+      value: -4.3823776
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.68505204
+      value: 2.725306
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.2597623
+      value: 3.0120087
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.09171006
+      value: 0.45261544
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.007204827
+      value: 0.10922837
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.99270105
+      value: 0.8602939
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.07798752
+      value: -0.20761223
       objectReference: {fileID: 0}
     - target: {fileID: 8754484748706083896, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -15298,13 +15279,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &608879018
@@ -15333,6 +15310,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -15341,9 +15321,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!65 &608879019
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15665,6 +15642,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -15673,9 +15653,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!136 &617442590
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15923,7 +15900,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 914733320}
-  possessable: {fileID: 676815618}
 --- !u!114 &626423222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17095,6 +17071,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -17103,9 +17082,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!136 &676815619
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19218,7 +19194,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 1200802993}
-  possessable: {fileID: 261938887}
 --- !u!114 &781275242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20148,7 +20123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 1194794882}
-  possessable: {fileID: 249509091}
 --- !u!114 &817384373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21305,6 +21279,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 0
   meshRenderer: {fileID: 0}
@@ -21313,9 +21290,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!54 &866267287
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -21383,12 +21357,12 @@ MonoBehaviour:
   chargeLossRate: 105
   delayBetweenZooms: 0.5
   rotationRate: 30
+  rotationSensitivityMod: 0.01
+  delayToUpdateChargeMeter: 0.25
   OnomatopoeiaText: Bonk!
   OnomatopoeiaScale: 1
   onomatopoeiaLifetime: 1
   possessableParticle: {fileID: 0}
-  delayToUpdateChargeMeter: 0.25
-  chargeMeter: {fileID: 1823120944}
 --- !u!4 &866267290
 Transform:
   m_ObjectHideFlags: 0
@@ -21473,13 +21447,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &870627094
@@ -21508,6 +21478,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -21516,9 +21489,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!65 &870627095
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24728,6 +24698,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 0
   meshRenderer: {fileID: 0}
@@ -24736,9 +24709,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!54 &1113493178
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -24806,12 +24776,12 @@ MonoBehaviour:
   chargeLossRate: 105
   delayBetweenZooms: 0.5
   rotationRate: 30
+  rotationSensitivityMod: 0.01
+  delayToUpdateChargeMeter: 0.25
   OnomatopoeiaText: Bonk!
   OnomatopoeiaScale: 1
   onomatopoeiaLifetime: 1
   possessableParticle: {fileID: 0}
-  delayToUpdateChargeMeter: 0.25
-  chargeMeter: {fileID: 1352860424}
 --- !u!4 &1113493181
 Transform:
   m_ObjectHideFlags: 0
@@ -28438,7 +28408,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 611987384}
-  possessable: {fileID: 103664212}
 --- !u!114 &1290602029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30084,13 +30053,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &1372510874
@@ -30119,6 +30084,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -30127,9 +30095,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!65 &1372510875
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -35700,13 +35665,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &1650232314
@@ -35735,6 +35696,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -35743,9 +35707,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!65 &1650232315
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36764,8 +36725,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1713172170}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0072048265, y: 0.99270105, z: -0.07798751, w: 0.09171004}
-  m_LocalPosition: {x: -27.093847, y: 3.3450527, z: 46.85976}
+  m_LocalRotation: {x: 0.109228365, y: 0.8602939, z: -0.20761223, w: 0.45261544}
+  m_LocalPosition: {x: -30.682377, y: 5.385306, z: 45.612007}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37145,7 +37106,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 1927344426}
-  possessable: {fileID: 49470787}
 --- !u!114 &1718369004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44277,7 +44237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8260563878581112116, guid: 71d99ec3cd375d0408fc3a9166b528e5, type: 3}
       propertyPath: HubScene
-      value: ACTUAL Globe Scene
+      value: InsideGlobeALPHA
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -46055,6 +46015,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -46063,9 +46026,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!136 &2146444514
 CapsuleCollider:
   m_ObjectHideFlags: 0
