@@ -116,11 +116,14 @@ public class ThirdPersonInputHandler : IInputHandler
         //CooldownManager.Instance.StartCooldown();
         //TurnOnCooldownCanvas();
         rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+
     }
 
     // for the player / ghost: this means EXITING ghost mode
     public override void OnPossessionEnded()
     {
+        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
     #endregion
 
