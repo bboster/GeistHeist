@@ -348,7 +348,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2672405748642897335}
-  - {fileID: 8596665378422631725}
+  - {fileID: 7485161577530775410}
   m_Father: {fileID: 9047533981336939939}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8445324199067435655
@@ -8863,7 +8863,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 15
+  m_VersionIndex: 57
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -9026,10 +9026,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionInteractable
   sceneName: ACTUAL Globe Scene
-  loadingScreenPrefab: {fileID: 0}
-  levelLoadingCardPrefab: {fileID: 0}
-  confirmationText: Go inside the globe?
-  confirmationPopupPrefab: {fileID: 7508292700099194344, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+  loadingScreenPrefab: {fileID: 4996678474793840024, guid: ef6279e25117c4d4ab9e6b822786aca1, type: 3}
+  levelLoadingCardPrefab: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
+  confirmationText: Go Inside Globe?
+  confirmationPopupPrefab: {fileID: 5103595946940546535, guid: 5bc7dd9fed6d12a4580e4eb6ceb61a03, type: 3}
+  closeMenuOnConfirm: 0
 --- !u!114 &3808395953883841324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9046,8 +9047,8 @@ MonoBehaviour:
   buttonPressText: {fileID: 2662174043878902714}
   endCutsceneScene: Main Menu
   endingButtonPresses: 10
-  EndingActive: 0
   currentButtonPresses: 0
+  EndingActive: 0
 --- !u!114 &5303909961969861786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9073,6 +9074,9 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 0}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -9081,9 +9085,8 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
+  debugAlwaysPossessable: 0
+  actionBillboardUIPoint: {fileID: 3569352361585863115}
 --- !u!1 &7401502774690206568
 GameObject:
   m_ObjectHideFlags: 0
@@ -9220,7 +9223,7 @@ Transform:
   - {fileID: 1173200098750633462}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &3187218362757136144
+--- !u!1001 &4365845528448451919
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -9230,7 +9233,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_Name
-      value: Interact Button Point
+      value: Action Button Point
       objectReference: {fileID: 0}
     - target: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_Layer
@@ -9238,11 +9241,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: buttonKey
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: buttonText
-      value: E
+      value: 'Q '
+      objectReference: {fileID: 0}
+    - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: showInterractPrompt
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalScale.x
@@ -9258,15 +9269,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.575
+      value: 0.71
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.14999998
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.114
+      value: 0.00800015
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9299,16 +9310,21 @@ PrefabInstance:
     - target: {fileID: 8054673630455065609, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: SourceGameObject
       value: 
-      objectReference: {fileID: 7131126409352793401}
+      objectReference: {fileID: 8322101370845618958}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26581e60da394724197441682d8b83a4, type: 3}
---- !u!4 &8596665378422631725 stripped
+--- !u!4 &7485161577530775410 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
-  m_PrefabInstance: {fileID: 3187218362757136144}
+  m_PrefabInstance: {fileID: 4365845528448451919}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8322101370845618958 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
+  m_PrefabInstance: {fileID: 4365845528448451919}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9106403194000920458
 PrefabInstance:
@@ -9328,11 +9344,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: buttonText
       value: Q
+      objectReference: {fileID: 0}
+    - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: additionalButtonText
+      value: ' (Ends Game)'
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalScale.x
@@ -9348,15 +9368,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.575
+      value: 0.715
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.3035412
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.111
+      value: 0.012
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9389,7 +9409,7 @@ PrefabInstance:
     - target: {fileID: 8054673630455065609, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: SourceGameObject
       value: 
-      objectReference: {fileID: 7131126409352793401}
+      objectReference: {fileID: 3569352361585863115}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9398,5 +9418,10 @@ PrefabInstance:
 --- !u!4 &2672405748642897335 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
+  m_PrefabInstance: {fileID: 9106403194000920458}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3569352361585863115 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
   m_PrefabInstance: {fileID: 9106403194000920458}
   m_PrefabAsset: {fileID: 0}
