@@ -140,9 +140,12 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
             Debug.LogWarning("CollectableRegistry not found in Resources.");
     }
 
-    private void UpdateVisibility()
+    public void UpdateVisibility()
     {
-        gameObject.SetActive(DebugAlwaysDisplay || SaveDataManager.Instance.IsCollectableCollected(ThisCollectable));
+        gameObject.SetActive((DebugAlwaysDisplay || SaveDataManager.Instance.IsCollectableCollected(ThisCollectable)) && SaveDataManager.Instance.EquipedHat() != (int)ThisCollectable);
+        MeshRenderer existingMesh = GetComponentInChildren<MeshRenderer>();
+        if (existingMesh != null)
+            existingMesh.enabled = SaveDataManager.Instance.IsCollectableCollected(ThisCollectable) && SaveDataManager.Instance.EquipedHat() != (int)ThisCollectable;
     }
     #endregion
 

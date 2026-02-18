@@ -3434,6 +3434,10 @@ PrefabInstance:
       value: Interact Button Point
       objectReference: {fileID: 0}
     - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: buttonKey
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: buttonText
       value: Q
       objectReference: {fileID: 0}
@@ -16784,31 +16788,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.7938471
+      value: -4.3823786
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.68505204
+      value: 2.7253046
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.2597623
+      value: 3.0120068
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.09171014
+      value: 0.4526156
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0072048325
+      value: 0.10922842
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.992701
+      value: 0.86029387
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0779875
+      value: -0.20761225
       objectReference: {fileID: 0}
     - target: {fileID: 8754484748706083896, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -21308,11 +21312,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38800cd25e1334c45a1e3092994495da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
-  sceneName: FINAL Parlour Room
+  sceneName: KitchenWing1
   loadingScreenPrefab: {fileID: 4996678474793840024, guid: ef6279e25117c4d4ab9e6b822786aca1, type: 3}
   levelLoadingCardPrefab: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
   confirmationText: Enter the Art Exhibit? (Wing 2)
   confirmationPopupPrefab: {fileID: 4649167759747579475, guid: f76a53c6cd44c9a46a704fef926786c4, type: 3}
+  closeMenuOnConfirm: 0
 --- !u!1 &733398841
 GameObject:
   m_ObjectHideFlags: 0
@@ -24692,31 +24697,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.662457
+      value: 9.073926
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25.525051
+      value: 27.565304
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.860497
+      value: -2.1082525
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.09171016
+      value: 0.4526155
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0072048334
+      value: 0.1092284
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.992701
+      value: 0.86029387
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0779875
+      value: -0.20761223
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -64365,14 +64370,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1422376319}
-    - target: {fileID: 3474600935642791087, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
-      propertyPath: confirmationText
-      value: Go Inside Globe?
-      objectReference: {fileID: 0}
-    - target: {fileID: 3474600935642791087, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
-      propertyPath: confirmationPopupPrefab
-      value: 
-      objectReference: {fileID: 5103595946940546535, guid: 5bc7dd9fed6d12a4580e4eb6ceb61a03, type: 3}
     - target: {fileID: 7736493930754196892, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
       propertyPath: m_Name
       value: Globe
@@ -64387,7 +64384,7 @@ PrefabInstance:
       objectReference: {fileID: 1422376319}
     - target: {fileID: 8445324199067435655, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
       propertyPath: m_VersionIndex
-      value: 21
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 9047533981336939939, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
       propertyPath: m_LocalPosition.x
