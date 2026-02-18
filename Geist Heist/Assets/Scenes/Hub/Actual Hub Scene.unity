@@ -3434,6 +3434,10 @@ PrefabInstance:
       value: Interact Button Point
       objectReference: {fileID: 0}
     - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: buttonKey
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: buttonText
       value: Q
       objectReference: {fileID: 0}
@@ -21312,7 +21316,8 @@ MonoBehaviour:
   loadingScreenPrefab: {fileID: 4996678474793840024, guid: ef6279e25117c4d4ab9e6b822786aca1, type: 3}
   levelLoadingCardPrefab: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
   confirmationText: Enter the Art Exhibit? (Wing 2)
-  confirmationPopupPrefab: {fileID: 120270094049834394, guid: 85a6c648e22bc79478015b1f3947e196, type: 3}
+  confirmationPopupPrefab: {fileID: 4649167759747579475, guid: f76a53c6cd44c9a46a704fef926786c4, type: 3}
+  closeMenuOnConfirm: 0
 --- !u!1 &733398841
 GameObject:
   m_ObjectHideFlags: 0
@@ -64365,14 +64370,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1422376319}
-    - target: {fileID: 3474600935642791087, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
-      propertyPath: confirmationText
-      value: Go Inside Globe?
-      objectReference: {fileID: 0}
-    - target: {fileID: 3474600935642791087, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
-      propertyPath: confirmationPopupPrefab
-      value: 
-      objectReference: {fileID: 5103595946940546535, guid: 5bc7dd9fed6d12a4580e4eb6ceb61a03, type: 3}
     - target: {fileID: 7736493930754196892, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
       propertyPath: m_Name
       value: Globe
@@ -64387,7 +64384,7 @@ PrefabInstance:
       objectReference: {fileID: 1422376319}
     - target: {fileID: 8445324199067435655, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
       propertyPath: m_VersionIndex
-      value: 21
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 9047533981336939939, guid: 595881280727e6e4f9cf9de64abe2d06, type: 3}
       propertyPath: m_LocalPosition.x

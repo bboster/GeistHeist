@@ -12,7 +12,7 @@ using FMODUnity;
 using NaughtyAttributes;
 using UnityEngine;
 
-public class FlavorTextInteractable : MonoBehaviour, IInteractable
+public class FlavorTextActionable : MonoBehaviour, IActionable
 {
     [InfoBox("Flavor text can only be read once per save file. Reset your save file if you are debugging.")]
     [SerializeField, ResizableTextArea] private string DisplayText = "";
@@ -39,21 +39,21 @@ public class FlavorTextInteractable : MonoBehaviour, IInteractable
     [SerializeField, ShowIf(nameof(RequireSpecificHat)), HideIf(nameof(AlwaysAppear))] private Collectable requiredHat;
 
     private Outline outline;
-    private bool? cached_isInteractable; // decide one time if it is interactable and never again (until scene is reloaded)
+    private bool? cached_isActionable; // decide one time if it is actionable and never again (until scene is reloaded)
     void Start()
     {
         outline = GetComponent<Outline>();
         outline.enabled = false;
 
         if (SaveDataManager.Instance.IsFlavorTextRead(DisplayText))
-            DisableTextInteractable();
+            DisableTextActionable();
     }
 
-    public void Interact()
+    public void Action()
     {
         DialogueManager.Instance.DisplayText_Dialogue(DisplayText, secondsUntilCloseText, onDialogueEndCallback: OnFlavorTextEnd);
         SaveDataManager.Instance.MarkFlavorTextAsRead(DisplayText, autoSave: true);
-        DisableTextInteractable();
+        DisableTextActionable();
     }
 
     private void OnFlavorTextEnd()
@@ -62,13 +62,13 @@ public class FlavorTextInteractable : MonoBehaviour, IInteractable
         //TODO: @Joe put sound effect here
     }
 
-    public void DisableTextInteractable()
+    public void DisableTextActionable()
     {
         this.enabled = false; // cant interact with it anymore
         outline.enabled = false;
     }
 
-    public void EnableTextInteractable()
+    public void EnableTextActionable()
     {
         this.enabled = true;
         // keep outline disabled tho
@@ -116,18 +116,18 @@ public class FlavorTextInteractable : MonoBehaviour, IInteractable
         return true;
     }
 
-    void IInteractable.OnPlayerLookStart()
+    void IActionable.OnPlayerLookStart()
     {
     }
 
-    bool IInteractable.IsInteractable()
+    bool IActionable.IsActionable()
     {
-        // only decide interactability first time you look at the object. Like shroedingers cat.
-        cached_isInteractable = cached_isInteractable ?? HasMetConditionsToAppear();
+        // only decide actionability first time you look at the object. Like shroedingers cat.
+        cached_isActionable = cached_isActionable ?? HasMetConditionsToAppear();
 
         if (SaveDataManager.Instance.IsFlavorTextRead(DisplayText))
             return false;
 
-        return cached_isInteractable.Value;
+        return cached_isActionable.Value;
     }
 }
