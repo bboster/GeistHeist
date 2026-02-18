@@ -80,17 +80,22 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
-        SwapCameras(PlayerGhostObject,possessable);
+        // Store reference to old object before changing CurrentObject
+        PossessableObject oldObject = CurrentObject;
+        if (oldObject != null)
+            DeRegisterInputs(oldObject);
+        if (oldObject != null)
+            oldObject.OnPossessionEnded();
         PlayerGhostObject.gameObject.SetActive(false);
-        UpdateListener(possessable);
 
+        // Update listener for audio and register inputs
+        UpdateListener(possessable);
         RegisterInputs(possessable);
 
-        if (CurrentObject != null) CurrentObject.OnPossessionEnded();
+        // Start posetion and swap cameras
         possessable.OnPossessionStart();
-
-        DeRegisterInputs(CurrentObject);
         CurrentObject = possessable;
+        SwapCameras(oldObject, possessable);
 
         OnPossessionObjectChanged.Invoke(CurrentObject);
     }
@@ -113,20 +118,25 @@ public class PlayerManager : Singleton<PlayerManager>
             return;
         }
 
+        // Store reference to old object
+        PossessableObject oldObject = CurrentObject;
         CheckGhostExitPoints(possessable);
-
-        SwapCameras(possessable, PlayerGhostObject);
+        if (oldObject != null)
+            DeRegisterInputs(oldObject);
+        if (oldObject != null)
+            oldObject.OnPossessionEnded();
         PlayerGhostObject.gameObject.SetActive(true);
-        UpdateListener(PlayerGhostObject);
 
+        // Update listener for audio and register inputs
+        UpdateListener(PlayerGhostObject);
         RegisterInputs(PlayerGhostObject);
 
-        possessable.OnPossessionEnded();
+        // Call ghost's start possession
         PlayerGhostObject.OnPossessionStart();
-
         CurrentObject = PlayerGhostObject;
+        SwapCameras(oldObject, PlayerGhostObject);
 
-        DeRegisterInputs(possessable);
+        //DeRegisterInputs(possessable);
 
         OnPossessionObjectChanged.Invoke(CurrentObject);
     }
@@ -163,31 +173,65 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void SwapCameras(PossessableObject oldObject, PossessableObject newObject)
     {
-        // if both possessables dont have special behaviour
-        if (oldObject == null || (!oldObject.HasCustomCameraBehavior && !newObject.HasCustomCameraBehavior))
+        // Null safety check
+        if (newObject == null)
+            return;
+
+        // If neither has custom camera behavior, use the main camera
+        if ((oldObject == null || !oldObject.HasCustomCameraBehavior) && !newObject.HasCustomCameraBehavior)
         {
-            //mainCinemachineCamera.Follow = newObject.
-            //;
+            mainCinemachineCamera.gameObject.SetActive(true);
             mainPlayerCameraController.SetAnchorPoint(newObject.cameraAnchor);
             currentCameraController = mainPlayerCameraController;
         }
-        else if (oldObject.HasCustomCameraBehavior || newObject.HasCustomCameraBehavior)
+        // If new object has custom camera, switch to it
+        else if (newObject.HasCustomCameraBehavior && newObject.CinemachineCamera != null)
         {
-            // Get rotation values
-            var newOrbitalFollow = newObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
-            var oldOrbitalFollow = oldObject.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+            // Deactivate old camera if it exists
+            if (oldObject != null && oldObject.HasCustomCameraBehavior && oldObject.CinemachineCamera != null)
+            {
+                oldObject.CinemachineCamera.gameObject.SetActive(false);
+            }
+            else
+            {
+                mainCinemachineCamera.gameObject.SetActive(false);
+            }
 
-            newOrbitalFollow.HorizontalAxis.Value = oldOrbitalFollow.HorizontalAxis.Value;
-
+            // Activate new custom camera
             newObject.CinemachineCamera.gameObject.SetActive(true);
+            
+            // Get PlayerCameraController from the CinemachineCamera GameObject, not the possessable
+            currentCameraController = newObject.CinemachineCamera.GetComponent<PlayerCameraController>();
+            
+            if (currentCameraController == null)
+            {
+                currentCameraController = newObject.CinemachineCamera.GetComponentInParent<PlayerCameraController>();
+            }
+           
+            if (currentCameraController == null)
+            {
+                Debug.LogError($"[PlayerManager] Could not find PlayerCameraController on or near {newObject.CinemachineCamera.gameObject.name}", newObject.gameObject);
+                currentCameraController = mainPlayerCameraController;
+            }
+        }
+        // Switching FROM custom camera back to main camera
+        else if (oldObject != null && oldObject.HasCustomCameraBehavior && oldObject.CinemachineCamera != null && !newObject.HasCustomCameraBehavior)
+        {
             oldObject.CinemachineCamera.gameObject.SetActive(false);
-
-            currentCameraController = newObject.GetComponent<PlayerCameraController>();
-
+            mainCinemachineCamera.gameObject.SetActive(true);
             mainPlayerCameraController.SetAnchorPoint(newObject.cameraAnchor);
+            currentCameraController = mainPlayerCameraController;
+        }
+        // Fallback: HasCustomCameraBehavior is true but CinemachineCamera is null
+        else if (newObject.HasCustomCameraBehavior && newObject.CinemachineCamera == null)
+        {
+            Debug.LogError($"'{newObject.gameObject.name}' has HasCustomCameraBehavior checked but CinemachineCamera is not assigned!", newObject);
+            mainCinemachineCamera.gameObject.SetActive(true);
+            currentCameraController = mainPlayerCameraController;
         }
 
-        currentCameraController.UpdateAllSettings();
+        if (currentCameraController != null)
+            currentCameraController.UpdateAllSettings();
     }
 
     public void RegisterInputs(PossessableObject possessable)
