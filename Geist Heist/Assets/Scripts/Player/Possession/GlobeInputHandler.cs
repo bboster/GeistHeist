@@ -33,9 +33,14 @@ public class GlobeInputHandler : IInputHandler
     private Coroutine endCoroutine;
     [HideInInspector] public bool EndingActive = false;
 
+
     private Animator animator => GetComponent<Animator>();
     private SceneTransitionActionable sceneTransitionInteractable => GetComponent<SceneTransitionActionable>();
 
+    private void Start()
+    {
+        
+    }
     public override void WhilePossessingUpdate()
     {
     }

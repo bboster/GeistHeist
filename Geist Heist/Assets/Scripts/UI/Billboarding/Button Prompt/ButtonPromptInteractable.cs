@@ -15,9 +15,12 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ButtonPromptInteractable : MonoBehaviour, IInteractable
+public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionable
 {
-    [SerializeField] public string buttonText="E";
+
+    public ButtonType buttonKey;
+
+    [SerializeField] public string additionalButtonText="";
 
     private ButtonPromptBillboardUI billboardUI;
     [HideInInspector] public UnityEvent ShowUIEvent = new();
@@ -34,6 +37,9 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
 
     void IInteractable.OnPlayerLookStart()
     {
+        if (buttonKey != ButtonType.Interact)
+            return;
+
         /*int parentsDisabled =
             transform
             .GetComponentsInParent<IInteractable>() // parent's Interactables
@@ -56,22 +62,52 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
     }
     void IInteractable.OnPlayerLookStop()
     {
+        if (buttonKey != ButtonType.Interact)
+            return;
+
         Debug.Log("stopped looking");
         billboardUI.Hide();
     }
 
+    void IActionable.OnPlayerLookStart()
+    {
+        if (buttonKey != ButtonType.Action)
+            return;
+
+        var parent_actionable = transform.GetComponentInParent<IActionable>();
+        if (parent_actionable.IsActionable() == false)
+        {
+            Debug.Log("Parent unactionable");
+            billboardUI.Hide();
+            return;
+        }
+
+        // UpdateButtonPrompt changes the text depending on if its a controller / keyboard. 
+        // This is redundant now but will be important later.
+        billboardUI.UpdateButtonPrompt();
+        billboardUI.Show();
+    }
+
+    void IActionable.OnPlayerLookStop()
+    {
+        if (buttonKey != ButtonType.Action)
+            return;
+
+        billboardUI.Hide();
+    }
+
+    public void Action()
+    {/* do nothing */}
     public bool IsParentInteractable()
     {
+        
         var parent_interactable = transform.parent.GetComponent<IInteractable>();
         var parent_actionable   = transform.parent.GetComponent<IActionable>();
 
-        if (parent_interactable != null && parent_actionable != null)
-            return parent_interactable.IsInteractable() && parent_actionable.IsActionable();
-
-        if(parent_interactable != null)
+        if(parent_interactable != null && buttonKey == ButtonType.Interact)
             return parent_interactable.IsInteractable();
 
-        if (parent_actionable != null)
+        if (parent_actionable != null && buttonKey == ButtonType.Action)
             return parent_actionable.IsActionable();
 
         Debug.LogWarning($"{gameObject.name}'s parent does not have an interactable or actionable component");
