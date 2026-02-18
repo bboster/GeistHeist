@@ -124,7 +124,7 @@ public abstract class IBillboardUI : MonoBehaviour
 
     protected virtual float CalculateOpacity(float playerDistance, Vector3 UIPosition)
     {
-        float t = Mathf.InverseLerp(closeScaleDistance, farScaleDistance, playerDistance);
+        float t = Mathf.InverseLerp(closeOpacityDistance, farOpacityDistance, playerDistance);
         float baseAlpha = Mathf.Lerp(closeOpacity, farOpacity, t);
 
         // check if baseAlpha is 0 to avoid all the bs happening down there
