@@ -15700,6 +15700,7 @@ MonoBehaviour:
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
   AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
@@ -15709,9 +15710,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &2636969142504031137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28545,7 +28543,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -30655,6 +30654,7 @@ MonoBehaviour:
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
   AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
@@ -30664,9 +30664,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &9117771539280333833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30685,13 +30682,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &5235575462988015434
@@ -35017,7 +35010,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -41667,7 +41661,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -52532,7 +52527,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -81677,6 +81673,7 @@ MonoBehaviour:
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
   AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
@@ -81686,9 +81683,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &1492952332729957202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92730,7 +92724,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -95943,6 +95938,7 @@ MonoBehaviour:
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
   AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
@@ -95952,9 +95948,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &3429161579932726134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95973,13 +95966,9 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
   trajectoryPredictor: {fileID: 0}
   LineRenderer: {fileID: 0}
 --- !u!114 &1852809605538699317
@@ -99274,7 +99263,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -104319,6 +104309,7 @@ MonoBehaviour:
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
   AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
@@ -104328,9 +104319,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &7191491785482576346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111594,7 +111582,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -117242,6 +117231,7 @@ MonoBehaviour:
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
   AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
@@ -117251,9 +117241,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &8681176931010739775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125902,7 +125889,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -137855,6 +137843,7 @@ MonoBehaviour:
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
   AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
@@ -137864,9 +137853,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &5241893489824326608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165891,6 +165877,7 @@ MonoBehaviour:
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
   AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
   isGhost: 0
   CanUnPossess: 1
@@ -165900,9 +165887,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &5800225826284695290
 MonoBehaviour:
   m_ObjectHideFlags: 0

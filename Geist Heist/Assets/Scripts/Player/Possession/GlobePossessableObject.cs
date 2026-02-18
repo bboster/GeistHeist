@@ -12,13 +12,13 @@ public class GlobePossessableObject : PossessableObject, IInteractable
 {
     [SerializeField] private bool debugAlwaysPossessable;
 
-    [SerializeField, Required] private GameObject actionBillboardUIPoint;
+    [SerializeField, Required] private GameObject interactBillboardUIPoint;
 
     void Start()
     {
         if (SaveDataManager.Instance.AllLevelsCompleted() == false && (Application.isEditor && debugAlwaysPossessable == false))
         {
-            actionBillboardUIPoint.SetActive(false);
+            interactBillboardUIPoint.SetActive(false);
         }
     }
 
