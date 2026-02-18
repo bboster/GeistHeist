@@ -513,7 +513,7 @@ public class ThirdPersonInputHandler : IInputHandler
     private void RotatePlayer()
     {
         if(transform.rotation != targetRotation)
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
         Vector3 diff = (transform.position - positionLastFrame).WithY(0);
 
