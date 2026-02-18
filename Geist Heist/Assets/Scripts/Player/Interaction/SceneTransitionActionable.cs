@@ -47,7 +47,7 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
             closeMenuOnConfirm: true, freezeTime: false,
             OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfirmPressed(popupCanvas));
 
-        popup.GetComponentInParent<LevelConfirmationVisualizer>()?.Initialize();
+        popup.GetComponentInParent<LevelConfirmationVisualizer>()?.Initialize(sceneName);
     }
 
     void OnCancelPressed(GameObject confirmationPopup)
