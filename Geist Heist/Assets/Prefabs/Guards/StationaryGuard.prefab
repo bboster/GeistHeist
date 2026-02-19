@@ -37,6 +37,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6763716340219904352}
   - {fileID: 9016361732872943130}
   - {fileID: 8962726393112644240}
   - {fileID: 3287509978876339476}
@@ -44,8 +45,6 @@ Transform:
   - {fileID: 4759244467560396307}
   - {fileID: 3099534822290160820}
   - {fileID: 2386851480775375704}
-  - {fileID: 2046425248456093714}
-  - {fileID: 620401780613270601}
   - {fileID: 2749016206893264801}
   - {fileID: 8815582275079667568}
   m_Father: {fileID: 0}
@@ -498,12 +497,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7025816127814639886}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.1980443, z: 0}
+  m_LocalScale: {x: 0.06601477, y: 0.06601477, z: 0.06601477}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1960475012492913843}
+  m_Father: {fileID: 9016361732872943130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &634515115900350344
 MonoBehaviour:
@@ -519,6 +518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 121252902873117158}
+  displaceParentAtStart: 1
   billboardUI: {fileID: 0}
 --- !u!1 &7849074946065515977
 GameObject:
@@ -673,11 +673,11 @@ Transform:
   m_GameObject: {fileID: 7862435259215100387}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.047, y: 3.1339998, z: -0.191}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.003102694, y: 0.27290502, z: -0.012608821}
+  m_LocalScale: {x: 0.06601477, y: 0.06601477, z: 0.06601477}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1960475012492913843}
+  m_Father: {fileID: 9016361732872943130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7869722432528365631
 MonoBehaviour:
@@ -693,7 +693,78 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 8140011255406306161, guid: 25b2c2151953b3a42afffa3fa8a84f3f, type: 3}
   SourceGameObject: {fileID: 121252902873117158}
+  displaceParentAtStart: 1
   billboardUI: {fileID: 0}
+--- !u!1 &8822669627562160142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6763716340219904352}
+  - component: {fileID: 397195869295339319}
+  - component: {fileID: 6238799418199636919}
+  m_Layer: 0
+  m_Name: ProximityAggro
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6763716340219904352
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8822669627562160142}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1960475012492913843}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &397195869295339319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8822669627562160142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f962175aadf634297591bb04c85114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProximityStimulus
+  stimulusType: 3
+  priority: 2
+  stateToChangeTo: 4
+  parentGuard: {fileID: 4906703080055724546}
+--- !u!135 &6238799418199636919
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8822669627562160142}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.903396
+  m_Center: {x: 0, y: 0.21066082, z: 0}
 --- !u!1 &8980936156519645965
 GameObject:
   m_ObjectHideFlags: 0
@@ -1646,7 +1717,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 45c0836639bc2e342b6f98ffd7abe3fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2046425248456093714}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 45c0836639bc2e342b6f98ffd7abe3fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 620401780613270601}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45c0836639bc2e342b6f98ffd7abe3fc, type: 3}
 --- !u!4 &9016361732872943130 stripped
