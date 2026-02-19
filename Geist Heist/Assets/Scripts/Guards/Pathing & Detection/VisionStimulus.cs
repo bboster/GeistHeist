@@ -226,6 +226,7 @@ public class VisionStimulus : Stimulus
 
             //Sweeps the raycast a given distance along the base of the triangular visualizer. NewPoint = OldPoint + distance * unit vector of the base
             raySweep = raySweep - (coneDiameter / rayCount) * Vector3.Normalize(-dir);
+            raySweep.y = coneOrigin.position.y;
         }
 
         visionMesh.vertices = vertices;
