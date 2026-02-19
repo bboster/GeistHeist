@@ -18,6 +18,8 @@ public class BillboardUIPoint : MonoBehaviour
     [SerializeField, Required] public GameObject UIObjectPrefab;
     [SerializeField] private GameObject SourceGameObject;
 
+    [Foldout("Advanced"), SerializeField] private bool displaceParentAtStart = false;
+
     [HideInInspector] public IBillboardUI billboardUI;
 
     [Header("Debug")]
@@ -26,6 +28,10 @@ public class BillboardUIPoint : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // This is just for guard bubbles, and the weird way that designers handled the guard models
+        if(displaceParentAtStart)
+            transform.parent = transform.parent.parent;
+
         // this is expected behavior if this is an Onomatopoeia point
         if (UIObjectPrefab == null)
         {
