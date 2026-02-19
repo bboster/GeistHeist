@@ -14,11 +14,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class KeyManager : Singleton<KeyManager>
 {
-    [SerializeField] private List<KeyUISprite> KeyUIIcons;
+    [SerializeField] private List<KeyUISprite> KeyUIIcons = new List<KeyUISprite>();
 
     public event Action<KeyType> OnKeyCollected;
 
-    private readonly HashSet<KeyType> _keys = new HashSet<KeyType>();
+    private readonly HashSet<KeyType> _keys = new();
     public void Initialize()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -52,6 +52,7 @@ public class KeyManager : Singleton<KeyManager>
 
     public void Clear()
     {
+        if (_keys == null) return;
         if (_keys.Count == 0) return;
         _keys.Clear();
         Debug.Log("KeyInventory: Cleared keys on scene load.");
