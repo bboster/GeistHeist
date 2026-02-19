@@ -25,8 +25,6 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         public MeshFilter meshFilter => collectableObject.GetComponent<MeshFilter>();
     }
 
-    [SerializeField, Scene] private string LevelToLoad;
-
     // i know theres only one tether in our game but scalability (also there may be an animation later that duplicates the tethers)
     [SerializeField] private List<MeshRenderer> TetherModels;
 
@@ -49,13 +47,18 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     private static CollectableRegistry collectableRegistry;
     private static RenderTexture renderCameraOutputTexture;
 
+    private string tetherToDisplay;
+
     /// <summary>
     /// Initialized from kiosk
     /// </summary>
-    public void Initialize()
+    public void Initialize(string sceneToLoad)
     {
         if (collectableRegistry == null)
             collectableRegistry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
+
+        // make a copy of the material, to not flood github
+        notCollectedMaterial = Instantiate(notCollectedMaterial);
 
         foreach (var tetherModel in TetherModels)
         {
@@ -77,7 +80,10 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     {
         ScaleToFitBounds(tetherMesh.GetComponent<MeshFilter>(), sizeToFitForTether);
 
-        if (SaveDataManager.Instance.IsLevelCompleted(LevelToLoad))
+        // if its null then its probably because this is being run from the debug button.
+        if (SaveDataManager.Instance == null) return;
+
+        if (SaveDataManager.Instance.IsLevelCompleted(tetherToDisplay))
         {
             // return because tether is visible with correct materials by default
             return;
@@ -95,7 +101,10 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     {
         collectable.meshFilter.mesh = collectableRegistry.GetMesh(collectable.collectable);
         ScaleToFitBounds(collectable.meshFilter, sizeToFitForCollectable);
-        
+
+        // if its null then its probably because this is being run from the debug button.
+        if (SaveDataManager.Instance == null) return;
+
         if (SaveDataManager.Instance.IsCollectableCollected(collectable.collectable))
         {
             collectable.meshRenderer.materials = collectableRegistry.GetMaterials(collectable.collectable);
@@ -166,6 +175,15 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         renderCameraOverlayImage.GetComponent<CanvasGroup>().alpha = 1; // in inspector, interactability is disabled.
     }
 
+    #region Debug
+
+    [Button]
+    private void Debug_RefreshCollectableDisplays()
+    {
+        // idk what scene to put in there, it doesnt matter
+        Initialize("Main Menu");
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.orange;
@@ -180,4 +198,6 @@ public class LevelConfirmationVisualizer : MonoBehaviour
             Gizmos.DrawWireCube(collectable.collectableObject.transform.position, Vector3.one * sizeToFitForCollectable);
         }
     }
+
+    #endregion debug
 }

@@ -361,10 +361,10 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         if (!hasTimer)
             yield break;
+        possessionRefill.start();
 
-        while(currentTimerCharge < maxChargePercentage)
+        while (currentTimerCharge < maxChargePercentage)
         {
-            possessionRefill.start();
 
             currentTimerCharge = Mathf.Min(currentTimerCharge + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
             OnTimerUpdate.Invoke(currentTimerChargePercentage);
