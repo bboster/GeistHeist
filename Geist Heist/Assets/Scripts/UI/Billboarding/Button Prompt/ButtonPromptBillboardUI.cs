@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Sky
  * Creation Date: 10/23/25
- * Last Modified: 10/23/25
+ * Last Modified:  2/17/26
  * 
  * Brief Description: billboarded. Appears when the player can interact with it.
  * Childed under billboard UI manager.
@@ -17,6 +17,7 @@ public class ButtonPromptBillboardUI : IBillboardUI
 {
     [SerializeField, Required] private RectTransform popupParent;
     [SerializeField, Required] private TMP_Text interactText;
+    [ReadOnly] public ButtonType buttonType;
 
     private ButtonPromptInteractable buttomPrompt;
     private Coroutine popupAnimation;
@@ -37,6 +38,7 @@ public class ButtonPromptBillboardUI : IBillboardUI
     {
         buttomPrompt = sourceGameObject.GetComponentInChildren<ButtonPromptInteractable>();
         buttomPrompt.InitializeFromBillboardUI(this);
+        buttonType = buttomPrompt.buttonKey;
     }
 
     public override void Show()
@@ -48,7 +50,18 @@ public class ButtonPromptBillboardUI : IBillboardUI
 
     public void UpdateButtonPrompt()
     {
-        interactText.text = buttomPrompt.buttonText;
+        switch (buttonType)
+        {
+            case (ButtonType.Interact):
+                interactText.text = "E" + buttomPrompt.additionalButtonText;
+                break;
+            case (ButtonType.Action):
+                interactText.text = "Q" + buttomPrompt.additionalButtonText;
+                break;
+            default:
+                interactText.text = "Prompt Error";
+                break;
+        }
     }
 
     /// <summary>
@@ -93,4 +106,10 @@ public class ButtonPromptBillboardUI : IBillboardUI
         return base.CalculateOpacity(playerDistance, UIPosition);
     }
 
+}
+
+
+public enum ButtonType
+{
+    Interact, Action
 }
