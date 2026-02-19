@@ -44,6 +44,7 @@ public class StationaryBehavior : Behavior
         rotation.y = contRef.DefaultRotation - selfRef.transform.rotation.eulerAngles.y;
 
         selfRef.transform.Rotate(rotation);
+        contRef.visionConeRotator.transform.localRotation = Quaternion.identity;
     }
 
     /// <summary>
