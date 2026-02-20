@@ -31,11 +31,17 @@ public class PlayerCameraController : MonoBehaviour
 
     void Start()
     {
-        cinemachineCamera = GetComponent<CinemachineCamera>();
+        cinemachineCamera = GetComponentInChildren<CinemachineCamera>();
         inputAxisController = GetComponent<CinemachineInputAxisController>();
         orbitalFollow = GetComponent<CinemachineOrbitalFollow>();
 
-        minFov = cinemachineCamera.Lens.FieldOfView;
+        if(cinemachineCamera == null)
+        {
+            Debug.LogError("cinemachineCamera is null");
+            minFov = 75;
+        }
+        else
+            minFov = cinemachineCamera.Lens.FieldOfView;
 
         tempCameraPivot = new GameObject("Temp camera pivot").transform;
     }

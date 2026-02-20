@@ -39,6 +39,8 @@ public class ButtonPromptBillboardUI : IBillboardUI
         buttomPrompt = sourceGameObject.GetComponentInChildren<ButtonPromptInteractable>();
         buttomPrompt.InitializeFromBillboardUI(this);
         buttonType = buttomPrompt.buttonKey;
+
+        UpdateButtonPrompt();
     }
 
     public override void Show()
