@@ -9,6 +9,7 @@
 
 using FMODUnity;
 using NaughtyAttributes;
+using System.Collections;
 using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -28,9 +29,12 @@ public class PlayerManager : Singleton<PlayerManager>
     private InputEvents inputEvents => InputEvents.Instance;
     [HideInInspector] public Camera camera;
     [HideInInspector] public CinemachineCamera mainCinemachineCamera;
+    [SerializeField] private float possessionFacingRotationSpeed = 540f;
     private PlayerCameraController mainPlayerCameraController;
     private PlayerCameraController currentCameraController; // may be mainCinemachineCamera sometimes
     private StudioListener fmodListener;
+    private Coroutine possessionTransitionCoroutine;
+    private bool isTransitioningPossession = false;
 
     [HideInInspector] public static UnityEvent<PossessableObject> OnPossessionObjectChanged = new();
 
@@ -69,6 +73,9 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void PossessObject(PossessableObject possessable)
     {
+        if (isTransitioningPossession)
+            return;
+
         if(possessable == null)
         {
             Debug.LogError("Possessable is null");
@@ -82,26 +89,66 @@ public class PlayerManager : Singleton<PlayerManager>
 
         // Store reference to old object before changing CurrentObject
         PossessableObject oldObject = CurrentObject;
+        bool isTetherPossession = possessable.InputHandler is TetherPossessable;
+        if (oldObject != null && oldObject == PlayerGhostObject)
+        {
+            oldObject.QueueGhostPossessionAnimation(isTetherPossession);
+        }
+
+        if (possessionTransitionCoroutine != null)
+            StopCoroutine(possessionTransitionCoroutine);
+
+        possessionTransitionCoroutine = StartCoroutine(PossessObjectAfterAnimation(possessable, oldObject, isTetherPossession));
+    }
+
+    private IEnumerator PossessObjectAfterAnimation(PossessableObject possessable, PossessableObject oldObject, bool isTetherPossession)
+    {
+        isTransitioningPossession = true;
+
         if (oldObject != null)
             DeRegisterInputs(oldObject);
         if (oldObject != null)
             oldObject.OnPossessionEnded();
+
+        if (oldObject != null && oldObject == PlayerGhostObject)
+        {
+            float cameraDelay = oldObject.GetGhostCameraTransitionDelay(isTetherPossession);
+            if (cameraDelay > 0f)
+            {
+                float elapsed = 0f;
+                while (elapsed < cameraDelay)
+                {
+                    oldObject.RotateTowardsTarget(possessable.transform, possessionFacingRotationSpeed * Time.deltaTime);
+                    elapsed += Time.deltaTime;
+                    yield return null;
+                }
+            }
+
+            oldObject.FaceTowardsTarget(possessable.transform);
+        }
+
         PlayerGhostObject.gameObject.SetActive(false);
 
         // Update listener for audio and register inputs
         UpdateListener(possessable);
         RegisterInputs(possessable);
 
-        // Start posetion and swap cameras
+        // Start possession and swap cameras
         possessable.OnPossessionStart();
         CurrentObject = possessable;
         SwapCameras(oldObject, possessable);
 
         OnPossessionObjectChanged.Invoke(CurrentObject);
+
+        isTransitioningPossession = false;
+        possessionTransitionCoroutine = null;
     }
 
     public void PossessGhost(PossessableObject possessable)
     {
+        if (isTransitioningPossession)
+            return;
+
         if (possessable == null)
         {
             Debug.LogError("Possessable is null");
@@ -283,6 +330,9 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void Update()
     {
+        if (isTransitioningPossession)
+            return;
+
         if (CurrentObject != null)
             CurrentObject.WhilePossessingUpdate();
         if (currentInputHandler != null)
