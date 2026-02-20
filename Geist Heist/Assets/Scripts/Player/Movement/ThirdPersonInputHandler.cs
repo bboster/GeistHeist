@@ -109,7 +109,7 @@ public class ThirdPersonInputHandler : IInputHandler
         TryTurnOnActionablePrompt();
 
         RotatePlayer();
-        //HoverBob();
+        HoverBob();
         //StepClimb();
     }
 
@@ -545,14 +545,15 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
     }
 
-    /* Also no longer needed
+    
     private void HoverBob() // squarepants
     {
-        float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
+        //float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
-        playerModel.transform.position = playerModel.transform.position.WithY(height);
+        //float height = modelStartYPosition + hoverHeight;
+        //gameObject.transform.position = gameObject.transform.position.WithY(height);
     }
-    */
+    
 
     private bool OnSlope()
     {
