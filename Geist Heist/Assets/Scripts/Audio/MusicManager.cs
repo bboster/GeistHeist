@@ -6,10 +6,10 @@ using FMOD.Studio;
 
 public class MusicManager : Singleton<MusicManager>
 {
-    [SerializeField] private string hubName;
+    [SerializeField, NaughtyAttributes.Scene] private string hubName;
     [SerializeField] private string[] levelNames;
-    [SerializeField] private string globeName;
-    [SerializeField] private string menuName;
+    [SerializeField, NaughtyAttributes.Scene] private string globeName;
+    [SerializeField, NaughtyAttributes.Scene] private string menuName;
     
     private EventInstance levelBGM;
     private EventInstance hubBGM;
@@ -24,8 +24,21 @@ public class MusicManager : Singleton<MusicManager>
         hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.HubBGM);
         levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.LevelBGM);
 
+        SceneManager.sceneLoaded += StartMusic;
+
         //the following if-else block could be changed to a Switch statement -Josh
         StopAll();
+    }
+
+    private void Start()
+    {
+        Debug.Log(hubName);
+    }
+
+    private void StartMusic(Scene s, LoadSceneMode m)
+    {
+        Debug.Log(hubName);
+
 
         if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(menuName)))
         {
@@ -48,6 +61,8 @@ public class MusicManager : Singleton<MusicManager>
     void OnDestroy()
     {
         StopAll();
+
+        SceneManager.sceneLoaded -= StartMusic;
     }
 
     void StopAll()
