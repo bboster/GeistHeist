@@ -42,7 +42,7 @@ public class PlayerShoulderCamera : MonoBehaviour
         renderCamera.targetTexture = OutputRenderTexture;
 
         followObject = transform.parent;
-        followObjectPositionDifference = followObject.position - anchorPoint.position;
+        followObjectPositionDifference = anchorPoint.position - followObject.position;
 
         // De-child this so it doesnt use the parents rotation.
         //transform.SetParent(null);

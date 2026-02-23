@@ -53,7 +53,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
 
     [Header("Components")]
-    [SerializeField, Required] private MeshRenderer playerModel;
+    [SerializeField, Required] public Animator animator;
     [SerializeField] private ParticleSystem OllieParticles;
     
     //[SerializeField] private GameObject stepRayUpper;
@@ -82,15 +82,17 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private EventInstance playerMoveSFX;
 
+    private string isMovingParam = "isMoving";
+    private string isIdleParam = "isIdle";
+
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
         playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PlayerMovement);
-
         targetRotation = transform.rotation;
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
-        modelStartYPosition = playerModel.transform.position.y;
+        //modelStartYPosition = playerModel.transform.position.y;
         //stepRayUpper.transform.localPosition = new Vector3(stepRayUpper.transform.localPosition.x, stepRayUpperHeight, stepRayUpper.transform.localPosition.z);
         //stepRayLower.transform.localPosition = new Vector3(stepRayLower.transform.localPosition.x, stepRayLowerHeight, stepRayLower.transform.localPosition.z);
 
@@ -117,8 +119,6 @@ public class ThirdPersonInputHandler : IInputHandler
         //CooldownManager.Instance.StartCooldown();
         //TurnOnCooldownCanvas();
         rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-
-
     }
 
     // for the player / ghost: this means EXITING ghost mode
@@ -467,6 +467,9 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         OllieParticles.Play();
 
+        animator.SetBool(isMovingParam, true);
+        animator.SetBool(isIdleParam, false);
+
         playerMoveSFX.start();
 
         rigidbody.linearDamping = 0;
@@ -515,6 +518,9 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         OllieParticles.Stop();
 
+        animator.SetBool(isMovingParam, false);
+        animator.SetBool(isIdleParam, true);
+
         playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
     #endregion
@@ -539,12 +545,14 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
     }
 
+    /* Also no longer needed
     private void HoverBob() // squarepants
     {
         float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
         playerModel.transform.position = playerModel.transform.position.WithY(height);
     }
+    */
 
     private bool OnSlope()
     {
