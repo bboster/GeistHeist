@@ -43,8 +43,8 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
         ConfirmationPopup popup = popupCanvas.GetComponentInChildren<ConfirmationPopup>();
 
-        popup.OpenConfirmationPopup(text: confirmationText, fadeSeconds: 0.25f, 
-            closeMenuOnConfirm: true, freezeTime: false,
+        popup.OpenConfirmationPopup(text: confirmationText, fadeSeconds: 0.5f, 
+            closeMenuOnConfirm: false, freezeTime: false,
             OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfirmPressed(popupCanvas));
 
         popup.GetComponentInParent<LevelConfirmationVisualizer>()?.Initialize(sceneName);
@@ -60,15 +60,15 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
     void OnConfirmPressed(GameObject confirmationPopup)
     {
-        anyLevelConfirmScreenOpen = false;
+        //anyLevelConfirmScreenOpen = false;
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);
             LevelManager.Instance.ChangeScene(sceneName);
             return;
         }
-        var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
-        levelTransition.StartTransition(sceneName, levelLoadingCardPrefab);
+        //var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
+        //levelTransition.StartTransition(sceneName, levelLoadingCardPrefab);
 
     }
 }

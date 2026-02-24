@@ -175,6 +175,13 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         renderCameraOverlayImage.GetComponent<CanvasGroup>().alpha = 1; // in inspector, interactability is disabled.
     }
 
+    public void OnLoadingAnimationFinished()
+    {
+        // middle-man function because of the way animations events work
+        var confirmation = GetComponentInChildren<LevelConfirmationPopup>();
+        confirmation.OnLoadingAnimationFinished();
+    }
+
     #region Debug
 
     [Button]
