@@ -18,21 +18,72 @@ public class PlayerCameraController : MonoBehaviour
     private Coroutine moveTrackingPointCoroutine;
     private CinemachineCamera cinemachineCamera;
     private CinemachineInputAxisController inputAxisController;
+    private CinemachineOrbitalFollow orbitalFollow;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private float minFov;
+
+    [Tooltip("Maximum FOV when camera reaches max vertical height.")]
+    [SerializeField] private float maxFov = 75f;
+
+    [SerializeField] private float fovSmoothSpeed = 5f;
+
+    [SerializeField] private SpecialCameraType specialCameraType;
+
     void Start()
     {
-        cinemachineCamera = GetComponent<CinemachineCamera>();
+        cinemachineCamera = GetComponentInChildren<CinemachineCamera>();
         inputAxisController = GetComponent<CinemachineInputAxisController>();
+        orbitalFollow = GetComponent<CinemachineOrbitalFollow>();
 
-        // instantiate new empty
+        if(cinemachineCamera == null)
+        {
+            Debug.LogError("cinemachineCamera is null");
+            minFov = 75;
+        }
+        else
+            minFov = cinemachineCamera.Lens.FieldOfView;
+
         tempCameraPivot = new GameObject("Temp camera pivot").transform;
+    }
+
+    private void Update()
+    {
+        if (specialCameraType == SpecialCameraType.VendingMachine)
+        {
+            UpdateFOVFromHeight();
+        }
+    }
+
+    /// <summary>
+    /// Updates FOV dynamically based on the vertical axis range of the orbital follow.
+    /// </summary>
+    /// A bit of a lazy solution but it works for the use case, if other possessables need similar camera behavior
+    /// I can make this method more universal.
+    private void UpdateFOVFromHeight()
+    {
+        if (orbitalFollow == null)
+            return;
+
+        var verticalAxis = orbitalFollow.VerticalAxis;
+
+        float currentHeight = verticalAxis.Value;
+        float minHeight = verticalAxis.Range.x;
+        float maxHeight = verticalAxis.Range.y;
+
+        // Normalize height based on axis-defined range
+        float normalizedHeight = Mathf.InverseLerp(minHeight, maxHeight, currentHeight);
+
+        float targetFov = Mathf.Lerp(minFov, maxFov, normalizedHeight);
+
+        float currentFov = cinemachineCamera.Lens.FieldOfView;
+        float smoothedFov = Mathf.Lerp(currentFov, targetFov, Time.deltaTime * fovSmoothSpeed);
+
+        cinemachineCamera.Lens.FieldOfView = smoothedFov;
     }
 
     /// <summary>
     /// Sets camera follow point to a temporary transform and lerps that anchor to the new one.
     /// </summary>
-    /// <param name="cameraAnchor"></param>
     public void SetAnchorPoint(Transform cameraAnchor)
     {
         StaticUtilities.StopAndStartCoroutine(ref moveTrackingPointCoroutine, SmoothSetAnchorPoint(cameraAnchor));
@@ -40,14 +91,13 @@ public class PlayerCameraController : MonoBehaviour
 
     private IEnumerator SmoothSetAnchorPoint(Transform cameraAnchor)
     {
-
-        // set temp anchor position to where current camera anchor is
-        tempCameraPivot.transform.position = cinemachineCamera.Follow.position;
+        tempCameraPivot.position = cinemachineCamera.Follow.position;
         cinemachineCamera.Follow = tempCameraPivot;
 
         Vector3 startPoint = tempCameraPivot.position;
         float timeStarted = Time.time;
         float timeElapsed = 0;
+
         if (cameraAnchor != null)
             Debug.DrawLine(startPoint, cameraAnchor.position, Color.blue, transitionSeconds * 2);
 
@@ -58,10 +108,16 @@ public class PlayerCameraController : MonoBehaviour
 
             if (cameraAnchor != null)
                 tempCameraPivot.position = Vector3.Lerp(startPoint, cameraAnchor.position, t);
+
             yield return null;
         }
 
         cinemachineCamera.Follow = cameraAnchor;
+    }
+
+    public enum SpecialCameraType
+    {
+        VendingMachine
     }
 
     #region Settings
@@ -80,7 +136,6 @@ public class PlayerCameraController : MonoBehaviour
             return;
         }
 
-        // apply sensitivity to every axis (yes it HAS to be iterated for some reason)
         foreach (var c in inputAxisController.Controllers)
         {
             c.Input.LegacyGain = Mathf.Sign(c.Input.LegacyGain) * SettingsProfile.LookSensitivityTransformed;
@@ -96,17 +151,17 @@ public class PlayerCameraController : MonoBehaviour
             return;
         }
 
-        // apply sensitivity to every axis (yes it HAS to be iterated for some reason)
         foreach (var c in inputAxisController.Controllers)
         {
             var axisName = c.Name;
-            // horrible and hard-coded but there is not a better way to do this (that I could find)
-            if (axisName == "Look Orbit Y" || axisName == "Mouse Y" || axisName == "Gamepad Right Stick Y") // Adjust axis names as needed
+
+            if (axisName == "Look Orbit Y" || axisName == "Mouse Y" || axisName == "Gamepad Right Stick Y")
             {
                 c.Input.Gain = (SettingsProfile.InvertLook ? 1 : -1) * SettingsProfile.LookSensitivityTransformed;
                 c.Input.LegacyGain = (SettingsProfile.InvertLook ? -1 : 1) * SettingsProfile.LookSensitivityTransformed;
             }
         }
     }
+
     #endregion
 }

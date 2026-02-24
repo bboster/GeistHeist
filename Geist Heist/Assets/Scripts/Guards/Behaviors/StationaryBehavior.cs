@@ -16,18 +16,15 @@ using UnityEngine.Splines.Interpolators;
 public class StationaryBehavior : Behavior
 {
     private bool isRotatingRight = true;
-
     #region Might Be Used Later
 
-    /*[Header("Rotation Values")]
+    [Header("Rotation Values")]
     [Tooltip("How far left the guard can rotate from 0 degrees.")]
     [SerializeField] private float leftRotationValue;
     [Tooltip("How far right the guard can rotate from 0 degrees.")]
     [SerializeField] private float rightRotationValue;
     [Tooltip("How fast the guard will rotate.")]
-    [SerializeField] private float rotationSpeed;
-    [Tooltip("How long it should take for the guard to rotate from the center to one side")]
-    [SerializeField] private float rotationTime;*/
+    [SerializeField] private float coneRotationSpeed;
 
     #endregion 
 
@@ -47,6 +44,7 @@ public class StationaryBehavior : Behavior
         rotation.y = contRef.DefaultRotation - selfRef.transform.rotation.eulerAngles.y;
 
         selfRef.transform.Rotate(rotation);
+        contRef.visionConeRotator.transform.localRotation = Quaternion.identity;
     }
 
     /// <summary>
@@ -62,42 +60,54 @@ public class StationaryBehavior : Behavior
 
     public override IEnumerator BehaviorLoop()
     {
-        Vector3 rotation = selfRef.transform.rotation.eulerAngles;
-        rotation.y = contRef.DefaultRotation - selfRef.transform.rotation.eulerAngles.y;
+        leftRotationValue = Mathf.Abs(contRef.leftRotationValue);
+        rightRotationValue = Mathf.Abs(contRef.rightRotationValue);
+        coneRotationSpeed = contRef.coneRotationSpeed;
 
-        selfRef.transform.Rotate(rotation);
+
+        Vector3 rotation = contRef.visionConeRotator.transform.localRotation.eulerAngles;
+        //rotation.y = contRef.DefaultRotation - visionCone.transform.rotation.eulerAngles.y;
+
+        //contRef.visionConeRotator.transform.localRotation = Quaternion.Euler(rotation);
 
         #region Might be used later
 
-        /*Vector3 rightRotation = selfRef.transform.rotation.eulerAngles;
+        Vector3 rightRotation = contRef.visionConeRotator.transform.localRotation.eulerAngles;
         rightRotation.y += rightRotationValue;
-        Vector3 leftRotation = selfRef.transform.rotation.eulerAngles;
-        leftRotation.y += leftRotationValue;
+        Vector3 leftRotationChecker = contRef.visionConeRotator.transform.localRotation.eulerAngles;
+        leftRotationChecker.y -= leftRotationValue;
+        leftRotationChecker.y = leftRotationChecker.y + 360;
+        Vector3 LeftRotationGoal = contRef.visionConeRotator.transform.localRotation.eulerAngles;
+        LeftRotationGoal.y -= leftRotationValue;
 
         Vector3 rotationGoal = rightRotation;
-        Vector3 rotationDefault = selfRef.transform.rotation.eulerAngles;
+        Vector3 rotationDefault = contRef.visionConeRotator.transform.localRotation.eulerAngles;
+        Vector3 rotationChecker = rightRotation;
 
         for (; ;)
         {
-            Vector3 rotation = Vector3.Slerp(rotationDefault, rotationGoal, rotationSpeed * Time.deltaTime);
-            selfRef.transform.Rotate(rotation);
+            Vector3 currentRotation = Vector3.Slerp(rotationDefault, rotationGoal, coneRotationSpeed * Time.deltaTime);
+            contRef.visionConeRotator.transform.localRotation = 
+                Quaternion.Euler(currentRotation + contRef.visionConeRotator.transform.localRotation.eulerAngles);
 
-            if(selfRef.transform.rotation.eulerAngles.y <= rotationGoal.y && isRotatingRight == true)
+            if(contRef.visionConeRotator.transform.localRotation.eulerAngles.y >= rotationChecker.y && 
+                isRotatingRight == true && contRef.visionConeRotator.transform.localRotation.eulerAngles.y < 180)
             {
-                rotationGoal = leftRotation;
+                rotationGoal = LeftRotationGoal;
+                rotationChecker = leftRotationChecker;
                 isRotatingRight = false;
             }
-            else if(selfRef.transform.rotation.eulerAngles.y >= rotationGoal.y && isRotatingRight == false)
+            else if(contRef.visionConeRotator.transform.localRotation.eulerAngles.y <= rotationChecker.y && 
+                isRotatingRight == false && contRef.visionConeRotator.transform.localRotation.eulerAngles.y >180)
             {
                 rotationGoal = rightRotation;
+                rotationChecker = rightRotation;
                 isRotatingRight = true;
             }
 
             yield return new WaitForEndOfFrame();
-        }*/
+        }
 
         #endregion
-
-        yield return new WaitForEndOfFrame();
     }
 }

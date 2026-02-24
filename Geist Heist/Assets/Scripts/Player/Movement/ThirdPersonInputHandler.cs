@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 11/18/25
+ * Last Modified: 2/15/26
  * 
  * Brief Description: Handles third person movement and interaction. 
  * This script should only be used for the ghost
@@ -53,7 +53,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
 
     [Header("Components")]
-    [SerializeField, Required] private MeshRenderer playerModel;
+    [SerializeField, Required] public Animator animator;
     [SerializeField] private ParticleSystem OllieParticles;
     
     //[SerializeField] private GameObject stepRayUpper;
@@ -66,7 +66,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public static Action<GuardStates> OnPossessObject;
 
-    private GameObject lastObjectLookedAt;
+    private GameObject lastInteractableLookedAt;
+    private GameObject lastActionableLookedAt;
     private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
     private float frameCountSinceLastInteraction;
     private float frameCountSinceLastAction;
@@ -81,15 +82,17 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private EventInstance playerMoveSFX;
 
+    private string isMovingParam = "isMoving";
+    private string isIdleParam = "isIdle";
+
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
         playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PlayerMovement);
-
         targetRotation = transform.rotation;
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
-        modelStartYPosition = playerModel.transform.position.y;
+        //modelStartYPosition = playerModel.transform.position.y;
         //stepRayUpper.transform.localPosition = new Vector3(stepRayUpper.transform.localPosition.x, stepRayUpperHeight, stepRayUpper.transform.localPosition.z);
         //stepRayLower.transform.localPosition = new Vector3(stepRayLower.transform.localPosition.x, stepRayLowerHeight, stepRayLower.transform.localPosition.z);
 
@@ -121,6 +124,7 @@ public class ThirdPersonInputHandler : IInputHandler
     // for the player / ghost: this means EXITING ghost mode
     public override void OnPossessionEnded()
     {
+        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
     #endregion
 
@@ -205,20 +209,21 @@ public class ThirdPersonInputHandler : IInputHandler
         var result = GetBestActionableSphereCast();
 
         // if looking at something different than last frame
-        if (lastObjectLookedAt != result)
+        if (lastActionableLookedAt != result)
         {
-            if (lastObjectLookedAt != null)
-                LookAtActionableStop(lastObjectLookedAt);
+            if (lastActionableLookedAt != null)
+                LookAtActionableStop(lastActionableLookedAt);
 
             if (result != null)
                 LookAtActionableStart(result);
         }
-        lastObjectLookedAt = result;
+        lastActionableLookedAt = result;
     }
 
     private void LookAtActionableStart(GameObject obj)
     {
-        if (obj == null) return;
+        if (obj == null) 
+            return;
 
         if (obj.TryGetComponent<Outline>(out Outline outline))
             outline.enabled = true;
@@ -226,8 +231,11 @@ public class ThirdPersonInputHandler : IInputHandler
         var allActionables = obj.GetComponentsInChildren<IActionable>();
         foreach (var actionable in allActionables)
         {
-            // Display Interact UI, most of the time
-            actionable.OnPlayerLookStart();
+            if (actionable.IsActionable())
+            {
+                // Display Interact UI, most of the time
+                actionable.OnPlayerLookStart();
+            }
         }
     }
 
@@ -268,8 +276,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
             actionable.Action();
         }
-        LookAtActionableStop(lastObjectLookedAt);
-        lastObjectLookedAt = null;
+        LookAtActionableStop(lastActionableLookedAt);
+        lastActionableLookedAt = null;
 
     }
 
@@ -384,8 +392,8 @@ public class ThirdPersonInputHandler : IInputHandler
             if(interactable is PossessableObject)
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
         }
-        LookAtInteractableStop(lastObjectLookedAt);
-        lastObjectLookedAt = null;
+        LookAtInteractableStop(lastInteractableLookedAt);
+        lastInteractableLookedAt = null;
     }
 
     /// <summary>
@@ -397,15 +405,15 @@ public class ThirdPersonInputHandler : IInputHandler
         var result = GetBestInteractableSphereCast();
 
         // if looking at something different than last frame
-        if (lastObjectLookedAt != result)
+        if (lastInteractableLookedAt != result)
         {
-            if (lastObjectLookedAt != null)
-                LookAtInteractableStop(lastObjectLookedAt);
+            if (lastInteractableLookedAt != null)
+                LookAtInteractableStop(lastInteractableLookedAt);
 
             if (result != null)
                 LookAtInteractableStart(result);
         }
-        lastObjectLookedAt = result;
+        lastInteractableLookedAt = result;
     }
 
     private void LookAtInteractableStart(GameObject obj)
@@ -418,8 +426,12 @@ public class ThirdPersonInputHandler : IInputHandler
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
         {
-            // Display Interact UI, most of the time
-            interactable.OnPlayerLookStart();
+            if (interactable.IsInteractable())
+            {
+                // Display Interact UI, most of the time
+                interactable.OnPlayerLookStart();
+            }
+            
         }
     }
 
@@ -454,6 +466,9 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnMoveStarted()
     {
         OllieParticles.Play();
+
+        animator.SetBool(isMovingParam, true);
+        animator.SetBool(isIdleParam, false);
 
         playerMoveSFX.start();
 
@@ -503,6 +518,9 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         OllieParticles.Stop();
 
+        animator.SetBool(isMovingParam, false);
+        animator.SetBool(isIdleParam, true);
+
         playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
     #endregion
@@ -527,12 +545,14 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
     }
 
+    /* Also no longer needed
     private void HoverBob() // squarepants
     {
         float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
         playerModel.transform.position = playerModel.transform.position.WithY(height);
     }
+    */
 
     private bool OnSlope()
     {

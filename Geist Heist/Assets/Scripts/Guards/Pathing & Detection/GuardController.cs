@@ -28,6 +28,8 @@ public class GuardController : MonoBehaviour
     [HideInInspector] public float AngularSpeed;
     [HideInInspector] public float Acceleration;
 
+    public GameObject visionConeRotator;
+
     [SerializeField, BoxGroup("Design Values")] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
     [Tooltip("The location a guard will return to by default")]
@@ -47,6 +49,12 @@ public class GuardController : MonoBehaviour
     [HideInInspector] public UnityEvent<String> VoiceClipPlayed = new();
     [HideInInspector] public UnityEvent VoiceClipStopped = new();
 
+    [Tooltip("How far left the guard can rotate from 0 degrees."), Foldout("Stationary Guards Only")]
+    public float leftRotationValue;
+    [Tooltip("How far right the guard can rotate from 0 degrees."), Foldout("Stationary Guards Only")]
+    public float rightRotationValue;
+    [Tooltip("How fast the guard will rotate."), Foldout("Stationary Guards Only")]
+    public float coneRotationSpeed;
 
     [Foldout("Programming Values")]
     [SerializeField] private Animator animator;

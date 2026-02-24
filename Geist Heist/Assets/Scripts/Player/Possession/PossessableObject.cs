@@ -57,6 +57,20 @@ public class PossessableObject : MonoBehaviour, IInteractable
     public GameObject PossessableTextPrefab;
     public bool HasChargeAbility;
 
+    [Header("Animation")]
+    [SerializeField] public Animator animator;
+    private string isPossessingParam = "isPossessing";
+    private string tetherPossessParam = "TetherPossess";
+    private string modePossessedParam = "modePossessed";
+    private string isMovingParam = "isMoving";
+    private string isIdleParam = "isIdle";
+    [SerializeField] private string possessStateName = "possess";
+    [SerializeField] private string tetherPossessStateName = "tetherpossess";
+    private bool queueTetherPossessAnimation = false;
+    [SerializeField, ShowIf(nameof(isGhost)), Min(0f)] private float possessCameraTransitionDelay = 0.35f;
+    [SerializeField, ShowIf(nameof(isGhost)), Min(0f)] private float tetherCameraTransitionDelay = 0.75f;
+
+
     [Header("Other")]
     [SerializeField] private bool isGhost = false;
 
@@ -78,7 +92,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     private EventInstance possessionEnter;
     private EventInstance possessionLow;
-    private EventInstance possessionOut;
+    private EventInstance possessionOut;    
     private EventInstance possessionRefill;
 
     #region Guard Detection Variables
@@ -202,6 +216,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
+        // Ghost is disabled while inside possessables; keep animator state so
+        // it can transition from possess -> possessExit when re-enabled.
+        if (isGhost && animator != null)
+        {
+            animator.keepAnimatorStateOnDisable = true;
+        }
+
         /*if(possessableCanvas == null)
             possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
 
@@ -233,6 +254,41 @@ public class PossessableObject : MonoBehaviour, IInteractable
         return inputHandler;
     }
 
+    /// <summary>
+    /// Sets the animation type used the next time this object exits possession.
+    /// </summary>
+    public void QueueGhostPossessionAnimation(bool isTetherPossession)
+    {
+        queueTetherPossessAnimation = isTetherPossession;
+    }
+
+    public float GetGhostCameraTransitionDelay(bool isTetherPossession)
+    {
+        if (!isGhost)
+            return 0f;
+
+        return isTetherPossession ? tetherCameraTransitionDelay : possessCameraTransitionDelay;
+    }
+
+    public void RotateTowardsTarget(Transform target, float maxDegreesDelta)
+    {
+        if (target == null)
+            return;
+
+        Vector3 direction = target.position - transform.position;
+        direction.y = 0f;
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxDegreesDelta);
+    }
+
+    public void FaceTowardsTarget(Transform target)
+    {
+        RotateTowardsTarget(target, 360f);
+    }
+
 
     /// <summary>
     /// Called in PlayerManager when player enters object
@@ -254,6 +310,24 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (unpossessCoroutine == null)
             unpossessCoroutine = StartCoroutine(WaitForUnpossess());
 
+        if (isGhost)
+        {
+            if (animator != null)
+            {
+                animator.SetBool(isPossessingParam, false);
+                animator.SetBool(tetherPossessParam, false);
+                animator.SetBool(modePossessedParam, false);
+                animator.SetBool(isMovingParam, false);
+                animator.SetBool(isIdleParam, true);
+            }
+            else
+            {
+                Debug.LogWarning($"No animator assigned for ghost object '{gameObject.name}'.");
+            }
+
+            queueTetherPossessAnimation = false;
+        }
+
         if (hasTimer)
         {
             if(rechargeCoroutine != null)
@@ -274,7 +348,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         //StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
 
-        if (!CanUnPossess)
+        if (!CanUnPossess && !isGhost)
         {
             Debug.LogError("Trying to unpossess early");
             return;
@@ -287,6 +361,29 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         InputHandler.OnPossessionEnded();
         OnObjectLeft?.Invoke();
+
+        if (isGhost)
+        {
+            if (animator != null)
+            {
+                animator.SetBool(tetherPossessParam, queueTetherPossessAnimation);
+                animator.SetBool(isPossessingParam, !queueTetherPossessAnimation);
+                animator.SetBool(modePossessedParam, true);
+                animator.SetBool(isMovingParam, false);
+                animator.SetBool(isIdleParam, false);
+
+                // Start the possession clip immediately instead of waiting on exit-time transitions.
+                string stateToPlay = queueTetherPossessAnimation ? tetherPossessStateName : possessStateName;
+                if (!string.IsNullOrWhiteSpace(stateToPlay))
+                {
+                    animator.CrossFadeInFixedTime(stateToPlay, 0.05f, 0, 0f);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"No animator assigned for ghost object '{gameObject.name}'.");
+            }
+        }
 
         if (hasTimer)
         {
@@ -361,10 +458,10 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         if (!hasTimer)
             yield break;
+        possessionRefill.start();
 
-        while(currentTimerCharge < maxChargePercentage)
+        while (currentTimerCharge < maxChargePercentage)
         {
-            possessionRefill.start();
 
             currentTimerCharge = Mathf.Min(currentTimerCharge + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
             OnTimerUpdate.Invoke(currentTimerChargePercentage);
