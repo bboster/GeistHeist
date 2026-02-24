@@ -18,6 +18,7 @@ public class LevelConfirmationPopup : ConfirmationPopup
 {
     [SerializeField, Required] private CanvasGroup loadingText;
     [SerializeField, Required] private Animator animator;
+    [SerializeField, Required] private Transform parent;
 
     private bool loadingAnimationFinished = false;
 
@@ -25,10 +26,12 @@ public class LevelConfirmationPopup : ConfirmationPopup
     {
         base.OpenConfirmationPopup(text, OnConfirmationButtonClicked, OnCancelButtonClicked, fadeSeconds, closeMenuOnConfirm, freezeTime);
 
-        confirmButton.onClick.RemoveAllListeners();
-        confirmButton.onClick.AddListener(OnConfirmButtonClicked);
+        confirmButton?.onClick.RemoveAllListeners();
+        confirmButton?.onClick.AddListener(OnConfirmButtonClicked);
 
         loadingText.alpha = 0;
+
+        DontDestroyOnLoad(parent.gameObject);
     }
 
     protected override void OnConfirmButtonClicked()
@@ -49,11 +52,13 @@ public class LevelConfirmationPopup : ConfirmationPopup
     // Called from the animation clip that shows the "Loading..." text
     public void OnLoadingAnimationFinished()
     {
+        Debug.Log("Level finished loading");
         loadingAnimationFinished = true;
     }
 
     IEnumerator CloseLevelConfirmation()
     {
+        Debug.Log("closing level confirmation screen");
         yield return new WaitForSecondsRealtime(2);
 
         // wait for little loading animation to finish
@@ -63,5 +68,10 @@ public class LevelConfirmationPopup : ConfirmationPopup
         yield return StaticUtilities.FadeToHidden(canvasGroup, lastFadeSecondsUsed);
 
         HideConfirmationPopup();
+    }
+
+    protected override void AfterFadeToHidden()
+    {
+        Destroy(parent.gameObject);
     }
 }

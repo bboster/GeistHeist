@@ -79,11 +79,11 @@ public class ConfirmationPopup : MonoBehaviour
         afterCancelClicked = OnCancelButtonClicked;
             
         // Confirm button
-        confirmButton.onClick.RemoveAllListeners();
-        confirmButton.onClick.AddListener(OnConfirmButtonClicked); // may be redundant to remove this listener and then immediately add it back but idk else to do it.
+        confirmButton?.onClick.RemoveAllListeners();
+        confirmButton?.onClick.AddListener(OnConfirmButtonClicked); // may be redundant to remove this listener and then immediately add it back but idk else to do it.
         onConfirmationButtonClicked = OnConfirmationButtonClicked;
         if (OnConfirmationButtonClicked != null)
-            confirmButton.onClick.AddListener(OnConfirmationButtonClicked);
+            confirmButton?.onClick.AddListener(OnConfirmationButtonClicked);
 
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
@@ -115,7 +115,7 @@ public class ConfirmationPopup : MonoBehaviour
         }
     }
 
-    private void AfterFadeToHidden()
+    protected virtual void AfterFadeToHidden()
     {
         StaticUtilities.DisableCanvasGroup(canvasGroup);
 

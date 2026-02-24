@@ -60,15 +60,10 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
     void OnConfirmPressed(GameObject confirmationPopup)
     {
-        //anyLevelConfirmScreenOpen = false;
-        if (loadingScreenPrefab == null)
-        {
-            Debug.LogError("No transition card set on " + gameObject.name);
-            LevelManager.Instance.ChangeScene(sceneName);
-            return;
-        }
-        //var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
-        //levelTransition.StartTransition(sceneName, levelLoadingCardPrefab);
+        Debug.Log("Confirm Pressed");
+        SaveDataManager.Instance.MarkSceneAsCompleted(sceneName);
+        LevelManager.Instance.ChangeScene(sceneName);
+        return;
 
     }
 }
