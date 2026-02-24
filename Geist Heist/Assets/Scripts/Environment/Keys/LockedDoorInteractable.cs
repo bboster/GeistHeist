@@ -62,7 +62,6 @@ public class LockedDoorInteractable : MonoBehaviour, IActionable
             AudioManager.Instance.PlayOneShot(FMODEvents.Instance.DoorOpen, transform.position);
 
             _isOpen = true;
-            LevelManager.Instance?.MarkDoorOpened(GetCheckpointStateId());
             StartCoroutine(OpenDoorRoutine());
         }
         else
@@ -114,6 +113,17 @@ public class LockedDoorInteractable : MonoBehaviour, IActionable
 
         _isOpen = true;
         OpenDoorInstantly();
+    }
+
+    public bool TryGetOpenDoorStateId(out string doorStateId)
+    {
+        doorStateId = null;
+
+        if (!_isOpen)
+            return false;
+
+        doorStateId = GetCheckpointStateId();
+        return !string.IsNullOrEmpty(doorStateId);
     }
 
     private void OpenDoorInstantly()

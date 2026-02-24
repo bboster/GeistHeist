@@ -16,9 +16,9 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     private int previousLevel = -1;
 
     [HideInInspector] public Vector3 SpawnLocation;
-    private Checkpoint currentCheckpoint;
     private readonly HashSet<KeyType> savedKeys = new();
-    private readonly HashSet<string> openedDoorIds = new();
+    private readonly HashSet<string> savedDoorIds = new();
+    private readonly HashSet<string> activatedCheckpointIds = new();
 
     /// <summary>
     /// Initializes the LevelManager every time a scene is loaded
@@ -26,17 +26,13 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     /// <param name="location"></param>
     public Task Initialize(Vector3 location)
     {
-        /*
-         * rename this function to Initialize?
-         * -toby
-         */
         if (previousLevel == -1 || previousLevel != SceneManager.GetActiveScene().buildIndex)
         {
             SpawnLocation = location;
             previousLevel = SceneManager.GetActiveScene().buildIndex;
-            currentCheckpoint = null;
             savedKeys.Clear();
-            openedDoorIds.Clear();
+            savedDoorIds.Clear();
+            activatedCheckpointIds.Clear();
         }
 
         PlayerManager.Instance.PlayerGhostObject.gameObject.transform.position = SpawnLocation;
@@ -49,16 +45,23 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     /// Updates SpawnLocation
     /// </summary>
     /// <param name="location"></param>
-    public void UpdateCheckpoint(Vector3 location, Checkpoint checkpoint)
+    public bool UpdateCheckpoint(Vector3 location, Checkpoint checkpoint)
     {
-        SpawnLocation = location;
-        currentCheckpoint = checkpoint;
-        SaveCurrentKeys();
-    }
+        if (checkpoint == null)
+            return false;
 
-    public bool IsCheckpointCurrent(Checkpoint checkpoint)
-    {
-        return (checkpoint == currentCheckpoint);
+        string checkpointId = checkpoint.GetCheckpointStateId();
+        if (string.IsNullOrWhiteSpace(checkpointId))
+            return false;
+
+        // Each checkpoint can only create one saved snapshot per scene run.
+        if (!activatedCheckpointIds.Add(checkpointId))
+            return false;
+
+        SpawnLocation = location;
+        SaveCurrentKeys();
+        SaveCurrentDoors();
+        return true;
     }
 
     public void SaveCurrentKeys()
@@ -89,25 +92,29 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         }
     }
 
-    public void MarkDoorOpened(string doorStateId)
-    {
-        if (string.IsNullOrEmpty(doorStateId))
-            return;
-
-        openedDoorIds.Add(doorStateId);
-    }
-
     public bool IsDoorOpened(string doorStateId)
     {
         if (string.IsNullOrEmpty(doorStateId))
             return false;
 
-        return openedDoorIds.Contains(doorStateId);
+        return savedDoorIds.Contains(doorStateId);
+    }
+
+    public void SaveCurrentDoors()
+    {
+        savedDoorIds.Clear();
+
+        var doorsInScene = FindObjectsByType<LockedDoorInteractable>(FindObjectsSortMode.None);
+        foreach (var door in doorsInScene)
+        {
+            if (door.TryGetOpenDoorStateId(out var doorStateId))
+                savedDoorIds.Add(doorStateId);
+        }
     }
 
     private void RestoreDoors()
     {
-        if (openedDoorIds.Count == 0)
+        if (savedDoorIds.Count == 0)
             return;
 
         var doorsInScene = FindObjectsByType<LockedDoorInteractable>(FindObjectsSortMode.None);
