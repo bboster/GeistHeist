@@ -40,6 +40,9 @@ public class KeyManager : Singleton<KeyManager>
         if (key == KeyType.None) return;
         if (_keys.Add(key))
         {
+            if (LevelManager.Instance != null)
+                LevelManager.Instance.SaveCurrentKeys();
+
             OnKeyCollected?.Invoke(key);
             Debug.Log($"KeyInventory: Collected key {key}");
         }

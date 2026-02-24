@@ -9,6 +9,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 {
@@ -16,6 +17,8 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 
     [HideInInspector] public Vector3 SpawnLocation;
     private Checkpoint currentCheckpoint;
+    private readonly HashSet<KeyType> savedKeys = new();
+    private readonly HashSet<string> openedDoorIds = new();
 
     /// <summary>
     /// Initializes the LevelManager every time a scene is loaded
@@ -31,9 +34,14 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         {
             SpawnLocation = location;
             previousLevel = SceneManager.GetActiveScene().buildIndex;
+            currentCheckpoint = null;
+            savedKeys.Clear();
+            openedDoorIds.Clear();
         }
 
         PlayerManager.Instance.PlayerGhostObject.gameObject.transform.position = SpawnLocation;
+        RestoreKeys();
+        RestoreDoors();
         return Task.CompletedTask;
     }
 
@@ -45,11 +53,68 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     {
         SpawnLocation = location;
         currentCheckpoint = checkpoint;
+        SaveCurrentKeys();
     }
 
     public bool IsCheckpointCurrent(Checkpoint checkpoint)
     {
         return (checkpoint == currentCheckpoint);
+    }
+
+    public void SaveCurrentKeys()
+    {
+        savedKeys.Clear();
+
+        if (KeyManager.Instance == null)
+            return;
+
+        foreach (var key in KeyManager.Instance.GetKeys())
+        {
+            if (key != KeyType.None)
+                savedKeys.Add(key);
+        }
+    }
+
+    private void RestoreKeys()
+    {
+        if (KeyManager.Instance == null)
+            return;
+
+        var keysToRestore = new List<KeyType>(savedKeys);
+        KeyManager.Instance.Clear();
+
+        foreach (var key in keysToRestore)
+        {
+            KeyManager.Instance.AddKey(key);
+        }
+    }
+
+    public void MarkDoorOpened(string doorStateId)
+    {
+        if (string.IsNullOrEmpty(doorStateId))
+            return;
+
+        openedDoorIds.Add(doorStateId);
+    }
+
+    public bool IsDoorOpened(string doorStateId)
+    {
+        if (string.IsNullOrEmpty(doorStateId))
+            return false;
+
+        return openedDoorIds.Contains(doorStateId);
+    }
+
+    private void RestoreDoors()
+    {
+        if (openedDoorIds.Count == 0)
+            return;
+
+        var doorsInScene = FindObjectsByType<LockedDoorInteractable>(FindObjectsSortMode.None);
+        foreach (var door in doorsInScene)
+        {
+            door.RestoreCheckpointStateIfNeeded();
+        }
     }
 
     #region Scene Transition Scripts
