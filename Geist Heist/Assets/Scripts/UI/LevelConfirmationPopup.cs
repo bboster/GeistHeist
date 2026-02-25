@@ -41,6 +41,8 @@ public class LevelConfirmationPopup : ConfirmationPopup
         animator.SetTrigger("Loading");
 
         cancelButton.enabled = false;
+        confirmButton.interactable = false;
+        confirmButton.SetColors(disabledColor: Color.white); // so the player cant tell i just disabled it lolz
         confirmButton.enabled = false;
 
         SceneManager.sceneLoaded += (_,_) => { StartCoroutine(CloseLevelConfirmation()); };
