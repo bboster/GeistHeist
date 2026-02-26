@@ -10,13 +10,16 @@ using System.Collections;
 using JetBrains.Annotations;
 using UnityEngine;
 
-public class CanScript : MonoBehaviour
+public class VendingCanController : MonoBehaviour
 {       
-
     [SerializeField] private GameObject soundStimulus;
 
-    [Header("VFX")]
+    [Header("Onomatopoeia")]
     [SerializeField] private string OnomatopoeiaText = "clank!";
+
+    [Header("Sound Wave")]
+    [SerializeField] private float soundWaveRadius = 3f;
+    [SerializeField] private float soundWaveLifetime = 0.75f;
 
     bool firstTime = true;
 
@@ -57,5 +60,7 @@ public class CanScript : MonoBehaviour
         //TODO: add clank sound
 
         // TODO: add particle
+
+        SoundWaveManager.Instance.CreateSoundWaveAtPosition(impactPoint, soundWaveRadius, soundWaveLifetime, collision: false);
     }
 }
