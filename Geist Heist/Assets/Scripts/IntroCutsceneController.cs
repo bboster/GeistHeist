@@ -23,7 +23,7 @@ public class IntroCutsceneController : MonoBehaviour
     private InputActionMap map;
     private InputAction skip;
 
-    [SerializeField] private string hubScene;
+    [SerializeField, Scene] private string hubScene;
     [SerializeField, Required] private GameObject loadingScreenPrefab;
     [SerializeField, Required] private GameObject loadingCardPrefab;
     [SerializeField] private TextMeshProUGUI skipText; //THIS NEEDS TO BE SWAPPED OUT WITH CONTROLLER ICONS
