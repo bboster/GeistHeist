@@ -9,6 +9,7 @@
  */
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using FMODUnity;
@@ -25,6 +26,7 @@ public class LockedDoorInteractable : MonoBehaviour, IActionable
 
     [Header("Door")]
     [SerializeField] private KeyType requiredKey = KeyType.Circle;
+    [SerializeField] private string checkpointStateIdOverride;
     
     [Tooltip("Which corner (local to the door) the HINGE actually sits on")]
     [SerializeField] private HingeCorner hingeCorner = HingeCorner.BackLeft;        
@@ -39,6 +41,7 @@ public class LockedDoorInteractable : MonoBehaviour, IActionable
     // runtime
     private Vector3? _computedPivotWorld = null;
     private bool _isOpen;
+    private string _cachedCheckpointStateId;
 
     // IInteractable
     public void Action() => TryOpen();
@@ -58,8 +61,8 @@ public class LockedDoorInteractable : MonoBehaviour, IActionable
         {
             AudioManager.Instance.PlayOneShot(FMODEvents.Instance.DoorOpen, transform.position);
 
-            StartCoroutine(OpenDoorRoutine());
             _isOpen = true;
+            StartCoroutine(OpenDoorRoutine());
         }
         else
         {
@@ -71,22 +74,11 @@ public class LockedDoorInteractable : MonoBehaviour, IActionable
 
     private IEnumerator OpenDoorRoutine()
     {
-        // Resolve pivot (hinge) world point
-        Vector3 pivotWorld;
-        if (!_computedPivotWorld.HasValue)
-        {
-            if (TryComputePivotFromRenderers(out var computed))
-                _computedPivotWorld = computed;
-            else
-                _computedPivotWorld = transform.position; // fallback
-        }
-        pivotWorld = _computedPivotWorld.Value;
+        Vector3 pivotWorld = ResolvePivotWorld();
 
         Vector3 axis = transform.up;
         float angle = openAngle;
-
-        // Determine deterministic sign: front hinges rotate -angle (toward player/front), back hinges +angle (away from player).
-        float chosenSign = (hingeCorner == HingeCorner.FrontLeft || hingeCorner == HingeCorner.FrontRight) ? -1f : +1f;
+        float chosenSign = GetOpenSign();
 
         // Animate rotation around pivot
         float duration = Mathf.Max(0.0001f, openSeconds);
@@ -106,6 +98,84 @@ public class LockedDoorInteractable : MonoBehaviour, IActionable
         float remaining = angle - rotated;
         if (Mathf.Abs(remaining) > 0.0005f)
             transform.RotateAround(pivotWorld, axis, chosenSign * remaining);
+    }
+
+    public void RestoreCheckpointStateIfNeeded()
+    {
+        if (_isOpen)
+            return;
+
+        if (LevelManager.Instance == null)
+            return;
+
+        if (!LevelManager.Instance.IsDoorOpened(GetCheckpointStateId()))
+            return;
+
+        _isOpen = true;
+        OpenDoorInstantly();
+    }
+
+    public bool TryGetOpenDoorStateId(out string doorStateId)
+    {
+        doorStateId = null;
+
+        if (!_isOpen)
+            return false;
+
+        doorStateId = GetCheckpointStateId();
+        return !string.IsNullOrEmpty(doorStateId);
+    }
+
+    private void OpenDoorInstantly()
+    {
+        Vector3 pivotWorld = ResolvePivotWorld();
+        transform.RotateAround(pivotWorld, transform.up, GetOpenSign() * openAngle);
+    }
+
+    private Vector3 ResolvePivotWorld()
+    {
+        if (!_computedPivotWorld.HasValue)
+        {
+            if (TryComputePivotFromRenderers(out var computed))
+                _computedPivotWorld = computed;
+            else
+                _computedPivotWorld = transform.position;
+        }
+
+        return _computedPivotWorld.Value;
+    }
+
+    private float GetOpenSign()
+    {
+        // front hinges rotate toward -angle, back hinges rotate toward +angle
+        return (hingeCorner == HingeCorner.FrontLeft || hingeCorner == HingeCorner.FrontRight) ? -1f : +1f;
+    }
+
+    private string GetCheckpointStateId()
+    {
+        if (!string.IsNullOrWhiteSpace(checkpointStateIdOverride))
+            return checkpointStateIdOverride;
+
+        if (!string.IsNullOrEmpty(_cachedCheckpointStateId))
+            return _cachedCheckpointStateId;
+
+        _cachedCheckpointStateId = BuildHierarchyStateId();
+        return _cachedCheckpointStateId;
+    }
+
+    private string BuildHierarchyStateId()
+    {
+        List<string> segments = new();
+        Transform current = transform;
+
+        while (current != null)
+        {
+            segments.Add($"{current.name}[{current.GetSiblingIndex()}]");
+            current = current.parent;
+        }
+
+        segments.Reverse();
+        return $"{gameObject.scene.buildIndex}:{string.Join("/", segments)}";
     }
 
     // Compute pivot from child renderers using the inspector-selected hingeCorner (hinge sits at this corner).

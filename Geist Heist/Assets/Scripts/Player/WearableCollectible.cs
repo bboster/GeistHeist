@@ -30,6 +30,7 @@ public class WearableCollectible : MonoBehaviour
     private CollectableRegistry Registry;
     [ReadOnly] public Collectable currentHat; 
     private Collectable previousHat;
+    [SerializeField] private Collectable defaultHat;
 
     private OptionalCollectableHubDisplay[] allHubDisplays;
 
@@ -48,6 +49,9 @@ public class WearableCollectible : MonoBehaviour
         // Load what the player had equipped last
         allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
         currentHat = GetEquippedCollectable(SaveDataManager.Instance.EquipedHat());
+
+        if (currentHat == Collectable.None)
+            currentHat = defaultHat;
         
         EquipHat(currentHat);
         previousHat = Collectable.None;

@@ -43,6 +43,8 @@ public class ThirdPersonInputHandler : IInputHandler
     [Tooltip("How much up/down player goes. value of 0.1 will go -0.1 to +0.1. total height of 0.2")]
     [Foldout ("Animation Settings"), SerializeField] private float hoverHeight = 0.2f;
     [Foldout ("Animation Settings"), SerializeField] private float hoverSpeed = 0.75f;
+    [Foldout ("Animation Settings"), SerializeField] private GameObject playerModel;
+    private float currentHeight;
 
     [Header("Interaction")]
     // Scene transition specific variables
@@ -99,6 +101,7 @@ public class ThirdPersonInputHandler : IInputHandler
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
         rampLayerMask = LayerMask.GetMask("Ramp");
+        currentHeight = playerModel.transform.localPosition.y;
     }
 
     #region Possession
@@ -109,7 +112,7 @@ public class ThirdPersonInputHandler : IInputHandler
         TryTurnOnActionablePrompt();
 
         RotatePlayer();
-        //HoverBob();
+        HoverBob();
         //StepClimb();
     }
 
@@ -545,14 +548,15 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
     }
 
-    /* Also no longer needed
+    
     private void HoverBob() // squarepants
     {
-        float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
+        //float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
-        playerModel.transform.position = playerModel.transform.position.WithY(height);
+        float height = currentHeight + hoverHeight;
+        playerModel.transform.localPosition = playerModel.transform.localPosition.WithY(height);
     }
-    */
+    
 
     private bool OnSlope()
     {
