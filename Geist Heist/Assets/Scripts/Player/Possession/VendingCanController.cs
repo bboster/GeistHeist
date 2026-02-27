@@ -8,18 +8,17 @@
 
 using System.Collections;
 using JetBrains.Annotations;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class VendingCanController : MonoBehaviour
 {       
-    [SerializeField] private GameObject soundStimulus;
+    [SerializeField] private GameObject soundStimulusPrefab;
 
     [Header("Onomatopoeia")]
     [SerializeField] private string OnomatopoeiaText = "clank!";
 
     [Header("Sound Wave")]
-    [SerializeField] private float soundWaveRadius = 3f;
-    [SerializeField] private float soundWaveLifetime = 0.75f;
 
     bool firstTime = true;
 
@@ -39,8 +38,8 @@ public class VendingCanController : MonoBehaviour
 
         if (firstTime)
         {
-            Instantiate(soundStimulus, transform.position, Quaternion.identity);
-            Debug.Log("Stimulus");
+            var soundWave = Instantiate(soundStimulusPrefab, transform.position, Quaternion.identity);
+            var soundStimulus = soundWave.GetComponent<SoundStimulus>();
             firstTime = false;
             OnCrashOrBounceDetected(collision.contacts[0].point);
         }
@@ -60,7 +59,5 @@ public class VendingCanController : MonoBehaviour
         //TODO: add clank sound
 
         // TODO: add particle
-
-        SoundWaveManager.Instance.CreateSoundWaveAtPosition(impactPoint, soundWaveRadius, soundWaveLifetime, collision: false);
     }
 }
