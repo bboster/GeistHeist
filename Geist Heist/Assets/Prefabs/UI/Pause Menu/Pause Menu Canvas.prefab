@@ -1056,6 +1056,18 @@ MonoBehaviour:
   HubScene: 13
   pauseScreenParent: {fileID: 444959215771597309}
   pauseGroup: {fileID: 3957722871870928866}
+  menuBackAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Menu Back
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: b4a3bcd4-6b31-4f26-9506-8c28e55f4f12
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
   settingsTab: {fileID: 4098855970659608366}
   controlsTab: {fileID: 6320015283925093451}
   generalTab: {fileID: 5895298553346777642}
@@ -2231,6 +2243,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4728054709059538163, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4801289806046254294, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
       propertyPath: m_Name
       value: Menu Button
@@ -2359,6 +2375,10 @@ PrefabInstance:
     - target: {fileID: 4627027416864514134, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4728054709059538163, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4801289806046254294, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
       propertyPath: m_Name
@@ -2565,8 +2585,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
   m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
+    m_Mode: 2
+    m_WrapAround: 1
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -2701,6 +2721,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8522120832247250493, guid: 115dfe4c44be3384fb13b50d8268107f, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522120832247250493, guid: 115dfe4c44be3384fb13b50d8268107f, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 5165944967521641607}
+    - target: {fileID: 8522120832247250493, guid: 115dfe4c44be3384fb13b50d8268107f, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 1615649738272534582}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3032,6 +3064,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4728054709059538163, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4801289806046254294, guid: c313bce20d2782e4880acd64ea1e5493, type: 3}
       propertyPath: m_Name
       value: Continue Button
@@ -3161,11 +3197,57 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5675759197993509762, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5675759197993509762, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 1725046430355276802}
+    - target: {fileID: 6413598499287379085, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6413598499287379085, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 15038738991041293}
+    - target: {fileID: 7888924767279677254, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+      propertyPath: m_fontColorGradient.bottomLeft.r
+      value: 0.7176471
+      objectReference: {fileID: 0}
+    - target: {fileID: 7888924767279677254, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+      propertyPath: m_fontColorGradient.bottomRight.r
+      value: 0.7176471
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+--- !u!114 &15038738991041293 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5675759197993509762, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+  m_PrefabInstance: {fileID: 5688386405087144079}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &1725046430355276802 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6413598499287379085, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
+  m_PrefabInstance: {fileID: 5688386405087144079}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &4812125590928895849 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 880787938445838310, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
@@ -3631,6 +3713,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8522120832247250493, guid: 115dfe4c44be3384fb13b50d8268107f, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522120832247250493, guid: 115dfe4c44be3384fb13b50d8268107f, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 5165944967521641607}
+    - target: {fileID: 8522120832247250493, guid: 115dfe4c44be3384fb13b50d8268107f, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 6151413544726541079}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

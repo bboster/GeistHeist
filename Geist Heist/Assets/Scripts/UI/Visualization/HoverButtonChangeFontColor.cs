@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby Schamberger
+ * Contributors: Toby Schamberger, Joshua Kelly
  * Creation: 11/6/25
- * Last Edited: 11/24/25
+ * Last Edited: 3/1/26
  * Summary: Change the color of a font text when user hover overs a selectable (button).
  * Designed for vertical gradients rn. Can be updated to do multiple colors with an enum.
  */
@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
     [SerializeField, Required] private TMP_Text targetText;
 
@@ -39,6 +39,9 @@ public class HoverButtonChangeFontColor : MonoBehaviour, IPointerEnterHandler, I
 
     public void OnPointerEnter(PointerEventData eventData) => OnPointerEnter();
     public void OnPointerExit(PointerEventData eventData) => OnPointerExit();
+
+    public void OnSelect(BaseEventData eventData) => OnPointerEnter();
+    public void OnDeselect(BaseEventData eventData) => OnPointerExit();
 
     public void SetHoveringGradient()
     {
