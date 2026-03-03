@@ -26,7 +26,7 @@ public class DialogueBoxTrigger : MonoBehaviour
         if(other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             alreadyTriggered = true;
-            DialogueManager.Instance.DisplayText_Dialogue(Text, stayLength);
+            DialogueUIManager.Instance.DisplayText_Dialogue(Text, stayLength);
 
             voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
 

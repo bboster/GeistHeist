@@ -37,7 +37,7 @@ public class PATrigger : MonoBehaviour
             }
 
             alreadyTriggered = true;
-            DialogueManager.Instance.DisplayText_PASystem(Text, stayLength);
+            DialogueUIManager.Instance.DisplayText_PASystem(Text, stayLength);
         }
     }
 

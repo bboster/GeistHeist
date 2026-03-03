@@ -142,7 +142,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(GuardCoroutineManagerPrefab); //Does not require initialization
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
-        Instantiate(DailougeManagerPrefab).GetComponent<DialogueManager>().Initialize();
+        Instantiate(DailougeManagerPrefab).GetComponent<DialogueUIManager>().Initialize();
         Instantiate(AudioManagerPrefab).GetComponent<AudioManager>().Initialize();
         Instantiate(MusicManagerPrefab).GetComponent<MusicManager>().Initialize();
         Instantiate(KeyManagerPrefab).GetComponent<KeyManager>().Initialize();

@@ -10,7 +10,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DialogueManager : Singleton<DialogueManager>
+public class DialogueUIManager : Singleton<DialogueUIManager>
 {
     [SerializeField] private GameObject DialogueTextboxPrefab;
     [SerializeField] private GameObject PAPrefab;
@@ -48,12 +48,12 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private IEnumerator FillText(string text, float stayLength, TMPro.TMP_Text textbox, UnityAction onDialogueEndCallback = null)
     {
-        DialogueManager.Instance.PAholder.SetActive(true);
+        DialogueUIManager.Instance.PAholder.SetActive(true);
         int temp = 0;
-        DialogueManager.Instance.PATextbox.text = "";
-        while (DialogueManager.Instance.PATextbox.text.Length < text.Length)
+        DialogueUIManager.Instance.PATextbox.text = "";
+        while (DialogueUIManager.Instance.PATextbox.text.Length < text.Length)
         {
-            DialogueManager.Instance.PATextbox.text += text.Substring(temp, 1);
+            DialogueUIManager.Instance.PATextbox.text += text.Substring(temp, 1);
             temp++;
             yield return new WaitForSeconds(secondsBetweenLetters);
         }
@@ -68,6 +68,6 @@ public class DialogueManager : Singleton<DialogueManager>
     //this is just in case we have to have it called somewhere else for the audio clip ending when that gets implemented
     private void ClearBox()
     {
-        DialogueManager.Instance.PAholder.SetActive(false);
+        DialogueUIManager.Instance.PAholder.SetActive(false);
     }
 }
