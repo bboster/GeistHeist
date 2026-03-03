@@ -27,6 +27,21 @@ public class DialogueBoxTrigger : MonoBehaviour
 
     [SerializeField] private List<DialogueTextData> dialogueText;
 
+
+    private void Start()
+    {
+        if (dialogueText.Count == 0)
+        {
+            Debug.Log($"Please update set the Dialogue text to the list in gameobject: {gameObject.name}");
+
+            var temp = new DialogueTextData();
+            temp.BodyText = Text;
+            temp.StayLength = stayLength;
+            temp.audioLine = 0;
+            dialogueText.Add(temp);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
 

@@ -6,70 +6,48 @@
  * Brief Description: Instantiates and keeps the textboxes and canvases of the
  * Dialogue and PA system
  */
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class DialogueUIManager : Singleton<DialogueUIManager>
 {
-    [SerializeField] private GameObject DialogueTextboxPrefab;
-    [SerializeField] private GameObject PAPrefab;
-    [SerializeField] private float secondsBetweenLetters;
-
-    private GameObject DialogueCanvas;
-    private TMPro.TMP_Text DialogueTextbox;
-
-    private GameObject PAholder;
-    private TMPro.TMP_Text PATextbox;
-
-    private Coroutine typingCoroutine;
+    [SerializeField] private DialogueUIViewModel DialogueTextboxPrefab;
+    [SerializeField] private DialogueUIViewModel PATextboxPrefab;
+    [SerializeField] public float secondsBetweenLetters;
+    [SerializeField] public RectTransform dialogueBubblesLayout;
 
     public void Initialize()
     {
-        DialogueCanvas = Instantiate(DialogueTextboxPrefab);
-        DialogueTextbox = DialogueCanvas.GetComponentInChildren<TMPro.TMP_Text>();
-
-        PAholder = Instantiate(PAPrefab);
-        PATextbox = PAholder.GetComponentInChildren<TMPro.TMP_Text>();
-
-        DialogueCanvas.SetActive(false);
-        PAholder.SetActive(false);
     }
 
-    public void DisplayText_Dialogue(string text, float stayLength, UnityAction onDialogueEndCallback=null)
+    public void DisplayText_Dialogue(List<DialogueTextData> dialogueText, UnityAction onDialogueEndCallback=null)
     {
-        StaticUtilities.StopAndStartCoroutine(ref typingCoroutine, FillText(text, stayLength, DialogueTextbox, onDialogueEndCallback: onDialogueEndCallback));
+        StartCoroutine(DisplayTextList(dialogueText, DialogueTextboxPrefab, onDialogueEndCallback: onDialogueEndCallback));
     }
 
-    public void DisplayText_PASystem(string text, float stayLength, UnityAction onDialogueEndCallback = null)
+    public void DisplayText_PASystem(List<DialogueTextData> dialogueText, UnityAction onDialogueEndCallback = null)
     {
-        StaticUtilities.StopAndStartCoroutine(ref typingCoroutine, FillText(text, stayLength, PATextbox, onDialogueEndCallback: onDialogueEndCallback));
+        StartCoroutine(DisplayTextList(dialogueText, PATextboxPrefab, onDialogueEndCallback: onDialogueEndCallback));
     }
 
-
-
-    private IEnumerator FillText(string text, float stayLength, TMPro.TMP_Text textbox, UnityAction onDialogueEndCallback = null)
+    private IEnumerator DisplayTextList(List<DialogueTextData> dialogueText, DialogueUIViewModel textboxPrefab , UnityAction onDialogueEndCallback = null)
     {
-        DialogueUIManager.Instance.PAholder.SetActive(true);
-        int temp = 0;
-        DialogueUIManager.Instance.PATextbox.text = "";
-        while (DialogueUIManager.Instance.PATextbox.text.Length < text.Length)
+        for(int i = 0; i < dialogueText.Count; i++)
         {
-            DialogueUIManager.Instance.PATextbox.text += text.Substring(temp, 1);
-            temp++;
-            yield return new WaitForSeconds(secondsBetweenLetters);
+            DialogueTextData textData = dialogueText[i];
+
+            DialogueUIViewModel textBubble = Instantiate(textboxPrefab, dialogueBubblesLayout);
+
+            // Wait for typewriter animation. DialogueViewModel knows when to destroy itself (dont wait for that)
+            yield return textBubble.InitializeTypewriterAnimation(textData);
+            yield return new WaitForSeconds(textData.SecondsDelayUntilNextDialogue);
         }
-        yield return new WaitForSeconds(stayLength); //this will be replaced with the end of the audio clip eventually
 
-        ClearBox();
-
-        if(onDialogueEndCallback != null) 
-            onDialogueEndCallback();    
-    }
-
-    //this is just in case we have to have it called somewhere else for the audio clip ending when that gets implemented
-    private void ClearBox()
-    {
-        DialogueUIManager.Instance.PAholder.SetActive(false);
+        if(onDialogueEndCallback != null)
+            onDialogueEndCallback();
     }
 }

@@ -15,8 +15,11 @@ public class DialogueTextData
     [ResizableTextArea]
     public string BodyText;
 
-    public float StayLength;
+    public float SecondsDelayUntilNextDialogue = 0.1f;
+
+    [Tooltip("How long to wait until destroying itself")]
+    public float StayLength = 3;
 
     [Header("Audio")]
-    public int whichLine;
+    public int audioLine;
 }
