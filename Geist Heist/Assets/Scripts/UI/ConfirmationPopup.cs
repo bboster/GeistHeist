@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Josh
  * Creation Date: 10/20/25
- * Last Modified: 11/5/25
+ * Last Modified: 3/1/26
  * 
  * Brief Description: Resusable & modular UI popup for confirming the users choice.
  */
@@ -11,6 +11,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
@@ -29,6 +30,8 @@ public class ConfirmationPopup : MonoBehaviour
     private Coroutine fadeOpacityCoroutine;
 
     private UnityAction afterCancelClicked = null;
+    private GameObject previouslySelectedBeforeOpen;
+    private bool shouldRestorePreviousSelectionOnHide;
 
     public static bool AnyConfirmationMenuOpen = false;
 
@@ -56,6 +59,8 @@ public class ConfirmationPopup : MonoBehaviour
 
         lastFadeSecondsUsed = fadeSeconds;
         this.closeMenuOnConfirm = closeMenuOnConfirm;
+        previouslySelectedBeforeOpen = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+        shouldRestorePreviousSelectionOnHide = false;
 
         // Press esc to close popup
         InputEvents.PauseStartedOverride = OnCancelButtonPressed;
@@ -89,6 +94,7 @@ public class ConfirmationPopup : MonoBehaviour
             canvasGroup = GetComponent<CanvasGroup>();
 
         StaticUtilities.EnableCanvasGroup(canvasGroup, alpha: 0);
+        EventSystem.current.SetSelectedGameObject(cancelButton.gameObject);
 
         if (lastFadeSecondsUsed > 0)
             fadeOpacityCoroutine = StaticUtilities.FadeToVisible(canvasGroup, fadeSeconds);
@@ -110,6 +116,7 @@ public class ConfirmationPopup : MonoBehaviour
         else
         {
             StaticUtilities.DisableCanvasGroup(canvasGroup);
+            RestorePreviousSelectionIfNeeded();
             if(afterCancelClicked != null)
                 afterCancelClicked();
         }
@@ -118,6 +125,7 @@ public class ConfirmationPopup : MonoBehaviour
     private void AfterFadeToHidden()
     {
         StaticUtilities.DisableCanvasGroup(canvasGroup);
+        RestorePreviousSelectionIfNeeded();
 
         if (afterCancelClicked != null)
             afterCancelClicked();
@@ -126,6 +134,7 @@ public class ConfirmationPopup : MonoBehaviour
     void OnCancelButtonPressed()
     {
         Time.timeScale = oldTimeScale;
+        shouldRestorePreviousSelectionOnHide = true;
 
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
@@ -136,9 +145,27 @@ public class ConfirmationPopup : MonoBehaviour
     void OnConfirmButtonClicked()
     {
         Time.timeScale = oldTimeScale;
+        shouldRestorePreviousSelectionOnHide = false;
         if (closeMenuOnConfirm)
         {
             StaticUtilities.DisableCanvasGroup(canvasGroup);
         }
+    }
+
+    private void RestorePreviousSelectionIfNeeded()
+    {
+        if (!shouldRestorePreviousSelectionOnHide)
+            return;
+
+        shouldRestorePreviousSelectionOnHide = false;
+
+        if (EventSystem.current == null || previouslySelectedBeforeOpen == null || !previouslySelectedBeforeOpen.activeInHierarchy)
+            return;
+
+        Selectable selectable = previouslySelectedBeforeOpen.GetComponent<Selectable>();
+        if (selectable != null && !selectable.IsInteractable())
+            return;
+
+        EventSystem.current.SetSelectedGameObject(previouslySelectedBeforeOpen);
     }
 }
