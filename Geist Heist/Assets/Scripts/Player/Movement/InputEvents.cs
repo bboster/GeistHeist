@@ -113,6 +113,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    #region Controllers
     private void OnInputUserChanged(InputUser user, InputUserChange change, InputDevice device)
     {
         if (device == null || _currentDevice == device || !_canUseControlSwap ||
@@ -178,6 +179,9 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
                 _kbmScheme = scheme;
         }
     }
+
+
+    #endregion
 
     void InitializeActions()
     {

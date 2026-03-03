@@ -12,11 +12,13 @@ using NaughtyAttributes;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ButtonPromptBillboardUI : IBillboardUI
 {
     [SerializeField, Required] private RectTransform popupParent;
-    [SerializeField, Required] private TMP_Text interactText;
+    //[SerializeField, Required] private TMP_Text interactText;
+    [SerializeField, Required] private Image image;
     [ReadOnly] public ButtonType buttonType;
 
     private ButtonPromptInteractable buttomPrompt;
@@ -52,18 +54,7 @@ public class ButtonPromptBillboardUI : IBillboardUI
 
     public void UpdateButtonPrompt()
     {
-        switch (buttonType)
-        {
-            case (ButtonType.Interact):
-                interactText.text = "E" + buttomPrompt.additionalButtonText;
-                break;
-            case (ButtonType.Action):
-                interactText.text = "Q" + buttomPrompt.additionalButtonText;
-                break;
-            default:
-                interactText.text = "Prompt Error";
-                break;
-        }
+        image.sprite = BillboardUIManager.Instance.GetKeyButtonSprite(buttonType, )
     }
 
     /// <summary>
