@@ -16,7 +16,6 @@ using NaughtyAttributes;
 public class KeyItem : MonoBehaviour
 {
     [SerializeField] public KeyType keyType;
-    [SerializeField] private GameObject collectionParticlePrefab;
 
     private bool _collected;
     private Collider childCollider;
@@ -40,9 +39,11 @@ public class KeyItem : MonoBehaviour
 
         RegisterKey();
 
+        /*
         // optional particle
         if (collectionParticlePrefab != null)
             StaticUtilities.PlayAndDestroyParticle(collectionParticlePrefab, transform.position);
+        */
 
         // start collection animation
         StartCoroutine(CollectAnimation());
