@@ -3,9 +3,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 /*
-* Contributors: Brenden, Toby
+* Contributors: Brenden, Toby, Jacob
 * Creation Date: 10/1/25
-* Last Modified: 10/29/25
+* Last Modified: 3/3/26
 * 
 * Brief Description: Input Handler for the Vending Machine, handles movement and actions for the Vending Machine
 *
@@ -166,6 +166,13 @@ public class VendingObject : IInputHandler, IInteractable
     void IInteractable.Interact()
     {
         //PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
+    }
+
+    public override bool IsDetectable()
+    {
+        //Detectable for a brief window while the can is ejected
+
+        throw new System.NotImplementedException();
     }
 
     public void OnDrawGizmos()

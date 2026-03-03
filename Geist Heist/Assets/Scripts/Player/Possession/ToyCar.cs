@@ -6,9 +6,9 @@ using UnityEngine.UI;
 using FMODUnity;
 using FMOD.Studio;
 /*
- * Contributors: Sky, Toby
+ * Contributors: Sky, Toby, Jacob
  * Creation Date: 10/2/25
- * Last Modified: 10/27/25
+ * Last Modified: 3/3/26
  * 
  * Brief Description: Input Handler for the Toy Car, handles movement and actions for the Toy Car
  */
@@ -154,6 +154,15 @@ public class ToyCar : IInputHandler
             physicsEnabled = false;
             hasLaunchedThisPossession = true;
         }
+    }
+
+    public override bool IsDetectable()
+    {
+        //Check detectable velocity thresholds.
+
+        //If greater than threshold then return true, else return false
+
+        throw new System.NotImplementedException();
     }
 
     #region action

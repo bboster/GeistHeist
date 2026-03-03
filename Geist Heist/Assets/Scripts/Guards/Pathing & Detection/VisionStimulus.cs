@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors: Joshua Kelly
  * Creation: 10/02/25
- * Last Edited: 12/05/25
+ * Last Edited: 3/3/26
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
@@ -10,18 +10,18 @@ using FMOD;
 using GuardUtilities;
 using NaughtyAttributes;
 using System.Collections;
-using System.Net.NetworkInformation;
 using Unity.Cinemachine;
 using UnityEditor;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class VisionStimulus : Stimulus
 {
     #region Variable Declarations
 
-    private bool hasSeenPlayer = false;
+    private bool hasSeenPlayer = false; //DEPRECATED WITH NEW SYSTEM
     private bool playerObjectSeen = false;
-    private bool actionDetected = false;
+    private bool actionDetected = false; //DEPRECATED WITH NEW SYSTEM
     private Coroutine timer;
 
     [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
@@ -128,6 +128,52 @@ public class VisionStimulus : Stimulus
                 playerObjectSeen = true;
             }
         }
+
+        #region New Vision Code
+
+        //Conditions: Ghost seen, possessable seen but no action taken, possessable seen and action taken, action taken on a seen possessable
+        GuardStates currentState = parentController.currentBehavior.StateName;
+
+        //Only executes contained code if the object within the trigger can be seen by the guard
+        //TODO: Have the vision trigger ignore all collision layers except the player to avoid rapidly triggering this function and tanking performance
+        if (VisionCast(other.gameObject))
+        {
+            //if Ghost seen enter chase state
+            if (other.gameObject == PlayerManager.Instance.PlayerGhostObject)
+            {
+                //Enter chase immediately
+                TriggerStimulus();
+            }
+            //else if possessable seen but no action taken then watch for possessable action
+            else if (other.gameObject == PlayerManager.Instance.CurrentObject)
+            {
+                //Call check function to see if the object is detectable. If yes then enter chase state
+                if (other.gameObject.GetComponent<IInputHandler>().IsDetectable())
+                {
+                    TriggerStimulus();
+                }
+                //Else change playerObjectSeen to true
+                else
+                {
+                    playerObjectSeen = true;
+                }
+            }
+
+            //TODO: Code to handle objects re-entering the vision cone while the timer is running.
+        }
+        //This should execute if the guard is still in the vision cone but is behind a wall, is seen, and is in either surprised or chase state
+        else if(playerObjectSeen == true && (currentState == GuardStates.surprised || currentState == GuardStates.chase))
+        {
+            if(timer == null)
+                timer = StartCoroutine(VisionBreakTimer());
+        }
+        else //This should execute if the guard is still in the cone but is behind a wall and is not in either surprised or chase state
+        {
+            playerObjectSeen = false;
+        }
+
+        #endregion
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -146,6 +192,16 @@ public class VisionStimulus : Stimulus
                 playerObjectSeen = false;
             }
         }
+
+        #region New Vision Code
+
+        //Conditions: Ghost/noticed possessable no longer seen, possessable that has taken no action no longer seen
+
+        //Only execute lines below if the object leaving the trigger is CurrentObject
+
+        //if current state is surprised or chase, then start the vision break timer, else set playerObjectSeen to false
+
+        #endregion
     }
 
     #endregion
