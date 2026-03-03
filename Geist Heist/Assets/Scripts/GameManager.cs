@@ -121,7 +121,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (!InGodMode)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
         }
     }
 
@@ -135,7 +135,8 @@ public class GameManager : Singleton<GameManager>
     /// <returns></returns>
     public Task InstantiateManagers()
     {
-        Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize();
+        if(InputEvents.Instance == null)
+            Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize();
         Instantiate(FMODEventsPrefab);
         Instantiate(LevelManagerPrefab); // initialization happens in PlayerManager
         Instantiate(SaveDataManagerPrefab);
