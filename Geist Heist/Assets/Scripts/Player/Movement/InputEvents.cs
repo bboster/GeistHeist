@@ -8,13 +8,9 @@
  */
 
 using System.Collections;
-using System.Diagnostics;
-using System.Net.Http.Headers;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
 
@@ -57,7 +53,6 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static UnityEvent<Vector2> LookUpdate = new UnityEvent<Vector2>();
 
     [SerializeField] private float _sensitivity = 1;
-    public static bool IsHeld = false;
 
     public Vector2 LookDelta => Look.ReadValue<Vector2>() * _sensitivity;
     public Vector3 FirstPersonInputDirection => (
@@ -67,16 +62,16 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         .normalized;
 
     public Vector2 InputDirection2D => Move.ReadValue<Vector2>();
-    public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed, PausePressed/*, SpacePressed*/;
+    public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed/*, SpacePressed*/;
 
     #region Time Held
-    private static float moveTimeStarted, actionTimeStarted, interactTimeStarted, spaceTimeStarted = -1; // other inputs can be added but i dont think theyre super necessary.
+    private static float moveTimeStarted = -1f, actionTimeStarted = -1f, interactTimeStarted = -1f; // other inputs can be added but i dont think theyre super necessary.
     private static float actionTimeReleased = -1;
     public static float MoveHeldTime => MovePressed ? Time.time - moveTimeStarted : 0;
     public static float ActionHeldTime => ActionPressed ? Time.time - actionTimeStarted : 0;
     public static float ActionReleasedTime => ActionPressed ? 0 : Time.time - actionTimeReleased;
     public static float InteractHeldTime => InteractPressed ? Time.time - interactTimeStarted : 0;
-    //public static float SpaceHeldTime => SpacePressed ? Time.time - spaceTimeStarted : 0;
+    //public static float SpaceHeldTime => SpacePressed ? Time.time - spaceTimeStarted : 0; // only needed if space input is restored
 
 
     #endregion
@@ -198,7 +193,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         Move.started += ctx => InputActionStarted(ref MovePressed, MoveStarted, ref moveTimeStarted);
         //Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
         Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted, ref actionTimeStarted);
-        Interact.started += ctx => InputActionStarted(ref InteractPressed, InteractStarted);
+        Interact.started += ctx => InputActionStarted(ref InteractPressed, InteractStarted, ref interactTimeStarted);
         //Space.started += ctx => InputActionStarted(ref SpacePressed, SpaceStarted, ref spaceTimeStarted);
         Pause.started += ctx => OnPauseStarted();
         DebugA.started += ctx => { DebugStarted.Invoke(); };
@@ -266,52 +261,78 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         if (ActionPressed) ActionHeld.Invoke(ActionHeldTime);
         else ActionNotHeld.Invoke(ActionReleasedTime);
         if (InteractPressed) InteractHeld.Invoke(InteractHeldTime);
-
-        LookUpdate.Invoke(LookDelta);
     }
 
     private void Update()
     {
+        if (!GameManager.Instance.IsPaused)
+            LookUpdate.Invoke(LookDelta);
+
         // Polling-based device switching (catches input not yet in InputUser.onChange)
         if (playerInput == null || playerInput.actions == null || !_canUseControlSwap)
             return;
 
-        string currentScheme = playerInput.currentControlScheme;
+        if (!WasAnySwitchRelevantDeviceUpdatedThisFrame())
+            return;
 
-        // If on gamepad scheme, check for keyboard/mouse input
-        if (_gamepadScheme.HasValue && currentScheme == _gamepadScheme.Value.name)
-        {
-            if ((Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) ||
-                (Mouse.current != null && Mouse.current.delta.ReadValue().sqrMagnitude > 0.01f))
-            {
-                if (_kbmScheme.HasValue)
-                {
-                    playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
-                    _currentDevice = Keyboard.current;
-                    _canUseControlSwap = false;
-                    StartCoroutine(PreventControlSwapUntilEndOfFrame());
-                }
-                return;
-            }
-        }
-        // If on keyboard/mouse scheme, check for any gamepad input
-        else if (_kbmScheme.HasValue && currentScheme == _kbmScheme.Value.name)
-        {
-            if (Gamepad.current != null && IsGamepadActive())
-            {
-                if (_gamepadScheme.HasValue)
-                {
-                    playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
-                    _currentDevice = Gamepad.current;
-                    _canUseControlSwap = false;
-                    StartCoroutine(PreventControlSwapUntilEndOfFrame());
-                }
-                return;
-            }
-        }
+        string currentScheme = playerInput.currentControlScheme;
+        if (TrySwitchToKeyboardMouseScheme(currentScheme))
+            return;
+
+        TrySwitchToGamepadScheme(currentScheme);
     }
 
-    public bool IsGamepadActive()
+    private static bool WasAnySwitchRelevantDeviceUpdatedThisFrame()
+    {
+        return (Keyboard.current?.wasUpdatedThisFrame ?? false) ||
+               (Mouse.current?.wasUpdatedThisFrame ?? false) ||
+               (Gamepad.current?.wasUpdatedThisFrame ?? false);
+    }
+
+    private bool TrySwitchToKeyboardMouseScheme(string currentScheme)
+    {
+        if (!_gamepadScheme.HasValue || currentScheme != _gamepadScheme.Value.name)
+            return false;
+
+        if ((Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) ||
+            (Mouse.current != null && Mouse.current.delta.ReadValue().sqrMagnitude > 0.01f))
+        {
+            if (_kbmScheme.HasValue)
+            {
+                playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
+                _currentDevice = Keyboard.current;
+                _canUseControlSwap = false;
+                StartCoroutine(PreventControlSwapUntilEndOfFrame());
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TrySwitchToGamepadScheme(string currentScheme)
+    {
+        if (!_kbmScheme.HasValue || currentScheme != _kbmScheme.Value.name)
+            return false;
+
+        if (Gamepad.current != null && IsGamepadInputActive())
+        {
+            if (_gamepadScheme.HasValue)
+            {
+                playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
+                _currentDevice = Gamepad.current;
+                _canUseControlSwap = false;
+                StartCoroutine(PreventControlSwapUntilEndOfFrame());
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    // Raw gamepad activity detector for scheme switching.
+    // This must not rely on action.activeControl while on KBM scheme.
+    private bool IsGamepadInputActive()
     {
         var gamepad = Gamepad.current;
         if (gamepad == null)
@@ -319,8 +340,23 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         return gamepad.leftStick.ReadValue().sqrMagnitude > 0.15f ||
                gamepad.rightStick.ReadValue().sqrMagnitude > 0.15f ||
+               gamepad.dpad.ReadValue().sqrMagnitude > 0.1f ||
                gamepad.leftTrigger.ReadValue() > 0.1f ||
-               gamepad.rightTrigger.ReadValue() > 0.1f;
+               gamepad.rightTrigger.ReadValue() > 0.1f ||
+               gamepad.buttonSouth.isPressed ||
+               gamepad.buttonNorth.isPressed ||
+               gamepad.buttonEast.isPressed ||
+               gamepad.buttonWest.isPressed ||
+               gamepad.leftShoulder.isPressed ||
+               gamepad.rightShoulder.isPressed ||
+               gamepad.startButton.isPressed ||
+               gamepad.selectButton.isPressed;
+    }
+
+    // Detects move-input source only (use this for movement-tuned behavior).
+    public bool IsMoveInputFromGamepad()
+    {
+        return Move?.activeControl?.device is Gamepad;
     }
 
     private void RemoveAllListeners()
