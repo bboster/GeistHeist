@@ -71,7 +71,7 @@ public class KeyItem : MonoBehaviour
 
         Vector3 startPos = transform.position;
         Vector3 startEulers = transform.eulerAngles;
-        Vector3 startScale = transform.localScale;
+        Vector3 startScale = transform.lossyScale;
 
         if (particleSystem != null)
         {
