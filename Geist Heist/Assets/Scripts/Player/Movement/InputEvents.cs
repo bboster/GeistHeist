@@ -8,6 +8,7 @@
  */
 
 using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -315,7 +316,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         if (!_kbmScheme.HasValue || currentScheme != _kbmScheme.Value.name)
             return false;
 
-        if (Gamepad.current != null && IsGamepadInputActive())
+        if (Gamepad.current != null && IsInputFromGamepad())
         {
             if (_gamepadScheme.HasValue)
             {
@@ -332,7 +333,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     // Raw gamepad activity detector for scheme switching.
     // This must not rely on action.activeControl while on KBM scheme.
-    private bool IsGamepadInputActive()
+    private bool IsInputFromGamepad()
     {
         var gamepad = Gamepad.current;
         if (gamepad == null)
@@ -357,6 +358,22 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public bool IsMoveInputFromGamepad()
     {
         return Move?.activeControl?.device is Gamepad;
+    }
+
+    // UI scripts should use this to decide which prompts to show.
+    public bool IsGamepadActive()
+    {
+        if (playerInput == null)
+            return false;
+
+        string currentScheme = playerInput.currentControlScheme;
+        if (string.IsNullOrEmpty(currentScheme))
+            return false;
+
+        if (_gamepadScheme.HasValue)    
+            return currentScheme == _gamepadScheme.Value.name;
+
+        return currentScheme.IndexOf("Gamepad", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     private void RemoveAllListeners()
