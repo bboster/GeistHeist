@@ -252,13 +252,13 @@ public class PauseMenu : MonoBehaviour
     {
         ClosePauseMenu();
         Time.timeScale = 1;
-        SceneManager.LoadScene(HubScene);
+        LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(HubScene));
     }
 
     void OnConfirmQuitToMainMenuButtonClicked()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(MainMenuScene);
+        LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(MainMenuScene));
     }
 
     #endregion
@@ -266,7 +266,7 @@ public class PauseMenu : MonoBehaviour
     #region Debug UI Buttons
     void RestartLevelButtonClicked()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
     }
 
     void ResetSaveDataButtonClicked()
