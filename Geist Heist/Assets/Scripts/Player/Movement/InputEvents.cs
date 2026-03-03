@@ -66,7 +66,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         .WithY(0)
         .normalized;
 
-    public Vector2 InputDirection2D => Move.ReadValue<Vector2>();
+    public Vector2 InputDirection2D => (FadeToBlack.Instance == null) ? Move.ReadValue<Vector2>() : Vector2.zero;
     public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed, PausePressed/*, SpacePressed*/;
 
     #region Time Held
