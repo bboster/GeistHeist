@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 {
@@ -19,6 +20,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     private readonly HashSet<KeyType> savedKeys = new();
     private readonly HashSet<string> savedDoorIds = new();
     private readonly HashSet<string> activatedCheckpointIds = new();
+    [SerializeField] private GameObject fadeToBlack;
 
     /// <summary>
     /// Initializes the LevelManager every time a scene is loaded
@@ -122,6 +124,12 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         {
             door.RestoreCheckpointStateIfNeeded();
         }
+    }
+
+    public void InstantiateFadeToBlack(UnityAction action)
+    {
+        FadeToBlack ftb = Instantiate(fadeToBlack).GetComponent<FadeToBlack>();
+        ftb.Initialize(action);
     }
 
     #region Scene Transition Scripts

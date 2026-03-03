@@ -62,8 +62,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         .WithY(0)
         .normalized;
 
-    public Vector2 InputDirection2D => Move.ReadValue<Vector2>();
-    public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed/*, SpacePressed*/;
+    public Vector2 InputDirection2D => (FadeToBlack.Instance == null) ? Move.ReadValue<Vector2>() : Vector2.zero;
+    public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed, PausePressed/*, SpacePressed*/;
 
     #region Time Held
     private static float moveTimeStarted = -1f, actionTimeStarted = -1f, interactTimeStarted = -1f; // other inputs can be added but i dont think theyre super necessary.
