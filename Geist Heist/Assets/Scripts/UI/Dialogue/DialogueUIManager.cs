@@ -46,6 +46,8 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
         StaticUtilities.StopAndStartCoroutine(ref typingCoroutine, FillText(text, stayLength, PATextbox, onDialogueEndCallback: onDialogueEndCallback));
     }
 
+
+
     private IEnumerator FillText(string text, float stayLength, TMPro.TMP_Text textbox, UnityAction onDialogueEndCallback = null)
     {
         DialogueUIManager.Instance.PAholder.SetActive(true);

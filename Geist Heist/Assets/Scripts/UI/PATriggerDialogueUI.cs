@@ -10,7 +10,7 @@ using FMODUnity;
 using FMOD.Studio;
 
 //This script looks very similar to DialogueBoxTrigger, maybe try to combine these scripts into one?
-public class PATrigger : MonoBehaviour
+public class PATriggerDialogueUI : MonoBehaviour
 {
     [SerializeField] string Text;
     [Tooltip("How long the full text will stay on the screen")]
@@ -40,6 +40,8 @@ public class PATrigger : MonoBehaviour
             DialogueUIManager.Instance.DisplayText_PASystem(Text, stayLength);
         }
     }
+
+    
 
     
 }
