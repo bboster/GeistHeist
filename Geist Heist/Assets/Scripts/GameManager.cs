@@ -19,7 +19,7 @@ using UnityEditor;
 
 public class GameManager : Singleton<GameManager>
 {
-    // All of this behavior is implemented in TetherPossessable.cs, DoorInteractable.cs, and HubLevelGate.cs
+    // All of this behavior is implemented in TetherPossessable.cs, DoorInteractable.cs, and HubLevelVisibilityToggle.cs
 
     [Header("Managers")]
     [SerializeField, Required] GameObject InputManagerPrefab;

@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
- * Creation: 10/3/25
- * Last Edited: 10/3/25
+ * Creation:    10/3/2025
+ * Last Edited:  3/3/2026
  * Summary: Disables/enables a gate based on if another level has been completed.
  * 
  * Note: This code is extremely similar to TetherHubDisplay.cs, and honestly could have been modularized with just one boolean.
@@ -19,16 +19,16 @@ using UnityEngine;
  * -Toby
  */
 
-public class HubLevelGate : MonoBehaviour
+public class HubLevelVisibilityToggle : MonoBehaviour
 {
-    [InfoBox("If 'Required Level' has been completed -> this object will be disabled.\n\nUse this for blocking off the player in the hub world")]
+    [InfoBox("If 'Required Level' has been completed -> this object will be enabled or disabled.\n\nUse this for blocking off the player in the hub world")]
     [InfoBox("If a level is not appearing, make sure it is added to the build settings")]
 
     [SerializeField, Scene] private string RequiredLevel;
-
+    [SerializeField] private HubVisibilityType Visibility;
 
     [Header("Debug")]
-    [SerializeField, OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysHide;
+    [SerializeField, OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysApply;
 
     public void Start()
     {
@@ -37,11 +37,26 @@ public class HubLevelGate : MonoBehaviour
 
     private void UpdateVisibility()
     {
-        if (DebugAlwaysHide)
+        if (DebugAlwaysApply)
         {
             gameObject.SetActive(false);
             return;
         }
-        gameObject.SetActive( ! SaveDataManager.Instance.IsLevelCompleted(RequiredLevel));
+
+        if(Visibility == HubVisibilityType.EnableIfLevelCompleted)
+        {
+            gameObject.SetActive(SaveDataManager.Instance.IsLevelCompleted(RequiredLevel));
+        }
+        else
+        {
+            gameObject.SetActive( ! SaveDataManager.Instance.IsLevelCompleted(RequiredLevel));
+        }
+        
+    }
+
+    private enum HubVisibilityType
+    {
+        EnableIfLevelCompleted,
+        DisableIfLevelCompleted,
     }
 }
