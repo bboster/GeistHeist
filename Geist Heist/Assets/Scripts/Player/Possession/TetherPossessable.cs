@@ -55,7 +55,7 @@ public class TetherPossessable : IInputHandler
         SaveDataManager.Instance.MarkSceneAsCompleted(SceneManager.GetActiveScene().name);
 
         //SceneManager.LoadScene(HubScene);
-        LevelManager.Instance.ChangeScene(HubScene);
+        LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(HubScene));
     }
 
     #region action
