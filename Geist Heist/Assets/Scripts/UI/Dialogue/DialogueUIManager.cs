@@ -70,8 +70,9 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
             textBubble.Initialize(textData);
             viewModels.Insert(0, textBubble);
 
-            if (textData.audioLine != 0)
+            if (textData.audioLine != -1)
             {
+                Debug.Log($"Playing audio clip for: {textData.BodyText}");
                 string paramField = isPASystem ? "PA" : "JOEY PUT PARAM NAME HERE PLS :3";
                 RuntimeManager.StudioSystem.setParameterByName(paramField, textData.audioLine);
                 voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
@@ -85,7 +86,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
 
             // if theres a voice line, wait for it to finish playing (accounting for time elapsed from typewriter)
             // cant do a null check because EventInstances cant be null for whatever reason 
-            if (textData.audioLine != 0)
+            if (textData.audioLine != -1)
                 yield return new WaitForSeconds(Time.time - timeTypewriterStarted - textData.SecondsDelayUntilNextDialogue);
 
             yield return new WaitForSeconds(textData.SecondsDelayUntilNextDialogue);

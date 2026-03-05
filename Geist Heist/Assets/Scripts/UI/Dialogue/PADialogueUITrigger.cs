@@ -32,11 +32,11 @@ public class PADialogueUITrigger : MonoBehaviour
     {
         if (other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
-            if (whichLine >= 0 && whichLine < 3)
+            /*if (whichLine >= 0 && whichLine < 3)
             {
                 RuntimeManager.StudioSystem.setParameterByName("PA", whichLine);
                 voiceline.start();
-            }
+            }*/
 
             alreadyTriggered = true;
             DialogueUIManager.Instance.DisplayText_PASystem(dialogueText);

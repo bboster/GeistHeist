@@ -105,8 +105,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c58362d5333c394c83df24820c55170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlavorTextInteractable
-  DisplayText: Example Flavor Text :)
-  secondsUntilCloseText: 10
+  flavorText:
+  - BodyText: Example Flavor Text
+    SecondsDelayUntilNextDialogue: 0.1
+    StayLength: 10
+    audioLine: -1
   AlwaysAppear: 0
   chanceToAppear: 1
   requiredScenesCompleted: []
@@ -115,6 +118,8 @@ MonoBehaviour:
   requiredCollectablesUncollected: 
   RequireSpecificHat: 0
   requiredHat: 0
+  DisplayText: Example Flavor Text :)
+  secondsUntilCloseText: 10
 --- !u!65 &567333840498247898
 BoxCollider:
   m_ObjectHideFlags: 0
