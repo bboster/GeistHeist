@@ -51,11 +51,12 @@ public class ButtonPromptBillboardUI : IBillboardUI
         base.Show();
 
         StaticUtilities.StopAndStartCoroutine(ref popupAnimation, PopupAnimation());
+        UpdateButtonPrompt();
     }
 
     public void UpdateButtonPrompt()
     {
-        image.sprite = BillboardUIManager.Instance.GetKeyButtonSprite(buttonType, isController: InputEvents.Instance.IsMoveInputFromGamepad());
+        image.sprite = BillboardUIManager.Instance.GetKeyButtonSprite(buttonType, isController: InputEvents.Instance.IsGamepadActive());
     }
 
     /// <summary>

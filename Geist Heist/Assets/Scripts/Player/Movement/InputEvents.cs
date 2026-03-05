@@ -284,6 +284,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         if (!WasAnySwitchRelevantDeviceUpdatedThisFrame())
             return;
 
+        OnControllerChanged.Invoke();
+
         string currentScheme = playerInput.currentControlScheme;
         if (TrySwitchToKeyboardMouseScheme(currentScheme))
             return;
@@ -327,12 +329,12 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         if (Gamepad.current != null && IsInputFromGamepad())
         {
+            OnControllerChanged.Invoke();
             if (_gamepadScheme.HasValue)
             {
                 playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
                 _currentDevice = Gamepad.current;
                 _canUseControlSwap = false;
-                OnControllerChanged.Invoke();
                 StartCoroutine(PreventControlSwapUntilEndOfFrame());
             }
             return true;

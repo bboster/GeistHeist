@@ -57,7 +57,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
 
         // UpdateButtonPrompt changes the text depending on if its a controller / keyboard. 
         // This is redundant now but will be important later.
-        billboardUI.UpdateButtonPrompt();
+        //billboardUI.UpdateButtonPrompt(InputEvents.Instance.IsMoveInputFromGamepad());
         billboardUI.Show();
     }
     void IInteractable.OnPlayerLookStop()
@@ -84,7 +84,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
 
         // UpdateButtonPrompt changes the text depending on if its a controller / keyboard. 
         // This is redundant now but will be important later.
-        billboardUI.UpdateButtonPrompt();
+        //billboardUI.UpdateButtonPrompt();
         billboardUI.Show();
     }
 
