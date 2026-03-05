@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Josh
  * Creation Date: 10/20/2025
- * Last Modified: 11/24/2025
+ * Last Modified: 3/1/2026
  * 
  * Brief Description: Handles UI elements for the pause menu.
  * Also listens to escape key input to open and close it.
@@ -9,6 +9,9 @@
 
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -41,10 +44,27 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] private Button resetSaveButton;
 
     private static float timeOfLastPause;
+    private InputAction menuBackAction;
+
+    private void OnEnable()
+    {
+        TrySubscribeToUICancel();
+    }
+
+    private void OnDisable()
+    {
+        if (menuBackAction == null)
+            return;
+
+        menuBackAction.performed -= OnMenuBackPressed;
+        menuBackAction = null;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        TrySubscribeToUICancel();
+
         // disable going to hub if you are at the hub
         if(SceneManager.GetActiveScene().buildIndex == HubScene)
         {
@@ -82,6 +102,7 @@ public class PauseMenu : MonoBehaviour
 
         // general tab is default tab
         generalTab.OpenTab();
+        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
         controlsTab.CloseTab();
         settingsTab.CloseTab();
 
@@ -117,6 +138,77 @@ public class PauseMenu : MonoBehaviour
             OpenPauseMenu();
         else
             ClosePauseMenu() ;
+    }
+
+    private void OnMenuBackPressed(InputAction.CallbackContext ctx)
+    {
+        if (!IsPauseMenuOpen())
+            return;
+
+        if (IsConfirmationPopupOpen())
+        {
+            confirmationPopup.HideConfirmationPopup();
+            SelectDefaultForCurrentTab();
+            return;
+        }
+
+        bool settingsOpen = settingsTab.canvasGroup != null && settingsTab.canvasGroup.alpha > 0.001f;
+        bool controlsOpen = controlsTab.canvasGroup != null && controlsTab.canvasGroup.alpha > 0.001f;
+        if (settingsOpen || controlsOpen)
+        {
+            generalTab.OpenTab();
+            EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
+            return;
+        }
+
+        // Root/general pause page: back closes pause menu.
+        ClosePauseMenu();
+    }
+
+    private void TrySubscribeToUICancel()
+    {
+        if (menuBackAction != null)
+            return;
+
+        InputSystemUIInputModule uiInputModule = EventSystem.current != null
+            ? EventSystem.current.currentInputModule as InputSystemUIInputModule
+            : null;
+
+        if (uiInputModule == null)
+            uiInputModule = Object.FindFirstObjectByType<InputSystemUIInputModule>();
+
+        if (uiInputModule == null || uiInputModule.cancel == null || uiInputModule.cancel.action == null)
+            return;
+
+        menuBackAction = uiInputModule.cancel.action;
+        menuBackAction.performed += OnMenuBackPressed;
+    }
+
+    private bool IsPauseMenuOpen()
+    {
+        return pauseScreenParent != null
+            && pauseScreenParent.gameObject.activeInHierarchy
+            && pauseGroup != null
+            && pauseGroup.interactable;
+    }
+
+    private bool IsConfirmationPopupOpen()
+    {
+        if (confirmationPopup == null)
+            return false;
+
+        CanvasGroup cg = confirmationPopup.GetComponent<CanvasGroup>();
+        return cg != null && cg.interactable && cg.alpha > 0.001f;
+    }
+
+    private void SelectDefaultForCurrentTab()
+    {
+        if (settingsTab.canvasGroup != null && settingsTab.canvasGroup.alpha > 0.001f)
+            EventSystem.current.SetSelectedGameObject(settingsTab.toggleButton.gameObject);
+        else if (controlsTab.canvasGroup != null && controlsTab.canvasGroup.alpha > 0.001f)
+            EventSystem.current.SetSelectedGameObject(controlsTab.toggleButton.gameObject);
+        else
+            EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
     }
 
     #region Tab Navigation Buttons
@@ -160,13 +252,13 @@ public class PauseMenu : MonoBehaviour
     {
         ClosePauseMenu();
         Time.timeScale = 1;
-        SceneManager.LoadScene(HubScene);
+        LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(HubScene));
     }
 
     void OnConfirmQuitToMainMenuButtonClicked()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(MainMenuScene);
+        LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(MainMenuScene));
     }
 
     #endregion
@@ -174,7 +266,7 @@ public class PauseMenu : MonoBehaviour
     #region Debug UI Buttons
     void RestartLevelButtonClicked()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
     }
 
     void ResetSaveDataButtonClicked()

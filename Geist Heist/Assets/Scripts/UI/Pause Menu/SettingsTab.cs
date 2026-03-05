@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Joshua Kelly
  * Creation: 11/15/2025
- * Last Edited: 11/24/25
+ * Last Edited: 3/1/2026
  * 
  * Description: Manages UI elements and settings data.
  * Settings variables are stored and accessed in SettingsProfile.cs
@@ -11,6 +11,7 @@ using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SettingsTab : PauseMenuTab
@@ -68,9 +69,9 @@ public class SettingsTab : PauseMenuTab
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected /*override*/ void Start()
     {
+
         //base.Start();
         ppManager = Camera.main.GetComponentInChildren<PostProcessingManager>();
-
         AddComponentListeners();
         //exitSettingsButton.onClick.AddListener(() => CloseTab());
         resetToDefaultsButton.onClick.AddListener(OnResetToDefaultsButtonPressed);
@@ -79,6 +80,7 @@ public class SettingsTab : PauseMenuTab
     public override void OpenTab()
     {
         base.OpenTab();
+        EventSystem.current?.SetSelectedGameObject(lookSensitivityAttributes.SliderComponent.gameObject);
     }
 
     public override void CloseTab()
