@@ -73,7 +73,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
             if (textData.audioLine != -1)
             {
                 Debug.Log($"Playing audio clip for: {textData.BodyText}");
-                string paramField = isPASystem ? "PA" : "JOEY PUT PARAM NAME HERE PLS :3";
+                string paramField = isPASystem ? "PA" : "Ollie";
                 RuntimeManager.StudioSystem.setParameterByName(paramField, textData.audioLine);
                 voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
                 voiceline.start();
