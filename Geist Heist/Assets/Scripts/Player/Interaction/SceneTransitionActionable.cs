@@ -28,6 +28,8 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
     [Foldout("Advanced"), SerializeField] private bool closeMenuOnConfirm = false;
 
     private static bool anyLevelConfirmScreenOpen = false;
+    [Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
+    [SerializeField] private bool hasConfirmationPopup = true;
 
     public void Action()
     {
@@ -36,6 +38,14 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
             Debug.Log("can't open new confirm screen, player is already in a confirmation menu");
             return;
         }
+
+        if (!hasConfirmationPopup)
+        {
+            Debug.Log("Going straight to fade");
+            LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneName));
+            return;
+        }
+
         anyLevelConfirmScreenOpen = true;
 
         // if i didnt have to spawn this in, that would be cool

@@ -4,7 +4,8 @@
  * Last Edited: 2/1/2026
  * Summary: Allows player to collect keys in the environment. Upon walking into the key,
  * It plays the same collection animation as OptionalCollectible.
- * When animation finishes, the key is added to KeyManager and the GameObject is destroyed.
+ * Key is added to KeyManager as soon as collection starts so it is usable during the pickup animation.
+ * When animation finishes, the GameObject is destroyed.
  * TODO: // Simple enum for keys. Extend with the symbols used in UI.
  */
 
@@ -15,7 +16,6 @@ using NaughtyAttributes;
 public class KeyItem : MonoBehaviour
 {
     [SerializeField] public KeyType keyType;
-    [SerializeField] private GameObject collectionParticlePrefab;
 
     private bool _collected;
     private Collider childCollider;
@@ -37,9 +37,13 @@ public class KeyItem : MonoBehaviour
         _collected = true;
         if (childCollider != null) childCollider.enabled = false;
 
+        RegisterKey();
+
+        /*
         // optional particle
         if (collectionParticlePrefab != null)
             StaticUtilities.PlayAndDestroyParticle(collectionParticlePrefab, transform.position);
+        */
 
         // start collection animation
         StartCoroutine(CollectAnimation());
@@ -68,7 +72,7 @@ public class KeyItem : MonoBehaviour
 
         Vector3 startPos = transform.position;
         Vector3 startEulers = transform.eulerAngles;
-        Vector3 startScale = transform.localScale;
+        Vector3 startScale = transform.lossyScale;
 
         if (particleSystem != null)
         {
@@ -136,13 +140,15 @@ public class KeyItem : MonoBehaviour
 
     private void AfterCollectAnimationFinished()
     {
-        // Add to inventory (no persistence)
+        Destroy(this.gameObject);
+    }
+
+    private void RegisterKey()
+    {
         if (KeyManager.Instance != null)
             KeyManager.Instance.AddKey(keyType);
         else
             Debug.LogWarning("KeyItem: KeyInventory not found in scene. Add KeyInventory component to a scene object (e.g. PlayerManager).");
-
-        Destroy(this.gameObject);
     }
     #endregion
 }

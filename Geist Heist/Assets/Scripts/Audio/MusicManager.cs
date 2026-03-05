@@ -16,15 +16,20 @@ public class MusicManager : Singleton<MusicManager>
     private EventInstance globeBGM;
     private EventInstance menuBGM;
 
+    protected override void Awake()
+    {
+        SceneManager.sceneLoaded += StartMusic;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Initialize()
     {
-        menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.MenuBGM);
+
         globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GlobeBGM);
         hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.HubBGM);
         levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.LevelBGM);
 
-        SceneManager.sceneLoaded += StartMusic;
+
 
         //the following if-else block could be changed to a Switch statement -Josh
         StopAll();
@@ -42,6 +47,7 @@ public class MusicManager : Singleton<MusicManager>
 
         if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(menuName)))
         {
+            menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.MenuBGM);
             menuBGM.start();
         }
         else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(hubName)))

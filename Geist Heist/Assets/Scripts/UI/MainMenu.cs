@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby Schamberger
+ * Contributors: Toby Schamberger, Joshua Kelly
  * Creation: 10/20/25
- * Last Edited: 11/5/25
+ * Last Edited: 3/1/26
  * Summary: Handles button functionality for main menu.
  * The player will be prompted to delete their save if they press new game after having save data.
  */
@@ -9,6 +9,9 @@
 using NaughtyAttributes;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -42,16 +45,25 @@ public class MainMenu : MonoBehaviour
 
     // if the player has played before and got past the first level
     private bool playerHasSignificantSaveData;
+    private InputAction menuCancelAction;
 
-    void Start()
+    private void OnEnable()
     {
-        playerHasSignificantSaveData = 
-               SaveDataManager.Instance.DoesSaveDataExist() 
+        TrySubscribeToUICancel();
+    }
+
+    private void Start()
+    {
+        TrySubscribeToUICancel();
+
+        playerHasSignificantSaveData =
+               SaveDataManager.Instance.DoesSaveDataExist()
             && SaveDataManager.Instance.GetLevelsCompletedCount() > 0;
 
         // hide/show continue button based on if save data exists
-        continueGameButton.gameObject.SetActive(playerHasSignificantSaveData == true);
-
+        continueGameButton.gameObject.SetActive(playerHasSignificantSaveData);
+        EventSystem.current.SetSelectedGameObject(
+            playerHasSignificantSaveData ? continueGameButton.gameObject : newGameButton.gameObject);
         // Hide other pages
         // The only reason im setting them active in code instead of having them active in scene is that i do not trust game designers
         creditsPage.gameObject.SetActive(true);
@@ -68,7 +80,7 @@ public class MainMenu : MonoBehaviour
 
         // Credits
         closeCreditsButton.onClick.AddListener(OnCreditsBackButtonClicked);
-        
+
         // How to Play
         closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
 
@@ -77,6 +89,34 @@ public class MainMenu : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    private void TrySubscribeToUICancel()
+    {
+        if (menuCancelAction != null)
+            return;
+
+        InputSystemUIInputModule uiInputModule = EventSystem.current != null
+            ? EventSystem.current.currentInputModule as InputSystemUIInputModule
+            : null;
+
+        if (uiInputModule == null)
+            uiInputModule = Object.FindFirstObjectByType<InputSystemUIInputModule>();
+
+        if (uiInputModule == null || uiInputModule.cancel == null || uiInputModule.cancel.action == null)
+            return;
+
+        menuCancelAction = uiInputModule.cancel.action;
+        menuCancelAction.performed += OnMenuCancel;
+    }
+
+    private void OnDisable()
+    {
+        if (menuCancelAction == null)
+            return;
+
+        menuCancelAction.performed -= OnMenuCancel;
+        menuCancelAction = null;
     }
 
     /// <summary>
@@ -101,9 +141,9 @@ public class MainMenu : MonoBehaviour
     }
 
 
-#region Buttons OnClicked
+    #region Buttons OnClicked
 
-    # region Main Page
+    #region Main Page
     void OnNewGameButtonClicked()
     {
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
@@ -135,6 +175,7 @@ public class MainMenu : MonoBehaviour
 
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         StaticUtilities.EnableCanvasGroup(creditsPage);
+        EventSystem.current.SetSelectedGameObject(closeCreditsButton.gameObject);
     }
 
     void OnHowToPlayButtonClicked()
@@ -143,6 +184,7 @@ public class MainMenu : MonoBehaviour
 
         StaticUtilities.DisableCanvasGroup(creditsPage);
         StaticUtilities.EnableCanvasGroup(howToPlayPage);
+        EventSystem.current.SetSelectedGameObject(closeHowToPlayButton.gameObject);
     }
 
     void OnQuitButtonClicked()
@@ -153,7 +195,7 @@ public class MainMenu : MonoBehaviour
         EditorApplication.isPlaying = false;
 #else
         Application.Quit();
-    #endif
+#endif
     }
 
     #endregion
@@ -176,6 +218,7 @@ public class MainMenu : MonoBehaviour
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         StaticUtilities.DisableCanvasGroup(creditsPage);
+        EventSystem.current.SetSelectedGameObject(creditsButton.gameObject);
     }
 
     #endregion
@@ -187,16 +230,42 @@ public class MainMenu : MonoBehaviour
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
+        EventSystem.current.SetSelectedGameObject(howToPlayButton.gameObject);
     }
 
     #endregion
 
     #endregion
 
+    void OnMenuCancel(InputAction.CallbackContext _)
+    {
+        CanvasGroup popupGroup = confirmationPopup != null ? confirmationPopup.GetComponent<CanvasGroup>() : null;
+        bool popupOpen = popupGroup != null && popupGroup.interactable && popupGroup.alpha > 0.001f;
+        if (popupOpen)
+        {
+            confirmationPopup.HideConfirmationPopup();
+            EventSystem.current.SetSelectedGameObject(
+                playerHasSignificantSaveData ? continueGameButton.gameObject : newGameButton.gameObject);
+            return;
+        }
+
+        if (howToPlayPage != null && howToPlayPage.interactable && howToPlayPage.alpha > 0.001f)
+        {
+            OnCloseHowToPlayButtonClicked();
+            return;
+        }
+
+        if (creditsPage != null && creditsPage.interactable && creditsPage.alpha > 0.001f)
+        {
+            OnCreditsBackButtonClicked();
+            return;
+        }
+    }
+
 
     #region Level transition
 
-    
+
 
     #endregion
 }

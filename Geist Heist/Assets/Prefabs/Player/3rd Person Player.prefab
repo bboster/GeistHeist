@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WearableCollectible
   wearableNode: {fileID: 1752873029236376262}
   currentHat: 1
+  defaultHat: 15
   PreviewCollectable: 1
 --- !u!1 &3233496734506821444
 GameObject:
@@ -142,7 +143,7 @@ Transform:
   m_GameObject: {fileID: 3233496734506821444}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.56903, y: -3.7, z: 5.04948}
+  m_LocalPosition: {x: 6.56903, y: 0, z: 5.04948}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -185,7 +186,7 @@ MonoBehaviour:
   animator: {fileID: 1458245353906695561}
   possessStateName: possess
   tetherPossessStateName: tetherpossess
-  possessCameraTransitionDelay: 1
+  possessCameraTransitionDelay: 0.3
   tetherCameraTransitionDelay: 1.85
   isGhost: 1
   CanUnPossess: 1
@@ -262,8 +263,9 @@ MonoBehaviour:
   speedPickup: 3
   slowDownFactor: 0.1
   rotationSpeed: 270
-  hoverHeight: 0.1
+  hoverHeight: 0.9
   hoverSpeed: 3
+  playerModel: {fileID: 512131676566069029}
   thirdPersonCinemachineCamera: {fileID: 6503710880496754358}
   interactSphereCastRadius: 3
   interactRayLength: 5
@@ -462,8 +464,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6503710880496754358}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.011563826, y: 0.9728236, z: -0.04981432, w: -0.22582991}
-  m_LocalPosition: {x: 1.8650913, y: 0.434718, z: 3.800714}
+  m_LocalRotation: {x: 0.057690684, y: 0.08295523, z: -0.0048104194, w: 0.9948704}
+  m_LocalPosition: {x: -0.7056732, y: 0.49583519, z: -4.2020993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -546,7 +548,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: -153.86182
+    Value: 9.532928
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -556,7 +558,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: -0.48957425
+    Value: 0.4673139
     Center: 17.5
     Range: {x: -6.7, y: 45}
     Wrap: 0
@@ -943,10 +945,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: OllieWalkCycle
       objectReference: {fileID: 0}
-    - target: {fileID: 779890438492457683, guid: 849d335c7f5fc8849a0b884c05d1d9d6, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 784220095184742530, guid: 849d335c7f5fc8849a0b884c05d1d9d6, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -1100,10 +1098,6 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4221121327733832889, guid: 849d335c7f5fc8849a0b884c05d1d9d6, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4575504994209312939, guid: 849d335c7f5fc8849a0b884c05d1d9d6, type: 3}
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
@@ -1303,6 +1297,11 @@ PrefabInstance:
       addedObject: {fileID: 2774012598759010100}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 849d335c7f5fc8849a0b884c05d1d9d6, type: 3}
+--- !u!1 &512131676566069029 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 779890438492457683, guid: 849d335c7f5fc8849a0b884c05d1d9d6, type: 3}
+  m_PrefabInstance: {fileID: 993553011397826038}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &887391265304495519 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 115240450916438121, guid: 849d335c7f5fc8849a0b884c05d1d9d6, type: 3}
@@ -1328,7 +1327,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2577956161955679644, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.28
+      value: -0.42
       objectReference: {fileID: 0}
     - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1336,7 +1335,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.22
       objectReference: {fileID: 0}
     - target: {fileID: 3350819859963313743, guid: ffd61b0a2109e584a92b30c726654c2d, type: 3}
       propertyPath: m_LocalPosition.z
