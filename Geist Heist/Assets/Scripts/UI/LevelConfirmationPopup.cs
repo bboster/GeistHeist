@@ -51,7 +51,6 @@ public class LevelConfirmationPopup : ConfirmationPopup
     // Called from the animation clip that shows the "Loading..." text
     public void OnLoadingAnimationFinished()
     {
-
         // this loads the scene
         onConfirmationButtonClicked();
 
