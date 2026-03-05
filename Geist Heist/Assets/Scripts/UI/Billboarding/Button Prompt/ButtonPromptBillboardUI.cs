@@ -21,6 +21,8 @@ public class ButtonPromptBillboardUI : IBillboardUI
     [SerializeField, Required] private Image image;
     [ReadOnly] public ButtonType buttonType;
 
+    [HideInInspector] public bool IsPlayerLooking = false;
+
     private ButtonPromptInteractable buttomPrompt;
     private Coroutine popupAnimation;
 
@@ -95,14 +97,13 @@ public class ButtonPromptBillboardUI : IBillboardUI
 
     protected override float CalculateOpacity(float playerDistance, Vector3 UIPosition)
     {
-        if (buttomPrompt.IsParentInteractable() == false)
+        if (buttomPrompt.IsParentInteractable() == false || IsPlayerLooking == false)
             return 0;
 
         return base.CalculateOpacity(playerDistance, UIPosition);
     }
 
 }
-
 
 public enum ButtonType
 {
