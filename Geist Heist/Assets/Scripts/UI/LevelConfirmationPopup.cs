@@ -56,6 +56,7 @@ public class LevelConfirmationPopup : ConfirmationPopup
 
         Debug.Log("Level finished loading");
         loadingAnimationFinished = true;
+        AnyConfirmationMenuOpen = false;
     }
 
     IEnumerator CloseLevelConfirmation()
@@ -74,6 +75,7 @@ public class LevelConfirmationPopup : ConfirmationPopup
 
     protected override void AfterFadeToHidden()
     {
+        AnyConfirmationMenuOpen = false;
         Destroy(parent.gameObject);
     }
 }

@@ -27,13 +27,13 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
     [Foldout("Advanced"), SerializeField] private bool closeMenuOnConfirm = false;
 
-    private static bool anyLevelConfirmScreenOpen = false;
+    //private static bool anyLevelConfirmScreenOpen = false;
     [Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
     [SerializeField] private bool hasConfirmationPopup = true;
 
     public void Action()
     {
-        if(anyLevelConfirmScreenOpen == true)
+        if(ConfirmationPopup.AnyConfirmationMenuOpen == true)
         {
             Debug.Log("can't open new confirm screen, player is already in a confirmation menu");
             return;
@@ -46,7 +46,7 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
             return;
         }
 
-        anyLevelConfirmScreenOpen = true;
+        //anyLevelConfirmScreenOpen = true;
 
         // if i didnt have to spawn this in, that would be cool
         var popupCanvas = Instantiate(confirmationPopupPrefab);
@@ -62,7 +62,7 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
     void OnCancelPressed(GameObject confirmationPopup)
     {
-        anyLevelConfirmScreenOpen = false;
+        //anyLevelConfirmScreenOpen = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Destroy(confirmationPopup);

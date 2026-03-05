@@ -45,8 +45,6 @@ public class ConfirmationPopup : MonoBehaviour
             StaticUtilities.DisableCanvasGroup(canvasGroup);
     }
 
-
-
     /// <summary>
     /// Opens confirmation window, can add custom behaviour to the respective buttons
     /// </summary>
@@ -57,6 +55,8 @@ public class ConfirmationPopup : MonoBehaviour
     {
         if(canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
+
+        AnyConfirmationMenuOpen = true;
 
         lastFadeSecondsUsed = fadeSeconds;
         this.closeMenuOnConfirm = closeMenuOnConfirm;
@@ -106,12 +106,14 @@ public class ConfirmationPopup : MonoBehaviour
     {
         InputEvents.PauseStartedOverride = lastPauseStartedOverride;
 
+        AnyConfirmationMenuOpen = false;
+
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
         if (lastFadeSecondsUsed > 0)
             fadeOpacityCoroutine = StaticUtilities.FadeToHidden(canvasGroup, lastFadeSecondsUsed, 
-                currentCoroutineToCancel: fadeOpacityCoroutine, afterFadeCallback: AfterFadeToHidden);
+                                                currentCoroutineToCancel: fadeOpacityCoroutine, afterFadeCallback: AfterFadeToHidden);
 
         else
         {
