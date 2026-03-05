@@ -21,5 +21,6 @@ public class DialogueTextData
     public float StayLength = 3;
 
     [Header("Audio")]
-    public int audioLine;
+    public int audioLine = -1;
+
 }

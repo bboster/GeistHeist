@@ -15,6 +15,9 @@ public class DialogueBoxTrigger : MonoBehaviour
 {
     [InfoBox("'Text' is deprecated! please copy your text variables to the 'dialogueTest' list", EInfoBoxType.Warning)]
 
+    [SerializeField] private List<DialogueTextData> dialogueText = new();
+
+    #region Deprecated
     [SerializeField] string Text;
     [Tooltip("How long the full text will stay on the screen")]
     [SerializeField] float stayLength;
@@ -24,8 +27,7 @@ public class DialogueBoxTrigger : MonoBehaviour
 
     [Header("Advanced")]
     [SerializeField] private int whichLine;
-
-    [SerializeField] private List<DialogueTextData> dialogueText;
+    #endregion
 
 
     private void Start()
@@ -44,13 +46,11 @@ public class DialogueBoxTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
-
         // if collided with player and not already triggered
         if(other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             alreadyTriggered = true;
-            DialogueUIManager.Instance.DisplayText_Dialogue(Text, stayLength);
+            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText);
 
             voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
 

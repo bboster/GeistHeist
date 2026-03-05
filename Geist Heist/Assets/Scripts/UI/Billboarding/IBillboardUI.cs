@@ -44,7 +44,7 @@ public abstract class IBillboardUI : MonoBehaviour
     [Tooltip("If this element's y position on the screen is within the outer [X] percent of the screen, it will start to become semi-transparent")]
     [SerializeField, Range(0, 0.5f), Foldout("Opacity by screen position"), ShowIf(nameof(fadeInCorners))] private float farYEdgePercentToFade = 0.10f;
 
-    // Smooth opacity by player distance
+    // Smooth baseOpacity by player distance
     [Tooltip("Distance for camera to be when the UI object will be its largest")]
     [SerializeField, Foldout("Opacity by proximity")] private float closeOpacityDistance = 20;
     [Tooltip("The UI Objects max opacity")]
@@ -147,7 +147,7 @@ public abstract class IBillboardUI : MonoBehaviour
         // Min between both axes
         float min_edge_percent = Mathf.Min(x_edge_percent, y_edge_percent);
 
-        // Set opacity
+        // Set baseOpacity
         return Mathf.Min(baseAlpha, min_edge_percent);
        
     }
