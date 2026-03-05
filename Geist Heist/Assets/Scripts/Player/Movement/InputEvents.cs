@@ -65,6 +65,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public Vector2 InputDirection2D => (FadeToBlack.Instance == null) ? Move.ReadValue<Vector2>() : Vector2.zero;
     public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed, PausePressed/*, SpacePressed*/;
 
+    public UnityEvent OnControllerChanged = new();
+
     #region Time Held
     private static float moveTimeStarted = -1f, actionTimeStarted = -1f, interactTimeStarted = -1f; // other inputs can be added but i dont think theyre super necessary.
     private static float actionTimeReleased = -1;
@@ -124,6 +126,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, device);
             _currentDevice = device;
             _canUseControlSwap = false;
+            OnControllerChanged.Invoke();
             StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
         else if ((device is Keyboard || device is Mouse) && _kbmScheme.HasValue && playerInput.currentControlScheme != _kbmScheme.Value.name)
@@ -131,6 +134,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
             _currentDevice = device;
             _canUseControlSwap = false;
+            OnControllerChanged.Invoke();
             StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
     }
@@ -307,6 +311,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
                 playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
                 _currentDevice = Keyboard.current;
                 _canUseControlSwap = false;
+                OnControllerChanged.Invoke();
                 StartCoroutine(PreventControlSwapUntilEndOfFrame());
             }
             return true;
@@ -327,6 +332,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
                 playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
                 _currentDevice = Gamepad.current;
                 _canUseControlSwap = false;
+                OnControllerChanged.Invoke();
                 StartCoroutine(PreventControlSwapUntilEndOfFrame());
             }
             return true;

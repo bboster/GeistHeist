@@ -43,6 +43,7 @@ public class ButtonPromptBillboardUI : IBillboardUI
         buttonType = buttomPrompt.buttonKey;
 
         UpdateButtonPrompt();
+        InputEvents.Instance.OnControllerChanged.AddListener(UpdateButtonPrompt);
     }
 
     public override void Show()
@@ -54,7 +55,7 @@ public class ButtonPromptBillboardUI : IBillboardUI
 
     public void UpdateButtonPrompt()
     {
-        image.sprite = BillboardUIManager.Instance.GetKeyButtonSprite(buttonType, )
+        image.sprite = BillboardUIManager.Instance.GetKeyButtonSprite(buttonType, isController: InputEvents.Instance.IsMoveInputFromGamepad());
     }
 
     /// <summary>
