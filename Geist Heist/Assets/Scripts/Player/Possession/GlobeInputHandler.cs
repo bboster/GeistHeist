@@ -70,6 +70,7 @@ public class GlobeInputHandler : IInputHandler
     {
         if (EndingActive)
         {
+            animator.SetBool("EndingStarted", true);
             currentButtonPresses++;
             endingButtonPresses--;
         }
@@ -136,7 +137,7 @@ public class GlobeInputHandler : IInputHandler
             if (endingButtonPresses <= 0)
             {
                 //animation will be adjusted here later
-                animator.SetBool("EndingStarted", true);
+                animator.SetBool("EndRoll", true);
                 EndingActive = false;
             }
 
