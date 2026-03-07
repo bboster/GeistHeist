@@ -30,6 +30,8 @@ public class ToyCar : IInputHandler
     [SerializeField] private float delayBetweenZooms = 1;
     [Tooltip("How much moving rotates by per second.")]
     [SerializeField] private float rotationRate = 30;
+    [Tooltip("If the magnitude of the linearVelocity is greater than this value then the car is detectable")]
+    [SerializeField] private float detectableThreshold = 1f;
     [BoxGroup("Gamepad Tuning"), Tooltip("Modifies the gamepad's sensitivity while rotating the toy car")]
     [SerializeField] private float rotationSensitivityMod = 0.01f;
 
@@ -156,13 +158,14 @@ public class ToyCar : IInputHandler
         }
     }
 
+    /// <summary>
+    /// Returns true if the player is detectable, false otherwise
+    /// </summary>
+    /// <returns></returns>
     public override bool IsDetectable()
     {
-        //Check detectable velocity thresholds.
-
         //If greater than threshold then return true, else return false
-
-        throw new System.NotImplementedException();
+        return rb.linearVelocity.magnitude > detectableThreshold;
     }
 
     #region action
