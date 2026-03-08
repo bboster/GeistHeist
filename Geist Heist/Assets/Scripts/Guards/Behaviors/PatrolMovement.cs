@@ -22,6 +22,7 @@ public class PatrolMovement : GuardMovement
     {
         base.InitializeBehavior(selfRef);
         currentPatrolPath = contRef.Path;
+        currentPathIndex = contRef.StartIndex;
         MoveToPoint(GetNextPoint());
         thisAgent.isStopped = false;
     }
