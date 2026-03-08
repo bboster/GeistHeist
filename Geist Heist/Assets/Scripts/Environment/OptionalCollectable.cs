@@ -313,4 +313,8 @@ public enum Collectable
 	CollectibleTopHatTemp,
 	CollectibleFedoraTemp,
 	CollectibleNightcapTemp,
+	CollectibleTemplate,
+	CowboyHatVarient,
+	JesterHatVarient,
+	NewsboyHatVarient,
 }
