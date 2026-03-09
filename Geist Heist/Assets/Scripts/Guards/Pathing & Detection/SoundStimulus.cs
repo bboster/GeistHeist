@@ -15,8 +15,19 @@ public class SoundStimulus : Stimulus
 
     [SerializeField] private float soundLifetime;
 
+    [SerializeField] private bool makeSoundWaveVFX = true;
+
     private void Start()
     {
+        // expand the target scale cus it looks cool (and so it lines up with the particle)
+        Vector3 targetScale = transform.localScale;
+
+        if (makeSoundWaveVFX)
+            SoundWaveManager.Instance.CreateSoundWaveAtPosition(transform.position, targetScale.x, soundLifetime, collision: false);
+
+                                                                        // keep it there for just a lil longer
+        StaticUtilities.AnimateScale(transform, Vector3.zero, targetScale, soundLifetime + 0.25f, unscaledTime: false);
+
         StartCoroutine(SoundLength());
     }
 
