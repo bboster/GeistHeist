@@ -8,15 +8,17 @@
 
 using System.Collections;
 using JetBrains.Annotations;
+using NaughtyAttributes;
 using UnityEngine;
 
-public class CanScript : MonoBehaviour
+public class VendingCanController : MonoBehaviour
 {       
+    [SerializeField] private GameObject soundStimulusPrefab;
 
-    [SerializeField] private GameObject soundStimulus;
-
-    [Header("VFX")]
+    [Header("Onomatopoeia")]
     [SerializeField] private string OnomatopoeiaText = "clank!";
+
+    [Header("Sound Wave")]
 
     bool firstTime = true;
 
@@ -36,8 +38,8 @@ public class CanScript : MonoBehaviour
 
         if (firstTime)
         {
-            Instantiate(soundStimulus, transform.position, Quaternion.identity);
-            Debug.Log("Stimulus");
+            var soundWave = Instantiate(soundStimulusPrefab, transform.position, Quaternion.identity);
+            var soundStimulus = soundWave.GetComponent<SoundStimulus>();
             firstTime = false;
             OnCrashOrBounceDetected(collision.contacts[0].point);
         }
