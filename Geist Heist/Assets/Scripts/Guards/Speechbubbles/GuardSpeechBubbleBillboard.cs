@@ -27,16 +27,16 @@ public class GuardSpeechBubbleBillboard : IBillboardUI
     {
         talking = true;
         Textbox.text = Caption;
-        CalculateOpacity(1, Vector3.zero);
+        CalculateOpacity(-1, -1, Vector3.zero);
     }
 
     public void stopTalking()
     {
         talking=false;
-        CalculateOpacity(1, Vector3.zero);
+        CalculateOpacity(-1, -1, Vector3.zero);
     }
 
-    protected override float CalculateOpacity(float playerDistance, Vector3 UIPosition)
+    protected override float CalculateOpacity(float playerDistance, float cameraDistance, Vector3 UIPosition)
     {
         if (talking)
         {

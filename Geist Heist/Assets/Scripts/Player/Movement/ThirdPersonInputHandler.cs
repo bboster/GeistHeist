@@ -20,16 +20,17 @@ using UnityEngine.UI;
 //using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
 using FMODUnity;
 using FMOD.Studio;
+using UnityEngine.Rendering;
 
 public class ThirdPersonInputHandler : IInputHandler
 {
     [Header("Design Variables")]
-    [SerializeField] public float speed = 3;
-    [SerializeField] private float maxVelocity = 10;
+    [SerializeField] public float speed = 8.5f;
+    public float defaultSpeed;
     [Tooltip("Higher number: reaches desired speed faster")]
-    [SerializeField] private float speedPickup = 3;
+    [SerializeField] private float speedPickup = .35f; //changed from flat values to coefficients 
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
-    [SerializeField] private float slowDownFactor = 0.1f;
+    [SerializeField] private float slowDownFactor = 1.5f; //changed from flat values to coefficients 
     //[SerializeField, UnityEngine.Range(0f, 1f)] private float slopeTransitionSmooth = 0.5f;
     //[SerializeField] private float slopeModifier = 1f;
     //[SerializeField] private float stepRayUpperHeight = 0.3f;
@@ -90,6 +91,7 @@ public class ThirdPersonInputHandler : IInputHandler
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
+        defaultSpeed = speed;
         playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PlayerMovement);
         targetRotation = transform.rotation;
         positionLastFrame = transform.position;
@@ -494,13 +496,9 @@ public class ThirdPersonInputHandler : IInputHandler
 
         // Lerp current horizontal velocity towards desired velocity
         Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
-        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, flatDesired, speedPickup * Time.fixedDeltaTime);
-
-        // clamp to max velocity
-        newHorizontal = Vector3.ClampMagnitude(newHorizontal, maxVelocity);
+        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, flatDesired, speed * speedPickup * Time.fixedDeltaTime);
 
         rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
-        rigidbody.linearVelocity = Vector3.ClampMagnitude(rigidbody.linearVelocity, maxVelocity);
 
     }
 
@@ -512,10 +510,13 @@ public class ThirdPersonInputHandler : IInputHandler
 
             rigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
         }
-        
+
         // Maintains y velocity
         //rigidbody.linearVelocity = Vector3.MoveTowards(rigidbody.linearVelocity, new Vector3(0, rigidbody.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
-        // rigidbody.linearVelocity = Vector3.ClampMagnitude(rigidbody.linearVelocity, maxVelocity);
+        Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
+        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, Vector3.zero, Time.fixedDeltaTime * slowDownFactor);
+         
+        rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);         
     }
 
 
@@ -526,7 +527,7 @@ public class ThirdPersonInputHandler : IInputHandler
         animator.SetBool(isMovingParam, false);
         animator.SetBool(isIdleParam, true);
 
-        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        //playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
     #endregion
 

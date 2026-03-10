@@ -8,6 +8,7 @@
  */
 
 using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -64,6 +65,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public Vector2 InputDirection2D => (FadeToBlack.Instance == null) ? Move.ReadValue<Vector2>() : Vector2.zero;
     public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed, PausePressed/*, SpacePressed*/;
 
+    public UnityEvent OnControllerChanged = new();
+
     #region Time Held
     private static float moveTimeStarted = -1f, actionTimeStarted = -1f, interactTimeStarted = -1f; // other inputs can be added but i dont think theyre super necessary.
     private static float actionTimeReleased = -1;
@@ -108,6 +111,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    #region Controllers
     private void OnInputUserChanged(InputUser user, InputUserChange change, InputDevice device)
     {
         if (device == null || _currentDevice == device || !_canUseControlSwap ||
@@ -122,6 +126,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, device);
             _currentDevice = device;
             _canUseControlSwap = false;
+            OnControllerChanged.Invoke();
             StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
         else if ((device is Keyboard || device is Mouse) && _kbmScheme.HasValue && playerInput.currentControlScheme != _kbmScheme.Value.name)
@@ -129,6 +134,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
             _currentDevice = device;
             _canUseControlSwap = false;
+            OnControllerChanged.Invoke();
             StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
     }
@@ -173,6 +179,9 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
                 _kbmScheme = scheme;
         }
     }
+
+
+    #endregion
 
     void InitializeActions()
     {
@@ -275,6 +284,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         if (!WasAnySwitchRelevantDeviceUpdatedThisFrame())
             return;
 
+        OnControllerChanged.Invoke();
+
         string currentScheme = playerInput.currentControlScheme;
         if (TrySwitchToKeyboardMouseScheme(currentScheme))
             return;
@@ -302,6 +313,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
                 playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
                 _currentDevice = Keyboard.current;
                 _canUseControlSwap = false;
+                OnControllerChanged.Invoke();
                 StartCoroutine(PreventControlSwapUntilEndOfFrame());
             }
             return true;
@@ -315,8 +327,9 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         if (!_kbmScheme.HasValue || currentScheme != _kbmScheme.Value.name)
             return false;
 
-        if (Gamepad.current != null && IsGamepadInputActive())
+        if (Gamepad.current != null && IsInputFromGamepad())
         {
+            OnControllerChanged.Invoke();
             if (_gamepadScheme.HasValue)
             {
                 playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
@@ -332,7 +345,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     // Raw gamepad activity detector for scheme switching.
     // This must not rely on action.activeControl while on KBM scheme.
-    private bool IsGamepadInputActive()
+    private bool IsInputFromGamepad()
     {
         var gamepad = Gamepad.current;
         if (gamepad == null)
@@ -357,6 +370,22 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public bool IsMoveInputFromGamepad()
     {
         return Move?.activeControl?.device is Gamepad;
+    }
+
+    // UI scripts should use this to decide which prompts to show.
+    public bool IsGamepadActive()
+    {
+        if (playerInput == null)
+            return false;
+
+        string currentScheme = playerInput.currentControlScheme;
+        if (string.IsNullOrEmpty(currentScheme))
+            return false;
+
+        if (_gamepadScheme.HasValue)    
+            return currentScheme == _gamepadScheme.Value.name;
+
+        return currentScheme.IndexOf("Gamepad", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     private void RemoveAllListeners()
