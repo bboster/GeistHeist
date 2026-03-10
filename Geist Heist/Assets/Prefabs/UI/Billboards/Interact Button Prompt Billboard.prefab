@@ -70,14 +70,20 @@ MonoBehaviour:
   farXEdgePercentToFade: 0.15
   closeYEdgePercentToFade: 0.02
   farYEdgePercentToFade: 0.1
+  opacityByPlayerDistance: 1
   closeOpacityDistance: 20
   closeOpacity: 1
   farOpacityDistance: 22
   farOpacity: 0
+  opacityByCameraDistance: 0
+  closeCameraOpacityDistance: 20
+  closeCameraOpacity: 1
+  farCameraOpacityDistance: 22
+  farCameraOpacity: 0
   IsVisible: 1
   CurrentAlpha: 1
   popupParent: {fileID: 1646017468909634412}
-  interactText: {fileID: 6040268959210351963}
+  image: {fileID: 7856582804307670913}
   buttonType: 0
   popupStartRotation: 15
   popupMidwayRotation: 0
@@ -242,7 +248,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2608370537348110214, guid: 74143f180cc2d064bac6a7cc1df9f477, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74143f180cc2d064bac6a7cc1df9f477, type: 3}
@@ -251,14 +258,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8679075888625020630, guid: 74143f180cc2d064bac6a7cc1df9f477, type: 3}
   m_PrefabInstance: {fileID: 7972938847687585210}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6040268959210351963 stripped
+--- !u!114 &7856582804307670913 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4428948552325628129, guid: 74143f180cc2d064bac6a7cc1df9f477, type: 3}
+  m_CorrespondingSourceObject: {fileID: 265045852901857851, guid: 74143f180cc2d064bac6a7cc1df9f477, type: 3}
   m_PrefabInstance: {fileID: 7972938847687585210}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
