@@ -21,9 +21,6 @@ using UnityEngine;
 [RequireComponent(typeof(Canvas))]
 public class BillboardUIManager : Singleton<BillboardUIManager>
 {
-    [Tooltip("If false, calculates by player position. If true, calculates by camera position.")]
-    [SerializeField] bool CalculateScalingByCameraPosition = false;
-
     [SerializeField, Required] private GameObject onomatopoeiaPrefab;
     [SerializeField, Required] private GameObject onomatopoeiaPointPrefab;
 
@@ -72,9 +69,11 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             var elemTransform = elem.transform;
             var anchor = uiAnchorPair.Item1;
 
-            float playerDistance = CalculateScalingByCameraPosition ? 
-                Vector3.Distance(anchor.position, _camera.transform.position) :
+            float playerDistance = 
                 Vector3.Distance(anchor.position, PlayerManager.Instance.CurrentObject.transform.position);
+
+            float cameraDistance =
+                Vector3.Distance(anchor.position, _camera.transform.position);
 
             // Set Position
             elemTransform.position = anchor.position;
@@ -83,7 +82,8 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             Vector3 screenPos = _camera.WorldToScreenPoint(anchor.position);
             Vector3 uiPos = new Vector3(screenPos.x, /*Screen.height - */screenPos.y, screenPos.z);
 
-            elem.CalculateAndSetOpacity(playerDistance, uiPos);
+            elem.CalculateAndSetOpacity(playerDistance, cameraDistance, uiPos);
+
             //if (elem.CurrentAlpha == 0)
             //    continue; // dont bother with anything else if we dont need to.
 

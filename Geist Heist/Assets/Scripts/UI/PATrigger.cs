@@ -8,7 +8,7 @@
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
-
+//jumpscare
 //This script looks very similar to DialogueBoxTrigger, maybe try to combine these scripts into one?
 public class PATrigger : MonoBehaviour
 {

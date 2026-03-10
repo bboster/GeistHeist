@@ -95,12 +95,12 @@ public class ButtonPromptBillboardUI : IBillboardUI
         while (t < 1);
     }
 
-    protected override float CalculateOpacity(float playerDistance, Vector3 UIPosition)
+    protected override float CalculateOpacity(float playerDistance, float cameraDistance, Vector3 UIPosition)
     {
         if (buttomPrompt.IsParentInteractable() == false || IsPlayerLooking == false)
             return 0;
 
-        return base.CalculateOpacity(playerDistance, UIPosition);
+        return base.CalculateOpacity(playerDistance, cameraDistance, UIPosition);
     }
 
 }
