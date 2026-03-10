@@ -56,15 +56,13 @@ public class PauseMenu : MonoBehaviour
         if (menuBackAction == null)
             return;
 
-        menuBackAction.performed -= OnMenuBackPressed;
+        menuBackAction.started -= OnMenuBackPressed;
         menuBackAction = null;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        TrySubscribeToUICancel();
-
         // disable going to hub if you are at the hub
         if(SceneManager.GetActiveScene().buildIndex == HubScene)
         {
@@ -181,7 +179,7 @@ public class PauseMenu : MonoBehaviour
             return;
 
         menuBackAction = uiInputModule.cancel.action;
-        menuBackAction.performed += OnMenuBackPressed;
+        menuBackAction.started += OnMenuBackPressed;
     }
 
     private bool IsPauseMenuOpen()
