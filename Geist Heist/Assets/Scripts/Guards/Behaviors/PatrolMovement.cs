@@ -23,7 +23,6 @@ public class PatrolMovement : GuardMovement
         base.InitializeBehavior(selfRef);
         currentPatrolPath = contRef.Path;
         currentPathIndex = contRef.StartIndex;
-        MoveToPoint(GetNextPoint());
         thisAgent.isStopped = false;
     }
 
@@ -71,7 +70,7 @@ public class PatrolMovement : GuardMovement
     private Vector3 GetNextPoint()
     {
         Transform destinationTransform = currentPatrolPath.GetPoint(currentPathIndex);
-
+        Debug.Log("Next Point: " + destinationTransform.name);
         IncrementPathIndex();
 
         return destinationTransform.position;
