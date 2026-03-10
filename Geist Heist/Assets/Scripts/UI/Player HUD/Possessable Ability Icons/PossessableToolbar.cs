@@ -119,6 +119,10 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
 
         // Childed to uniqueIconPossessableParent
         currentText = Instantiate(textPrefab, uniqueTextPossessableParent);
+        if(currentText.TryGetComponent(out PossesableText text))
+        {
+            text.Initialize();
+        }
     }
 
     #endregion
