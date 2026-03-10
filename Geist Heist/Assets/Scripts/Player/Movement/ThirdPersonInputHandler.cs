@@ -525,7 +525,7 @@ public class ThirdPersonInputHandler : IInputHandler
         animator.SetBool(isMovingParam, false);
         animator.SetBool(isIdleParam, true);
 
-        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        //playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
     #endregion
 
