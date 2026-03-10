@@ -71,9 +71,5 @@ public class CheckpointAnimation : MonoBehaviour
         }
         //while (checkpointAnimationCoroutine != null);
         while (savingGroup.alpha > 0);
-
-
-
-
     }
 }
