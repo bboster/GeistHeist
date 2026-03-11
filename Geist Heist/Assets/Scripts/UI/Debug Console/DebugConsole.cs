@@ -79,7 +79,7 @@ public class DebugConsole : MonoBehaviour
         if (Command == "help")
         {
             TextArea.text = TextArea.text + "\n" + Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
-                "\nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value>";
+                "\nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value(or \"default\") >";
             return;
         }
 
@@ -162,11 +162,20 @@ public class DebugConsole : MonoBehaviour
         // player speed
         if (Command.Substring(0, 5) == "speed")
         {
+            if (Command.Equals("speed default"))
+            {
+                float defaultSpeed = Player.GetComponent<ThirdPersonInputHandler>().defaultSpeed;
+                TextArea.text = TextArea.text + "\n" + Command + " ~ Speed set to default: " + defaultSpeed;
+                PlayerSpeed(defaultSpeed);
+                return;
+            }
+
             if (Command.Length >= 7)
             {
                 int Temp;
                 if (int.TryParse(Command.Substring(6, Command.Length - 6), out Temp))
                 {
+                    TextArea.text = TextArea.text + "\n" + Command + "~ Speed set to: " + Temp;
                     PlayerSpeed(Temp);
                 }
                 else
@@ -176,7 +185,7 @@ public class DebugConsole : MonoBehaviour
             }
             else
             {
-                TextArea.text = TextArea.text + "\n" + Command + " Please put the speed number after the command";
+                TextArea.text = TextArea.text + "\n" + Command + " Please put the speed number (or \"default\") after the command";
             }
             return;
         }
