@@ -268,13 +268,14 @@ GameObject:
   - component: {fileID: 5405865981023194377}
   - component: {fileID: 5754274587455603194}
   - component: {fileID: 1571597804033577365}
+  - component: {fileID: 6085694180366399570}
   m_Layer: 0
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5405865981023194377
 Transform:
   m_ObjectHideFlags: 0
@@ -301,8 +302,8 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 62.81
-  m_Range: 13.5
+  m_Intensity: 40.96
+  m_Range: 13.9
   m_SpotAngle: 59.398304
   m_InnerSpotAngle: 47.518642
   m_CookieSize: 10
@@ -384,6 +385,21 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &6085694180366399570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428579917205608964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c8bca95f7c947b4db5fb152a0d693d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.cqf.urpvolumetricfog.runtime::VolumetricAdditionalLight
+  anisotropy: 0.04
+  scattering: 1
+  radius: 0.2
 --- !u!1 &735619524292305938
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,7 +456,7 @@ Transform:
   m_GameObject: {fileID: 1218365321054976243}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6181469, y: 0.28461504, z: -0.13}
+  m_LocalPosition: {x: 0.618, y: 1.135, z: 0.698}
   m_LocalScale: {x: 684.8536, y: 616.38275, z: 588.3514}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1363,11 +1379,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisionStimulus
   stimulusType: 0
-  priority: 9
+  priority: 7
   stateToChangeTo: 4
   behaviorIndex: 1
   recoveryBehaviorIndex: 0
-  visionBreakTimer: 0.2
+  visionBreakTimer: 0.5
   raycastLayer:
     serializedVersion: 2
     m_Bits: 256

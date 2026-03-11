@@ -11,12 +11,14 @@ using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using Unity.Cinemachine;
 
 public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 {
     private int previousLevel = -1;
 
     [HideInInspector] public Vector3 SpawnLocation;
+    [HideInInspector] public Vector3 SpawnRotation;
     private readonly HashSet<KeyType> savedKeys = new();
     private readonly HashSet<string> savedDoorIds = new();
     private readonly HashSet<string> activatedCheckpointIds = new();
@@ -31,13 +33,17 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         if (previousLevel == -1 || previousLevel != SceneManager.GetActiveScene().buildIndex)
         {
             SpawnLocation = location;
+            SpawnRotation = PlayerManager.Instance.PlayerGhostObject.transform.rotation.eulerAngles;
             previousLevel = SceneManager.GetActiveScene().buildIndex;
             savedKeys.Clear();
             savedDoorIds.Clear();
             activatedCheckpointIds.Clear();
         }
 
-        PlayerManager.Instance.PlayerGhostObject.gameObject.transform.position = SpawnLocation;
+        PossessableObject player = PlayerManager.Instance.PlayerGhostObject;
+        player.gameObject.transform.position = SpawnLocation;
+        player.gameObject.transform.rotation = Quaternion.Euler(SpawnRotation);
+        player.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>().HorizontalAxis.Value = SpawnRotation.y;
         RestoreKeys();
         RestoreDoors();
         return Task.CompletedTask;
@@ -47,7 +53,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     /// Updates SpawnLocation
     /// </summary>
     /// <param name="location"></param>
-    public bool UpdateCheckpoint(Vector3 location, Checkpoint checkpoint)
+    public bool UpdateCheckpoint(Vector3 location, Vector3 rotation, Checkpoint checkpoint)
     {
         if (checkpoint == null)
             return false;
@@ -61,6 +67,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
             return false;
 
         SpawnLocation = location;
+        SpawnRotation = rotation;
         SaveCurrentKeys();
         SaveCurrentDoors();
         return true;
