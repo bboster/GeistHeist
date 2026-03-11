@@ -11,6 +11,7 @@ using UnityEngine;
 public class Checkpoint : MonoBehaviour
 {
     [SerializeField] private Transform spawnLocation;
+    [SerializeField] private Vector3 spawnRotation;
     [SerializeField] private string checkpointStateIdOverride;
 
     private string cachedCheckpointStateId;
@@ -22,7 +23,7 @@ public class Checkpoint : MonoBehaviour
             if (obj == PlayerManager.Instance.CurrentObject)
             {
                 Vector3 checkpointSpawnLocation = spawnLocation != null ? spawnLocation.position : transform.position;
-                if (!LevelManager.Instance.UpdateCheckpoint(checkpointSpawnLocation, this))
+                if (!LevelManager.Instance.UpdateCheckpoint(checkpointSpawnLocation, spawnRotation, this))
                     return;
 
                 Debug.Log($"Checkpoint: '{gameObject.name}' Reached by {other.gameObject.name}");
