@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3910776610078816839}
   - component: {fileID: 8634760491937285974}
   - component: {fileID: 7173845577523704181}
-  - component: {fileID: 2302942938904953785}
+  - component: {fileID: 1607563157850995908}
   m_Layer: 6
   m_Name: LockedDoor
   m_TagString: Untagged
@@ -128,30 +128,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockedDoorInteractible
   requiredKey: 1
+  checkpointStateIdOverride: 
   hingeCorner: 0
   autoPivotInset: 0
   openAngle: 90
   openSeconds: 0.6
   ShowDebugGizmos: 1
---- !u!114 &2302942938904953785
+--- !u!114 &1607563157850995908
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7022197290474148758}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a3a34f82b6b4aa42b578b5228a5725f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::CustomOutline
+  meshRenderer: {fileID: 3910776610078816839}
+  outlineMaterial: {fileID: 2100000, guid: ab9dbacb766a9f34394f5ba5de885a5b, type: 2}
 --- !u!1 &7724530571739767482
 GameObject:
   m_ObjectHideFlags: 0

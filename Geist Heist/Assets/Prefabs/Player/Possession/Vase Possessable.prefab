@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 1595637412969543280}
   - component: {fileID: 261295155624401962}
   - component: {fileID: 2735227599938183973}
-  - component: {fileID: 4984831599448095111}
+  - component: {fileID: 905103051599467855}
   m_Layer: 6
   m_Name: Vase Possessable
   m_TagString: Untagged
@@ -138,6 +138,11 @@ MonoBehaviour:
   AbilityIconPrefab: {fileID: 4491390581451361740, guid: 133ca29150a67b648aa090ed83b9d80a, type: 3}
   PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -160,25 +165,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VaseObject
   thirdPersoncinemachineCamera: {fileID: 0}
   possessableParticles: {fileID: 5219996038768564688}
---- !u!114 &4984831599448095111
+--- !u!114 &905103051599467855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 726645532892400056}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a3a34f82b6b4aa42b578b5228a5725f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::CustomOutline
+  meshRenderer: {fileID: 5096388826252530929}
+  outlineMaterial: {fileID: 2100000, guid: ab9dbacb766a9f34394f5ba5de885a5b, type: 2}
 --- !u!1 &2593252985575565568
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,6 +577,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 964ab48bd1243b44482a15aba381623d, type: 3}
+--- !u!23 &5096388826252530929 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 964ab48bd1243b44482a15aba381623d, type: 3}
+  m_PrefabInstance: {fileID: 5871452580104620149}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6264839675720150942 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 964ab48bd1243b44482a15aba381623d, type: 3}

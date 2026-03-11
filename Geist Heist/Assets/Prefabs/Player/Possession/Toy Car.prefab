@@ -132,9 +132,9 @@ GameObject:
   - component: {fileID: 1174134053591356350}
   - component: {fileID: 2667771672078999720}
   - component: {fileID: 7862096149762473002}
-  - component: {fileID: 6480417976091650489}
   - component: {fileID: -7755143116239034038}
   - component: {fileID: 2279748789752088073}
+  - component: {fileID: 5021514614557820702}
   m_Layer: 10
   m_Name: Toy Car
   m_TagString: Untagged
@@ -183,6 +183,7 @@ MonoBehaviour:
   chargeLossRate: 105
   delayBetweenZooms: 0.5
   rotationRate: 45
+  detectableThreshold: 1
   rotationSensitivityMod: 0.01
   delayToUpdateChargeMeter: 0.25
   OnomatopoeiaText: Bonk!
@@ -270,6 +271,11 @@ MonoBehaviour:
   AbilityIconPrefab: {fileID: 4491390581451361740, guid: 2c1cc0c85f1aab149862c1a9d7334228, type: 3}
   PossessableTextPrefab: {fileID: 4491390581451361740, guid: 44a053911b752e24ab1558b2e674d348, type: 3}
   HasChargeAbility: 1
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 0
   meshRenderer: {fileID: 0}
@@ -278,25 +284,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
---- !u!114 &6480417976091650489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3402368958818299834}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
 --- !u!114 &-7755143116239034038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +323,20 @@ MonoBehaviour:
   OnJoltDetected:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5021514614557820702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3402368958818299834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a3a34f82b6b4aa42b578b5228a5725f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CustomOutline
+  meshRenderer: {fileID: 7565655402898799861}
+  outlineMaterial: {fileID: 2100000, guid: ab9dbacb766a9f34394f5ba5de885a5b, type: 2}
 --- !u!1 &3969884678775893338
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,6 +955,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e72d33e807bc61419fcbb31b281a376, type: 3}
+--- !u!23 &7565655402898799861 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 0e72d33e807bc61419fcbb31b281a376, type: 3}
+  m_PrefabInstance: {fileID: 9169062900381163633}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8698059868396046234 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0e72d33e807bc61419fcbb31b281a376, type: 3}

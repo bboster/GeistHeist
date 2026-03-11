@@ -427,8 +427,8 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         if(obj == null) return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
-            outline.enabled = true;
+        if (obj.TryGetComponent(out CustomOutline outline))
+            outline.AddMaterial();
 
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
@@ -448,8 +448,8 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         if (obj == null) return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
-            outline.enabled = false;
+        if (obj.TryGetComponent(out CustomOutline outline))
+            outline.RemoveMaterial();
 
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)

@@ -198,9 +198,9 @@ GameObject:
   - component: {fileID: 212927449578817803}
   - component: {fileID: 4242893702993749836}
   - component: {fileID: 8338812846202371703}
-  - component: {fileID: 5015108751406224692}
   - component: {fileID: 6729138879421277377}
   - component: {fileID: 7455586607501772162}
+  - component: {fileID: 5844670858963115654}
   m_Layer: 6
   m_Name: Vending Machine
   m_TagString: Untagged
@@ -313,29 +313,11 @@ MonoBehaviour:
   strengthGrowthRate: 166.67
   chargeLossRate: 170
   delayBetweenThrows: 1
+  detectableTime: 1
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
   trajectoryPredictor: {fileID: 6729138879421277377}
   LineRenderer: {fileID: 1951237483183071489}
---- !u!114 &5015108751406224692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2128761672490447748}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
 --- !u!114 &6729138879421277377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,6 +349,20 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &5844670858963115654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128761672490447748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a3a34f82b6b4aa42b578b5228a5725f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CustomOutline
+  meshRenderer: {fileID: 6769991941734655030}
+  outlineMaterial: {fileID: 2100000, guid: ab9dbacb766a9f34394f5ba5de885a5b, type: 2}
 --- !u!1 &4951548769398627959
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,6 +991,11 @@ MonoBehaviour:
 --- !u!4 &5600502191351013209 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: afa053a4e050b6949971a98facd98cea, type: 3}
+  m_PrefabInstance: {fileID: 5346408741446842546}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6769991941734655030 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: afa053a4e050b6949971a98facd98cea, type: 3}
   m_PrefabInstance: {fileID: 5346408741446842546}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6137967558294055636
