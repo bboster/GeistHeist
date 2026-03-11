@@ -164,6 +164,9 @@ public static class StaticUtilities
             time = unscaledTime ? Time.unscaledTime : Time.time;
             float t = (time - startTime) / seconds;
 
+            if (transform == null)
+                yield break;
+
             transform.localScale = Vector3.Lerp(startScale, endScale, t);
 
             yield return null;
