@@ -102,7 +102,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 639081287358349786
+  lastModified: 639076277672057150
   FileSizes: []
   Exists: 1
 --- !u!114 &-7412741378064867761
@@ -201,7 +201,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Interface.bank
   Name: Interface
   StudioPath: bank:/Interface
-  lastModified: 639081287358369818
+  lastModified: 639087311125294084
   FileSizes: []
   Exists: 1
 --- !u!114 &-6131477351185487881
@@ -367,6 +367,33 @@ MonoBehaviour:
   - Value B
   - Value C
   Exists: 1
+--- !u!114 &-5242055274850843947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Interface/SliderPickup
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Interface/SliderPickup
+  Guid:
+    Data1: -47198836
+    Data2: 1305590239
+    Data3: 1197976713
+    Data4: 424547827
+  Banks:
+  - {fileID: -6557744451024564174}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-4831961300128596700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,7 +452,7 @@ MonoBehaviour:
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
-  MaxDistance: 40
+  MaxDistance: 35
   Length: 325
 --- !u!114 &-3024663798059478732
 MonoBehaviour:
@@ -470,10 +497,10 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639081287358369818
+  lastModified: 639087311125317855
   FileSizes:
   - Name: 
-    Value: 2410
+    Value: 2542
   Exists: 1
 --- !u!114 &-1421575789328086154
 MonoBehaviour:
@@ -490,7 +517,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Prop.bank
   Name: Prop
   StudioPath: bank:/Prop
-  lastModified: 639081287358439956
+  lastModified: 639076277672203979
   FileSizes: []
   Exists: 1
 --- !u!114 &-851908753708785302
@@ -508,7 +535,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 639081287358429979
+  lastModified: 639087311125414021
   FileSizes: []
   Exists: 1
 --- !u!114 &-837954291161079869
@@ -581,7 +608,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Environment.bank
   Name: Environment
   StudioPath: bank:/Environment
-  lastModified: 639051050217832012
+  lastModified: 639005410973970246
   FileSizes: []
   Exists: 1
 --- !u!114 &11400000
@@ -630,6 +657,9 @@ MonoBehaviour:
   - {fileID: 404697676653760807}
   - {fileID: 3713151370907793409}
   - {fileID: -837954291161079869}
+  - {fileID: -5242055274850843947}
+  - {fileID: 2558252208144203838}
+  - {fileID: 2238350688546660189}
   EditorParameters:
   - {fileID: -3024663798059478732}
   - {fileID: -8152960091886087350}
@@ -638,7 +668,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: -2102165464519422386}
   cacheVersion: 131849
-  cacheTime: 639081287358439956
+  cacheTime: 639087311125414021
   SerializableEventsDict:
   - key: event:/BGM/Menu
     index: 0
@@ -797,6 +827,60 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 344
+--- !u!114 &2238350688546660189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Interface/KioskButton
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Interface/KioskButton
+  Guid:
+    Data1: 379892409
+    Data2: 1317748011
+    Data3: -1250729037
+    Data4: -803222796
+  Banks:
+  - {fileID: -6557744451024564174}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &2558252208144203838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Interface/SliderDrop
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Interface/SliderDrop
+  Guid:
+    Data1: 1347960737
+    Data2: 1227224186
+    Data3: -1671189067
+    Data4: 1718524140
+  Banks:
+  - {fileID: -6557744451024564174}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &2766786666545807733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -904,7 +988,7 @@ MonoBehaviour:
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
-  MaxDistance: 40
+  MaxDistance: 35
   Length: 680
 --- !u!114 &3708356882808990189
 MonoBehaviour:
@@ -1003,7 +1087,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639051050217842027
+  lastModified: 639005410974009753
   FileSizes: []
   Exists: 1
 --- !u!114 &6877936467423687297
@@ -1072,6 +1156,6 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Enemy.bank
   Name: Enemy
   StudioPath: bank:/Enemy
-  lastModified: 639081287358369818
+  lastModified: 639087311125255326
   FileSizes: []
   Exists: 1
