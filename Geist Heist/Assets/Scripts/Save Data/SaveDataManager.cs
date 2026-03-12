@@ -154,7 +154,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     /// <summary>
     /// Return true if level is stored in list of saved completed levels
     /// </summary>
-    public bool IsFlavorTextRead(string text)
+    public bool IsFlavorTextRead(List<DialogueTextData> text)
     {
         EnsureSaveData();
         int hash = text.GetHashCode();
@@ -162,7 +162,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         return currentSaveDta.FlavorTextsRead.Contains(hash);
     }
 
-    public void MarkFlavorTextAsRead(string text, bool autoSave = true)
+    public void MarkFlavorTextAsRead(List<DialogueTextData> text, bool autoSave = true)
     {
         EnsureSaveData();
 
