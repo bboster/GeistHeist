@@ -45,7 +45,10 @@ public class LevelConfirmationPopup : ConfirmationPopup
         confirmButton.SetColors(disabledColor: Color.white); // so the player cant tell i just disabled it lolz
         confirmButton.enabled = false;
 
-        SceneManager.sceneLoaded += (_,_) => { StartCoroutine(CloseLevelConfirmation()); };
+        SceneManager.sceneLoaded += (_,_) => { 
+            if(this != null)
+                StartCoroutine(CloseLevelConfirmation()); 
+        };
     }
 
     // Called from the animation clip that shows the "Loading..." text
