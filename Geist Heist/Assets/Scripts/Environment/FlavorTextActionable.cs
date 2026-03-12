@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby
- * Creation Date: 11/18/25
- * Last Modified: 11/18/25
+ * Creation Date: 11/18/2025
+ * Last Modified:  3/ 4/2026
  * 
  * Brief Description: When player interacts with flavor text, display some text, then ollie says something.
  * Flavor Text can only be read once per save file.
@@ -10,13 +10,16 @@
 
 using FMODUnity;
 using NaughtyAttributes;
+using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class FlavorTextActionable : MonoBehaviour, IActionable
 {
-    [InfoBox("Flavor text can only be read once per save file. Reset your save file if you are debugging.")]
-    [SerializeField, ResizableTextArea] private string DisplayText = "";
-    [SerializeField] private float secondsUntilCloseText = 10;
+    [SerializeField] private List<DialogueTextData> flavorText = new();
+
+
+    [InfoBox("'Text' is deprecated! please copy your text variables to the 'dialogueTest' list", EInfoBoxType.Warning)]
 
     [Space(10)]
 
@@ -38,6 +41,11 @@ public class FlavorTextActionable : MonoBehaviour, IActionable
     [SerializeField, HideIf(nameof(AlwaysAppear))] private bool RequireSpecificHat = false;
     [SerializeField, ShowIf(nameof(RequireSpecificHat)), HideIf(nameof(AlwaysAppear))] private Collectable requiredHat;
 
+
+    [InfoBox("Flavor text can only be read once per save file. Reset your save file if you are debugging.")]
+    [SerializeField, ResizableTextArea, Foldout("Deprecated")] private string DisplayText = "";
+    [SerializeField, Foldout("Deprecated")] private float secondsUntilCloseText = 10;
+
     private Outline outline;
     private bool? cached_isActionable; // decide one time if it is actionable and never again (until scene is reloaded)
     void Start()
@@ -45,14 +53,25 @@ public class FlavorTextActionable : MonoBehaviour, IActionable
         outline = GetComponent<Outline>();
         outline.enabled = false;
 
-        if (SaveDataManager.Instance.IsFlavorTextRead(DisplayText))
+        if (flavorText.Count == 0)
+        {
+            Debug.Log($"Please update set the Dialogue text to the list in gameobject: {gameObject.name}");
+
+            var temp = new DialogueTextData();
+            temp.BodyText = DisplayText;
+            temp.StayLength = 8;
+            temp.audioLine = 0;
+            flavorText.Add(temp);
+        }
+
+        if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
             DisableTextActionable();
     }
 
     public void Action()
     {
-        DialogueManager.Instance.DisplayText_Dialogue(DisplayText, secondsUntilCloseText, onDialogueEndCallback: OnFlavorTextEnd);
-        SaveDataManager.Instance.MarkFlavorTextAsRead(DisplayText, autoSave: true);
+        DialogueUIManager.Instance.DisplayText_Dialogue(flavorText, onDialogueEndCallback: OnFlavorTextEnd);
+        SaveDataManager.Instance.MarkFlavorTextAsRead(flavorText, autoSave: true);
         DisableTextActionable();
     }
 
@@ -125,7 +144,7 @@ public class FlavorTextActionable : MonoBehaviour, IActionable
         // only decide actionability first time you look at the object. Like shroedingers cat.
         cached_isActionable = cached_isActionable ?? HasMetConditionsToAppear();
 
-        if (SaveDataManager.Instance.IsFlavorTextRead(DisplayText))
+        if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
             return false;
 
         return cached_isActionable.Value;

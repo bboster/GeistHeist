@@ -63,7 +63,7 @@ public class PossessableTimerBillboardUI : IBillboardUI
 
         //Debug.Log($"{a}*{targetOpacity}*{opacityByTimeRemaining}");
 
-        // This sounds harsh, but CalculateAndSetOpacity smooths the opacity so its okay
+        // This sounds harsh, but CalculateAndSetOpacity smooths the baseOpacity so its okay
         return a * targetOpacity * opacityByTimeRemaining;
     }
 
