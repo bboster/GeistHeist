@@ -178,7 +178,7 @@ public abstract class IBillboardUI : MonoBehaviour
         // Min between both axes
         float min_edge_percent = Mathf.Min(x_edge_percent, y_edge_percent);
 
-        // Set opacity
+        // Set baseOpacity
         return Mathf.Min(baseAlpha, min_edge_percent);
        
     }

@@ -138,13 +138,13 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     {
         //StaticUtilities.EnableCanvasGroup(cooldownGroup, interactable: false);
 
-        StaticUtilities.FadeOpacity(cooldownGroup, 1, seconds: 0.5f);
+        StaticUtilities.FadeToVisible(cooldownGroup, seconds: 0.5f);
     }
     public void HideCooldownTimer()
     {
         //StaticUtilities.DisableCanvasGroup(cooldownGroup);
 
-        StaticUtilities.FadeOpacity(cooldownGroup, 0, seconds: 0.5f);
+        StaticUtilities.FadeToHidden(cooldownGroup, seconds: 0.5f);
     }
     #endregion
 
@@ -157,13 +157,13 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     {
         //StaticUtilities.EnableCanvasGroup(chargeGroup, interactable: false);
 
-        StaticUtilities.FadeOpacity(chargeGroup, 1, seconds: 0.25f);
+        StaticUtilities.FadeToVisible(chargeGroup, seconds: 0.25f);
     }
     public void HideChargeSliderBar()
     {
         //StaticUtilities.DisableCanvasGroup(chargeGroup);
 
-        StaticUtilities.FadeOpacity(chargeGroup, 0, seconds: 0.25f);
+        StaticUtilities.FadeToHidden(chargeGroup, seconds: 0.25f);
     }
     #endregion
 }

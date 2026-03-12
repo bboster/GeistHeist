@@ -7,7 +7,7 @@
  * Put this script on a canvas
  * Billboard ui objects do the following:
  * - stays in/ follows a single world point, 
- * - changes fontScale and opacity based on player proximity
+ * - changes fontScale and baseOpacity based on player proximity
  * - always faces the player
  */
 
@@ -78,7 +78,7 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             // Set Position
             elemTransform.position = anchor.position;
 
-            // Set opacity
+            // Set baseOpacity
             Vector3 screenPos = _camera.WorldToScreenPoint(anchor.position);
             Vector3 uiPos = new Vector3(screenPos.x, /*Screen.height - */screenPos.y, screenPos.z);
 
