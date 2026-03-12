@@ -141,6 +141,13 @@ public class VisionStimulus : Stimulus
             //if Ghost seen enter chase state
             if (other.gameObject == PlayerManager.Instance.PlayerGhostObject.gameObject)
             {
+                if(currentState == GuardStates.visionBreak)
+                {
+                    parentController.ChangeBehavior(GuardStates.surprised);
+                    StopVisionBreakTimer();
+                    return;
+                }
+
                 //Enter chase immediately
                 TriggerStimulus();
                 StopVisionBreakTimer();
