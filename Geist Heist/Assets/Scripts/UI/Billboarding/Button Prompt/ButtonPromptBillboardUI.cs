@@ -12,12 +12,16 @@ using NaughtyAttributes;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ButtonPromptBillboardUI : IBillboardUI
 {
     [SerializeField, Required] private RectTransform popupParent;
-    [SerializeField, Required] private TMP_Text interactText;
+    //[SerializeField, Required] private TMP_Text interactText;
+    [SerializeField, Required] private Image image;
     [ReadOnly] public ButtonType buttonType;
+
+    [HideInInspector] public bool IsPlayerLooking = false;
 
     private ButtonPromptInteractable buttomPrompt;
     private Coroutine popupAnimation;
@@ -41,6 +45,7 @@ public class ButtonPromptBillboardUI : IBillboardUI
         buttonType = buttomPrompt.buttonKey;
 
         UpdateButtonPrompt();
+        InputEvents.Instance.OnControllerChanged.AddListener(UpdateButtonPrompt);
     }
 
     public override void Show()
@@ -48,22 +53,12 @@ public class ButtonPromptBillboardUI : IBillboardUI
         base.Show();
 
         StaticUtilities.StopAndStartCoroutine(ref popupAnimation, PopupAnimation());
+        UpdateButtonPrompt();
     }
 
     public void UpdateButtonPrompt()
     {
-        switch (buttonType)
-        {
-            case (ButtonType.Interact):
-                interactText.text = "E" + buttomPrompt.additionalButtonText;
-                break;
-            case (ButtonType.Action):
-                interactText.text = "Q" + buttomPrompt.additionalButtonText;
-                break;
-            default:
-                interactText.text = "Prompt Error";
-                break;
-        }
+        image.sprite = BillboardUIManager.Instance.GetKeyButtonSprite(buttonType, isController: InputEvents.Instance.IsGamepadActive());
     }
 
     /// <summary>
@@ -102,14 +97,13 @@ public class ButtonPromptBillboardUI : IBillboardUI
 
     protected override float CalculateOpacity(float playerDistance, float cameraDistance, Vector3 UIPosition)
     {
-        if (buttomPrompt.IsParentInteractable() == false)
+        if (buttomPrompt.IsParentInteractable() == false || IsPlayerLooking == false)
             return 0;
 
         return base.CalculateOpacity(playerDistance, cameraDistance, UIPosition);
     }
 
 }
-
 
 public enum ButtonType
 {
