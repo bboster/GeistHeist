@@ -31,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject GuardManagerPrefab;
     [SerializeField, Required] GameObject BillboardUIManagerPrefab;
     [SerializeField, Required] GameObject LevelManagerPrefab;
-    [SerializeField, Required] GameObject DailougeManagerPrefab;
+    //[SerializeField, Required] GameObject DailougeManagerPrefab; // part of PlayerHUD now
     [SerializeField, Required] GameObject AudioManagerPrefab;
     [SerializeField, Required] GameObject MusicManagerPrefab;
     [SerializeField, Required] GameObject KeyManagerPrefab;
@@ -143,7 +143,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(GuardCoroutineManagerPrefab); //Does not require initialization
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
-        Instantiate(DailougeManagerPrefab).GetComponent<DialogueManager>().Initialize();
+        //Instantiate(DailougeManagerPrefab).GetComponent<DialogueUIManager>().Initialize(); // Moved to PlayerHUD
         Instantiate(AudioManagerPrefab).GetComponent<AudioManager>().Initialize();
         Instantiate(MusicManagerPrefab).GetComponent<MusicManager>().Initialize();
         Instantiate(KeyManagerPrefab).GetComponent<KeyManager>().Initialize();
