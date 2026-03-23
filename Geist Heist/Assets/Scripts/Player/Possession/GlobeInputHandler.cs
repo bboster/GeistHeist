@@ -64,6 +64,8 @@ public class GlobeInputHandler : IInputHandler
     {
     }
 
+    public override bool IsDetectable() { return false; }
+
 
     #region action
     public override void OnActionStarted()

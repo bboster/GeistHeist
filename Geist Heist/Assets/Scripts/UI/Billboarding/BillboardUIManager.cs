@@ -7,7 +7,7 @@
  * Put this script on a canvas
  * Billboard ui objects do the following:
  * - stays in/ follows a single world point, 
- * - changes fontScale and opacity based on player proximity
+ * - changes fontScale and baseOpacity based on player proximity
  * - always faces the player
  */
 
@@ -23,6 +23,9 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
 {
     [SerializeField, Required] private GameObject onomatopoeiaPrefab;
     [SerializeField, Required] private GameObject onomatopoeiaPointPrefab;
+
+    [Header("Button Sprites")]
+    [SerializeField] private List<ButtonSprite> buttonSprites;
 
     // NOT a dictionary because there could maybe be multiple ui elements at one anchor point
     //                    World Point, UI object
@@ -75,7 +78,7 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             // Set Position
             elemTransform.position = anchor.position;
 
-            // Set opacity
+            // Set baseOpacity
             Vector3 screenPos = _camera.WorldToScreenPoint(anchor.position);
             Vector3 uiPos = new Vector3(screenPos.x, /*Screen.height - */screenPos.y, screenPos.z);
 
@@ -157,6 +160,39 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
         StartCoroutine(DestroyBillboardAfterSeconds(pair, lifetime));
 
         return point.transform;
+    }
+
+    #endregion
+
+    #region Button Prompts
+
+
+    [System.Serializable]
+    private class ButtonSprite
+    {
+        [ShowAssetPreview(32, 32)] public Sprite sprite;
+        public ButtonType Action;
+        public bool IsControllerSprite;
+        public bool IsDisabledVariant;
+    }
+
+    public Sprite GetKeyButtonSprite(ButtonType buttonType, bool isController, bool isDisabled = false)
+    {
+        var sortedList = buttonSprites.Where(s => s.Action == buttonType &&
+                                                  s.IsControllerSprite == isController &&
+                                                  s.IsDisabledVariant == isDisabled);
+        if(sortedList.Count() <=0)
+        {
+            Debug.LogError($"No button prompt is found with the following properties:\nAction: {buttonType}\tController: {isController}\tDisabled: {isDisabled}");
+            return null;
+        }
+        if (sortedList.Count() >= 2)
+        {
+            Debug.LogError($"Du[licate button prompts found with the following properties:\nAction: {buttonType}\tController: {isController}\tDisabled: {isDisabled}");
+            return null;
+        }
+
+        return sortedList.First().sprite;
     }
 
     #endregion
