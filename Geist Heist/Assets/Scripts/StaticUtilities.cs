@@ -38,15 +38,6 @@ public static class StaticUtilities
             .normalized;
     }
 
-    public static void StopAndStartCoroutine(ref Coroutine coroutineInstance, IEnumerator coroutineToPlay)
-    {
-        // If using this code in other projects, replace GuardCoroutineManager with a different singleton
-        if (coroutineInstance != null)
-            CoroutineRunner.StopCoroutine(coroutineInstance);
-
-        coroutineInstance = CoroutineRunner.StartCoroutine(coroutineToPlay);
-    }
-
     #endregion
 
     #region Components
@@ -222,16 +213,34 @@ public static class StaticUtilities
 
     #endregion
 
+    #region Coroutines
+
+    public static void StopAndStartCoroutine(ref Coroutine coroutineInstance, IEnumerator coroutineToPlay)
+    {
+        if (coroutineInstance != null)
+            CoroutineRunner.StopCoroutine(coroutineInstance);
+
+        coroutineInstance = CoroutineRunner.StartCoroutine(coroutineToPlay);
+    }
+
+    public static void StartCoroutineIfNotPlaying(ref Coroutine coroutineInstance, IEnumerator coroutineToPlay)
+    {
+        if (coroutineInstance == null)
+            coroutineInstance = CoroutineRunner.StartCoroutine(coroutineToPlay);
+    }
+
+    #endregion
+
     #region UI
 
     public static void ToggleCanvasGroup(CanvasGroup canvasgroup, bool enabled, float? alpha = null, bool? ignoreParentGroups = null)
     {
         if (enabled)
-            EnableCanvasGroup(canvasgroup, alpha:alpha, ignoreParentGroups: ignoreParentGroups);
+            EnableCanvasGroup(canvasgroup, alpha: alpha, ignoreParentGroups: ignoreParentGroups);
         else
             DisableCanvasGroup(canvasgroup, ignoreParentGroups: ignoreParentGroups);
     }
-    public static void EnableCanvasGroup(CanvasGroup canvasgroup, float? alpha = null, bool interactable = true, bool blocksRaycasts=true, bool? ignoreParentGroups = null)
+    public static void EnableCanvasGroup(CanvasGroup canvasgroup, float? alpha = null, bool interactable = true, bool blocksRaycasts = true, bool? ignoreParentGroups = null)
     {
         canvasgroup.alpha = alpha ?? 1;
         canvasgroup.interactable = interactable;
@@ -260,14 +269,14 @@ public static class StaticUtilities
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public static Coroutine FadeToVisible(CanvasGroup group, float seconds, bool unscaledTime = true, 
+    public static Coroutine FadeToVisible(CanvasGroup group, float seconds, bool unscaledTime = true,
         UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, a: 1, seconds: seconds, unscaledTime: unscaledTime,
-            afterFadeCallback:afterFadeCallback));
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: group.alpha, target_a: 1, seconds: seconds, unscaledTime: unscaledTime,
+            afterFadeCallback: afterFadeCallback));
     }
 
     public static Coroutine FadeToHidden(CanvasGroup group, float seconds, bool unscaledTime = true,
@@ -276,37 +285,35 @@ public static class StaticUtilities
         if (currentCoroutineToCancel != null)
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: group.alpha, target_a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
-    public static Coroutine FadeOpacity(CanvasGroup group, float a, float seconds, bool unscaledTime = true,
-        UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
+    public static Coroutine FadeOpacity(CanvasGroup group, float start_a, float target_a, float seconds,
+        bool unscaledTime = true, UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, a: a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: start_a, target_a: target_a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
-    private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
+    private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float start_a, float target_a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
     {
-        float startOpacity = group.alpha;
-
         float startTime = unscaledTime ? Time.unscaledTime : Time.time;
         float time = startTime;
-        while(time - startTime < seconds)
+        while (time - startTime < seconds)
         {
             time = unscaledTime ? Time.unscaledTime : Time.time;
             float t = (time - startTime) / seconds;
 
-            group.alpha = Mathf.Lerp(startOpacity, a, t);
+            group.alpha = Mathf.Lerp(start_a, target_a, t);
 
             yield return null;
         }
         // apply one more time just in case.
-        group.alpha = a;
+        group.alpha = target_a;
 
-        if(afterFadeCallback != null)
+        if (afterFadeCallback != null)
             afterFadeCallback();
     }
 
@@ -317,7 +324,7 @@ public static class StaticUtilities
     /// </summary>
     /// <param name="uiComponent"></param>
     public static void SetColors(this Selectable uiComponent,
-        Color? normalColor = null, Color? highlightedColor=null, Color? pressedColor = null, Color? selectedColor=null, Color? disabledColor=null )
+        Color? normalColor = null, Color? highlightedColor = null, Color? pressedColor = null, Color? selectedColor = null, Color? disabledColor = null)
     {
         var colors = uiComponent.colors;
         colors.normalColor = normalColor ?? colors.normalColor;
@@ -357,12 +364,12 @@ public static class StaticUtilities
         transform.LookAway(target.position);
     }
 
-    public static void ScaleOverTime(Transform transform, Vector3 targetScale, float seconds, bool unscaledTime=true)
+    public static void ScaleOverTime(Transform transform, Vector3 targetScale, float seconds, bool unscaledTime = true)
     {
         ScaleOverTime(transform, transform.localScale, targetScale, seconds);
     }
 
-    public static void ScaleOverTime(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime=true)
+    public static void ScaleOverTime(Transform transform, Vector3 startScale, Vector3 targetScale, float seconds, bool unscaledTime = true)
     {
         CoroutineRunner.StartCoroutine(ScaleOverTimeCoroutine(transform, startScale, targetScale, seconds, unscaledTime));
     }
@@ -403,7 +410,7 @@ public static class StaticUtilities
     /// </summary>
     public static float Min(this Vector3 vector)
     {
-        return Mathf.Min(Mathf.Min(vector.x,vector.y),vector.z);
+        return Mathf.Min(Mathf.Min(vector.x, vector.y), vector.z);
     }
 
     /// <summary>
@@ -450,7 +457,7 @@ public static class StaticUtilities
     #endregion
 
     #region Math
-    
+
     /// <summary>
     /// Returns the positive distance between a and b.
     /// </summary>
@@ -595,7 +602,7 @@ public static class StaticUtilities
     public static T[] ListToArray<T>(List<T> list)
     {
         T[] result = new T[list.Count];
-        for(int i=0; i<list.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
             result[i] = list.ElementAt(i);
         }
@@ -629,6 +636,43 @@ public static class StaticUtilities
         foreach (T element in source)
         {
             action(element);
+        }
+    }
+
+    #endregion
+
+    #region Dictionaries
+
+    /// <summary>
+    /// Returns first instance of a key that found.
+    /// If duplicate values exist in the dictionary, an unpredictable key may be returned.
+    /// </summary>
+    public static T1 GetFirstKeyByValue<T1, T2>(this Dictionary<T1, T2> dictionary, T2 value)
+    {
+        return dictionary.Keys
+            .Where(k => dictionary[k].Equals(value))
+            .First();
+    }
+
+    public static void RemoveAllInstancesWithValue<T1, T2>(this Dictionary<T1, T2> dictionary, T2 value)
+    {
+        var keysToRemove = dictionary.Keys.Where(k => dictionary[k].Equals(value)).ToList();
+
+        foreach (var key in keysToRemove)
+        {
+            dictionary.Remove(key);
+        }
+    }
+
+    #endregion
+
+    #region Stacks
+
+    public static void PushMultiple<T>(this Stack<T> stack, IEnumerable<T> values)
+    {
+        foreach (var value in values)
+        {
+            stack.Push(value);
         }
     }
 

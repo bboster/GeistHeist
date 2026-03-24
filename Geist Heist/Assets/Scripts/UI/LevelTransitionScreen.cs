@@ -50,7 +50,7 @@ public class LevelTransitionScreen : MonoBehaviour
     private IEnumerator FadeIn()
     {
         group.alpha = 0;
-        yield return StaticUtilities.FadeOpacity(group, 1, fadeInSeconds);
+        yield return StaticUtilities.FadeOpacity(group, 0, 1, fadeInSeconds);
 
         SceneManager.LoadScene(_sceneToLoad);
     }
@@ -68,7 +68,7 @@ public class LevelTransitionScreen : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(waitingSeconds);
 
-        yield return StaticUtilities.FadeOpacity(group, 0, fadeOutSeconds);
+        yield return StaticUtilities.FadeOpacity(group, 1, 0, fadeOutSeconds);
 
         Destroy(this.gameObject);
     }

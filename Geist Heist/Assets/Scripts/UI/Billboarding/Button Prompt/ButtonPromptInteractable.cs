@@ -100,7 +100,6 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
     {/* do nothing */}
     public bool IsParentInteractable()
     {
-        
         var parent_interactable = transform.parent.GetComponent<IInteractable>();
         var parent_actionable   = transform.parent.GetComponent<IActionable>();
 

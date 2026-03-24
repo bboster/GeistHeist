@@ -7,22 +7,28 @@
  */
 
 using NaughtyAttributes;
+using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField, BoxGroup("Idle Animation")] private float secondsOfInactivityForIdle = 10;
+    [SerializeField, BoxGroup("Idle Animation"), Required] private Button pressAnyButtonButton;
+
     [SerializeField, BoxGroup("Hub Scene"), Scene] private string HubScene;
     [SerializeField, BoxGroup("Hub Scene")] private GameObject HubSceneLoadingCardPrefab;
 
     [SerializeField, BoxGroup("New Game Scene"), Scene] private string NewGameScene; // making it separate because i imagine we will have a tutorial level or a cutscene or something play on a new save.
     [SerializeField, BoxGroup("New Game Scene")] private GameObject NewSceneLoadingCardPrefab;
     [SerializeField, BoxGroup("New Game Scene")] string confirmNewGameText = "Are you sure? Continuing will delete your progress.";
+    [SerializeField, BoxGroup("New Game Scene")] bool confirmationForNewGame = true;
 
     [Header("Settings")]
     [SerializeField, Required] private ConfirmationPopup confirmationPopup;
@@ -46,6 +52,10 @@ public class MainMenu : MonoBehaviour
     // if the player has played before and got past the first level
     private bool playerHasSignificantSaveData;
     private InputAction menuCancelAction;
+    private Animator mainMenuAnimator;
+    private float TimeOfLastAnyButtonPressed = 0;
+    private Coroutine waitToDelayCoroutine;
+    private bool introAnimationFinished = false;
 
     private void OnEnable()
     {
@@ -54,6 +64,9 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+        mainMenuAnimator = GetComponent<Animator>();
+        mainMenuAnimator.SetBool("Active", false);
+
         TrySubscribeToUICancel();
 
         playerHasSignificantSaveData =
@@ -71,18 +84,21 @@ public class MainMenu : MonoBehaviour
         howToPlayPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
 
+        InputSystem.onEvent += OnAnyButtonPressed;
+        pressAnyButtonButton.onClick.AddListener(() => OnAnyButtonPressed(null, null));
+
         // Main Menu
         newGameButton.onClick.AddListener(OnNewGameButtonClicked);
         continueGameButton.onClick.AddListener(OnContinueButtonClicked);
-        creditsButton.onClick.AddListener(OnCreditsButtonClicked);
-        howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
+        if(creditsButton != null) creditsButton.onClick.AddListener(OnCreditsButtonClicked);
+        if(howToPlayButton != null) howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
         quitGameButton.onClick.AddListener(OnQuitButtonClicked);
 
         // Credits
-        closeCreditsButton.onClick.AddListener(OnCreditsBackButtonClicked);
+        if(closeCreditsButton!= null) closeCreditsButton.onClick.AddListener(OnCreditsBackButtonClicked);
 
         // How to Play
-        closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
+        if (closeHowToPlayButton != null) closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
 
         // Confirmation Popup
         confirmationPopup.HideConfirmationPopup();
@@ -144,11 +160,12 @@ public class MainMenu : MonoBehaviour
     #region Buttons OnClicked
 
     #region Main Page
+
     void OnNewGameButtonClicked()
     {
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
-        if (!playerHasSignificantSaveData)
+        if (!playerHasSignificantSaveData || !confirmationForNewGame)
         {
             LoadNewGame();
             return;
@@ -237,6 +254,37 @@ public class MainMenu : MonoBehaviour
 
     #endregion
 
+    #region Animations
+
+    void OnAnyButtonPressed(UnityEngine.InputSystem.LowLevel.InputEventPtr eventPtr, InputDevice device)
+    {
+        // ignore input for a tiny bit
+        if (introAnimationFinished == false) return;
+        // it counts moving your mouse as an input (sob)
+        if (device != null && device.ToString().Contains("Mouse")) return;
+
+        TimeOfLastAnyButtonPressed = Time.unscaledTime;
+
+        StaticUtilities.StartCoroutineIfNotPlaying(ref waitToDelayCoroutine, CheckActiveState());
+    }
+
+
+    IEnumerator CheckActiveState()
+    {
+        while (true)
+        {
+            Debug.Log(Time.unscaledTime - TimeOfLastAnyButtonPressed);
+            bool active = (Time.unscaledTime - TimeOfLastAnyButtonPressed < secondsOfInactivityForIdle);
+            mainMenuAnimator.SetBool("Active", active);
+            yield return null;
+        }
+    }
+
+    public void OnMainMenuIntroFinished() => introAnimationFinished = true;
+
+
+    #endregion
+
     void OnMenuCancel(InputAction.CallbackContext _)
     {
         CanvasGroup popupGroup = confirmationPopup != null ? confirmationPopup.GetComponent<CanvasGroup>() : null;
@@ -261,11 +309,4 @@ public class MainMenu : MonoBehaviour
             return;
         }
     }
-
-
-    #region Level transition
-
-
-
-    #endregion
 }
