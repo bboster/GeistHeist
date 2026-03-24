@@ -52,6 +52,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
         {
             Debug.Log("Parent uninteractable");
             billboardUI.Hide();
+            billboardUI.IsPlayerLooking = false;
             return;
         }
 
@@ -59,6 +60,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
         // This is redundant now but will be important later.
         billboardUI.UpdateButtonPrompt();
         billboardUI.Show();
+        billboardUI.IsPlayerLooking = true;
     }
     void IInteractable.OnPlayerLookStop()
     {
@@ -67,6 +69,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
 
         Debug.Log("stopped looking");
         billboardUI.Hide();
+        billboardUI.IsPlayerLooking = false;
     }
 
     void IActionable.OnPlayerLookStart()
@@ -79,6 +82,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
         {
             Debug.Log("Parent unactionable");
             billboardUI.Hide();
+            billboardUI.IsPlayerLooking = false;
             return;
         }
 
@@ -86,6 +90,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
         // This is redundant now but will be important later.
         billboardUI.UpdateButtonPrompt();
         billboardUI.Show();
+        billboardUI.IsPlayerLooking = true;
     }
 
     void IActionable.OnPlayerLookStop()
@@ -94,6 +99,7 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
             return;
 
         billboardUI.Hide();
+        billboardUI.IsPlayerLooking = false;
     }
 
     public void Action()

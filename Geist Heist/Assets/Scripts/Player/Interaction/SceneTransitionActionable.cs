@@ -27,13 +27,13 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
     [Foldout("Advanced"), SerializeField] private bool closeMenuOnConfirm = false;
 
-    private static bool anyLevelConfirmScreenOpen = false;
+    //private static bool anyLevelConfirmScreenOpen = false;
     [Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
     [SerializeField] private bool hasConfirmationPopup = true;
 
     public void Action()
     {
-        if(anyLevelConfirmScreenOpen == true)
+        if(ConfirmationPopup.AnyConfirmationMenuOpen == true)
         {
             Debug.Log("can't open new confirm screen, player is already in a confirmation menu");
             return;
@@ -46,15 +46,15 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
             return;
         }
 
-        anyLevelConfirmScreenOpen = true;
+        //anyLevelConfirmScreenOpen = true;
 
         // if i didnt have to spawn this in, that would be cool
         var popupCanvas = Instantiate(confirmationPopupPrefab);
 
         ConfirmationPopup popup = popupCanvas.GetComponentInChildren<ConfirmationPopup>();
 
-        popup.OpenConfirmationPopup(text: confirmationText, fadeSeconds: 0.25f, 
-            closeMenuOnConfirm: true, freezeTime: false,
+        popup.OpenConfirmationPopup(text: confirmationText, fadeSeconds: 0.5f, 
+            closeMenuOnConfirm: false, freezeTime: false,
             OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfirmPressed(popupCanvas));
 
         popup.GetComponentInParent<LevelConfirmationVisualizer>()?.Initialize(sceneName);
@@ -62,7 +62,7 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
     void OnCancelPressed(GameObject confirmationPopup)
     {
-        anyLevelConfirmScreenOpen = false;
+        //anyLevelConfirmScreenOpen = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Destroy(confirmationPopup);
@@ -70,15 +70,10 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
 
     void OnConfirmPressed(GameObject confirmationPopup)
     {
-        anyLevelConfirmScreenOpen = false;
-        if (loadingScreenPrefab == null)
-        {
-            Debug.LogError("No transition card set on " + gameObject.name);
-            LevelManager.Instance.ChangeScene(sceneName);
-            return;
-        }
-        var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
-        levelTransition.StartTransition(sceneName, levelLoadingCardPrefab);
+        Debug.Log("Confirm Pressed");
+        SaveDataManager.Instance.MarkSceneAsCompleted(sceneName);
+        LevelManager.Instance.ChangeScene(sceneName);
+        return;
 
     }
 }

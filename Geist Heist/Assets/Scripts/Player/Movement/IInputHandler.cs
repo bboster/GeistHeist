@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Jacob
  * Creation Date: 9/15/25
- * Last Modified: 10/27/25
+ * Last Modified: 3/3/26
  * 
  * Brief Description: interface for anything that can handle player input.
  *  To be placed on any possessible object, and the player ghost.
@@ -53,6 +53,10 @@ public abstract class IInputHandler : MonoBehaviour
     public abstract void WhileSpaceHeld(float secondsHeld);
     public abstract void OnSpaceCanceled(float secondsHeld); */
 
-
+    /// <summary>
+    /// Called while a possessable is in a guard's vision range.
+    /// </summary>
+    /// <returns> Returns true if the object is detectable, false otherwise. </returns>
+    public abstract bool IsDetectable();
 
 }

@@ -32,6 +32,8 @@ public class VaseInputHandler : IInputHandler
         possessableParticles.Stop();
     }
 
+    public override bool IsDetectable() { return false; }
+
     #region action
     public override void OnActionStarted()
     {

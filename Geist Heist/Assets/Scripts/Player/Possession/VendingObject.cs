@@ -3,9 +3,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 /*
-* Contributors: Brenden, Toby
+* Contributors: Brenden, Toby, Jacob
 * Creation Date: 10/1/25
-* Last Modified: 10/29/25
+* Last Modified: 3/3/26
 * 
 * Brief Description: Input Handler for the Vending Machine, handles movement and actions for the Vending Machine
 *
@@ -19,6 +19,7 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField] private GameObject CanPrefab;
 
     private float currentStrength;
+    private bool detectable = false;
 
     //If the balancing dropdown is no longer being used these comments should be deleted to improve readability
     /*[Dropdown("balancing")]*/[SerializeField] private float maxStrength;
@@ -29,6 +30,8 @@ public class VendingObject : IInputHandler, IInteractable
     /*[Dropdown("balancing")]*///[SerializeField] private bool Tap;
     [Tooltip("Force there to be time between can throws")]
     [SerializeField] private float delayBetweenThrows = 1f;
+    [Tooltip("The amount of time in seconds the player is detectable after ejecting a can")]
+    [SerializeField] private float detectableTime = 1f;
     //[SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
 
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
@@ -96,6 +99,7 @@ public class VendingObject : IInputHandler, IInteractable
         GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
         temp.GetComponent<Rigidbody>().AddForce(CanSpawnPoint.transform.forward * currentStrength);
         hasThrownThisPossession = true;
+        StartCoroutine(DetectableTimer());
 
         if (possessableObject.VisiblePossessionMaterial != null)
         {
@@ -166,6 +170,26 @@ public class VendingObject : IInputHandler, IInteractable
     void IInteractable.Interact()
     {
         //PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
+    }
+
+    /// <summary>
+    /// Returns true if the object is detectable, false otherwise
+    /// </summary>
+    /// <returns></returns>
+    public override bool IsDetectable()
+    {
+        return detectable;
+    }
+
+    /// <summary>
+    /// Controls how long the player is detectable after launching a can
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator DetectableTimer()
+    {
+        detectable = true;
+        yield return new WaitForSeconds(detectableTime);
+        detectable = false;
     }
 
     public void OnDrawGizmos()
