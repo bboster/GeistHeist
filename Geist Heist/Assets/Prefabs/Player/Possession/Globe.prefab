@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4736187171289028447}
   m_Layer: 0
-  m_Name: Globe Camera Anchor
+  m_Name: Globe Swing Camera Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,6 +30,38 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4919217130501532946}
+  m_Father: {fileID: 5225363458447540929}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &264200331394186718
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 369430589726311301}
+  m_Layer: 0
+  m_Name: Globe Roll Camera Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &369430589726311301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 264200331394186718}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5190495088446502311}
   m_Father: {fileID: 5225363458447540929}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1876427650027056345
@@ -260,7 +292,7 @@ Animator:
   m_GameObject: {fileID: 2028572975817648515}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ae96bdabf3ed9dc4098834c47e89d28d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 1cbc835c42dfade4e902d2d8dfc8cbbd, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -290,6 +322,7 @@ MonoBehaviour:
   confirmationText: Go Inside Globe?
   confirmationPopupPrefab: {fileID: 5103595946940546535, guid: 5bc7dd9fed6d12a4580e4eb6ceb61a03, type: 3}
   closeMenuOnConfirm: 0
+  hasConfirmationPopup: 1
 --- !u!114 &8871367632489137557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,9 +335,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 049c7e2ee40feb44bb786b790f3c758b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlobePossessable
-  globeCamera: {fileID: 582774347660886353}
+  globeSwingCamera: {fileID: 0}
+  globeRollCamera: {fileID: 0}
   buttonPressText: {fileID: 3528419821515742301}
-  endCutsceneScene: Main Menu
+  endCutsceneScene: OutroCutscene
   endingButtonPresses: 10
   currentButtonPresses: 0
   EndingActive: 0
@@ -336,6 +370,11 @@ MonoBehaviour:
   AbilityIconPrefab: {fileID: 0}
   PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -365,6 +404,145 @@ MonoBehaviour:
   bakeKeys: []
   bakeValues: []
   outlineFillMaterial: {fileID: 0}
+--- !u!1 &3113878750798251020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5190495088446502311}
+  - component: {fileID: 5596558742428566235}
+  - component: {fileID: 3833518646787166633}
+  m_Layer: 0
+  m_Name: Globe Roll Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5190495088446502311
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3113878750798251020}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.14430727, y: -0.54895645, z: 0.11743499, w: 0.81488115}
+  m_LocalPosition: {x: -5.99, y: 8.22, z: -18.74}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 369430589726311301}
+  m_LocalEulerAnglesHint: {x: 21.353, y: -67.551, z: 2.028}
+--- !u!114 &5596558742428566235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3113878750798251020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 1
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 66.55482
+    OrthographicSize: 5
+    NearClipPlane: 0.01
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!114 &3833518646787166633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3113878750798251020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5d7c088409d9a40b7b09aa707777f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineOrbitalFollow
+  TargetOffset: {x: 0, y: 0, z: 0}
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 1, y: 1, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  OrbitStyle: 0
+  Radius: 10
+  Orbits:
+    Top:
+      Radius: 2
+      Height: 5
+    Center:
+      Radius: 4
+      Height: 2.25
+    Bottom:
+      Radius: 2.5
+      Height: 0.1
+    SplineCurvature: 0.5
+  RecenteringTarget: 1
+  HorizontalAxis:
+    Value: 0
+    Center: 0
+    Range: {x: -180, y: 180}
+    Wrap: 1
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  VerticalAxis:
+    Value: 17.5
+    Center: 17.5
+    Range: {x: -10, y: 45}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  RadialAxis:
+    Value: 1
+    Center: 1
+    Range: {x: 1, y: 1}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
 --- !u!1 &3570522730866818126
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,10 +569,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4736187171289028447}
+  - {fileID: 369430589726311301}
   - {fileID: 8862898906648144643}
   - {fileID: 2638019932448210472}
   - {fileID: 2670837819561023166}
@@ -549,7 +728,7 @@ GameObject:
   - component: {fileID: 582774347660886353}
   - component: {fileID: 1775126798904495504}
   m_Layer: 0
-  m_Name: Globe Camera
+  m_Name: Globe Swing Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -563,13 +742,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6837122718734016892}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06566041, y: -0.6715577, z: 0.044854227, w: 0.736673}
-  m_LocalPosition: {x: 33.2, y: 0.66, z: -3.3}
+  m_LocalRotation: {x: 0.076089054, y: -0.41975874, z: 0.023101503, w: 0.9041457}
+  m_LocalPosition: {x: 15.149999, y: 5.789998, z: -28.779999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4736187171289028447}
-  m_LocalEulerAnglesHint: {x: 9.032, y: -84.806, z: -1.282}
+  m_LocalEulerAnglesHint: {x: 9.032, y: -64.206, z: -1.282}
 --- !u!114 &582774347660886353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -904,7 +1083,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1036,6 +1215,7 @@ MonoBehaviour:
   confirmationText: Go Inside Globe?
   confirmationPopupPrefab: {fileID: 5103595946940546535, guid: 5bc7dd9fed6d12a4580e4eb6ceb61a03, type: 3}
   closeMenuOnConfirm: 0
+  hasConfirmationPopup: 1
 --- !u!114 &63192768418683518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1048,9 +1228,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 049c7e2ee40feb44bb786b790f3c758b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlobePossessable
-  globeCamera: {fileID: 582774347660886353}
+  globeSwingCamera: {fileID: 582774347660886353}
+  globeRollCamera: {fileID: 5596558742428566235}
   buttonPressText: {fileID: 3528419821515742301}
-  endCutsceneScene: Main Menu
+  endCutsceneScene: OutroCutscene
   endingButtonPresses: 10
   currentButtonPresses: 0
   EndingActive: 0
@@ -1078,10 +1259,15 @@ MonoBehaviour:
   PossessedMaterial: {fileID: 0}
   UnpossessedMaterial: {fileID: 0}
   VisiblePossessionMaterial: {fileID: 0}
-  VisibleUnPossessedMaterial: {fileID: 0}
+  VisibleUnPossessedMaterial: {fileID: 2100000, guid: 7f215450e14de644d82bf78622e04701, type: 2}
   AbilityIconPrefab: {fileID: 0}
   PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -1090,7 +1276,7 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  debugAlwaysPossessable: 0
+  debugAlwaysPossessable: 1
   interactBillboardUIPoint: {fileID: 116407751311461491}
 --- !u!95 &6441661795119216212
 Animator:
