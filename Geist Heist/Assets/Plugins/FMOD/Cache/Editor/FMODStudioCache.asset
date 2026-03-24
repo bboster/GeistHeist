@@ -102,7 +102,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 639081311437530193
+  lastModified: 639075279887954816
   FileSizes: []
   Exists: 1
 --- !u!114 &-7412741378064867761
@@ -229,7 +229,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Interface.bank
   Name: Interface
   StudioPath: bank:/Interface
-  lastModified: 639099448102754930
+  lastModified: 639087359323821392
   FileSizes: []
   Exists: 1
 --- !u!114 &-6131477351185487881
@@ -313,6 +313,34 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 80571
+--- !u!114 &-5704006384050648882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/OllieLines
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Player/OllieLines
+  Guid:
+    Data1: 538258170
+    Data2: 1144113696
+    Data3: -2119226735
+    Data4: 1478396742
+  Banks:
+  - {fileID: -851908753708785302}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -4831961300128596700}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-5625658959606445834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +449,39 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-4831961300128596700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/OllieLines/Olllie
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: Olllie
+  StudioPath: 
+  Min: 0
+  Max: 8
+  Default: 0
+  ID:
+    data1: 657172610
+    data2: 1914341871
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - Collectable
+  - ForceOut
+  - Globe
+  - SeenByGuard
+  - EscapedGuard
+  - PA
+  - Tether
+  - StartLevel
+  - Plaque
+  Exists: 1
 --- !u!114 &-4083111858960988548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,10 +579,17 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
+<<<<<<< HEAD
   lastModified: 639099482814944547
   FileSizes:
   - Name: 
     Value: 2866
+=======
+  lastModified: 639087359323821392
+  FileSizes:
+  - Name: 
+    Value: 2542
+>>>>>>> parent of bd5d9fa39 (Build Again)
   Exists: 1
 --- !u!114 &-1421575789328086154
 MonoBehaviour:
@@ -538,7 +606,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Prop.bank
   Name: Prop
   StudioPath: bank:/Prop
-  lastModified: 639081311439694258
+  lastModified: 639075279888748117
   FileSizes: []
   Exists: 1
 --- !u!114 &-1231218422897322339
@@ -612,7 +680,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 639099480786202785
+  lastModified: 639087359323868853
   FileSizes: []
   Exists: 1
 --- !u!114 &-837954291161079869
@@ -642,6 +710,34 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 50
   Length: 4425
+--- !u!114 &-537283658057088717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PALines/PA
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: PA
+  StudioPath: 
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 3239578326
+    data2: 570785099
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - ArtHistory
+  - NoTouchy
+  - NowClosed
+  - Welcome
+  Exists: 1
 --- !u!114 &-494341529633423300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,7 +753,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Environment.bank
   Name: Environment
   StudioPath: bank:/Environment
-  lastModified: 639099480785628334
+  lastModified: 639004446359823079
   FileSizes: []
   Exists: 1
 --- !u!114 &11400000
@@ -681,7 +777,6 @@ MonoBehaviour:
   - {fileID: 6415018798854378887}
   - {fileID: -851908753708785302}
   - {fileID: -1421575789328086154}
-  - {fileID: 8260628639308485708}
   EditorEvents:
   - {fileID: -5916744746378562211}
   - {fileID: 2792318057707570515}
@@ -692,6 +787,7 @@ MonoBehaviour:
   - {fileID: 3831020330713862163}
   - {fileID: 56505635555935134}
   - {fileID: 3071262338836036755}
+  - {fileID: 1356156007779197203}
   - {fileID: -6716325176000077977}
   - {fileID: -6131477351185487881}
   - {fileID: -6709140501490564824}
@@ -700,6 +796,7 @@ MonoBehaviour:
   - {fileID: 3708356882808990189}
   - {fileID: 7942693862421799238}
   - {fileID: -8314606071248173043}
+  - {fileID: -5704006384050648882}
   - {fileID: 2766786666545807733}
   - {fileID: -9131598924704776146}
   - {fileID: 404697676653760807}
@@ -720,7 +817,11 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: -2102165464519422386}
   cacheVersion: 131849
+<<<<<<< HEAD
   cacheTime: 639099482815475665
+=======
+  cacheTime: 639087359323868853
+>>>>>>> parent of bd5d9fa39 (Build Again)
   SerializableEventsDict:
   - key: event:/BGM/Menu
     index: 0
@@ -740,38 +841,39 @@ MonoBehaviour:
     index: 7
   - key: event:/Environment/PAJingle
     index: 8
-  - key: event:/Interface/UIHover
+  - key: event:/Environment/PALines
     index: 9
-  - key: event:/Interface/PossessionLow
+  - key: event:/Interface/UIHover
     index: 10
-  - key: event:/Interface/PossessionOut
+  - key: event:/Interface/PossessionLow
     index: 11
-  - key: event:/Interface/PossessionRefill
+  - key: event:/Interface/PossessionOut
     index: 12
-  - key: event:/Interface/UIClick
+  - key: event:/Interface/PossessionRefill
     index: 13
-  - key: event:/Player/PossessionExit
+  - key: event:/Interface/UIClick
     index: 14
-  - key: event:/Player/Movement
+  - key: event:/Player/PossessionExit
     index: 15
-  - key: event:/Player/PossessionEnter
+  - key: event:/Player/Movement
     index: 16
-  - key: event:/Prop/CarBump
+  - key: event:/Player/PossessionEnter
     index: 17
-  - key: event:/Prop/CanBounce
+  - key: event:/Player/OllieLines
     index: 18
-  - key: event:/Prop/CanShot
+  - key: event:/Prop/CarBump
     index: 19
-  - key: event:/Prop/CarWind
+  - key: event:/Prop/CanBounce
     index: 20
-  - key: event:/Prop/CarMove
+  - key: event:/Prop/CanShot
     index: 21
-  - key: event:/Interface/SliderPickup
+  - key: event:/Prop/CarWind
     index: 22
-  - key: event:/Interface/SliderDrop
+  - key: event:/Prop/CarMove
     index: 23
-  - key: event:/Interface/KioskButton
+  - key: event:/Interface/SliderPickup
     index: 24
+<<<<<<< HEAD
   - key: event:/Voicelines/VLLobbyNightOne
     index: 25
   - key: event:/Voicelines/VLTutorial
@@ -780,6 +882,12 @@ MonoBehaviour:
     index: 27
   - key: event:/Voicelines/VLLobbyNightTwo
     index: 28
+=======
+  - key: event:/Interface/SliderDrop
+    index: 25
+  - key: event:/Interface/KioskButton
+    index: 26
+>>>>>>> parent of bd5d9fa39 (Build Again)
 --- !u!114 &56505635555935134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -834,6 +942,34 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 50
   Length: 673
+--- !u!114 &1356156007779197203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Environment/PALines
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Environment/PALines
+  Guid:
+    Data1: -1351146534
+    Data2: 1113117679
+    Data3: 1960600462
+    Data4: -1786462319
+  Banks:
+  - {fileID: -494341529633423300}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -537283658057088717}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &1390902973887171655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1143,7 +1279,11 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
+<<<<<<< HEAD
   lastModified: 639099482814924371
+=======
+  lastModified: 639004446359823079
+>>>>>>> parent of bd5d9fa39 (Build Again)
   FileSizes: []
   Exists: 1
 --- !u!114 &6877936467423687297
@@ -1197,6 +1337,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 50
   Length: 870
+<<<<<<< HEAD
 --- !u!114 &8260628639308485708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1263,6 +1404,8 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+=======
+>>>>>>> parent of bd5d9fa39 (Build Again)
 --- !u!114 &9198907384314641535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1278,6 +1421,6 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Enemy.bank
   Name: Enemy
   StudioPath: bank:/Enemy
-  lastModified: 639099448097247491
+  lastModified: 639087359323810590
   FileSizes: []
   Exists: 1
