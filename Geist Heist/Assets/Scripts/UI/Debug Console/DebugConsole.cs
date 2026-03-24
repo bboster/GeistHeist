@@ -79,7 +79,7 @@ public class DebugConsole : MonoBehaviour
         if (Command == "help")
         {
             TextArea.text = TextArea.text + "\n" + Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
-                "\nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value(or \"default\") >";
+                "\nList Scene: ls \nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value(or \"default\") >";
             return;
         }
 
@@ -108,19 +108,12 @@ public class DebugConsole : MonoBehaviour
         }
 
         // Load Scene
-        if(Command.Substring(0, 2) == "ls")
+        if (Command.Substring(0, 2) == "ls")
         {
-            if(Command.Length >= 4)
-            {
-                LoadNewScene(Command.Substring(3, Command.Length - 3));
-                TextArea.text = TextArea.text + "\n" + "Scene Failed to load, Please input a valid scene";
-            }
-            else
-            {
-                TextArea.text = TextArea.text + "\n" + Command + " Invalid Scene name or index, Please input a valid scene";
-            }
+            listScenes();
             return;
         }
+
 
         // "scene _..."
         if (Command.Substring(0, 5) == "scene")
@@ -222,6 +215,15 @@ public class DebugConsole : MonoBehaviour
         }
     }
 
+    private void listScenes()
+    {
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+            TextArea.text = TextArea.text + "\n" + i + ": " + sceneName;
+        }   
+    }
     private void LoadNewScene(String sceneName)
     {
         int Temp;
