@@ -16,8 +16,10 @@ using UnityEngine.SceneManagement;
 public class GlobeInputHandler : IInputHandler
 {
     [Header ("Required Variables")]
-    [Tooltip("Camera for the ending scene.")]
-    [SerializeField] private CinemachineCamera globeCamera;
+    [Tooltip("Camera for the ending swinging.")]
+    [SerializeField] private CinemachineCamera globeSwingCamera;
+    [Tooltip("Camera for the ending rolling.")]
+    [SerializeField] private CinemachineCamera globeRollCamera;
     //will likely change with later UI assets
     [Tooltip("UI for the button pressing minigame.")]
     [SerializeField] private TMP_Text buttonPressText;
@@ -47,9 +49,9 @@ public class GlobeInputHandler : IInputHandler
 
     public override void OnPossessionStart()
     {
-        if (globeCamera.Priority == 0)
+        if (globeSwingCamera.Priority == 0)
         {
-            globeCamera.Priority++;
+            globeSwingCamera.Priority++;
         }
 
         if (endCoroutine == null)
@@ -141,6 +143,12 @@ public class GlobeInputHandler : IInputHandler
                 //animation will be adjusted here later
                 animator.SetBool("EndRoll", true);
                 EndingActive = false;
+
+                if (globeRollCamera.Priority == 0)
+                {
+                    globeSwingCamera.Priority--;
+                    globeRollCamera.Priority++;
+                }
             }
 
             yield return null;
