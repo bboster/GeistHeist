@@ -95,6 +95,8 @@ public class ToyCar : IInputHandler
         possessableParticle.Stop();
         velocityChangeDetector.StopRecordingVelocity();
 
+        carWindSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
         if (possessableObject.UnpossessedMaterial != null)
         {
             possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
