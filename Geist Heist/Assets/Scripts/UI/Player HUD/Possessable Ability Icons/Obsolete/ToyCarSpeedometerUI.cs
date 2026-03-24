@@ -89,7 +89,7 @@ public class ToyCarSpeedometerUI : PossessableChargeMeterUI
 
     private float GetOpacity(float heldTime)
     {
-        // Change opacity if applicable
+        // Change baseOpacity if applicable
         if (!HideWhenNotHeld)
             return 1;
 

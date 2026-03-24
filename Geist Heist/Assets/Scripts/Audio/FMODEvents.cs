@@ -47,11 +47,4 @@ public class FMODEvents : Singleton<FMODEvents>
     [field: Header("Prop SFX")]
     [field: SerializeField] public EventReference DoorOpen { get; private set; }
     [field: SerializeField] public EventReference DoorLocked { get; private set; }
-
-
-    /* Replace the static 'instance' below with 'instant". The generic `Singleton<T>` base already exposes a static `Instance` property.
-     * You will need to replace usages across the codebase to use `FMODEvents.Instance` (could easily be done with find and replace)
-     *
-     * - Josh
-     */
 }
