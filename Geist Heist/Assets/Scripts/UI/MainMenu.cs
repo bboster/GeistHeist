@@ -39,7 +39,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private Button continueGameButton;
     [SerializeField, Required] private Button settingsButton;
     [SerializeField, Required] private Button creditsButton;
-    [SerializeField, Required] private Button howToPlayButton;
+    [SerializeField] private Button howToPlayButton;
     [SerializeField, Required] private Button quitGameButton;
 
     [Header("Credits Page")]
