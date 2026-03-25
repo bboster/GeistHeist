@@ -116,7 +116,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             GuardController GC = other.transform.GetComponentInParent<GuardController>();
 
             //if it is a guard in chase state + possessed
-            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject != playerManager.PlayerGhostObject)
+            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject.gameObject == this.gameObject)
             {
                 possessionIsSafe = false;
                 if (VisiblePossessionMaterial != null)
@@ -146,7 +146,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             GuardController GC = other.transform.GetComponentInParent<GuardController>();
 
             //if it is a guard in chase state + possessed
-            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject != playerManager.PlayerGhostObject)
+            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject.gameObject == this.gameObject)
             {
                 if (VisiblePossessionMaterial != null)
                 {
@@ -171,7 +171,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (other.transform.GetComponent<VisionStimulus>() != null)
         {
             //if player is still inside
-            if (playerManager.CurrentObject != playerManager.PlayerGhostObject)
+            if (playerManager.CurrentObject.gameObject == this.gameObject)
             {
                 possessionIsSafe = true;
                 if (PossessedMaterial != null)
@@ -212,7 +212,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
         if (UnpossessedMaterial != null)
-            meshRenderer.material = UnpossessedMaterial;
+            this.meshRenderer.material = UnpossessedMaterial;
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
@@ -303,7 +303,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         InputHandler.OnPossessionStart();
 
         if(PossessedMaterial != null && possessionIsSafe)
-            meshRenderer.material = PossessedMaterial;
+            this.meshRenderer.material = PossessedMaterial;
         else
             Debug.LogWarning("No possession material for " + gameObject.name);
 
@@ -355,7 +355,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         }
 
         if (UnpossessedMaterial != null && possessionIsSafe)
-            meshRenderer.material = UnpossessedMaterial;
+            this.meshRenderer.material = UnpossessedMaterial;
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
