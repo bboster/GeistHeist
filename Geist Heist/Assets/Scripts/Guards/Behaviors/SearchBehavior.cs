@@ -58,6 +58,8 @@ public class SearchBehavior : GuardMovement
     /// <returns></returns>
     private void StartSearch()
     {
+        MoveToPoint(selfRef.transform.position);
+        thisAgent.isStopped = true;
         GuardCoroutineManager.Instance.StartBehaviorTimer(searchLength, this);
         contRef.GetAnimator().SetTrigger("LookingAround");
 
