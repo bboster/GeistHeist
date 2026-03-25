@@ -37,6 +37,7 @@ public class MainMenu : MonoBehaviour
     [Header("Main Page")]
     [SerializeField, Required] private Button newGameButton;
     [SerializeField, Required] private Button continueGameButton;
+    [SerializeField, Required] private Button settingsButton;
     [SerializeField, Required] private Button creditsButton;
     [SerializeField, Required] private Button howToPlayButton;
     [SerializeField, Required] private Button quitGameButton;
@@ -48,6 +49,11 @@ public class MainMenu : MonoBehaviour
     [Header("How to Play Page")]
     [SerializeField, Required] private CanvasGroup howToPlayPage;
     [SerializeField, Required] private Button closeHowToPlayButton;
+
+    [Header("Settings Page")]
+    [SerializeField, Required] private CanvasGroup settingsPage;
+    [SerializeField, Required] private Button closeSettingsButton;
+    private bool settingsOpen = false;
 
     // if the player has played before and got past the first level
     private bool playerHasSignificantSaveData;
@@ -83,6 +89,9 @@ public class MainMenu : MonoBehaviour
         StaticUtilities.DisableCanvasGroup(creditsPage);
         howToPlayPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
+        settingsPage.gameObject.SetActive(true);
+        StaticUtilities.DisableCanvasGroup(settingsPage);
+        settingsOpen = false;
 
         InputSystem.onEvent += OnAnyButtonPressed;
         pressAnyButtonButton.onClick.AddListener(() => OnAnyButtonPressed(null, null));
@@ -90,6 +99,7 @@ public class MainMenu : MonoBehaviour
         // Main Menu
         newGameButton.onClick.AddListener(OnNewGameButtonClicked);
         continueGameButton.onClick.AddListener(OnContinueButtonClicked);
+        settingsButton.onClick.AddListener(OnSettingsButtonClicked);
         if(creditsButton != null) creditsButton.onClick.AddListener(OnCreditsButtonClicked);
         if(howToPlayButton != null) howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
         quitGameButton.onClick.AddListener(OnQuitButtonClicked);
@@ -99,6 +109,9 @@ public class MainMenu : MonoBehaviour
 
         // How to Play
         if (closeHowToPlayButton != null) closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
+
+        // settings
+        closeSettingsButton.onClick.AddListener(OnSettingsBackButtonClicked);
 
         // Confirmation Popup
         confirmationPopup.HideConfirmationPopup();
@@ -186,6 +199,14 @@ public class MainMenu : MonoBehaviour
         LoadScene(HubScene, NewSceneLoadingCardPrefab);
     }
 
+    void OnSettingsButtonClicked()
+    {
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
+        settingsOpen = true;
+
+        StaticUtilities.EnableCanvasGroup(settingsPage);
+    }
+
     void OnCreditsButtonClicked()
     {
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
@@ -240,7 +261,20 @@ public class MainMenu : MonoBehaviour
 
     #endregion
 
-    #region Credits
+    #region Settings
+
+    void OnSettingsBackButtonClicked()
+    {
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
+
+        StaticUtilities.DisableCanvasGroup(settingsPage);
+        EventSystem.current.SetSelectedGameObject(settingsButton.gameObject);
+        settingsOpen = false;
+    }
+
+    #endregion
+
+    #region How To Play
 
     void OnCloseHowToPlayButtonClicked()
     {
@@ -273,7 +307,10 @@ public class MainMenu : MonoBehaviour
     {
         while (true)
         {
-            Debug.Log(Time.unscaledTime - TimeOfLastAnyButtonPressed);
+            if (settingsOpen)
+                TimeOfLastAnyButtonPressed = Time.unscaledTime;
+
+            //Debug.Log(Time.unscaledTime - TimeOfLastAnyButtonPressed);
             bool active = (Time.unscaledTime - TimeOfLastAnyButtonPressed < secondsOfInactivityForIdle);
             mainMenuAnimator.SetBool("Active", active);
             yield return null;

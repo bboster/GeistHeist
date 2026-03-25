@@ -316,6 +316,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -694,6 +695,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -838,9 +840,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -200, y: 0}
-  m_SizeDelta: {x: 300, y: 0}
-  m_Pivot: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -50, y: 0}
+  m_SizeDelta: {x: 200, y: 0}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &6023118548342350359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -854,10 +856,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 7161662007570141854}
+    m_SelectOnDown: {fileID: 1373192192471389061}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -995,6 +997,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1293,10 +1296,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 5382131556430665904}
+    m_SelectOnDown: {fileID: 6023118548342350359}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -1518,6 +1521,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1654,6 +1658,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1780,7 +1785,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6698373679281392084}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1851,9 +1856,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -200, y: 0}
-  m_SizeDelta: {x: 300, y: 0}
-  m_Pivot: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -50, y: 0}
+  m_SizeDelta: {x: 200, y: 0}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &5382131556430665904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1867,10 +1872,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 7161662007570141854}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -2044,6 +2049,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2204,7 +2210,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 40, y: 5}
-  m_SizeDelta: {x: 600, y: -190}
+  m_SizeDelta: {x: 500, y: -190}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &2587490619475279249
 CanvasRenderer:
@@ -2576,6 +2582,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 6023118548342350359}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 4199497149372881818}
+    - target: {fileID: 6123900795786566953, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Name
+      value: Master Volume Slider
+      objectReference: {fileID: 0}
     - target: {fileID: 6962245861720141619, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
       propertyPath: m_Name
       value: Master Volume Group (2)
@@ -2712,6 +2734,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 4199497149372881818}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 3469165413777443627}
+    - target: {fileID: 6123900795786566953, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Name
+      value: SFX Volume Slider
+      objectReference: {fileID: 0}
     - target: {fileID: 6962245861720141619, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
       propertyPath: m_Name
       value: 'SFX Volume Area '
@@ -2843,6 +2881,22 @@ PrefabInstance:
     - target: {fileID: 3229830034472242970, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 1373192192471389061}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 3374849414792509024}
+    - target: {fileID: 6123900795786566953, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Name
+      value: Music Volume Slider
       objectReference: {fileID: 0}
     - target: {fileID: 6962245861720141619, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
       propertyPath: m_Name
@@ -2979,6 +3033,22 @@ PrefabInstance:
     - target: {fileID: 3229830034472242970, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 3374849414792509024}
+    - target: {fileID: 5228157078324990915, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 6039860146916787742}
+    - target: {fileID: 6123900795786566953, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
+      propertyPath: m_Name
+      value: Vocals Volume Slider
       objectReference: {fileID: 0}
     - target: {fileID: 6962245861720141619, guid: 10b189b5e64a3b4449e60305db75df64, type: 3}
       propertyPath: m_Name
