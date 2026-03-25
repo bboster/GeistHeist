@@ -21,7 +21,7 @@ public class FMODEvents : Singleton<FMODEvents>
 
     [field: Header("Environment SFX")]
     [field: SerializeField] public EventReference PAJingle { get; private set; }
-    [field: SerializeField] public EventReference PALines { get; private set; }
+    [field: SerializeField] public EventReference PALines { get; private set; } //temp
 
     [field: Header("Interface SFX")]
     [field: SerializeField] public EventReference PossessionLow { get; private set; }
@@ -34,17 +34,21 @@ public class FMODEvents : Singleton<FMODEvents>
     [field: SerializeField] public EventReference PossessionEnter { get; private set; }
     [field: SerializeField] public EventReference PossessionExit { get; private set; }
     [field: SerializeField] public EventReference PlayerMovement { get; private set; }
-    [field: SerializeField] public EventReference OllieLines { get; private set; }
+    [field: SerializeField] public EventReference OllieLines { get; private set; } //temp
 
     [field: Header("Prop SFX")]
     [field: SerializeField] public EventReference CanBounce { get; private set; }
-    [field: SerializeField] public EventReference CanCharge { get; private set; }
+    //[field: SerializeField] public EventReference CanCharge { get; private set; }
     [field: SerializeField] public EventReference CanShot { get; private set; }
     [field: SerializeField] public EventReference CarWind { get; private set; }
     [field: SerializeField] public EventReference CarGo { get; private set; }
     [field: SerializeField] public EventReference CarBump { get; private set; }
-
-    [field: Header("Prop SFX")]
     [field: SerializeField] public EventReference DoorOpen { get; private set; }
     [field: SerializeField] public EventReference DoorLocked { get; private set; }
+
+    [field: Header("Voicelines")]
+    [field: SerializeField] public EventReference VLTutorial { get; private set; }
+    [field: SerializeField] public EventReference VLLobbyNightOne { get; private set; }
+    [field: SerializeField] public EventReference VLParlor { get; private set; }
+    [field: SerializeField] public EventReference VLLobbyNightTwo { get; private set; }
 }
