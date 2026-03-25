@@ -36,10 +36,11 @@ public class GuardController : MonoBehaviour
     [Required, BoxGroup("Design Values")] public Transform ReturnLocation;
     [Tooltip("The rotation the guard should face by default, match this to its placement in the level")]
     [BoxGroup("Design Values")] public float DefaultRotation;
+    [Tooltip("The index of the point the guard should start at.")]
+    [BoxGroup("Design Values")] public int StartIndex = 0;
 
     [Tooltip("Default behavior for the enemy"), Expandable]
     [Required, BoxGroup("Behaviors")] public Behavior DefaultBehavior;
-
     [Expandable]
     [SerializeField, BoxGroup("Behaviors")] public Behavior currentBehavior;
 

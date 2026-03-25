@@ -20,5 +20,7 @@ public class PlayerHUDManager : Singleton<PlayerHUDManager>
     {
         keyUI.Initialize();
         possessableToolbar.Initialize();
+
+        GetComponent<DialogueUIManager>().Initialize(); 
     }
 }
