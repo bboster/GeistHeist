@@ -121,7 +121,7 @@ public class DebugConsole : MonoBehaviour
             return;
         }
 
-        // Load Scene
+        // List Scene
         if (Command.StartsWith("ls"))
         {
             listScenes();
@@ -231,7 +231,8 @@ public class DebugConsole : MonoBehaviour
 
     private void listScenes()
     {
-        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+        AppendConsoleLine("ls");
+        for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
             string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
