@@ -72,16 +72,4 @@ public class LevelTransitionScreen : MonoBehaviour
 
         Destroy(this.gameObject);
     }
-
-#if UNITY_EDITOR
-    private void Update()
-    {
-        if (Input.anyKeyDown)
-        {
-            //StopAllCoroutines();
-            //SceneManager.LoadScene(_sceneToLoad);
-            //Destroy(this.gameObject);
-        }
-    }
-#endif
 }
