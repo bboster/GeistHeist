@@ -53,6 +53,7 @@ public class CollectableRegistry : ScriptableObject
         if ((int)collectable <= 0) return null;
 
         var entry = entries.Find(e => e.collectable == collectable);
+        if(entry == null) return null;
         return entry.meshPrefab.GetComponent<MeshFilter>().sharedMesh;
     }
 
