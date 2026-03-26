@@ -22,10 +22,10 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
     private GameObject levelLoadingCardPrefab;
 
     [Header("Popup text")]
-    [SerializeField] private string confirmationText = "Go to _____?";
-    [SerializeField, Required] private GameObject confirmationPopupPrefab;
+    [SerializeField, ShowIf("hasConfirmationPopup")] private string confirmationText = "Go to _____?";
+    [SerializeField, ShowIf("hasConfirmationPopup")] private GameObject confirmationPopupPrefab;
 
-    [Foldout("Advanced"), SerializeField] private bool closeMenuOnConfirm = false;
+    [Foldout("Advanced"), SerializeField, ShowIf("hasConfirmationPopup")] private bool closeMenuOnConfirm = false;
 
     //private static bool anyLevelConfirmScreenOpen = false;
     [Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
