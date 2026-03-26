@@ -43,6 +43,8 @@ public class FreeCamMode : IInputHandler
     {
     }
 
+    public override bool IsDetectable() { return false; }
+
     #region Action
     public override void OnActionStarted()
     {

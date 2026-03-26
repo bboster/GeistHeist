@@ -298,6 +298,8 @@ public class ThirdPersonInputHandler : IInputHandler
     {
     }
 
+    public override bool IsDetectable() { return false; }
+
     #endregion
 
     #region Interact
