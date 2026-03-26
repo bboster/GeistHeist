@@ -33,6 +33,7 @@ public class VisionBreakSearchBehavior : GuardMovement
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;
+        contRef.GetAnimator().SetBool("isSearching", true);
     }
 
     /// <summary>
@@ -66,9 +67,11 @@ public class VisionBreakSearchBehavior : GuardMovement
         GuardCoroutineManager.Instance.StartBehaviorTimer(searchLength, this);
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
 
-/*#if UNITY_EDITOR
-        selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
-#endif*/
+        contRef.GetAnimator().SetBool("isStandingSearching", true);
+
+        /*#if UNITY_EDITOR
+                selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
+        #endif*/
     }
 
     /// <summary>
@@ -81,5 +84,7 @@ public class VisionBreakSearchBehavior : GuardMovement
         behaviorComplete = true;
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
         SearchLocation = Vector3.zero;
+        contRef.GetAnimator().SetBool("isStandingSearching", false);
+        contRef.GetAnimator().SetBool("isSearching", false);
     }
 }

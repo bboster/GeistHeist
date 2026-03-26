@@ -21,6 +21,18 @@ public class SurprisedBehavior : Behavior
 
     private EventInstance guardGasp;
 
+    public override void InitializeBehavior(GameObject selfRef)
+    {
+        base.InitializeBehavior(selfRef);
+        contRef.GetAnimator().SetBool("isShocked", true);
+    }
+
+    public override void StopBehavior()
+    {
+        base.StopBehavior();
+        contRef.GetAnimator().SetBool("isShocked", false);
+    }
+
     private void Start()
     {
         guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);

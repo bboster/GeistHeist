@@ -28,8 +28,9 @@ public class SearchBehavior : GuardMovement
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;
+        contRef.GetAnimator().SetBool("isSearching", true);
     }
-    
+
     /// <summary>
     /// Controls the overall logic for the behavior.
     /// </summary>
@@ -58,6 +59,7 @@ public class SearchBehavior : GuardMovement
     /// <returns></returns>
     private void StartSearch()
     {
+        contRef.GetAnimator().SetBool("isStandingSearching", true);
         MoveToPoint(selfRef.transform.position);
         thisAgent.isStopped = true;
         GuardCoroutineManager.Instance.StartBehaviorTimer(searchLength, this);
@@ -80,5 +82,7 @@ public class SearchBehavior : GuardMovement
         behaviorComplete = true;
         contRef.GetAnimator().SetTrigger("LookingAround");
         SearchLocation = Vector3.zero;
+        contRef.GetAnimator().SetBool("isStandingSearching", false);
+        contRef.GetAnimator().SetBool("isSearching", false);
     }
 }
