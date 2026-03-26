@@ -47,6 +47,7 @@ public class PauseMenu : MonoBehaviour
 
     private static float timeOfLastPause;
     private InputAction menuBackAction;
+    private Color defaultNormalTabTextColor;
 
     private void OnEnable()
     {
@@ -65,8 +66,10 @@ public class PauseMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        defaultNormalTabTextColor = settingsTab.toggleButton.colors.normalColor;
+
         // disable going to hub if you are at the hub
-        if(SceneManager.GetActiveScene().buildIndex == HubScene)
+        if (SceneManager.GetActiveScene().buildIndex == HubScene)
         {
             quitToHubButton.interactable = false;
         }
@@ -220,7 +223,7 @@ public class PauseMenu : MonoBehaviour
 
         DisableAllWavyTexts();
         generalTab.wavyTextAnimation.PlayAnimation = true;
-        generalTab.wavyTextAnimation.textBox.characterSpacing = wavyTextLetterSpacing;
+        generalTab.toggleButton.SetColors(normalColor:  Color.white);   
     }
 
     void OnOpenControlsButtonSelected()
@@ -229,7 +232,7 @@ public class PauseMenu : MonoBehaviour
 
         DisableAllWavyTexts();
         controlsTab.wavyTextAnimation.PlayAnimation = true;
-        controlsTab.wavyTextAnimation.textBox.characterSpacing = wavyTextLetterSpacing;
+        controlsTab.toggleButton.SetColors(normalColor: Color.white);
     }
 
     void OnOpenSettingsButtonSelected()
@@ -238,17 +241,22 @@ public class PauseMenu : MonoBehaviour
 
         DisableAllWavyTexts();
         settingsTab.wavyTextAnimation.PlayAnimation = true;
-        settingsTab.wavyTextAnimation.textBox.characterSpacing = wavyTextLetterSpacing;
+        settingsTab.toggleButton.SetColors(normalColor: Color.white);
     }
 
     void DisableAllWavyTexts()
     {
         generalTab.wavyTextAnimation.PlayAnimation = false;
-        generalTab.wavyTextAnimation.textBox.characterSpacing = 0;
+        generalTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //generalTab.wavyTextAnimation.textBox.characterSpacing = 0;
+
         controlsTab.wavyTextAnimation.PlayAnimation = false;
-        controlsTab.wavyTextAnimation.textBox.characterSpacing = 0;
+        controlsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //controlsTab.wavyTextAnimation.textBox.characterSpacing = 0;
+
         settingsTab.wavyTextAnimation.PlayAnimation = false;
-        settingsTab.wavyTextAnimation.textBox.characterSpacing = 0;
+        settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //settingsTab.wavyTextAnimation.textBox.characterSpacing = 0;
     }
 
     #endregion

@@ -13,12 +13,23 @@ using UnityEngine.SceneManagement;
 
 public class GeneralTab : PauseMenuTab
 {
+    [Header("Collectables Text")]
+    [SerializeField, Required] private TMP_Text tethersCollectedText;
+    [SerializeField] private string defaultTethersCollectedText = "[COLLECTED]/1 Tethers";
+
+[Header("Collectables Text")]
     [SerializeField, Required] private TMP_Text collectablesCollectedText;
-    [SerializeField] private string defaultCollectedText = "Collectables:";
+    [SerializeField] private string defaultHatsCollectedText = "[COLLECTED]/[COUNT] Hats";
+
+    [Header("Current Level Text")]
     [SerializeField, Required] private TMP_Text stageNameText;
     [SerializeField] private string defaultStageNameText = "Current Wing: [SCENE_NAME]";
 
     private OptionalCollectable[] allCollectables;
+    private TetherPossessable[] allTethers;
+
+    private int numTethersCollected => allTethers.Where(c => c.IsCollected).Count();
+
     private int numCollectablesCollected => allCollectables.Where(c => c.IsCollected).Count();
 
     /// <summary>
@@ -26,12 +37,26 @@ public class GeneralTab : PauseMenuTab
     /// </summary>
     public override void RefreshUI()
     {
-        if (allCollectables == null)
-            allCollectables = Object.FindObjectsByType<OptionalCollectable>(FindObjectsSortMode.None);
+        if (allCollectables == null) allCollectables = Object.FindObjectsByType<OptionalCollectable>(FindObjectsSortMode.None);
+        if(allTethers == null) allTethers = Object.FindObjectsByType<TetherPossessable>(FindObjectsSortMode.None);
+
+        // Count of tethers
+        if (allTethers.Count() != 0)
+        {
+            tethersCollectedText.text = defaultTethersCollectedText
+                                        .Replace("[COLLECTED]", numTethersCollected.ToString())
+                                        .Replace("[COUNT]", allTethers.Count().ToString());
+        }
+        else
+            tethersCollectedText.gameObject.SetActive(false);
 
         // Count of collectables
         if (allCollectables.Count() != 0)
-            collectablesCollectedText.text = $"{defaultCollectedText} {numCollectablesCollected} / {allCollectables.Count()}";
+        {
+            collectablesCollectedText.text = defaultHatsCollectedText
+                                            .Replace("[COLLECTED]", numCollectablesCollected.ToString())
+                                            .Replace("[COUNT]", allCollectables.Count().ToString());
+        }
         else
             collectablesCollectedText.gameObject.SetActive(false);
 
