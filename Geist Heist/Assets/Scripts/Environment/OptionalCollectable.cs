@@ -314,11 +314,15 @@ public enum Collectable
 	
 	
 	
-	CollectibleNightcap,
-	CollectibleFedora,
-	CollectibleWizardHat,
+	
+	
+	
 
-    LobsterCollectable,
+    
     ChefHatCollectable,
     TeaCupCollectable,
+	
+	CollectibleWizardHat,
+	CollectibleFedora,
+	CollectibleNightcap,
 }
