@@ -43,6 +43,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] private Button restartLevelButton;
     [SerializeField, Required] private Button resetSaveButton;
 
+    [Foldout("Advanced Settings"), SerializeField] private float wavyTextLetterSpacing = 8;
+
     private static float timeOfLastPause;
     private InputAction menuBackAction;
 
@@ -74,7 +76,7 @@ public class PauseMenu : MonoBehaviour
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
 
         // tab buttons
-        generalTab .toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenInfoButtonSelected(); });
+        generalTab .toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenGeneralButtonSelected(); });
         controlsTab.toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenControlsButtonSelected(); });
         settingsTab.toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenSettingsButtonSelected(); });
 
@@ -99,10 +101,11 @@ public class PauseMenu : MonoBehaviour
         GameManager.Instance.PauseGame();
 
         // general tab is default tab
-        generalTab.OpenTab();
-        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
-        controlsTab.CloseTab();
+
         settingsTab.CloseTab();
+        controlsTab.CloseTab();
+        OnOpenGeneralButtonSelected();
+        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
 
         pauseScreenParent.gameObject.SetActive(true);
         StaticUtilities.EnableCanvasGroup(pauseGroup);
@@ -140,7 +143,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnMenuBackPressed(InputAction.CallbackContext ctx)
     {
-        if (!IsPauseMenuOpen())
+        if (!IsPauseMenuOpen() || Time.unscaledTime - timeOfLastPause < 0.1f)
             return;
 
         if (IsConfirmationPopupOpen())
@@ -211,19 +214,41 @@ public class PauseMenu : MonoBehaviour
 
     #region Tab Navigation Buttons
 
-    void OnOpenInfoButtonSelected()
+    void OnOpenGeneralButtonSelected()
     {
         generalTab.OpenTab();
+
+        DisableAllWavyTexts();
+        generalTab.wavyTextAnimation.PlayAnimation = true;
+        generalTab.wavyTextAnimation.textBox.characterSpacing = wavyTextLetterSpacing;
     }
 
     void OnOpenControlsButtonSelected()
     {
         controlsTab.OpenTab();
+
+        DisableAllWavyTexts();
+        controlsTab.wavyTextAnimation.PlayAnimation = true;
+        controlsTab.wavyTextAnimation.textBox.characterSpacing = wavyTextLetterSpacing;
     }
 
     void OnOpenSettingsButtonSelected()
     {
         settingsTab.OpenTab();
+
+        DisableAllWavyTexts();
+        settingsTab.wavyTextAnimation.PlayAnimation = true;
+        settingsTab.wavyTextAnimation.textBox.characterSpacing = wavyTextLetterSpacing;
+    }
+
+    void DisableAllWavyTexts()
+    {
+        generalTab.wavyTextAnimation.PlayAnimation = false;
+        generalTab.wavyTextAnimation.textBox.characterSpacing = 0;
+        controlsTab.wavyTextAnimation.PlayAnimation = false;
+        controlsTab.wavyTextAnimation.textBox.characterSpacing = 0;
+        settingsTab.wavyTextAnimation.PlayAnimation = false;
+        settingsTab.wavyTextAnimation.textBox.characterSpacing = 0;
     }
 
     #endregion
