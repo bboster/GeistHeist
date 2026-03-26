@@ -20,6 +20,8 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     {
         public Collectable collectable;
         public GameObject collectableObject;
+        
+        [Foldout("Advanced")] public Vector3 rotationOffset = Vector3.zero;
 
         public MeshRenderer meshRenderer => collectableObject.GetComponent<MeshRenderer>();
         public MeshFilter meshFilter => collectableObject.GetComponent<MeshFilter>();
@@ -39,6 +41,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     [SerializeField] private float collectableRotationSeconds = 6;
     [SerializeField] private float tetherRotationSeconds = 20;
     [SerializeField, Required] private Material notCollectedMaterial;
+    private Material notCollectedMaterialInstance;
 
 
     [Foldout("Advanced"), Required, SerializeField] private Camera renderCamera;
@@ -54,11 +57,13 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     /// </summary>
     public void Initialize(string sceneToLoad)
     {
+        GameManager.Instance.SetPlayerInMenu(true);
+
         if (collectableRegistry == null)
             collectableRegistry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
 
         // make a copy of the material, to not flood github
-        notCollectedMaterial = Instantiate(notCollectedMaterial);
+        notCollectedMaterialInstance = Instantiate(notCollectedMaterial);
 
         foreach (var tetherModel in TetherModels)
         {
@@ -138,24 +143,24 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     #region Viewport Objects Animation
     private void Update()
     {
-        notCollectedMaterial.SetFloat("_Unscaled_Time", Time.unscaledTime);
+        notCollectedMaterialInstance.SetFloat("_Unscaled_Time", Time.unscaledTime);
 
         for (int i=0; i<CollectableMeshes.Count; i++)
         {
             var collectableMesh = CollectableMeshes[i];
-            RotateItem(collectableMesh.collectableObject.transform, collectableRotationSeconds, i, tiltAngle);
+            RotateItem(collectableMesh.collectableObject.transform, collectableRotationSeconds, i, tiltAngle, collectableMesh.rotationOffset);
         }
 
         for (int i = 0; i < TetherModels.Count; i++)
         {
             var tetherMesh = TetherModels[i];
-            RotateItem(tetherMesh.transform, tetherRotationSeconds, 0, 0);
+            RotateItem(tetherMesh.transform, tetherRotationSeconds, 0, 0, Vector3.zero);
         }
     }
 
-    private void RotateItem(Transform item, float rotateSeconds, float offset, float tilt)
+    private void RotateItem(Transform item, float rotateSeconds, float timeOffset, float tilt, Vector3 rotationOffset)
     {
-        Vector3 rotation = new Vector3(0, (Time.unscaledTime + offset) * 360 / rotateSeconds, tilt);
+        Vector3 rotation = new Vector3(0, (Time.unscaledTime + timeOffset) * 360 / rotateSeconds, tilt) + rotationOffset;
         item.localEulerAngles = rotation;
     }
 
@@ -186,6 +191,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         // middle-man function because of the way animations events work
         var confirmation = GetComponentInChildren<LevelConfirmationPopup>();
         confirmation.OnLoadingAnimationFinished();
+        GameManager.Instance.SetPlayerInMenu(false);
     }
 
     #region Debug
@@ -209,8 +215,14 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         foreach (var collectable in CollectableMeshes)
         {
             Gizmos.DrawWireCube(collectable.collectableObject.transform.position, Vector3.one * sizeToFitForCollectable);
+            collectable.collectableObject.transform.localEulerAngles = collectable.rotationOffset;
         }
     }
 
     #endregion debug
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.SetPlayerInMenu(false);
+    }
 }
