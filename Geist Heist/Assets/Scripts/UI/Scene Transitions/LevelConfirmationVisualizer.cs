@@ -99,7 +99,13 @@ public class LevelConfirmationVisualizer : MonoBehaviour
 
     private void RefreshCollectable(LevelConfirmCollectableMesh collectable)
     {
-        collectable.meshFilter.mesh = collectableRegistry.GetMesh(collectable.collectable);
+        var mesh = collectableRegistry.GetMesh(collectable.collectable);
+        if(mesh == null)
+        {
+            Debug.LogWarning($"There is no mesh associated with the hat {collectable.ToString()} in collectible registry");
+            return;
+        }
+        collectable.meshFilter.mesh = mesh;
         ScaleToFitBounds(collectable.meshFilter, sizeToFitForCollectable);
 
         // if its null then its probably because this is being run from the debug button.
