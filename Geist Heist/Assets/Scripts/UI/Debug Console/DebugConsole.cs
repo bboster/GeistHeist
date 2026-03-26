@@ -232,7 +232,7 @@ public class DebugConsole : MonoBehaviour
     private void listScenes()
     {
         AppendConsoleLine("ls");
-        for (int i = 0; i < SceneManager.sceneCount; i++)
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
         {
             string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
             string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
