@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 using NaughtyAttributes;
 using UnityEngine.Events;
 
-public class SceneTransitionActionable : MonoBehaviour, IActionable
+public class SceneTransitionInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField][Scene] private string sceneName;
 
@@ -31,7 +31,7 @@ public class SceneTransitionActionable : MonoBehaviour, IActionable
     [Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
     [SerializeField] private bool hasConfirmationPopup = true;
 
-    public void Action()
+    public void Interact()
     {
         if(ConfirmationPopup.AnyConfirmationMenuOpen == true)
         {
