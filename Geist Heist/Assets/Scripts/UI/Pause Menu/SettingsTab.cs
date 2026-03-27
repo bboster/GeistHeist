@@ -18,12 +18,14 @@ public class SettingsTab : PauseMenuTab
 {
     [Header("Non-settings buttons")]
     //[SerializeField, Required] private Button exitSettingsButton;
-    [SerializeField, Required] private Button resetToDefaultsButton;
+    [SerializeField, Required] private Button resetGameplayToDefaultsButton;
+    [SerializeField, Required] private Button resetAudioToDefaultsButton;
     [SerializeField] private string resetToDefaultsConfirmationText = "Reset all settings?";
 
     [Header("Individual Settings attributes")]
     [SerializeField] private SliderSettingsAttributes lookSensitivityAttributes;
-    [SerializeField] private ToggleSettingsAttributes invertLookAttributes; 
+    [SerializeField] private ToggleSettingsAttributes invertYLookAttributes; 
+    [SerializeField] private ToggleSettingsAttributes invertXLookAttributes; 
     [SerializeField] private SliderSettingsAttributes brightnessAttributes;
 
     [SerializeField] private SliderSettingsAttributes masterVolumeAttributes;
@@ -74,7 +76,8 @@ public class SettingsTab : PauseMenuTab
         ppManager = Camera.main.GetComponentInChildren<PostProcessingManager>();
         AddComponentListeners();
         //exitSettingsButton.onClick.AddListener(() => CloseTab());
-        resetToDefaultsButton.onClick.AddListener(OnResetToDefaultsButtonPressed);
+        resetGameplayToDefaultsButton.onClick.AddListener(OnResetGameplayToDefaultsButtonPressed);
+        resetAudioToDefaultsButton.onClick.AddListener(OnResetAudiToDefaultsButtonPressed);
     }
 
     public override void OpenTab()
@@ -91,14 +94,25 @@ public class SettingsTab : PauseMenuTab
 
     #region Misc Buttons
 
-    private void OnResetToDefaultsButtonPressed()
+    private void OnResetGameplayToDefaultsButtonPressed()
     {
-        pauseMenu.confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetToDefaultsButtonPressed);
+        pauseMenu.confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetGameplayToDefaultsButtonPressed);
     }
 
-    private void OnConfirmResetToDefaultsButtonPressed()
+    private void OnResetAudiToDefaultsButtonPressed()
     {
-        SettingsProfile.ResetToDefaults();
+        pauseMenu.confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetAudioToDefaultsButtonPressed);
+    }
+
+    private void OnConfirmResetGameplayToDefaultsButtonPressed()
+    {
+        SettingsProfile.ResetGameplayToDefaults();
+        RefreshUI();
+    }
+
+    private void OnConfirmResetAudioToDefaultsButtonPressed()
+    {
+        SettingsProfile.ResetAudioToDefaults();
         RefreshUI();
     }
 
@@ -111,7 +125,9 @@ public class SettingsTab : PauseMenuTab
             minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY,
             onSettingsUpdatedCallback:PlayerManager.Instance.UpdateCamerasSensitivity));
 
-        invertLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertLookAttributes, ref SettingsProfile.InvertLook,
+        invertYLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertYLookAttributes, ref SettingsProfile.InvertYLook,
+            onSettingsUpdatedCallback: PlayerManager.Instance.UpdateCamerasInvertLook));
+        invertXLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertXLookAttributes, ref SettingsProfile.InvertXLook,
             onSettingsUpdatedCallback: PlayerManager.Instance.UpdateCamerasInvertLook));
 
         brightnessAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(brightnessAttributes, ref SettingsProfile.Brightness,
@@ -179,7 +195,8 @@ public class SettingsTab : PauseMenuTab
         // Assumes SettingsProfile.ReadSavedSettings has already run 
 
         lookSensitivityAttributes.RefreshComponent(SettingsProfile.LookSensitivity, SettingsProfile.LookSensitityScalar);
-        invertLookAttributes.RefreshComponent(SettingsProfile.InvertLook);
+        invertYLookAttributes.RefreshComponent(SettingsProfile.InvertYLook);
+        invertXLookAttributes.RefreshComponent(SettingsProfile.InvertXLook);
         brightnessAttributes.RefreshComponent(SettingsProfile.Brightness, SettingsProfile.BrightnessScalar);
 
         masterVolumeAttributes.RefreshComponent(SettingsProfile.MasterVolume, SettingsProfile.MasterVolumeTransformed);
@@ -198,6 +215,7 @@ public class SliderSettingsAttributes
     //[Range(0, 100)] public float DefaulValue = 100;
     [AllowNesting, Required] public Slider SliderComponent;
     [AllowNesting, Required] public TMP_Text OutputTextComponent;
+    public bool DisplayAsPercentage = true;
 
     public void RefreshComponent(float currentValue, float currentValueTransformed)
     {
@@ -207,7 +225,7 @@ public class SliderSettingsAttributes
 
     public void RefreshTextOnly(float currentValue)
     {
-        OutputTextComponent.text = Mathf.RoundToInt(currentValue).ToString();
+        OutputTextComponent.text = Mathf.RoundToInt(currentValue).ToString() + (DisplayAsPercentage ? "%" : "");
     }
 }
 
