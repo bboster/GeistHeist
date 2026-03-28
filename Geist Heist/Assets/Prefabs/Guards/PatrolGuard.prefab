@@ -1,5 +1,53 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &30066744025319911
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8706505712778134170}
+  - component: {fileID: 4844939962425304840}
+  m_Layer: 0
+  m_Name: BillboardSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8706505712778134170
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30066744025319911}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0741931, y: 3.7040696, z: -0.30149338}
+  m_LocalScale: {x: 1.57855, y: 1.57855, z: 1.57855}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1960475012492913843}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4844939962425304840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30066744025319911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6646ea5922be444b714d8e1a547696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
+  UIObjectPrefab: {fileID: 8140011255406306161, guid: 25b2c2151953b3a42afffa3fa8a84f3f, type: 3}
+  SourceGameObject: {fileID: 121252902873117158}
+  displaceParentAtStart: 1
+  billboardUI: {fileID: 0}
 --- !u!1 &79506103086844024
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,6 +175,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8706505712778134170}
+  - {fileID: 6524723121646803298}
   - {fileID: 5537088458361401238}
   - {fileID: 464571138776013567}
   - {fileID: 6963547461052879827}
@@ -797,6 +847,54 @@ Transform:
   - {fileID: 386879150111781256}
   m_Father: {fileID: 4838201369532783242}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1118123780454962399
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6524723121646803298}
+  - component: {fileID: 4529783204949976955}
+  m_Layer: 0
+  m_Name: Guard Text Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6524723121646803298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118123780454962399}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.7, z: 0}
+  m_LocalScale: {x: 1.57855, y: 1.57855, z: 1.57855}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1960475012492913843}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4529783204949976955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118123780454962399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6646ea5922be444b714d8e1a547696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
+  UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
+  SourceGameObject: {fileID: 121252902873117158}
+  displaceParentAtStart: 1
+  billboardUI: {fileID: 0}
 --- !u!1 &1218365321054976243
 GameObject:
   m_ObjectHideFlags: 0
