@@ -33,6 +33,9 @@ public class SettingsTab : PauseMenuTab
     [SerializeField] private SliderSettingsAttributes sfxVolumeAttributes;
     [SerializeField] private SliderSettingsAttributes vocalsVolumeAttributes;
 
+    [Header("Other")]
+    [SerializeField, Required] private ConfirmationPopup confirmationPopup;
+
     private PostProcessingManager ppManager; // lol peepeeManager
 
     #region Attribute variables
@@ -96,12 +99,12 @@ public class SettingsTab : PauseMenuTab
 
     private void OnResetGameplayToDefaultsButtonPressed()
     {
-        pauseMenu.confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetGameplayToDefaultsButtonPressed);
+        confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetGameplayToDefaultsButtonPressed);
     }
 
     private void OnResetAudiToDefaultsButtonPressed()
     {
-        pauseMenu.confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetAudioToDefaultsButtonPressed);
+        confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetAudioToDefaultsButtonPressed);
     }
 
     private void OnConfirmResetGameplayToDefaultsButtonPressed()

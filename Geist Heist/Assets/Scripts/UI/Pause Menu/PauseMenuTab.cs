@@ -17,8 +17,6 @@ public class PauseMenuTab : MonoBehaviour
     [SerializeField, Required] public Toggle toggleButton;
     [SerializeField, Required] public WavyTextAnimation wavyTextAnimation;
 
-    protected PauseMenu pauseMenu;
-
     public virtual void OpenTab()
     {
         RefreshUI();

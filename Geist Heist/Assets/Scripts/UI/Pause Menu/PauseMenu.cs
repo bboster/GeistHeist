@@ -72,6 +72,7 @@ public class PauseMenu : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex == HubScene)
         {
             quitToHubButton.interactable = false;
+            quitToHubButton.gameObject.SetActive(false);
         }
 
         pauseScreenParent.gameObject.SetActive(true);
@@ -97,22 +98,20 @@ public class PauseMenu : MonoBehaviour
     {
         confirmationPopup.HideConfirmationPopup();
 
-        if(settingsTab.canvasGroup.alpha > 0)
-            settingsTab.CloseTab();
-
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.PauseGame();
 
         // general tab is default tab
 
-        settingsTab.CloseTab();
-        controlsTab.CloseTab();
-        OnOpenGeneralButtonSelected();
-        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
 
         pauseScreenParent.gameObject.SetActive(true);
         StaticUtilities.EnableCanvasGroup(pauseGroup);
         StaticUtilities.ShowCursor();
+
+        settingsTab.CloseTab();
+        controlsTab.CloseTab();
+        OnOpenGeneralButtonSelected();
+        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
     }
 
     public void ClosePauseMenu()

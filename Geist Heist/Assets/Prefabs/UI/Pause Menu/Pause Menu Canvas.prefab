@@ -5832,7 +5832,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1740730426532534669, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
       propertyPath: m_Alpha
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3427022398787477726, guid: 1c46ba52e05ed644881f8b942d5f103e, type: 3}
       propertyPath: m_Name
@@ -6181,6 +6181,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2152484903240166533, guid: 937386b08481454438a200b98c2ff34a, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2264220060692163928, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -6225,10 +6229,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3201519812616804813, guid: 937386b08481454438a200b98c2ff34a, type: 3}
-      propertyPath: m_Name
-      value: Brightness Percent Text
-      objectReference: {fileID: 0}
     - target: {fileID: 3412375683930708022, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6268,10 +6268,6 @@ PrefabInstance:
     - target: {fileID: 3747305756072834514, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3899402383049394369, guid: 937386b08481454438a200b98c2ff34a, type: 3}
-      propertyPath: m_Name
-      value: Brightness Slider
       objectReference: {fileID: 0}
     - target: {fileID: 4285633956937558606, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6566,21 +6562,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6980200593839064230}
     - target: {fileID: 7617379628941885289, guid: 937386b08481454438a200b98c2ff34a, type: 3}
+      propertyPath: confirmationPopup
+      value: 
+      objectReference: {fileID: 5759203136524687862}
+    - target: {fileID: 7617379628941885289, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       propertyPath: wavyTextAnimation
       value: 
       objectReference: {fileID: 6336677656205836064}
-    - target: {fileID: 7617379628941885289, guid: 937386b08481454438a200b98c2ff34a, type: 3}
-      propertyPath: brightnessAttributes.SliderComponent
-      value: 
-      objectReference: {fileID: 1422550721195874193}
-    - target: {fileID: 7617379628941885289, guid: 937386b08481454438a200b98c2ff34a, type: 3}
-      propertyPath: brightnessAttributes.OutputTextComponent
-      value: 
-      objectReference: {fileID: 4697263178648529282}
-    - target: {fileID: 7617379628941885289, guid: 937386b08481454438a200b98c2ff34a, type: 3}
-      propertyPath: lookSensitivityAttributes.DisplayAsPercentage
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9014762424724535963, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6626,24 +6614,31 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2038827346993808538, guid: 937386b08481454438a200b98c2ff34a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 551606967560961924, guid: 937386b08481454438a200b98c2ff34a, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 8717039024004238990, guid: 937386b08481454438a200b98c2ff34a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 296750149992384763}
+      addedObject: {fileID: 8992149748786802439}
   m_SourcePrefab: {fileID: 100100000, guid: 937386b08481454438a200b98c2ff34a, type: 3}
---- !u!114 &1422550721195874193 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4821591550324379606, guid: 937386b08481454438a200b98c2ff34a, type: 3}
+--- !u!1 &3003185644588144329 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8717039024004238990, guid: 937386b08481454438a200b98c2ff34a, type: 3}
   m_PrefabInstance: {fileID: 5860398763067512903}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!225 &8992149748786802439
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3003185644588144329}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!114 &4098855970659608366 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7617379628941885289, guid: 937386b08481454438a200b98c2ff34a, type: 3}
@@ -6655,39 +6650,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e2834604b934054dbf20554b056163a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsTab
---- !u!114 &4697263178648529282 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1181163944024814021, guid: 937386b08481454438a200b98c2ff34a, type: 3}
-  m_PrefabInstance: {fileID: 5860398763067512903}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &6093137127631266098 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 422065471403309429, guid: 937386b08481454438a200b98c2ff34a, type: 3}
   m_PrefabInstance: {fileID: 5860398763067512903}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6265600259831818179 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 551606967560961924, guid: 937386b08481454438a200b98c2ff34a, type: 3}
-  m_PrefabInstance: {fileID: 5860398763067512903}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &296750149992384763
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6265600259831818179}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
 --- !u!1001 &6441688905393064720
 PrefabInstance:
   m_ObjectHideFlags: 0

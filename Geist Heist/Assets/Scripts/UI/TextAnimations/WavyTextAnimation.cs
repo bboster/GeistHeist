@@ -19,6 +19,8 @@ public class WavyTextAnimation : MonoBehaviour
 
     private float t;
 
+    private Coroutine anim;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,38 +28,33 @@ public class WavyTextAnimation : MonoBehaviour
 
         textString = textBox.text;
         defaultCharacterSpacing = textBox.characterSpacing;
-        StartCoroutine(AnimateText());
     }
 
-    IEnumerator AnimateText()
+    void Update()
     {
-        while (true)
+
+        if (PlayAnimation) t = Mathf.MoveTowards(t, 1, Time.unscaledDeltaTime / disableAnimationSeconds);
+        else               t = Mathf.MoveTowards(t, 0, Time.unscaledDeltaTime / disableAnimationSeconds);
+
+
+        if (t > 0)
         {
-            yield return null;
-
-            if (PlayAnimation) t = Mathf.MoveTowards(t, 1, Time.unscaledDeltaTime / disableAnimationSeconds);
-            else               t = Mathf.MoveTowards(t, 0, Time.unscaledDeltaTime / disableAnimationSeconds);
-
-
-            if (t > 0)
+            string waveString = "";
+            for (int i = 0; i < textString.Length; i++)
             {
-                string waveString = "";
-                for (int i = 0; i < textString.Length; i++)
-                {
-                    char c = textString[i];
-                    float height = StaticUtilities.SinRange((Time.unscaledTime + i) * waveSpeed, -waveHeight, waveHeight);
-                    height = StaticUtilities.RoundToHundreth(height * t);
-                    waveString += $"<voffset={height}em>{c}</voffset>";
-                }
-                textBox.text = waveString;
-                textBox.characterSpacing = Mathf.Lerp(defaultCharacterSpacing, characterSpacingWhileWavy, t);
+                char c = textString[i];
+                float height = StaticUtilities.SinRange((Time.unscaledTime + i) * waveSpeed, -waveHeight, waveHeight);
+                height = StaticUtilities.RoundToHundreth(height * t);
+                waveString += $"<voffset={height}em>{c}</voffset>";
             }
+            textBox.text = waveString;
+            textBox.characterSpacing = Mathf.Lerp(defaultCharacterSpacing, characterSpacingWhileWavy, t);
+        }
 
-            else
-            {
-                textBox.text = textString;
-                textBox.characterSpacing = defaultCharacterSpacing;
-            }
+        else
+        {
+            textBox.text = textString;
+            textBox.characterSpacing = defaultCharacterSpacing;
         }
     }
 }

@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 3412375683930708022}
   - component: {fileID: 6512104919052883451}
   - component: {fileID: 3321889091063171610}
+  - component: {fileID: 2152484903240166533}
   m_Layer: 5
   m_Name: Gameplay Text
   m_TagString: Untagged
@@ -248,6 +249,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!225 &2152484903240166533
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551606967560961924}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1714454800429248274
 GameObject:
   m_ObjectHideFlags: 0
@@ -1007,14 +1020,14 @@ MonoBehaviour:
   lookSensitivityAttributes:
     SliderComponent: {fileID: 665118887544716414}
     OutputTextComponent: {fileID: 6608777074167792237}
-    DisplayAsPercentage: 1
+    DisplayAsPercentage: 0
   invertYLookAttributes:
     ToggleComponent: {fileID: 7541377036415611805}
   invertXLookAttributes:
     ToggleComponent: {fileID: 3339214503604045674}
   brightnessAttributes:
-    SliderComponent: {fileID: 6508640650194995493}
-    OutputTextComponent: {fileID: 639154418470582070}
+    SliderComponent: {fileID: 4821591550324379606}
+    OutputTextComponent: {fileID: 1181163944024814021}
     DisplayAsPercentage: 1
   masterVolumeAttributes:
     SliderComponent: {fileID: 1516903199457917028}
@@ -2483,6 +2496,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4663760065887605145, guid: 0c67a644679f50940afe8d0080b075d9, type: 3}
+      propertyPath: m_Name
+      value: Brightness Percent Text
+      objectReference: {fileID: 0}
+    - target: {fileID: 6542148688091594901, guid: 0c67a644679f50940afe8d0080b075d9, type: 3}
+      propertyPath: m_Name
+      value: Brightness Slider
+      objectReference: {fileID: 0}
     - target: {fileID: 7788257633927293495, guid: 0c67a644679f50940afe8d0080b075d9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2512,11 +2533,33 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c67a644679f50940afe8d0080b075d9, type: 3}
+--- !u!114 &1181163944024814021 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8985598275098605969, guid: 0c67a644679f50940afe8d0080b075d9, type: 3}
+  m_PrefabInstance: {fileID: 7842759675828521044}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &4656910707362669311 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3204240500774464171, guid: 0c67a644679f50940afe8d0080b075d9, type: 3}
   m_PrefabInstance: {fileID: 7842759675828521044}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4821591550324379606 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3332293907195643778, guid: 0c67a644679f50940afe8d0080b075d9, type: 3}
+  m_PrefabInstance: {fileID: 7842759675828521044}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1001 &8389636046124617383
 PrefabInstance:
   m_ObjectHideFlags: 0
