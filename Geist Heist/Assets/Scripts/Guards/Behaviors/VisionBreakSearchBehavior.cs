@@ -19,6 +19,8 @@ public class VisionBreakSearchBehavior : GuardMovement
     private bool behaviorComplete = false;
 
     [SerializeField] private float searchLength;
+    [Tooltip("How long a guard can be moving to the break point before the path is determined invalid")]
+    [SerializeField] private float lengthBeforePathInvalid;
 
     public Vector3 SearchLocation;
 
@@ -31,6 +33,7 @@ public class VisionBreakSearchBehavior : GuardMovement
         base.InitializeBehavior(selfRef);
         SearchLocation = PlayerManager.Instance.CurrentObject.transform.position;
         MoveToPoint(SearchLocation);
+        GuardCoroutineManager.Instance.StartBehaviorTimer(lengthBeforePathInvalid, this);
         thisAgent.isStopped = false;
         behaviorComplete = false;
         contRef.GetAnimator().SetBool("isSearching", true);
@@ -64,6 +67,8 @@ public class VisionBreakSearchBehavior : GuardMovement
     /// <returns></returns>
     private void StartSearch()
     {
+        GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
+        contRef.searchAnimator.runtimeAnimatorController = stateController;
         GuardCoroutineManager.Instance.StartBehaviorTimer(searchLength, this);
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
 
@@ -79,6 +84,8 @@ public class VisionBreakSearchBehavior : GuardMovement
     /// </summary>
     public override void StopBehavior()
     {
+        contRef.searchAnimator.StopPlayback();
+        contRef.searchAnimator.runtimeAnimatorController = null;
         base.StopBehavior();
         GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;

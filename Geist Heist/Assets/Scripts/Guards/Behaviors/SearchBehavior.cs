@@ -29,6 +29,7 @@ public class SearchBehavior : GuardMovement
         thisAgent.isStopped = false;
         behaviorComplete = false;
         contRef.GetAnimator().SetBool("isSearching", true);
+        contRef.searchAnimator.runtimeAnimatorController = stateController;
     }
 
     /// <summary>
@@ -77,6 +78,8 @@ public class SearchBehavior : GuardMovement
     /// </summary>
     public override void StopBehavior()
     {
+        contRef.searchAnimator.StopPlayback();
+        contRef.searchAnimator.runtimeAnimatorController = null;
         base.StopBehavior();
         GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;
