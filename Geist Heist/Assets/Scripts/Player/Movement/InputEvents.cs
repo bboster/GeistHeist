@@ -261,7 +261,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.IsPaused)
+        if (GameManager.Instance.IsPaused || GameManager.Instance.IsPlayerInMenu)
             return;
 
         if (MovePressed) MoveHeld.Invoke(MoveHeldTime);
