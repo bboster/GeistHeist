@@ -310,7 +310,15 @@ public enum Collectable
 	
 	CowboyHatColletable,
 	Jester_Hat_Collectable,
-	CollectibleTopHatTemp,
-	CollectibleFedoraTemp,
-	CollectibleNightcapTemp,
+	
+	
+	
+	
+	CollectibleNightcap,
+	CollectibleFedora,
+	CollectibleWizardHat,
+
+    LobsterCollectable,
+    ChefHatCollectable,
+    TeaCupCollectable,
 }
