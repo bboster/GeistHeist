@@ -52,6 +52,7 @@ public class GameManager : Singleton<GameManager>
     [Required] public Transform PlayerStart;
 
     public bool IsPaused { get; private set; } = false;
+    public bool IsPlayerInMenu { get; private set; } = false;
     public UnityEvent OnPauseChanged = new();
 
     [HideInInspector] public bool InGodMode;
@@ -186,6 +187,11 @@ public class GameManager : Singleton<GameManager>
     {
         if (IsPaused) UnpauseGame();
         else PauseGame();
+    }
+
+    public void SetPlayerInMenu(bool inMenu)
+    {
+        IsPlayerInMenu = inMenu;
     }
     #endregion
 }
