@@ -18,8 +18,10 @@ public class GlobeInputHandler : IInputHandler
     [Header ("Required Variables")]
     [Tooltip("Camera for the ending swinging.")]
     [SerializeField] private CinemachineCamera globeSwingCamera;
-    [Tooltip("Camera for the ending rolling.")]
+    [Tooltip("Camera for the ending rolling before hallway.")]
     [SerializeField] private CinemachineCamera globeRollCamera;
+    [Tooltip("Camera for the ending rolling through the hallway.")]
+    [SerializeField] private CinemachineCamera globeHallwayCamera;
     //will likely change with later UI assets
     [Tooltip("UI for the button pressing minigame.")]
     [SerializeField] private TMP_Text buttonPressText;
@@ -49,10 +51,7 @@ public class GlobeInputHandler : IInputHandler
 
     public override void OnPossessionStart()
     {
-        if (globeSwingCamera.Priority == 0)
-        {
-            globeSwingCamera.Priority++;
-        }
+        IncreaseCameraPriority(globeSwingCamera);
 
         if (endCoroutine == null)
         {
@@ -144,18 +143,30 @@ public class GlobeInputHandler : IInputHandler
                 animator.SetBool("EndRoll", true);
                 EndingActive = false;
 
-                if (globeRollCamera.Priority == 0)
-                {
-                    globeSwingCamera.Priority--;
-                    globeRollCamera.Priority++;
-                }
+                IncreaseCameraPriority(globeRollCamera);
+                DecreaseCameraPriority(globeSwingCamera);
             }
+        }
+        yield return null;
+    }
 
-            yield return null;
+    public void IncreaseCameraPriority(CinemachineCamera camera)
+    {
+        if (camera.Priority == 0)
+        {
+            camera.Priority++;
+        }
+    }
+    public void DecreaseCameraPriority(CinemachineCamera camera)
+    {
+        if (camera.Priority != 0)
+        {
+            camera.Priority--;
         }
     }
 
-    public void LoadEndScene()
+
+public void LoadEndScene()
     {
         StopAllCoroutines();
         LevelManager.Instance.ChangeScene(endCutsceneScene);
