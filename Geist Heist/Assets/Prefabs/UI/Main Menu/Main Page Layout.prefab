@@ -90,12 +90,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 4139891828165982575}
+    m_SelectOnDown: {fileID: 3143986084605695990}
+    m_SelectOnLeft: {fileID: 3143986084605695990}
+    m_SelectOnRight: {fileID: 3143986084605695990}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0.627451}
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7ce7177a94b28a342bff00383a7b3ba3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 307fea478d205bb489854aa64ac96f72, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -606,6 +606,7 @@ GameObject:
   - component: {fileID: 1268593075676913115}
   - component: {fileID: 2791125547152948109}
   - component: {fileID: 8059230648648346486}
+  - component: {fileID: 1007490194295569643}
   m_Layer: 5
   m_Name: Press Any Button Text
   m_TagString: Untagged
@@ -669,8 +670,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4294951803
+  m_fontColor: {r: 0.48235297, g: 0.76470596, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -687,7 +688,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 57.45
+  m_fontSize: 55.7
   m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -697,9 +698,9 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: 16
   m_characterHorizontalScale: 1
-  m_wordSpacing: 0
+  m_wordSpacing: 50
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
@@ -744,6 +745,25 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1007490194295569643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4172443778527469782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c16ba412045cad41a9c8274d884c867, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WavyTextAnimation
+  waveSpeed: 0.7
+  waveHeight: 0.2
+  PlayAnimation: 1
+  textBox: {fileID: 2791125547152948109}
+  disableAnimationSeconds: 0.1
+  changeCharacterSpacing: 0
+  characterSpacingWhileWavy: 0
 --- !u!1 &4275732437010407194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,7 +1311,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1529.77, y: 2160}
+  m_SizeDelta: {x: 999, y: 2160}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &3050030300369996370
 CanvasRenderer:
@@ -1555,6 +1575,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 8496249957021773872}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 4139891828165982575}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 777887620580253536}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 777887620580253536}
     - target: {fileID: 7632306404080522620, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
       propertyPath: m_Name
       value: Settings Button
@@ -1569,6 +1609,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5884051613125641945, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
   m_PrefabInstance: {fileID: 9230334053228046}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7129800396468139406 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+  m_PrefabInstance: {fileID: 9230334053228046}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &1673745928420285360
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1657,6 +1708,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 3143986084605695990}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 7129800396468139406}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 777887620580253536}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 777887620580253536}
     - target: {fileID: 7632306404080522620, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
       propertyPath: m_Name
       value: New Game Button
@@ -1671,6 +1742,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5884051613125641945, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
   m_PrefabInstance: {fileID: 1673745928420285360}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8496249957021773872 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+  m_PrefabInstance: {fileID: 1673745928420285360}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &5292653084403252342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1763,6 +1845,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 4139891828165982575}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 8496249957021773872}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 777887620580253536}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 777887620580253536}
     - target: {fileID: 7632306404080522620, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
       propertyPath: m_Name
       value: Play Game Button
@@ -1777,6 +1879,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5884051613125641945, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
   m_PrefabInstance: {fileID: 5292653084403252342}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3143986084605695990 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+  m_PrefabInstance: {fileID: 5292653084403252342}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &6602612340127601391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1873,6 +1986,26 @@ PrefabInstance:
       propertyPath: targetText
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 7129800396468139406}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 777887620580253536}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 777887620580253536}
+    - target: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 777887620580253536}
     - target: {fileID: 7632306404080522620, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
       propertyPath: m_Name
       value: Quit Button
@@ -1891,3 +2024,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5884051613125641945, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
   m_PrefabInstance: {fileID: 6602612340127601391}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4139891828165982575 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7121010559092960128, guid: 4655c539b0ac5e146afa2b5edcf82f94, type: 3}
+  m_PrefabInstance: {fileID: 6602612340127601391}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
