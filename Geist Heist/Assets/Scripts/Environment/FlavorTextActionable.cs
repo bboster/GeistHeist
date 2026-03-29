@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 
-public class FlavorTextActionable : MonoBehaviour, IActionable
+public class FlavorTextActionable : MonoBehaviour, IInteractable
 {
     [SerializeField] private List<DialogueTextData> flavorText = new();
 
@@ -68,7 +68,7 @@ public class FlavorTextActionable : MonoBehaviour, IActionable
             DisableTextActionable();
     }
 
-    public void Action()
+    public void Interact()
     {
         DialogueUIManager.Instance.DisplayText_Dialogue(flavorText, onDialogueEndCallback: OnFlavorTextEnd);
         SaveDataManager.Instance.MarkFlavorTextAsRead(flavorText, autoSave: true);
@@ -87,7 +87,7 @@ public class FlavorTextActionable : MonoBehaviour, IActionable
         outline.enabled = false;
     }
 
-    public void EnableTextActionable()
+    public void EnableTextInteractable()
     {
         this.enabled = true;
         // keep outline disabled tho
@@ -135,11 +135,11 @@ public class FlavorTextActionable : MonoBehaviour, IActionable
         return true;
     }
 
-    void IActionable.OnPlayerLookStart()
+    void IInteractable.OnPlayerLookStart()
     {
     }
 
-    bool IActionable.IsActionable()
+    bool IInteractable.IsInteractable()
     {
         // only decide actionability first time you look at the object. Like shroedingers cat.
         cached_isActionable = cached_isActionable ?? HasMetConditionsToAppear();
