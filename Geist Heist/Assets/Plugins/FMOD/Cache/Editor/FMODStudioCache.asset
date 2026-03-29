@@ -42,7 +42,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Environment.bank
   Name: Environment
   StudioPath: bank:/Environment
-  lastModified: 639100463499113205
+  lastModified: 639099616034193879
   FileSizes: []
   Exists: 1
 --- !u!114 &-8255656020541330298
@@ -72,6 +72,33 @@ MonoBehaviour:
   - Value B
   - Value C
   Exists: 1
+--- !u!114 &-8119729520361066748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Prop/DoorLocked
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Prop/DoorLocked
+  Guid:
+    Data1: -721400485
+    Data2: 1093661833
+    Data3: 1930203279
+    Data4: 1725917016
+  Banks:
+  - {fileID: 6286152001578167159}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 35
+  Length: 1007
 --- !u!114 &-6659818643767199507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,10 +138,10 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639100463499113205
+  lastModified: 639103904404766868
   FileSizes:
   - Name: 
-    Value: 2866
+    Value: 2970
   Exists: 1
 --- !u!114 &-6001547716701033407
 MonoBehaviour:
@@ -214,9 +241,36 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Enemy.bank
   Name: Enemy
   StudioPath: bank:/Enemy
-  lastModified: 639087359323810590
+  lastModified: 639099448097247491
   FileSizes: []
   Exists: 1
+--- !u!114 &-5268578455739075225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Prop/DoorUnlocked
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Prop/DoorUnlocked
+  Guid:
+    Data1: -1501403582
+    Data2: 1159216850
+    Data3: 1227395772
+    Data4: -1169369982
+  Banks:
+  - {fileID: 6286152001578167159}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 35
+  Length: 702
 --- !u!114 &-4206312160512030336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,7 +297,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 711
+  Length: 1300
 --- !u!114 &-3226643318192844654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,7 +364,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Interface.bank
   Name: Interface
   StudioPath: bank:/Interface
-  lastModified: 639087359323821392
+  lastModified: 639103926831593522
   FileSizes: []
   Exists: 1
 --- !u!114 &-1809128106369088695
@@ -409,7 +463,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 639100463499113205
+  lastModified: 639103926833792934
   FileSizes: []
   Exists: 1
 --- !u!114 &11400000
@@ -464,6 +518,8 @@ MonoBehaviour:
   - {fileID: 1961291480545547208}
   - {fileID: -6001547716701033407}
   - {fileID: -5794829220441064446}
+  - {fileID: -5268578455739075225}
+  - {fileID: -8119729520361066748}
   EditorParameters:
   - {fileID: 4226902835621910385}
   - {fileID: 7499942934452804311}
@@ -472,7 +528,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: -6590521824193411396}
   cacheVersion: 131849
-  cacheTime: 639100463499113205
+  cacheTime: 639103926835448231
   SerializableEventsDict:
   - key: event:/BGM/Menu
     index: 0
@@ -532,6 +588,10 @@ MonoBehaviour:
     index: 27
   - key: event:/Voicelines/VLLobbyNightTwo
     index: 28
+  - key: event:/Prop/DoorUnlocked
+    index: 29
+  - key: event:/Prop/DoorLocked
+    index: 30
 --- !u!114 &205095641162040774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +714,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Voicelines.bank
   Name: Voicelines
   StudioPath: bank:/Voicelines
-  lastModified: 639100463499113205
+  lastModified: 639103926835448231
   FileSizes: []
   Exists: 1
 --- !u!114 &3555943338841856052
@@ -683,7 +743,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 711
+  Length: 1021
 --- !u!114 &4087271554544102265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,7 +922,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 639075279887954816
+  lastModified: 639081311437530193
   FileSizes: []
   Exists: 1
 --- !u!114 &5387794233900066970
@@ -996,7 +1056,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 0
+  Length: 329
 --- !u!114 &6286152001578167159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1012,7 +1072,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Prop.bank
   Name: Prop
   StudioPath: bank:/Prop
-  lastModified: 639075279888748117
+  lastModified: 639103926834823722
   FileSizes: []
   Exists: 1
 --- !u!114 &6951204317605075788
@@ -1145,7 +1205,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639004446359823079
+  lastModified: 639103904404756880
   FileSizes: []
   Exists: 1
 --- !u!114 &8721028491005390484
@@ -1253,7 +1313,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 0
+  Length: 334
 --- !u!114 &9180031457176711939
 MonoBehaviour:
   m_ObjectHideFlags: 0

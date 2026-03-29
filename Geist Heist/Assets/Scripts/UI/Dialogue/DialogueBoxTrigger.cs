@@ -10,6 +10,7 @@ using FMODUnity;
 using FMOD.Studio;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using UnityEngine.SceneManagement;
 
 public class DialogueBoxTrigger : MonoBehaviour
 {
@@ -52,11 +53,37 @@ public class DialogueBoxTrigger : MonoBehaviour
             alreadyTriggered = true;
             DialogueUIManager.Instance.DisplayText_PASystem(dialogueText);
 
-            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
+            string currentParameter = "";
+            string currentSceneName = SceneManager.GetActiveScene().name;
 
-            if (whichLine >= 0 && whichLine < 3)
+            //This needs more changes later when we add voicelines to remaining scenes
+            if (currentSceneName == "TutorialHallway")
             {
-                RuntimeManager.StudioSystem.setParameterByName("PA", whichLine);
+                currentParameter = "VLTutorial";
+                voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLTutorial);
+            }
+            if (currentSceneName == "FINAL Parlor Room")
+            {
+                currentParameter = "VLParlor";
+                voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLParlor);
+            }
+            if (currentSceneName == "HubV2.5")
+            {
+                if (SaveDataManager.Instance.IsLevelCompleted("TutorialHallway") && !SaveDataManager.Instance.IsLevelCompleted("FINAL Parlor Room"))
+                {
+                    currentParameter = "VLLobbyNightOne";
+                    voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightOne);
+                }
+                if (SaveDataManager.Instance.IsLevelCompleted("FINAL Parlor Room") && !SaveDataManager.Instance.IsLevelCompleted("Exhibit 1 Wing 2 - Library"))
+                {
+                    currentParameter = "VLLobbyNightOne";
+                    voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightOne);
+                }
+            }
+
+            if (whichLine >= 0 && whichLine < 9)
+            {
+                RuntimeManager.StudioSystem.setParameterByName(currentParameter, whichLine);
                 voiceline.start();
             }
         }
