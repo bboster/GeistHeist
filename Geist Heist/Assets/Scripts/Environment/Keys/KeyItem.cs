@@ -25,6 +25,16 @@ public class KeyItem : MonoBehaviour
     {
         childCollider = GetComponent<Collider>();
         if (childCollider != null) childCollider.isTrigger = true;
+
+        
+    }
+
+    private void Start()
+    {
+        if (KeyManager.Instance.HasKey(keyType))
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
