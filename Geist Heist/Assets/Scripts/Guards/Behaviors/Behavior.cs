@@ -53,7 +53,7 @@ public class Behavior : ScriptableObject
 
         if (stateController != null)
         {
-            selfRef.GetComponent<Animator>().runtimeAnimatorController = stateController;
+            //selfRef.GetComponent<Animator>().runtimeAnimatorController = stateController;
         }
 
         contRef = selfRef.GetComponent<GuardController>();
@@ -67,8 +67,8 @@ public class Behavior : ScriptableObject
     /// </summary>
     public virtual void StopBehavior()
     {
-        selfRef.GetComponent<Animator>().StopPlayback();
-        selfRef.GetComponent<Animator>().runtimeAnimatorController = null;
+        //selfRef.GetComponent<Animator>().StopPlayback();
+        //selfRef.GetComponent<Animator>().runtimeAnimatorController = null;
         Destroy(this);
     }
 
