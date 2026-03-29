@@ -35,7 +35,8 @@ public class SettingsTab : PauseMenuTab
     [SerializeField] private SliderSettingsAttributes vocalsVolumeAttributes;
 
     [Header("Other")]
-    [SerializeField, Required] private ConfirmationPopup confirmationPopup;
+    [SerializeField] private bool resetConfirmation = false;
+    [ShowIf(nameof(resetConfirmation)), SerializeField, Required] private ConfirmationPopup confirmationPopup;
 
     private PostProcessingManager ppManager; // lol peepeeManager
 
@@ -68,14 +69,24 @@ public class SettingsTab : PauseMenuTab
 
     private void OnResetGameplayToDefaultsButtonPressed()
     {
-        confirmationPopup.gameObject.SetActive(true);
-        confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetGameplayToDefaultsButtonPressed);
+        if (resetConfirmation)
+        {
+            confirmationPopup.gameObject.SetActive(true);
+            confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetGameplayToDefaultsButtonPressed);
+        }
+        else
+            OnConfirmResetGameplayToDefaultsButtonPressed();
     }
 
     private void OnResetAudiToDefaultsButtonPressed()
     {
-        confirmationPopup.gameObject.SetActive(true);
-        confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetAudioToDefaultsButtonPressed);
+        if (resetConfirmation)
+        {
+            confirmationPopup.gameObject.SetActive(true);
+            confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetAudioToDefaultsButtonPressed);
+        }
+        else
+            OnConfirmResetAudioToDefaultsButtonPressed();
     }
 
     private void OnConfirmResetGameplayToDefaultsButtonPressed()
