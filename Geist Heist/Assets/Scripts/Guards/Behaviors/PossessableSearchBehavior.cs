@@ -31,6 +31,7 @@ public class PossessableSearchBehavior : GuardMovement
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;
+        contRef.searchAnimator.runtimeAnimatorController = stateController;
     }
 
     /// <summary>
@@ -73,6 +74,8 @@ public class PossessableSearchBehavior : GuardMovement
     /// </summary>
     public override void StopBehavior()
     {
+        contRef.searchAnimator.StopPlayback();
+        contRef.searchAnimator.runtimeAnimatorController = null;
         base.StopBehavior();
 
         if(TimerCoroutine != null)

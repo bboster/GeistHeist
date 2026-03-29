@@ -93,6 +93,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private bool _canUseControlSwap = true;
     private WaitForEndOfFrame _endOfFrame = null;
 
+    private Coroutine updateCoroutine;
+
     public void Initialize()
     {
         if (Instance != this)
@@ -109,6 +111,9 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         InputUser.onChange += OnInputUserChanged;
         
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        if (updateCoroutine == null)
+            updateCoroutine = StartCoroutine(UnscaledUpdate());
     }
 
     #region Controllers
@@ -261,7 +266,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.IsPaused)
+        if (GameManager.Instance.IsPaused || GameManager.Instance.IsPlayerInMenu)
             return;
 
         if (MovePressed) MoveHeld.Invoke(MoveHeldTime);
@@ -276,21 +281,29 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     {
         if (!GameManager.Instance.IsPaused)
             LookUpdate.Invoke(LookDelta);
+    }
 
-        // Polling-based device switching (catches input not yet in InputUser.onChange)
-        if (playerInput == null || playerInput.actions == null || !_canUseControlSwap)
-            return;
+    IEnumerator UnscaledUpdate()
+    {
+        while (true)
+        {
+            yield return null;
 
-        if (!WasAnySwitchRelevantDeviceUpdatedThisFrame())
-            return;
+            // Polling-based device switching (catches input not yet in InputUser.onChange)
+            if (playerInput == null || playerInput.actions == null || !_canUseControlSwap)
+                continue;
 
-        OnControllerChanged.Invoke();
+            if (!WasAnySwitchRelevantDeviceUpdatedThisFrame())
+                continue;
 
-        string currentScheme = playerInput.currentControlScheme;
-        if (TrySwitchToKeyboardMouseScheme(currentScheme))
-            return;
+            OnControllerChanged.Invoke();
 
-        TrySwitchToGamepadScheme(currentScheme);
+            string currentScheme = playerInput.currentControlScheme;
+            if (TrySwitchToKeyboardMouseScheme(currentScheme))
+                continue;
+
+            TrySwitchToGamepadScheme(currentScheme);
+        }
     }
 
     private static bool WasAnySwitchRelevantDeviceUpdatedThisFrame()
