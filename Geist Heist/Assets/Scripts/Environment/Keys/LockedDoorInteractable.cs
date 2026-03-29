@@ -14,7 +14,7 @@ using UnityEngine;
 using NaughtyAttributes;
 using FMODUnity;
 
-public class LockedDoorInteractable : MonoBehaviour, IActionable
+public class LockedDoorInteractable : MonoBehaviour, IInteractable
 {
     public enum HingeCorner
     {
@@ -44,9 +44,9 @@ public class LockedDoorInteractable : MonoBehaviour, IActionable
     private string _cachedCheckpointStateId;
 
     // IInteractable
-    public void Action() => TryOpen();
+    public void Interact() => TryOpen();
 
-    public bool IsActionable()
+    public bool IsInteractable()
     {
         if (_isOpen) return false;
         

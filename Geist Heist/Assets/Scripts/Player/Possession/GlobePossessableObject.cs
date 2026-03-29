@@ -9,7 +9,7 @@ using NaughtyAttributes;
 using NUnit.Framework;
 using UnityEngine;
 
-public class GlobePossessableObject : PossessableObject, IInteractable
+public class GlobePossessableObject : PossessableObject, IInteractable, IActionable
 {
     [SerializeField] private bool debugAlwaysPossessable;
 
@@ -33,12 +33,30 @@ public class GlobePossessableObject : PossessableObject, IInteractable
         }
     }
 
+    void IInteractable.Interact()
+    {
+        //don't
+    }
+
+
     bool IInteractable.IsInteractable()
+    {
+        //never
+        return false;
+    }
+
+    public void Action()
+    {
+        PlayerManager.Instance.PossessObject(this);
+    }
+
+    bool IActionable.IsActionable()
     {
         if (SaveDataManager.Instance.AllLevelsCompleted() || (Application.isEditor && debugAlwaysPossessable))
         {
             return true;
         }
+
         return false;
     }
 }

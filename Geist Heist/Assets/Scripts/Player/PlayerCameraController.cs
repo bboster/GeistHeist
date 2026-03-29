@@ -157,8 +157,14 @@ public class PlayerCameraController : MonoBehaviour
 
             if (axisName == "Look Orbit Y" || axisName == "Mouse Y" || axisName == "Gamepad Right Stick Y")
             {
-                c.Input.Gain = (SettingsProfile.InvertLook ? 1 : -1) * SettingsProfile.LookSensitivityTransformed;
-                c.Input.LegacyGain = (SettingsProfile.InvertLook ? -1 : 1) * SettingsProfile.LookSensitivityTransformed;
+                c.Input.Gain = (SettingsProfile.InvertYLook ? 1 : -1) * SettingsProfile.LookSensitivityTransformed;
+                c.Input.LegacyGain = (SettingsProfile.InvertYLook ? -1 : 1) * SettingsProfile.LookSensitivityTransformed;
+            }
+
+            if (axisName == "Look Orbit X" || axisName == "Mouse X" || axisName == "Gamepad Right Stick X")
+            {
+                c.Input.Gain = (SettingsProfile.InvertXLook ? -1 : 1) * SettingsProfile.LookSensitivityTransformed;
+                c.Input.LegacyGain = (SettingsProfile.InvertXLook ? 1 : -1) * SettingsProfile.LookSensitivityTransformed;
             }
         }
     }

@@ -543,6 +543,11 @@ public static class StaticUtilities
         return Mathf.Lerp(a, b, Cos01(x));
     }
 
+    public static float RoundToHundreth(float x)
+    {
+        return Mathf.Round(x * 100) / 100;
+    }
+
     #endregion
 
     #region Lists
