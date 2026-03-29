@@ -25,6 +25,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public PossessableObject CurrentObject;
 
     public IInputHandler currentInputHandler => CurrentObject?.InputHandler;
+    public LayerMask stopExit;
 
     private InputEvents inputEvents => InputEvents.Instance;
     [HideInInspector] public Camera camera;
@@ -202,7 +203,7 @@ public class PlayerManager : Singleton<PlayerManager>
                 Collider[] collisions = Physics.OverlapSphere(possessable.ghostExitPoints[i].transform.position, 0.2f);
 
                 //no collision = use this point
-                if (collisions.Length <= 0)
+                if (collisions.Length <= 0 && !Physics.Raycast(CurrentObject.transform.position, Vector3.Normalize(possessable.ghostExitPoints[i].transform.position - CurrentObject.transform.position) , Vector3.Distance(CurrentObject.transform.position, possessable.ghostExitPoints[i].transform.position), stopExit))
                 {
                     PlayerManager.Instance.PlayerGhostObject.transform.position = possessable.ghostExitPoints[i].position;
                     return possessable.ghostExitPoints[i].position;
