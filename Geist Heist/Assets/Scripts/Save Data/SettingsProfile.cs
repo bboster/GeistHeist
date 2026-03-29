@@ -15,7 +15,8 @@ public static class SettingsProfile
 {
     // Default Display values
     private const float DEFAULT_LOOK_SENSITIVITY = 100;
-    private const bool DEFAULT_INVERT_LOOK = false;
+    private const bool DEFAULT_INVERT_X_LOOK = false;
+    private const bool DEFAULT_INVERT_Y_LOOK = false;
     private const float DEFAULT_BRIGHTNESS = 50; // evaluates to 0
 
     private const float DEFAULT_MASTER_VOLUME = 100;
@@ -40,7 +41,8 @@ public static class SettingsProfile
     //TODO: if performance is a problem, convert string keys to ints.
 
     private const string LOOK_SENSITIVITY_KEY = "Look Sensitivity";
-    private const string INVERT_LOOK_KEY = "Invert Look";
+    private const string INVERT_X_LOOK_KEY = "Invert X Look";
+    private const string INVERT_Y_LOOK_KEY = "Invert Y Look";
     private const string BRIGHTNESS_KEY = "Brightness";
     private const string MASTER_VOLUME_KEY = "Master volume";
     private const string MUSIC_VOLUME_KEY = "Music volume";
@@ -50,7 +52,8 @@ public static class SettingsProfile
     #endregion
 
     // Current variables
-    public static bool InvertLook;
+    public static bool InvertXLook;
+    public static bool InvertYLook;
 
     public static float LookSensitivity, Brightness, 
         MasterVolume, MusicVolume, SFXVolume, VocalsVolume;
@@ -82,7 +85,8 @@ public static class SettingsProfile
     public static void ReadSavedSettings()
     {
         LookSensitivity = PlayerPrefs.GetFloat(LOOK_SENSITIVITY_KEY, DEFAULT_LOOK_SENSITIVITY);
-        InvertLook = PlayerPrefs.GetInt(INVERT_LOOK_KEY, DEFAULT_INVERT_LOOK ? 1 : 0) == 1; // Playerprefs cant store bools, so just store an int
+        InvertXLook = PlayerPrefs.GetInt(INVERT_X_LOOK_KEY, DEFAULT_INVERT_X_LOOK ? 1 : 0) == 1; // Playerprefs cant store bools, so just store an int
+        InvertYLook = PlayerPrefs.GetInt(INVERT_Y_LOOK_KEY, DEFAULT_INVERT_Y_LOOK ? 1 : 0) == 1; 
         Brightness = PlayerPrefs.GetFloat(BRIGHTNESS_KEY, DEFAULT_BRIGHTNESS);
 
         MasterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_MASTER_VOLUME);
@@ -96,7 +100,8 @@ public static class SettingsProfile
         Debug.Log("Saving current settings profile to settings profile");
 
         PlayerPrefs.SetFloat(LOOK_SENSITIVITY_KEY, LookSensitivity);
-        PlayerPrefs.SetInt(INVERT_LOOK_KEY, InvertLook ? 1 : 0); // Playerprefs cant store bools, so just store an int
+        PlayerPrefs.SetInt(INVERT_X_LOOK_KEY, InvertXLook ? 1 : 0); // Playerprefs cant store bools, so just store an int
+        PlayerPrefs.SetInt(INVERT_Y_LOOK_KEY, InvertYLook ? 1 : 0); 
         PlayerPrefs.SetFloat(BRIGHTNESS_KEY, Brightness);
 
         PlayerPrefs.SetFloat(MASTER_VOLUME_KEY, MasterVolume);
@@ -105,12 +110,19 @@ public static class SettingsProfile
         PlayerPrefs.SetFloat(VOCALS_VOLUME_KEY, VocalsVolume);
     }
 
-    public static void ResetToDefaults()
+    public static void ResetGameplayToDefaults()
     {
-        Debug.Log("Reseting all game settings to defaults");
+        Debug.Log("Reseting all gameplay settings to defaults");
         LookSensitivity = DEFAULT_LOOK_SENSITIVITY;
-        InvertLook = DEFAULT_INVERT_LOOK;
+        InvertXLook = DEFAULT_INVERT_X_LOOK;
+        InvertYLook = DEFAULT_INVERT_Y_LOOK;
         Brightness = DEFAULT_BRIGHTNESS;
+        SaveCurrentSettings();
+    }
+
+    public static void ResetAudioToDefaults()
+    {
+        Debug.Log("Reseting all audio settings to defaults");
         MasterVolume = DEFAULT_MASTER_VOLUME;
         MusicVolume = DEFAULT_MUSIC_VOLUME;
         SFXVolume = DEFAULT_SFX_VOLUME;
