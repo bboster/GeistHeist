@@ -24,6 +24,13 @@ public class PatrolMovement : GuardMovement
         currentPatrolPath = contRef.Path;
         currentPathIndex = contRef.StartIndex;
         thisAgent.isStopped = false;
+        contRef.GetAnimator().SetBool("isPatrolling", true);
+    }
+
+    public override void StopBehavior()
+    {
+        base.StopBehavior();
+        contRef.GetAnimator().SetBool("isPatrolling", false);
     }
 
     /// <summary>
