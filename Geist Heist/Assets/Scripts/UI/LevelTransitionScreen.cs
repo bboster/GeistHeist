@@ -68,20 +68,8 @@ public class LevelTransitionScreen : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(waitingSeconds);
 
-        yield return StaticUtilities.FadeOpacity(group, 1, 0, fadeOutSeconds);
+        yield return StaticUtilities.FadeToHidden(group, fadeOutSeconds);
 
         Destroy(this.gameObject);
     }
-
-#if UNITY_EDITOR
-    private void Update()
-    {
-        if (Input.anyKeyDown)
-        {
-            //StopAllCoroutines();
-            //SceneManager.LoadScene(_sceneToLoad);
-            //Destroy(this.gameObject);
-        }
-    }
-#endif
 }

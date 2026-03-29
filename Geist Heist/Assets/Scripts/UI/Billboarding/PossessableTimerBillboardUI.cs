@@ -52,18 +52,18 @@ public class PossessableTimerBillboardUI : IBillboardUI
         timerFill.color = timerFillGradient.Evaluate(1-t);
     }
 
-    protected override float CalculateOpacity(float playerDistance, Vector3 UIPosition)
+    protected override float CalculateOpacity(float playerDistance, float cameraDistance, Vector3 UIPosition)
     {
         float a;
 
         if (hideTimerIfPlayerPossessing && playerPossessingThis)
             a = 0;
         else
-            a = base.CalculateOpacity(playerDistance, UIPosition);
+            a = base.CalculateOpacity(playerDistance, cameraDistance,UIPosition);
 
         //Debug.Log($"{a}*{targetOpacity}*{opacityByTimeRemaining}");
 
-        // This sounds harsh, but CalculateAndSetOpacity smooths the opacity so its okay
+        // This sounds harsh, but CalculateAndSetOpacity smooths the baseOpacity so its okay
         return a * targetOpacity * opacityByTimeRemaining;
     }
 

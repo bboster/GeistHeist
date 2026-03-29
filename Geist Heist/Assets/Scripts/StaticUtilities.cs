@@ -155,6 +155,9 @@ public static class StaticUtilities
             time = unscaledTime ? Time.unscaledTime : Time.time;
             float t = (time - startTime) / seconds;
 
+            if (transform == null)
+                yield break;
+
             transform.localScale = Vector3.Lerp(startScale, endScale, t);
 
             yield return null;
@@ -547,6 +550,11 @@ public static class StaticUtilities
     public static float CosRange(float x, float a, float b)
     {
         return Mathf.Lerp(a, b, Cos01(x));
+    }
+
+    public static float RoundToHundreth(float x)
+    {
+        return Mathf.Round(x * 100) / 100;
     }
 
     #endregion

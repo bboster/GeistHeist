@@ -17,6 +17,7 @@ using UnityEngine.SceneManagement;
 public class AttackBehavior : Behavior
 {
     private bool performingAttack = true;
+    private bool loopRunning = false;
 
     [SerializeField] private float attackLength; //REPLACE WITH ANIMATION STUFF LATER
 
@@ -31,7 +32,7 @@ public class AttackBehavior : Behavior
 
         for(; ; )
         {
-            if(performingAttack == true)
+            if(performingAttack == true && contRef.currentBehavior.StateName == GuardStates.attack)
             {
                 //Debug.Log("Player Caught");
                 GameManager.Instance.DeathReset();
@@ -45,5 +46,7 @@ public class AttackBehavior : Behavior
 
             yield return new WaitForSeconds(attackLength);
         }
+
+
     }
 }

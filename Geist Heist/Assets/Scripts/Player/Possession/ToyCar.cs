@@ -6,9 +6,9 @@ using UnityEngine.UI;
 using FMODUnity;
 using FMOD.Studio;
 /*
- * Contributors: Sky, Toby
+ * Contributors: Sky, Toby, Jacob
  * Creation Date: 10/2/25
- * Last Modified: 10/27/25
+ * Last Modified: 3/3/26
  * 
  * Brief Description: Input Handler for the Toy Car, handles movement and actions for the Toy Car
  */
@@ -30,6 +30,8 @@ public class ToyCar : IInputHandler
     [SerializeField] private float delayBetweenZooms = 1;
     [Tooltip("How much moving rotates by per second.")]
     [SerializeField] private float rotationRate = 30;
+    [Tooltip("If the magnitude of the linearVelocity is greater than this value then the car is detectable")]
+    [SerializeField] private float detectableThreshold = 1f;
     [BoxGroup("Gamepad Tuning"), Tooltip("Modifies the gamepad's sensitivity while rotating the toy car")]
     [SerializeField] private float rotationSensitivityMod = 0.01f;
 
@@ -93,6 +95,8 @@ public class ToyCar : IInputHandler
         possessableParticle.Stop();
         velocityChangeDetector.StopRecordingVelocity();
 
+        carWindSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
         if (possessableObject.UnpossessedMaterial != null)
         {
             possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
@@ -154,6 +158,16 @@ public class ToyCar : IInputHandler
             physicsEnabled = false;
             hasLaunchedThisPossession = true;
         }
+    }
+
+    /// <summary>
+    /// Returns true if the player is detectable, false otherwise
+    /// </summary>
+    /// <returns></returns>
+    public override bool IsDetectable()
+    {
+        //If greater than threshold then return true, else return false
+        return rb.linearVelocity.magnitude > detectableThreshold;
     }
 
     #region action

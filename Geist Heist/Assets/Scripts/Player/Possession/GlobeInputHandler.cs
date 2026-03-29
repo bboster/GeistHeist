@@ -35,7 +35,7 @@ public class GlobeInputHandler : IInputHandler
 
 
     private Animator animator => GetComponent<Animator>();
-    private SceneTransitionActionable sceneTransitionInteractable => GetComponent<SceneTransitionActionable>();
+    private SceneTransitionInteractable sceneTransitionInteractable => GetComponent<SceneTransitionInteractable>();
 
     private void Start()
     {
@@ -63,6 +63,8 @@ public class GlobeInputHandler : IInputHandler
     public override void OnPossessionEnded()
     {
     }
+
+    public override bool IsDetectable() { return false; }
 
 
     #region action
