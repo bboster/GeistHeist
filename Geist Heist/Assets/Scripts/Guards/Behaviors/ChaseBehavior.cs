@@ -26,11 +26,14 @@ public class ChaseBehavior : GuardMovement
 
         MoveToPoint(GetPlayerLocation());
         thisAgent.isStopped = false;
+
+        contRef.GetAnimator().SetBool("isChasing", true);
     }
 
     public override void StopBehavior()
     {
         base.StopBehavior();
+        contRef.GetAnimator().SetBool("isChasing", false);
     }
 
     #endregion

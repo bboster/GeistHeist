@@ -36,7 +36,9 @@ public class StationaryBehavior : Behavior
     /// <param name="selfRef"></param>
     public override void InitializeBehavior(GameObject selfRef)
     {
+
         base.InitializeBehavior(selfRef);
+        contRef.GetAnimator().SetBool("isStandingSearching", true);
         selfRef.GetComponent<NavMeshAgent>().isStopped = true;
         selfRef.GetComponent<NavMeshAgent>().enabled = false;
 
@@ -52,6 +54,7 @@ public class StationaryBehavior : Behavior
     /// </summary>
     public override void StopBehavior()
     {
+        contRef.GetAnimator().SetBool("isStandingSearching", false);
         selfRef.GetComponent<NavMeshAgent>().enabled = true;
         base.StopBehavior();
     }
