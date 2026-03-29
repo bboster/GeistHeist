@@ -19,6 +19,8 @@ public class VisionBreakSearchBehavior : GuardMovement
     private bool behaviorComplete = false;
 
     [SerializeField] private float searchLength;
+    [Tooltip("How long a guard can be moving to the break point before the path is determined invalid")]
+    [SerializeField] private float lengthBeforePathInvalid;
 
     public Vector3 SearchLocation;
 
@@ -31,8 +33,10 @@ public class VisionBreakSearchBehavior : GuardMovement
         base.InitializeBehavior(selfRef);
         SearchLocation = PlayerManager.Instance.CurrentObject.transform.position;
         MoveToPoint(SearchLocation);
+        GuardCoroutineManager.Instance.StartBehaviorTimer(lengthBeforePathInvalid, this);
         thisAgent.isStopped = false;
         behaviorComplete = false;
+        contRef.GetAnimator().SetBool("isSearching", true);
     }
 
     /// <summary>
@@ -63,12 +67,16 @@ public class VisionBreakSearchBehavior : GuardMovement
     /// <returns></returns>
     private void StartSearch()
     {
+        GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
+        contRef.searchAnimator.runtimeAnimatorController = stateController;
         GuardCoroutineManager.Instance.StartBehaviorTimer(searchLength, this);
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
 
-/*#if UNITY_EDITOR
-        selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
-#endif*/
+        contRef.GetAnimator().SetBool("isStandingSearching", true);
+
+        /*#if UNITY_EDITOR
+                selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
+        #endif*/
     }
 
     /// <summary>
@@ -76,10 +84,14 @@ public class VisionBreakSearchBehavior : GuardMovement
     /// </summary>
     public override void StopBehavior()
     {
+        contRef.searchAnimator.StopPlayback();
+        contRef.searchAnimator.runtimeAnimatorController = null;
         base.StopBehavior();
         GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;
         selfRef.GetComponent<GuardController>().GetAnimator().SetTrigger("LookingAround");
         SearchLocation = Vector3.zero;
+        contRef.GetAnimator().SetBool("isStandingSearching", false);
+        contRef.GetAnimator().SetBool("isSearching", false);
     }
 }
