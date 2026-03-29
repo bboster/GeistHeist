@@ -51,6 +51,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private Button closeHowToPlayButton;
 
     [Header("Settings Page")]
+    [SerializeField, Required] private SettingsTab settingsTab;
     [SerializeField, Required] private CanvasGroup settingsPage;
     [SerializeField, Required] private Button closeSettingsButton;
     private bool settingsOpen = false;
@@ -203,6 +204,8 @@ public class MainMenu : MonoBehaviour
     {
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
         settingsOpen = true;
+        PauseMenuTab.currentOpenTab = null;
+        settingsTab.OpenTab();
 
         StaticUtilities.EnableCanvasGroup(settingsPage);
     }
@@ -270,6 +273,8 @@ public class MainMenu : MonoBehaviour
         StaticUtilities.DisableCanvasGroup(settingsPage);
         EventSystem.current.SetSelectedGameObject(settingsButton.gameObject);
         settingsOpen = false;
+
+        settingsTab.CloseTab();
     }
 
     #endregion

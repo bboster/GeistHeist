@@ -354,6 +354,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void UpdateCamerasSensitivity()
     {
+        if (mainPlayerCameraController == null) return;
+
         mainPlayerCameraController.UpdateCameraSensitivity();
         if (currentCameraController != mainPlayerCameraController)
             currentCameraController.UpdateCameraSensitivity();
@@ -361,6 +363,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void UpdateCamerasInvertLook()
     {
+        if (mainPlayerCameraController == null) return;
+
         mainPlayerCameraController.UpdateCameraInvertLook();
         if (currentCameraController != mainPlayerCameraController)
             currentCameraController. UpdateCameraInvertLook();
