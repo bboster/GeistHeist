@@ -147482,6 +147482,7 @@ GameObject:
   - component: {fileID: 1303174639}
   - component: {fileID: 1303174641}
   - component: {fileID: 1303174640}
+  - component: {fileID: 1303174642}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -147546,6 +147547,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1303174638}
   m_CullTransparentMesh: 1
+--- !u!114 &1303174642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303174638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+  m_EffectColor: {r: 0.10588236, g: 0.5764706, b: 1, a: 1}
+  m_EffectDistance: {x: -5, y: 5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1304231521
 GameObject:
   m_ObjectHideFlags: 0
@@ -180548,6 +180564,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.22311, y: 2.870849, z: 10.641888}
   m_Center: {x: 0.29886246, y: 0.93542445, z: -1.1415646}
+--- !u!114 &1642544366 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5112650003540687205, guid: e1f9d75daa020184cb23ddbfbfec499c, type: 3}
+  m_PrefabInstance: {fileID: 8402504179295704955}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &1644309949
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -231852,7 +231879,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &5160796784381452456
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -232034,7 +232061,7 @@ MonoBehaviour:
   howToPlayButton: {fileID: 0}
   quitGameButton: {fileID: 7235324450579758182}
   creditsPage: {fileID: 1587668506051476400}
-  closeCreditsButton: {fileID: 7706855623050363738}
+  closeCreditsButton: {fileID: 1642544366}
   howToPlayPage: {fileID: 1522602267021946663}
   closeHowToPlayButton: {fileID: 2602466551927493324}
   settingsTab: {fileID: 1566735210}
@@ -232114,17 +232141,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 487b0d47ed0208e4ca05f28ffd7ac065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoverButtonSound
---- !u!114 &7706855623050363738 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6809367584848540554, guid: e1f9d75daa020184cb23ddbfbfec499c, type: 3}
-  m_PrefabInstance: {fileID: 8402504179295704955}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!114 &7729037295997127434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232299,14 +232315,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 803241560748580407, guid: e1f9d75daa020184cb23ddbfbfec499c, type: 3}
-      propertyPath: m_Alpha
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 888135942593367136, guid: e1f9d75daa020184cb23ddbfbfec499c, type: 3}
       propertyPath: m_Name
       value: Credits Page
       objectReference: {fileID: 0}
+    - target: {fileID: 5112650003540687205, guid: e1f9d75daa020184cb23ddbfbfec499c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 1794256888}
+    - target: {fileID: 5112650003540687205, guid: e1f9d75daa020184cb23ddbfbfec499c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 1794256888}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

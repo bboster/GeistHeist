@@ -55,6 +55,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private CanvasGroup settingsPage;
     [SerializeField, Required] private Button closeSettingsButton;
     private bool settingsOpen = false;
+    private bool creditsOpen = false;
 
     // if the player has played before and got past the first level
     private bool playerHasSignificantSaveData;
@@ -93,6 +94,7 @@ public class MainMenu : MonoBehaviour
         settingsPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(settingsPage);
         settingsOpen = false;
+        creditsOpen = false;
 
         InputSystem.onEvent += OnAnyButtonPressed;
         pressAnyButtonButton.onClick.AddListener(() => OnAnyButtonPressed(null, null));
@@ -213,6 +215,7 @@ public class MainMenu : MonoBehaviour
     void OnCreditsButtonClicked()
     {
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
+        creditsOpen = true;
 
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         StaticUtilities.EnableCanvasGroup(creditsPage);
@@ -257,6 +260,7 @@ public class MainMenu : MonoBehaviour
     void OnCreditsBackButtonClicked()
     {
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
+        creditsOpen = false;
 
         StaticUtilities.DisableCanvasGroup(creditsPage);
         EventSystem.current.SetSelectedGameObject(creditsButton.gameObject);
@@ -312,7 +316,7 @@ public class MainMenu : MonoBehaviour
     {
         while (true)
         {
-            if (settingsOpen)
+            if (settingsOpen || creditsOpen)
                 TimeOfLastAnyButtonPressed = Time.unscaledTime;
 
             //Debug.Log(Time.unscaledTime - TimeOfLastAnyButtonPressed);
