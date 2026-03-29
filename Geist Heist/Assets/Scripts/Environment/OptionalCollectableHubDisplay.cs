@@ -127,8 +127,8 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
         // Reset transform and ensure visibility
         target.transform.localPosition = Vector3.zero;
-        target.transform.localRotation = Quaternion.identity;
-        target.transform.localScale = Vector3.one;
+        //target.transform.localRotation = Quaternion.identity;
+        //target.transform.localScale = Vector3.one;
         target.gameObject.SetActive(true);
     }
     private void LoadRegistry()
