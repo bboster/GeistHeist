@@ -55,8 +55,8 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
         if(isPASystem)
         {
             //play audio clip here joey
-            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PAJingle);
-            yield return new WaitForSeconds(0.4f); // idk how long the PAJingle is, theres no way to get it either
+            //AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PAJingle);
+            //yield return new WaitForSeconds(0.4f); // idk how long the PAJingle is, theres no way to get it either
         }
 
         // this code is really dense, im sorry.
