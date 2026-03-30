@@ -62,6 +62,7 @@ public class GuardController : MonoBehaviour
     [SerializeField] private ParticleSystem dustParticles;
     [SerializeField] private ParticleSystem smokeParticlesL;
     [SerializeField] private ParticleSystem smokeParticlesR;
+    public Animator searchAnimator;
 
     [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
