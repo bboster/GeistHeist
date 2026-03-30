@@ -49,7 +49,13 @@ public class KeyUIManager : MonoBehaviour
         }
 
         // account for duplicate keys
-        var uniqueKeysInScene = keysInScene.Select(k => k.keyType).Distinct().ToList();
+        var uniqueKeysInScene = keysInScene
+            .Select(k => k.keyType)
+            .Distinct()
+            .OrderBy(k => KeyManager.Instance.KeyUIIcons.FindIndex(kui => kui.Key == k))
+            .ToList();
+
+
         if (uniqueKeysInScene.Count() > keyImages.Count) {
             Debug.LogError($"There are more keys ({uniqueKeysInScene.Count()} in scene than usable images in the key UI ({keyImages.Count})");
             return;
