@@ -48,6 +48,9 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
 
     private Outline outline;
     private bool? cached_isActionable; // decide one time if it is actionable and never again (until scene is reloaded)
+
+    public currentLevel thisLevel;
+
     void Start()
     {
         outline = GetComponent<Outline>();
@@ -70,7 +73,7 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        DialogueUIManager.Instance.DisplayText_Dialogue(flavorText, onDialogueEndCallback: OnFlavorTextEnd);
+        DialogueUIManager.Instance.DisplayText_Dialogue(flavorText, thisLevel, onDialogueEndCallback: OnFlavorTextEnd);
         SaveDataManager.Instance.MarkFlavorTextAsRead(flavorText, autoSave: true);
         DisableTextActionable();
     }
