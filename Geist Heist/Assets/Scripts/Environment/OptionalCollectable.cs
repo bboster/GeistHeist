@@ -321,4 +321,6 @@ public enum Collectable
     LobsterCollectable,
     ChefHatCollectable,
     TeaCupCollectable,
+	CollectibleTemplate,
+	PurpleTopHat,
 }
