@@ -32,6 +32,38 @@ Transform:
   - {fileID: 4919217130501532946}
   m_Father: {fileID: 5225363458447540929}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &191616793259084008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1905837876239891624}
+  m_Layer: 0
+  m_Name: Globe Hallway Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1905837876239891624
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191616793259084008}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.09628001, w: 0.9953543}
+  m_LocalPosition: {x: -0.2617477, y: -0.19284171, z: 0}
+  m_LocalScale: {x: 0.08783486, y: 0.08783486, z: 0.08783487}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4791164194289135784}
+  m_Father: {fileID: 8862898906648144643}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1876427650027056345
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +178,6 @@ GameObject:
   - component: {fileID: 9004393852417125356}
   - component: {fileID: 1898307076615750055}
   - component: {fileID: 5491131658075242119}
-  - component: {fileID: 962496565493810803}
   - component: {fileID: 3767519987537585855}
   - component: {fileID: 8871367632489137557}
   - component: {fileID: 362992205300284476}
@@ -188,7 +219,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028572975817648515}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -246,32 +277,10 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!95 &962496565493810803
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028572975817648515}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1cbc835c42dfade4e902d2d8dfc8cbbd, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3767519987537585855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,12 +288,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028572975817648515}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38800cd25e1334c45a1e3092994495da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionInteractable
-  sceneName: ACTUAL Globe Scene
+  sceneName: Main Menu
   loadingScreenPrefab: {fileID: 4996678474793840024, guid: ef6279e25117c4d4ab9e6b822786aca1, type: 3}
   levelLoadingCardPrefab: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
   confirmationText: Go Inside Globe?
@@ -298,7 +307,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028572975817648515}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 049c7e2ee40feb44bb786b790f3c758b, type: 3}
   m_Name: 
@@ -318,7 +327,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028572975817648515}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad178c2cb7d35814e86defddb59d8e57, type: 3}
   m_Name: 
@@ -373,6 +382,138 @@ MonoBehaviour:
   bakeKeys: []
   bakeValues: []
   outlineFillMaterial: {fileID: 0}
+--- !u!1 &2935397182190751640
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4791164194289135784}
+  - component: {fileID: 8709068852195673654}
+  - component: {fileID: 6074121208120663775}
+  - component: {fileID: 1904898054905479357}
+  m_Layer: 0
+  m_Name: Globe Hallway Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &4791164194289135784
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935397182190751640}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.22524403, y: -0.6749056, z: 0.22654009, w: 0.66516703}
+  m_LocalPosition: {x: 23.481207, y: 18.685314, z: 0.042856757}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1905837876239891624}
+  m_LocalEulerAnglesHint: {x: 23.001, y: -90, z: 0}
+--- !u!114 &8709068852195673654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935397182190751640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 1
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 8862898906648144643}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 91.9
+    OrthographicSize: 5
+    NearClipPlane: 0.01
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!114 &6074121208120663775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935397182190751640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
+  Damping: {x: 0.1, y: 0.5, z: 0.3}
+  ShoulderOffset: {x: 24.78, y: 7.24, z: 2.03}
+  VerticalArmLength: 0.91
+  CameraSide: 0.834
+  CameraDistance: 2
+  AvoidObstacles:
+    Enabled: 0
+    CollisionFilter:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    IgnoreTag: 
+    CameraRadius: 0.2
+    DampingIntoCollision: 0
+    DampingFromCollision: 0.5
+--- !u!114 &1904898054905479357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935397182190751640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f38bda98361e1de48a4ca2bd86ea3c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineRotationComposer
+  Composition:
+    ScreenPosition: {x: 0, y: 0}
+    DeadZone:
+      Enabled: 0
+      Size: {x: 0.2, y: 0.2}
+    HardLimits:
+      Enabled: 0
+      Size: {x: 0.8, y: 0.8}
+      Offset: {x: 0, y: 0}
+  CenterOnActivate: 1
+  TargetOffset: {x: 0, y: 0, z: -0.2}
+  Damping: {x: 0.5, y: 0.5}
+  Lookahead:
+    Enabled: 0
+    Time: 0
+    Smoothing: 0
+    IgnoreY: 0
 --- !u!1 &3570522730866818126
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,7 +565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5938262428246387303
 Transform:
   m_ObjectHideFlags: 0
@@ -1267,11 +1408,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 3848111523564ff4da638362db941fa9, type: 2}
     - target: {fileID: -6688680765671369198, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -6531534217169694260, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2207055031722144181, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -1283,11 +1424,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 3848111523564ff4da638362db941fa9, type: 2}
     - target: {fileID: 19861884916414074, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 779532687743388704, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: m_Name
@@ -1299,11 +1440,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2749903753347161657, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5129681450506873123, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8839266897458754628, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -1321,6 +1462,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5938262428246387303}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1905837876239891624}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e739b40b6f917ca42a1bf25891ee289d, type: 3}
       insertIndex: -1
@@ -1397,7 +1541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GlobePossessable
   globeSwingCamera: {fileID: 582774347660886353}
   globeRollCamera: {fileID: 5263451495580764414}
-  globeHallwayCamera: {fileID: 2841717784509035169}
+  globeHallwayCamera: {fileID: 8709068852195673654}
   buttonPressText: {fileID: 3528419821515742301}
   endCutsceneScene: OutroCutscene
   endingButtonPresses: 10
@@ -1427,7 +1571,7 @@ MonoBehaviour:
   PossessedMaterial: {fileID: 0}
   UnpossessedMaterial: {fileID: 0}
   VisiblePossessionMaterial: {fileID: 0}
-  VisibleUnPossessedMaterial: {fileID: 0}
+  VisibleUnPossessedMaterial: {fileID: 2100000, guid: 7f215450e14de644d82bf78622e04701, type: 2}
   AbilityIconPrefab: {fileID: 0}
   PossessableTextPrefab: {fileID: 0}
   HasChargeAbility: 0
@@ -1444,7 +1588,7 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  debugAlwaysPossessable: 1
+  debugAlwaysPossessable: 0
   interactBillboardUIPoint: {fileID: 116407751311461491}
 --- !u!95 &6441661795119216212
 Animator:

@@ -8229,138 +8229,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e3bdd522e272d1a488cd274acfe87b22, type: 3}
   m_PrefabInstance: {fileID: 1351998426}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &171779469
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 171779470}
-  - component: {fileID: 171779473}
-  - component: {fileID: 171779472}
-  - component: {fileID: 171779471}
-  m_Layer: 0
-  m_Name: Globe Hallway Camera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
---- !u!4 &171779470
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171779469}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.2875924, y: -0.650748, z: 0.28791708, w: 0.64103156}
-  m_LocalPosition: {x: 20.273354, y: 22.48146, z: 0.042856757}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 594985228}
-  m_LocalEulerAnglesHint: {x: 23.001, y: -90, z: 0}
---- !u!114 &171779471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171779469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f38bda98361e1de48a4ca2bd86ea3c17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineRotationComposer
-  Composition:
-    ScreenPosition: {x: 0, y: 0}
-    DeadZone:
-      Enabled: 0
-      Size: {x: 0.2, y: 0.2}
-    HardLimits:
-      Enabled: 0
-      Size: {x: 0.8, y: 0.8}
-      Offset: {x: 0, y: 0}
-  CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0, z: -0.2}
-  Damping: {x: 0.5, y: 0.5}
-  Lookahead:
-    Enabled: 0
-    Time: 0
-    Smoothing: 0
-    IgnoreY: 0
---- !u!114 &171779472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171779469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
-  Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 24.78, y: 7.24, z: 2.03}
-  VerticalArmLength: 0.91
-  CameraSide: 0.834
-  CameraDistance: 2
-  AvoidObstacles:
-    Enabled: 0
-    CollisionFilter:
-      serializedVersion: 2
-      m_Bits: 4294967295
-    IgnoreTag: 
-    CameraRadius: 0.2
-    DampingIntoCollision: 0
-    DampingFromCollision: 0.5
---- !u!114 &171779473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171779469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
-  Priority:
-    Enabled: 1
-    m_Value: 0
-  OutputChannel: 1
-  StandbyUpdate: 2
-  m_StreamingVersion: 20241001
-  m_LegacyPriority: 0
-  Target:
-    TrackingTarget: {fileID: 795321532}
-    LookAtTarget: {fileID: 0}
-    CustomLookAtTarget: 0
-  Lens:
-    FieldOfView: 91.9
-    OrthographicSize: 5
-    NearClipPlane: 0.01
-    FarClipPlane: 1000
-    Dutch: 0
-    ModeOverride: 0
-    PhysicalProperties:
-      GateFit: 2
-      SensorSize: {x: 21.946, y: 16.002}
-      LensShift: {x: 0, y: 0}
-      FocusDistance: 10
-      Iso: 200
-      ShutterSpeed: 0.005
-      Aperture: 16
-      BladeCount: 5
-      Curvature: {x: 2, y: 11}
-      BarrelClipping: 0.25
-      Anamorphism: 0
-  BlendHint: 0
 --- !u!1 &177945219
 GameObject:
   m_ObjectHideFlags: 0
@@ -12880,29 +12748,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1947103047}
     m_Modifications:
-    - target: {fileID: 63192768418683518, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: globeHallwayCamera
-      value: 
-      objectReference: {fileID: 171779473}
-    - target: {fileID: 362992205300284476, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1898307076615750055, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3570522730866818126, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
       propertyPath: m_Name
       value: Globe
-      objectReference: {fileID: 0}
-    - target: {fileID: 3767519987537585855, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3767519987537585855, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: sceneName
-      value: Main Menu
       objectReference: {fileID: 0}
     - target: {fileID: 5225363458447540929, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12944,25 +12792,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5491131658075242119, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6426544663343763313, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8871367632489137557, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 962496565493810803, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 8862898906648144643, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 594985228}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
 --- !u!1001 &249408510
@@ -41041,38 +40873,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 273264860655025274, guid: 2ac90f6884dd08f4b947e9b2ed8419a4, type: 3}
   m_PrefabInstance: {fileID: 593623212}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &594985227
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 594985228}
-  m_Layer: 0
-  m_Name: Globe Hallway Anchor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
---- !u!4 &594985228
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 594985227}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.09628001, w: 0.9953543}
-  m_LocalPosition: {x: -0.2617477, y: -0.19284171, z: 0}
-  m_LocalScale: {x: 0.08783486, y: 0.08783486, z: 0.08783487}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 171779470}
-  m_Father: {fileID: 795321532}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &595824000
 Mesh:
   m_ObjectHideFlags: 0
@@ -50026,11 +49826,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4692698166189449011, guid: 268cbaa9612378f49b66006a8fc99f84, type: 3}
   m_PrefabInstance: {fileID: 791853402}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &795321532 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8862898906648144643, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-  m_PrefabInstance: {fileID: 249209961}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &796167463
 GameObject:
