@@ -30,6 +30,14 @@ public class DialogueBoxTrigger : MonoBehaviour
     [SerializeField] private int whichLine;
     #endregion
 
+    public enum currentLevel
+    {
+        Tutorial,
+        Lobby,
+        Parlor
+    }
+
+    public currentLevel thisLevel;
 
     private void Start()
     {
@@ -54,20 +62,19 @@ public class DialogueBoxTrigger : MonoBehaviour
             DialogueUIManager.Instance.DisplayText_PASystem(dialogueText);
 
             string currentParameter = "";
-            string currentSceneName = SceneManager.GetActiveScene().name;
 
             //This needs more changes later when we add voicelines to remaining scenes
-            if (currentSceneName == "TutorialHallway")
+            if (thisLevel == currentLevel.Tutorial)
             {
                 currentParameter = "VLTutorial";
                 voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLTutorial);
             }
-            if (currentSceneName == "FINAL Parlor Room")
+            if (thisLevel == currentLevel.Parlor)
             {
                 currentParameter = "VLParlor";
                 voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLParlor);
             }
-            if (currentSceneName == "HubV2.5")
+            if (thisLevel == currentLevel.Lobby)
             {
                 if (SaveDataManager.Instance.IsLevelCompleted("TutorialHallway") && !SaveDataManager.Instance.IsLevelCompleted("FINAL Parlor Room"))
                 {
@@ -76,8 +83,8 @@ public class DialogueBoxTrigger : MonoBehaviour
                 }
                 if (SaveDataManager.Instance.IsLevelCompleted("FINAL Parlor Room") && !SaveDataManager.Instance.IsLevelCompleted("Exhibit 1 Wing 2 - Library"))
                 {
-                    currentParameter = "VLLobbyNightOne";
-                    voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightOne);
+                    currentParameter = "VLLobbyNightTwo";
+                    voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightTwo);
                 }
             }
 
