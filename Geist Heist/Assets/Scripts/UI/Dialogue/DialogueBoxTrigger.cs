@@ -76,15 +76,20 @@ public class DialogueBoxTrigger : MonoBehaviour
             }
             if (thisLevel == currentLevel.Lobby)
             {
-                if (SaveDataManager.Instance.IsLevelCompleted("TutorialHallway") && !SaveDataManager.Instance.IsLevelCompleted("FINAL Parlor Room"))
+                int levelCount = SaveDataManager.Instance.GetLevelsCompletedCount();
+                Debug.Log("levelCount: " + levelCount);
+                switch (levelCount)
                 {
-                    currentParameter = "VLLobbyNightOne";
-                    voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightOne);
-                }
-                if (SaveDataManager.Instance.IsLevelCompleted("FINAL Parlor Room") && !SaveDataManager.Instance.IsLevelCompleted("Exhibit 1 Wing 2 - Library"))
-                {
-                    currentParameter = "VLLobbyNightTwo";
-                    voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightTwo);
+                    case 2:
+                        currentParameter = "VLLobbyNightOne";
+                        voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightOne);
+                        break;
+                    case 3:
+                        currentParameter = "VLLobbyNightTwo";
+                        voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightTwo);
+                        break;
+                    default:
+                        break;
                 }
             }
 
