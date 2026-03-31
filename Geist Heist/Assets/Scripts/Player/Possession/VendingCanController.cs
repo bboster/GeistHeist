@@ -42,6 +42,7 @@ public class VendingCanController : MonoBehaviour
             var soundStimulus = soundWave.GetComponent<SoundStimulus>();
             firstTime = false;
             OnCrashOrBounceDetected(collision.contacts[0].point);
+            StartCoroutine(DeleteCanClutter());
         }
     }
 
