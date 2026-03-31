@@ -25,16 +25,8 @@ public class PADialogueUITrigger : MonoBehaviour
     [SerializeField, Foldout("Deprecated")] float stayLength;
     bool alreadyTriggered;
 
-    private EventInstance voiceline;
 
     [SerializeField, Foldout("Deprecated")] private int whichLine;
-
-    public enum currentLevel
-    {
-        Tutorial,
-        Lobby,
-        Parlor
-    }
 
     public currentLevel thisLevel;
 
@@ -42,46 +34,8 @@ public class PADialogueUITrigger : MonoBehaviour
     {
         if (other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
-            string currentParameter = "";
-
-            //This needs more changes later when we add voicelines to remaining scenes
-            if (thisLevel == currentLevel.Tutorial)
-            {
-                currentParameter = "VLTutorial";
-                voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLTutorial);
-            }
-            if (thisLevel == currentLevel.Parlor)
-            {
-                currentParameter = "VLParlor";
-                voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLParlor);
-            }
-            if (thisLevel == currentLevel.Lobby)
-            {
-                int levelCount = SaveDataManager.Instance.GetLevelsCompletedCount();
-                Debug.Log("levelCount: " + levelCount);
-                switch (levelCount)
-                {
-                    case 2:
-                        currentParameter = "VLLobbyNightOne";
-                        voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightOne);
-                        break;
-                    case 3:
-                        currentParameter = "VLLobbyNightTwo";
-                        voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightTwo);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (whichLine >= 0 && whichLine < 9)
-            {
-                RuntimeManager.StudioSystem.setParameterByName(currentParameter, whichLine);
-                voiceline.start();
-            }
-
             alreadyTriggered = true;
-            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText);
+            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText, thisLevel);
         }
     }
 

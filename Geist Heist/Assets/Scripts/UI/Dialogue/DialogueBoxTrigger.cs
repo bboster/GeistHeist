@@ -30,13 +30,6 @@ public class DialogueBoxTrigger : MonoBehaviour
     [SerializeField] private int whichLine;
     #endregion
 
-    public enum currentLevel
-    {
-        Tutorial,
-        Lobby,
-        Parlor
-    }
-
     public currentLevel thisLevel;
 
     private void Start()
@@ -59,7 +52,7 @@ public class DialogueBoxTrigger : MonoBehaviour
         if(other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             alreadyTriggered = true;
-            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText);
+            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText, thisLevel);
 
             string currentParameter = "";
 

@@ -9,6 +9,7 @@
 using FMOD.Studio;
 using FMODUnity;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
@@ -32,32 +33,25 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
     {
     }
 
-    public void DisplayText_Dialogue(List<DialogueTextData> dialogueText, UnityAction onDialogueEndCallback=null)
+    public void DisplayText_Dialogue(List<DialogueTextData> dialogueText, currentLevel currentLevel, UnityAction onDialogueEndCallback=null)
     {
-        StartCoroutine(DisplayTextList(dialogueText, false, onDialogueEndCallback: onDialogueEndCallback));
+        StartCoroutine(DisplayTextList(dialogueText, false, currentLevel, onDialogueEndCallback: onDialogueEndCallback));
 
         if (relocateDialogueBubblesCoroutine == null)
             relocateDialogueBubblesCoroutine = StartCoroutine(UpdateDialogueBubbleLayout());
     }
 
-    public void DisplayText_PASystem(List<DialogueTextData> dialogueText, UnityAction onDialogueEndCallback = null)
+    public void DisplayText_PASystem(List<DialogueTextData> dialogueText, currentLevel currentLevel, UnityAction onDialogueEndCallback = null)
     {
-        StartCoroutine(DisplayTextList(dialogueText, true, onDialogueEndCallback: onDialogueEndCallback));
+        StartCoroutine(DisplayTextList(dialogueText, true, currentLevel, onDialogueEndCallback: onDialogueEndCallback));
 
         if (relocateDialogueBubblesCoroutine == null)
             relocateDialogueBubblesCoroutine = StartCoroutine(UpdateDialogueBubbleLayout());
     }
 
-    private IEnumerator DisplayTextList(List<DialogueTextData> dialogueText, bool isPASystem , UnityAction onDialogueEndCallback = null)
+    private IEnumerator DisplayTextList(List<DialogueTextData> dialogueText, bool isPASystem , currentLevel currentLevel, UnityAction onDialogueEndCallback = null)
     {
         EventInstance voiceline;
-
-        if(isPASystem)
-        {
-            //play audio clip here joey
-            //AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PAJingle);
-            //yield return new WaitForSeconds(0.4f); // idk how long the PAJingle is, theres no way to get it either
-        }
 
         // this code is really dense, im sorry.
 
@@ -65,12 +59,14 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
         {
             DialogueTextData textData = dialogueText[i];
 
+            TryPlayVoiceLine(textData, currentLevel);
+
             var prefab = isPASystem ? PATextboxPrefab : DialogueTextboxPrefab;
             DialogueUIViewModel textBubble = Instantiate(prefab, dialogueBubblesLayout);
             textBubble.Initialize(textData);
             viewModels.Insert(0, textBubble);
 
-            if (textData.audioLine != -1)
+            /*if (textData.audioLine != -1)
             {
                 Debug.Log($"Playing audio clip for: {textData.BodyText}");
                 string paramField = isPASystem ? "PA" : "Ollie";
@@ -78,7 +74,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
                 voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
                 voiceline.start();
             }
-            else Debug.LogWarning("No audio clip for dialogue: " + textData.BodyText);
+            else Debug.LogWarning("No audio clip for dialogue: " + textData.BodyText);*/
 
             // Wait for typewriter animation. DialogueViewModel knows when to destroy itself (dont wait for that)
             float timeTypewriterStarted = Time.time;
@@ -94,6 +90,44 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
 
         if(onDialogueEndCallback != null)
             onDialogueEndCallback();
+    }
+
+    private void TryPlayVoiceLine(DialogueTextData textData, currentLevel thisLevel)
+    {
+        if (textData.audioLine == -1) return;
+
+        //This needs more changes later when we add voicelines to remaining scenes
+        if (thisLevel == currentLevel.Tutorial)
+        {
+            PlayVoiceLine(FMODEvents.Instance.VLTutorial, "VLTutorial", textData);
+        }
+        if (thisLevel == currentLevel.Parlor)
+        {
+            PlayVoiceLine(FMODEvents.Instance.VLParlor, "VLParlor", textData);
+        }
+        if (thisLevel == currentLevel.Lobby)
+        {
+            int levelCount = SaveDataManager.Instance.GetLevelsCompletedCount();
+            Debug.Log("levelCount: " + levelCount);
+            switch (levelCount)
+            {
+                case 2:
+                    PlayVoiceLine(FMODEvents.Instance.VLLobbyNightOne, "VLLobbyNightOne", textData);
+                    break;
+                case 3:
+                    PlayVoiceLine(FMODEvents.Instance.VLLobbyNightTwo, "VLLobbyNightTwo", textData);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    
+    private void PlayVoiceLine(EventReference eventInstance, string parameter, DialogueTextData textData)
+    {
+        EventInstance voiceline = AudioManager.Instance.CreateEventInstance(eventInstance);
+        RuntimeManager.StudioSystem.setParameterByName(parameter, textData.audioLine);
+        voiceline.start();
     }
 
     private IEnumerator UpdateDialogueBubbleLayout()
@@ -127,4 +161,12 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
             yield return null;
         }
     }
+}
+
+
+public enum currentLevel
+{
+    Tutorial,
+    Lobby,
+    Parlor
 }
