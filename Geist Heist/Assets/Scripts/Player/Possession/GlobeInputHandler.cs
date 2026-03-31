@@ -16,12 +16,14 @@ using UnityEngine.SceneManagement;
 public class GlobeInputHandler : IInputHandler
 {
     [Header ("Required Variables")]
+
     [Tooltip("Camera for the ending swinging.")]
     [SerializeField] private CinemachineCamera globeSwingCamera;
     [Tooltip("Camera for the ending rolling before hallway.")]
     [SerializeField] private CinemachineCamera globeRollCamera;
     [Tooltip("Camera for the ending rolling through the hallway.")]
     [SerializeField] private CinemachineCamera globeHallwayCamera;
+
     //will likely change with later UI assets
     [Tooltip("UI for the button pressing minigame.")]
     [SerializeField] private TMP_Text buttonPressText;
@@ -51,7 +53,7 @@ public class GlobeInputHandler : IInputHandler
 
     public override void OnPossessionStart()
     {
-        IncreaseCameraPriority(globeSwingCamera);
+        IncreaseCameraPriority(globeSwingCamera, 1);
 
         if (endCoroutine == null)
         {
@@ -143,21 +145,22 @@ public class GlobeInputHandler : IInputHandler
                 animator.SetBool("EndRoll", true);
                 EndingActive = false;
 
-                IncreaseCameraPriority(globeRollCamera);
+                IncreaseCameraPriority(globeRollCamera, 1);
                 DecreaseCameraPriority(globeSwingCamera);
             }
+            yield return null;
         }
-        yield return null;
     }
 
-    public void IncreaseCameraPriority(CinemachineCamera camera)
+    private void IncreaseCameraPriority(CinemachineCamera camera, int value)
     {
         if (camera.Priority == 0)
         {
-            camera.Priority++;
+            camera.Priority += value;
         }
     }
-    public void DecreaseCameraPriority(CinemachineCamera camera)
+
+    private void DecreaseCameraPriority(CinemachineCamera camera)
     {
         if (camera.Priority != 0)
         {
@@ -165,8 +168,14 @@ public class GlobeInputHandler : IInputHandler
         }
     }
 
+    public void SwitchToHallwayCamera()
+    {
+        IncreaseCameraPriority(globeHallwayCamera, 2);
+        DecreaseCameraPriority(globeRollCamera);
+    }
 
-public void LoadEndScene()
+
+    public void LoadEndScene()
     {
         StopAllCoroutines();
         LevelManager.Instance.ChangeScene(endCutsceneScene);
