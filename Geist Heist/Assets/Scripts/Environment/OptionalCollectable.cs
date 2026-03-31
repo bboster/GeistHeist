@@ -300,7 +300,7 @@ public enum Collectable
     Vending_Machine_Collectable,
     
     VaseCollectible,
-	ToyCarCollectible,
+	
 	ChairCollectible,
 	NewsPaperHat,
 	
