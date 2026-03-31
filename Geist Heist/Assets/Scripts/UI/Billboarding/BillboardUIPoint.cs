@@ -40,6 +40,11 @@ public class BillboardUIPoint : MonoBehaviour
         }
 
         billboardUI = Instantiate(UIObjectPrefab).GetComponent<IBillboardUI>();
+        if(BillboardUIManager.Instance == null)
+        {
+            Debug.LogError($"{gameObject.name} can not spawn its billboard element because BillboardUIManager is missing from the scene");
+            return;
+        }
         BillboardUIManager.Instance.RegisterAndInitializeBillboardUIPoint(this.transform, billboardUI, SourceGameObject); 
     }
 
