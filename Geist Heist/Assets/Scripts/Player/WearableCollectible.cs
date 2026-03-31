@@ -47,7 +47,7 @@ public class WearableCollectible : MonoBehaviour
     private void Start()
     {
         // Load what the player had equipped last
-        allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsSortMode.None);
+        RefreshHubDisplays();
         currentHat = GetEquippedCollectable(SaveDataManager.Instance.EquipedHat());
 
         if (currentHat == Collectable.None)
@@ -103,7 +103,7 @@ public class WearableCollectible : MonoBehaviour
         // Instantiate the new hat if it isnt none
 
         // Get the correct mesh *each time*
-        MeshRenderer meshPrefab = Registry.GetMeshRenderer(currentHat);
+        MeshRenderer meshPrefab = Registry.GetWearableMeshRenderer(currentHat);
         if (meshPrefab == null)
         {
             Debug.LogWarning($"No mesh prefab found for {currentHat}.");
@@ -111,8 +111,9 @@ public class WearableCollectible : MonoBehaviour
         }
 
         MeshRenderer hat = Instantiate(meshPrefab, wearableTransform);
-        hat.transform.localPosition = Vector3.zero;
-        hat.transform.localRotation = Quaternion.identity;
+        hat.transform.localPosition += Registry.GetWearableLocalPosition(currentHat);
+        hat.transform.localEulerAngles += Registry.GetWearableLocalEulerAngles(currentHat);
+        hat.transform.localScale = Vector3.Scale(hat.transform.localScale, Registry.GetWearableLocalScale(currentHat));
         hat.gameObject.layer = wearableTransform.gameObject.layer;
 
         if (Application.isPlaying)
@@ -124,17 +125,26 @@ public class WearableCollectible : MonoBehaviour
     public void ReplaceHat(Collectable previousHat)
     {
         // Move the current hat back to hub instead of destroying
+        RefreshHubDisplays();
         if (previousHat != Collectable.None)
-        {            
-            foreach (var display in allHubDisplays) 
+        {
+            foreach (var display in allHubDisplays)
             {
+                if (display == null)
+                    continue;
+
                 Debug.Log($"Attempting to call display.spawnMesh({previousHat}) in hub display.");
                 display.spawnMesh(previousHat); // currentHat = Collectable currently equipped
-                display.GetComponent<OptionalCollectableHubDisplay>().UpdateVisibility();
+                display.UpdateVisibility();
             }
 
             // No need to destroy currentHat, as it's an enum
         }
+    }
+
+    private void RefreshHubDisplays()
+    {
+        allHubDisplays = FindObjectsByType<OptionalCollectableHubDisplay>(FindObjectsInactive.Include, FindObjectsSortMode.None);
     }
 
     public Collectable GetEquippedCollectable(int collectableValue)
@@ -171,6 +181,70 @@ public class WearableCollectible : MonoBehaviour
     {
         PreviewHat();
         SaveDataManager.Instance.MarkCollectableAsWorn(PreviewCollectable);
+    }
+
+    [Button("Save Scene Hat As Wearable Offset")]
+    private void SaveSceneHatAsWearableOffset()
+    {
+        Collectable targetCollectable = PreviewCollectable != Collectable.None ? PreviewCollectable : currentHat;
+        if (targetCollectable == Collectable.None)
+        {
+            Debug.LogWarning("Pick a PreviewCollectable (or equip a hat) before saving wearable offsets.");
+            return;
+        }
+
+        if (Registry == null)
+        {
+            Registry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
+            if (Registry == null)
+            {
+                Debug.LogWarning("Registry not found.");
+                return;
+            }
+        }
+
+        if (wearableNode == null)
+            wearableNode = gameObject;
+
+        MeshRenderer sceneHat = wearableNode.GetComponentInChildren<MeshRenderer>(true);
+        if (sceneHat == null)
+        {
+            Debug.LogWarning($"[{name}] No scene hat mesh found under wearable node.");
+            return;
+        }
+
+        MeshRenderer sourceMesh = Registry.GetWearableMeshRenderer(targetCollectable);
+        if (sourceMesh == null)
+        {
+            Debug.LogWarning($"[{name}] No wearable prefab set in CollectableRegistry for {targetCollectable}.");
+            return;
+        }
+
+        Vector3 positionOffset = sceneHat.transform.localPosition - sourceMesh.transform.localPosition;
+        Vector3 rotationOffset = new Vector3(
+            Mathf.DeltaAngle(sourceMesh.transform.localEulerAngles.x, sceneHat.transform.localEulerAngles.x),
+            Mathf.DeltaAngle(sourceMesh.transform.localEulerAngles.y, sceneHat.transform.localEulerAngles.y),
+            Mathf.DeltaAngle(sourceMesh.transform.localEulerAngles.z, sceneHat.transform.localEulerAngles.z));
+        Vector3 scaleOffset = new Vector3(
+            SafeDivide(sceneHat.transform.localScale.x, sourceMesh.transform.localScale.x),
+            SafeDivide(sceneHat.transform.localScale.y, sourceMesh.transform.localScale.y),
+            SafeDivide(sceneHat.transform.localScale.z, sourceMesh.transform.localScale.z));
+
+        if (!Registry.TrySetWearableOffsets(targetCollectable, positionOffset, rotationOffset, scaleOffset))
+        {
+            Debug.LogWarning($"[{name}] Could not update wearable offsets. No registry entry exists for {targetCollectable}.");
+            return;
+        }
+
+        Debug.Log($"[{name}] Saved wearable offsets for {targetCollectable}. Position: {positionOffset}, Rotation: {rotationOffset}, Scale: {scaleOffset}");
+    }
+
+    private float SafeDivide(float numerator, float denominator)
+    {
+        if (Mathf.Approximately(denominator, 0f))
+            return 1f;
+
+        return numerator / denominator;
     }
 #endif
     #endregion
