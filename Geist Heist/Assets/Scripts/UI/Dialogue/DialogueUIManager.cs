@@ -35,7 +35,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
 
     public void DisplayText_Dialogue(List<DialogueTextData> dialogueText, currentLevel currentLevel, UnityAction onDialogueEndCallback=null)
     {
-        StartCoroutine(DisplayTextList(dialogueText, false, currentLevel, onDialogueEndCallback: onDialogueEndCallback));
+        StartCoroutine(DisplayTextList(dialogueText, currentLevel, onDialogueEndCallback: onDialogueEndCallback));
 
         if (relocateDialogueBubblesCoroutine == null)
             relocateDialogueBubblesCoroutine = StartCoroutine(UpdateDialogueBubbleLayout());
@@ -43,13 +43,13 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
 
     public void DisplayText_PASystem(List<DialogueTextData> dialogueText, currentLevel currentLevel, UnityAction onDialogueEndCallback = null)
     {
-        StartCoroutine(DisplayTextList(dialogueText, true, currentLevel, onDialogueEndCallback: onDialogueEndCallback));
+        StartCoroutine(DisplayTextList(dialogueText, currentLevel, onDialogueEndCallback: onDialogueEndCallback));
 
         if (relocateDialogueBubblesCoroutine == null)
             relocateDialogueBubblesCoroutine = StartCoroutine(UpdateDialogueBubbleLayout());
     }
 
-    private IEnumerator DisplayTextList(List<DialogueTextData> dialogueText, bool isPASystem , currentLevel currentLevel, UnityAction onDialogueEndCallback = null)
+    private IEnumerator DisplayTextList(List<DialogueTextData> dialogueText , currentLevel currentLevel, UnityAction onDialogueEndCallback = null)
     {
         EventInstance voiceline;
 
@@ -61,20 +61,10 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
 
             TryPlayVoiceLine(textData, currentLevel);
 
-            var prefab = isPASystem ? PATextboxPrefab : DialogueTextboxPrefab;
+            var prefab = textData.dialogueSpeaker == DialogueSpeaker.PASystem ? PATextboxPrefab : DialogueTextboxPrefab;
             DialogueUIViewModel textBubble = Instantiate(prefab, dialogueBubblesLayout);
             textBubble.Initialize(textData);
             viewModels.Insert(0, textBubble);
-
-            /*if (textData.audioLine != -1)
-            {
-                Debug.Log($"Playing audio clip for: {textData.BodyText}");
-                string paramField = isPASystem ? "PA" : "Ollie";
-                RuntimeManager.StudioSystem.setParameterByName(paramField, textData.audioLine);
-                voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
-                voiceline.start();
-            }
-            else Debug.LogWarning("No audio clip for dialogue: " + textData.BodyText);*/
 
             // Wait for typewriter animation. DialogueViewModel knows when to destroy itself (dont wait for that)
             float timeTypewriterStarted = Time.time;
