@@ -15,6 +15,8 @@ public class DialogueTextData
     [ResizableTextArea]
     public string BodyText;
 
+    public DialogueSpeaker dialogueSpeaker;
+
     public float SecondsDelayUntilNextDialogue = 0.1f;
 
     [Tooltip("How long to wait until destroying itself")]
@@ -23,4 +25,11 @@ public class DialogueTextData
     [Header("Audio")]
     public int audioLine = -1;
 
+    private EColor debugColor => (dialogueSpeaker == DialogueSpeaker.Ollie) ? EColor.Blue : EColor.Orange;
+}
+
+public enum DialogueSpeaker
+{
+    PASystem,
+    Ollie,
 }
