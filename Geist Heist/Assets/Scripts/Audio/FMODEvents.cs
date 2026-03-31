@@ -47,6 +47,7 @@ public class FMODEvents : Singleton<FMODEvents>
     [field: SerializeField] public EventReference DoorLocked { get; private set; }
 
     [field: Header("Voicelines")]
+    [field: SerializeField] public EventReference VLIntro { get; private set; }
     [field: SerializeField] public EventReference VLTutorial { get; private set; }
     [field: SerializeField] public EventReference VLLobbyNightOne { get; private set; }
     [field: SerializeField] public EventReference VLParlor { get; private set; }
