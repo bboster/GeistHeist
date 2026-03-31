@@ -10,6 +10,7 @@ using FMODUnity;
 using FMOD.Studio;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using UnityEngine.SceneManagement;
 
 public class DialogueBoxTrigger : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class DialogueBoxTrigger : MonoBehaviour
     [SerializeField] private int whichLine;
     #endregion
 
+    public currentLevel thisLevel;
 
     private void Start()
     {
@@ -50,13 +52,43 @@ public class DialogueBoxTrigger : MonoBehaviour
         if(other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             alreadyTriggered = true;
-            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText);
+            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText, thisLevel);
 
-            voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PALines);
+            string currentParameter = "";
 
-            if (whichLine >= 0 && whichLine < 3)
+            //This needs more changes later when we add voicelines to remaining scenes
+            if (thisLevel == currentLevel.Tutorial)
             {
-                RuntimeManager.StudioSystem.setParameterByName("PA", whichLine);
+                currentParameter = "VLTutorial";
+                voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLTutorial);
+            }
+            if (thisLevel == currentLevel.Parlor)
+            {
+                currentParameter = "VLParlor";
+                voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLParlor);
+            }
+            if (thisLevel == currentLevel.Lobby)
+            {
+                int levelCount = SaveDataManager.Instance.GetLevelsCompletedCount();
+                Debug.Log("levelCount: " + levelCount);
+                switch (levelCount)
+                {
+                    case 2:
+                        currentParameter = "VLLobbyNightOne";
+                        voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightOne);
+                        break;
+                    case 3:
+                        currentParameter = "VLLobbyNightTwo";
+                        voiceline = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.VLLobbyNightTwo);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (whichLine >= 0 && whichLine < 9)
+            {
+                RuntimeManager.StudioSystem.setParameterByName(currentParameter, whichLine);
                 voiceline.start();
             }
         }
