@@ -12,7 +12,8 @@ public class WavyTextAnimation : MonoBehaviour
 
     [SerializeField] public TMP_Text textBox;
     [SerializeField, Foldout("Advanced Settings")] private float disableAnimationSeconds = 0.1f;
-    [SerializeField, Foldout("Advanced Settings")] private float characterSpacingWhileWavy = 8;
+    [SerializeField, Foldout("Advanced Settings")] private bool changeCharacterSpacing = true;
+    [SerializeField, Foldout("Advanced Settings"), ShowIf(nameof(changeCharacterSpacing))] private float characterSpacingWhileWavy = 8;
 
     private string textString;
     private float defaultCharacterSpacing;
@@ -48,13 +49,15 @@ public class WavyTextAnimation : MonoBehaviour
                 waveString += $"<voffset={height}em>{c}</voffset>";
             }
             textBox.text = waveString;
-            textBox.characterSpacing = Mathf.Lerp(defaultCharacterSpacing, characterSpacingWhileWavy, t);
+            if(changeCharacterSpacing)
+                textBox.characterSpacing = Mathf.Lerp(defaultCharacterSpacing, characterSpacingWhileWavy, t);
         }
 
         else
         {
             textBox.text = textString;
-            textBox.characterSpacing = defaultCharacterSpacing;
+            if(changeCharacterSpacing)  
+                textBox.characterSpacing = defaultCharacterSpacing;
         }
     }
 }
