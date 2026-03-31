@@ -6,6 +6,7 @@
  * Brief Description: Handles possession and interactibility for the globe
  */
 using NaughtyAttributes;
+using NUnit.Framework;
 using UnityEngine;
 
 public class GlobePossessableObject : PossessableObject, IInteractable, IActionable
@@ -19,6 +20,16 @@ public class GlobePossessableObject : PossessableObject, IInteractable, IActiona
         if (SaveDataManager.Instance.AllLevelsCompleted() == false && (Application.isEditor && debugAlwaysPossessable == false))
         {
             interactBillboardUIPoint.SetActive(false);
+        }
+        else
+        {
+            MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
+
+            //make it add material later maybe? shader or better material?
+            foreach (MeshRenderer meshRenderer in meshRenderers)
+            {
+                meshRenderer.material = VisibleUnPossessedMaterial;
+            }
         }
     }
 
