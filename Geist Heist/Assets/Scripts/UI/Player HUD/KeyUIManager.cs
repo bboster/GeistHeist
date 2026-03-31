@@ -41,7 +41,8 @@ public class KeyUIManager : MonoBehaviour
     public void Initialize()
     {
         // hide this ui if no keys here
-        keysInScene = FindObjectsByType<KeyItem>(FindObjectsSortMode.None);
+        if(keysInScene == null)
+            keysInScene = FindObjectsByType<KeyItem>(FindObjectsSortMode.None);
         if(keysInScene.IsNullOrEmpty())
         {
             this.gameObject.SetActive(false);
@@ -49,30 +50,39 @@ public class KeyUIManager : MonoBehaviour
         }
 
         // account for duplicate keys
-        var uniqueKeysInScene = keysInScene.Select(k => k.keyType).Distinct().ToList();
+        var uniqueKeysInScene = keysInScene
+            .Select(k => k.keyType)
+            .Distinct()
+            //.OrderBy(k => KeyManager.Instance.KeyUIIcons.FindIndex(kui => kui.Key == k))
+            .ToList();
+
+
         if (uniqueKeysInScene.Count() > keyImages.Count) {
             Debug.LogError($"There are more keys ({uniqueKeysInScene.Count()} in scene than usable images in the key UI ({keyImages.Count})");
             return;
         }
 
-        // Create keyType / image pairs
-        for(int i=0; i< uniqueKeysInScene.Count(); i++)
+        for(int i=0; i< KeyManager.Instance.KeyUIIcons.Count(); i++)
         {
-            keyImagePairs.Add(uniqueKeysInScene[i], keyImages[i]);
-            Sprite sprite = KeyManager.Instance.GetKeySprite(uniqueKeysInScene[i]);
-            if(sprite == null)
-            {
-                // hopefully designers listen because this WILL be a problem.
-                Debug.LogError($"No key UI icon has been defined for keytype: {uniqueKeysInScene[i]}. Please define it in the KeyManager prefab.");
-            }
-            keyImages[i].sprite = sprite;
-            keyImages[i].color = keyUncollectedColor;
-        }
+            var keyUIICon = KeyManager.Instance.KeyUIIcons[i];
 
-        // Hide all of the remaining keys
-        for(int i= uniqueKeysInScene.Count(); i< keyImages.Count(); i++)
-        {
-            keyImages[i].gameObject.SetActive(false);
+            if (uniqueKeysInScene.Contains(keyUIICon.Key))
+            {
+                keyImagePairs.Add(keyUIICon.Key, keyImages[i]);
+                Sprite sprite = KeyManager.Instance.GetKeySprite(keyUIICon.Key);
+                if (sprite == null)
+                {
+                    // hopefully designers listen because this WILL be a problem.
+                    Debug.LogError($"No key UI icon has been defined for keytype: {keyUIICon.Key}. Please define it in the KeyManager prefab.");
+                }
+                keyImages[i].sprite = sprite;
+                keyImages[i].color = keyUncollectedColor;
+            }
+            else
+            {
+                if(i < keyImages.Count())   
+                    keyImages[i].gameObject.SetActive(false);
+            }
         }
 
         KeyManager.Instance.OnKeyCollected += OnKeyCollected;
