@@ -18,7 +18,7 @@ public class MusicManager : Singleton<MusicManager>
 
     protected override void Awake()
     {
-        SceneManager.sceneLoaded += StartMusic;
+        //SceneManager.sceneLoaded += StartMusic;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -38,6 +38,7 @@ public class MusicManager : Singleton<MusicManager>
     private void Start()
     {
         Debug.Log(hubName);
+        StartMusic(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
     private void StartMusic(Scene s, LoadSceneMode m)
