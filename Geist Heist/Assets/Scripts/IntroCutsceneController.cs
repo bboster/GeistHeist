@@ -48,7 +48,11 @@ public class IntroCutsceneController : MonoBehaviour
         player.renderMode = VideoRenderMode.RenderTexture;
         player.targetTexture = renderTexture;
 
+
         outputImage.texture = renderTexture;
+
+        player.Prepare();
+        StartCoroutine(PrepareWait());
 
         player.loopPointReached += LoadHub;
 
@@ -57,6 +61,17 @@ public class IntroCutsceneController : MonoBehaviour
 
         skip = map.FindAction("Jump");
         skip.started += SkipCutscene;
+    }
+
+    private IEnumerator PrepareWait()
+    {
+        while(!player.isPrepared)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        player.Play();
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.VLIntro);
     }
 
     /// <summary>
