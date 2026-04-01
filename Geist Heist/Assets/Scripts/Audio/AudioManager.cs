@@ -10,6 +10,7 @@ using FMODUnity;
 using UnityEngine;
 using FMOD.Studio;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class AudioManager : Singleton<AudioManager>
 {
@@ -20,12 +21,6 @@ public class AudioManager : Singleton<AudioManager>
     
     private float getPausedVolumeMultiplier => GameManager.Instance == null ? 1 :       // timescale is 1 if no GameManager (this happens in main menu)
                                    (GameManager.Instance.IsPaused ? 0 : 1); // actual calculation if gamemanger is in scene
-
-    protected override void Awake()
-    {
-        base.Awake();
-        SceneManager.sceneLoaded += StopAllSoundEvents;
-    }
 
     //Sets AudioManager Instance in the scene
     protected void Start()
@@ -131,18 +126,8 @@ public class AudioManager : Singleton<AudioManager>
         }
     }
 
-    /// <summary>
-    /// Stops all currently playing sound events
-    /// </summary>
-    public void StopAllSoundEvents(Scene scene, LoadSceneMode mode)
-    {
-        masterBus.stopAllEvents(STOP_MODE.IMMEDIATE);
-    }
-
     private void OnDestroy()
     {
-        SceneManager.sceneLoaded -= StopAllSoundEvents;
-
         if (GameManager.Instance != null) GameManager.Instance.OnPauseChanged.RemoveListener(UpdateAllVolumes);
 
         //TODO
