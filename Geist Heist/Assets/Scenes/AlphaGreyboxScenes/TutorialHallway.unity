@@ -5232,6 +5232,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8537336853914238247, guid: b93e670cf8b80f84f9daadd9f2b0ac63, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7312,6 +7316,10 @@ PrefabInstance:
     - target: {fileID: 8674794494923113222, guid: 0c2a189e28e3cc14ab24da6729db2b30, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8763138857176215129, guid: 0c2a189e28e3cc14ab24da6729db2b30, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13237,6 +13245,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.9090347, y: 3.5, z: 0.90903497}
   m_Center: {x: -0.000000044703484, y: 1.7499998, z: 0.000000059604645}
+--- !u!4 &659591895 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+  m_PrefabInstance: {fileID: 1678507747}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &692718321
 GameObject:
   m_ObjectHideFlags: 0
@@ -23226,6 +23239,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 8992485254176408251, guid: fdbf9d613ffeebc4796450c54b26bb9d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27046,6 +27063,39 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e15a58a5c80c4994f96f94f0928379ad, type: 3}
+--- !u!1 &1568142056 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1020908512215321541, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+  m_PrefabInstance: {fileID: 1712739041}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1568142057 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+  m_PrefabInstance: {fileID: 1712739041}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1568142058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568142056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8fcdce510928fb4ab2354602fe37dcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PADialogueUITrigger
+  dialogueText:
+  - BodyText: '*Sigh* a dreadfully close call back there. I have a feeling I''m going
+      to become quite acquainted with vases... Goodness knows what else.'
+    dialogueSpeaker: 1
+    SecondsDelayUntilNextDialogue: 0
+    StayLength: 5
+    audioLine: 1
+  Text: 
+  stayLength: 0
+  whichLine: 0
+  thisLevel: 0
 --- !u!1001 &1571693735
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28236,6 +28286,103 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
+--- !u!1001 &1678507747
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 337275289570117903, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].BodyText
+      value: Drat! I can't let them spot me. I must find somewhere to hide!
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].StayLength
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].dialogueSpeaker
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4135309368863494559, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 18.407206
+      objectReference: {fileID: 0}
+    - target: {fileID: 4135309368863494559, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.0479
+      objectReference: {fileID: 0}
+    - target: {fileID: 7148221544204128209, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Name
+      value: DialogueTriggerTutorial0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -14.511454
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -8.4400015
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.344822
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8660690069022315454, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Name
+      value: DialogueTriggersIterativeLevel
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 420265048089149496, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+    - {fileID: 3011754353872438091, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+    - {fileID: 4798006361977881177, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+    - {fileID: 4767475152855471049, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+    - {fileID: 5940991075646214485, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1568142057}
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
 --- !u!1001 &1689270136
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28390,6 +28537,79 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 922757a17eaf8a247bd10f36d457ab22, type: 3}
+--- !u!1001 &1712739041
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 659591895}
+    m_Modifications:
+    - target: {fileID: 1020908512215321541, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_Name
+      value: DialogueTriggerTutorial0 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 18.407206
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 55.308
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6087453321581598091, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7617651216503835931, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794771129529530289, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      propertyPath: Text
+      value: Bathroom dialogue goes here
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8794771129529530289, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1020908512215321541, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1568142058}
+  m_SourcePrefab: {fileID: 100100000, guid: 162a9980b7b373f42bcf1757cfb38cf5, type: 3}
 --- !u!1001 &1721810755
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36441,3 +36661,4 @@ SceneRoots:
   - {fileID: 149633794}
   - {fileID: 6330561914987937434}
   - {fileID: 1592289088}
+  - {fileID: 1678507747}

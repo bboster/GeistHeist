@@ -6,6 +6,8 @@
  * Summary: Loads into hub scene after intro cutscene is finished playing
  * TO DO: Swap out the skip text message with controller support system
  */
+using FMOD.Studio;
+using FMODUnity;
 using NaughtyAttributes;
 using System;
 using System.Collections;
@@ -32,6 +34,7 @@ public class IntroCutsceneController : MonoBehaviour
     [SerializeField] private RawImage outputImage;
 
     private RenderTexture renderTexture;
+    private EventInstance introVl;
 
     private void Awake()
     {
@@ -48,7 +51,11 @@ public class IntroCutsceneController : MonoBehaviour
         player.renderMode = VideoRenderMode.RenderTexture;
         player.targetTexture = renderTexture;
 
+
         outputImage.texture = renderTexture;
+
+        player.Prepare();
+        StartCoroutine(PrepareWait());
 
         player.loopPointReached += LoadHub;
 
@@ -57,6 +64,18 @@ public class IntroCutsceneController : MonoBehaviour
 
         skip = map.FindAction("Jump");
         skip.started += SkipCutscene;
+    }
+
+    private IEnumerator PrepareWait()
+    {
+        while(!player.isPrepared)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        player.Play();
+        introVl = RuntimeManager.CreateInstance(FMODEvents.Instance.VLIntro);
+        introVl.start();
     }
 
     /// <summary>
@@ -121,5 +140,7 @@ public class IntroCutsceneController : MonoBehaviour
     {
         player.loopPointReached -= LoadHub;
         skip.started -= SkipCutscene;
+
+        introVl.stop(STOP_MODE.ALLOWFADEOUT);
     }
 }

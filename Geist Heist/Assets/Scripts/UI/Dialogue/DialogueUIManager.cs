@@ -12,9 +12,9 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class DialogueUIManager : Singleton<DialogueUIManager>
 {
@@ -29,6 +29,20 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
     private List<DialogueUIViewModel> viewModels = new();
 
     private Coroutine relocateDialogueBubblesCoroutine;
+
+    private EventInstance currentVL;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        SceneManager.sceneUnloaded += StopVoiceLine;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneUnloaded -= StopVoiceLine;
+    }
+
     public void Initialize()
     {
     }
@@ -115,9 +129,19 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
     
     private void PlayVoiceLine(EventReference eventInstance, string parameter, DialogueTextData textData)
     {
-        EventInstance voiceline = AudioManager.Instance.CreateEventInstance(eventInstance);
+        currentVL = AudioManager.Instance.CreateEventInstance(eventInstance);
         RuntimeManager.StudioSystem.setParameterByName(parameter, textData.audioLine);
-        voiceline.start();
+        currentVL.start();
+    }
+
+    public void StopVoiceLine()
+    {
+        currentVL.stop(STOP_MODE.IMMEDIATE);
+    }
+
+    public void StopVoiceLine(Scene scene)
+    {
+        currentVL.stop(STOP_MODE.IMMEDIATE);
     }
 
     private IEnumerator UpdateDialogueBubbleLayout()
