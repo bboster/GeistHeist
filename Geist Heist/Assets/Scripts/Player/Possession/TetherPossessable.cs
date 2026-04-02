@@ -8,10 +8,6 @@
  */
 
 using NaughtyAttributes;
-using System;
-using System.IO;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
@@ -22,6 +18,8 @@ public class TetherPossessable : IInputHandler
     [SerializeField] private GameObject thirdPersoncinemachineCamera;
     [Tooltip("Loads this scene")]
     [SerializeField, Scene] private string HubScene = "Lobby";
+
+    public bool IsCollected => SaveDataManager.Instance.IsLevelCompleted(SceneManager.GetActiveScene().name);
 
     private Coroutine victoryAnimation;
 
@@ -48,7 +46,8 @@ public class TetherPossessable : IInputHandler
     {
     }
 
-    //TODO: replace this with something else
+    
+    //TO DO: adapt this to start on the tether and maybe go to another script when we get an animation, currently changes scenes abruptly
     IEnumerator LoadNextSceneCooldown()
     {
         Debug.Log($"Tether collected! Leaving {SceneManager.GetActiveScene().name} now...");
@@ -58,8 +57,10 @@ public class TetherPossessable : IInputHandler
         SaveDataManager.Instance.MarkSceneAsCompleted(SceneManager.GetActiveScene().name);
 
         //SceneManager.LoadScene(HubScene);
-        GameManager.Instance.NextLevel(HubScene);
+        LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(HubScene));
     }
+
+    public override bool IsDetectable() { return false; }
 
     #region action
     public override void OnActionStarted()

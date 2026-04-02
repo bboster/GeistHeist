@@ -3,7 +3,7 @@
 /*
  * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 11/12/2025
+ * Last Modified: 2/12/2026
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -14,12 +14,10 @@ using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.Events;
 using NaughtyAttributes;
-using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using FMOD.Studio;
-using FMODUnity;
 using GuardUtilities;
 
 public class PossessableObject : MonoBehaviour, IInteractable
@@ -34,7 +32,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [HideIf(nameof(isGhost))] public List<Transform> ghostExitPoints;
 
     [Header("Timer Variables")]
-    [SerializeField, HideIf(nameof(isGhost))] private bool hasTimer;
+    [SerializeField, HideIf(nameof(isGhost))] public bool hasTimer;
     [SerializeField, HideIf(nameof(isGhost))] public float maxChargePercentage = 100;
     [Tooltip("The percentage the timer recharges each interval while the player is not possessing.")]
     [SerializeField, ShowIf(nameof(hasTimerAndIsNotGhost))] private float timerRechargePercentage = 10;
@@ -54,27 +52,47 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [Tooltip("Material on possessable when a guard sees the possessable in chase state but possessable is NOT possessed.")]
     [SerializeField, HideIf(nameof(isGhost)), Required, ShowAssetPreview(16, 16)] public Material VisibleUnPossessedMaterial;
 
+    [Header("UI")]
+    public GameObject AbilityIconPrefab;
+    public GameObject PossessableTextPrefab;
+    public bool HasChargeAbility;
+
+    [Header("Animation")]
+    [SerializeField] public Animator animator;
+    private string isPossessingParam = "isPossessing";
+    private string tetherPossessParam = "TetherPossess";
+    private string modePossessedParam = "modePossessed";
+    private string isMovingParam = "isMoving";
+    private string isIdleParam = "isIdle";
+    [SerializeField] private string possessStateName = "possess";
+    [SerializeField] private string tetherPossessStateName = "tetherpossess";
+    private bool queueTetherPossessAnimation = false;
+    [SerializeField, ShowIf(nameof(isGhost)), Min(0f)] private float possessCameraTransitionDelay = 0.35f;
+    [SerializeField, ShowIf(nameof(isGhost)), Min(0f)] private float tetherCameraTransitionDelay = 0.75f;
+
+
     [Header("Other")]
     [SerializeField] private bool isGhost = false;
 
     [HideInInspector] public bool CanUnPossess = true;
     private bool possessionIsSafe = true;
-    public IInputHandler InputHandler => GetInputHandler();
+    [HideInInspector] public IInputHandler InputHandler => GetInputHandler();
     private IInputHandler inputHandler;
 
     private Coroutine dischargeCoroutine = null;
     private Coroutine rechargeCoroutine;
-    private Coroutine unpossessCoroutine=null;
+    private Coroutine unpossessCoroutine = null;
 
     [HideInInspector] public MeshRenderer meshRenderer;
 
-    [ReadOnly] private float currentTimerPercentage;
+    [ReadOnly] private float currentTimerCharge;
+    private float currentTimerChargePercentage => currentTimerCharge / maxChargePercentage;
     [HideInInspector] public UnityEvent<float> OnTimerUpdate = new();
     [HideInInspector] public bool PauseDischargeTimer = false;
 
     private EventInstance possessionEnter;
     private EventInstance possessionLow;
-    private EventInstance possessionOut;
+    private EventInstance possessionOut;    
     private EventInstance possessionRefill;
 
     #region Guard Detection Variables
@@ -98,7 +116,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             GuardController GC = other.transform.GetComponentInParent<GuardController>();
 
             //if it is a guard in chase state + possessed
-            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject != playerManager.PlayerGhostObject)
+            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject.gameObject == this.gameObject)
             {
                 possessionIsSafe = false;
                 if (VisiblePossessionMaterial != null)
@@ -119,7 +137,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    //I'm not seeing a reason to keep this function if Enter and Exit are being used, but if there's some reason I'm unaware of then this is fine to stay
+    private void OnTriggerStay(Collider other) 
     {
         //if interaction is vision cone
         if (other.transform.GetComponent<VisionStimulus>() != null)
@@ -127,7 +146,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
             GuardController GC = other.transform.GetComponentInParent<GuardController>();
 
             //if it is a guard in chase state + possessed
-            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject != playerManager.PlayerGhostObject)
+            if (GC != null && GC.currentBehavior.StateName == GuardStates.chase && playerManager.CurrentObject.gameObject == this.gameObject)
             {
                 if (VisiblePossessionMaterial != null)
                 {
@@ -152,7 +171,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (other.transform.GetComponent<VisionStimulus>() != null)
         {
             //if player is still inside
-            if (playerManager.CurrentObject != playerManager.PlayerGhostObject)
+            if (playerManager.CurrentObject.gameObject == this.gameObject)
             {
                 possessionIsSafe = true;
                 if (PossessedMaterial != null)
@@ -183,7 +202,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
     void Start()
     {
-        currentTimerPercentage = maxChargePercentage;
+        currentTimerCharge = maxChargePercentage;
 
         if (ghostExitPoints.Count == 0)
         {
@@ -193,11 +212,18 @@ public class PossessableObject : MonoBehaviour, IInteractable
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
         if (UnpossessedMaterial != null)
-            meshRenderer.material = UnpossessedMaterial;
+            this.meshRenderer.material = UnpossessedMaterial;
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
-        if(possessableCanvas == null)
+        // Ghost is disabled while inside possessables; keep animator state so
+        // it can transition from possess -> possessExit when re-enabled.
+        if (isGhost && animator != null)
+        {
+            animator.keepAnimatorStateOnDisable = true;
+        }
+
+        /*if(possessableCanvas == null)
             possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
 
         if (possessableCanvas != null)
@@ -205,19 +231,21 @@ public class PossessableObject : MonoBehaviour, IInteractable
             possessableCanvasGroup = possessableCanvas.gameObject.GetOrAddComponent<CanvasGroup>();
             possessableCanvasGroup.alpha = 0;
             possessableCanvas.gameObject.SetActive(false);
-        }
+        }*/
 
+        //It might be worth moving this line into a manager so that we don't get a ton of repeat messages in the console
         if(AudioManager.Instance == null)
         {
             Debug.LogError("No audio manager in scene");
             return;
         }
 
-        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionEnter);
-
-        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionLow);
-        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionOut);
-        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PossessionRefill);
+        //This is a sound issue, but I think all sound setup should be in its own function for organization, especially since some sounds may need additional lines
+        //in the future
+        possessionEnter = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionEnter);
+        possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionLow);
+        possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionOut);
+        possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionRefill);
     }
 
     public IInputHandler GetInputHandler()
@@ -226,10 +254,41 @@ public class PossessableObject : MonoBehaviour, IInteractable
         return inputHandler;
     }
 
-    void IInteractable.Interact()
+    /// <summary>
+    /// Sets the animation type used the next time this object exits possession.
+    /// </summary>
+    public void QueueGhostPossessionAnimation(bool isTetherPossession)
     {
-        PlayerManager.Instance.PossessObject(this);
+        queueTetherPossessAnimation = isTetherPossession;
     }
+
+    public float GetGhostCameraTransitionDelay(bool isTetherPossession)
+    {
+        if (!isGhost)
+            return 0f;
+
+        return isTetherPossession ? tetherCameraTransitionDelay : possessCameraTransitionDelay;
+    }
+
+    public void RotateTowardsTarget(Transform target, float maxDegreesDelta)
+    {
+        if (target == null)
+            return;
+
+        Vector3 direction = target.position - transform.position;
+        direction.y = 0f;
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxDegreesDelta);
+    }
+
+    public void FaceTowardsTarget(Transform target)
+    {
+        RotateTowardsTarget(target, 360f);
+    }
+
 
     /// <summary>
     /// Called in PlayerManager when player enters object
@@ -238,18 +297,36 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         possessionEnter.start();
 
-        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
+        //StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, ShowAndEnableCanvas());
 
         gameObject.SetActive(true);
         InputHandler.OnPossessionStart();
 
         if(PossessedMaterial != null && possessionIsSafe)
-            meshRenderer.material = PossessedMaterial;
+            this.meshRenderer.material = PossessedMaterial;
         else
-            Debug.LogWarning("No possession material for "+gameObject.name);
+            Debug.LogWarning("No possession material for " + gameObject.name);
 
         if (unpossessCoroutine == null)
             unpossessCoroutine = StartCoroutine(WaitForUnpossess());
+
+        if (isGhost)
+        {
+            if (animator != null)
+            {
+                animator.SetBool(isPossessingParam, false);
+                animator.SetBool(tetherPossessParam, false);
+                animator.SetBool(modePossessedParam, false);
+                animator.SetBool(isMovingParam, false);
+                animator.SetBool(isIdleParam, true);
+            }
+            else
+            {
+                Debug.LogWarning($"No animator assigned for ghost object '{gameObject.name}'.");
+            }
+
+            queueTetherPossessAnimation = false;
+        }
 
         if (hasTimer)
         {
@@ -269,21 +346,44 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void OnPossessionEnded()
     {
-        StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
+        //StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, HideAndDisableCanvas());
 
-        if (!CanUnPossess)
+        if (!CanUnPossess && !isGhost)
         {
             Debug.LogError("Trying to unpossess early");
             return;
         }
 
         if (UnpossessedMaterial != null && possessionIsSafe)
-            meshRenderer.material = UnpossessedMaterial;
+            this.meshRenderer.material = UnpossessedMaterial;
         else
             Debug.LogWarning("No unpossession material for " + gameObject.name);
 
         InputHandler.OnPossessionEnded();
         OnObjectLeft?.Invoke();
+
+        if (isGhost)
+        {
+            if (animator != null)
+            {
+                animator.SetBool(tetherPossessParam, queueTetherPossessAnimation);
+                animator.SetBool(isPossessingParam, !queueTetherPossessAnimation);
+                animator.SetBool(modePossessedParam, true);
+                animator.SetBool(isMovingParam, false);
+                animator.SetBool(isIdleParam, false);
+
+                // Start the possession clip immediately instead of waiting on exit-time transitions.
+                string stateToPlay = queueTetherPossessAnimation ? tetherPossessStateName : possessStateName;
+                if (!string.IsNullOrWhiteSpace(stateToPlay))
+                {
+                    animator.CrossFadeInFixedTime(stateToPlay, 0.05f, 0, 0f);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"No animator assigned for ghost object '{gameObject.name}'.");
+            }
+        }
 
         if (hasTimer)
         {
@@ -293,10 +393,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
                 dischargeCoroutine = null;
             }
 
-            if(rechargeCoroutine == null)
+            if (rechargeCoroutine == null)
             {
                 rechargeCoroutine = StartCoroutine(StartRecharge());
             }
+            
         }
     }
 
@@ -318,19 +419,33 @@ public class PossessableObject : MonoBehaviour, IInteractable
         unpossessCoroutine = null;
     }
 
+    #region Interaction
+    void IInteractable.Interact()
+    {
+        PlayerManager.Instance.PossessObject(this);
+    }
+
+    bool IInteractable.IsInteractable()
+    {
+        // interactable if player isnt possessed
+        return playerManager.CurrentObject == playerManager.PlayerGhostObject;
+    }
+
+    #endregion
+
     #region Timer
-    
+
     private IEnumerator StartDischarge()
     {
         if (!hasTimer)
             yield break;
 
-        while(currentTimerPercentage > 0)
+        while(currentTimerCharge > 0)
         {
             if (!PauseDischargeTimer)
             {
-                currentTimerPercentage = Mathf.Max(currentTimerPercentage - (timerDischargePercentage * Time.deltaTime), 0);
-                OnTimerUpdate.Invoke(currentTimerPercentage);
+                currentTimerCharge = Mathf.Max(currentTimerCharge - (timerDischargePercentage * Time.deltaTime), 0);
+                OnTimerUpdate.Invoke(currentTimerChargePercentage);
             }
 
             yield return null;
@@ -343,13 +458,13 @@ public class PossessableObject : MonoBehaviour, IInteractable
     {
         if (!hasTimer)
             yield break;
+        possessionRefill.start();
 
-        while(currentTimerPercentage < maxChargePercentage)
+        while (currentTimerCharge < maxChargePercentage)
         {
-            possessionRefill.start();
 
-            currentTimerPercentage = Mathf.Min(currentTimerPercentage + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
-            OnTimerUpdate.Invoke(currentTimerPercentage);
+            currentTimerCharge = Mathf.Min(currentTimerCharge + (timerRechargePercentage * Time.deltaTime), maxChargePercentage);
+            OnTimerUpdate.Invoke(currentTimerChargePercentage);
             yield return null;
         }
 
@@ -362,7 +477,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         if (dischargeCoroutine != null)
         {
-            OnTimerUpdate.Invoke(currentTimerPercentage);
+            OnTimerUpdate.Invoke(currentTimerChargePercentage);
             StopCoroutine(dischargeCoroutine);
             dischargeCoroutine = null;
         }
@@ -371,6 +486,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     }
     #endregion
 
+    /*
     #region Canvas
 
     [Header("Canvas settings")]
@@ -387,11 +503,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
             yield break;
 
         possessableCanvas.gameObject.SetActive(true);
-        while(possessableCanvasGroup.alpha < 1)
-        {
-            possessableCanvasGroup.alpha += Time.deltaTime / showSeconds;
-            yield return null;
-        }
+
+        yield return StaticUtilities.FadeToVisible(possessableCanvasGroup, showSeconds);
     }
 
     private IEnumerator HideAndDisableCanvas()
@@ -399,13 +512,11 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if (possessableCanvas == null)
             yield break;
 
-        while (possessableCanvasGroup.alpha > 0)
-        {
-            possessableCanvasGroup.alpha -= Time.deltaTime / hideSeconds;
-            yield return null;
-        }
+        yield return StaticUtilities.FadeToVisible(possessableCanvasGroup, hideSeconds);
+
         possessableCanvas.gameObject.SetActive(false);
     }
 
     #endregion
+    */
 }

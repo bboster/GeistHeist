@@ -15,8 +15,9 @@ public static class SettingsProfile
 {
     // Default Display values
     private const float DEFAULT_LOOK_SENSITIVITY = 100;
-    private const bool DEFAULT_INVERT_LOOK = false;
-    private const float DEFAULT_BRIGHTNESS = 50; 
+    private const bool DEFAULT_INVERT_X_LOOK = false;
+    private const bool DEFAULT_INVERT_Y_LOOK = false;
+    private const float DEFAULT_BRIGHTNESS = 50; // evaluates to 0
 
     private const float DEFAULT_MASTER_VOLUME = 100;
     private const float DEFAULT_MUSIC_VOLUME = 100;
@@ -30,9 +31,8 @@ public static class SettingsProfile
 
     public const float MIN_BRIGHTNESS = 0;
     public const float MAX_BRIGHTNESS = 100;
-    private const float DEFAULT_BRIGHTNESS_TRANSFORMED = 0; // Real value, used in game (0 because it does not add or subtract brightness by default)
-    private const float MIN_BRIGHTNESS_TRANSFORMED = -1;
-    private const float MAX_BRIGHTNESS_TRANSFORMED = 1;
+    private const float MIN_BRIGHTNESS_TRANSFORMED = -0.5f;
+    private const float MAX_BRIGHTNESS_TRANSFORMED = 0.5f;
 
     #region Player Pref Keys
 
@@ -41,7 +41,8 @@ public static class SettingsProfile
     //TODO: if performance is a problem, convert string keys to ints.
 
     private const string LOOK_SENSITIVITY_KEY = "Look Sensitivity";
-    private const string INVERT_LOOK_KEY = "Invert Look";
+    private const string INVERT_X_LOOK_KEY = "Invert X Look";
+    private const string INVERT_Y_LOOK_KEY = "Invert Y Look";
     private const string BRIGHTNESS_KEY = "Brightness";
     private const string MASTER_VOLUME_KEY = "Master volume";
     private const string MUSIC_VOLUME_KEY = "Music volume";
@@ -51,24 +52,30 @@ public static class SettingsProfile
     #endregion
 
     // Current variables
-    public static bool InvertLook;
+    public static bool InvertXLook;
+    public static bool InvertYLook;
 
-    // TODO: BRIGHTNESS NOT IMPLEMENTED
-    public static float LookSensitivy, Brightness, 
+    public static float LookSensitivity, Brightness, 
         MasterVolume, MusicVolume, SFXVolume, VocalsVolume;
 
     // Technical values:
     public static float LookSensitityScalar =>
-        Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, LookSensitivy);
+        Mathf.InverseLerp(MIN_LOOK_SENSITIVITY, MAX_LOOK_SENSITIVITY, LookSensitivity);
     public static float LookSensitivityTransformed =>
         Mathf.LerpUnclamped(0.1f, DEFAULT_LOOK_SENSITIVITY_TRANSFORMED,
-            /* t: */ StaticUtilities.InverseLerpUnclamped(MIN_LOOK_SENSITIVITY, DEFAULT_LOOK_SENSITIVITY, LookSensitivy)); 
+            /* t: */ StaticUtilities.InverseLerpUnclamped(MIN_LOOK_SENSITIVITY, DEFAULT_LOOK_SENSITIVITY, LookSensitivity)); 
     public static float BrightnessScalar => Mathf.InverseLerp(MIN_BRIGHTNESS, MAX_BRIGHTNESS, Brightness);
     public static float BrightnessTransformed => Mathf.Lerp(MIN_BRIGHTNESS_TRANSFORMED, MAX_BRIGHTNESS_TRANSFORMED, BrightnessScalar);
     public static float MasterVolumeTransformed => MasterVolume / 100;
     public static float MusicVolumeTransformed => MusicVolume / 100;
     public static float SFXVolumeTransformed => SFXVolume / 100;
     public static float VocalsVolumeTransformed => VocalsVolume / 100;
+
+    // Log Audio
+    public static float MasterVolumeScaled => MasterVolume == 0 ? 0 : Mathf.Log10(MasterVolume) /2;
+    public static float MusicVolumeScaled => MusicVolume == 0 ? 0 : Mathf.Log10(MusicVolume) /2;
+    public static float SFXVolumeScaled => SFXVolume == 0 ? 0 : Mathf.Log10(SFXVolume) /2;
+    public static float VocalsVolumeScaled => SFXVolume == 0 ? 0 : Mathf.Log10(SFXVolume) /2;
 
     /// <summary>
     /// Reads settings from PlayerPrefs and updates its public 
@@ -77,8 +84,9 @@ public static class SettingsProfile
     /// </summary>
     public static void ReadSavedSettings()
     {
-        LookSensitivy = PlayerPrefs.GetFloat(LOOK_SENSITIVITY_KEY, DEFAULT_LOOK_SENSITIVITY);
-        InvertLook = PlayerPrefs.GetInt(INVERT_LOOK_KEY, DEFAULT_INVERT_LOOK ? 1 : 0) == 1; // Playerprefs cant store bools, so just store an int
+        LookSensitivity = PlayerPrefs.GetFloat(LOOK_SENSITIVITY_KEY, DEFAULT_LOOK_SENSITIVITY);
+        InvertXLook = PlayerPrefs.GetInt(INVERT_X_LOOK_KEY, DEFAULT_INVERT_X_LOOK ? 1 : 0) == 1; // Playerprefs cant store bools, so just store an int
+        InvertYLook = PlayerPrefs.GetInt(INVERT_Y_LOOK_KEY, DEFAULT_INVERT_Y_LOOK ? 1 : 0) == 1; 
         Brightness = PlayerPrefs.GetFloat(BRIGHTNESS_KEY, DEFAULT_BRIGHTNESS);
 
         MasterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_MASTER_VOLUME);
@@ -91,8 +99,9 @@ public static class SettingsProfile
     {
         Debug.Log("Saving current settings profile to settings profile");
 
-        PlayerPrefs.SetFloat(LOOK_SENSITIVITY_KEY, LookSensitivy);
-        PlayerPrefs.SetInt(INVERT_LOOK_KEY, InvertLook ? 1 : 0); // Playerprefs cant store bools, so just store an int
+        PlayerPrefs.SetFloat(LOOK_SENSITIVITY_KEY, LookSensitivity);
+        PlayerPrefs.SetInt(INVERT_X_LOOK_KEY, InvertXLook ? 1 : 0); // Playerprefs cant store bools, so just store an int
+        PlayerPrefs.SetInt(INVERT_Y_LOOK_KEY, InvertYLook ? 1 : 0); 
         PlayerPrefs.SetFloat(BRIGHTNESS_KEY, Brightness);
 
         PlayerPrefs.SetFloat(MASTER_VOLUME_KEY, MasterVolume);
@@ -101,12 +110,19 @@ public static class SettingsProfile
         PlayerPrefs.SetFloat(VOCALS_VOLUME_KEY, VocalsVolume);
     }
 
-    public static void ResetToDefaults()
+    public static void ResetGameplayToDefaults()
     {
-        Debug.Log("Reseting all game settings to defaults");
-        LookSensitivy = DEFAULT_LOOK_SENSITIVITY;
-        InvertLook = DEFAULT_INVERT_LOOK;
+        Debug.Log("Reseting all gameplay settings to defaults");
+        LookSensitivity = DEFAULT_LOOK_SENSITIVITY;
+        InvertXLook = DEFAULT_INVERT_X_LOOK;
+        InvertYLook = DEFAULT_INVERT_Y_LOOK;
         Brightness = DEFAULT_BRIGHTNESS;
+        SaveCurrentSettings();
+    }
+
+    public static void ResetAudioToDefaults()
+    {
+        Debug.Log("Reseting all audio settings to defaults");
         MasterVolume = DEFAULT_MASTER_VOLUME;
         MusicVolume = DEFAULT_MUSIC_VOLUME;
         SFXVolume = DEFAULT_SFX_VOLUME;

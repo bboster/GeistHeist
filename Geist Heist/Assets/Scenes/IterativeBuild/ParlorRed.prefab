@@ -1873,6 +1873,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 7072286326578587246}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &150333652495817310
 GameObject:
@@ -3985,16 +3986,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   AngularSpeed: 0
   Acceleration: 0
+  visionConeRotator: {fileID: 0}
   path: {fileID: 0}
   ReturnLocation: {fileID: 6723537626808962371}
   DefaultRotation: -90
+  StartIndex: 0
   DefaultBehavior: {fileID: 11400000, guid: fa3b3e20446e670428971e8475876ae9, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  leftRotationValue: 0
+  rightRotationValue: 0
+  coneRotationSpeed: 0
   animator: {fileID: 8581255169341584778}
   dustParticles: {fileID: 0}
   smokeParticlesL: {fileID: 0}
   smokeParticlesR: {fileID: 0}
+  searchAnimator: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -4594,6 +4607,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 3973337247040009502, guid: 7eb3110d53d79ec44902a85110b3feea, type: 3}
   SourceGameObject: {fileID: 1205662345857188346}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &329231696749588893
 GameObject:
@@ -6881,7 +6895,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 5540889460357251916}
-  possessable: {fileID: 3669657103747286109}
 --- !u!1 &407432474435790323
 GameObject:
   m_ObjectHideFlags: 0
@@ -6928,6 +6941,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 3973337247040009502, guid: 7eb3110d53d79ec44902a85110b3feea, type: 3}
   SourceGameObject: {fileID: 5489224857529994055}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &494460772389059409
 GameObject:
@@ -15694,6 +15708,14 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -15702,9 +15724,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &2636969142504031137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28525,6 +28544,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: 04332d44037a08546a9f2050d356689e, type: 3}
   SourceGameObject: {fileID: 7448418436145514829}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!114 &1180992695056807021
 MonoBehaviour:
@@ -28538,7 +28558,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -30647,6 +30668,14 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -30655,9 +30684,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &9117771539280333833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30676,14 +30702,12 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
+  detectableTime: 1
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
-  possessableParticle: {fileID: 0}
+  trajectoryPredictor: {fileID: 0}
+  LineRenderer: {fileID: 0}
 --- !u!114 &5235575462988015434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31936,16 +31960,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   AngularSpeed: 0
   Acceleration: 0
+  visionConeRotator: {fileID: 0}
   path: {fileID: 0}
   ReturnLocation: {fileID: 0}
   DefaultRotation: 0
+  StartIndex: 0
   DefaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  leftRotationValue: 0
+  rightRotationValue: 0
+  coneRotationSpeed: 0
   animator: {fileID: 7326960021570764311}
   dustParticles: {fileID: 0}
   smokeParticlesL: {fileID: 0}
   smokeParticlesR: {fileID: 0}
+  searchAnimator: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -32666,16 +32702,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   AngularSpeed: 0
   Acceleration: 0
+  visionConeRotator: {fileID: 0}
   path: {fileID: 7713141769544353075}
   ReturnLocation: {fileID: 6135447007805446111}
   DefaultRotation: 0
+  StartIndex: 0
   DefaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  leftRotationValue: 0
+  rightRotationValue: 0
+  coneRotationSpeed: 0
   animator: {fileID: 7399383499867731399}
   dustParticles: {fileID: 0}
   smokeParticlesL: {fileID: 0}
   smokeParticlesR: {fileID: 0}
+  searchAnimator: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -34982,6 +35030,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: 04332d44037a08546a9f2050d356689e, type: 3}
   SourceGameObject: {fileID: 9195895146707354727}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!114 &622554934514465095
 MonoBehaviour:
@@ -34995,7 +35044,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -41632,6 +41682,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: 04332d44037a08546a9f2050d356689e, type: 3}
   SourceGameObject: {fileID: 1205662345857188346}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!114 &679458748767789011
 MonoBehaviour:
@@ -41645,7 +41696,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -45862,6 +45914,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 3973337247040009502, guid: 7eb3110d53d79ec44902a85110b3feea, type: 3}
   SourceGameObject: {fileID: 6312172203633808546}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &2180262737032788147
 GameObject:
@@ -45909,6 +45962,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 9110686647262554203}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &2234946853866107145
 GameObject:
@@ -46067,16 +46121,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   AngularSpeed: 0
   Acceleration: 0
+  visionConeRotator: {fileID: 0}
   path: {fileID: 0}
   ReturnLocation: {fileID: 0}
   DefaultRotation: 0
+  StartIndex: 0
   DefaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  leftRotationValue: 0
+  rightRotationValue: 0
+  coneRotationSpeed: 0
   animator: {fileID: 7734498209358541505}
   dustParticles: {fileID: 0}
   smokeParticlesL: {fileID: 0}
   smokeParticlesR: {fileID: 0}
+  searchAnimator: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -52491,6 +52557,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: 04332d44037a08546a9f2050d356689e, type: 3}
   SourceGameObject: {fileID: 5489224857529994055}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!114 &4255909822707037799
 MonoBehaviour:
@@ -52504,7 +52571,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -57270,6 +57338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 5281375873950003649}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &3003554623449179209
 GameObject:
@@ -63155,6 +63224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 3973337247040009502, guid: 7eb3110d53d79ec44902a85110b3feea, type: 3}
   SourceGameObject: {fileID: 7448418436145514829}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &3375223924635047329
 GameObject:
@@ -75542,7 +75612,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 8990694285244890047}
-  possessable: {fileID: 201906598748339374}
 --- !u!1 &3896942609324501715
 GameObject:
   m_ObjectHideFlags: 0
@@ -75589,6 +75658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 3973337247040009502, guid: 7eb3110d53d79ec44902a85110b3feea, type: 3}
   SourceGameObject: {fileID: 9195895146707354727}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &3902286582853926613
 GameObject:
@@ -78039,16 +78109,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   AngularSpeed: 0
   Acceleration: 0
+  visionConeRotator: {fileID: 0}
   path: {fileID: 0}
   ReturnLocation: {fileID: 8263108791048838167}
   DefaultRotation: 90
+  StartIndex: 0
   DefaultBehavior: {fileID: 11400000, guid: fa3b3e20446e670428971e8475876ae9, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  leftRotationValue: 0
+  rightRotationValue: 0
+  coneRotationSpeed: 0
   animator: {fileID: 5527570867652483291}
   dustParticles: {fileID: 0}
   smokeParticlesL: {fileID: 0}
   smokeParticlesR: {fileID: 0}
+  searchAnimator: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -81643,6 +81725,14 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -81651,9 +81741,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &1492952332729957202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92110,16 +92197,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   AngularSpeed: 0
   Acceleration: 0
+  visionConeRotator: {fileID: 0}
   path: {fileID: 0}
   ReturnLocation: {fileID: 5019090440679270411}
   DefaultRotation: 180
+  StartIndex: 0
   DefaultBehavior: {fileID: 11400000, guid: fa3b3e20446e670428971e8475876ae9, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  leftRotationValue: 0
+  rightRotationValue: 0
+  coneRotationSpeed: 0
   animator: {fileID: 5297583994119241560}
   dustParticles: {fileID: 0}
   smokeParticlesL: {fileID: 0}
   smokeParticlesR: {fileID: 0}
+  searchAnimator: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -92676,6 +92775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: 04332d44037a08546a9f2050d356689e, type: 3}
   SourceGameObject: {fileID: 6312172203633808546}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!114 &2352273937337788802
 MonoBehaviour:
@@ -92689,7 +92789,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -95390,7 +95491,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 586509255944148708}
-  possessable: {fileID: 8515109688760848885}
 --- !u!1 &4705431748912086748
 GameObject:
   m_ObjectHideFlags: 0
@@ -95902,6 +96002,14 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: f47623fb5e550ba4190d73b4fbcdaedb, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -95910,9 +96018,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &3429161579932726134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95931,14 +96036,12 @@ MonoBehaviour:
   minStrength: 8
   strengthGrowthRate: 33
   chargeLossRate: 60
-  launchDirection: {x: 1, y: 2, z: 1}
-  Tap: 0
   delayBetweenThrows: 1
-  tapStrength: 0
+  detectableTime: 1
   delayToUpdateChargeMeter: 0.25
   delayToUpdateMaterialVisibility: 0.5
-  chargeMeter: {fileID: 0}
-  possessableParticle: {fileID: 0}
+  trajectoryPredictor: {fileID: 0}
+  LineRenderer: {fileID: 0}
 --- !u!114 &1852809605538699317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97673,6 +97776,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 3973337247040009502, guid: 7eb3110d53d79ec44902a85110b3feea, type: 3}
   SourceGameObject: {fileID: 826566899522038076}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &4934741281545746739
 GameObject:
@@ -99218,6 +99322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: 04332d44037a08546a9f2050d356689e, type: 3}
   SourceGameObject: {fileID: 4730291600290741893}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!114 &6373697933155754156
 MonoBehaviour:
@@ -99231,7 +99336,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -100549,16 +100655,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   AngularSpeed: 0
   Acceleration: 0
+  visionConeRotator: {fileID: 0}
   path: {fileID: 0}
   ReturnLocation: {fileID: 0}
   DefaultRotation: 0
+  StartIndex: 0
   DefaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  leftRotationValue: 0
+  rightRotationValue: 0
+  coneRotationSpeed: 0
   animator: {fileID: 4402657961457922569}
   dustParticles: {fileID: 0}
   smokeParticlesL: {fileID: 0}
   smokeParticlesR: {fileID: 0}
+  searchAnimator: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -102825,6 +102943,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
   spawnLocation: {fileID: 8796349748987560019}
+  spawnRotation: {x: 0, y: 0, z: 0}
+  checkpointStateIdOverride: 
 --- !u!1 &5380487560107334091
 GameObject:
   m_ObjectHideFlags: 0
@@ -104269,6 +104389,14 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -104277,9 +104405,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &7191491785482576346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110002,6 +110127,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
   spawnLocation: {fileID: 7001970222070932008}
+  spawnRotation: {x: 0, y: 0, z: 0}
+  checkpointStateIdOverride: 
 --- !u!1 &5876458870808532474
 GameObject:
   m_ObjectHideFlags: 0
@@ -111324,6 +111451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 3973337247040009502, guid: 7eb3110d53d79ec44902a85110b3feea, type: 3}
   SourceGameObject: {fileID: 4730291600290741893}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &5978471858823682440
 GameObject:
@@ -111530,6 +111658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: 04332d44037a08546a9f2050d356689e, type: 3}
   SourceGameObject: {fileID: 4276417972491276751}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!114 &5504877583334763759
 MonoBehaviour:
@@ -111543,7 +111672,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -117190,6 +117320,14 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -117198,9 +117336,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &8681176931010739775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119253,6 +119388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 4100445118096235283}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &6419083121236848791
 GameObject:
@@ -120422,7 +120558,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 1217040611166657486}
-  possessable: {fileID: 7992701689222421727}
 --- !u!1 &6458322020893646224
 GameObject:
   m_ObjectHideFlags: 0
@@ -122219,6 +122354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 4455918093400587408}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &6773884242981143539
 GameObject:
@@ -125578,16 +125714,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   AngularSpeed: 0
   Acceleration: 0
+  visionConeRotator: {fileID: 0}
   path: {fileID: 0}
   ReturnLocation: {fileID: 0}
   DefaultRotation: 0
+  StartIndex: 0
   DefaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  leftRotationValue: 0
+  rightRotationValue: 0
+  coneRotationSpeed: 0
   animator: {fileID: 1618933597026428326}
   dustParticles: {fileID: 0}
   smokeParticlesL: {fileID: 0}
   smokeParticlesR: {fileID: 0}
+  searchAnimator: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -125831,6 +125979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: 04332d44037a08546a9f2050d356689e, type: 3}
   SourceGameObject: {fileID: 826566899522038076}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!114 &8954613688883926044
 MonoBehaviour:
@@ -125844,7 +125993,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ce4458e24b0744cb6ed011f58204bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptInteractable
-  buttonText: E
+  buttonKey: 0
+  additionalButtonText: 
   ShowUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -125897,6 +126047,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 235571923305887298}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &7176444767522142429
 GameObject:
@@ -137796,6 +137947,14 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -137804,9 +137963,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &5241893489824326608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139945,7 +140101,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 2316123217171613217}
-  possessable: {fileID: 6785950339672097072}
 --- !u!1 &7592271620377463265
 GameObject:
   m_ObjectHideFlags: 0
@@ -152082,6 +152237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 1296124266358750687}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &8238079478189345678
 GameObject:
@@ -152909,6 +153065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 3973337247040009502, guid: 7eb3110d53d79ec44902a85110b3feea, type: 3}
   SourceGameObject: {fileID: 4276417972491276751}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &8274169370876520167
 GameObject:
@@ -152956,6 +153113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 1368444887709890063}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &8285384935708929725
 GameObject:
@@ -153047,7 +153205,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingIndicator
   hidingImage: {fileID: 4292060233769769412}
-  possessable: {fileID: 5014892466566405845}
 --- !u!1 &8314639845696728955
 GameObject:
   m_ObjectHideFlags: 0
@@ -162760,6 +162917,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
   spawnLocation: {fileID: 5520697923273766977}
+  spawnRotation: {x: 0, y: 0, z: 0}
+  checkpointStateIdOverride: 
 --- !u!1 &8989403829326136463
 GameObject:
   m_ObjectHideFlags: 0
@@ -165204,16 +165363,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   AngularSpeed: 0
   Acceleration: 0
+  visionConeRotator: {fileID: 0}
   path: {fileID: 0}
   ReturnLocation: {fileID: 0}
   DefaultRotation: 0
+  StartIndex: 0
   DefaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  leftRotationValue: 0
+  rightRotationValue: 0
+  coneRotationSpeed: 0
   animator: {fileID: 738023312438832019}
   dustParticles: {fileID: 0}
   smokeParticlesL: {fileID: 0}
   smokeParticlesR: {fileID: 0}
+  searchAnimator: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -165734,6 +165905,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 2234946853866107145}
+  displaceParentAtStart: 0
   billboardUI: {fileID: 0}
 --- !u!1 &9195895146707354727
 GameObject:
@@ -165826,6 +165998,14 @@ MonoBehaviour:
   UnpossessedMaterial: {fileID: 2100000, guid: 0f259dd7aa754c047af88c609bdd7c1e, type: 2}
   VisiblePossessionMaterial: {fileID: 0}
   VisibleUnPossessedMaterial: {fileID: 0}
+  AbilityIconPrefab: {fileID: 0}
+  PossessableTextPrefab: {fileID: 0}
+  HasChargeAbility: 0
+  animator: {fileID: 0}
+  possessStateName: possess
+  tetherPossessStateName: tetherpossess
+  possessCameraTransitionDelay: 0.35
+  tetherCameraTransitionDelay: 0.75
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -165834,9 +166014,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
-  possessableCanvas: {fileID: 0}
-  showSeconds: 1
-  hideSeconds: 0.3
 --- !u!114 &5800225826284695290
 MonoBehaviour:
   m_ObjectHideFlags: 0

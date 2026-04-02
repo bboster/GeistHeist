@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 4955695058344905747}
   - component: {fileID: 8532723276404513259}
   - component: {fileID: 7326446809035403836}
-  - component: {fileID: 1910434275005708387}
   - component: {fileID: 421329015279503688}
   - component: {fileID: -5229989608320162015}
   - component: {fileID: 3487713375576966330}
   - component: {fileID: 3815661978593017410}
+  - component: {fileID: 2623479136260140712}
   m_Layer: 0
   m_Name: can
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
   m_LocalPosition: {x: 0.891, y: -5.508, z: 10.339}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -45,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2652521570684091903}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 6168650812902891753, guid: c6082734eeb5829459053c9f0d8d1152, type: 3}
 --- !u!23 &7326446809035403836
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -71,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dbbf66483312fdb43976216ec45d6994, type: 2}
+  - {fileID: 2100000, guid: 02d29b19ff1b8dc4f858913063a68e8f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -94,29 +94,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1910434275005708387
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2652521570684091903}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &421329015279503688
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -126,7 +103,7 @@ Rigidbody:
   m_GameObject: {fileID: 2652521570684091903}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.5
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -156,8 +133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81a286052633cb149b1d79364705d84a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CanScript
-  soundStimulus: {fileID: 1452868294091368668, guid: eca2fd6e6f6562c4eafe9da2b86dc40e, type: 3}
+  soundStimulusPrefab: {fileID: 1452868294091368668, guid: eca2fd6e6f6562c4eafe9da2b86dc40e, type: 3}
   OnomatopoeiaText: clank!
+  CanDespawnTimer: 3
 --- !u!114 &3487713375576966330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,6 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardStunner
   stunVelocityThreshold: 1
+  isCar: 0
 --- !u!114 &3815661978593017410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,12 +162,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea24babacec1ea4a8fe30ad3228824b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SuddenVelocityChangeDetector
-  minVelocityForRegister: 3
-  maxVelocityToBeStopped: 0.3
-  recordVelocityAtStart: 0
-  collisionLayers:
-    serializedVersion: 2
-    m_Bits: 1993
+  minVelocityForRegister: 0.1
+  maxVelocityToBeStopped: 0.5
+  recordVelocityAtStart: 1
+  debugLogSpeeds: 0
   OnStopDetected:
     m_PersistentCalls:
       m_Calls: []
@@ -198,3 +175,26 @@ MonoBehaviour:
   OnJoltDetected:
     m_PersistentCalls:
       m_Calls: []
+--- !u!136 &2623479136260140712
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2652521570684091903}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.014693645
+  m_Height: 0.053170998
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

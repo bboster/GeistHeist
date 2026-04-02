@@ -26,6 +26,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     [Header("Scene Transition")]
     [SerializeField, Scene] private List<string> ScenesToExcludeFromCompletionCount;
+    [SerializeField, Scene] private List<string> ScenesRequiredForCompletion;
 
     [Header("Debug")]
     [Tooltip("If true, does not save any data")]
@@ -34,10 +35,8 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
     private string runtimeSavePath;
 
-    // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
-    void Start()
+    public void Start()
     {
-        // TODO: move this from start later, probably
         runtimeSavePath = Path.Combine(Application.persistentDataPath, $"{_defaultfFileName}.{_fileType}");
         LoadData();
     }
@@ -129,6 +128,25 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             .Count();
     }
 
+    /// <summary>
+    /// Sees if all scenes in required list are completed
+    /// </summary>
+    public bool AllLevelsCompleted()
+    {
+        EnsureSaveData();
+
+        foreach (var level in ScenesRequiredForCompletion)
+        {
+            if (currentSaveDta.ScenesCompleted.Contains(level) == false)
+            {
+                Debug.Log($"Player has not completed game because they need to complete {level}");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     #endregion
 
     #region Flavor Text
@@ -136,7 +154,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     /// <summary>
     /// Return true if level is stored in list of saved completed levels
     /// </summary>
-    public bool IsFlavorTextRead(string text)
+    public bool IsFlavorTextRead(List<DialogueTextData> text)
     {
         EnsureSaveData();
         int hash = text.GetHashCode();
@@ -144,7 +162,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         return currentSaveDta.FlavorTextsRead.Contains(hash);
     }
 
-    public void MarkFlavorTextAsRead(string text, bool autoSave = true)
+    public void MarkFlavorTextAsRead(List<DialogueTextData> text, bool autoSave = true)
     {
         EnsureSaveData();
 

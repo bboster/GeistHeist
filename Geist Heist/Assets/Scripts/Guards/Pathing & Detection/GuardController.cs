@@ -28,28 +28,41 @@ public class GuardController : MonoBehaviour
     [HideInInspector] public float AngularSpeed;
     [HideInInspector] public float Acceleration;
 
+    public GameObject visionConeRotator;
+
     [SerializeField, BoxGroup("Design Values")] private PatrolPath path;
     public PatrolPath Path { get { return path; } }
     [Tooltip("The location a guard will return to by default")]
     [Required, BoxGroup("Design Values")] public Transform ReturnLocation;
     [Tooltip("The rotation the guard should face by default, match this to its placement in the level")]
     [BoxGroup("Design Values")] public float DefaultRotation;
+    [Tooltip("The index of the point the guard should start at.")]
+    [BoxGroup("Design Values")] public int StartIndex = 0;
 
     [Tooltip("Default behavior for the enemy"), Expandable]
     [Required, BoxGroup("Behaviors")] public Behavior DefaultBehavior;
-
     [Expandable]
     [SerializeField, BoxGroup("Behaviors")] public Behavior currentBehavior;
 
     private Coroutine activeBehaviorLoop;
 
     [SerializeField, BoxGroup("Behaviors")] private int currentPriority;
+    [HideInInspector] public UnityEvent<String> VoiceClipPlayed = new();
+    [HideInInspector] public UnityEvent VoiceClipStopped = new();
+
+    [Tooltip("How far left the guard can rotate from 0 degrees."), Foldout("Stationary Guards Only")]
+    public float leftRotationValue;
+    [Tooltip("How far right the guard can rotate from 0 degrees."), Foldout("Stationary Guards Only")]
+    public float rightRotationValue;
+    [Tooltip("How fast the guard will rotate."), Foldout("Stationary Guards Only")]
+    public float coneRotationSpeed;
 
     [Foldout("Programming Values")]
     [SerializeField] private Animator animator;
     [SerializeField] private ParticleSystem dustParticles;
     [SerializeField] private ParticleSystem smokeParticlesL;
     [SerializeField] private ParticleSystem smokeParticlesR;
+    public Animator searchAnimator;
 
     [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
 
@@ -106,8 +119,8 @@ public class GuardController : MonoBehaviour
         defaultAcceleration = thisAgent.acceleration;
 
         //only for sfx for now
-        guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardWalk);
-        guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GuardRun);
+        guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardWalk);
+        guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardRun);
     }
 
     /// <summary>
@@ -182,6 +195,16 @@ public class GuardController : MonoBehaviour
             guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
+    }
+
+    public void GuardTalking(String Caption)
+    {
+        VoiceClipPlayed.Invoke(Caption);
+    }
+
+    public void GuardStopsTalking()
+    {
+        VoiceClipStopped.Invoke();
     }
 
     private void OnDestroy()

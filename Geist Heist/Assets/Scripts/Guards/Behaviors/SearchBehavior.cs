@@ -28,8 +28,10 @@ public class SearchBehavior : GuardMovement
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;
+        contRef.GetAnimator().SetBool("isSearching", true);
+        contRef.searchAnimator.runtimeAnimatorController = stateController;
     }
-    
+
     /// <summary>
     /// Controls the overall logic for the behavior.
     /// </summary>
@@ -45,7 +47,7 @@ public class SearchBehavior : GuardMovement
 
             if (behaviorComplete)
             {
-                contRef.ChangeBehavior(contRef.DefaultBehavior.StateName);
+                contRef.ChangeBehavior(GuardStates.returnToPath);
             }
 
             yield return new WaitForEndOfFrame();
@@ -58,7 +60,10 @@ public class SearchBehavior : GuardMovement
     /// <returns></returns>
     private void StartSearch()
     {
-        GuardCoroutineManager.instance.StartBehaviorTimer(searchLength, this);
+        contRef.GetAnimator().SetBool("isStandingSearching", true);
+        MoveToPoint(selfRef.transform.position);
+        thisAgent.isStopped = true;
+        GuardCoroutineManager.Instance.StartBehaviorTimer(searchLength, this);
         contRef.GetAnimator().SetTrigger("LookingAround");
 
         progress = 0;
@@ -73,10 +78,14 @@ public class SearchBehavior : GuardMovement
     /// </summary>
     public override void StopBehavior()
     {
+        contRef.searchAnimator.StopPlayback();
+        contRef.searchAnimator.runtimeAnimatorController = null;
         base.StopBehavior();
-        GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
+        GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
         behaviorComplete = true;
         contRef.GetAnimator().SetTrigger("LookingAround");
         SearchLocation = Vector3.zero;
+        contRef.GetAnimator().SetBool("isStandingSearching", false);
+        contRef.GetAnimator().SetBool("isSearching", false);
     }
 }

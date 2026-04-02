@@ -2724,31 +2724,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.2324628
+      value: -2.3560686
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.0850527
+      value: 3.1253061
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.9774308
+      value: 2.7296753
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.09171008
+      value: 0.45261553
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.007204827
+      value: 0.10922839
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.99270105
+      value: 0.8602939
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.07798748
+      value: -0.2076122
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3092,6 +3092,10 @@ PrefabInstance:
     - target: {fileID: 5758013179522098753, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_Name
       value: Button Prompt
+      objectReference: {fileID: 0}
+    - target: {fileID: 5868790832404580217, guid: 26581e60da394724197441682d8b83a4, type: 3}
+      propertyPath: buttonKey
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6590520712618447421, guid: 26581e60da394724197441682d8b83a4, type: 3}
       propertyPath: m_LocalScale.x
@@ -3835,31 +3839,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.7938472
+      value: 4.3823786
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.68505275
+      value: 2.725306
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.2597623
+      value: -3.0120068
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99270105
+      value: 0.86029387
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.07798749
+      value: 0.20761223
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0917101
+      value: -0.4526156
       objectReference: {fileID: 0}
     - target: {fileID: 8019966906077005622, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0072048292
+      value: 0.10922841
       objectReference: {fileID: 0}
     - target: {fileID: 8762889882606682532, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5278,11 +5282,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38800cd25e1334c45a1e3092994495da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
-  sceneName: Actual Hub Scene
+  sceneName: HubV2
   loadingScreenPrefab: {fileID: 4996678474793840024, guid: ef6279e25117c4d4ab9e6b822786aca1, type: 3}
   levelLoadingCardPrefab: {fileID: 7534185664916424207, guid: 143892171ba986346bf5a29d131350b1, type: 3}
   confirmationText: Go to Hub?
-  confirmationPopupPrefab: {fileID: 7508292700099194344, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+  confirmationPopupPrefab: {fileID: 5103595946940546535, guid: 5bc7dd9fed6d12a4580e4eb6ceb61a03, type: 3}
+  closeMenuOnConfirm: 0
 --- !u!65 &1847116310
 BoxCollider:
   m_ObjectHideFlags: 0

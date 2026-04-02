@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors: Joshua Kelly
  * Creation: 10/02/25
- * Last Edited: 12/05/25
+ * Last Edited: 3/3/26
  * Summary: Detects when the player enters or exits and enemy's vision cone and changes behavior accordingly.
  */
 
@@ -10,7 +10,6 @@ using FMOD;
 using GuardUtilities;
 using NaughtyAttributes;
 using System.Collections;
-using System.Net.NetworkInformation;
 using Unity.Cinemachine;
 using UnityEditor;
 using UnityEngine;
@@ -19,8 +18,9 @@ public class VisionStimulus : Stimulus
 {
     #region Variable Declarations
 
-    private bool hasSeenPlayer = false;
+    private bool hasSeenPlayer = false; //DEPRECATED WITH NEW SYSTEM
     private bool playerObjectSeen = false;
+    private bool actionDetected = false; //DEPRECATED WITH NEW SYSTEM
     private Coroutine timer;
 
     [Tooltip("The index of the behavior to activate when the player is seen. WILL REPLACE WITH BETTER SYSTEM WHEN I THINK OF ONE")]
@@ -78,14 +78,16 @@ public class VisionStimulus : Stimulus
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out PossessableObject obj))
+        /*if (other.gameObject.TryGetComponent(out PossessableObject obj)) //Checks if the object detected is the player
         {
+            //if the detected object is the player and the enemy has not alredy seen the player, it executes this condition
             if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == false)
             {
                 StopTimer();
 
                 hasSeenPlayer = true;
 
+                //Checks if the player can be seen and, if yes, triggers the visions stimulus detection on the guard
                 if (!VisionCast(other.gameObject, out RaycastHit info))
                 {
                     hasSeenPlayer = true;
@@ -97,9 +99,9 @@ public class VisionStimulus : Stimulus
                     UnityEngine.Debug.Log(info.collider.gameObject.name);
 #endif
             }
-            else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false)
+            else if (obj.Equals(PlayerManager.Instance.CurrentObject) && playerObjectSeen == false) //handles reentering the vision cone
             {
-                StopTimer();
+                StopTimer(); //Stops the timer that would transition the guard into vision break state
 
                 if (obj.gameObject.TryGetComponent(out Rigidbody rb))
                 {
@@ -114,32 +116,135 @@ public class VisionStimulus : Stimulus
                             timer = null;
                         }
 
-                        TriggerStimulus();
-                        return;
+                        if(!VisionCast(other.gameObject))
+                        {
+                            actionDetected = true;
+                            TriggerStimulus();
+                        }
                     }
                 }
 
                 playerObjectSeen = true;
             }
+        }*/
+
+        #region New Vision Code
+
+        //Conditions: Ghost seen, possessable seen but no action taken, possessable seen and action taken, action taken on a seen possessable
+        GuardStates currentState = parentController.currentBehavior.StateName;
+
+        //Only executes contained code if the object within the trigger can be seen by the guard
+        //TODO: Have the vision trigger ignore all collision layers except the player to avoid rapidly triggering this function and tanking performance
+        if (VisionCast(other.gameObject))
+        {
+            //if Ghost seen enter chase state
+            if (other.gameObject == PlayerManager.Instance.PlayerGhostObject.gameObject)
+            {
+                if(currentState == GuardStates.visionBreak)
+                {
+                    parentController.ChangeBehavior(GuardStates.surprised);
+                    StopVisionBreakTimer();
+                    return;
+                }
+
+                //Enter chase immediately
+                TriggerStimulus();
+                StopVisionBreakTimer();
+            }
+            //else if possessable seen but no action taken then watch for possessable action
+            else if (other.gameObject == PlayerManager.Instance.CurrentObject.gameObject)
+            {
+                //Call check function to see if the object is detectable. If yes then enter chase state
+                if (other.gameObject.GetComponent<IInputHandler>().IsDetectable())
+                {
+                    TriggerStimulus();
+                }
+                //Else change playerObjectSeen to true
+                else
+                {
+                    playerObjectSeen = true;
+                }
+
+                StopVisionBreakTimer();
+            }
+
+            //TODO: Code to handle objects re-entering the vision cone while the timer is running.
         }
+        //This should execute if the player is still in the vision cone but is behind a wall, is seen, and is in either surprised or chase state
+        else if(playerObjectSeen == true && (currentState == GuardStates.surprised || currentState == GuardStates.chase))
+        {
+            if(timer == null)
+                StartVisionBreakTimer();
+        }
+        else //This should execute if the player is still in the cone but is behind a wall and is not in either surprised or chase state
+        {
+            playerObjectSeen = false;
+        }
+
+        #endregion
+
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out PossessableObject obj))
+        /*if (other.gameObject.TryGetComponent(out PossessableObject obj))
         {
-            if (obj.Equals(PlayerManager.Instance.PlayerGhostObject) && hasSeenPlayer == true)
+            if (obj.Equals(PlayerManager.Instance.CurrentObject) && (hasSeenPlayer == true || actionDetected == true))
             {
                 if (!VisionCast(other.gameObject))
                 {
-                    timer = StartCoroutine(VisionBreakTimer());
+                    StartVisionBreakTimer();
                 }
             }
             else if (obj.Equals(PlayerManager.Instance.CurrentObject))
             {
                 playerObjectSeen = false;
             }
+        }*/
+
+        #region New Vision Code
+
+        //Conditions: Ghost/noticed possessable no longer seen, possessable that has taken no action no longer seen
+
+        //Only execute lines below if the object leaving the trigger is CurrentObject
+        if(other.gameObject == PlayerManager.Instance.CurrentObject.gameObject)
+        {
+            GuardStates curState = parentController.currentBehavior.StateName;
+
+            //if current state is surprised or chase, then start the vision break timer, else set playerObjectSeen to false
+            if(curState == GuardStates.surprised || curState == GuardStates.chase)
+            {
+                StartVisionBreakTimer();
+            }
+            else
+            {
+                playerObjectSeen = false;
+            }
         }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Handles starting the vision break timer
+    /// </summary>
+    private void StartVisionBreakTimer()
+    {
+        if(timer != null)
+        {
+            StopCoroutine(timer);
+        }
+
+        timer = StartCoroutine(VisionBreakTimer());
+    }
+
+    private void StopVisionBreakTimer()
+    {
+        if(timer != null)
+        {
+            StopCoroutine(timer);
+            timer = null;
+        }    
     }
 
     #endregion
@@ -220,6 +325,7 @@ public class VisionStimulus : Stimulus
 
             //Sweeps the raycast a given distance along the base of the triangular visualizer. NewPoint = OldPoint + distance * unit vector of the base
             raySweep = raySweep - (coneDiameter / rayCount) * Vector3.Normalize(-dir);
+            raySweep.y = coneOrigin.position.y;
         }
 
         visionMesh.vertices = vertices;
@@ -262,7 +368,7 @@ public class VisionStimulus : Stimulus
         direction.y = 0;
         float distance = Vector3.Distance(raycastSpawn.position, target.transform.position) + 2; //Calculates the distance to raycast
 
-        return Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer); ;
+        return !Physics.Raycast(spawnLocation, direction, out RaycastHit info, distance, raycastLayer); ;
     }
 
     /// <summary>
@@ -304,6 +410,7 @@ public class VisionStimulus : Stimulus
     /// <returns></returns>
     private IEnumerator VisionBreakTimer()
     {
+        actionDetected = false;
         yield return new WaitForSeconds(visionBreakTimer);
 
         hasSeenPlayer = false;
@@ -323,6 +430,7 @@ public class VisionStimulus : Stimulus
     {
         if (playerObjectSeen == true)
         {
+            actionDetected = true;
             if (timer != null)
             {
                 StopCoroutine(timer);
@@ -335,7 +443,7 @@ public class VisionStimulus : Stimulus
 
     private void ObjectLeft()
     {
-        playerObjectSeen = false;
+        //playerObjectSeen = false;
     }
 
     private void OnDisable()

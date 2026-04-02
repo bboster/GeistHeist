@@ -18,6 +18,8 @@ public class BillboardUIPoint : MonoBehaviour
     [SerializeField, Required] public GameObject UIObjectPrefab;
     [SerializeField] private GameObject SourceGameObject;
 
+    [Foldout("Advanced"), SerializeField] private bool displaceParentAtStart = false;
+
     [HideInInspector] public IBillboardUI billboardUI;
 
     [Header("Debug")]
@@ -26,12 +28,24 @@ public class BillboardUIPoint : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // this is expected behavior is this is an Onomatopoeia point
+        // This is just for guard bubbles, and the weird way that designers handled the guard models
+        if(displaceParentAtStart)
+            transform.parent = transform.parent.parent;
+
+        // this is expected behavior if this is an Onomatopoeia point
         if (UIObjectPrefab == null)
+        {
+            Debug.LogError("Prefab null");
             return;
+        }
 
         billboardUI = Instantiate(UIObjectPrefab).GetComponent<IBillboardUI>();
-        BillboardUIManager.Instance.RegisterAndInitializeBillboardUIPoint(this.transform, billboardUI, SourceGameObject);
+        if(BillboardUIManager.Instance == null)
+        {
+            Debug.LogError($"{gameObject.name} can not spawn its billboard element because BillboardUIManager is missing from the scene");
+            return;
+        }
+        BillboardUIManager.Instance.RegisterAndInitializeBillboardUIPoint(this.transform, billboardUI, SourceGameObject); 
     }
 
     private void OnDrawGizmos()

@@ -89,7 +89,10 @@ public class OptionalCollectable : MonoBehaviour
 
         if (particleSystem != null)
         {
-            particleSystem.Stop(false);
+            /* Note: the particle system is automatically destroyed when it is done playing.
+             * This code is fine and harmless, but it would be better to change the duration of the original particle.
+             */
+            //particleSystem.Stop(false);
         }
 
         // Sideflips
@@ -178,7 +181,7 @@ public class OptionalCollectable : MonoBehaviour
             return;
         }
 
-        // Queue the registry update to happen after import/validation finishes
+        // Queue the collectableRegistry update to happen after import/validation finishes
         EditorApplication.delayCall += () =>
         {
             if (Registry == null)
@@ -297,7 +300,7 @@ public enum Collectable
     Vending_Machine_Collectable,
     
     VaseCollectible,
-	ToyCarCollectible,
+	
 	ChairCollectible,
 	NewsPaperHat,
 	
@@ -307,4 +310,18 @@ public enum Collectable
 	
 	CowboyHatColletable,
 	Jester_Hat_Collectable,
+	
+	
+	
+	
+	CollectibleNightcap,
+	CollectibleFedora,
+	CollectibleWizardHat,
+
+    LobsterCollectable,
+    ChefHatCollectable,
+    TeaCupCollectable,
+	CollectibleTemplate,
+	PurpleTopHat,
+	JesterHatVarient,
 }

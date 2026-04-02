@@ -1,34 +1,40 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Josh
  * Creation Date: 10/20/25
- * Last Modified: 11/5/25
+ * Last Modified: 3/1/26
  * 
  * Brief Description: Resusable & modular UI popup for confirming the users choice.
  */
 
 using NaughtyAttributes;
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class ConfirmationPopup : MonoBehaviour
 {
     [SerializeField, Required] private TMP_Text confirmationText;
-    [SerializeField, Required] private Button cancelButton;
-    [SerializeField, Required] private Button confirmButton; 
+    [SerializeField, Required] protected Button cancelButton;
+    [SerializeField, Required] protected Button confirmButton; 
     [SerializeField] private bool hideOnCreation = true; 
 
-    private CanvasGroup canvasGroup;
-    private float oldTimeScale=1;
-    private float lastFadeSecondsUsed = -1;
+    protected CanvasGroup canvasGroup;
+    protected float oldTimeScale=1;
+    protected float lastFadeSecondsUsed = -1;
+    private bool closeMenuOnConfirm;
     private UnityAction lastPauseStartedOverride;
     private Coroutine fadeOpacityCoroutine;
 
-    private UnityAction afterCancelClicked = null;
+    protected UnityAction afterCancelClicked = null;
+    protected UnityAction onConfirmationButtonClicked = null;
+    private GameObject previouslySelectedBeforeOpen;
+    private bool shouldRestorePreviousSelectionOnHide;
+
+    public static bool AnyConfirmationMenuOpen = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,27 +45,33 @@ public class ConfirmationPopup : MonoBehaviour
             StaticUtilities.DisableCanvasGroup(canvasGroup);
     }
 
-
-
     /// <summary>
     /// Opens confirmation window, can add custom behaviour to the respective buttons
     /// </summary>
+    /// <param name="text">Text prompt that displays at text box (not confirmation button)</param>
     /// <param name="fadeSeconds">If greater than 0, fades in and out</param>
-    public void OpenConfirmationPopup(string? text = null, UnityAction? OnConfirmationButtonClicked = null, UnityAction? OnCancelButtonClicked = null, float fadeSeconds = -1)
+    public virtual void OpenConfirmationPopup(string? text = null, UnityAction? OnConfirmationButtonClicked = null, UnityAction? OnCancelButtonClicked = null,
+        float fadeSeconds = -1, bool closeMenuOnConfirm = true, bool freezeTime = true)
     {
         if(canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
+        AnyConfirmationMenuOpen = true;
+
         lastFadeSecondsUsed = fadeSeconds;
+        this.closeMenuOnConfirm = closeMenuOnConfirm;
+        previouslySelectedBeforeOpen = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+        shouldRestorePreviousSelectionOnHide = false;
 
         // Press esc to close popup
-        InputEvents.PauseStartedOverride = HideConfirmationPopup;
+        InputEvents.PauseStartedOverride = OnCancelButtonPressed;
 
         StaticUtilities.ShowCursor();
         oldTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
+        if(freezeTime)
+            Time.timeScale = 0f;
 
-        if(text != null)
+        if(text != null && confirmationText != null)
         {
             confirmationText.text = text;
         }
@@ -71,84 +83,91 @@ public class ConfirmationPopup : MonoBehaviour
         //cancelButton.onClick.AddListener(OnCancelButtonClicked);
         afterCancelClicked = OnCancelButtonClicked;
             
-            
-
         // Confirm button
-        confirmButton.onClick.RemoveAllListeners();
-        confirmButton.onClick.AddListener(OnConfirmButtonClicked); // may be redundant to remove this listener and then immediately add it back but idk else to do it.
-        if(OnConfirmationButtonClicked != null)
-            confirmButton.onClick.AddListener(OnConfirmationButtonClicked);
+        confirmButton?.onClick.RemoveAllListeners();
+        confirmButton?.onClick.AddListener(OnConfirmButtonClicked); // may be redundant to remove this listener and then immediately add it back but idk else to do it.
+        onConfirmationButtonClicked = OnConfirmationButtonClicked;
+        if (OnConfirmationButtonClicked != null)
+            confirmButton?.onClick.AddListener(OnConfirmationButtonClicked);
+
+        if (canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
+
+        StaticUtilities.EnableCanvasGroup(canvasGroup, alpha: 0);
+        EventSystem.current.SetSelectedGameObject(cancelButton.gameObject);
 
         if (lastFadeSecondsUsed > 0)
-            StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, FadeToVisible());
+            fadeOpacityCoroutine = StaticUtilities.FadeToVisible(canvasGroup, fadeSeconds, unscaledTime: true);
         else
-            StaticUtilities.EnableCanvasGroup(canvasGroup);
+            canvasGroup.alpha = 1;
     }
 
     public void HideConfirmationPopup()
     {
         InputEvents.PauseStartedOverride = lastPauseStartedOverride;
 
+        AnyConfirmationMenuOpen = false;
+
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
         if (lastFadeSecondsUsed > 0)
-            StaticUtilities.StopAndStartCoroutine(ref fadeOpacityCoroutine, FadeToHiddenVisible());
+            fadeOpacityCoroutine = StaticUtilities.FadeToHidden(canvasGroup, lastFadeSecondsUsed, 
+                                                currentCoroutineToCancel: fadeOpacityCoroutine, afterFadeCallback: AfterFadeToHidden);
+
         else
         {
             StaticUtilities.DisableCanvasGroup(canvasGroup);
+            RestorePreviousSelectionIfNeeded();
             if(afterCancelClicked != null)
                 afterCancelClicked();
         }
     }
 
-    void OnCancelButtonPressed()
+    protected virtual void AfterFadeToHidden()
     {
-        Time.timeScale = oldTimeScale;
-        HideConfirmationPopup();
-    }
-
-    void OnConfirmButtonClicked()
-    {
-        Time.timeScale = oldTimeScale;
         StaticUtilities.DisableCanvasGroup(canvasGroup);
-    }
-
-    #region fade opacity
-
-    private IEnumerator FadeToVisible()
-    {
-        StaticUtilities.EnableCanvasGroup(canvasGroup, alpha : 0);
-
-        float timeStarted = Time.unscaledTime;
-        float t = 0;
-        while(t < 1)
-        {
-            t = (Time.unscaledTime - timeStarted) / lastFadeSecondsUsed;
-            canvasGroup.alpha = t;
-            yield return null;
-        }
-    }
-
-    private IEnumerator FadeToHiddenVisible()
-    {
-        if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
-
-        float timeStarted = Time.unscaledTime;
-        float t = 0;
-        while (t < 1)
-        {
-            t = (Time.unscaledTime - timeStarted) / lastFadeSecondsUsed;
-            canvasGroup.alpha = 1-t;
-            yield return null;
-        }
-
-        StaticUtilities.DisableCanvasGroup(canvasGroup);
+        RestorePreviousSelectionIfNeeded();
 
         if (afterCancelClicked != null)
             afterCancelClicked();
     }
 
+    void OnCancelButtonPressed()
+    {
+        Time.timeScale = oldTimeScale;
+        shouldRestorePreviousSelectionOnHide = true;
 
-    #endregion
+        if (canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
+
+        HideConfirmationPopup();
+    }
+
+    protected virtual void OnConfirmButtonClicked()
+    {
+        Time.timeScale = oldTimeScale;
+        shouldRestorePreviousSelectionOnHide = false;
+        if (closeMenuOnConfirm)
+        {
+            StaticUtilities.DisableCanvasGroup(canvasGroup);
+        }
+    }
+
+    private void RestorePreviousSelectionIfNeeded()
+    {
+        if (!shouldRestorePreviousSelectionOnHide)
+            return;
+
+        shouldRestorePreviousSelectionOnHide = false;
+
+        if (EventSystem.current == null || previouslySelectedBeforeOpen == null || !previouslySelectedBeforeOpen.activeInHierarchy)
+            return;
+
+        Selectable selectable = previouslySelectedBeforeOpen.GetComponent<Selectable>();
+        if (selectable != null && !selectable.IsInteractable())
+            return;
+
+        EventSystem.current.SetSelectedGameObject(previouslySelectedBeforeOpen);
+    }
 }

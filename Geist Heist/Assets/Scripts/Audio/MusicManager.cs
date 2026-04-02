@@ -6,32 +6,60 @@ using FMOD.Studio;
 
 public class MusicManager : Singleton<MusicManager>
 {
+    [SerializeField, NaughtyAttributes.Scene] private string hubName;
+    [SerializeField] private string[] levelNames;
+    [SerializeField, NaughtyAttributes.Scene] private string globeName;
+    [SerializeField, NaughtyAttributes.Scene] private string menuName;
+    
     private EventInstance levelBGM;
     private EventInstance hubBGM;
     private EventInstance globeBGM;
     private EventInstance menuBGM;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.MenuBGM);
-        globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.GlobeBGM);
-        hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.HubBGM);
-        levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.LevelBGM);
 
+    protected override void Awake()
+    {
+        //SceneManager.sceneLoaded += StartMusic;
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public void Initialize()
+    {
+
+        globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GlobeBGM);
+        hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.HubBGM);
+        levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.LevelBGM);
+
+
+
+        //the following if-else block could be changed to a Switch statement -Josh
         StopAll();
-        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Main Menu")))
+    }
+
+    private void Start()
+    {
+        Debug.Log(hubName);
+        StartMusic(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+    }
+
+    private void StartMusic(Scene s, LoadSceneMode m)
+    {
+        Debug.Log(hubName);
+
+
+        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(menuName)))
         {
+            menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.MenuBGM);
             menuBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Actual Hub Scene")))
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(hubName)))
         {
             hubBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("Globe")))
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(globeName)))
         {
             globeBGM.start();
         }
-        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("FINAL Parlour Room")))
+        else
         {
             levelBGM.start();
         }
@@ -40,6 +68,8 @@ public class MusicManager : Singleton<MusicManager>
     void OnDestroy()
     {
         StopAll();
+
+        SceneManager.sceneLoaded -= StartMusic;
     }
 
     void StopAll()

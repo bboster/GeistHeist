@@ -31,6 +31,7 @@ public class PossessableSearchBehavior : GuardMovement
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;
+        contRef.searchAnimator.runtimeAnimatorController = stateController;
     }
 
     /// <summary>
@@ -61,7 +62,7 @@ public class PossessableSearchBehavior : GuardMovement
     /// <returns></returns>
     private void StartSearch()
     {
-        GuardCoroutineManager.instance.StartPossessableSearchTimer(searchLength, this);
+        GuardCoroutineManager.Instance.StartPossessableSearchTimer(searchLength, this);
 
 /*#if UNITY_EDITOR
         selfRef.GetComponent<GuardDebugger>().StartDebugProgress(searchLength, this);
@@ -73,10 +74,12 @@ public class PossessableSearchBehavior : GuardMovement
     /// </summary>
     public override void StopBehavior()
     {
+        contRef.searchAnimator.StopPlayback();
+        contRef.searchAnimator.runtimeAnimatorController = null;
         base.StopBehavior();
 
         if(TimerCoroutine != null)
-            GuardCoroutineManager.instance.StopBehaviorTimer(TimerCoroutine);
+            GuardCoroutineManager.Instance.StopBehaviorTimer(TimerCoroutine);
 
         behaviorComplete = true;
         SearchLocation = Vector3.zero;

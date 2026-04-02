@@ -22,15 +22,25 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     [Header("Debug")]
     [SerializeField, OnValueChanged(nameof(UpdateVisibility))] private bool DebugAlwaysDisplay;
 
+    private WearableCollectible wearableCollectible;
+    private ButtonPromptInteractable buttonPrompt;
+
     #region Unity Lifecycle
     private void OnValidate()
     {
 #if UNITY_EDITOR
         LoadRegistry();
+        EnsureTriggerCollider();
+        EnsureButtonPromptSetup();
 #endif
     }
 
-    private void Awake() => LoadRegistry();
+    private void Awake()
+    {
+        LoadRegistry();
+        EnsureTriggerCollider();
+        EnsureButtonPromptSetup();
+    }
 
     private void Start()
     {
@@ -49,7 +59,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
             return;
         }
 
-        MeshRenderer meshPrefab = Registry.GetMesh(ThisCollectable);
+        MeshRenderer meshPrefab = Registry.GetWearableMeshRenderer(ThisCollectable);
         if (meshPrefab == null)
         {
             Debug.LogWarning($"No prefab found in Registry for {ThisCollectable}.");
@@ -58,7 +68,10 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
         Debug.Log($"Attempting to wear: {ThisCollectable}");
 
-        WearableCollectible wearableCollectible = FindAnyObjectByType<WearableCollectible>();
+        if(wearableCollectible == null)
+            wearableCollectible = FindAnyObjectByType<WearableCollectible>();
+
+
         if (wearableCollectible == null)
         {
             Debug.LogWarning("No WearableCollectible instance found in the scene.");
@@ -66,14 +79,15 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
         }
 
         wearableCollectible.EquipHat(ThisCollectable);
-        SaveDataManager.Instance.MarkCollectableAsWorn(ThisCollectable);
 
         Debug.Log($"{ThisCollectable} equipped successfully!");
+        UpdateVisibility();
+    }
 
-        // Hide this mesh to indicate it's now equipped
-        MeshRenderer existingMesh = GetComponentInChildren<MeshRenderer>();
-        if (existingMesh != null)
-            existingMesh.enabled = false;
+    bool IInteractable.IsInteractable()
+    {
+        return SaveDataManager.Instance.IsCollectableCollected(ThisCollectable)
+            && SaveDataManager.Instance.EquipedHat() != (int)ThisCollectable;
     }
     #endregion
 
@@ -84,7 +98,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
         if (ThisCollectable != collectableToRespawn)
             return;
 
-        MeshRenderer newMeshPrefab = Registry.GetMesh(ThisCollectable);
+        MeshRenderer newMeshPrefab = Registry.GetDisplayMeshRenderer(ThisCollectable);
         if (newMeshPrefab == null)
         {
             Debug.LogWarning($"[{name}] No CollectableModel to respawn for {ThisCollectable}");
@@ -120,10 +134,9 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
         target.sharedMaterials = source.sharedMaterials;
 
-        // Reset transform and ensure visibility
-        target.transform.localPosition = Vector3.zero;
-        target.transform.localRotation = Quaternion.identity;
-        target.transform.localScale = Vector3.one;
+        target.transform.localPosition = source.transform.localPosition + Registry.GetDisplayLocalPosition(ThisCollectable);
+        target.transform.localEulerAngles = source.transform.localEulerAngles + Registry.GetDisplayLocalEulerAngles(ThisCollectable);
+        target.transform.localScale = Vector3.Scale(source.transform.localScale, Registry.GetDisplayLocalScale(ThisCollectable));
         target.gameObject.SetActive(true);
     }
     private void LoadRegistry()
@@ -135,15 +148,87 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
             Debug.LogWarning("CollectableRegistry not found in Resources.");
     }
 
-    private void UpdateVisibility()
+    private void EnsureTriggerCollider()
     {
-        gameObject.SetActive(DebugAlwaysDisplay || SaveDataManager.Instance.IsCollectableCollected(ThisCollectable));
+        if (TryGetComponent<Collider>(out var coll) && !coll.isTrigger)
+            coll.isTrigger = true;
+    }
+
+    private void EnsureButtonPromptSetup()
+    {
+        if (buttonPrompt == null)
+            buttonPrompt = GetComponentInChildren<ButtonPromptInteractable>(true);
+
+        if (buttonPrompt == null)
+            return;
+
+        buttonPrompt.buttonKey = ButtonType.Interact;
+        buttonPrompt.additionalButtonText = string.Empty;
+    }
+
+    public void UpdateVisibility()
+    {
+        gameObject.SetActive((DebugAlwaysDisplay || SaveDataManager.Instance.IsCollectableCollected(ThisCollectable)) && SaveDataManager.Instance.EquipedHat() != (int)ThisCollectable);
+        MeshRenderer existingMesh = GetComponentInChildren<MeshRenderer>();
+        if (existingMesh != null)
+            existingMesh.enabled = SaveDataManager.Instance.IsCollectableCollected(ThisCollectable) && SaveDataManager.Instance.EquipedHat() != (int)ThisCollectable;
     }
     #endregion
 
 
     #region Debug Tools
 #if UNITY_EDITOR
+    [Button("Save Scene Mesh As Display Offset")]
+    private void SaveSceneMeshAsDisplayOffset()
+    {
+        LoadRegistry();
+        if (Registry == null)
+        {
+            Debug.LogWarning("CollectableRegistry not found in Resources.");
+            return;
+        }
+
+        MeshRenderer sceneMesh = GetComponentInChildren<MeshRenderer>(true);
+        if (sceneMesh == null)
+        {
+            Debug.LogWarning($"[{name}] No scene mesh found to read transform from.");
+            return;
+        }
+
+        MeshRenderer sourceMesh = Registry.GetDisplayMeshRenderer(ThisCollectable);
+        if (sourceMesh == null)
+        {
+            Debug.LogWarning($"[{name}] No prefab is set in CollectableRegistry for {ThisCollectable}.");
+            return;
+        }
+
+        Vector3 positionOffset = sceneMesh.transform.localPosition - sourceMesh.transform.localPosition;
+        Vector3 rotationOffset = new Vector3(
+            Mathf.DeltaAngle(sourceMesh.transform.localEulerAngles.x, sceneMesh.transform.localEulerAngles.x),
+            Mathf.DeltaAngle(sourceMesh.transform.localEulerAngles.y, sceneMesh.transform.localEulerAngles.y),
+            Mathf.DeltaAngle(sourceMesh.transform.localEulerAngles.z, sceneMesh.transform.localEulerAngles.z));
+        Vector3 scaleOffset = new Vector3(
+            SafeDivide(sceneMesh.transform.localScale.x, sourceMesh.transform.localScale.x),
+            SafeDivide(sceneMesh.transform.localScale.y, sourceMesh.transform.localScale.y),
+            SafeDivide(sceneMesh.transform.localScale.z, sourceMesh.transform.localScale.z));
+
+        if (!Registry.TrySetDisplayOffsets(ThisCollectable, positionOffset, rotationOffset, scaleOffset))
+        {
+            Debug.LogWarning($"[{name}] Could not update offsets. No registry entry exists for {ThisCollectable}.");
+            return;
+        }
+
+        Debug.Log($"[{name}] Saved display offsets for {ThisCollectable}. Position: {positionOffset}, Rotation: {rotationOffset}, Scale: {scaleOffset}");
+    }
+
+    private float SafeDivide(float numerator, float denominator)
+    {
+        if (Mathf.Approximately(denominator, 0f))
+            return 1f;
+
+        return numerator / denominator;
+    }
+
     [Button("Preview Collectable")]
     private void PreviewCollectable()
     {

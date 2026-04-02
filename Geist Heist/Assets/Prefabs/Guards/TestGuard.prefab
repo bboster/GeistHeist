@@ -38,6 +38,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3356660740523595402}
   - {fileID: 4100900097416174939}
   - {fileID: 4730414694274019532}
   - {fileID: 7846031698482388494}
@@ -46,7 +47,6 @@ Transform:
   - {fileID: 4768498741255970239}
   - {fileID: 7921228283787362018}
   - {fileID: 1307291879809254197}
-  - {fileID: 2046425248456093714}
   - {fileID: 2749016206893264801}
   - {fileID: 8802723771553580982}
   m_Father: {fileID: 0}
@@ -169,11 +169,16 @@ MonoBehaviour:
   DefaultBehavior: {fileID: 11400000, guid: 862d2e95e2cac814d8510fce9f97e2d1, type: 2}
   currentBehavior: {fileID: 0}
   currentPriority: 0
+  VoiceClipPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  VoiceClipStopped:
+    m_PersistentCalls:
+      m_Calls: []
   animator: {fileID: 8501832552835297838}
   dustParticles: {fileID: 4497605020585135536}
   smokeParticlesL: {fileID: 7740090257798655818}
   smokeParticlesR: {fileID: 4947930299147570199}
-  waveParticles: {fileID: 0}
   SearchLocation: {x: 0, y: 0, z: 0}
   OnBehaviorStarted:
     m_PersistentCalls:
@@ -554,6 +559,54 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.903396
   m_Center: {x: 0, y: 0.21066082, z: 0}
+--- !u!1 &4138243889186070311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3356660740523595402}
+  - component: {fileID: 7540368818233547689}
+  m_Layer: 0
+  m_Name: BillboardSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3356660740523595402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4138243889186070311}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.047, y: 2.03, z: -0.191}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1960475012492913843}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7540368818233547689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4138243889186070311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6646ea5922be444b714d8e1a547696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
+  UIObjectPrefab: {fileID: 8140011255406306161, guid: 25b2c2151953b3a42afffa3fa8a84f3f, type: 3}
+  SourceGameObject: {fileID: 121252902873117158}
+  displaceParentAtStart: 0
+  billboardUI: {fileID: 0}
 --- !u!1 &6594531850623139369
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,12 +721,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7025816127814639886}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.22457871, z: 0}
+  m_LocalScale: {x: 0.07485957, y: 0.07485957, z: 0.07485957}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1960475012492913843}
+  m_Father: {fileID: 4100900097416174939}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &634515115900350344
 MonoBehaviour:
@@ -689,6 +742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BillboardUIPoint
   UIObjectPrefab: {fileID: 6483610362573815863, guid: ffd926966fbec224b87f2674f560c631, type: 3}
   SourceGameObject: {fileID: 121252902873117158}
+  displaceParentAtStart: 1
   billboardUI: {fileID: 0}
 --- !u!1 &8449940454367373523
 GameObject:
@@ -887,7 +941,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 45c0836639bc2e342b6f98ffd7abe3fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2046425248456093714}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45c0836639bc2e342b6f98ffd7abe3fc, type: 3}
 --- !u!4 &4100900097416174939 stripped

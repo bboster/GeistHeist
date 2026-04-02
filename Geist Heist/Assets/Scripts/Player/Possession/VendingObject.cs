@@ -2,12 +2,10 @@ using NaughtyAttributes;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using FMODUnity;
-using FMOD.Studio;
 /*
-* Contributors: Brenden, Toby
+* Contributors: Brenden, Toby, Jacob
 * Creation Date: 10/1/25
-* Last Modified: 10/29/25
+* Last Modified: 3/3/26
 * 
 * Brief Description: Input Handler for the Vending Machine, handles movement and actions for the Vending Machine
 *
@@ -21,95 +19,72 @@ public class VendingObject : IInputHandler, IInteractable
     [SerializeField] private GameObject CanPrefab;
 
     private float currentStrength;
+    private bool detectable = false;
 
+    //If the balancing dropdown is no longer being used these comments should be deleted to improve readability
     /*[Dropdown("balancing")]*/[SerializeField] private float maxStrength;
     /*[Dropdown("balancing")]*/[SerializeField] private float minStrength;
     /*[Dropdown("balancing")]*/[SerializeField] private float strengthGrowthRate;
     /*[Dropdown("balancing")]*/[SerializeField] private float chargeLossRate;
-    /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
-    /*[Dropdown("balancing")]*/[SerializeField] private bool Tap;
+    // /*[Dropdown("balancing")]*/[SerializeField] private Vector3 launchDirection;
+    /*[Dropdown("balancing")]*///[SerializeField] private bool Tap;
     [Tooltip("Force there to be time between can throws")]
     [SerializeField] private float delayBetweenThrows = 1f;
-    [SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
+    [Tooltip("The amount of time in seconds the player is detectable after ejecting a can")]
+    [SerializeField] private float detectableTime = 1f;
+    //[SerializeField, ShowIf(nameof(Tap))] private float tapStrength;
 
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
     [Tooltip("How long it takes for the visible material to go back to possession material.")]
     [SerializeField] private float delayToUpdateMaterialVisibility = 0.5f;
 
-    [SerializeField] private PossessableChargeMeterUI chargeMeter;
-    [SerializeField] private ParticleSystem possessableParticle;
-
     private PossessableObject possessableObject;
     private bool hasThrownThisPossession;
     private Coroutine materialCountdownCoroutine;
 
-    private EventInstance canCharge;
+    [SerializeField, Required] TrajectoryPredictor trajectoryPredictor;
+    [SerializeField, Required] GameObject LineRenderer;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
-        canCharge = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CanCharge);
-
         possessableObject = GetComponent<PossessableObject>();
-        if(chargeMeter == null)
-            chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();   
     }
 
     public override void OnPossessionStart()
     {
-        if (chargeMeter == null)
-            chargeMeter = GetComponentInChildren<PossessableChargeMeterUI>();
-
-        chargeMeter?.OnPossessionStarted();
+        PossessableToolbar.Instance.SetChargeBarValue(0);
         hasThrownThisPossession = false;
-        possessableParticle.Play();
     }
 
     public override void OnPossessionEnded()
     {
         currentStrength = minStrength;
         hasThrownThisPossession = false;
-        possessableParticle.Stop();
+        LineRenderer.SetActive(false);
     }
 
     public override void WhilePossessingUpdate()
     {
-        chargeMeter.UpdateCharge(currentStrength, maxStrength);
-        //Images.SetActive(false);
+        PossessableToolbar.Instance.SetChargeBarValue(currentStrength / maxStrength);
     }
 
     #region action
     public override void OnActionStarted()
     {
-        if (Tap)
-        {
-            if (possessableObject.VisiblePossessionMaterial != null)
-            {
-                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
-            }
 
-            AudioManager.Instance.PlayOneShot(FMODEvents.instance.CanShot, CanSpawnPoint.transform.position);
-
-            GameObject temp;
-            temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            temp.GetComponent<Rigidbody>().AddForce(launchDirection * tapStrength, ForceMode.Impulse);
-            hasThrownThisPossession = true;
-
-        }
     }
 
     public override void WhileActionHeld(float secondsHeld)
     {
         if (secondsHeld < delayBetweenThrows && hasThrownThisPossession)
             return;
-
-        if (!Tap)
-        {
-            // Will be clamped later (dont clamp now for charge ui animations)
-            currentStrength += Time.deltaTime * strengthGrowthRate;
-            canCharge.start();
-        }
+        LineRenderer.SetActive(true);
+        // Will be clamped later (dont clamp now for charge ui animations)
+        currentStrength += Time.deltaTime * strengthGrowthRate;
+        /*Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
+        tempLaunch.y = launchDirection.y;*/
+        trajectoryPredictor.PredictTrajectory(Mathf.Clamp(currentStrength, minStrength, maxStrength), CanPrefab.GetComponent<Rigidbody>().mass, CanSpawnPoint.transform.forward, CanSpawnPoint.transform.position, CanPrefab.GetComponent<Rigidbody>().linearDamping, .025f);
     }
 
     public override void OnActionCanceled(float secondsHeld)
@@ -117,28 +92,21 @@ public class VendingObject : IInputHandler, IInteractable
         if (secondsHeld < delayBetweenThrows && hasThrownThisPossession)
             return;
 
-        if (!Tap)
+        
+        LineRenderer.SetActive(false);
+        currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
+        
+        GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
+        temp.GetComponent<Rigidbody>().AddForce(CanSpawnPoint.transform.forward * currentStrength);
+        hasThrownThisPossession = true;
+        StartCoroutine(DetectableTimer());
+
+        if (possessableObject.VisiblePossessionMaterial != null)
         {
-            canCharge.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-            AudioManager.Instance.PlayOneShot(FMODEvents.instance.CanShot, CanSpawnPoint.transform.position);
-
-            currentStrength = Mathf.Clamp(currentStrength, minStrength, maxStrength);
-
-            GameObject temp = Instantiate(CanPrefab, CanSpawnPoint.transform.position, Quaternion.identity);
-            Vector3 tempLaunch = Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward);
-            tempLaunch.y = launchDirection.y;
-            temp.GetComponent<Rigidbody>().AddForce(tempLaunch * currentStrength);
-            hasThrownThisPossession = true;
-
-            if (possessableObject.VisiblePossessionMaterial != null)
-            {
-                possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
-            }
+            possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;
         }
-
         if (possessableObject.PossessedMaterial != null)
         {
-
             if (materialCountdownCoroutine == null)
             {
                 materialCountdownCoroutine = StartCoroutine(MaterialReplaceCountdown());
@@ -204,18 +172,38 @@ public class VendingObject : IInputHandler, IInteractable
         //PlayerManager.Instance.PossessObject(GetComponent<PossessableObject>());
     }
 
+    /// <summary>
+    /// Returns true if the object is detectable, false otherwise
+    /// </summary>
+    /// <returns></returns>
+    public override bool IsDetectable()
+    {
+        return detectable;
+    }
+
+    /// <summary>
+    /// Controls how long the player is detectable after launching a can
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator DetectableTimer()
+    {
+        detectable = true;
+        yield return new WaitForSeconds(detectableTime);
+        detectable = false;
+    }
+
     public void OnDrawGizmos()
     {
         Gizmos.DrawRay(CanSpawnPoint.position, CanSpawnPoint.forward);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(CanSpawnPoint.position, 
+        /*Gizmos.DrawRay(CanSpawnPoint.position, 
             Vector3.Scale(launchDirection, CanSpawnPoint.transform.forward)
             .WithY(launchDirection.y)
-        );
+        );*/
     }
 
-    public void OnDrawGizmosSelected()
+    public void OnDrawGizmosSelected() //Remind me to add a ticket to the backlog for this
     {
         // ok guys i got distracted but i still wanna finish this l8r
         /*Gizmos.color = Color.green;

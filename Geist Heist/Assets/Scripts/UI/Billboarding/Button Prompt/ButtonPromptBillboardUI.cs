@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Sky
  * Creation Date: 10/23/25
- * Last Modified: 10/23/25
+ * Last Modified:  2/17/26
  * 
  * Brief Description: billboarded. Appears when the player can interact with it.
  * Childed under billboard UI manager.
@@ -9,16 +9,19 @@
  */
 
 using NaughtyAttributes;
-using NaughtyAttributes.Test;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class ButtonPromptBillboardUI : IBillboardUI
 {
     [SerializeField, Required] private RectTransform popupParent;
-    [SerializeField, Required] private TMP_Text interactText;
+    //[SerializeField, Required] private TMP_Text interactText;
+    [SerializeField, Required] private Image image;
+    [ReadOnly] public ButtonType buttonType;
+
+    [HideInInspector] public bool IsPlayerLooking = false;
 
     private ButtonPromptInteractable buttomPrompt;
     private Coroutine popupAnimation;
@@ -39,6 +42,10 @@ public class ButtonPromptBillboardUI : IBillboardUI
     {
         buttomPrompt = sourceGameObject.GetComponentInChildren<ButtonPromptInteractable>();
         buttomPrompt.InitializeFromBillboardUI(this);
+        buttonType = buttomPrompt.buttonKey;
+
+        UpdateButtonPrompt();
+        InputEvents.Instance.OnControllerChanged.AddListener(UpdateButtonPrompt);
     }
 
     public override void Show()
@@ -46,11 +53,12 @@ public class ButtonPromptBillboardUI : IBillboardUI
         base.Show();
 
         StaticUtilities.StopAndStartCoroutine(ref popupAnimation, PopupAnimation());
+        UpdateButtonPrompt();
     }
 
     public void UpdateButtonPrompt()
     {
-        interactText.text = buttomPrompt.buttonText;
+        image.sprite = BillboardUIManager.Instance.GetKeyButtonSprite(buttonType, isController: InputEvents.Instance.IsGamepadActive());
     }
 
     /// <summary>
@@ -60,7 +68,7 @@ public class ButtonPromptBillboardUI : IBillboardUI
     private IEnumerator PopupAnimation()
     {
         // go counter clockwise half the time
-        float randomDirection = UnityEngine.Random.value > 0.5 ? -1 : 1;
+        float randomDirection = Random.value > 0.5 ? -1 : 1;
         float startTime = Time.time;
         float t, z_rot, scalar;
         do
@@ -87,4 +95,17 @@ public class ButtonPromptBillboardUI : IBillboardUI
         while (t < 1);
     }
 
+    protected override float CalculateOpacity(float playerDistance, float cameraDistance, Vector3 UIPosition)
+    {
+        if (buttomPrompt.IsParentInteractable() == false || IsPlayerLooking == false)
+            return 0;
+
+        return base.CalculateOpacity(playerDistance, cameraDistance, UIPosition);
+    }
+
+}
+
+public enum ButtonType
+{
+    Interact, Action
 }

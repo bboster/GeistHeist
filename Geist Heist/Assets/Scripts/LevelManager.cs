@@ -9,44 +9,43 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using UnityEngine.Events;
+using Unity.Cinemachine;
 
 public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 {
     private int previousLevel = -1;
 
     [HideInInspector] public Vector3 SpawnLocation;
-    private Checkpoint currentCheckpoint;
-
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-#if UNITY_EDITOR
-
-    private void Update()
-    {
-        /*if(Input.GetKeyDown(KeyCode.L))
-        {
-            SceneManager.LoadScene("CheckpointTestScene");
-        }*/
-    }
-
-#endif
+    [HideInInspector] public Vector3 SpawnRotation;
+    private readonly HashSet<KeyType> savedKeys = new();
+    private readonly HashSet<string> savedDoorIds = new();
+    private readonly HashSet<string> activatedCheckpointIds = new();
+    [SerializeField] private GameObject fadeToBlack;
 
     /// <summary>
     /// Initializes the LevelManager every time a scene is loaded
     /// </summary>
     /// <param name="location"></param>
-    public Task InitializeLevelManager(Vector3 location)
+    public Task Initialize(Vector3 location)
     {
-        if(previousLevel == -1 || previousLevel != SceneManager.GetActiveScene().buildIndex)
+        if (previousLevel == -1 || previousLevel != SceneManager.GetActiveScene().buildIndex)
         {
             SpawnLocation = location;
+            SpawnRotation = PlayerManager.Instance.PlayerGhostObject.transform.rotation.eulerAngles;
             previousLevel = SceneManager.GetActiveScene().buildIndex;
+            savedKeys.Clear();
+            savedDoorIds.Clear();
+            activatedCheckpointIds.Clear();
         }
 
-        PlayerManager.Instance.PlayerGhostObject.gameObject.transform.position = SpawnLocation;
+        PossessableObject player = PlayerManager.Instance.PlayerGhostObject;
+        player.gameObject.transform.position = SpawnLocation;
+        player.gameObject.transform.rotation = Quaternion.Euler(SpawnRotation);
+        player.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>().HorizontalAxis.Value = SpawnRotation.y;
+        RestoreKeys();
+        RestoreDoors();
         return Task.CompletedTask;
     }
 
@@ -54,14 +53,107 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     /// Updates SpawnLocation
     /// </summary>
     /// <param name="location"></param>
-    public void UpdateCheckpoint(Vector3 location, Checkpoint checkpoint)
+    public bool UpdateCheckpoint(Vector3 location, Vector3 rotation, Checkpoint checkpoint)
     {
+        if (checkpoint == null)
+            return false;
+
+        string checkpointId = checkpoint.GetCheckpointStateId();
+        if (string.IsNullOrWhiteSpace(checkpointId))
+            return false;
+
+        // Each checkpoint can only create one saved snapshot per scene run.
+        if (!activatedCheckpointIds.Add(checkpointId))
+            return false;
+
         SpawnLocation = location;
-        currentCheckpoint = checkpoint;
+        SpawnRotation = rotation;
+        SaveCurrentKeys();
+        SaveCurrentDoors();
+        return true;
     }
 
-    public bool IsCheckpointCurrent(Checkpoint checkpoint)
+    public void SaveCurrentKeys()
     {
-        return (checkpoint == currentCheckpoint);
+        savedKeys.Clear();
+
+        if (KeyManager.Instance == null)
+            return;
+
+        foreach (var key in KeyManager.Instance.GetKeys())
+        {
+            if (key != KeyType.None)
+                savedKeys.Add(key);
+        }
     }
+
+    private void RestoreKeys()
+    {
+        if (KeyManager.Instance == null)
+            return;
+
+        var keysToRestore = new List<KeyType>(savedKeys);
+        KeyManager.Instance.Clear();
+
+        foreach (var key in keysToRestore)
+        {
+            KeyManager.Instance.AddKey(key);
+        }
+    }
+
+    public bool IsDoorOpened(string doorStateId)
+    {
+        if (string.IsNullOrEmpty(doorStateId))
+            return false;
+
+        return savedDoorIds.Contains(doorStateId);
+    }
+
+    public void SaveCurrentDoors()
+    {
+        savedDoorIds.Clear();
+
+        var doorsInScene = FindObjectsByType<LockedDoorInteractable>(FindObjectsSortMode.None);
+        foreach (var door in doorsInScene)
+        {
+            if (door.TryGetOpenDoorStateId(out var doorStateId))
+                savedDoorIds.Add(doorStateId);
+        }
+    }
+
+    private void RestoreDoors()
+    {
+        if (savedDoorIds.Count == 0)
+            return;
+
+        var doorsInScene = FindObjectsByType<LockedDoorInteractable>(FindObjectsSortMode.None);
+        foreach (var door in doorsInScene)
+        {
+            door.RestoreCheckpointStateIfNeeded();
+        }
+    }
+
+    public void InstantiateFadeToBlack(UnityAction action)
+    {
+        FadeToBlack ftb = Instantiate(fadeToBlack).GetComponent<FadeToBlack>();
+        ftb.Initialize(action);
+    }
+
+    #region Scene Transition Scripts
+
+    public void ChangeScene(string sceneName)
+    {
+        //currentLevel++;
+        SceneManager.LoadScene(sceneName);
+        Debug.Log("Advancing to level: " + sceneName);
+    }
+
+    public void ChangeScene(int sceneNum)
+    {
+        //currentLevel++;
+        SceneManager.LoadScene(sceneNum);
+        Debug.Log("Advancing to level: " + sceneNum);
+    }
+
+    #endregion
 }

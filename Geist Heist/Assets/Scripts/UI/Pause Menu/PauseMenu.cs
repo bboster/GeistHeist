@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Josh
  * Creation Date: 10/20/2025
- * Last Modified: 11/24/2025
+ * Last Modified: 3/1/2026
  * 
  * Brief Description: Handles UI elements for the pause menu.
  * Also listens to escape key input to open and close it.
@@ -9,6 +9,9 @@
 
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -40,15 +43,36 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] private Button restartLevelButton;
     [SerializeField, Required] private Button resetSaveButton;
 
+    [Foldout("Advanced Settings"), SerializeField] private float wavyTextLetterSpacing = 8;
+
     private static float timeOfLastPause;
+    private InputAction menuBackAction;
+    private Color defaultNormalTabTextColor;
+
+    private void OnEnable()
+    {
+        TrySubscribeToUICancel();
+    }
+
+    private void OnDisable()
+    {
+        if (menuBackAction == null)
+            return;
+
+        menuBackAction.started -= OnMenuBackPressed;
+        menuBackAction = null;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        defaultNormalTabTextColor = settingsTab.toggleButton.colors.normalColor;
+
         // disable going to hub if you are at the hub
-        if(SceneManager.GetActiveScene().buildIndex == HubScene)
+        if (SceneManager.GetActiveScene().buildIndex == HubScene)
         {
             quitToHubButton.interactable = false;
+            quitToHubButton.gameObject.SetActive(false);
         }
 
         pauseScreenParent.gameObject.SetActive(true);
@@ -56,7 +80,7 @@ public class PauseMenu : MonoBehaviour
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
 
         // tab buttons
-        generalTab .toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenInfoButtonSelected(); });
+        generalTab .toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenGeneralButtonSelected(); });
         controlsTab.toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenControlsButtonSelected(); });
         settingsTab.toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenSettingsButtonSelected(); });
 
@@ -74,20 +98,20 @@ public class PauseMenu : MonoBehaviour
     {
         confirmationPopup.HideConfirmationPopup();
 
-        if(settingsTab.canvasGroup.alpha > 0)
-            settingsTab.CloseTab();
-
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.PauseGame();
 
-        // general tabis default tab
-        generalTab.OpenTab();
-        controlsTab.CloseTab();
-        settingsTab.CloseTab();
+        // general tab is default tab
+
 
         pauseScreenParent.gameObject.SetActive(true);
         StaticUtilities.EnableCanvasGroup(pauseGroup);
         StaticUtilities.ShowCursor();
+
+        settingsTab.CloseTab();
+        controlsTab.CloseTab();
+        OnOpenGeneralButtonSelected();
+        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
     }
 
     public void ClosePauseMenu()
@@ -119,21 +143,119 @@ public class PauseMenu : MonoBehaviour
             ClosePauseMenu() ;
     }
 
+    private void OnMenuBackPressed(InputAction.CallbackContext ctx)
+    {
+        if (!IsPauseMenuOpen() || Time.unscaledTime - timeOfLastPause < 0.1f)
+            return;
+
+        if (IsConfirmationPopupOpen())
+        {
+            confirmationPopup.HideConfirmationPopup();
+            SelectDefaultForCurrentTab();
+            return;
+        }
+
+        bool settingsOpen = settingsTab.canvasGroup != null && settingsTab.canvasGroup.alpha > 0.001f;
+        bool controlsOpen = controlsTab.canvasGroup != null && controlsTab.canvasGroup.alpha > 0.001f;
+        if (settingsOpen || controlsOpen)
+        {
+            generalTab.OpenTab();
+            EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
+            return;
+        }
+
+        // Root/general pause page: back closes pause menu.
+        ClosePauseMenu();
+    }
+
+    private void TrySubscribeToUICancel()
+    {
+        if (menuBackAction != null)
+            return;
+
+        InputSystemUIInputModule uiInputModule = EventSystem.current != null
+            ? EventSystem.current.currentInputModule as InputSystemUIInputModule
+            : null;
+
+        if (uiInputModule == null)
+            uiInputModule = Object.FindFirstObjectByType<InputSystemUIInputModule>();
+
+        if (uiInputModule == null || uiInputModule.cancel == null || uiInputModule.cancel.action == null)
+            return;
+
+        menuBackAction = uiInputModule.cancel.action;
+        menuBackAction.started += OnMenuBackPressed;
+    }
+
+    private bool IsPauseMenuOpen()
+    {
+        return pauseScreenParent != null
+            && pauseScreenParent.gameObject.activeInHierarchy
+            && pauseGroup != null
+            && pauseGroup.interactable;
+    }
+
+    private bool IsConfirmationPopupOpen()
+    {
+        if (confirmationPopup == null)
+            return false;
+
+        CanvasGroup cg = confirmationPopup.GetComponent<CanvasGroup>();
+        return cg != null && cg.interactable && cg.alpha > 0.001f;
+    }
+
+    private void SelectDefaultForCurrentTab()
+    {
+        if (settingsTab.canvasGroup != null && settingsTab.canvasGroup.alpha > 0.001f)
+            EventSystem.current.SetSelectedGameObject(settingsTab.toggleButton.gameObject);
+        else if (controlsTab.canvasGroup != null && controlsTab.canvasGroup.alpha > 0.001f)
+            EventSystem.current.SetSelectedGameObject(controlsTab.toggleButton.gameObject);
+        else
+            EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
+    }
+
     #region Tab Navigation Buttons
 
-    void OnOpenInfoButtonSelected()
+    void OnOpenGeneralButtonSelected()
     {
         generalTab.OpenTab();
+
+        DisableAllWavyTexts();
+        generalTab.wavyTextAnimation.PlayAnimation = true;
+        generalTab.toggleButton.SetColors(normalColor:  Color.white);   
     }
 
     void OnOpenControlsButtonSelected()
     {
         controlsTab.OpenTab();
+
+        DisableAllWavyTexts();
+        controlsTab.wavyTextAnimation.PlayAnimation = true;
+        controlsTab.toggleButton.SetColors(normalColor: Color.white);
     }
 
     void OnOpenSettingsButtonSelected()
     {
         settingsTab.OpenTab();
+
+        DisableAllWavyTexts();
+        settingsTab.wavyTextAnimation.PlayAnimation = true;
+        settingsTab.toggleButton.SetColors(normalColor: Color.white);
+    }
+
+    void DisableAllWavyTexts()
+    {
+        generalTab.wavyTextAnimation.PlayAnimation = false;
+        generalTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //generalTab.wavyTextAnimation.textBox.characterSpacing = 0;
+
+        controlsTab.wavyTextAnimation.PlayAnimation = false;
+        controlsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //controlsTab.wavyTextAnimation.textBox.characterSpacing = 0;
+
+        settingsTab.wavyTextAnimation.PlayAnimation = false;
+        settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //settingsTab.wavyTextAnimation.textBox.characterSpacing = 0;
     }
 
     #endregion
@@ -160,13 +282,14 @@ public class PauseMenu : MonoBehaviour
     {
         ClosePauseMenu();
         Time.timeScale = 1;
-        SceneManager.LoadScene(HubScene);
+        LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(HubScene));
     }
 
     void OnConfirmQuitToMainMenuButtonClicked()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(MainMenuScene);
+        DialogueUIManager.Instance.StopVoiceLine();
+        LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(MainMenuScene));
     }
 
     #endregion
@@ -174,7 +297,7 @@ public class PauseMenu : MonoBehaviour
     #region Debug UI Buttons
     void RestartLevelButtonClicked()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
     }
 
     void ResetSaveDataButtonClicked()

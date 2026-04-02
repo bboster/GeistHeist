@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby, Jacob, Brooke, Sky, Josh, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 11/18/25
+ * Last Modified: 2/15/26
  * 
  * Brief Description: Handles third person movement and interaction. 
  * This script should only be used for the ghost
@@ -20,18 +20,19 @@ using UnityEngine.UI;
 //using UnityEditor.UIElements; had to comment this out as they were causing build errors, UIElements does not exist in namespace UnityEditor
 using FMODUnity;
 using FMOD.Studio;
+using UnityEngine.Rendering;
 
 public class ThirdPersonInputHandler : IInputHandler
 {
     [Header("Design Variables")]
-    [SerializeField] public float speed = 3;
-    [SerializeField] private float maxVelocity = 10;
+    [SerializeField] public float speed = 8.5f;
+    public float defaultSpeed;
     [Tooltip("Higher number: reaches desired speed faster")]
-    [SerializeField] private float speedPickup = 3;
+    [SerializeField] private float speedPickup = .35f; //changed from flat values to coefficients 
     [Tooltip("Multiply speed by this number when player is not holding any move keys")]
-    [SerializeField] private float slowDownFactor = 0.1f;
-    [SerializeField, UnityEngine.Range(0f, 1f)] private float slopeTransitionSmooth = 0.5f;
-    [SerializeField] private float slopeModifier = 1f;
+    [SerializeField] private float slowDownFactor = 1.5f; //changed from flat values to coefficients 
+    //[SerializeField, UnityEngine.Range(0f, 1f)] private float slopeTransitionSmooth = 0.5f;
+    //[SerializeField] private float slopeModifier = 1f;
     //[SerializeField] private float stepRayUpperHeight = 0.3f;
     //[SerializeField] private float stepRayLowerHeight = -0.9f;
     //[SerializeField] private float stepRayUpperLength = 0.35f;
@@ -43,6 +44,8 @@ public class ThirdPersonInputHandler : IInputHandler
     [Tooltip("How much up/down player goes. value of 0.1 will go -0.1 to +0.1. total height of 0.2")]
     [Foldout ("Animation Settings"), SerializeField] private float hoverHeight = 0.2f;
     [Foldout ("Animation Settings"), SerializeField] private float hoverSpeed = 0.75f;
+    [Foldout ("Animation Settings"), SerializeField] private GameObject playerModel;
+    private float currentHeight;
 
     [Header("Interaction")]
     // Scene transition specific variables
@@ -53,7 +56,7 @@ public class ThirdPersonInputHandler : IInputHandler
     [SerializeField, Foldout("Interaction")] LayerMask layerToInclude;
 
     [Header("Components")]
-    [SerializeField, Required] private MeshRenderer playerModel;
+    [SerializeField, Required] public Animator animator;
     [SerializeField] private ParticleSystem OllieParticles;
     
     //[SerializeField] private GameObject stepRayUpper;
@@ -66,9 +69,11 @@ public class ThirdPersonInputHandler : IInputHandler
 
     public static Action<GuardStates> OnPossessObject;
 
-    private GameObject lastObjectLookedAt;
+    private GameObject lastInteractableLookedAt;
+    private GameObject lastActionableLookedAt;
     private Vector3 sphereCastDirection => thirdPersonCinemachineCamera.transform.forward;
     private float frameCountSinceLastInteraction;
+    private float frameCountSinceLastAction;
     private Vector3 positionLastFrame;
     private float modelStartYPosition;
     private Quaternion targetRotation;
@@ -80,42 +85,37 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private EventInstance playerMoveSFX;
 
+    private string isMovingParam = "isMoving";
+    private string isIdleParam = "isIdle";
+
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
     {
-        playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.PlayerMovement);
-
+        defaultSpeed = speed;
+        playerMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PlayerMovement);
         targetRotation = transform.rotation;
         positionLastFrame = transform.position;
         rigidbody = GetComponent<Rigidbody>();
-        modelStartYPosition = playerModel.transform.position.y;
+        //modelStartYPosition = playerModel.transform.position.y;
         //stepRayUpper.transform.localPosition = new Vector3(stepRayUpper.transform.localPosition.x, stepRayUpperHeight, stepRayUpper.transform.localPosition.z);
         //stepRayLower.transform.localPosition = new Vector3(stepRayLower.transform.localPosition.x, stepRayLowerHeight, stepRayLower.transform.localPosition.z);
 
         //layerToInclude = LayerMask.GetMask("Interactable");
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
         rampLayerMask = LayerMask.GetMask("Ramp");
+        currentHeight = playerModel.transform.localPosition.y;
     }
 
+    #region Possession
     // WhilePossessingUpdate is called once per frame
     public override void WhilePossessingUpdate()
     {
         TryTurnOnInteractablePrompt();
+        TryTurnOnActionablePrompt();
 
         RotatePlayer();
-        //HoverBob();
+        HoverBob();
         //StepClimb();
-        onSlope = OnSlope();
-
-        if (onSlope)
-        {
-            // freeze the Z and all rotation of the rigidbody
-            rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
-        }
-        else
-        {
-            rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        }
     }
 
     // for the player / ghost: this means ENTERING ghost mode
@@ -123,16 +123,167 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         //CooldownManager.Instance.StartCooldown();
         //TurnOnCooldownCanvas();
+        rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     // for the player / ghost: this means EXITING ghost mode
     public override void OnPossessionEnded()
     {
+        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
+    #endregion
 
     #region Action
+
+    private List<RaycastHit> GetAllActionablesSphereCast()
+    {
+        //kept the same to keep consistent interaction area
+        var sphereCastResults = Physics.SphereCastAll(gameObject.transform.position, interactSphereCastRadius, sphereCastDirection, interactRayLength, layerToInclude);
+
+        if (sphereCastResults.IsNullOrEmpty())
+            return null;
+
+        List<RaycastHit> filteredResults = new();
+
+        // Filter all gameobjects
+        foreach (var result in sphereCastResults)
+        {
+            IActionable actionable;
+
+            // if object can even be actioned with
+            if (result.transform.TryGetComponent(out actionable) == false)
+            {
+                continue;
+            }
+
+            if (actionable.IsActionable() == false)
+                continue;
+
+            if (result.transform.gameObject == this.gameObject)
+                continue;
+
+            // Test if there is a wall between player and the object
+            Vector3 playerPos = gameObject.transform.position;
+            Vector3 actionPos = result.transform.position;
+            Vector3 direction = (actionPos - playerPos).normalized;
+            float distance = Vector3.Distance(playerPos, actionPos);
+
+            //raycast is sent from the player 
+            bool ray = Physics.Raycast(playerPos, direction, out RaycastHit hit, distance, layerToInclude);
+            if (drawInteractRay) Debug.DrawLine(playerPos, actionPos,
+                                ray && hit.transform.gameObject != result.transform.gameObject ? Color.red : Color.green);
+            if (ray && hit.transform.gameObject != result.transform.gameObject)
+            {
+                Debug.Log("Raycast hit a wall");
+                continue;
+            }
+
+            filteredResults.Add(result);
+        }
+
+        if (filteredResults.IsNullOrEmpty()) return null;
+
+        return filteredResults;
+    }
+
+    private GameObject GetBestActionableSphereCast()
+    {
+        // Filter interactables in spherecast
+        var filteredSphereCastResults = GetAllActionablesSphereCast();
+
+        if (filteredSphereCastResults.IsNullOrEmpty()) return null;
+
+        // Sort by which one the player is looking at most. 
+        return filteredSphereCastResults
+            .Where(r => r.transform.gameObject != this.transform.gameObject)
+            .OrderBy(r =>
+                // Ref: dot product returns value -1 to 1. -1 for completely opposite directions and 1 for perfectly perpendicular.
+                Vector3.Dot(
+                    thirdPersonCinemachineCamera.transform.forward,
+                    r.transform.position - gameObject.transform.position
+                ))
+           .Last()
+           .transform.gameObject;
+    }
+    /// <summary>
+    /// performs spherecast looking for interactable. Same spherecast as interact button.
+    /// Opens button prompts if possible (through Hide/OnPlayerLookStart functions on IInteractable)
+    /// </summary>
+    private void TryTurnOnActionablePrompt()
+    {
+        var result = GetBestActionableSphereCast();
+
+        // if looking at something different than last frame
+        if (lastActionableLookedAt != result)
+        {
+            if (lastActionableLookedAt != null)
+                LookAtActionableStop(lastActionableLookedAt);
+
+            if (result != null)
+                LookAtActionableStart(result);
+        }
+        lastActionableLookedAt = result;
+    }
+
+    private void LookAtActionableStart(GameObject obj)
+    {
+        if (obj == null) 
+            return;
+
+        if (obj.TryGetComponent<Outline>(out Outline outline))
+            outline.enabled = true;
+
+        var allActionables = obj.GetComponentsInChildren<IActionable>();
+        foreach (var actionable in allActionables)
+        {
+            if (actionable.IsActionable())
+            {
+                // Display Interact UI, most of the time
+                actionable.OnPlayerLookStart();
+            }
+        }
+    }
+
+    // These two could have been 1 function with a boolean parameter but I like the intuitivity with the names.
+    // They can be condensed tho :P idc that much
+    private void LookAtActionableStop(GameObject obj)
+    {
+        if (obj == null) return;
+
+        if (obj.TryGetComponent<Outline>(out Outline outline))
+            outline.enabled = false;
+
+        var allActionables = obj.GetComponentsInChildren<IActionable>();
+        foreach (var actionable in allActionables)
+        {
+            // Hide interact UI, most of the time
+            actionable.OnPlayerLookStop();
+        }
+    }
+
+
     public override void OnActionStarted()
     {
+        if (Time.frameCount - frameCountSinceLastAction <= 3)
+            return;
+
+        var result = GetBestActionableSphereCast();
+        if (result == null) return;
+
+        frameCountSinceLastAction = Time.time;
+
+        var allActionables = result.GetComponentsInChildren<IActionable>();
+
+        foreach (var actionable in allActionables)
+        {
+            if (actionable == null)
+                continue;
+
+            actionable.Action();
+        }
+        LookAtActionableStop(lastActionableLookedAt);
+        lastActionableLookedAt = null;
+
     }
 
     public override void WhileActionHeld(float secondsHeld)
@@ -146,6 +297,8 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void OnActionCanceled(float secondsHeld)
     {
     }
+
+    public override bool IsDetectable() { return false; }
 
     #endregion
 
@@ -246,8 +399,8 @@ public class ThirdPersonInputHandler : IInputHandler
             if(interactable is PossessableObject)
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
         }
-        LookAtInteractableStop(lastObjectLookedAt);
-        lastObjectLookedAt = null;
+        LookAtInteractableStop(lastInteractableLookedAt);
+        lastInteractableLookedAt = null;
     }
 
     /// <summary>
@@ -259,15 +412,15 @@ public class ThirdPersonInputHandler : IInputHandler
         var result = GetBestInteractableSphereCast();
 
         // if looking at something different than last frame
-        if (lastObjectLookedAt != result)
+        if (lastInteractableLookedAt != result)
         {
-            if (lastObjectLookedAt != null)
-                LookAtInteractableStop(lastObjectLookedAt);
+            if (lastInteractableLookedAt != null)
+                LookAtInteractableStop(lastInteractableLookedAt);
 
             if (result != null)
                 LookAtInteractableStart(result);
         }
-        lastObjectLookedAt = result;
+        lastInteractableLookedAt = result;
     }
 
     private void LookAtInteractableStart(GameObject obj)
@@ -280,8 +433,12 @@ public class ThirdPersonInputHandler : IInputHandler
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
         {
-            // Display Interact UI, most of the time
-            interactable.OnPlayerLookStart();
+            if (interactable.IsInteractable())
+            {
+                // Display Interact UI, most of the time
+                interactable.OnPlayerLookStart();
+            }
+            
         }
     }
 
@@ -317,51 +474,32 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         OllieParticles.Play();
 
+        animator.SetBool(isMovingParam, true);
+        animator.SetBool(isIdleParam, false);
+
         playerMoveSFX.start();
+
+        rigidbody.linearDamping = 0;
+
+        rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
     }
     public override void WhileMoveHeld(float secondsHeld)
     {
         playerMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
+
+        onSlope = OnSlope();
 
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
         // calculate flat ground movement direction
         Vector3 flatDesired = direction * speed;
 
-        // calculate slope direction if on slope
-        Vector3 slopeDesired = flatDesired;
-        if (onSlope)
-        {
-            Vector3 slopeDirection = Vector3.ProjectOnPlane(flatDesired, slopeHit.normal);
-            slopeDesired = slopeDirection * (speed * slopeModifier);
-        }
-
-        // Smoothly blend between flat and slope direction
-        Vector3 blendedDesired = Vector3.Lerp(flatDesired, slopeDesired, onSlope ? slopeTransitionSmooth : 0f);
-
-        // Lerp current horizontal velocity towards blended desired velocity
+        // Lerp current horizontal velocity towards desired velocity
         Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
-        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, blendedDesired, speedPickup * Time.fixedDeltaTime);
+        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, flatDesired, speed * speedPickup * Time.fixedDeltaTime);
 
-        // clamp to max velocity
-        newHorizontal = Vector3.ClampMagnitude(newHorizontal, maxVelocity);
+        rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
 
-        if (onSlope)
-        {
-            Vector3 desiredOnPlane = Vector3.ProjectOnPlane(newHorizontal, slopeHit.normal);
-
-            Vector3 normalVelocity = Vector3.Project(rigidbody.linearVelocity, slopeHit.normal);
-
-            if(Vector3.Dot(normalVelocity, slopeHit.normal) < -0.05f)
-            {
-                normalVelocity = Vector3.zero;
-            }
-            rigidbody.linearVelocity = desiredOnPlane + normalVelocity;
-        }
-        else
-        {
-            rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
-        }
     }
 
     public override void WhileMoveNotHeld()
@@ -369,9 +507,16 @@ public class ThirdPersonInputHandler : IInputHandler
         if (onSlope)
         {
             rigidbody.linearVelocity = Vector3.zero;
+
+            rigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
         }
+
         // Maintains y velocity
-        rigidbody.linearVelocity = Vector3.MoveTowards(rigidbody.linearVelocity, new Vector3(0, rigidbody.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
+        //rigidbody.linearVelocity = Vector3.MoveTowards(rigidbody.linearVelocity, new Vector3(0, rigidbody.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
+        Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
+        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, Vector3.zero, Time.fixedDeltaTime * slowDownFactor);
+         
+        rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);         
     }
 
 
@@ -379,16 +524,20 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         OllieParticles.Stop();
 
-        playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        animator.SetBool(isMovingParam, false);
+        animator.SetBool(isIdleParam, true);
+
+        //playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
     #endregion
+
 
     #region Other
 
     private void RotatePlayer()
     {
         if(transform.rotation != targetRotation)
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
         Vector3 diff = (transform.position - positionLastFrame).WithY(0);
 
@@ -402,16 +551,19 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
     }
 
+    
     private void HoverBob() // squarepants
     {
-        float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
+        //float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
 
-        playerModel.transform.position = playerModel.transform.position.WithY(height);
+        float height = currentHeight + hoverHeight;
+        playerModel.transform.localPosition = playerModel.transform.localPosition.WithY(height);
     }
+    
 
     private bool OnSlope()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 1.5f, rampLayerMask))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 5, rampLayerMask))
         {
             if (slopeHit.normal != Vector3.up)
             {
@@ -498,5 +650,5 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         playerMoveSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
-   
+
 }

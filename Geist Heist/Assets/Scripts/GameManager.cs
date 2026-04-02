@@ -15,15 +15,15 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Events;
+using UnityEditor;
 
 public class GameManager : Singleton<GameManager>
 {
-    // All of this behavior is implemented in TetherPossessable.cs, DoorInteractable.cs, and HubLevelGate.cs
+    // All of this behavior is implemented in TetherPossessable.cs, DoorInteractable.cs, and HubLevelVisibilityToggle.cs
 
     [Header("Managers")]
     [SerializeField, Required] GameObject InputManagerPrefab;
     [SerializeField, Required] GameObject PlayerManagerPrefab;
-    //[SerializeField, Required] GameObject CoolDownManagerPrefab; TODO: waiting until sky finishes refactoring it
     [SerializeField, Required] GameObject SaveDataManagerPrefab;
     [SerializeField, Required] GameObject GuardCoroutineManagerPrefab;
     [SerializeField, Required] GameObject BehaviourDatabasePrefab;
@@ -31,9 +31,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject GuardManagerPrefab;
     [SerializeField, Required] GameObject BillboardUIManagerPrefab;
     [SerializeField, Required] GameObject LevelManagerPrefab;
-    [SerializeField, Required] GameObject DailougeManagerPrefab;
+    //[SerializeField, Required] GameObject DailougeManagerPrefab; // part of PlayerHUD now
     [SerializeField, Required] GameObject AudioManagerPrefab;
     [SerializeField, Required] GameObject MusicManagerPrefab;
+    [SerializeField, Required] GameObject KeyManagerPrefab;
+    [SerializeField, Required] GameObject SoundWaveManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject PauseMenuPrefab;
@@ -50,6 +52,7 @@ public class GameManager : Singleton<GameManager>
     [Required] public Transform PlayerStart;
 
     public bool IsPaused { get; private set; } = false;
+    public bool IsPlayerInMenu { get; private set; } = false;
     public UnityEvent OnPauseChanged = new();
 
     [HideInInspector] public bool InGodMode;
@@ -72,6 +75,9 @@ public class GameManager : Singleton<GameManager>
             return;
 
         SettingsProfile.ReadSavedSettings();
+
+        if (PlayerStart == null)
+            PlayerStart = FindFirstObjectByType<ThirdPersonInputHandler>().transform;
 
         // All of these should be singletons, which destroy themselves if they already exist, 
         // so its okay if we dont check if this doesnt exist first
@@ -96,19 +102,6 @@ public class GameManager : Singleton<GameManager>
     public static int currentLevel = 0;*/
 
     #region Level Progression
-    public void NextLevel(string sceneName)
-    {
-        //currentLevel++;
-        SceneManager.LoadScene(sceneName);
-        Debug.Log("Advancing to level: " + sceneName);
-    }
-
-    public void NextLevel(int sceneNum)
-    {
-        //currentLevel++;
-        SceneManager.LoadScene(sceneNum);
-        Debug.Log("Advancing to level: " + sceneNum);
-    }
 
     /// <summary>
     /// Spawns the player into the level
@@ -129,7 +122,8 @@ public class GameManager : Singleton<GameManager>
     {
         if (!InGodMode)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            DialogueUIManager.Instance.StopVoiceLine();
+            LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
         }
     }
 
@@ -143,34 +137,31 @@ public class GameManager : Singleton<GameManager>
     /// <returns></returns>
     public Task InstantiateManagers()
     {
-        if (PlayerStart == null)
-            PlayerStart = FindFirstObjectByType<ThirdPersonInputHandler>().transform;
-
-        Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize() ;
+        if(InputEvents.Instance == null)
+            Instantiate(InputManagerPrefab).GetComponent<InputEvents>().Initialize();
+        Instantiate(FMODEventsPrefab);
         Instantiate(LevelManagerPrefab); // initialization happens in PlayerManager
         Instantiate(SaveDataManagerPrefab);
-        Instantiate(GuardCoroutineManagerPrefab);
+        Instantiate(GuardCoroutineManagerPrefab); //Does not require initialization
         Instantiate(BehaviourDatabasePrefab);
         Instantiate(ShaderManagerPrefab);
-        Instantiate(DailougeManagerPrefab);
-        Instantiate(AudioManagerPrefab);
-        Instantiate(MusicManagerPrefab);
+        //Instantiate(DailougeManagerPrefab).GetComponent<DialogueUIManager>().Initialize(); // Moved to PlayerHUD
+        Instantiate(AudioManagerPrefab).GetComponent<AudioManager>().Initialize();
+        Instantiate(MusicManagerPrefab).GetComponent<MusicManager>().Initialize();
+        Instantiate(KeyManagerPrefab).GetComponent<KeyManager>().Initialize();
+        Instantiate(SoundWaveManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
 
-        Instantiate(PlayerManagerPrefab);//.GetComponent<PlayerManager>().Initialize();
+        Instantiate(PlayerManagerPrefab); //Initializes in Start
 
-
+        Instantiate(GeneralHUDPrefab).GetComponent<PlayerHUDManager>().Initialize();
         Instantiate(PauseMenuPrefab);//.GetComponentInChildren<PauseMenu>().Initialize();
-        Instantiate(GeneralHUDPrefab);
         Instantiate(DebugConsolePrefab);
-        Instantiate(FMODEventsPrefab);
 
-
-
-        if (GameObject.FindAnyObjectByType(typeof(InputSystemUIInputModule)) == null)
-            Instantiate(EventSystemPrefab);
+        var inputModule = FindAnyObjectByType(typeof(InputSystemUIInputModule));
+        if (inputModule == null) Instantiate(EventSystemPrefab);
 
         return Task.CompletedTask;
     }
@@ -197,6 +188,11 @@ public class GameManager : Singleton<GameManager>
     {
         if (IsPaused) UnpauseGame();
         else PauseGame();
+    }
+
+    public void SetPlayerInMenu(bool inMenu)
+    {
+        IsPlayerInMenu = inMenu;
     }
     #endregion
 }

@@ -1,25 +1,23 @@
 /*
  * Contributors: Brenden
  * Creation Date: 10/21/25
- * Last Modified: 11/23/25
+ * Last Modified: 1/27/2026
  * 
  * Brief Description: handles the commands from the debug console
  */
+
 using System;
-using TMPro;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.Windows;
 
 public class DebugConsole : MonoBehaviour
 {
     [SerializeField] GameObject Console;
     [SerializeField] TMPro.TMP_InputField inputs;
     [SerializeField] TMPro.TMP_Text TextArea;
-    [SerializeField] GameObject Player;
-    [SerializeField] GameObject cameraGO;
+    [SerializeField] ScrollRect logScrollRect;
     [SerializeField] GameObject[] Prefabs;
 
     [SerializeField] GameObject FreeCamPrefab;
@@ -30,13 +28,23 @@ public class DebugConsole : MonoBehaviour
     private bool cameraToggle = false;
     private bool freezeToggle = false;
 
+    GameObject Player => PlayerManager.Instance.PlayerGhostObject.gameObject;
+
+    GameObject cameraGO => PlayerManager.Instance.camera.gameObject;
+
     private void Start()
     {
         Console.SetActive(false);
         InputEvents.DebugStarted.AddListener(ToggleConsole);
-        Player = FindFirstObjectByType<ThirdPersonInputHandler>().gameObject;
-        cameraGO = FindFirstObjectByType<Camera>().gameObject;
         FreeCamInstance = Instantiate(FreeCamPrefab, cameraGO.transform.position, Quaternion.identity);
+
+        if (logScrollRect == null && TextArea != null)
+            logScrollRect = TextArea.GetComponentInParent<ScrollRect>();
+
+        if (TextArea != null)
+            TextArea.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+
+        StartCoroutine(ScrollToBottomNextFrame());
     }
 
 
@@ -58,6 +66,7 @@ public class DebugConsole : MonoBehaviour
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
                 inputs.ActivateInputField();
+                StartCoroutine(ScrollToBottomNextFrame());
             }
         }
         else
@@ -70,100 +79,127 @@ public class DebugConsole : MonoBehaviour
     {
         string Command = inputs.text.ToLower();
 
-        if(Command == "nc")
+        inputs.text = "";
+        inputs.ActivateInputField();
+
+        if (Command.IsEmptyOrNull<string>())
+        {
+            Debug.LogWarning("Empty debug command");
+            return;
+        }
+
+        if (Command == "help")
+        {
+            AppendConsoleLine(
+                Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
+                "\nList Scene: ls \nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value(or \"default\") >"
+            );
+            return;
+        }
+
+        // noclip
+        if (Command == "nc" || Command == "noclip")
         {
             NoClip();
-            TextArea.text = TextArea.text + "\n" + Command + " " + noClipToggle;
+            AppendConsoleLine(Command + " " + noClipToggle);
+            return;
         }
-        else if(Command == "god")
+
+        // God Mode
+        if(Command == "god")
         {
             GodMode();
-            TextArea.text = TextArea.text + "\n" + Command + " " + godToggle;
+            AppendConsoleLine(Command + " " + godToggle);
+            return;
         }
-        else if(Command == "dc")
+
+        // disconnect
+        if(Command == "dc" || Command=="freecam")
         {
             FreeCam();
-            TextArea.text = TextArea.text + "\n" + Command + " " + cameraToggle;
+            AppendConsoleLine(Command + " " + cameraToggle);
+            return;
         }
-        else if(Command.Substring(0, 2) == "ls")
+
+        // List Scene
+        if (Command.StartsWith("ls"))
         {
-            if(Command.Length >= 4)
+            listScenes();
+            return;
+        }
+
+
+        // "scene _..."
+        if (Command.StartsWith("scene"))
+        {
+            if (Command.Length >= 7)
             {
-                LoadNewScene(Command.Substring(3, Command.Length - 3));
-                TextArea.text = TextArea.text + "\n" + "Scene Failed to load, Please input a valid scene";
+                LoadNewScene(Command.Substring(6, Command.Length - 6));
+                AppendConsoleLine("Scene Failed to load, Please input a valid scene");
             }
             else
             {
-                TextArea.text = TextArea.text + "\n" + Command + " Invalid Scene name or index, Please input a valid scene";
+                AppendConsoleLine(Command + " Invalid Scene name or index, Please input a valid scene");
             }
-            
+            return;
         }
-        else if(Command == "freeze")
+
+        if (Command == "freeze")
         {
-            //waiting for jacob to implement
+            //waiting for jacob to implement - someone should implement this
             Debug.Log("Freeze");
-            TextArea.text = TextArea.text + "\n" + Command + " " + freezeToggle;
+            AppendConsoleLine(Command + " " + freezeToggle);
+            return;
         }
-        else if(Command == "help")
+
+        // spawn item
+        if (Command.StartsWith("spawn"))
         {
-            TextArea.text = TextArea.text + "\n" + Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
-                "\nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value>";
-        }
-        else if(Command.Length > 4)
-        {
-            if (Command.Substring(0, 5) == "spawn")
+            if (Command.Length >= 7)
             {
-                if(Command.Length >= 7)
+                spawnItem(Command.Substring(6, Command.Length - 6));
+            }
+            else
+            {
+                AppendConsoleLine(Command + " Invalid item, Please input a valid item");
+            }
+            return;
+        }
+
+        // player speed
+        if (Command.StartsWith("speed"))
+        {
+            if (Command.Equals("speed default"))
+            {
+                float defaultSpeed = Player.GetComponent<ThirdPersonInputHandler>().defaultSpeed;
+                AppendConsoleLine(Command + " ~ Speed set to default: " + defaultSpeed);
+                PlayerSpeed(defaultSpeed);
+                return;
+            }
+
+            if (Command.Length >= 7)
+            {
+                int Temp;
+                if (int.TryParse(Command.Substring(6, Command.Length - 6), out Temp))
                 {
-                    spawnItem(Command.Substring(6, Command.Length - 6));
+                    AppendConsoleLine(Command + "~ Speed set to: " + Temp);
+                    PlayerSpeed(Temp);
                 }
                 else
                 {
-                    TextArea.text = TextArea.text + "\n" + Command + " Invalid item, Please input a valid item";
+                    AppendConsoleLine(Command + " Please put a number after the command");
                 }
             }
-            else if (Command.Substring(0, 5) == "scene")
+            else
             {
-                if (Command.Length >= 7)
-                {
-                    LoadNewScene(Command.Substring(6, Command.Length - 6));
-                    TextArea.text = TextArea.text + "\n" + "Scene Failed to load, Please input a valid scene";
-                }
-                else
-                {
-                    TextArea.text = TextArea.text + "\n" + Command + " Invalid Scene name or index, Please input a valid scene";
-                }
+                AppendConsoleLine(Command + " Please put the speed number (or \"default\") after the command");
             }
-            else if (Command.Substring(0, 5) == "speed")
-            {
-                if (Command.Length >= 7)
-                {
-                    int Temp;
-                    if (int.TryParse(Command.Substring(6, Command.Length - 6), out Temp))
-                    {
-                        PlayerSpeed(Temp);
-                    }
-                    else
-                    {
-                        TextArea.text = TextArea.text + "\n" + Command + " Please put a number after the command";
-                    }
-                }
-                else
-                {
-                    TextArea.text = TextArea.text + "\n" + Command + " Please put the speed number after the command";
-                }
-            }
-            else if(Command.Length != 0)
-            {
-                TextArea.text = TextArea.text + "\n" + Command + " No command found, use Help for all commands";
-            }
+            return;
         }
-        else if(Command.Length != 0)
-        {
-            TextArea.text = TextArea.text + "\n" + Command + " No command found, use Help for all commands";
-        }
-        inputs.text = "";
-        inputs.ActivateInputField();
+
+        AppendConsoleLine(Command + " No command found, use Help for all commands");
+        Debug.LogWarning("no command found found for " + Command);
+
     }
 
     private void NoClip()
@@ -193,6 +229,37 @@ public class DebugConsole : MonoBehaviour
         }
     }
 
+    private void listScenes()
+    {
+        AppendConsoleLine("ls");
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+            AppendConsoleLine(i + ": " + sceneName);
+        }   
+    }
+
+    private void AppendConsoleLine(string line)
+    {
+        TextArea.text = TextArea.text + "\n" + line;
+        StartCoroutine(ScrollToBottomNextFrame());
+    }
+
+    private IEnumerator ScrollToBottomNextFrame()
+    {
+        yield return null;
+
+        if (logScrollRect == null)
+            yield break;
+
+        Canvas.ForceUpdateCanvases();
+        if (logScrollRect.content != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(logScrollRect.content);
+
+        logScrollRect.verticalNormalizedPosition = 0f;
+    }
+
     private void LoadNewScene(String sceneName)
     {
         int Temp;
@@ -216,6 +283,7 @@ public class DebugConsole : MonoBehaviour
         }
         else
         {
+            //maybe three variables instead of the array indexes? In case they get jumbled/we add more items to spawn
             if (itemName == "vase")
             {
                 Instantiate(Prefabs[0], cameraGO.transform.position, Quaternion.identity);

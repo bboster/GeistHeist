@@ -7,7 +7,7 @@
  * Put this script on a canvas
  * Billboard ui objects do the following:
  * - stays in/ follows a single world point, 
- * - changes scale and opacity based on player proximity
+ * - changes fontScale and baseOpacity based on player proximity
  * - always faces the player
  */
 
@@ -21,11 +21,11 @@ using UnityEngine;
 [RequireComponent(typeof(Canvas))]
 public class BillboardUIManager : Singleton<BillboardUIManager>
 {
-    [Tooltip("If false, calculates by player position. If true, calculates by camera position.")]
-    [SerializeField] bool CalculateScalingByCameraPosition = false;
-
     [SerializeField, Required] private GameObject onomatopoeiaPrefab;
     [SerializeField, Required] private GameObject onomatopoeiaPointPrefab;
+
+    [Header("Button Sprites")]
+    [SerializeField] private List<ButtonSprite> buttonSprites;
 
     // NOT a dictionary because there could maybe be multiple ui elements at one anchor point
     //                    World Point, UI object
@@ -59,31 +59,33 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
                 return; 
             }
 
-            if (uiAnchorPair.Item2.IsVisible == false)
-                continue;
+            //if (uiAnchorPair.Item2.IsVisible == false)
+            //    continue;
 
-            if (PlayerManager.Instance.CurrentObject == null)
+            if (PlayerManager.Instance == null || PlayerManager.Instance.CurrentObject == null)
                 continue;
 
             var elem = uiAnchorPair.Item2;
-            var elemRectTransform = elem.rectTransform;
             var elemTransform = elem.transform;
             var anchor = uiAnchorPair.Item1;
 
-            float playerDistance = CalculateScalingByCameraPosition ? 
-                Vector3.Distance(anchor.position, _camera.transform.position) :
+            float playerDistance = 
                 Vector3.Distance(anchor.position, PlayerManager.Instance.CurrentObject.transform.position);
+
+            float cameraDistance =
+                Vector3.Distance(anchor.position, _camera.transform.position);
 
             // Set Position
             elemTransform.position = anchor.position;
 
-            // Set opacity
+            // Set baseOpacity
             Vector3 screenPos = _camera.WorldToScreenPoint(anchor.position);
             Vector3 uiPos = new Vector3(screenPos.x, /*Screen.height - */screenPos.y, screenPos.z);
 
-            elem.CalculateAndSetOpacity(playerDistance, uiPos);
-            if (elem.CurrentAlpha == 0)
-                continue; // dont bother with anything else if we dont need to.
+            elem.CalculateAndSetOpacity(playerDistance, cameraDistance, uiPos);
+
+            //if (elem.CurrentAlpha == 0)
+            //    continue; // dont bother with anything else if we dont need to.
 
             // Face camera
             if (elem.MirrorBillboard)
@@ -91,7 +93,7 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
             else
                 elemTransform.LookAt(_camera.transform);
 
-            // Set scale
+            // Set Scale
             elem.CalculateAndSetScale(playerDistance);
         }
     }
@@ -112,33 +114,13 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
         UIElement.rectTransform.SetParent(billboardUICanvas.transform);
 
         var pair = new Tuple<Transform, IBillboardUI>(worldPoint, UIElement);
+        Debug.Log("new billboard: " + worldPoint.gameObject.name + " : " + UIElement.gameObject.name);
         billboardUIPoints.Add(pair);
 
         UIElement.OnInitialize(SourceGameObject);
         UIElement.ToggleVisibility(!UIElement.HideByDefault);
 
         return pair;
-    }
-
-    /// <summary>
-    /// Spawns Onomatopoeia text at set position.
-    /// </summary>
-    /// <param name="randomRotationRange">Degrees that the Onomatopoeia can by randomly rotated by</param>
-    /// <returns>Transform that the Onomatopoeia will be "childed" to.</returns>
-    public Transform SpawnOnomatopoeia(string text, Vector3 worldPosition, 
-                                       float lifetime = 1.5f, float scale = 1, float randomRotationRange=0,
-                                       bool bold = true, bool italics = false)
-    {
-        // TODO: these could be object pooled (but tbh i dont think our games performance is that bad so im not going to bother)
-        var point = Instantiate(onomatopoeiaPointPrefab, worldPosition, Quaternion.identity);
-        var onomatopoeiaBillboard = Instantiate(onomatopoeiaPrefab).GetComponent<OnomatopoeiaBillboardUI>();
-
-        onomatopoeiaBillboard.SetTextProperties(text, scale, randomRotationRange, bold, italics);
-
-        var pair = RegisterAndInitializeBillboardUIPoint(point.transform, onomatopoeiaBillboard, null);
-        StartCoroutine(DestroyBillboardAfterSeconds(pair, lifetime));
-
-        return point.transform;
     }
 
     private IEnumerator DestroyBillboardAfterSeconds(Tuple<Transform, IBillboardUI> pointAndUI, float seconds)
@@ -152,4 +134,66 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
 
         // todo: make it fade out probably lol
     }
+
+
+    #region Onomatopoeias
+
+    /// <summary>
+    /// Spawns Onomatopoeia text at set position.
+    /// </summary>
+    /// <param name="randomRotationRange">Degrees that the Onomatopoeia can by randomly rotated by</param>
+    /// <returns>Transform that the Onomatopoeia will be "childed" to.</returns>
+    public Transform SpawnOnomatopoeia(string text, Vector3 worldPosition, 
+                                       float lifetime = 1.5f, float fontScale = 1, float randomRotationRange=0,
+                                       bool bold = true, bool italics = false,
+                                       bool animateRotationOverTime = false, bool animateScaleOverTime = true)
+    {
+        // TODO: these could be object pooled (but tbh i dont think our games performance is that bad so im not going to bother)
+        var point = Instantiate(onomatopoeiaPointPrefab, worldPosition, Quaternion.identity);
+        var onomatopoeiaBillboard = Instantiate(onomatopoeiaPrefab).GetComponent<OnomatopoeiaBillboardUI>();
+
+        onomatopoeiaBillboard.SetTextProperties(text, fontScale, randomRotationRange, lifetime, 
+                                                bold, italics, 
+                                                animateRotationOverTime, animateScaleOverTime);
+
+        var pair = RegisterAndInitializeBillboardUIPoint(point.transform, onomatopoeiaBillboard, null);
+        StartCoroutine(DestroyBillboardAfterSeconds(pair, lifetime));
+
+        return point.transform;
+    }
+
+    #endregion
+
+    #region Button Prompts
+
+
+    [System.Serializable]
+    private class ButtonSprite
+    {
+        [ShowAssetPreview(32, 32)] public Sprite sprite;
+        public ButtonType Action;
+        public bool IsControllerSprite;
+        public bool IsDisabledVariant;
+    }
+
+    public Sprite GetKeyButtonSprite(ButtonType buttonType, bool isController, bool isDisabled = false)
+    {
+        var sortedList = buttonSprites.Where(s => s.Action == buttonType &&
+                                                  s.IsControllerSprite == isController &&
+                                                  s.IsDisabledVariant == isDisabled);
+        if(sortedList.Count() <=0)
+        {
+            Debug.LogError($"No button prompt is found with the following properties:\nAction: {buttonType}\tController: {isController}\tDisabled: {isDisabled}");
+            return null;
+        }
+        if (sortedList.Count() >= 2)
+        {
+            Debug.LogError($"Du[licate button prompts found with the following properties:\nAction: {buttonType}\tController: {isController}\tDisabled: {isDisabled}");
+            return null;
+        }
+
+        return sortedList.First().sprite;
+    }
+
+    #endregion
 }

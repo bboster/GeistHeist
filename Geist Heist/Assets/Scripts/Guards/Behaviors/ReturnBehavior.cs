@@ -27,6 +27,14 @@ public class ReturnBehavior : GuardMovement
             MoveToPoint(contRef.Path.GetPoint(0).position);
             thisAgent.isStopped = false;
         }
+
+        contRef.GetAnimator().SetBool("isPatrolling", true);
+    }
+
+    public override void StopBehavior()
+    {
+        base.StopBehavior();
+        contRef.GetAnimator().SetBool("isPatrolling", false);
     }
 
     public override IEnumerator BehaviorLoop()

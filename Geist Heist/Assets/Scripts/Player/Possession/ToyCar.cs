@@ -6,9 +6,9 @@ using UnityEngine.UI;
 using FMODUnity;
 using FMOD.Studio;
 /*
- * Contributors: Sky, Toby
+ * Contributors: Sky, Toby, Jacob
  * Creation Date: 10/2/25
- * Last Modified: 10/27/25
+ * Last Modified: 3/3/26
  * 
  * Brief Description: Input Handler for the Toy Car, handles movement and actions for the Toy Car
  */
@@ -28,46 +28,49 @@ public class ToyCar : IInputHandler
     [SerializeField] private float chargeLossRate;
     [Tooltip("Force there to be time between zooms")]
     [SerializeField] private float delayBetweenZooms = 1;
-
-    [Header("VFX")]
-    [SerializeField] private string OnomatopoeiaText = "Bonk!";
-    [SerializeField] private float OnomatopoeiaScale = 1;
+    [Tooltip("How much moving rotates by per second.")]
+    [SerializeField] private float rotationRate = 30;
+    [Tooltip("If the magnitude of the linearVelocity is greater than this value then the car is detectable")]
+    [SerializeField] private float detectableThreshold = 1f;
+    [BoxGroup("Gamepad Tuning"), Tooltip("Modifies the gamepad's sensitivity while rotating the toy car")]
+    [SerializeField] private float rotationSensitivityMod = 0.01f;
 
     [Header("Speedometer seconds")]
     [SerializeField] private float delayToUpdateChargeMeter = 0.25f;
 
-    [Tooltip("How much moving rotates by per second.")]
-    [SerializeField] private float rotationRate = 30;
+    [Header("VFX")]
+    [SerializeField] private string OnomatopoeiaText = "Bonk!";
+    [SerializeField] private float OnomatopoeiaScale = 1;
+    [SerializeField] private float onomatopoeiaLifetime = 1;
+    [SerializeField] private ParticleSystem possessableParticle;
+
     //realtime hold strength
     private float currentStrength;
 
     private Rigidbody rb;
     private bool physicsEnabled = false;
     private PossessableObject possessableObject;
-    SuddenVelocityChangeDetector velocityChangeDetector;
+    private SuddenVelocityChangeDetector velocityChangeDetector; 
 
     private Coroutine freezeCoroutine;
     //activates when ghost is leaving an object
     private bool IsLeaving = false;
     private bool hasLaunchedThisPossession = false;
+    private float lastCrashOnomatopoeiaTimeStamp;
 
-    [SerializeField] private PossessableChargeMeterUI chargeMeter;
-    [SerializeField] private ParticleSystem possessableParticle;
 
     private EventInstance carMoveSFX;
     private EventInstance carWindSFX;
 
     private void Start()
     {
-        carMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CarGo);
-        carWindSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.instance.CarWind);
+        //Same note on sound as in PossessableObject.cs
+        carMoveSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.CarGo);
+        carWindSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.CarWind);
 
         rb = gameObject.GetComponent<Rigidbody>();
         possessableObject = GetComponent<PossessableObject>();
         velocityChangeDetector = GetComponent<SuddenVelocityChangeDetector>();
-
-        if (chargeMeter == null)
-            chargeMeter = GetComponentInChildren<ToyCarSpeedometerUI>();
 
         velocityChangeDetector.OnBounceDetected.AddListener(OnCrashOrBounceDetected);
         velocityChangeDetector.OnStopDetected.AddListener(OnCrashOrBounceDetected);
@@ -76,7 +79,7 @@ public class ToyCar : IInputHandler
     public override void OnPossessionStart()
     {
         hasLaunchedThisPossession = false;
-        chargeMeter.OnPossessionStarted();
+
         possessableParticle.Play();
         velocityChangeDetector.StartRecordingVelocity();
 
@@ -92,6 +95,8 @@ public class ToyCar : IInputHandler
         possessableParticle.Stop();
         velocityChangeDetector.StopRecordingVelocity();
 
+        carWindSFX.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
         if (possessableObject.UnpossessedMaterial != null)
         {
             possessableObject.meshRenderer.material = possessableObject.UnpossessedMaterial;
@@ -101,10 +106,13 @@ public class ToyCar : IInputHandler
     // Called every frame while player is possessing.
     public override void WhilePossessingUpdate()
     {
+        //Note for sound: Cases like this with repeating code should probably call another function that does the repeated bit and takes non-repeat info as parameters
         carMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
         carWindSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
 
-        chargeMeter.UpdateCharge(currentStrength, maxStrength);
+        //chargeMeter.UpdateCharge(currentStrength, maxStrength);
+        PossessableToolbar.Instance.SetChargeBarValue(currentStrength / maxStrength);
+
 
         //pause timer if car is moving
         if (rb.linearVelocity == Vector3.zero)
@@ -150,6 +158,16 @@ public class ToyCar : IInputHandler
             physicsEnabled = false;
             hasLaunchedThisPossession = true;
         }
+    }
+
+    /// <summary>
+    /// Returns true if the player is detectable, false otherwise
+    /// </summary>
+    /// <returns></returns>
+    public override bool IsDetectable()
+    {
+        //If greater than threshold then return true, else return false
+        return rb.linearVelocity.magnitude > detectableThreshold;
     }
 
     #region action
@@ -280,6 +298,8 @@ public class ToyCar : IInputHandler
 
         if (rb.linearVelocity == Vector3.zero)
         {
+            if (InputEvents.Instance.IsMoveInputFromGamepad())
+                rotation *= rotationSensitivityMod;
             transform.Rotate(new Vector3(rotation, 0, 0) * Time.deltaTime);
         }
     }
@@ -290,12 +310,21 @@ public class ToyCar : IInputHandler
     public override void OnMoveCanceled(float secondsHeld) { }
     #endregion
 
+
     #region Onomatopoeias
 
     void OnCrashOrBounceDetected(Vector3 impactPoint)
     {
+        if (Time.time - lastCrashOnomatopoeiaTimeStamp < 0.1f)
+            return;
+
         Vector3 spawnPoint = impactPoint + (Vector3.up * 2);
-        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, randomRotationRange:15, bold:true, scale:OnomatopoeiaScale);
+        BillboardUIManager.Instance.SpawnOnomatopoeia(OnomatopoeiaText, spawnPoint, lifetime: onomatopoeiaLifetime,
+            bold:true, fontScale:OnomatopoeiaScale, 
+            animateRotationOverTime:true, randomRotationRange:15, 
+            animateScaleOverTime:true);
+
+        lastCrashOnomatopoeiaTimeStamp = Time.time;
 
         //TODO: add Bonk sound
 
@@ -303,6 +332,7 @@ public class ToyCar : IInputHandler
     }
 
     #endregion
+
     public void UnFreezePosition()
     {
         rb.constraints = RigidbodyConstraints.None;

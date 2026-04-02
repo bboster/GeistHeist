@@ -58,19 +58,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.83020264, g: 0.8193182, b: 1, a: 1}
+  m_Color: {r: 0.058823533, g: 0.49803925, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1946255419, guid: 10faf9e346d0d6049952c26fd976ea22, type: 3}
+  m_Sprite: {fileID: 1858209450, guid: 26df7bd82ed10b941857d9904db24285, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 1
+  m_FillAmount: 0.91625977
   m_FillClockwise: 1
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -523032865, guid: 10faf9e346d0d6049952c26fd976ea22, type: 3}
+  m_Sprite: {fileID: -1516863105, guid: 26df7bd82ed10b941857d9904db24285, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0.91625977
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -276,31 +276,38 @@ MonoBehaviour:
   farXEdgePercentToFade: 0.15
   closeYEdgePercentToFade: 0.02
   farYEdgePercentToFade: 0.1
-  closeOpacityDistance: 6
-  closeOpacity: 1
-  farOpacityDistance: 8
-  farOpacity: 0
+  opacityByPlayerDistance: 0
+  closeOpacityDistance: 0
+  closeOpacity: 0
+  farOpacityDistance: 5
+  farOpacity: 1
+  opacityByCameraDistance: 1
+  closeCameraOpacityDistance: 2
+  closeCameraOpacity: 0
+  farCameraOpacityDistance: 3
+  farCameraOpacity: 1
   IsVisible: 1
   CurrentAlpha: 1
   hideSeconds: 0.2
   opacityWhenUnpossessed: 0.5
   percentToHide: 0.08
+  hideTimerIfPlayerPossessing: 0
   timerFill: {fileID: 1137790626835069270}
   timerFillGradient:
     serializedVersion: 2
-    key0: {r: 0.83020264, g: 0.8193182, b: 1, a: 1}
-    key1: {r: 0.755654, g: 0.7399908, b: 1, a: 1}
-    key2: {r: 1, g: 0.78431374, b: 0.6313726, a: 0}
-    key3: {r: 0.83020264, g: 0.8193182, b: 1, a: 0}
-    key4: {r: 1, g: 0.78431374, b: 0.6313726, a: 0}
+    key0: {r: 0.058823533, g: 0.49803925, b: 1, a: 1}
+    key1: {r: 0.3372549, g: 0.9960785, b: 0.9333334, a: 1}
+    key2: {r: 0.98823535, g: 1, b: 0.6901961, a: 0}
+    key3: {r: 1, g: 0.8431373, b: 0.26666668, a: 0}
+    key4: {r: 1, g: 0.8431373, b: 0.26666668, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 16384
-    ctime1: 27957
-    ctime2: 49151
-    ctime3: 49151
-    ctime4: 49151
+    ctime0: 9830
+    ctime1: 22937
+    ctime2: 42598
+    ctime3: 55705
+    ctime4: 56669
     ctime5: 0
     ctime6: 0
     ctime7: 0

@@ -12,15 +12,15 @@
  * TODO: swap UI for controller support eventually.
  */
 
-using System.Collections;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ButtonPromptInteractable : MonoBehaviour, IInteractable
+public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionable
 {
-    [SerializeField] public string buttonText="E";
+
+    public ButtonType buttonKey;
+
+    [SerializeField] public string additionalButtonText="";
 
     private ButtonPromptBillboardUI billboardUI;
     [HideInInspector] public UnityEvent ShowUIEvent = new();
@@ -37,17 +37,22 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
 
     void IInteractable.OnPlayerLookStart()
     {
+        if (buttonKey != ButtonType.Interact)
+            return;
+
         /*int parentsDisabled =
             transform
             .GetComponentsInParent<IInteractable>() // parent's Interactables
             .Select(i => i.IsInteractable() == false) // filter by uninteractable
             .Count();// > 0; // overengineered but i love lambda so much
         Debug.Log($"{parentsDisabled} parents disabled");*/
-        var parent_interactable = transform.GetComponentInParent < IInteractable> ();
+
+        var parent_interactable = transform.GetComponentInParent < IInteractable > ();
         if(parent_interactable.IsInteractable() == false)
         {
             Debug.Log("Parent uninteractable");
             billboardUI.Hide();
+            billboardUI.IsPlayerLooking = false;
             return;
         }
 
@@ -55,9 +60,62 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable
         // This is redundant now but will be important later.
         billboardUI.UpdateButtonPrompt();
         billboardUI.Show();
+        billboardUI.IsPlayerLooking = true;
     }
     void IInteractable.OnPlayerLookStop()
     {
+        if (buttonKey != ButtonType.Interact)
+            return;
+
+        Debug.Log("stopped looking");
         billboardUI.Hide();
+        billboardUI.IsPlayerLooking = false;
+    }
+
+    void IActionable.OnPlayerLookStart()
+    {
+        if (buttonKey != ButtonType.Action)
+            return;
+
+        var parent_actionable = transform.GetComponentInParent<IActionable>();
+        if (parent_actionable.IsActionable() == false)
+        {
+            Debug.Log("Parent unactionable");
+            billboardUI.Hide();
+            billboardUI.IsPlayerLooking = false;
+            return;
+        }
+
+        // UpdateButtonPrompt changes the text depending on if its a controller / keyboard. 
+        // This is redundant now but will be important later.
+        billboardUI.UpdateButtonPrompt();
+        billboardUI.Show();
+        billboardUI.IsPlayerLooking = true;
+    }
+
+    void IActionable.OnPlayerLookStop()
+    {
+        if (buttonKey != ButtonType.Action)
+            return;
+
+        billboardUI.Hide();
+        billboardUI.IsPlayerLooking = false;
+    }
+
+    public void Action()
+    {/* do nothing */}
+    public bool IsParentInteractable()
+    {
+        var parent_interactable = transform.parent.GetComponent<IInteractable>();
+        var parent_actionable   = transform.parent.GetComponent<IActionable>();
+
+        if(parent_interactable != null && buttonKey == ButtonType.Interact)
+            return parent_interactable.IsInteractable();
+
+        if (parent_actionable != null && buttonKey == ButtonType.Action)
+            return parent_actionable.IsActionable();
+
+        Debug.LogWarning($"{gameObject.name}'s parent does not have an interactable or actionable component");
+        return false;
     }
 }

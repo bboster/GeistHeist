@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Joshua Kelly
  * Creation: 11/15/2025
- * Last Edited: 11/24/25
+ * Last Edited: 3/1/2026
  * 
  * Description: Manages UI elements and settings data.
  * Settings variables are stored and accessed in SettingsProfile.cs
@@ -11,18 +11,22 @@ using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingsTab : PauseMenuTab
 {
     [Header("Non-settings buttons")]
     //[SerializeField, Required] private Button exitSettingsButton;
-    [SerializeField, Required] private Button resetToDefaultsButton;
+    [SerializeField, Required] private Button resetGameplayToDefaultsButton;
+    [SerializeField, Required] private Button resetAudioToDefaultsButton;
     [SerializeField] private string resetToDefaultsConfirmationText = "Reset all settings?";
 
     [Header("Individual Settings attributes")]
     [SerializeField] private SliderSettingsAttributes lookSensitivityAttributes;
-    [SerializeField] private ToggleSettingsAttributes invertLookAttributes; 
+    [SerializeField] private ToggleSettingsAttributes invertYLookAttributes; 
+    [SerializeField] private ToggleSettingsAttributes invertXLookAttributes; 
     [SerializeField] private SliderSettingsAttributes brightnessAttributes;
 
     [SerializeField] private SliderSettingsAttributes masterVolumeAttributes;
@@ -30,55 +34,29 @@ public class SettingsTab : PauseMenuTab
     [SerializeField] private SliderSettingsAttributes sfxVolumeAttributes;
     [SerializeField] private SliderSettingsAttributes vocalsVolumeAttributes;
 
+    [Header("Other")]
+    [SerializeField] private bool resetConfirmation = false;
+    [ShowIf(nameof(resetConfirmation)), SerializeField, Required] private ConfirmationPopup confirmationPopup;
+
     private PostProcessingManager ppManager; // lol peepeeManager
-
-    #region Attribute variables
-    /*
-    // Master Volume
-    [BoxGroup("Master Volume"), Label("Default Value"), Range(0, 100), SerializeField] private float defaultMasterVolume = 100;
-    [BoxGroup("Master Volume"), Label("Slider"), Required, SerializeField] private Slider masterVolumeSlider;
-    [BoxGroup("Master Volume"), Label("Output Text"), Required, SerializeField] private TMP_Text masterVolumeOutputText;
-    [SerializeField, ReadOnly] private float currentMasterVolume = 0;
-    private const string MASTER_VOLUME_PLAYER_PREF_KEY = "Master Volume";
-
-    // Music Volume
-    [BoxGroup("Music Volume"), Label("Default Value"), Range(0, 100), SerializeField] private float defaultMusicVolume = 100;
-    [BoxGroup("Music Volume"), Label("Slider"), Required, SerializeField] private Slider MusicVolumeSlider;
-    [BoxGroup("Music Volume"), Label("Output Text"), Required, SerializeField] private TMP_Text MusicVolumeOutputText;
-    [SerializeField, ReadOnly] private float currentMusicVolume = 0;
-    private const string MUSIC_VOLUME_PLAYER_PREF_KEY = "Music Volume";
-
-    // SFX Volume
-    [BoxGroup("SFX Volume"), Label("Default Value"), Range(0, 100), SerializeField] private float defaultSFXVolume = 100;
-    [BoxGroup("SFX Volume"), Label("Slider"), Required, SerializeField] private Slider SFXVolumeSlider;
-    [BoxGroup("SFX Volume"), Label("Output Text"), Required, SerializeField] private TMP_Text SFXVolumeOutputText;
-    [SerializeField, ReadOnly] private float currentSFXVolume = 0;
-    private const string SFX_VOLUME_PLAYER_PREF_KEY = "SFX Volume";
-
-    // Vocals Volume
-    [BoxGroup("Vocals Volume"), Label("Default Value"), Range(0, 100), SerializeField] private float defaultVocalsVolume = 100;
-    [BoxGroup("Vocals Volume"), Label("Slider"), Required, SerializeField] private Slider VocalsVolumeSlider;
-    [BoxGroup("Vocals Volume"), Label("Output Text"), Required, SerializeField] private TMP_Text VocalsVolumeOutputText;
-    [SerializeField, ReadOnly] private float currentVocalsVolume = 0;
-    private const string VOCALS_VOLUME_PLAYER_PREF_KEY = "Music Volume";*/
-
-    #endregion
-
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected /*override*/ void Start()
     {
+        SettingsProfile.ReadSavedSettings();
+
         //base.Start();
         ppManager = Camera.main.GetComponentInChildren<PostProcessingManager>();
-
         AddComponentListeners();
         //exitSettingsButton.onClick.AddListener(() => CloseTab());
-        resetToDefaultsButton.onClick.AddListener(OnResetToDefaultsButtonPressed);
+        resetGameplayToDefaultsButton.onClick.AddListener(OnResetGameplayToDefaultsButtonPressed);
+        resetAudioToDefaultsButton.onClick.AddListener(OnResetAudiToDefaultsButtonPressed);
     }
 
     public override void OpenTab()
     {
         base.OpenTab();
+        EventSystem.current?.SetSelectedGameObject(lookSensitivityAttributes.SliderComponent.gameObject);
     }
 
     public override void CloseTab()
@@ -89,14 +67,37 @@ public class SettingsTab : PauseMenuTab
 
     #region Misc Buttons
 
-    private void OnResetToDefaultsButtonPressed()
+    private void OnResetGameplayToDefaultsButtonPressed()
     {
-        pauseMenu.confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetToDefaultsButtonPressed);
+        if (resetConfirmation)
+        {
+            confirmationPopup.gameObject.SetActive(true);
+            confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetGameplayToDefaultsButtonPressed);
+        }
+        else
+            OnConfirmResetGameplayToDefaultsButtonPressed();
     }
 
-    private void OnConfirmResetToDefaultsButtonPressed()
+    private void OnResetAudiToDefaultsButtonPressed()
     {
-        SettingsProfile.ResetToDefaults();
+        if (resetConfirmation)
+        {
+            confirmationPopup.gameObject.SetActive(true);
+            confirmationPopup.OpenConfirmationPopup(resetToDefaultsConfirmationText, OnConfirmationButtonClicked: OnConfirmResetAudioToDefaultsButtonPressed);
+        }
+        else
+            OnConfirmResetAudioToDefaultsButtonPressed();
+    }
+
+    private void OnConfirmResetGameplayToDefaultsButtonPressed()
+    {
+        SettingsProfile.ResetGameplayToDefaults();
+        RefreshUI();
+    }
+
+    private void OnConfirmResetAudioToDefaultsButtonPressed()
+    {
+        SettingsProfile.ResetAudioToDefaults();
         RefreshUI();
     }
 
@@ -105,12 +106,16 @@ public class SettingsTab : PauseMenuTab
     #region Input Handling
     private void AddComponentListeners()
     {
-        lookSensitivityAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(lookSensitivityAttributes, ref SettingsProfile.LookSensitivy, 
+        UnityAction onSensitivitySettingsUpdatedCallback = PlayerManager.Instance == null ? null : PlayerManager.Instance.UpdateCamerasSensitivity;
+        lookSensitivityAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(lookSensitivityAttributes, ref SettingsProfile.LookSensitivity, 
             minValue:SettingsProfile.MIN_LOOK_SENSITIVITY, maxValue:SettingsProfile.MAX_LOOK_SENSITIVITY,
-            onSettingsUpdatedCallback:PlayerManager.Instance.UpdateCamerasSensitivity));
+            onSettingsUpdatedCallback: onSensitivitySettingsUpdatedCallback));
 
-        invertLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertLookAttributes, ref SettingsProfile.InvertLook,
-            onSettingsUpdatedCallback: PlayerManager.Instance.UpdateCamerasInvertLook));
+        UnityAction onCameraLookSettingsUpdatedCallback = PlayerManager.Instance == null ? null : PlayerManager.Instance.UpdateCamerasInvertLook;
+        invertYLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertYLookAttributes, ref SettingsProfile.InvertYLook,
+            onSettingsUpdatedCallback: onCameraLookSettingsUpdatedCallback));
+        invertXLookAttributes.ToggleComponent.onValueChanged.AddListener((bool _) => OnToggleValueChanged(invertXLookAttributes, ref SettingsProfile.InvertXLook,
+            onSettingsUpdatedCallback: onCameraLookSettingsUpdatedCallback));
 
         brightnessAttributes.SliderComponent.onValueChanged.AddListener((float _) => OnSliderValueChanged(brightnessAttributes, ref SettingsProfile.Brightness,
             minValue: SettingsProfile.MIN_BRIGHTNESS, maxValue: SettingsProfile.MAX_BRIGHTNESS,
@@ -146,7 +151,7 @@ public class SettingsTab : PauseMenuTab
         // sliderAttributes.RefreshComponent(realValue, t); // conflicts with current input
         sliderAttributes.RefreshTextOnly(realValue);
 
-        if (onSettingsUpdatedCallback != null)
+        if (onSettingsUpdatedCallback != null && SceneManager.GetActiveScene().name != "Main Menu")
             onSettingsUpdatedCallback();
 
         SettingsProfile.SaveCurrentSettings();
@@ -176,8 +181,9 @@ public class SettingsTab : PauseMenuTab
     {
         // Assumes SettingsProfile.ReadSavedSettings has already run 
 
-        lookSensitivityAttributes.RefreshComponent(SettingsProfile.LookSensitivy, SettingsProfile.LookSensitityScalar);
-        invertLookAttributes.RefreshComponent(SettingsProfile.InvertLook);
+        lookSensitivityAttributes.RefreshComponent(SettingsProfile.LookSensitivity, SettingsProfile.LookSensitityScalar);
+        invertYLookAttributes.RefreshComponent(SettingsProfile.InvertYLook);
+        invertXLookAttributes.RefreshComponent(SettingsProfile.InvertXLook);
         brightnessAttributes.RefreshComponent(SettingsProfile.Brightness, SettingsProfile.BrightnessScalar);
 
         masterVolumeAttributes.RefreshComponent(SettingsProfile.MasterVolume, SettingsProfile.MasterVolumeTransformed);
@@ -196,6 +202,7 @@ public class SliderSettingsAttributes
     //[Range(0, 100)] public float DefaulValue = 100;
     [AllowNesting, Required] public Slider SliderComponent;
     [AllowNesting, Required] public TMP_Text OutputTextComponent;
+    public bool DisplayAsPercentage = true;
 
     public void RefreshComponent(float currentValue, float currentValueTransformed)
     {
@@ -205,7 +212,7 @@ public class SliderSettingsAttributes
 
     public void RefreshTextOnly(float currentValue)
     {
-        OutputTextComponent.text = Mathf.RoundToInt(currentValue).ToString();
+        OutputTextComponent.text = Mathf.RoundToInt(currentValue).ToString() + (DisplayAsPercentage ? "%" : "");
     }
 }
 
