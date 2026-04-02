@@ -306,6 +306,9 @@ public class MainMenu : MonoBehaviour
         // it counts moving your mouse as an input (sob)
         if (device != null && device.ToString().Contains("Mouse")) return;
 
+        if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
+        else EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
+
         TimeOfLastAnyButtonPressed = Time.unscaledTime;
 
         StaticUtilities.StartCoroutineIfNotPlaying(ref waitToDelayCoroutine, CheckActiveState());
@@ -314,6 +317,7 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator CheckActiveState()
     {
+        bool wasActive = false;
         while (true)
         {
             if (settingsOpen || creditsOpen)
@@ -322,6 +326,11 @@ public class MainMenu : MonoBehaviour
             //Debug.Log(Time.unscaledTime - TimeOfLastAnyButtonPressed);
             bool active = (Time.unscaledTime - TimeOfLastAnyButtonPressed < secondsOfInactivityForIdle);
             mainMenuAnimator.SetBool("Active", active);
+
+            if(!active && wasActive) EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
+
+            wasActive = active;
+
             yield return null;
         }
     }
