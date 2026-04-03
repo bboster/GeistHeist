@@ -15,12 +15,13 @@ public class PauseMenuTab : MonoBehaviour
 
     [SerializeField, Required] public CanvasGroup canvasGroup;
     [SerializeField, Required] public Toggle toggleButton;
-    protected PauseMenu pauseMenu;
+    [SerializeField, Required] public WavyTextAnimation wavyTextAnimation;
 
     public virtual void OpenTab()
     {
         RefreshUI();
-        toggleButton.isOn = true;
+        if(toggleButton != null) toggleButton.isOn = true;
+
         if (currentOpenTab == this) return;
 
         if(currentOpenTab != null)
@@ -36,7 +37,7 @@ public class PauseMenuTab : MonoBehaviour
 
     public virtual void CloseTab()
     {
-        toggleButton.isOn = false;
+        if(toggleButton != null) toggleButton.isOn = false;
         StaticUtilities.DisableCanvasGroup(canvasGroup);
         //InputEvents.PauseStartedOverride = null;
         //pauseMenu.OpenPauseMenu();

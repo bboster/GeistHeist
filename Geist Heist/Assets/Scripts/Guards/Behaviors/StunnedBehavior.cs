@@ -16,6 +16,18 @@ public class StunnedBehavior : Behavior
 {
     [SerializeField] private float stunLength;
 
+    public override void InitializeBehavior(GameObject selfRef)
+    {
+        base.InitializeBehavior(selfRef);
+        contRef.GetAnimator().SetBool("isStunned", true);
+    }
+
+    public override void StopBehavior()
+    {
+        base.StopBehavior();
+        contRef.GetAnimator().SetBool("isSetunned", false);
+    }
+
     public override IEnumerator BehaviorLoop()
     {
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();

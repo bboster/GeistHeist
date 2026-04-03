@@ -12,7 +12,6 @@ using NaughtyAttributes;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEditor;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class VisionStimulus : Stimulus

@@ -43,8 +43,11 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] private Button restartLevelButton;
     [SerializeField, Required] private Button resetSaveButton;
 
+    [Foldout("Advanced Settings"), SerializeField] private float wavyTextLetterSpacing = 8;
+
     private static float timeOfLastPause;
     private InputAction menuBackAction;
+    private Color defaultNormalTabTextColor;
 
     private void OnEnable()
     {
@@ -63,10 +66,13 @@ public class PauseMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        defaultNormalTabTextColor = settingsTab.toggleButton.colors.normalColor;
+
         // disable going to hub if you are at the hub
-        if(SceneManager.GetActiveScene().buildIndex == HubScene)
+        if (SceneManager.GetActiveScene().buildIndex == HubScene)
         {
             quitToHubButton.interactable = false;
+            quitToHubButton.gameObject.SetActive(false);
         }
 
         pauseScreenParent.gameObject.SetActive(true);
@@ -74,7 +80,7 @@ public class PauseMenu : MonoBehaviour
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
 
         // tab buttons
-        generalTab .toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenInfoButtonSelected(); });
+        generalTab .toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenGeneralButtonSelected(); });
         controlsTab.toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenControlsButtonSelected(); });
         settingsTab.toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenSettingsButtonSelected(); });
 
@@ -92,21 +98,20 @@ public class PauseMenu : MonoBehaviour
     {
         confirmationPopup.HideConfirmationPopup();
 
-        if(settingsTab.canvasGroup.alpha > 0)
-            settingsTab.CloseTab();
-
         Debug.Log("Pause Menu Opened");
         GameManager.Instance.PauseGame();
 
         // general tab is default tab
-        generalTab.OpenTab();
-        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
-        controlsTab.CloseTab();
-        settingsTab.CloseTab();
+
 
         pauseScreenParent.gameObject.SetActive(true);
         StaticUtilities.EnableCanvasGroup(pauseGroup);
         StaticUtilities.ShowCursor();
+
+        settingsTab.CloseTab();
+        controlsTab.CloseTab();
+        OnOpenGeneralButtonSelected();
+        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
     }
 
     public void ClosePauseMenu()
@@ -140,7 +145,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnMenuBackPressed(InputAction.CallbackContext ctx)
     {
-        if (!IsPauseMenuOpen())
+        if (!IsPauseMenuOpen() || Time.unscaledTime - timeOfLastPause < 0.1f)
             return;
 
         if (IsConfirmationPopupOpen())
@@ -211,19 +216,46 @@ public class PauseMenu : MonoBehaviour
 
     #region Tab Navigation Buttons
 
-    void OnOpenInfoButtonSelected()
+    void OnOpenGeneralButtonSelected()
     {
         generalTab.OpenTab();
+
+        DisableAllWavyTexts();
+        generalTab.wavyTextAnimation.PlayAnimation = true;
+        generalTab.toggleButton.SetColors(normalColor:  Color.white);   
     }
 
     void OnOpenControlsButtonSelected()
     {
         controlsTab.OpenTab();
+
+        DisableAllWavyTexts();
+        controlsTab.wavyTextAnimation.PlayAnimation = true;
+        controlsTab.toggleButton.SetColors(normalColor: Color.white);
     }
 
     void OnOpenSettingsButtonSelected()
     {
         settingsTab.OpenTab();
+
+        DisableAllWavyTexts();
+        settingsTab.wavyTextAnimation.PlayAnimation = true;
+        settingsTab.toggleButton.SetColors(normalColor: Color.white);
+    }
+
+    void DisableAllWavyTexts()
+    {
+        generalTab.wavyTextAnimation.PlayAnimation = false;
+        generalTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //generalTab.wavyTextAnimation.textBox.characterSpacing = 0;
+
+        controlsTab.wavyTextAnimation.PlayAnimation = false;
+        controlsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //controlsTab.wavyTextAnimation.textBox.characterSpacing = 0;
+
+        settingsTab.wavyTextAnimation.PlayAnimation = false;
+        settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //settingsTab.wavyTextAnimation.textBox.characterSpacing = 0;
     }
 
     #endregion
@@ -256,6 +288,7 @@ public class PauseMenu : MonoBehaviour
     void OnConfirmQuitToMainMenuButtonClicked()
     {
         Time.timeScale = 1;
+        DialogueUIManager.Instance.StopVoiceLine();
         LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(MainMenuScene));
     }
 

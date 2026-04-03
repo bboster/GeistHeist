@@ -159,9 +159,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WearableCollectible
   wearableNode: {fileID: 2543574003377067510}
-  currentHat: 1
-  defaultHat: 15
-  PreviewCollectable: 1
+  currentHat: 21
+  defaultHat: 21
+  PreviewCollectable: 21
 --- !u!1 &3233496734506821444
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,6 +309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonInputHandler
   speed: 8.5
+  defaultSpeed: 0
   speedPickup: 3
   slowDownFactor: 5
   rotationSpeed: 270
@@ -1595,6 +1596,10 @@ PrefabInstance:
     - target: {fileID: 828816802279875767, guid: 84d633812f5fd46438b99edc043a5bfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1270705882324296027, guid: 84d633812f5fd46438b99edc043a5bfd, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4701745403541461229, guid: 84d633812f5fd46438b99edc043a5bfd, type: 3}
       propertyPath: m_Enabled

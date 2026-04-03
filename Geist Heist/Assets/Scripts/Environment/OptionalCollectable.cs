@@ -300,7 +300,7 @@ public enum Collectable
     Vending_Machine_Collectable,
     
     VaseCollectible,
-	ToyCarCollectible,
+	
 	ChairCollectible,
 	NewsPaperHat,
 	
@@ -321,4 +321,7 @@ public enum Collectable
     LobsterCollectable,
     ChefHatCollectable,
     TeaCupCollectable,
+	CollectibleTemplate,
+	PurpleTopHat,
+	JesterHatVarient,
 }

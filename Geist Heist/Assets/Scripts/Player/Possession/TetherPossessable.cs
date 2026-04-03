@@ -19,6 +19,8 @@ public class TetherPossessable : IInputHandler
     [Tooltip("Loads this scene")]
     [SerializeField, Scene] private string HubScene = "Lobby";
 
+    public bool IsCollected => SaveDataManager.Instance.IsLevelCompleted(SceneManager.GetActiveScene().name);
+
     private Coroutine victoryAnimation;
 
     private void Start()

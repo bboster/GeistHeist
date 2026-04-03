@@ -9,6 +9,8 @@
 using FMODUnity;
 using UnityEngine;
 using FMOD.Studio;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class AudioManager : Singleton<AudioManager>
 {
@@ -31,6 +33,12 @@ public class AudioManager : Singleton<AudioManager>
         validateBus(sfxBus);
         vocalsBus = RuntimeManager.GetBus("bus:/Vocals");
         validateBus(vocalsBus);
+
+        if(SceneManager.GetActiveScene().name == "Main Menu")
+        {
+            SettingsProfile.ReadSavedSettings();
+            UpdateAllVolumes();
+        }
     }
 
     public void Initialize()
