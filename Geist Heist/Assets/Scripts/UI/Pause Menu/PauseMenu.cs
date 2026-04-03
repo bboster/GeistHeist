@@ -288,6 +288,7 @@ public class PauseMenu : MonoBehaviour
     void OnConfirmQuitToMainMenuButtonClicked()
     {
         Time.timeScale = 1;
+        DialogueUIManager.Instance.StopVoiceLine();
         LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(MainMenuScene));
     }
 
