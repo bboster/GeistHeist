@@ -14,7 +14,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class KeyManager : Singleton<KeyManager>
 {
-    [SerializeField] private List<KeyUISprite> KeyUIIcons = new List<KeyUISprite>();
+    [SerializeField] public List<KeyUISprite> KeyUIIcons = new List<KeyUISprite>();
 
     public event Action<KeyType> OnKeyCollected;
 

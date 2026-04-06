@@ -42,7 +42,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Environment.bank
   Name: Environment
   StudioPath: bank:/Environment
-  lastModified: 639103904663153370
+  lastModified: 639100585311921353
   FileSizes: []
   Exists: 1
 --- !u!114 &-8255656020541330298
@@ -72,6 +72,60 @@ MonoBehaviour:
   - Value B
   - Value C
   Exists: 1
+--- !u!114 &-8119729520361066748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Prop/DoorLocked
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Prop/DoorLocked
+  Guid:
+    Data1: -721400485
+    Data2: 1093661833
+    Data3: 1930203279
+    Data4: 1725917016
+  Banks:
+  - {fileID: 6286152001578167159}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 35
+  Length: 1007
+--- !u!114 &-7195795890627500697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Prop/DoorUnlocked
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Prop/DoorUnlocked
+  Guid:
+    Data1: -1501403582
+    Data2: 1159216850
+    Data3: 1227395772
+    Data4: -1169369982
+  Banks:
+  - {fileID: 6286152001578167159}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 35
+  Length: 702
 --- !u!114 &-6659818643767199507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,7 +147,7 @@ MonoBehaviour:
     data1: 530458799
     data2: 3722448469
   Type: 1
-  IsGlobal: 0
+  IsGlobal: 1
   Labels: []
   Exists: 1
 --- !u!114 &-6590521824193411396
@@ -111,11 +165,38 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639105536516947980
+  lastModified: 639105798456645799
   FileSizes:
   - Name: 
-    Value: 2866
+    Value: 3006
   Exists: 1
+--- !u!114 &-6470060445442076166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Prop/DoorLocked
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Prop/DoorLocked
+  Guid:
+    Data1: -721400485
+    Data2: 1093661833
+    Data3: 1930203279
+    Data4: 1725917016
+  Banks:
+  - {fileID: 6286152001578167159}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 35
+  Length: 1007
 --- !u!114 &-6001547716701033407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,9 +295,36 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Enemy.bank
   Name: Enemy
   StudioPath: bank:/Enemy
-  lastModified: 639103904663143376
+  lastModified: 639099626384431585
   FileSizes: []
   Exists: 1
+--- !u!114 &-5268578455739075225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Prop/DoorUnlocked
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Prop/DoorUnlocked
+  Guid:
+    Data1: -1501403582
+    Data2: 1159216850
+    Data3: 1227395772
+    Data4: -1169369982
+  Banks:
+  - {fileID: 6286152001578167159}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 35
+  Length: 702
 --- !u!114 &-4206312160512030336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,7 +351,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 711
+  Length: 1300
 --- !u!114 &-3226643318192844654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +373,7 @@ MonoBehaviour:
     data1: 1521672953
     data2: 3641838376
   Type: 1
-  IsGlobal: 0
+  IsGlobal: 1
   Labels: []
   Exists: 1
 --- !u!114 &-3162132344017317281
@@ -295,6 +403,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 50
   Length: 219
+--- !u!114 &-2595903946864442456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/VLLobbyNightOne
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: VLLobbyNightOne
+  StudioPath: parameter:/VLLobbyNightOne
+  Min: 0
+  Max: 4
+  Default: 0
+  ID:
+    data1: 2564103004
+    data2: 1816243034
+  Type: 1
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
 --- !u!114 &-2249628270404762194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,7 +442,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Interface.bank
   Name: Interface
   StudioPath: bank:/Interface
-  lastModified: 639105536516927978
+  lastModified: 639105798456635747
   FileSizes: []
   Exists: 1
 --- !u!114 &-1809128106369088695
@@ -367,6 +499,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-1224729317603124514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/VLLobbyNightTwo
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: VLLobbyNightTwo
+  StudioPath: parameter:/VLLobbyNightTwo
+  Min: 0
+  Max: 2
+  Default: 0
+  ID:
+    data1: 2072800956
+    data2: 3021014057
+  Type: 1
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
 --- !u!114 &-1179890960124944839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,7 +565,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 639105536516957991
+  lastModified: 639105798456655791
   FileSizes: []
   Exists: 1
 --- !u!114 &11400000
@@ -464,15 +620,22 @@ MonoBehaviour:
   - {fileID: 1961291480545547208}
   - {fileID: -6001547716701033407}
   - {fileID: -5794829220441064446}
+  - {fileID: -7195795890627500697}
+  - {fileID: -6470060445442076166}
+  - {fileID: 6950104938048270485}
   EditorParameters:
   - {fileID: 4226902835621910385}
   - {fileID: 7499942934452804311}
+  - {fileID: 1428712511247278978}
+  - {fileID: -2595903946864442456}
+  - {fileID: -1224729317603124514}
+  - {fileID: 5597885409741756439}
   MasterBanks:
   - {fileID: 8290224813339360744}
   StringsBanks:
   - {fileID: -6590521824193411396}
   cacheVersion: 131849
-  cacheTime: 639105536517108027
+  cacheTime: 639105798456821091
   SerializableEventsDict:
   - key: event:/BGM/Menu
     index: 0
@@ -532,6 +695,12 @@ MonoBehaviour:
     index: 27
   - key: event:/Voicelines/VLLobbyNightTwo
     index: 28
+  - key: event:/Prop/DoorUnlocked
+    index: 29
+  - key: event:/Prop/DoorLocked
+    index: 30
+  - key: event:/Voicelines/VLIntro
+    index: 31
 --- !u!114 &205095641162040774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,6 +756,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &1428712511247278978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/VLParlor
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: VLParlor
+  StudioPath: parameter:/VLParlor
+  Min: 0
+  Max: 8
+  Default: 0
+  ID:
+    data1: 1521672953
+    data2: 3641838376
+  Type: 1
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
 --- !u!114 &1961291480545547208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636,7 +829,7 @@ MonoBehaviour:
     data1: 2072800956
     data2: 3021014057
   Type: 1
-  IsGlobal: 0
+  IsGlobal: 1
   Labels: []
   Exists: 1
 --- !u!114 &3527647611741554694
@@ -654,7 +847,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Voicelines.bank
   Name: Voicelines
   StudioPath: bank:/Voicelines
-  lastModified: 639105536517108027
+  lastModified: 639105798456821091
   FileSizes: []
   Exists: 1
 --- !u!114 &3555943338841856052
@@ -683,7 +876,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 711
+  Length: 1021
 --- !u!114 &4087271554544102265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,7 +1055,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 639073673063468688
+  lastModified: 639071247893055830
   FileSizes: []
   Exists: 1
 --- !u!114 &5387794233900066970
@@ -886,7 +1079,31 @@ MonoBehaviour:
     data1: 2564103004
     data2: 1816243034
   Type: 1
-  IsGlobal: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &5597885409741756439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/VLTutorial
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: VLTutorial
+  StudioPath: parameter:/VLTutorial
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 530458799
+    data2: 3722448469
+  Type: 1
+  IsGlobal: 1
   Labels: []
   Exists: 1
 --- !u!114 &5814322871582953308
@@ -996,7 +1213,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 0
+  Length: 329
 --- !u!114 &6286152001578167159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1012,9 +1229,36 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Prop.bank
   Name: Prop
   StudioPath: bank:/Prop
-  lastModified: 639105536516978570
+  lastModified: 639105798456675791
   FileSizes: []
   Exists: 1
+--- !u!114 &6950104938048270485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Voicelines/VLIntro
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Voicelines/VLIntro
+  Guid:
+    Data1: 1770715888
+    Data2: 1180544853
+    Data3: -2138364750
+    Data4: 1487496189
+  Banks:
+  - {fileID: 3527647611741554694}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 138184
 --- !u!114 &6951204317605075788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1145,7 +1389,7 @@ MonoBehaviour:
   Path: Assets/FMODBanks/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639105536516937981
+  lastModified: 639105798456635747
   FileSizes: []
   Exists: 1
 --- !u!114 &8721028491005390484
@@ -1253,7 +1497,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 0
+  Length: 334
 --- !u!114 &9180031457176711939
 MonoBehaviour:
   m_ObjectHideFlags: 0

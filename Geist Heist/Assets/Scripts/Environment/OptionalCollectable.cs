@@ -323,4 +323,5 @@ public enum Collectable
     TeaCupCollectable,
 	CollectibleTemplate,
 	PurpleTopHat,
+	JesterHatVarient,
 }

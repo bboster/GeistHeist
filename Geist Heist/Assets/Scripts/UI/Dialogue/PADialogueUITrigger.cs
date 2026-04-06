@@ -10,6 +10,7 @@ using FMODUnity;
 using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //This script looks very similar to DialogueBoxTrigger, maybe try to combine these scripts into one?
 public class PADialogueUITrigger : MonoBehaviour
@@ -24,22 +25,17 @@ public class PADialogueUITrigger : MonoBehaviour
     [SerializeField, Foldout("Deprecated")] float stayLength;
     bool alreadyTriggered;
 
-    private EventInstance voiceline;
 
     [SerializeField, Foldout("Deprecated")] private int whichLine;
+
+    public currentLevel thisLevel;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
-            /*if (whichLine >= 0 && whichLine < 3)
-            {
-                RuntimeManager.StudioSystem.setParameterByName("PA", whichLine);
-                voiceline.start();
-            }*/
-
             alreadyTriggered = true;
-            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText);
+            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText, thisLevel);
         }
     }
 
