@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby Schamberger, Joshua Kelly
  * Creation: 10/20/25
- * Last Edited: 3/1/26
+ * Last Edited: 4/7/2026
  * Summary: Handles button functionality for main menu.
  * The player will be prompted to delete their save if they press new game after having save data.
  */
@@ -12,6 +12,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
@@ -33,6 +34,10 @@ public class MainMenu : MonoBehaviour
     [Header("Settings")]
     [SerializeField, Required] private ConfirmationPopup confirmationPopup;
     [SerializeField, Required] private GameObject loadingScreenPrefab;
+
+    [Header("Fog")]
+    [SerializeField, Required] private RenderTexture leftFogRenderTexture;
+    [SerializeField, Required] private RenderTexture rightFogRenderTexture;
 
     [Header("Main Page")]
     [SerializeField, Required] private Button newGameButton;
@@ -64,6 +69,8 @@ public class MainMenu : MonoBehaviour
     private float TimeOfLastAnyButtonPressed = 0;
     private Coroutine waitToDelayCoroutine;
     private bool introAnimationFinished = false;
+    private bool menuActive = false;
+    private bool gamepadActive = false;
 
     private void OnEnable()
     {
@@ -83,8 +90,8 @@ public class MainMenu : MonoBehaviour
 
         // hide/show continue button based on if save data exists
         continueGameButton.gameObject.SetActive(playerHasSignificantSaveData);
-        EventSystem.current.SetSelectedGameObject(
-            playerHasSignificantSaveData ? continueGameButton.gameObject : newGameButton.gameObject);
+        EventSystem.current.SetSelectedGameObject(pressAnyButtonButton.gameObject);
+
         // Hide other pages
         // The only reason im setting them active in code instead of having them active in scene is that i do not trust game designers
         creditsPage.gameObject.SetActive(true);
@@ -95,6 +102,12 @@ public class MainMenu : MonoBehaviour
         StaticUtilities.DisableCanvasGroup(settingsPage);
         settingsOpen = false;
         creditsOpen = false;
+
+        InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
+        OnControllerChanged();
+
+        InputEvents.PauseStarted.AddListener(OnSettingsBackButtonClicked);
+        InputEvents.ActionStarted.AddListener(OnSettingsBackButtonClicked); // because its B on controller
 
         InputSystem.onEvent += OnAnyButtonPressed;
         pressAnyButtonButton.onClick.AddListener(() => OnAnyButtonPressed(null, null));
@@ -210,6 +223,11 @@ public class MainMenu : MonoBehaviour
         settingsTab.OpenTab();
 
         StaticUtilities.EnableCanvasGroup(settingsPage);
+
+        if (InputEvents.Instance.IsGamepadActive())
+        {
+            EventSystem.current.SetSelectedGameObject(closeSettingsButton.gameObject);
+        }
     }
 
     void OnCreditsButtonClicked()
@@ -219,7 +237,11 @@ public class MainMenu : MonoBehaviour
 
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         StaticUtilities.EnableCanvasGroup(creditsPage);
-        EventSystem.current.SetSelectedGameObject(closeCreditsButton.gameObject);
+
+        if (InputEvents.Instance.IsGamepadActive())
+        {
+            EventSystem.current.SetSelectedGameObject(closeCreditsButton.gameObject);
+        }
     }
 
     void OnHowToPlayButtonClicked()
@@ -306,8 +328,9 @@ public class MainMenu : MonoBehaviour
         // it counts moving your mouse as an input (sob)
         if (device != null && device.ToString().Contains("Mouse")) return;
 
-        if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
-        else EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
+        if ( !menuActive && device != null && device is Gamepad) return;
+
+        Debug.Log("Any Button pressed");
 
         TimeOfLastAnyButtonPressed = Time.unscaledTime;
 
@@ -324,12 +347,20 @@ public class MainMenu : MonoBehaviour
                 TimeOfLastAnyButtonPressed = Time.unscaledTime;
 
             //Debug.Log(Time.unscaledTime - TimeOfLastAnyButtonPressed);
-            bool active = (Time.unscaledTime - TimeOfLastAnyButtonPressed < secondsOfInactivityForIdle);
-            mainMenuAnimator.SetBool("Active", active);
+            menuActive = (Time.unscaledTime - TimeOfLastAnyButtonPressed < secondsOfInactivityForIdle);
+            mainMenuAnimator.SetBool("Active", menuActive);
 
-            if(!active && wasActive) EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
+            if (!menuActive && wasActive)
+            {
+                EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
+            }
+            if (menuActive && !wasActive)
+            {
+                if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
+                else EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
+            }
 
-            wasActive = active;
+            wasActive = menuActive;
 
             yield return null;
         }
@@ -364,4 +395,81 @@ public class MainMenu : MonoBehaviour
             return;
         }
     }
+
+    #region Controller / Keyboard
+
+    void OnControllerChanged()
+    {
+        if (InputEvents.Instance.IsGamepadActive())
+            OnGamepadInputActivated();
+        else
+            OnKeyboardInputActivated();
+    }
+
+    void OnKeyboardInputActivated()
+    {
+        if (! gamepadActive)
+            return;
+
+        gamepadActive = false;
+
+        Debug.Log("Mouse input activated");
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    void OnGamepadInputActivated()
+    {
+        // bad solution, im so tired
+        OnAnyButtonPressed(null, null);
+
+        if (!menuActive)
+        {
+            EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
+        }
+
+        // dont do it twice
+        if (gamepadActive) 
+            return;
+
+        Debug.Log("Gamepad input activated");
+        gamepadActive = true;
+
+        if (menuActive == true)
+        {
+            if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
+            else EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
+        }
+
+        
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    #endregion
+
+    #region Resolution
+    Vector2 lastResolution;
+
+    void Update()
+    {
+        if (Screen.width != lastResolution.x || Screen.height != lastResolution.y)
+        {
+            lastResolution = new Vector2(Screen.width, Screen.height);
+            OnResolutionChanged();
+        }
+    }
+
+    void OnResolutionChanged()
+    {
+        Debug.Log($"new resolution: {Screen.width} x {Screen.height}");
+        leftFogRenderTexture.width  = Screen.width;
+        leftFogRenderTexture.height = Screen.height;
+        rightFogRenderTexture.width = Screen.width;
+        rightFogRenderTexture.height = Screen.height;
+    }
+    #endregion
 }
