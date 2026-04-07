@@ -115,10 +115,10 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
             Debug.Log("levelCount: " + levelCount);
             switch (levelCount)
             {
-                case 2:
+                case 1:
                     PlayVoiceLine(FMODEvents.Instance.VLLobbyNightOne, "VLLobbyNightOne", textData);
                     break;
-                case 3:
+                case 2:
                     PlayVoiceLine(FMODEvents.Instance.VLLobbyNightTwo, "VLLobbyNightTwo", textData);
                     break;
                 default:
