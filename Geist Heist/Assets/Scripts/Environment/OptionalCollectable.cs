@@ -290,38 +290,45 @@ public class OptionalCollectable : MonoBehaviour
 public enum Collectable
 {
     None,
-    Test_Collectable,
-    Test_Collectable_1,
-    Test_Collectable_2,
-    Test_Collectable_3,
-    Test_Collectable_4,
-    Stone_Collectable,
-    Wood_Collectable,
-    Vending_Machine_Collectable,
     
-    VaseCollectible,
-	
-	ChairCollectible,
-	NewsPaperHat,
-	
-	
-	
-	
-	
-	CowboyHatColletable,
-	Jester_Hat_Collectable,
+    
+    
+    
+    
+    
+    
+    
+    
+    
 	
 	
 	
 	
-	CollectibleNightcap,
-	CollectibleFedora,
-	CollectibleWizardHat,
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
-    LobsterCollectable,
-    ChefHatCollectable,
-    TeaCupCollectable,
-	CollectibleTemplate,
-	PurpleTopHat,
-	JesterHatVarient,
+    
+    
+    
+	
+	
+	
+	Purple_Hat,
+	Newsboy_Hat,
+	Cowboy_Hat,
+	Jester_Hat,
+	Alt_Newsboy_Hat,
+	Alt_Cowboy_Hat,
+	Alt_Jester_Hat,
 }
