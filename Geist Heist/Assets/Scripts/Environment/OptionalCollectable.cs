@@ -331,4 +331,13 @@ public enum Collectable
 	Alt_Newsboy_Hat,
 	Alt_Cowboy_Hat,
 	Alt_Jester_Hat,
+	Chefs_Hat,
+	Lobster_Hat,
+	Tea_Cup_Hat,
+	Alt_Chefs_Hat,
+	Alt_Lobster_Hat,
+	Alt_Tea_Cup_Hat,
+	Wizard_Hat,
+	Fedora_Hat,
+	Nightcap_Hat,
 }
