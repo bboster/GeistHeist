@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby Schamberger, Joshua Kelly
  * Creation: 10/20/25
- * Last Edited: 4/7/2026
+ * Last Edited: 4/6/2026
  * Summary: Handles button functionality for main menu.
  * The player will be prompted to delete their save if they press new game after having save data.
  */
@@ -15,6 +15,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -70,7 +71,7 @@ public class MainMenu : MonoBehaviour
     private Coroutine waitToDelayCoroutine;
     private bool introAnimationFinished = false;
     private bool menuActive = false;
-    private bool gamepadActive = false;
+    private bool? gamepadActive = null;
 
     private void OnEnable()
     {
@@ -109,8 +110,8 @@ public class MainMenu : MonoBehaviour
         InputEvents.PauseStarted.AddListener(OnSettingsBackButtonClicked);
         InputEvents.ActionStarted.AddListener(OnSettingsBackButtonClicked); // because its B on controller
 
-        InputSystem.onEvent += OnAnyButtonPressed;
-        pressAnyButtonButton.onClick.AddListener(() => OnAnyButtonPressed(null, null));
+        InputSystem.onAnyButtonPress.Call((ctrl) => OnAnyButtonPressed());
+        pressAnyButtonButton.onClick.AddListener(() => OnAnyButtonPressed());
 
         // Main Menu
         newGameButton.onClick.AddListener(OnNewGameButtonClicked);
@@ -131,6 +132,8 @@ public class MainMenu : MonoBehaviour
 
         // Confirmation Popup
         confirmationPopup.HideConfirmationPopup();
+
+        StaticUtilities.StartCoroutineIfNotPlaying(ref waitToDelayCoroutine, CheckActiveState());
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -192,6 +195,13 @@ public class MainMenu : MonoBehaviour
 
     void OnNewGameButtonClicked()
     {
+        // dont let player skip right into gameplay 
+        if(InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - TimeOfLastAnyButtonPressed < 1.5f)
+        {
+            Debug.Log("player pressed play too early");
+            return;
+        }
+
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         if (!playerHasSignificantSaveData || !confirmationForNewGame)
@@ -209,6 +219,13 @@ public class MainMenu : MonoBehaviour
 
     void OnContinueButtonClicked()
     {
+        // dont let player skip right into gameplay 
+        if (InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - TimeOfLastAnyButtonPressed < 1.5f)
+        {
+            Debug.Log("player pressed play too early");
+            return;
+        }
+
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         //SceneManager.LoadScene(HubScene);
@@ -294,6 +311,9 @@ public class MainMenu : MonoBehaviour
 
     void OnSettingsBackButtonClicked()
     {
+        // since player can activate this by pressing esc
+        if(settingsOpen == false) { return; }   
+
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         StaticUtilities.DisableCanvasGroup(settingsPage);
@@ -321,48 +341,78 @@ public class MainMenu : MonoBehaviour
 
     #region Animations
 
-    void OnAnyButtonPressed(UnityEngine.InputSystem.LowLevel.InputEventPtr eventPtr, InputDevice device)
+    void OnAnyButtonPressed()
     {
         // ignore input for a tiny bit
-        if (introAnimationFinished == false) return;
+        if (introAnimationFinished == false)
+        {
+            if (InputEvents.Instance.IsGamepadActive())
+            {
+                EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
+            }
+            return;
+        }
+
+        /*
         // it counts moving your mouse as an input (sob)
         if (device != null && device.ToString().Contains("Mouse")) return;
 
-        if ( !menuActive && device != null && device is Gamepad) return;
+        // because gamepad inputs (like stick movements) should count on active menu but not idle menu
+        if (!menuActive && device != null && device is Gamepad gamepad)
+        {
+            float stickMagnitude =
+                gamepad.leftStick.ReadValue().magnitude +
+                gamepad.rightStick.ReadValue().magnitude;
+
+            if (stickMagnitude < 0.2f)
+                return;
+        }*/
 
         Debug.Log("Any Button pressed");
 
         TimeOfLastAnyButtonPressed = Time.unscaledTime;
-
-        StaticUtilities.StartCoroutineIfNotPlaying(ref waitToDelayCoroutine, CheckActiveState());
     }
 
 
     IEnumerator CheckActiveState()
     {
+        while (introAnimationFinished == false) yield return null;
+
         bool wasActive = false;
         while (true)
         {
+            // refresh timer so menu doesnt go back to idle while user is in submenu
             if (settingsOpen || creditsOpen)
                 TimeOfLastAnyButtonPressed = Time.unscaledTime;
 
             //Debug.Log(Time.unscaledTime - TimeOfLastAnyButtonPressed);
-            menuActive = (Time.unscaledTime - TimeOfLastAnyButtonPressed < secondsOfInactivityForIdle);
+            menuActive = (Time.unscaledTime - TimeOfLastAnyButtonPressed <= secondsOfInactivityForIdle);
             mainMenuAnimator.SetBool("Active", menuActive);
 
-            if (!menuActive && wasActive)
-            {
-                EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
-            }
-            if (menuActive && !wasActive)
-            {
-                if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
-                else EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
-            }
+            // frame that menu became inactive
+            if (!menuActive &&  wasActive) OnMenuEnterIdle();
+            if ( menuActive && !wasActive) OnMenuEnterActive();
 
             wasActive = menuActive;
 
             yield return null;
+        }
+    }
+
+    void OnMenuEnterIdle()
+    {
+        if (InputEvents.Instance.IsGamepadActive())
+        {
+            EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
+        }
+    }
+
+    void OnMenuEnterActive()
+    {
+        if (InputEvents.Instance.IsGamepadActive())
+        {
+            if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
+            else EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
         }
     }
 
@@ -408,7 +458,8 @@ public class MainMenu : MonoBehaviour
 
     void OnKeyboardInputActivated()
     {
-        if (! gamepadActive)
+        // if we already know its active
+        if (gamepadActive.HasValue && gamepadActive.Value == false)
             return;
 
         gamepadActive = false;
@@ -423,19 +474,24 @@ public class MainMenu : MonoBehaviour
 
     void OnGamepadInputActivated()
     {
-        // bad solution, im so tired
-        OnAnyButtonPressed(null, null);
+        // bad solution, refreshes ui countdown
+        //OnAnyButtonPressed(null, null);
 
         if (!menuActive)
         {
             EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
         }
 
-        // dont do it twice
-        if (gamepadActive) 
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        Debug.Log("Gamepad input detected");
+
+        // ==== First frame after swapped to controller only: ====
+
+        if (gamepadActive.HasValue && gamepadActive.Value == true) 
             return;
 
-        Debug.Log("Gamepad input activated");
         gamepadActive = true;
 
         if (menuActive == true)
@@ -445,8 +501,6 @@ public class MainMenu : MonoBehaviour
         }
 
         
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     #endregion
