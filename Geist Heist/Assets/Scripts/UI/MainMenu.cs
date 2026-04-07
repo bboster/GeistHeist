@@ -68,6 +68,7 @@ public class MainMenu : MonoBehaviour
     private InputAction menuCancelAction;
     private Animator mainMenuAnimator;
     private float TimeOfLastAnyButtonPressed = 0;
+    private float? timeOfFirstAnyButton = null;
     private Coroutine waitToDelayCoroutine;
     private bool introAnimationFinished = false;
     private bool menuActive = false;
@@ -195,8 +196,10 @@ public class MainMenu : MonoBehaviour
 
     void OnNewGameButtonClicked()
     {
+        if (timeOfFirstAnyButton == null) return;
+
         // dont let player skip right into gameplay 
-        if(InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - TimeOfLastAnyButtonPressed < 1.5f)
+        if(InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - timeOfFirstAnyButton.Value < 1.5f)
         {
             Debug.Log("player pressed play too early");
             return;
@@ -219,12 +222,14 @@ public class MainMenu : MonoBehaviour
 
     void OnContinueButtonClicked()
     {
+        if (timeOfFirstAnyButton == null) return;
+
         // dont let player skip right into gameplay 
-        /*if (InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - TimeOfLastAnyButtonPressed < 1.5f)
+        if (InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - timeOfFirstAnyButton.Value < 1.5f)
         {
             Debug.Log("player pressed play too early");
             return;
-        }*/
+        }
 
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
@@ -317,7 +322,9 @@ public class MainMenu : MonoBehaviour
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
         StaticUtilities.DisableCanvasGroup(settingsPage);
-        EventSystem.current.SetSelectedGameObject(settingsButton.gameObject);
+        if(InputEvents.Instance.IsGamepadActive())
+            EventSystem.current.SetSelectedGameObject(settingsButton.gameObject);
+
         settingsOpen = false;
 
         settingsTab.CloseTab();
@@ -371,6 +378,8 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Any Button pressed");
 
         TimeOfLastAnyButtonPressed = Time.unscaledTime;
+
+        if(timeOfFirstAnyButton == null) timeOfFirstAnyButton = Time.unscaledTime;
     }
 
 
@@ -404,6 +413,7 @@ public class MainMenu : MonoBehaviour
         if (InputEvents.Instance.IsGamepadActive())
         {
             EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
+            timeOfFirstAnyButton = null;
         }
     }
 
