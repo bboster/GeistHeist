@@ -220,11 +220,11 @@ public class MainMenu : MonoBehaviour
     void OnContinueButtonClicked()
     {
         // dont let player skip right into gameplay 
-        if (InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - TimeOfLastAnyButtonPressed < 1.5f)
+        /*if (InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - TimeOfLastAnyButtonPressed < 1.5f)
         {
             Debug.Log("player pressed play too early");
             return;
-        }
+        }*/
 
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
@@ -493,6 +493,12 @@ public class MainMenu : MonoBehaviour
             return;
 
         gamepadActive = true;
+
+        if(settingsOpen == true)
+        {
+            EventSystem.current?.SetSelectedGameObject(closeSettingsButton.gameObject);
+            return;
+        }
 
         if (menuActive == true)
         {

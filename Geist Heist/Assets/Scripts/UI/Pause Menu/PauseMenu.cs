@@ -222,7 +222,8 @@ public class PauseMenu : MonoBehaviour
 
         DisableAllWavyTexts();
         generalTab.wavyTextAnimation.PlayAnimation = true;
-        generalTab.toggleButton.SetColors(normalColor:  Color.white);   
+        generalTab.toggleButton.SetColors(normalColor:  Color.white);
+        SetRightNavigationSelectable(generalTab.GetFirstSelectedElementInMenu(), generalTab.toggleButton);
     }
 
     void OnOpenControlsButtonSelected()
@@ -232,6 +233,7 @@ public class PauseMenu : MonoBehaviour
         DisableAllWavyTexts();
         controlsTab.wavyTextAnimation.PlayAnimation = true;
         controlsTab.toggleButton.SetColors(normalColor: Color.white);
+        SetRightNavigationSelectable(controlsTab.GetFirstSelectedElementInMenu(), controlsTab.toggleButton);
     }
 
     void OnOpenSettingsButtonSelected()
@@ -241,6 +243,7 @@ public class PauseMenu : MonoBehaviour
         DisableAllWavyTexts();
         settingsTab.wavyTextAnimation.PlayAnimation = true;
         settingsTab.toggleButton.SetColors(normalColor: Color.white);
+        SetRightNavigationSelectable(settingsTab.GetFirstSelectedElementInMenu(), settingsTab.toggleButton);
     }
 
     void DisableAllWavyTexts()
@@ -256,6 +259,32 @@ public class PauseMenu : MonoBehaviour
         settingsTab.wavyTextAnimation.PlayAnimation = false;
         settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         //settingsTab.wavyTextAnimation.textBox.characterSpacing = 0;
+    }
+
+    void SetRightNavigationSelectable(Selectable selectable, Selectable button)
+    {
+        if (selectable == null) return;
+
+
+        var firstSelectedNavigation = selectable.navigation;
+        firstSelectedNavigation.selectOnLeft = button;
+        selectable.navigation = firstSelectedNavigation;
+        
+        var continueSelectedNavigation = continueGameButton.navigation;
+        continueSelectedNavigation.selectOnRight = selectable;
+        continueGameButton.navigation = continueSelectedNavigation;
+
+        var generalNavigation = generalTab.toggleButton.navigation;
+        generalNavigation.selectOnRight = selectable;
+        generalTab.toggleButton.navigation = generalNavigation;
+
+        var settingsNavigation = settingsTab.toggleButton.navigation;
+        settingsNavigation.selectOnRight = selectable;
+        settingsTab.toggleButton.navigation = settingsNavigation;
+
+        var controlsNavigation = controlsTab.toggleButton.navigation;
+        controlsNavigation.selectOnRight = selectable;
+        controlsTab.toggleButton.navigation = controlsNavigation;
     }
 
     #endregion
