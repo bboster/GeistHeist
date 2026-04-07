@@ -111,7 +111,11 @@ public class PauseMenu : MonoBehaviour
         settingsTab.CloseTab();
         controlsTab.CloseTab();
         OnOpenGeneralButtonSelected();
-        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
+
+        if (InputEvents.Instance.IsGamepadActive())
+        {
+            EventSystem.current.SetSelectedGameObject(continueGameButton.gameObject);
+        }
     }
 
     public void ClosePauseMenu()
@@ -222,7 +226,10 @@ public class PauseMenu : MonoBehaviour
 
         DisableAllWavyTexts();
         generalTab.wavyTextAnimation.PlayAnimation = true;
-        generalTab.toggleButton.SetColors(normalColor:  Color.white);
+        if(!InputEvents.Instance.IsGamepadActive())
+            generalTab.toggleButton.SetColors(normalColor:  Color.white);
+        else
+            settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         SetRightNavigationSelectable(generalTab.GetFirstSelectedElementInMenu(), generalTab.toggleButton);
     }
 
@@ -232,7 +239,10 @@ public class PauseMenu : MonoBehaviour
 
         DisableAllWavyTexts();
         controlsTab.wavyTextAnimation.PlayAnimation = true;
-        controlsTab.toggleButton.SetColors(normalColor: Color.white);
+        if (!InputEvents.Instance.IsGamepadActive())
+            controlsTab.toggleButton.SetColors(normalColor: Color.white);
+        else
+            settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         SetRightNavigationSelectable(controlsTab.GetFirstSelectedElementInMenu(), controlsTab.toggleButton);
     }
 
@@ -242,7 +252,10 @@ public class PauseMenu : MonoBehaviour
 
         DisableAllWavyTexts();
         settingsTab.wavyTextAnimation.PlayAnimation = true;
-        settingsTab.toggleButton.SetColors(normalColor: Color.white);
+        if (!InputEvents.Instance.IsGamepadActive())
+            settingsTab.toggleButton.SetColors(normalColor: Color.white);
+        else
+            settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         SetRightNavigationSelectable(settingsTab.GetFirstSelectedElementInMenu(), settingsTab.toggleButton);
     }
 

@@ -7,10 +7,11 @@
  * Use other scripts to connect to the unityevents.
  */
 
-using System.Collections;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
@@ -275,8 +276,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance == null) return;
-        if (GameManager.Instance.IsPaused || GameManager.Instance.IsPlayerInMenu)
+        if (GameManager.Instance != null && (GameManager.Instance.IsPaused || GameManager.Instance.IsPlayerInMenu))
             return;
 
         if (MovePressed) MoveHeld.Invoke(MoveHeldTime);
