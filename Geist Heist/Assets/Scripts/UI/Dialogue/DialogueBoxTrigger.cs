@@ -14,9 +14,15 @@ using UnityEngine.SceneManagement;
 
 public class DialogueBoxTrigger : MonoBehaviour
 {
+
+    // IMPLEMENT THIS AFTER FUSE
+    [SerializeField] private bool useOldAudioSystem = true;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField] private EventReference audioEventReference;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField] private string AudioParameterName;
+
     [InfoBox("'Text' is deprecated! please copy your text variables to the 'dialogueTest' list", EInfoBoxType.Warning)]
 
-    [SerializeField] private List<DialogueTextData> dialogueText = new();
+    [SerializeField, AllowNesting] private List<DialogueTextData> dialogueText = new();
 
     #region Deprecated
     [SerializeField] string Text;
@@ -48,12 +54,14 @@ public class DialogueBoxTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         // if collided with player and not already triggered
         if(other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             alreadyTriggered = true;
-            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText, thisLevel);
+            DialogueUIManager.Instance.DisplayText_Dialogue(dialogueText, thisLevel, useOldAudioSystem, audioEventReference, AudioParameterName);
 
+            /*
             string currentParameter = "";
 
             //This needs more changes later when we add voicelines to remaining scenes
@@ -91,6 +99,7 @@ public class DialogueBoxTrigger : MonoBehaviour
                 RuntimeManager.StudioSystem.setParameterByName(currentParameter, whichLine);
                 voiceline.start();
             }
+            */
         }
     }
 }

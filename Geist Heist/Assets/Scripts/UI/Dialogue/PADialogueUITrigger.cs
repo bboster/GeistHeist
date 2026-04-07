@@ -15,8 +15,12 @@ using UnityEngine.SceneManagement;
 //This script looks very similar to DialogueBoxTrigger, maybe try to combine these scripts into one?
 public class PADialogueUITrigger : MonoBehaviour
 {
+    // IMPLEMENT THIS AFTER FUSE
+    [SerializeField] private bool useOldAudioSystem = true;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField] private EventReference audioEventReference;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField] private string AudioParameterName;
 
-    [SerializeField] private List<DialogueTextData> dialogueText = new();
+    [SerializeField, AllowNesting] private List<DialogueTextData> dialogueText = new();
 
     [InfoBox("'Text' is deprecated! please copy your text variables to the 'dialogueTest' list", EInfoBoxType.Warning)]
 
@@ -35,7 +39,8 @@ public class PADialogueUITrigger : MonoBehaviour
         if (other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
         {
             alreadyTriggered = true;
-            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText, thisLevel);
+
+            DialogueUIManager.Instance.DisplayText_Dialogue(dialogueText, thisLevel, useOldAudioSystem, audioEventReference, AudioParameterName);
         }
     }
 
