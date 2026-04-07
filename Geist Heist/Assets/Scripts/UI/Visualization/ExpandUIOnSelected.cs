@@ -16,6 +16,7 @@ public class ExpandUIOnSelected : MonoBehaviour, ISelectHandler, IDeselectHandle
 {
     [SerializeField] private Vector3 scale = new Vector3(1.25f, 1.25f, 1.25f);
     [SerializeField] private float smoothSeconds = 0.1f;
+    [SerializeField] private bool controllerOnly = true;
     [Required, SerializeField] private RectTransform elementToScale;
 
     private Coroutine coroutine;
@@ -28,6 +29,9 @@ public class ExpandUIOnSelected : MonoBehaviour, ISelectHandler, IDeselectHandle
 
     public void OnSelect(BaseEventData eventData)
     {
+        if (controllerOnly && InputEvents.Instance.IsGamepadActive() == false)
+            return;
+
         coroutine = StaticUtilities.AnimateScale(elementToScale, scale, smoothSeconds, unscaledTime: true, coroutine);
     }
 
