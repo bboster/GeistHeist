@@ -60,6 +60,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private SettingsTab settingsTab;
     [SerializeField, Required] private CanvasGroup settingsPage;
     [SerializeField, Required] private Button closeSettingsButton;
+
+    private static float SECONDS_UNTIL_PLAYER_CAN_PLAY_THE_GAME = 2;
+
     private bool settingsOpen = false;
     private bool creditsOpen = false;
 
@@ -199,7 +202,7 @@ public class MainMenu : MonoBehaviour
         if (timeOfFirstAnyButton == null) return;
 
         // dont let player skip right into gameplay 
-        if(InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - timeOfFirstAnyButton.Value < 1.5f)
+        if(InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - timeOfFirstAnyButton.Value < SECONDS_UNTIL_PLAYER_CAN_PLAY_THE_GAME)
         {
             Debug.Log("player pressed play too early");
             return;
@@ -225,7 +228,7 @@ public class MainMenu : MonoBehaviour
         if (timeOfFirstAnyButton == null) return;
 
         // dont let player skip right into gameplay 
-        if (InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - timeOfFirstAnyButton.Value < 1.5f)
+        if (InputEvents.Instance.IsGamepadActive() && Time.unscaledTime - timeOfFirstAnyButton.Value < SECONDS_UNTIL_PLAYER_CAN_PLAY_THE_GAME)
         {
             Debug.Log("player pressed play too early");
             return;
@@ -345,6 +348,8 @@ public class MainMenu : MonoBehaviour
     #endregion
 
     #endregion
+
+    
 
     #region Animations
 
@@ -492,6 +497,7 @@ public class MainMenu : MonoBehaviour
             EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
         }
 
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -507,6 +513,12 @@ public class MainMenu : MonoBehaviour
         if(settingsOpen == true)
         {
             EventSystem.current?.SetSelectedGameObject(closeSettingsButton.gameObject);
+            return;
+        }
+
+        if (creditsOpen == true)
+        {
+            EventSystem.current?.SetSelectedGameObject(closeCreditsButton.gameObject);
             return;
         }
 

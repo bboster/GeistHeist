@@ -22,8 +22,6 @@ public class IntroCutsceneController : MonoBehaviour
 {
     private bool skippable = false;
     private VideoPlayer player;
-    private InputActionMap map;
-    private InputAction skip;
 
     [SerializeField, Scene] private string hubScene;
     [SerializeField, Required] private GameObject loadingScreenPrefab;
@@ -59,11 +57,12 @@ public class IntroCutsceneController : MonoBehaviour
 
         player.loopPointReached += LoadHub;
 
-        map = GetComponent<PlayerInput>().currentActionMap;
-        map.Enable();
+    }
 
-        skip = map.FindAction("Jump");
-        skip.started += SkipCutscene;
+    private void Start()
+    {
+        InputEvents.PauseStarted.AddListener(SkipCutscene);
+        InputEvents.InteractStarted.AddListener(SkipCutscene);
     }
 
     private IEnumerator PrepareWait()
@@ -113,9 +112,10 @@ public class IntroCutsceneController : MonoBehaviour
     /// <summary>
     /// Skips the cutscene
     /// </summary>
-    /// <param name="ctx"></param>
-    private void SkipCutscene(InputAction.CallbackContext ctx)
+    private void SkipCutscene()
     {
+        Debug.Log("skipping!");
+
         if (skippable)
             LoadHub();
 
@@ -139,7 +139,6 @@ public class IntroCutsceneController : MonoBehaviour
     private void OnDestroy()
     {
         player.loopPointReached -= LoadHub;
-        skip.started -= SkipCutscene;
 
         introVl.stop(STOP_MODE.ALLOWFADEOUT);
     }
