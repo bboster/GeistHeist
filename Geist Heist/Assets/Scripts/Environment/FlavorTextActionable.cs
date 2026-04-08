@@ -17,6 +17,10 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
 {
     [SerializeField] private List<DialogueTextData> flavorText = new();
 
+    // IMPLEMENT THIS AFTER FUSE
+    [SerializeField] private bool useOldAudioSystem = true;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField] private EventReference audioEventReference;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField] private string AudioParameterName;
 
     [InfoBox("'Text' is deprecated! please copy your text variables to the 'dialogueTest' list", EInfoBoxType.Warning)]
 
@@ -72,7 +76,9 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        DialogueUIManager.Instance.DisplayText_Dialogue(flavorText, thisLevel, onDialogueEndCallback: OnFlavorTextEnd);
+        DialogueUIManager.Instance.DisplayText_Dialogue(flavorText, thisLevel, 
+            useOldAudioSystem, audioEventReference, AudioParameterName,
+            onDialogueEndCallback: OnFlavorTextEnd);
         SaveDataManager.Instance.MarkFlavorTextAsRead(flavorText, autoSave: true);
         DisableTextActionable();
     }

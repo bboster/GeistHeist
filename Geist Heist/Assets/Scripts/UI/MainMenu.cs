@@ -70,8 +70,10 @@ public class MainMenu : MonoBehaviour
 
     private static float SECONDS_UNTIL_PLAYER_CAN_PLAY_THE_GAME = 2;
 
+    // this shouldve been an enum
     private bool settingsOpen = false;
     private bool creditsOpen = false;
+    private bool confirmNewGameOpen = false;
 
     // if the player has played before and got past the first level
     private bool playerHasSignificantSaveData;
@@ -231,6 +233,7 @@ public class MainMenu : MonoBehaviour
 
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
+        // if first time playing / no save data
         if (!playerHasSignificantSaveData || !confirmationForNewGame)
         {
             LoadNewGame();
@@ -241,7 +244,8 @@ public class MainMenu : MonoBehaviour
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         StaticUtilities.DisableCanvasGroup(creditsPage);
 
-        confirmationPopup.OpenConfirmationPopup(confirmNewGameText, OnConfirmDeleteSaveButtonClicked);
+        confirmNewGameOpen = true;
+        confirmationPopup.OpenConfirmationPopup(confirmNewGameText, OnConfirmDeleteSaveButtonClicked, OnCancelButtonClicked: OnCancelDeleteSaveButtonClicked);
     }
 
     void OnContinueButtonClicked()
@@ -318,7 +322,15 @@ public class MainMenu : MonoBehaviour
     {
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
+        confirmNewGameOpen = false;
         LoadNewGame();
+    }
+
+    void OnCancelDeleteSaveButtonClicked()
+    {
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
+        confirmNewGameOpen = false;
+        EventSystem.current.SetSelectedGameObject(newGameButton.gameObject);
     }
 
     #endregion
@@ -531,19 +543,25 @@ public class MainMenu : MonoBehaviour
 
         gamepadActive = true;
 
-        if(settingsOpen == true)
+        if(settingsOpen)
         {
             EventSystem.current?.SetSelectedGameObject(closeSettingsButton.gameObject);
             return;
         }
 
-        if (creditsOpen == true)
+        if (creditsOpen)
         {
             EventSystem.current?.SetSelectedGameObject(closeCreditsButton.gameObject);
             return;
         }
 
-        if (menuActive == true)
+        if(confirmNewGameOpen)
+        {
+            EventSystem.current?.SetSelectedGameObject(confirmationPopup.cancelButton.gameObject);
+            return;
+        }
+
+        if (menuActive)
         {
             if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
             else EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);

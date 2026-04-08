@@ -18,8 +18,8 @@ using UnityEngine.UI;
 public class ConfirmationPopup : MonoBehaviour
 {
     [SerializeField, Required] private TMP_Text confirmationText;
-    [SerializeField, Required] protected Button cancelButton;
-    [SerializeField, Required] protected Button confirmButton; 
+    [SerializeField, Required] public Button cancelButton;
+    [SerializeField, Required] public Button confirmButton; 
     [SerializeField] private bool hideOnCreation = true; 
 
     protected CanvasGroup canvasGroup;
@@ -33,6 +33,8 @@ public class ConfirmationPopup : MonoBehaviour
     protected UnityAction onConfirmationButtonClicked = null;
     private GameObject previouslySelectedBeforeOpen;
     private bool shouldRestorePreviousSelectionOnHide;
+
+    private int frameOpened;
 
     public static bool AnyConfirmationMenuOpen = false;
 
@@ -57,6 +59,7 @@ public class ConfirmationPopup : MonoBehaviour
             canvasGroup = GetComponent<CanvasGroup>();
 
         AnyConfirmationMenuOpen = true;
+        frameOpened = Time.frameCount;
 
         lastFadeSecondsUsed = fadeSeconds;
         this.closeMenuOnConfirm = closeMenuOnConfirm;
@@ -137,6 +140,12 @@ public class ConfirmationPopup : MonoBehaviour
 
     void OnCancelButtonPressed()
     {
+        // weird controller bug. too close to fuse for a good solution;
+        if(Time.frameCount == frameOpened)
+        {
+            return;
+        }
+
         Time.timeScale = oldTimeScale;
         shouldRestorePreviousSelectionOnHide = true;
 

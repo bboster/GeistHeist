@@ -14,9 +14,33 @@ using UnityEngine.SceneManagement;
 
 public class DialogueBoxTrigger : MonoBehaviour
 {
-    [InfoBox("'Text' is deprecated! please copy your text variables to the 'dialogueTest' list", EInfoBoxType.Warning)]
+    [SerializeField, AllowNesting] private List<DialogueTextData> dialogueText = new();
 
-    [SerializeField] private List<DialogueTextData> dialogueText = new();
+    // guys i went REALLY overboard but i am having so much fun
+    [ Header("Conditions to appear:")]
+    [SerializeField, BoxGroup("Appear Conditions")] private bool AlwaysAppear = false;
+    [InfoBox("If conditions are left blank/default, then flavor text can always appear")]
+    [Tooltip("0: never appears, 1: appears every time")]
+    [SerializeField, BoxGroup("Appear Conditions"), Range(0, 1), HideIf(nameof(AlwaysAppear))] private float chanceToAppear = 1;
+    [Tooltip("Leave list empty to make it so player can see flavor text without completing any levels")]
+    [SerializeField, BoxGroup("Appear Conditions"), Scene, HideIf(nameof(AlwaysAppear))] private string[] requiredScenesCompleted;
+    [Tooltip("Require player to not have experienced a certain level to display")]
+    [SerializeField, BoxGroup("Appear Conditions"), Scene, HideIf(nameof(AlwaysAppear))] private string[] requiredScenesNotCompleted;
+    [Tooltip("Leave list empty to make it so player can see flavor text without collecting anything")]
+    [SerializeField, BoxGroup("Appear Conditions"), HideIf(nameof(AlwaysAppear))] private Collectable[] requiredCollectables;
+    [Tooltip("Require player to not collected certain collectables")]
+    [SerializeField, BoxGroup("Appear Conditions"), HideIf(nameof(AlwaysAppear))] private Collectable[] requiredCollectablesUncollected;
+    [Tooltip("If true, requires a specific hat to be worn")]
+    [SerializeField, BoxGroup("Appear Conditions"), HideIf(nameof(AlwaysAppear))] private bool RequireSpecificHat = false;
+    [SerializeField, BoxGroup("Appear Conditions"), ShowIf(nameof(RequireSpecificHat)), HideIf(nameof(AlwaysAppear))] private Collectable requiredHat;
+
+    [Header("Audio")]
+    // IMPLEMENT THIS AFTER FUSE
+    [SerializeField, BoxGroup("Audio")] private bool useOldAudioSystem = true;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField, BoxGroup("Audio")] private EventReference audioEventReference;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField, BoxGroup("Audio")] private string AudioParameterName;
+
+    [InfoBox("'Text' is deprecated! please copy your text variables to the 'dialogueTest' list", EInfoBoxType.Warning)]
 
     #region Deprecated
     [SerializeField] string Text;
@@ -48,12 +72,14 @@ public class DialogueBoxTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         // if collided with player and not already triggered
-        if(other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered)
+        if(other.gameObject.GetComponent<ThirdPersonInputHandler>() != null && !alreadyTriggered && HasMetConditionsToAppear())
         {
             alreadyTriggered = true;
-            DialogueUIManager.Instance.DisplayText_PASystem(dialogueText, thisLevel);
+            DialogueUIManager.Instance.DisplayText_Dialogue(dialogueText, thisLevel, useOldAudioSystem, audioEventReference, AudioParameterName);
 
+            /*
             string currentParameter = "";
 
             //This needs more changes later when we add voicelines to remaining scenes
@@ -91,6 +117,49 @@ public class DialogueBoxTrigger : MonoBehaviour
                 RuntimeManager.StudioSystem.setParameterByName(currentParameter, whichLine);
                 voiceline.start();
             }
+            */
         }
+    }
+
+    /// <summary>
+    /// If random chance is met, levels have been completed, and other conditions.
+    /// </summary>
+    /// <returns>True if flavor text can be read</returns>
+    private bool HasMetConditionsToAppear()
+    {
+        if (AlwaysAppear)
+            return true;
+
+        if (Random.value > chanceToAppear)
+            return false;
+
+        foreach (var scene in requiredScenesCompleted)
+        {
+            if (SaveDataManager.Instance.IsLevelCompleted(scene) == false)
+                return false;
+        }
+
+        foreach (var scene in requiredScenesNotCompleted)
+        {
+            if (SaveDataManager.Instance.IsLevelCompleted(scene) == true)
+                return false;
+        }
+
+        foreach (var collectable in requiredCollectables)
+        {
+            if (SaveDataManager.Instance.IsCollectableCollected(collectable) == false)
+                return false;
+        }
+
+        foreach (var collectable in requiredCollectablesUncollected)
+        {
+            if (SaveDataManager.Instance.IsCollectableCollected(collectable) == true)
+                return false;
+        }
+
+        if (RequireSpecificHat && SaveDataManager.Instance.IsHatEqupped(requiredHat) == false)
+            return false;
+
+        return true;
     }
 }
