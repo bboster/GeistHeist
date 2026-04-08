@@ -34933,7 +34933,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319672038}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -171979,7 +171979,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1923997316}
     m_Modifications:
     - target: {fileID: 2465791638011734583, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_Name
@@ -171987,15 +171987,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.3333334
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.3333334
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.3333334
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -172042,6 +172042,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2aa9626175605444390684551c7cb44c, type: 3}
+--- !u!4 &1529258693 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
+  m_PrefabInstance: {fileID: 1529258692}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &1529258697 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5455749153156820321, guid: 2aa9626175605444390684551c7cb44c, type: 3}
@@ -212289,6 +212294,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1923997316}
   - component: {fileID: 1923997315}
+  - component: {fileID: 1923997317}
   m_Layer: 0
   m_Name: Animation Parent
   m_TagString: Untagged
@@ -212306,7 +212312,7 @@ Animator:
   m_GameObject: {fileID: 1923997314}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8f3992c1bce0782409034c5b97eaad05, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5f0d26819e9d7ce44b541ac7104dc5b2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -212333,8 +212339,51 @@ Transform:
   m_Children:
   - {fileID: 1437993120}
   - {fileID: 1579334059018748781}
+  - {fileID: 1529258693}
+  - {fileID: 2105146372}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1923997317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1923997314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c83994521fe0e5c499dfb06bfd605ff5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  secondsOfInactivityForIdle: 12
+  pressAnyButtonButton: {fileID: 1979258485}
+  HubScene: HubV2.5
+  HubSceneLoadingCardPrefab: {fileID: 7534185664916424207, guid: 47c997df4b238e1479a6871234d7f477, type: 3}
+  NewGameScene: IntroCutscene
+  NewSceneLoadingCardPrefab: {fileID: 7534185664916424207, guid: 47c997df4b238e1479a6871234d7f477, type: 3}
+  confirmNewGameText: Are you sure? Continuing will delete your progress.
+  confirmationForNewGame: 1
+  confirmationPopup: {fileID: 6343168810249852369}
+  loadingScreenPrefab: {fileID: 4996678474793840024, guid: ef6279e25117c4d4ab9e6b822786aca1, type: 3}
+  leftFogRenderTexture: {fileID: 8400000, guid: 0dab16b3a380b5f439bc1c6471b2dc78, type: 2}
+  leftFogRenderCamera: {fileID: 1529258697}
+  leftFogMaterial: {fileID: 2100000, guid: d72b0bb57ba954f4798c2ec19cdc379b, type: 2}
+  rightFogRenderTexture: {fileID: 8400000, guid: 701694761b2faee44857422d4799716c, type: 2}
+  rightFogRenderCamera: {fileID: 603974514}
+  rightFogMaterial: {fileID: 2100000, guid: 7cf3f3a3384675245975adfe1e015ff4, type: 2}
+  newGameButton: {fileID: 4280835261662759407}
+  continueGameButton: {fileID: 4723317125436951581}
+  settingsButton: {fileID: 2060770478}
+  creditsButton: {fileID: 1108135284}
+  howToPlayButton: {fileID: 0}
+  quitGameButton: {fileID: 7235324450579758182}
+  creditsPage: {fileID: 1587668506051476400}
+  closeCreditsButton: {fileID: 1642544366}
+  howToPlayPage: {fileID: 1522602267021946663}
+  closeHowToPlayButton: {fileID: 2602466551927493324}
+  settingsTab: {fileID: 1566735210}
+  settingsPage: {fileID: 319672042}
+  closeSettingsButton: {fileID: 769073654}
 --- !u!1001 &1924502573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -228377,7 +228426,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1923997316}
     m_Modifications:
     - target: {fileID: 472803386660479261, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_Layer
@@ -228509,15 +228558,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.3333334
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.3333334
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.3333334
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -228566,6 +228615,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2aa9626175605444390684551c7cb44c, type: 3}
+--- !u!4 &2105146372 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8034806300886804673, guid: 2aa9626175605444390684551c7cb44c, type: 3}
+  m_PrefabInstance: {fileID: 2105146371}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2107262835
 GameObject:
   m_ObjectHideFlags: 0
@@ -232263,11 +232317,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1579334059018748781}
-  - component: {fileID: 7043623720840684603}
   - component: {fileID: 3987608874081203437}
   - component: {fileID: 3865300917313345186}
   - component: {fileID: 2202900765747944149}
-  - component: {fileID: 7043623720840684604}
   m_Layer: 5
   m_Name: Main Menu
   m_TagString: Untagged
@@ -232644,7 +232696,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8544935065131451510}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -232737,69 +232789,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7096079790229745927, guid: f3ad513483a06ab4ab79057221b47e1e, type: 3}
   m_PrefabInstance: {fileID: 1217216806554577169}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7043623720840684603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2424097683610443861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c83994521fe0e5c499dfb06bfd605ff5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MainMenu
-  secondsOfInactivityForIdle: 12
-  pressAnyButtonButton: {fileID: 1979258485}
-  HubScene: HubV2.5
-  HubSceneLoadingCardPrefab: {fileID: 7534185664916424207, guid: 47c997df4b238e1479a6871234d7f477, type: 3}
-  NewGameScene: IntroCutscene
-  NewSceneLoadingCardPrefab: {fileID: 7534185664916424207, guid: 47c997df4b238e1479a6871234d7f477, type: 3}
-  confirmNewGameText: Are you sure? Continuing will delete your progress.
-  confirmationForNewGame: 1
-  confirmationPopup: {fileID: 6343168810249852369}
-  loadingScreenPrefab: {fileID: 4996678474793840024, guid: ef6279e25117c4d4ab9e6b822786aca1, type: 3}
-  leftFogRenderTexture: {fileID: 8400000, guid: 0dab16b3a380b5f439bc1c6471b2dc78, type: 2}
-  leftFogRenderCamera: {fileID: 1529258697}
-  leftFogMaterial: {fileID: 2100000, guid: d72b0bb57ba954f4798c2ec19cdc379b, type: 2}
-  rightFogRenderTexture: {fileID: 8400000, guid: 701694761b2faee44857422d4799716c, type: 2}
-  rightFogRenderCamera: {fileID: 603974514}
-  rightFogMaterial: {fileID: 2100000, guid: 7cf3f3a3384675245975adfe1e015ff4, type: 2}
-  newGameButton: {fileID: 4280835261662759407}
-  continueGameButton: {fileID: 4723317125436951581}
-  settingsButton: {fileID: 2060770478}
-  creditsButton: {fileID: 1108135284}
-  howToPlayButton: {fileID: 0}
-  quitGameButton: {fileID: 7235324450579758182}
-  creditsPage: {fileID: 1587668506051476400}
-  closeCreditsButton: {fileID: 1642544366}
-  howToPlayPage: {fileID: 1522602267021946663}
-  closeHowToPlayButton: {fileID: 2602466551927493324}
-  settingsTab: {fileID: 1566735210}
-  settingsPage: {fileID: 319672042}
-  closeSettingsButton: {fileID: 769073654}
---- !u!95 &7043623720840684604
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2424097683610443861}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5f0d26819e9d7ce44b541ac7104dc5b2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7235324450579758182 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4139891828165982575, guid: f3ad513483a06ab4ab79057221b47e1e, type: 3}
@@ -233219,5 +233208,3 @@ SceneRoots:
   - {fileID: 66133664}
   - {fileID: 627441078}
   - {fileID: 1143720586}
-  - {fileID: 1529258692}
-  - {fileID: 2105146371}

@@ -21,7 +21,6 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField, Required] private Canvas mainMenuCanvas;
 
     [SerializeField, BoxGroup("Idle Animation")] private float secondsOfInactivityForIdle = 10;
     [SerializeField, BoxGroup("Idle Animation"), Required] private Button pressAnyButtonButton;
@@ -561,7 +560,8 @@ public class MainMenu : MonoBehaviour
     }
 
     void OnResolutionChanged()
-    {/*
+    {
+        /*
         Debug.Log($"new resolution: {Screen.width} x {Screen.height}");
         leftFogRenderTexture.width  = Screen.width;
         leftFogRenderTexture.height = Screen.height;
