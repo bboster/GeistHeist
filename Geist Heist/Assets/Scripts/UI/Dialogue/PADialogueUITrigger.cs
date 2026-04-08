@@ -17,8 +17,8 @@ public class PADialogueUITrigger : MonoBehaviour
 {
     // IMPLEMENT THIS AFTER FUSE
     [SerializeField] private bool useOldAudioSystem = true;
-    [HideIf(nameof(useOldAudioSystem)), SerializeField] private EventReference audioEventReference;
-    [HideIf(nameof(useOldAudioSystem)), SerializeField] private string AudioParameterName;
+    [/*HideIf(nameof(useOldAudioSystem)),*/ SerializeField] private EventReference audioEventReference;
+    [/*HideIf(nameof(useOldAudioSystem)),*/ SerializeField] private string AudioParameterName;
 
     [SerializeField, AllowNesting] private List<DialogueTextData> dialogueText = new();
 
