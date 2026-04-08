@@ -17,28 +17,28 @@ public class DialogueBoxTrigger : MonoBehaviour
     [SerializeField, AllowNesting] private List<DialogueTextData> dialogueText = new();
 
     // guys i went REALLY overboard but i am having so much fun
-    [Header("Conditions to appear:")]
-    [SerializeField] private bool AlwaysAppear = false;
+    [ Header("Conditions to appear:")]
+    [SerializeField, BoxGroup("Appear Conditions")] private bool AlwaysAppear = false;
     [InfoBox("If conditions are left blank/default, then flavor text can always appear")]
     [Tooltip("0: never appears, 1: appears every time")]
-    [SerializeField, Range(0, 1), HideIf(nameof(AlwaysAppear))] private float chanceToAppear = 1;
+    [SerializeField, BoxGroup("Appear Conditions"), Range(0, 1), HideIf(nameof(AlwaysAppear))] private float chanceToAppear = 1;
     [Tooltip("Leave list empty to make it so player can see flavor text without completing any levels")]
-    [SerializeField, Scene, HideIf(nameof(AlwaysAppear))] private string[] requiredScenesCompleted;
+    [SerializeField, BoxGroup("Appear Conditions"), Scene, HideIf(nameof(AlwaysAppear))] private string[] requiredScenesCompleted;
     [Tooltip("Require player to not have experienced a certain level to display")]
-    [SerializeField, Scene, HideIf(nameof(AlwaysAppear))] private string[] requiredScenesNotCompleted;
+    [SerializeField, BoxGroup("Appear Conditions"), Scene, HideIf(nameof(AlwaysAppear))] private string[] requiredScenesNotCompleted;
     [Tooltip("Leave list empty to make it so player can see flavor text without collecting anything")]
-    [SerializeField, HideIf(nameof(AlwaysAppear))] private Collectable[] requiredCollectables;
+    [SerializeField, BoxGroup("Appear Conditions"), HideIf(nameof(AlwaysAppear))] private Collectable[] requiredCollectables;
     [Tooltip("Require player to not collected certain collectables")]
-    [SerializeField, HideIf(nameof(AlwaysAppear))] private Collectable[] requiredCollectablesUncollected;
+    [SerializeField, BoxGroup("Appear Conditions"), HideIf(nameof(AlwaysAppear))] private Collectable[] requiredCollectablesUncollected;
     [Tooltip("If true, requires a specific hat to be worn")]
-    [SerializeField, HideIf(nameof(AlwaysAppear))] private bool RequireSpecificHat = false;
-    [SerializeField, ShowIf(nameof(RequireSpecificHat)), HideIf(nameof(AlwaysAppear))] private Collectable requiredHat;
+    [SerializeField, BoxGroup("Appear Conditions"), HideIf(nameof(AlwaysAppear))] private bool RequireSpecificHat = false;
+    [SerializeField, BoxGroup("Appear Conditions"), ShowIf(nameof(RequireSpecificHat)), HideIf(nameof(AlwaysAppear))] private Collectable requiredHat;
 
     [Header("Audio")]
     // IMPLEMENT THIS AFTER FUSE
-    [SerializeField] private bool useOldAudioSystem = true;
-    [HideIf(nameof(useOldAudioSystem)), SerializeField] private EventReference audioEventReference;
-    [HideIf(nameof(useOldAudioSystem)), SerializeField] private string AudioParameterName;
+    [SerializeField, BoxGroup("Audio")] private bool useOldAudioSystem = true;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField, BoxGroup("Audio")] private EventReference audioEventReference;
+    [HideIf(nameof(useOldAudioSystem)), SerializeField, BoxGroup("Audio")] private string AudioParameterName;
 
     [InfoBox("'Text' is deprecated! please copy your text variables to the 'dialogueTest' list", EInfoBoxType.Warning)]
 
