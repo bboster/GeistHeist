@@ -111,6 +111,12 @@ public class IntroCutsceneController : MonoBehaviour
             LevelManager.Instance.ChangeScene(hubScene);
             return;
         }
+
+        InputEvents.PauseStarted.RemoveListener(SkipCutscene);
+        InputEvents.InteractStarted.RemoveListener(SkipCutscene);
+
+        InputEvents.Instance.OnControllerChanged.RemoveListener(OnControllerUpdated);
+
         var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
         levelTransition.StartTransition(hubScene, loadingCardPrefab);
     }

@@ -109,7 +109,7 @@ public class ConfirmationPopup : MonoBehaviour
 
     public void HideConfirmationPopup()
     {
-        InputEvents.PauseStartedOverride = lastPauseStartedOverride;
+        InputEvents.PauseStartedOverride = lastPauseStartedOverride == null ? null : lastPauseStartedOverride;
 
         AnyConfirmationMenuOpen = false;
 
