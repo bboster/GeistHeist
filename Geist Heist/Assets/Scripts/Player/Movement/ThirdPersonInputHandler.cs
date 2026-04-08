@@ -104,6 +104,8 @@ public class ThirdPersonInputHandler : IInputHandler
         //CooldownManager.Instance.OnCooldownFinished += OnCooldownFinished;
         rampLayerMask = LayerMask.GetMask("Ramp");
         currentHeight = playerModel.transform.localPosition.y;
+
+        StaticUtilities.HideCursor();
     }
 
     #region Possession
