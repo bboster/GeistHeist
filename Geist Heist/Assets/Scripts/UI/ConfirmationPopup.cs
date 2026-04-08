@@ -94,7 +94,9 @@ public class ConfirmationPopup : MonoBehaviour
             canvasGroup = GetComponent<CanvasGroup>();
 
         StaticUtilities.EnableCanvasGroup(canvasGroup, alpha: 0);
-        EventSystem.current.SetSelectedGameObject(cancelButton.gameObject);
+
+        if(InputEvents.Instance.IsGamepadActive())
+            EventSystem.current.SetSelectedGameObject(cancelButton.gameObject);
 
         if (lastFadeSecondsUsed > 0)
             fadeOpacityCoroutine = StaticUtilities.FadeToVisible(canvasGroup, fadeSeconds, unscaledTime: true);

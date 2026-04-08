@@ -97,7 +97,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     private Coroutine updateCoroutine;
 
-    private void Awake()
+    protected override void Awake()
     {
         // for main menu only
         if (InitializeAtStart)

@@ -8,6 +8,7 @@
  */
 
 using NaughtyAttributes;
+using UnityEditor.ProBuilder;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -48,6 +49,7 @@ public class PauseMenu : MonoBehaviour
     private static float timeOfLastPause;
     private InputAction menuBackAction;
     private Color defaultNormalTabTextColor;
+    private PauseMenuTab currentTab;
 
     private void OnEnable()
     {
@@ -78,6 +80,9 @@ public class PauseMenu : MonoBehaviour
         pauseScreenParent.gameObject.SetActive(true);
 
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
+
+        InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
+        OnControllerChanged();
 
         // tab buttons
         generalTab .toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenGeneralButtonSelected(); });
@@ -222,9 +227,11 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenGeneralButtonSelected()
     {
+        currentTab = generalTab;
         generalTab.OpenTab();
 
         DisableAllWavyTexts();
+        ResetAllToggleButtonColors();
         generalTab.wavyTextAnimation.PlayAnimation = true;
         if(!InputEvents.Instance.IsGamepadActive())
             generalTab.toggleButton.SetColors(normalColor:  Color.white);
@@ -235,9 +242,11 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenControlsButtonSelected()
     {
+        currentTab = controlsTab;
         controlsTab.OpenTab();
 
         DisableAllWavyTexts();
+        ResetAllToggleButtonColors();
         controlsTab.wavyTextAnimation.PlayAnimation = true;
         if (!InputEvents.Instance.IsGamepadActive())
             controlsTab.toggleButton.SetColors(normalColor: Color.white);
@@ -248,9 +257,11 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenSettingsButtonSelected()
     {
+        currentTab = settingsTab;
         settingsTab.OpenTab();
 
         DisableAllWavyTexts();
+        ResetAllToggleButtonColors();
         settingsTab.wavyTextAnimation.PlayAnimation = true;
         if (!InputEvents.Instance.IsGamepadActive())
             settingsTab.toggleButton.SetColors(normalColor: Color.white);
@@ -262,16 +273,20 @@ public class PauseMenu : MonoBehaviour
     void DisableAllWavyTexts()
     {
         generalTab.wavyTextAnimation.PlayAnimation = false;
-        generalTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         //generalTab.wavyTextAnimation.textBox.characterSpacing = 0;
 
         controlsTab.wavyTextAnimation.PlayAnimation = false;
-        controlsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         //controlsTab.wavyTextAnimation.textBox.characterSpacing = 0;
 
         settingsTab.wavyTextAnimation.PlayAnimation = false;
-        settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         //settingsTab.wavyTextAnimation.textBox.characterSpacing = 0;
+    }
+
+    void ResetAllToggleButtonColors()
+    {
+        generalTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        controlsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
     }
 
     void SetRightNavigationSelectable(Selectable selectable, Selectable button)
@@ -350,4 +365,34 @@ public class PauseMenu : MonoBehaviour
 
     #endregion
 
+    #region Controller
+
+    void OnControllerChanged()
+    {
+        if (InputEvents.Instance.IsGamepadActive())
+            OnGamepadInputActivated();
+        else
+            OnKeyboardInputActivated();
+    }
+
+    void OnKeyboardInputActivated()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        
+        //IDK FIGURE IT OUT
+        //currentTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //currentTab.
+    }
+
+    void OnGamepadInputActivated()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        ResetAllToggleButtonColors();
+
+    }
+
+    #endregion
 }
