@@ -34,6 +34,8 @@ public class ConfirmationPopup : MonoBehaviour
     private GameObject previouslySelectedBeforeOpen;
     private bool shouldRestorePreviousSelectionOnHide;
 
+    private int frameOpened;
+
     public static bool AnyConfirmationMenuOpen = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -57,6 +59,7 @@ public class ConfirmationPopup : MonoBehaviour
             canvasGroup = GetComponent<CanvasGroup>();
 
         AnyConfirmationMenuOpen = true;
+        frameOpened = Time.frameCount;
 
         lastFadeSecondsUsed = fadeSeconds;
         this.closeMenuOnConfirm = closeMenuOnConfirm;
@@ -137,6 +140,12 @@ public class ConfirmationPopup : MonoBehaviour
 
     void OnCancelButtonPressed()
     {
+        // weird controller bug. too close to fuse for a good solution;
+        if(Time.frameCount == frameOpened)
+        {
+            return;
+        }
+
         Time.timeScale = oldTimeScale;
         shouldRestorePreviousSelectionOnHide = true;
 
