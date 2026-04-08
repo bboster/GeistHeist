@@ -18,8 +18,8 @@ using UnityEngine.UI;
 public class ConfirmationPopup : MonoBehaviour
 {
     [SerializeField, Required] private TMP_Text confirmationText;
-    [SerializeField, Required] protected Button cancelButton;
-    [SerializeField, Required] protected Button confirmButton; 
+    [SerializeField, Required] public Button cancelButton;
+    [SerializeField, Required] public Button confirmButton; 
     [SerializeField] private bool hideOnCreation = true; 
 
     protected CanvasGroup canvasGroup;
