@@ -41,9 +41,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private RenderTexture leftFogRenderTexture;
     [SerializeField, Required] private Camera leftFogRenderCamera;
     [SerializeField, Required] private Material leftFogMaterial;
+    [SerializeField, Required] private RawImage leftFogImage;
     [SerializeField, Required] private RenderTexture rightFogRenderTexture;
     [SerializeField, Required] private Camera rightFogRenderCamera;
     [SerializeField, Required] private Material rightFogMaterial;
+    [SerializeField, Required] private RawImage rightFogImage;
 
     [Header("Main Page")]
     [SerializeField, Required] private Button newGameButton;
@@ -95,10 +97,15 @@ public class MainMenu : MonoBehaviour
         leftFogRenderTexture = new RenderTexture(3840, 2160, leftFogRenderTexture.depth, leftFogRenderTexture.format);
         leftFogRenderTexture.Create();
         leftFogRenderCamera.targetTexture = leftFogRenderTexture;
-        leftFogMaterial.SetTexture("_Render_Texture", leftFogRenderTexture);
+        var leftFogMaterialCopy = Instantiate(leftFogMaterial);
+        leftFogMaterialCopy.SetTexture("_Render_Texture", leftFogRenderTexture);
+        leftFogImage.material = leftFogMaterialCopy;
+
         rightFogRenderTexture = new RenderTexture(3840, 2160, rightFogRenderTexture.depth, rightFogRenderTexture.format);
         rightFogRenderCamera.targetTexture = rightFogRenderTexture;
-        rightFogMaterial.SetTexture("_Render_Texture", rightFogRenderTexture);
+        var rightFogMaterialCopy = Instantiate(rightFogMaterial);
+        rightFogMaterialCopy.SetTexture("_Render_Texture", rightFogRenderTexture);
+        rightFogImage.material = rightFogMaterialCopy;
 
         TrySubscribeToUICancel();
 
