@@ -8,7 +8,6 @@
  */
 
 using NaughtyAttributes;
-using UnityEditor.ProBuilder;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -377,8 +376,11 @@ public class PauseMenu : MonoBehaviour
 
     void OnKeyboardInputActivated()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        if (GameManager.Instance.IsPaused)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
         
         //IDK FIGURE IT OUT
         //currentTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
@@ -387,10 +389,13 @@ public class PauseMenu : MonoBehaviour
 
     void OnGamepadInputActivated()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        if (GameManager.Instance.IsPaused)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
 
-        ResetAllToggleButtonColors();
+            ResetAllToggleButtonColors();
+        }
 
     }
 

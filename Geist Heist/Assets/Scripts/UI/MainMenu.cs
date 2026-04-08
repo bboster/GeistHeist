@@ -513,7 +513,7 @@ public class MainMenu : MonoBehaviour
         // bad solution, refreshes ui countdown
         //OnAnyButtonPressed(null, null);
 
-        if (!menuActive)
+        if (!menuActive && !settingsOpen)
         {
             EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
         }
