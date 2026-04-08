@@ -13,21 +13,19 @@ public class TutorialUIController : MonoBehaviour
     [SerializeField, Required] private Image MovementImage;
     [SerializeField, Required] private Sprite KeyboardMovementSprite;
     [SerializeField, Required] private Sprite ControllerMovementSprite;
-    [SerializeField, Required] private float MovementTutorialDelaySeconds = 3f;
+    [SerializeField] private float MovementTutorialDelaySeconds = 3f;
 
     [Header("Possess tutorial")]
     [SerializeField, Required] private CanvasGroup PossessCanvasGroup;
     [SerializeField, Required] private Image PossessImage;
     [SerializeField, Required] private Sprite KeyboardPossessSprite;
     [SerializeField, Required] private Sprite ControllerPossessSprite;
-    [SerializeField, Required] private float PossessTutorialDelaySeconds = 4f;
+    [SerializeField] private float PossessTutorialDelaySeconds = 4f;
 
     [Header("Guard tutorial")]
     [SerializeField, Required] private CanvasGroup GuardCanvasGroup;
     [SerializeField, Required] private Image GuardImage;
-    [SerializeField, Required] private Sprite KeyboardGuardSprite;
-    [SerializeField, Required] private Sprite ControllerGuardSprite;
-    [SerializeField, Required] private float GuartWaitSeconds = 6f;
+    [SerializeField] private float GuartWaitSeconds = 6f;
 
     private bool playerMovedEver = false;
     private bool playerPossessedEver = false;
@@ -36,7 +34,12 @@ public class TutorialUIController : MonoBehaviour
     void Start()
     {
         InputEvents.MoveStarted.AddListener(OnMoveStarted);
+        InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
         PlayerManager.OnPossessionObjectChanged.AddListener(OnPlayerPossessionObjectChanged);
+
+        StaticUtilities.DisableCanvasGroup(MovementCanvasGroup);
+        StaticUtilities.DisableCanvasGroup(PossessCanvasGroup);
+        StaticUtilities.DisableCanvasGroup(GuardCanvasGroup);
         StartCoroutine(TutorialAnimationSequence());
     }
 
@@ -54,13 +57,21 @@ public class TutorialUIController : MonoBehaviour
     {
         // === MOVEMENT TUTORIAL ===
 
-        yield return StaticUtilities.FadeOpacity(MovementCanvasGroup, 0, 1, ImageFadeAwaySeconds, unscaledTime: false);
+        yield return new WaitForSeconds(4);
 
-        // wait for them to move!
-        while (playerMovedEver == false) yield return null;
+        // dont do it if player figured it out
+        if(playerMovedEver == false)
+        {
+            yield return StaticUtilities.FadeOpacity(MovementCanvasGroup, 0, 1, ImageFadeAwaySeconds, unscaledTime: false);
 
-        yield return StaticUtilities.FadeOpacity(MovementCanvasGroup, 1, 0, ImageFadeAwaySeconds, unscaledTime: false);
-        yield return new WaitForSeconds(MovementTutorialDelaySeconds);
+            // wait for them to move!
+            while (playerMovedEver == false) yield return null;
+
+            yield return new WaitForSeconds(MovementTutorialDelaySeconds);
+
+            StaticUtilities.FadeOpacity(MovementCanvasGroup, 1, 0, ImageFadeAwaySeconds, unscaledTime: false);
+
+        }
 
         // === POSSESS TUTORIAL ===
 
@@ -69,8 +80,8 @@ public class TutorialUIController : MonoBehaviour
         // wait for them to possess!
         while (playerPossessedEver == false) yield return null;
 
-        yield return StaticUtilities.FadeOpacity(PossessCanvasGroup, 1, 0, ImageFadeAwaySeconds, unscaledTime: false);
         yield return new WaitForSeconds(PossessTutorialDelaySeconds);
+        StaticUtilities.FadeOpacity(PossessCanvasGroup, 1, 0, ImageFadeAwaySeconds, unscaledTime: false);
 
         // === GUARD TUTORIAL ===
 
@@ -85,6 +96,7 @@ public class TutorialUIController : MonoBehaviour
 
     private void OnControllerChanged()
     {
+        Debug.Log("controller: " + InputEvents.Instance.IsGamepadActive());
         if (InputEvents.Instance.IsGamepadActive())
         {
             MovementImage.sprite = ControllerMovementSprite;
@@ -93,7 +105,7 @@ public class TutorialUIController : MonoBehaviour
         else
         {
             MovementImage.sprite = KeyboardMovementSprite;
-            MovementImage.sprite = ControllerPossessSprite;
+            PossessImage.sprite = KeyboardPossessSprite;
         }
     }
 }
