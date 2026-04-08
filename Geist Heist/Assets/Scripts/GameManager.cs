@@ -124,7 +124,7 @@ public class GameManager : Singleton<GameManager>
         if (!InGodMode)
         {
             DialogueUIManager.Instance.StopVoiceLine();
-            LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
+            LevelManager.Instance.InstantiateFadeToBlack(() => SceneLoadManager.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex));
         }
     }
 
