@@ -17590,6 +17590,100 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &314959823 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7148221544204128209, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+  m_PrefabInstance: {fileID: 1786311770}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &314959829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314959823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8fcdce510928fb4ab2354602fe37dcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PADialogueUITrigger
+  dialogueText:
+  - BodyText: Welcome, wonderful guests, to the Illustrious Hubert Museum! We're
+      proud to announce that we've opened the gallery exhibit upstairs! Explore and
+      admire Oliver O. Hubert's vast collection to your heart's content.
+    dialogueSpeaker: 0
+    SecondsDelayUntilNextDialogue: 8
+    StayLength: 8
+    overrideTextData: 0
+    overrideAudioEventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    AudioParameterName: 
+    overrideAudioLine: 0
+    audioLine: 0
+  - BodyText: As a small side note, one of our artifacts went missing last night.
+      If you happen to know its whereabouts, please report it to the staff. And if
+      you were the individual who took it... How about we keep our hands to ourselves
+      next time, mmkay? This has been a prerecorded message!
+    dialogueSpeaker: 0
+    SecondsDelayUntilNextDialogue: 11
+    StayLength: 10
+    overrideTextData: 0
+    overrideAudioEventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    AudioParameterName: 
+    overrideAudioLine: 0
+    audioLine: 1
+  - BodyText: Oh! Anyway... Time to give the library another visit!
+    dialogueSpeaker: 1
+    SecondsDelayUntilNextDialogue: 5
+    StayLength: 5
+    overrideTextData: 0
+    overrideAudioEventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    AudioParameterName: 
+    overrideAudioLine: 0
+    audioLine: 2
+  AlwaysAppear: 0
+  chanceToAppear: 1
+  requiredScenesCompleted:
+  - FINAL Parlour Room
+  requiredScenesNotCompleted:
+  - Exibit 2 Wing 2
+  - Wing 3 - Bedroom Greybox
+  - Exhibit 1 Wing 2 - Library
+  - KitchenWing1
+  requiredCollectables: 
+  requiredCollectablesUncollected: 
+  RequireSpecificHat: 0
+  requiredHat: 0
+  useOldAudioSystem: 0
+  audioEventReference:
+    Guid:
+      Data1: 1538099910
+      Data2: 1112129606
+      Data3: 1701490616
+      Data4: -1214306549
+    Path: event:/Voicelines/VLLobbyNightTwo
+  AudioParameterName: VLLobbyNightTwo
+  Text: 
+  stayLength: 0
+  whichLine: 0
+  thisLevel: 1
 --- !u!1001 &318202709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54150,8 +54244,8 @@ Transform:
   m_GameObject: {fileID: 868157510}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.259995, y: 14.39, z: -4.2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 30.8029, y: 14.39, z: -4.2}
+  m_LocalScale: {x: 0.9924, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1119726886}
@@ -120821,8 +120915,36 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: useOldAudioSystem
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: AudioParameterName
+      value: VLLobbyNightOne
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.size
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Path
+      value: event:/Voicelines/VLLobbyNightOne
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Guid.Data1
+      value: 811132438
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Guid.Data2
+      value: 1225705089
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Guid.Data3
+      value: -1825269349
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Guid.Data4
+      value: -41913075
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[0].BodyText
@@ -120849,7 +120971,7 @@ PrefabInstance:
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[4].BodyText
       value: '"Prerecorded?" I beg your pardon? That nogoodnik has some nerve bewildering
-        me in my own home! (Sighs) No matter... I must investigate this... "parlor
+        me in my own home! *sigh* No matter... I must investigate this... "parlor
         exhibit."'
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
@@ -120878,15 +121000,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[2].StayLength
-      value: 6
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[3].StayLength
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[4].StayLength
-      value: 6
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: requiredScenesNotCompleted.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: 'requiredScenesNotCompleted.Array.data[0]'
+      value: FINAL Parlour Room
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: 'requiredScenesNotCompleted.Array.data[1]'
+      value: Wing 3 - Bedroom Greybox
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: 'requiredScenesNotCompleted.Array.data[2]'
+      value: Exibit 2 Wing 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: 'requiredScenesNotCompleted.Array.data[3]'
+      value: Exhibit 1 Wing 2 - Library
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: 'requiredScenesNotCompleted.Array.data[4]'
+      value: KitchenWing1
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[1].dialogueSpeaker
@@ -120910,15 +121056,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[2].SecondsDelayUntilNextDialogue
-      value: 6
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[3].SecondsDelayUntilNextDialogue
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[4].SecondsDelayUntilNextDialogue
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4135309368863494559, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: m_LocalScale.x
@@ -120992,6 +121138,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialogueTriggersIterativeLevel
       objectReference: {fileID: 0}
+    - target: {fileID: 8996439950246469092, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Size.x
+      value: 0.9999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996439950246469092, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Size.z
+      value: 3.5646152
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996439950246469092, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Center.x
+      value: 7.854964e-11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996439950246469092, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Center.z
+      value: -1.2823086
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 4767475152855471049, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
@@ -121000,7 +121162,10 @@ PrefabInstance:
     - {fileID: 3011754353872438091, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
     - {fileID: 4798006361977881177, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7148221544204128209, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 314959829}
   m_SourcePrefab: {fileID: 100100000, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
 --- !u!1001 &1791078343
 PrefabInstance:
@@ -123850,8 +124015,8 @@ Transform:
   m_GameObject: {fileID: 1839366249}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.9, y: 4.535902, z: 12.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 17.552, y: 4.535902, z: 12.5}
+  m_LocalScale: {x: 0.9779218, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1575560289}
