@@ -21,6 +21,7 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+
     [SerializeField, BoxGroup("Idle Animation")] private float secondsOfInactivityForIdle = 10;
     [SerializeField, BoxGroup("Idle Animation"), Required] private Button pressAnyButtonButton;
 
@@ -38,7 +39,13 @@ public class MainMenu : MonoBehaviour
 
     [Header("Fog")]
     [SerializeField, Required] private RenderTexture leftFogRenderTexture;
+    [SerializeField, Required] private Camera leftFogRenderCamera;
+    [SerializeField, Required] private Material leftFogMaterial;
+    [SerializeField, Required] private RawImage leftFogImage;
     [SerializeField, Required] private RenderTexture rightFogRenderTexture;
+    [SerializeField, Required] private Camera rightFogRenderCamera;
+    [SerializeField, Required] private Material rightFogMaterial;
+    [SerializeField, Required] private RawImage rightFogImage;
 
     [Header("Main Page")]
     [SerializeField, Required] private Button newGameButton;
@@ -87,6 +94,19 @@ public class MainMenu : MonoBehaviour
         mainMenuAnimator = GetComponent<Animator>();
         mainMenuAnimator.SetBool("Active", false);
 
+        leftFogRenderTexture = new RenderTexture(3840, 2160, leftFogRenderTexture.depth, leftFogRenderTexture.format);
+        leftFogRenderTexture.Create();
+        leftFogRenderCamera.targetTexture = leftFogRenderTexture;
+        var leftFogMaterialCopy = Instantiate(leftFogMaterial);
+        leftFogMaterialCopy.SetTexture("_Render_Texture", leftFogRenderTexture);
+        leftFogImage.material = leftFogMaterialCopy;
+
+        rightFogRenderTexture = new RenderTexture(3840, 2160, rightFogRenderTexture.depth, rightFogRenderTexture.format);
+        rightFogRenderCamera.targetTexture = rightFogRenderTexture;
+        var rightFogMaterialCopy = Instantiate(rightFogMaterial);
+        rightFogMaterialCopy.SetTexture("_Render_Texture", rightFogRenderTexture);
+        rightFogImage.material = rightFogMaterialCopy;
+
         TrySubscribeToUICancel();
 
         playerHasSignificantSaveData =
@@ -116,6 +136,7 @@ public class MainMenu : MonoBehaviour
 
         InputSystem.onAnyButtonPress.Call((ctrl) => OnAnyButtonPressed());
         pressAnyButtonButton.onClick.AddListener(() => OnAnyButtonPressed());
+
 
         // Main Menu
         newGameButton.onClick.AddListener(OnNewGameButtonClicked);
@@ -547,11 +568,15 @@ public class MainMenu : MonoBehaviour
 
     void OnResolutionChanged()
     {
+        /*
         Debug.Log($"new resolution: {Screen.width} x {Screen.height}");
         leftFogRenderTexture.width  = Screen.width;
         leftFogRenderTexture.height = Screen.height;
+        leftFogRenderTexture.Create();
+
         rightFogRenderTexture.width = Screen.width;
         rightFogRenderTexture.height = Screen.height;
+        rightFogRenderTexture.Create();*/
     }
     #endregion
 }
