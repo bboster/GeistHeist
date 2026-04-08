@@ -29,6 +29,9 @@ public class IntroCutsceneController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI skipText; //THIS NEEDS TO BE SWAPPED OUT WITH CONTROLLER ICONS
     [SerializeField] private float skipTextActiveTime;
 
+    [SerializeField] private string ControllerText;
+    [SerializeField] private string KeyboardText;
+
     [SerializeField] private RawImage outputImage;
 
     private RenderTexture renderTexture;
@@ -57,12 +60,15 @@ public class IntroCutsceneController : MonoBehaviour
 
         player.loopPointReached += LoadHub;
 
+        StaticUtilities.HideCursor();
     }
 
     private void Start()
     {
         InputEvents.PauseStarted.AddListener(SkipCutscene);
         InputEvents.InteractStarted.AddListener(SkipCutscene);
+
+        InputEvents.Instance.OnControllerChanged.AddListener(OnControllerUpdated);
     }
 
     private IEnumerator PrepareWait()
@@ -141,5 +147,11 @@ public class IntroCutsceneController : MonoBehaviour
         player.loopPointReached -= LoadHub;
 
         introVl.stop(STOP_MODE.ALLOWFADEOUT);
+    }
+
+    private void OnControllerUpdated()
+    {
+        Debug.Log("controller updated "+ InputEvents.Instance.IsGamepadActive().ToString());
+        skipText.text = InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText;
     }
 }
