@@ -17608,10 +17608,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PADialogueUITrigger
   dialogueText:
-  - BodyText: TEST
+  - BodyText: Welcome, wonderful guests, to the Illustrious Hubert Museum! We're
+      proud to announce that we've opened the gallery exhibit upstairs! Explore and
+      admire Oliver O. Hubert's vast collection to your heart's content.
     dialogueSpeaker: 0
-    SecondsDelayUntilNextDialogue: 4
-    StayLength: 4
+    SecondsDelayUntilNextDialogue: 7
+    StayLength: 7
     overrideTextData: 0
     overrideAudioEventReference:
       Guid:
@@ -17623,10 +17625,13 @@ MonoBehaviour:
     AudioParameterName: 
     overrideAudioLine: 0
     audioLine: 0
-  - BodyText: TEST
-    dialogueSpeaker: 1
-    SecondsDelayUntilNextDialogue: 4
-    StayLength: 4
+  - BodyText: As a small side note, one of our artifacts went missing last night.
+      If you happen to know its whereabouts, please report it to the staff. And if
+      you were the individual who took it... How about we keep our hands to ourselves
+      next time, mmkay? This has been a prerecorded message!
+    dialogueSpeaker: 0
+    SecondsDelayUntilNextDialogue: 11
+    StayLength: 10
     overrideTextData: 0
     overrideAudioEventReference:
       Guid:
@@ -17638,10 +17643,10 @@ MonoBehaviour:
     AudioParameterName: 
     overrideAudioLine: 0
     audioLine: 1
-  - BodyText: TEST
-    dialogueSpeaker: 0
-    SecondsDelayUntilNextDialogue: 4
-    StayLength: 4
+  - BodyText: Oh! Anyway... Time to give the library another visit!
+    dialogueSpeaker: 1
+    SecondsDelayUntilNextDialogue: 5
+    StayLength: 5
     overrideTextData: 0
     overrideAudioEventReference:
       Guid:
@@ -54239,8 +54244,8 @@ Transform:
   m_GameObject: {fileID: 868157510}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.259995, y: 14.39, z: -4.2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 30.8029, y: 14.39, z: -4.2}
+  m_LocalScale: {x: 0.9924, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1119726886}
@@ -120966,7 +120971,7 @@ PrefabInstance:
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[4].BodyText
       value: '"Prerecorded?" I beg your pardon? That nogoodnik has some nerve bewildering
-        me in my own home! (Sighs) No matter... I must investigate this... "parlor
+        me in my own home! *sigh* No matter... I must investigate this... "parlor
         exhibit."'
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
@@ -120995,15 +121000,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[2].StayLength
-      value: 6
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[3].StayLength
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[4].StayLength
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: requiredScenesNotCompleted.Array.size
@@ -121051,15 +121056,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[2].SecondsDelayUntilNextDialogue
-      value: 6
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[3].SecondsDelayUntilNextDialogue
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[4].SecondsDelayUntilNextDialogue
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4135309368863494559, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: m_LocalScale.x
@@ -121132,6 +121137,22 @@ PrefabInstance:
     - target: {fileID: 8660690069022315454, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: m_Name
       value: DialogueTriggersIterativeLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996439950246469092, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Size.x
+      value: 0.9999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996439950246469092, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Size.z
+      value: 3.5646152
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996439950246469092, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Center.x
+      value: 7.854964e-11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996439950246469092, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: m_Center.z
+      value: -1.2823086
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -123994,8 +124015,8 @@ Transform:
   m_GameObject: {fileID: 1839366249}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.9, y: 4.535902, z: 12.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 17.552, y: 4.535902, z: 12.5}
+  m_LocalScale: {x: 0.9779218, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1575560289}
