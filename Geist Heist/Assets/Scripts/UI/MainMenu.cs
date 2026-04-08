@@ -21,6 +21,8 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField, Required] private Canvas mainMenuCanvas;
+
     [SerializeField, BoxGroup("Idle Animation")] private float secondsOfInactivityForIdle = 10;
     [SerializeField, BoxGroup("Idle Animation"), Required] private Button pressAnyButtonButton;
 
@@ -38,7 +40,11 @@ public class MainMenu : MonoBehaviour
 
     [Header("Fog")]
     [SerializeField, Required] private RenderTexture leftFogRenderTexture;
+    [SerializeField, Required] private Camera leftFogRenderCamera;
+    [SerializeField, Required] private Material leftFogMaterial;
     [SerializeField, Required] private RenderTexture rightFogRenderTexture;
+    [SerializeField, Required] private Camera rightFogRenderCamera;
+    [SerializeField, Required] private Material rightFogMaterial;
 
     [Header("Main Page")]
     [SerializeField, Required] private Button newGameButton;
@@ -87,6 +93,14 @@ public class MainMenu : MonoBehaviour
         mainMenuAnimator = GetComponent<Animator>();
         mainMenuAnimator.SetBool("Active", false);
 
+        leftFogRenderTexture = new RenderTexture(3840, 2160, leftFogRenderTexture.depth, leftFogRenderTexture.format);
+        leftFogRenderTexture.Create();
+        leftFogRenderCamera.targetTexture = leftFogRenderTexture;
+        leftFogMaterial.SetTexture("_Render_Texture", leftFogRenderTexture);
+        rightFogRenderTexture = new RenderTexture(3840, 2160, rightFogRenderTexture.depth, rightFogRenderTexture.format);
+        rightFogRenderCamera.targetTexture = rightFogRenderTexture;
+        rightFogMaterial.SetTexture("_Render_Texture", rightFogRenderTexture);
+
         TrySubscribeToUICancel();
 
         playerHasSignificantSaveData =
@@ -116,6 +130,7 @@ public class MainMenu : MonoBehaviour
 
         InputSystem.onAnyButtonPress.Call((ctrl) => OnAnyButtonPressed());
         pressAnyButtonButton.onClick.AddListener(() => OnAnyButtonPressed());
+
 
         // Main Menu
         newGameButton.onClick.AddListener(OnNewGameButtonClicked);
@@ -546,12 +561,15 @@ public class MainMenu : MonoBehaviour
     }
 
     void OnResolutionChanged()
-    {
+    {/*
         Debug.Log($"new resolution: {Screen.width} x {Screen.height}");
         leftFogRenderTexture.width  = Screen.width;
         leftFogRenderTexture.height = Screen.height;
+        leftFogRenderTexture.Create();
+
         rightFogRenderTexture.width = Screen.width;
         rightFogRenderTexture.height = Screen.height;
+        rightFogRenderTexture.Create();*/
     }
     #endregion
 }
