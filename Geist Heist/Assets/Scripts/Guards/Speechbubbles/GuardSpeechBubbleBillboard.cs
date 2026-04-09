@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 /*
 * Contributors: Brenden
 * Creation Date: 2/4/26
@@ -28,6 +29,13 @@ public class GuardSpeechBubbleBillboard : IBillboardUI
         talking = true;
         Textbox.text = Caption;
         CalculateOpacity(-1, -1, Vector3.zero);
+        StartCoroutine(Timer());
+    }
+
+    private IEnumerator Timer()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+        stopTalking();
     }
 
     public void stopTalking()

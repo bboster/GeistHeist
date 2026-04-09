@@ -20,7 +20,7 @@ public class GuardStunner : MonoBehaviour
 
             if (impactVelocity.magnitude > stunVelocityThreshold)
             {
-                gc.ChangeBehavior(GuardStates.concussed);
+                //gc.ChangeBehavior(GuardStates.concussed);
                 if (isCar)
                 {
                     AudioManager.Instance.PlayOneShot(FMODEvents.Instance.CarBump, collision.transform.position);

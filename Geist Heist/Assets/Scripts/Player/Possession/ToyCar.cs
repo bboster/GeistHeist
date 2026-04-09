@@ -8,7 +8,7 @@ using FMOD.Studio;
 /*
  * Contributors: Sky, Toby, Jacob
  * Creation Date: 10/2/25
- * Last Modified: 3/3/26
+ * Last Modified: 4/9/26
  * 
  * Brief Description: Input Handler for the Toy Car, handles movement and actions for the Toy Car
  */
@@ -32,6 +32,8 @@ public class ToyCar : IInputHandler
     [SerializeField] private float rotationRate = 30;
     [Tooltip("If the magnitude of the linearVelocity is greater than this value then the car is detectable")]
     [SerializeField] private float detectableThreshold = 1f;
+    [Tooltip("How fast the car must be moving to be considered in motion")]
+    [SerializeField] private float movementThreshold = 0.1f;
     [BoxGroup("Gamepad Tuning"), Tooltip("Modifies the gamepad's sensitivity while rotating the toy car")]
     [SerializeField] private float rotationSensitivityMod = 0.01f;
 
@@ -261,7 +263,7 @@ public class ToyCar : IInputHandler
     /// </summary>
     public override void OnInteractStarted()
     {
-        if (possessableObject.CanUnPossess && rb.linearVelocity == Vector3.zero) 
+        if (possessableObject.CanUnPossess && rb.linearVelocity.magnitude <= movementThreshold) 
         {
             PlayerManager.Instance.PossessGhost(GetComponent<PossessableObject>());
 
