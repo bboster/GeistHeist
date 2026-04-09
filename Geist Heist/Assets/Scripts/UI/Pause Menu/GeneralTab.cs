@@ -62,6 +62,6 @@ public class GeneralTab : PauseMenuTab
 
         // current scene name
         string levelName = LevelManager.Instance.GetLevelDisplayName(SceneManager.GetActiveScene().name);
-        stageNameText.text = defaultStageNameText.Replace("[SCENE_NAME]", levelName); //TODO: make a static class that handles strings like this? 8/
+        stageNameText.text = defaultStageNameText.Replace("[SCENE_NAME]", levelName); 
     }
 }
