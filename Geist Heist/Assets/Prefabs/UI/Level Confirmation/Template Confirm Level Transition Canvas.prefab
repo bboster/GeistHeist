@@ -796,7 +796,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2676221549897066126}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.4, y: -0.76995116, z: 10}
   m_LocalScale: {x: 0.6239221, y: 0.6239221, z: 0.6239221}
   m_ConstrainProportionsScale: 0
@@ -1164,7 +1164,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6959300978559538777}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.17, y: -0.11, z: 10}
   m_LocalScale: {x: 0.5911057, y: 0.5911057, z: 0.5911057}
   m_ConstrainProportionsScale: 0
@@ -1480,10 +1480,13 @@ MonoBehaviour:
   CollectableMeshes:
   - collectable: 20
     collectableObject: {fileID: 2676221549897066126}
+    rotationOffset: {x: 0, y: 0, z: 0}
   - collectable: 19
     collectableObject: {fileID: 8552980683443137630}
+    rotationOffset: {x: 0, y: 0, z: 0}
   - collectable: 18
     collectableObject: {fileID: 6959300978559538777}
+    rotationOffset: {x: 0, y: 0, z: 0}
   sizeToFitForTether: 5
   sizeToFitForCollectable: 2.5
   tiltAngle: 15
@@ -1540,7 +1543,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8552980683443137630}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.33, y: -2.56, z: 10}
   m_LocalScale: {x: 2.2658694, y: 2.2658694, z: 2.2658694}
   m_ConstrainProportionsScale: 0
@@ -1695,6 +1698,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4728054709059538163, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4728054709059538163, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 6199418641383959923}
     - target: {fileID: 4801289806046254294, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_Name
       value: Cancel Button
@@ -2073,6 +2084,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4728054709059538163, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4728054709059538163, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 6037996864288356159}
     - target: {fileID: 4801289806046254294, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_Name
       value: Confirm Button

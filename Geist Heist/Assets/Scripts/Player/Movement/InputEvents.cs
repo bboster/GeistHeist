@@ -7,10 +7,11 @@
  * Use other scripts to connect to the unityevents.
  */
 
-using System.Collections;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
@@ -55,6 +56,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     [SerializeField] private float _sensitivity = 1;
 
+    [SerializeField] private bool InitializeAtStart = false; // to override with main menu
+
     public Vector2 LookDelta => Look.ReadValue<Vector2>() * _sensitivity;
     public Vector3 FirstPersonInputDirection => (
         (movementOrigin.forward * InputDirection2D.y)
@@ -82,7 +85,6 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private PlayerInput playerInput;
     private InputAction Move, /*Jump,*/ Look, Pause, DebugA, Action, Interact/*, Space*/;
 
-
     private Transform movementOrigin => GetCamera();
     private Transform _movementOrigin;
 
@@ -94,6 +96,13 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private WaitForEndOfFrame _endOfFrame = null;
 
     private Coroutine updateCoroutine;
+
+    protected override void Awake()
+    {
+        // for main menu only
+        if (InitializeAtStart)
+            Initialize();
+    }
 
     public void Initialize()
     {
@@ -229,6 +238,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     void InputActionStarted(ref bool pressedFlag, UnityEvent actionEvent, ref float timeStartedFlag, bool ignorePaused = false)
     {
+        if (GameManager.Instance == null) return;
         if (GameManager.Instance.IsPaused && !ignorePaused)
             return;
 
@@ -266,7 +276,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.IsPaused || GameManager.Instance.IsPlayerInMenu)
+        if (GameManager.Instance != null && (GameManager.Instance.IsPaused || GameManager.Instance.IsPlayerInMenu))
             return;
 
         if (MovePressed) MoveHeld.Invoke(MoveHeldTime);
@@ -279,7 +289,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     private void Update()
     {
-        if (!GameManager.Instance.IsPaused)
+        if (GameManager.Instance == null || !GameManager.Instance.IsPaused)
             LookUpdate.Invoke(LookDelta);
     }
 
