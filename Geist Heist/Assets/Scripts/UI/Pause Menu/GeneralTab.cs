@@ -61,6 +61,7 @@ public class GeneralTab : PauseMenuTab
             collectablesCollectedText.gameObject.SetActive(false);
 
         // current scene name
-        stageNameText.text = defaultStageNameText.Replace("[SCENE_NAME]", SceneManager.GetActiveScene().name); //TODO: make a static class that handles strings like this? 8/
+        string levelName = LevelManager.Instance.GetLevelDisplayName(SceneManager.GetActiveScene().name);
+        stageNameText.text = defaultStageNameText.Replace("[SCENE_NAME]", levelName); //TODO: make a static class that handles strings like this? 8/
     }
 }
