@@ -1,7 +1,7 @@
 /*
  * Contributors:  Brenden, Toby
  * Creation Date: 10/28/2025
- * Last Modified:  3/ 4/2026
+ * Last Modified:  4/7/2026
  * 
  * Brief Description: Instantiates and keeps the textboxes and canvases of the
  * Dialogue and PA system
@@ -47,23 +47,19 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
     {
     }
 
-    public void DisplayText_Dialogue(List<DialogueTextData> dialogueText, currentLevel currentLevel, UnityAction onDialogueEndCallback=null)
+    public void DisplayText_Dialogue(List<DialogueTextData> dialogueText, currentLevel currentLevel, 
+        bool oldAudioSystem, EventReference eventReference, string parameter, 
+        UnityAction onDialogueEndCallback = null)
     {
-        StartCoroutine(DisplayTextList(dialogueText, currentLevel, onDialogueEndCallback: onDialogueEndCallback));
+        StartCoroutine(DisplayTextList(dialogueText, currentLevel, oldAudioSystem, eventReference, parameter, onDialogueEndCallback: onDialogueEndCallback));
 
         if (relocateDialogueBubblesCoroutine == null)
             relocateDialogueBubblesCoroutine = StartCoroutine(UpdateDialogueBubbleLayout());
     }
 
-    public void DisplayText_PASystem(List<DialogueTextData> dialogueText, currentLevel currentLevel, UnityAction onDialogueEndCallback = null)
-    {
-        StartCoroutine(DisplayTextList(dialogueText, currentLevel, onDialogueEndCallback: onDialogueEndCallback));
-
-        if (relocateDialogueBubblesCoroutine == null)
-            relocateDialogueBubblesCoroutine = StartCoroutine(UpdateDialogueBubbleLayout());
-    }
-
-    private IEnumerator DisplayTextList(List<DialogueTextData> dialogueText , currentLevel currentLevel, UnityAction onDialogueEndCallback = null)
+    private IEnumerator DisplayTextList(List<DialogueTextData> dialogueText , currentLevel currentLevel,
+        bool oldAudioSystem, EventReference eventReference, string parameter,
+        UnityAction onDialogueEndCallback = null)
     {
         EventInstance voiceline;
 
@@ -73,7 +69,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
         {
             DialogueTextData textData = dialogueText[i];
 
-            TryPlayVoiceLine(textData, currentLevel);
+            TryPlayVoiceLine(textData, currentLevel, oldAudioSystem, eventReference, parameter);
 
             var prefab = textData.dialogueSpeaker == DialogueSpeaker.PASystem ? PATextboxPrefab : DialogueTextboxPrefab;
             DialogueUIViewModel textBubble = Instantiate(prefab, dialogueBubblesLayout);
@@ -96,9 +92,27 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
             onDialogueEndCallback();
     }
 
-    private void TryPlayVoiceLine(DialogueTextData textData, currentLevel thisLevel)
+    private void TryPlayVoiceLine(DialogueTextData textData, currentLevel thisLevel, bool oldAudioSystem, EventReference eventReference, string parameter)
     {
         if (textData.audioLine == -1) return;
+
+        if( textData.overrideTextData)
+        {
+            currentVL = AudioManager.Instance.CreateEventInstance(textData.overrideAudioEventReference);
+            RuntimeManager.StudioSystem.setParameterByName(textData.AudioParameterName, textData.overrideAudioLine);
+            currentVL.start();
+            return;
+        }
+
+        if (!oldAudioSystem)
+        {
+            currentVL = AudioManager.Instance.CreateEventInstance(eventReference);
+            RuntimeManager.StudioSystem.setParameterByName(parameter, textData.audioLine);
+            currentVL.start();
+            return;
+        }
+
+        Debug.Log("playing audio with old dialogue audio system");
 
         //This needs more changes later when we add voicelines to remaining scenes
         if (thisLevel == currentLevel.Tutorial)
@@ -115,10 +129,10 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
             Debug.Log("levelCount: " + levelCount);
             switch (levelCount)
             {
-                case 2:
+                case 1:
                     PlayVoiceLine(FMODEvents.Instance.VLLobbyNightOne, "VLLobbyNightOne", textData);
                     break;
-                case 3:
+                case 2:
                     PlayVoiceLine(FMODEvents.Instance.VLLobbyNightTwo, "VLLobbyNightTwo", textData);
                     break;
                 default:

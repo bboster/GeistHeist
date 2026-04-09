@@ -18,8 +18,8 @@ using UnityEngine.UI;
 public class ConfirmationPopup : MonoBehaviour
 {
     [SerializeField, Required] private TMP_Text confirmationText;
-    [SerializeField, Required] protected Button cancelButton;
-    [SerializeField, Required] protected Button confirmButton; 
+    [SerializeField, Required] public Button cancelButton;
+    [SerializeField, Required] public Button confirmButton; 
     [SerializeField] private bool hideOnCreation = true; 
 
     protected CanvasGroup canvasGroup;
@@ -33,6 +33,8 @@ public class ConfirmationPopup : MonoBehaviour
     protected UnityAction onConfirmationButtonClicked = null;
     private GameObject previouslySelectedBeforeOpen;
     private bool shouldRestorePreviousSelectionOnHide;
+
+    private int frameOpened;
 
     public static bool AnyConfirmationMenuOpen = false;
 
@@ -57,6 +59,7 @@ public class ConfirmationPopup : MonoBehaviour
             canvasGroup = GetComponent<CanvasGroup>();
 
         AnyConfirmationMenuOpen = true;
+        frameOpened = Time.frameCount;
 
         lastFadeSecondsUsed = fadeSeconds;
         this.closeMenuOnConfirm = closeMenuOnConfirm;
@@ -94,7 +97,9 @@ public class ConfirmationPopup : MonoBehaviour
             canvasGroup = GetComponent<CanvasGroup>();
 
         StaticUtilities.EnableCanvasGroup(canvasGroup, alpha: 0);
-        EventSystem.current.SetSelectedGameObject(cancelButton.gameObject);
+
+        if(InputEvents.Instance.IsGamepadActive())
+            EventSystem.current.SetSelectedGameObject(cancelButton.gameObject);
 
         if (lastFadeSecondsUsed > 0)
             fadeOpacityCoroutine = StaticUtilities.FadeToVisible(canvasGroup, fadeSeconds, unscaledTime: true);
@@ -104,7 +109,7 @@ public class ConfirmationPopup : MonoBehaviour
 
     public void HideConfirmationPopup()
     {
-        InputEvents.PauseStartedOverride = lastPauseStartedOverride;
+        InputEvents.PauseStartedOverride = lastPauseStartedOverride == null ? null : lastPauseStartedOverride;
 
         AnyConfirmationMenuOpen = false;
 
@@ -135,6 +140,12 @@ public class ConfirmationPopup : MonoBehaviour
 
     void OnCancelButtonPressed()
     {
+        // weird controller bug. too close to fuse for a good solution;
+        if(Time.frameCount == frameOpened)
+        {
+            return;
+        }
+
         Time.timeScale = oldTimeScale;
         shouldRestorePreviousSelectionOnHide = true;
 
