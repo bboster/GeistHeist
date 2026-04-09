@@ -46,9 +46,11 @@ public class LevelConfirmationVisualizer : MonoBehaviour
 
     [Foldout("Advanced"), Required, SerializeField] private Camera renderCamera;
     [Foldout("Advanced"), Required, SerializeField] private RawImage renderCameraOverlayImage;
+    [Foldout("Advanced"), Required, SerializeField] private int renderCameraSize = 5;
 
     private static CollectableRegistry collectableRegistry;
     private static RenderTexture renderCameraOutputTexture;
+    private Vector2 lastResolution;
 
     private string tetherToDisplay;
 
@@ -143,6 +145,12 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     #region Viewport Objects Animation
     private void Update()
     {
+        if (Screen.width != lastResolution.x || Screen.height != lastResolution.y)
+        {
+            lastResolution = new Vector2(Screen.width, Screen.height);
+            OnResolutionChanged();
+        }
+
         notCollectedMaterialInstance.SetFloat("_Unscaled_Time", Time.unscaledTime);
 
         for (int i=0; i<CollectableMeshes.Count; i++)
@@ -156,6 +164,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
             var tetherMesh = TetherModels[i];
             RotateItem(tetherMesh.transform, tetherRotationSeconds, 0, 0, Vector3.zero);
         }
+
     }
 
     private void RotateItem(Transform item, float rotateSeconds, float timeOffset, float tilt, Vector3 rotationOffset)
@@ -174,7 +183,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
 
         if (renderCameraOutputTexture == null)
         {
-            renderCameraOutputTexture = new RenderTexture(1920, 1080, 24, RenderTextureFormat.ARGB32); // 1920 x 1080 resolution
+            renderCameraOutputTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32); // 1920 x 1080 resolution
             renderCameraOutputTexture.Create();
         }
 
@@ -193,6 +202,17 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         confirmation.OnLoadingAnimationFinished();
         GameManager.Instance.SetPlayerInMenu(false);
     }
+
+    #region Resolution
+    void OnResolutionChanged()
+    {
+        Debug.Log($"new resolution: {Screen.width} x {Screen.height}");
+        renderCameraOutputTexture.width = Screen.width;
+        renderCameraOutputTexture.height = Screen.height;
+
+        renderCamera.orthographicSize = renderCameraSize * Screen.width / 1920;
+    }
+    #endregion
 
     #region Debug
 
