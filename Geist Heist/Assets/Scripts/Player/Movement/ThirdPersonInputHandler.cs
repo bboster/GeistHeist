@@ -495,14 +495,14 @@ public class ThirdPersonInputHandler : IInputHandler
 
         if (onSlope & rigidbody.linearVelocity.y >= 0)
         {
+            //match velocity to slope incline
             Vector3 slopeDirection = Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
             Vector3 desiredVelocity = slopeDirection * speed;
 
             Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
             Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, desiredVelocity, speed * speedPickup * Time.fixedDeltaTime);
 
-            // Force grounded behavior
-            rigidbody.linearVelocity = newHorizontal; // slight downward force to stay grounded
+            rigidbody.linearVelocity = newHorizontal;
         }
         else
         {
