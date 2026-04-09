@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 /*
  * Contributors: Sky
@@ -13,17 +14,35 @@ using UnityEngine;
  */
 public class AddGizmo : MonoBehaviour
 {
+    [SerializeField] private GizmoShape shape;
+
+    [ShowIf(nameof(shape), GizmoShape.Cube)] public Vector3 cubeSize;
+
     //temp for possessable exit points, make more modular in the future
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(this.transform.position, .5f);
 
-        Collider[] colliders = Physics.OverlapSphere(this.transform.position, 0.35f);
-        if (colliders.Length > 0)
+        if(shape == GizmoShape.Sphere)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(this.transform.position, .2f);
+            Gizmos.DrawWireSphere(this.transform.position, .5f);
+
+            Collider[] colliders = Physics.OverlapSphere(this.transform.position, 0.35f);
+            if (colliders.Length > 0)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(this.transform.position, .2f);
+            }
+        }
+        if(shape == GizmoShape.Cube)
+        {
+            Gizmos.DrawWireCube(transform.position, cubeSize);
         }
     }
+
+    private enum GizmoShape { 
+        Cube,
+        Sphere
+    }
 }
+
