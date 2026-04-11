@@ -116,6 +116,8 @@ public class ConfirmationPopup : MonoBehaviour
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
+        if (canvasGroup == null) return;
+
         if (lastFadeSecondsUsed > 0)
             fadeOpacityCoroutine = StaticUtilities.FadeToHidden(canvasGroup, lastFadeSecondsUsed, 
                                                 currentCoroutineToCancel: fadeOpacityCoroutine, afterFadeCallback: AfterFadeToHidden);
