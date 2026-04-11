@@ -7,6 +7,7 @@
  * Also listens to escape key input to open and close it.
  */
 
+using FMODUnity;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -338,6 +339,7 @@ public class PauseMenu : MonoBehaviour
     {
         ClosePauseMenu();
         Time.timeScale = 1;
+        RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
         LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(HubScene));
     }
 
@@ -345,6 +347,7 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         DialogueUIManager.Instance.StopVoiceLine();
+        RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
         LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(MainMenuScene));
     }
 
@@ -353,6 +356,7 @@ public class PauseMenu : MonoBehaviour
     #region Debug UI Buttons
     void RestartLevelButtonClicked()
     {
+        RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
         LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
     }
 

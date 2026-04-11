@@ -6,14 +6,15 @@
  * Summary: Stores data for a level that needs to carry over between scene reloads
  */
 
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using UnityEngine.Events;
-using Unity.Cinemachine;
+using FMODUnity;
 using NaughtyAttributes;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Unity.Cinemachine;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 {
@@ -149,6 +150,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     public void ChangeScene(string sceneName)
     {
         //currentLevel++;
+        RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
         SceneManager.LoadScene(sceneName);
         Debug.Log("Advancing to level: " + sceneName);
     }
@@ -156,6 +158,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     public void ChangeScene(int sceneNum)
     {
         //currentLevel++;
+        RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
         SceneManager.LoadScene(sceneNum);
         Debug.Log("Advancing to level: " + sceneNum);
     }

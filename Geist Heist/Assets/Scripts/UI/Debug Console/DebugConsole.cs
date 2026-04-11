@@ -6,6 +6,7 @@
  * Brief Description: handles the commands from the debug console
  */
 
+using FMODUnity;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -265,11 +266,12 @@ public class DebugConsole : MonoBehaviour
         int Temp;
         if (int.TryParse(sceneName, out Temp))
         {
+            RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
             SceneManager.LoadScene(Temp);
         }
         else
         {
-
+            RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
             SceneManager.LoadScene(sceneName);
         }
     }

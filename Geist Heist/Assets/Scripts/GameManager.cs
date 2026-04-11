@@ -6,16 +6,17 @@
  * Brief Description: Instantiates managers scripts that are required for scene to function.
  * Keeps track of game state, such as level.
  */
-using UnityEngine;
-using UnityEngine.SceneManagement;
+using FMODUnity;
 using NaughtyAttributes;
-using Unity.Cinemachine;
-using UnityEngine.UI;
 using System;
 using System.Threading.Tasks;
-using UnityEngine.InputSystem.UI;
-using UnityEngine.Events;
+using Unity.Cinemachine;
 using UnityEditor;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -123,6 +124,7 @@ public class GameManager : Singleton<GameManager>
         if (!InGodMode)
         {
             DialogueUIManager.Instance.StopVoiceLine();
+            RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
             LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
         }
     }

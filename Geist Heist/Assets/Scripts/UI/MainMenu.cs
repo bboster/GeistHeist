@@ -6,6 +6,7 @@
  * The player will be prompted to delete their save if they press new game after having save data.
  */
 
+using FMODUnity;
 using NaughtyAttributes;
 using System.Collections;
 using UnityEditor;
@@ -205,6 +206,8 @@ public class MainMenu : MonoBehaviour
 
     void LoadScene(string sceneToLoad, GameObject loadingCardPrefab)
     {
+        RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);

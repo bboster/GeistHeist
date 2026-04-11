@@ -8,6 +8,7 @@
  * Animation CARD should be handled with an animation component childed to this
  */
 
+using FMODUnity;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -52,6 +53,7 @@ public class LevelTransitionScreen : MonoBehaviour
         group.alpha = 0;
         yield return StaticUtilities.FadeOpacity(group, 0, 1, fadeInSeconds);
 
+        RuntimeManager.GetBus("Bus:/").stopAllEvents(FMOD.Studio.STOP_MODE.IMMEDIATE);
         SceneManager.LoadScene(_sceneToLoad);
     }
 
