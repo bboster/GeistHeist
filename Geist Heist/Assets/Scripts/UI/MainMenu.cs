@@ -77,7 +77,7 @@ public class MainMenu : MonoBehaviour
     private bool confirmNewGameOpen = false;
 
     // if the player has played before and got past the first level
-    private bool playerHasSignificantSaveData;
+    private bool playerHasSignificantSaveData => false;
     private InputAction menuCancelAction;
     private Animator mainMenuAnimator;
     private float TimeOfLastAnyButtonPressed = 0;
@@ -111,10 +111,6 @@ public class MainMenu : MonoBehaviour
         rightFogImage.material = rightFogMaterialCopy;
 
         TrySubscribeToUICancel();
-
-        playerHasSignificantSaveData =
-               SaveDataManager.Instance.DoesSaveDataExist()
-            && SaveDataManager.Instance.GetLevelsCompletedCount() > 0;
 
         // hide/show continue button based on if save data exists
         //continueGameButton.gameObject.SetActive(playerHasSignificantSaveData);
