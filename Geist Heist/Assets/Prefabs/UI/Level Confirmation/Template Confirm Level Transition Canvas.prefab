@@ -1496,6 +1496,7 @@ MonoBehaviour:
   notCollectedMaterial: {fileID: 2100000, guid: c57756e97d4c1d94eb245d28d25115af, type: 2}
   renderCamera: {fileID: 593068301388323175}
   renderCameraOverlayImage: {fileID: 1037326463120046110}
+  renderCameraSize: 5
 --- !u!95 &4787991003135709352
 Animator:
   serializedVersion: 7
@@ -1696,11 +1697,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_Pivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_Pivot.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1756,11 +1757,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 96
+      value: 151
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 70
+      value: 126.66669
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1862,6 +1863,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4801289806046254294, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7318555651555436580}
+    - targetCorrespondingSourceObject: {fileID: 4801289806046254294, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8764645067524704401}
   m_SourcePrefab: {fileID: 100100000, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
 --- !u!1 &5834326724406963994 stripped
 GameObject:
@@ -1880,6 +1884,22 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &8764645067524704401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5834326724406963994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff38f8cd2cc371147962d040bc7e9257, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExpandUIOnSelected
+  scale: {x: 1.25, y: 1.25, z: 1.25}
+  smoothSeconds: 0.1
+  controllerOnly: 1
+  elementToScale: {fileID: 5935931735928527770}
 --- !u!224 &5935931735928527770 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
@@ -2082,11 +2102,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_Pivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_Pivot.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2142,11 +2162,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 222
+      value: 347
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 70
+      value: 126.66669
       objectReference: {fileID: 0}
     - target: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2254,6 +2274,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4801289806046254294, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4560779085554976195}
+    - targetCorrespondingSourceObject: {fileID: 4801289806046254294, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7951304062757948001}
   m_SourcePrefab: {fileID: 100100000, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
 --- !u!1 &6139591008380007766 stripped
 GameObject:
@@ -2272,6 +2295,22 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &7951304062757948001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6139591008380007766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff38f8cd2cc371147962d040bc7e9257, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExpandUIOnSelected
+  scale: {x: 1.25, y: 1.25, z: 1.25}
+  smoothSeconds: 0.1
+  controllerOnly: 1
+  elementToScale: {fileID: 6314941912059511254}
 --- !u!114 &6199418641383959923 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4728054709059538163, guid: f5574bfd1b685a04681c630517f1666a, type: 3}

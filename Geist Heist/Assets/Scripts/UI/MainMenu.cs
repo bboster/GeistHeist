@@ -50,7 +50,7 @@ public class MainMenu : MonoBehaviour
 
     [Header("Main Page")]
     [SerializeField, Required] private Button newGameButton;
-    [SerializeField, Required] private Button continueGameButton;
+    //[SerializeField, Required] private Button continueGameButton;
     [SerializeField, Required] private Button settingsButton;
     [SerializeField, Required] private Button creditsButton;
     [SerializeField] private Button howToPlayButton;
@@ -117,7 +117,7 @@ public class MainMenu : MonoBehaviour
             && SaveDataManager.Instance.GetLevelsCompletedCount() > 0;
 
         // hide/show continue button based on if save data exists
-        continueGameButton.gameObject.SetActive(playerHasSignificantSaveData);
+        //continueGameButton.gameObject.SetActive(playerHasSignificantSaveData);
         EventSystem.current.SetSelectedGameObject(pressAnyButtonButton.gameObject);
 
         // Hide other pages
@@ -143,7 +143,7 @@ public class MainMenu : MonoBehaviour
 
         // Main Menu
         newGameButton.onClick.AddListener(OnNewGameButtonClicked);
-        continueGameButton.onClick.AddListener(OnContinueButtonClicked);
+        //continueGameButton.onClick.AddListener(OnContinueButtonClicked);
         settingsButton.onClick.AddListener(OnSettingsButtonClicked);
         if(creditsButton != null) creditsButton.onClick.AddListener(OnCreditsButtonClicked);
         if(howToPlayButton != null) howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
@@ -466,8 +466,9 @@ public class MainMenu : MonoBehaviour
     {
         if (InputEvents.Instance.IsGamepadActive())
         {
-            if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
-            else EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
+            //if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
+            //else 
+                EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
         }
     }
 
@@ -484,7 +485,8 @@ public class MainMenu : MonoBehaviour
         {
             confirmationPopup.HideConfirmationPopup();
             EventSystem.current.SetSelectedGameObject(
-                playerHasSignificantSaveData ? continueGameButton.gameObject : newGameButton.gameObject);
+                //playerHasSignificantSaveData ? continueGameButton.gameObject : newGameButton.gameObject);
+                newGameButton.gameObject);
             return;
         }
 
@@ -570,8 +572,9 @@ public class MainMenu : MonoBehaviour
 
         if (menuActive)
         {
-            if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
-            else EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
+            //if (continueGameButton.gameObject.activeSelf) EventSystem.current?.SetSelectedGameObject(continueGameButton.gameObject);
+            //else
+            EventSystem.current?.SetSelectedGameObject(newGameButton.gameObject);
         }
 
         
