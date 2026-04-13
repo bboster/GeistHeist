@@ -6,6 +6,7 @@
  * Brief Description: Data model that stores dialogue text and associated audio.
  */
 
+using FMODUnity;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -23,7 +24,11 @@ public class DialogueTextData
     public float StayLength = 3;
 
     [Header("Audio")]
-    public int audioLine = -1;
+    public bool overrideTextData = false;
+    [AllowNesting, ShowIf(nameof(overrideTextData))] public EventReference overrideAudioEventReference;
+    [AllowNesting, ShowIf(nameof(overrideTextData))] public string AudioParameterName;
+    [AllowNesting, ShowIf(nameof(overrideTextData)), InspectorName("Audio Line")] public int overrideAudioLine = -1;
+    [AllowNesting, HideIf(nameof(overrideTextData))] public int audioLine = -1;
 
     private EColor debugColor => (dialogueSpeaker == DialogueSpeaker.Ollie) ? EColor.Blue : EColor.Orange;
 }

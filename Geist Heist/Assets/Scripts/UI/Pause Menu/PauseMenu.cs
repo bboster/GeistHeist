@@ -48,6 +48,7 @@ public class PauseMenu : MonoBehaviour
     private static float timeOfLastPause;
     private InputAction menuBackAction;
     private Color defaultNormalTabTextColor;
+    private PauseMenuTab currentTab;
 
     private void OnEnable()
     {
@@ -78,6 +79,9 @@ public class PauseMenu : MonoBehaviour
         pauseScreenParent.gameObject.SetActive(true);
 
         InputEvents.PauseStarted.AddListener(OnPauseKeyPressed);
+
+        InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
+        OnControllerChanged();
 
         // tab buttons
         generalTab .toggleButton.onValueChanged.AddListener((isOn) => { if (isOn) OnOpenGeneralButtonSelected(); });
@@ -111,7 +115,11 @@ public class PauseMenu : MonoBehaviour
         settingsTab.CloseTab();
         controlsTab.CloseTab();
         OnOpenGeneralButtonSelected();
-        EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
+
+        if (InputEvents.Instance.IsGamepadActive())
+        {
+            EventSystem.current.SetSelectedGameObject(continueGameButton.gameObject);
+        }
     }
 
     public void ClosePauseMenu()
@@ -218,44 +226,92 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenGeneralButtonSelected()
     {
+        currentTab = generalTab;
         generalTab.OpenTab();
 
         DisableAllWavyTexts();
+        ResetAllToggleButtonColors();
         generalTab.wavyTextAnimation.PlayAnimation = true;
-        generalTab.toggleButton.SetColors(normalColor:  Color.white);   
+        if(!InputEvents.Instance.IsGamepadActive())
+            generalTab.toggleButton.SetColors(normalColor:  Color.white);
+        else
+            settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        SetRightNavigationSelectable(generalTab.GetFirstSelectedElementInMenu(), generalTab.toggleButton);
     }
 
     void OnOpenControlsButtonSelected()
     {
+        currentTab = controlsTab;
         controlsTab.OpenTab();
 
         DisableAllWavyTexts();
+        ResetAllToggleButtonColors();
         controlsTab.wavyTextAnimation.PlayAnimation = true;
-        controlsTab.toggleButton.SetColors(normalColor: Color.white);
+        if (!InputEvents.Instance.IsGamepadActive())
+            controlsTab.toggleButton.SetColors(normalColor: Color.white);
+        else
+            settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        SetRightNavigationSelectable(controlsTab.GetFirstSelectedElementInMenu(), controlsTab.toggleButton);
     }
 
     void OnOpenSettingsButtonSelected()
     {
+        currentTab = settingsTab;
         settingsTab.OpenTab();
 
         DisableAllWavyTexts();
+        ResetAllToggleButtonColors();
         settingsTab.wavyTextAnimation.PlayAnimation = true;
-        settingsTab.toggleButton.SetColors(normalColor: Color.white);
+        if (!InputEvents.Instance.IsGamepadActive())
+            settingsTab.toggleButton.SetColors(normalColor: Color.white);
+        else
+            settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        SetRightNavigationSelectable(settingsTab.GetFirstSelectedElementInMenu(), settingsTab.toggleButton);
     }
 
     void DisableAllWavyTexts()
     {
         generalTab.wavyTextAnimation.PlayAnimation = false;
-        generalTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         //generalTab.wavyTextAnimation.textBox.characterSpacing = 0;
 
         controlsTab.wavyTextAnimation.PlayAnimation = false;
-        controlsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         //controlsTab.wavyTextAnimation.textBox.characterSpacing = 0;
 
         settingsTab.wavyTextAnimation.PlayAnimation = false;
-        settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
         //settingsTab.wavyTextAnimation.textBox.characterSpacing = 0;
+    }
+
+    void ResetAllToggleButtonColors()
+    {
+        generalTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        controlsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        settingsTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+    }
+
+    void SetRightNavigationSelectable(Selectable selectable, Selectable button)
+    {
+        if (selectable == null) return;
+
+
+        var firstSelectedNavigation = selectable.navigation;
+        firstSelectedNavigation.selectOnLeft = button;
+        selectable.navigation = firstSelectedNavigation;
+        
+        var continueSelectedNavigation = continueGameButton.navigation;
+        continueSelectedNavigation.selectOnRight = selectable;
+        continueGameButton.navigation = continueSelectedNavigation;
+
+        var generalNavigation = generalTab.toggleButton.navigation;
+        generalNavigation.selectOnRight = selectable;
+        generalTab.toggleButton.navigation = generalNavigation;
+
+        var settingsNavigation = settingsTab.toggleButton.navigation;
+        settingsNavigation.selectOnRight = selectable;
+        settingsTab.toggleButton.navigation = settingsNavigation;
+
+        var controlsNavigation = controlsTab.toggleButton.navigation;
+        controlsNavigation.selectOnRight = selectable;
+        controlsTab.toggleButton.navigation = controlsNavigation;
     }
 
     #endregion
@@ -308,4 +364,40 @@ public class PauseMenu : MonoBehaviour
 
     #endregion
 
+    #region Controller
+
+    void OnControllerChanged()
+    {
+        if (InputEvents.Instance.IsGamepadActive())
+            OnGamepadInputActivated();
+        else
+            OnKeyboardInputActivated();
+    }
+
+    void OnKeyboardInputActivated()
+    {
+        if (GameManager.Instance.IsPaused)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        
+        //IDK FIGURE IT OUT
+        //currentTab.toggleButton.SetColors(normalColor: defaultNormalTabTextColor);
+        //currentTab.
+    }
+
+    void OnGamepadInputActivated()
+    {
+        if (GameManager.Instance.IsPaused)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
+            ResetAllToggleButtonColors();
+        }
+
+    }
+
+    #endregion
 }

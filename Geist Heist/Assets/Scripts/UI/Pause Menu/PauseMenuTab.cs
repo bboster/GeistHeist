@@ -1,12 +1,13 @@
 /*
  * Contributors: Toby
  * Creation: 11/20/25
- * Last Edited: 11/20/25
+ * Last Edited: 4/7/2026
  * Summary: Base class for a pause menu tab. Can open and close (wow!)
  */
 
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PauseMenuTab : MonoBehaviour
@@ -16,6 +17,10 @@ public class PauseMenuTab : MonoBehaviour
     [SerializeField, Required] public CanvasGroup canvasGroup;
     [SerializeField, Required] public Toggle toggleButton;
     [SerializeField, Required] public WavyTextAnimation wavyTextAnimation;
+    [SerializeField, Required] private Selectable firstSelectedElement;
+    [SerializeField, HideIf(nameof(_firstSelectedElementIsNull))] private Selectable secondSelectedElement;
+
+    private bool _firstSelectedElementIsNull => firstSelectedElement == null;
 
     public virtual void OpenTab()
     {
@@ -45,5 +50,15 @@ public class PauseMenuTab : MonoBehaviour
 
     public virtual void RefreshUI()
     {
+    }
+
+    public Selectable GetFirstSelectedElementInMenu()
+    {
+        if(_firstSelectedElementIsNull) return null;
+
+        if (firstSelectedElement.gameObject.activeSelf == false)
+            return secondSelectedElement;
+        else
+            return firstSelectedElement;
     }
 }
