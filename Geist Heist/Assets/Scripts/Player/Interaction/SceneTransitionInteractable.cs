@@ -57,6 +57,8 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
             closeMenuOnConfirm: false, freezeTime: false,
             OnCancelButtonClicked : () => OnCancelPressed(popupCanvas), OnConfirmationButtonClicked: () => OnConfirmPressed(popupCanvas));
 
+        GameManager.Instance.InGodMode = true;
+
         popup.GetComponentInParent<LevelConfirmationVisualizer>()?.Initialize(sceneName);
     }
 
@@ -66,6 +68,7 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Destroy(confirmationPopup);
+        GameManager.Instance.InGodMode = false;
     }
 
     void OnConfirmPressed(GameObject confirmationPopup)
