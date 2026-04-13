@@ -434,7 +434,7 @@ public class MainMenu : MonoBehaviour
 
             //Debug.Log(Time.unscaledTime - TimeOfLastAnyButtonPressed);
             menuActive = (Time.unscaledTime - TimeOfLastAnyButtonPressed <= secondsOfInactivityForIdle);
-            mainMenuAnimator.SetBool("Active", menuActive);
+            if(mainMenuAnimator != null) mainMenuAnimator.SetBool("Active", menuActive);
 
             // frame that menu became inactive
             if (!menuActive &&  wasActive) OnMenuEnterIdle();
