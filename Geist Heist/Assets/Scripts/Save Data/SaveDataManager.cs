@@ -178,7 +178,25 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             SaveData();
     }
 
+    #endregion
+
+    #region Toy Car
+
+    public bool HasPlayerMovedWithCar()
+    {
+        EnsureSaveData();
+        return currentSaveDta.HasPlayerMovedWithCar;
+    }
+
+    public void SetHasPlayerMovedWithCar(bool hasDriven, bool autoSave = true)
+    {
+        EnsureSaveData();
+        currentSaveDta.HasPlayerMovedWithCar = hasDriven;
+        if (autoSave) SaveData();
+    }
+
     #endregion 
+
 
     #region File Manipulation
 
