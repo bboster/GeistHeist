@@ -532,7 +532,7 @@ public class ThirdPersonInputHandler : IInputHandler
         Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
         Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, Vector3.zero, Time.fixedDeltaTime * slowDownFactor);
         float mass = this.rigidbody.mass;
-        Vector3 force = (newHorizontal - currentHorizontal) * mass * Mathf.Abs(Physics.gravity.y) / Time.fixedDeltaTime;
+        Vector3 force = (newHorizontal - currentHorizontal) * mass * 9.8f / Time.fixedDeltaTime;
 
         rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
         rigidbody.AddForce(force, ForceMode.Force);
