@@ -40,12 +40,21 @@ public class WavyTextAnimation : MonoBehaviour
 
         if (t > 0)
         {
+            bool isStyleTag = false;
             string waveString = "";
             for (int i = 0; i < textString.Length; i++)
             {
                 char c = textString[i];
+
+                // Skip style tags
+                if (c == '<') isStyleTag = true;
+                if (c == '>') { isStyleTag = false; return; } // next character will get wavy
+                if (isStyleTag) return;
+
+                // calculate height using a sin wave
                 float height = StaticUtilities.SinRange((Time.unscaledTime + i) * waveSpeed, -waveHeight, waveHeight);
                 height = StaticUtilities.RoundToHundreth(height * t);
+
                 waveString += $"<voffset={height}em>{c}</voffset>";
             }
             textBox.text = waveString;
@@ -59,5 +68,10 @@ public class WavyTextAnimation : MonoBehaviour
             if(changeCharacterSpacing)  
                 textBox.characterSpacing = defaultCharacterSpacing;
         }
+    }
+
+    public void SetText(string text)
+    {
+        textString = text;
     }
 }

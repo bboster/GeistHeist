@@ -18,7 +18,8 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
     [Header("Unique Possessable Icons")]
     [SerializeField, Required] private RectTransform uniqueIconPossessableParent;
     [SerializeField, Required] private CanvasGroup uniqueIconPossessableParentGroup;
-    [SerializeField, Required] private RectTransform uniqueTextPossessableParent; //@TODO
+    [SerializeField, Required] private RectTransform uniqueTextPossessableParent;
+    [SerializeField, Required] private RectTransform canvasOverlayParent;
 
     [Header("Cooldown Wheel")]
     [SerializeField] private Gradient cooldownColors;
@@ -143,7 +144,7 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
         }
 
         // Childed to uniqueIconPossessableParent
-        currentCanvasOverlay = Instantiate(canvasOverlayPrefab, uniqueTextPossessableParent);
+        currentCanvasOverlay = Instantiate(canvasOverlayPrefab, canvasOverlayParent);
         currentCanvasOverlay.Initialize();
     }
 

@@ -8,12 +8,21 @@
 
 using NaughtyAttributes;
 using System.Threading.Tasks;
+using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
 {
+    [Header("Components")]
     [Required, SerializeField] private CanvasGroup group;
+    [SerializeField, Required] private WavyTextAnimation wavyTextBox;
+
+    [Header("Text")]
+    [SerializeField] private string KeyboardText;
+    [SerializeField] private string ControllerText;
+
     public override void Initialize()
     {
         if (SaveDataManager.Instance.HasPlayerMovedWithCar())
@@ -22,6 +31,8 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
             Destroy(this.gameObject);
             return;
         }
+
+        wavyTextBox.SetText(   InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText   );
     }
 
     public override void WhilePossessedUpdate()
@@ -38,5 +49,15 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
     public override Task ThisDeinitialize()
     {
         throw new System.NotImplementedException();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (Application.isPlaying) return;
+
+        if(Mathf.RoundToInt((float)EditorApplication.timeSinceStartup / 5) % 2 == 0)
+            wavyTextBox.SetText( KeyboardText );
+        else
+            wavyTextBox.SetText( ControllerText );
     }
 }
