@@ -306,6 +306,9 @@ public static class StaticUtilities
         float time = startTime;
         while (time - startTime < seconds)
         {
+            if (group == null)
+                yield break;
+
             time = unscaledTime ? Time.unscaledTime : Time.time;
             float t = (time - startTime) / seconds;
 
@@ -313,6 +316,9 @@ public static class StaticUtilities
 
             yield return null;
         }
+        if(group == null)
+            yield break;    
+
         // apply one more time just in case.
         group.alpha = target_a;
 
