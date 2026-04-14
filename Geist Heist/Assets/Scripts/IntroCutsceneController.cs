@@ -22,14 +22,15 @@ public class IntroCutsceneController : MonoBehaviour
 {
     private bool skippable = false;
     private VideoPlayer player;
-    private InputActionMap map;
-    private InputAction skip;
 
     [SerializeField, Scene] private string hubScene;
     [SerializeField, Required] private GameObject loadingScreenPrefab;
     [SerializeField, Required] private GameObject loadingCardPrefab;
     [SerializeField] private TextMeshProUGUI skipText; //THIS NEEDS TO BE SWAPPED OUT WITH CONTROLLER ICONS
     [SerializeField] private float skipTextActiveTime;
+
+    [SerializeField] private string ControllerText;
+    [SerializeField] private string KeyboardText;
 
     [SerializeField] private RawImage outputImage;
 
@@ -44,7 +45,7 @@ public class IntroCutsceneController : MonoBehaviour
             return;
         }
 
-        renderTexture = new RenderTexture(1920, 1080, 1, RenderTextureFormat.ARGB32);
+        renderTexture = new RenderTexture(3840, 2160, 1, RenderTextureFormat.ARGB32);
         renderTexture.Create();
 
         player = GetComponent<VideoPlayer>();
@@ -59,11 +60,15 @@ public class IntroCutsceneController : MonoBehaviour
 
         player.loopPointReached += LoadHub;
 
-        map = GetComponent<PlayerInput>().currentActionMap;
-        map.Enable();
+        StaticUtilities.HideCursor();
+    }
 
-        skip = map.FindAction("Jump");
-        skip.started += SkipCutscene;
+    private void Start()
+    {
+        InputEvents.PauseStarted.AddListener(SkipCutscene);
+        InputEvents.InteractStarted.AddListener(SkipCutscene);
+
+        InputEvents.Instance.OnControllerChanged.AddListener(OnControllerUpdated);
     }
 
     private IEnumerator PrepareWait()
@@ -106,6 +111,12 @@ public class IntroCutsceneController : MonoBehaviour
             LevelManager.Instance.ChangeScene(hubScene);
             return;
         }
+
+        InputEvents.PauseStarted.RemoveListener(SkipCutscene);
+        InputEvents.InteractStarted.RemoveListener(SkipCutscene);
+
+        InputEvents.Instance.OnControllerChanged.RemoveListener(OnControllerUpdated);
+
         var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
         levelTransition.StartTransition(hubScene, loadingCardPrefab);
     }
@@ -113,9 +124,10 @@ public class IntroCutsceneController : MonoBehaviour
     /// <summary>
     /// Skips the cutscene
     /// </summary>
-    /// <param name="ctx"></param>
-    private void SkipCutscene(InputAction.CallbackContext ctx)
+    private void SkipCutscene()
     {
+        Debug.Log("skipping!");
+
         if (skippable)
             LoadHub();
 
@@ -139,8 +151,13 @@ public class IntroCutsceneController : MonoBehaviour
     private void OnDestroy()
     {
         player.loopPointReached -= LoadHub;
-        skip.started -= SkipCutscene;
 
         introVl.stop(STOP_MODE.ALLOWFADEOUT);
+    }
+
+    private void OnControllerUpdated()
+    {
+        Debug.Log("controller updated "+ InputEvents.Instance.IsGamepadActive().ToString());
+        skipText.text = InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText;
     }
 }
