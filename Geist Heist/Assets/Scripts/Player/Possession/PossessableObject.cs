@@ -3,7 +3,7 @@
 /*
  * Contributors: Toby, Sky, Skylar
  * Creation Date: 9/16/25
- * Last Modified: 2/12/2026
+ * Last Modified: 4/14/2026
  * 
  * Brief Description: On every possessable object, and the player for simplicity. 
  * Contains reference to input scripts and other stuff.
@@ -55,6 +55,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     [Header("UI")]
     public GameObject AbilityIconPrefab;
     public GameObject PossessableTextPrefab;
+    public PossessableCanvasOverlay CanvasOverlayPrefab;
     public bool HasChargeAbility;
 
     [Header("Animation")]
@@ -222,16 +223,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
         {
             animator.keepAnimatorStateOnDisable = true;
         }
-
-        /*if(possessableCanvas == null)
-            possessableCanvas = gameObject.GetComponentInChildren<Canvas>();
-
-        if (possessableCanvas != null)
-        {
-            possessableCanvasGroup = possessableCanvas.gameObject.GetOrAddComponent<CanvasGroup>();
-            possessableCanvasGroup.alpha = 0;
-            possessableCanvas.gameObject.SetActive(false);
-        }*/
 
         //It might be worth moving this line into a manager so that we don't get a ton of repeat messages in the console
         if(AudioManager.Instance == null)
@@ -406,9 +397,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
     /// </summary>
     public void WhilePossessingUpdate()
     {
-        
-        // Nothing right now
-        
+        PossessableToolbar.Instance?.currentCanvasOverlay?.WhilePossessedUpdate();
     }
 
     public IEnumerator WaitForUnpossess()

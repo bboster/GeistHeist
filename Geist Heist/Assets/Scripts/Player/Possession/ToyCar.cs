@@ -44,6 +44,8 @@ public class ToyCar : IInputHandler
     [SerializeField] private float onomatopoeiaLifetime = 1;
     [SerializeField] private ParticleSystem possessableParticle;
 
+    [Foldout("Advanced"), SerializeField] private float secondsHoldMoveToHideTutorial = 4; 
+
     //realtime hold strength
     private float currentStrength;
 
@@ -57,7 +59,7 @@ public class ToyCar : IInputHandler
     private bool IsLeaving = false;
     private bool hasLaunchedThisPossession = false;
     private float lastCrashOnomatopoeiaTimeStamp;
-
+    private static float TotalSecondsMoveHeld;
 
     private EventInstance carMoveSFX;
     private EventInstance carWindSFX;
@@ -307,7 +309,16 @@ public class ToyCar : IInputHandler
     public override void WhileMoveNotHeld()
     {
     }
-    public override void OnMoveCanceled(float secondsHeld) { }
+    public override void OnMoveCanceled(float secondsHeld) 
+    {
+        // try hide tutorial popup
+        TotalSecondsMoveHeld += secondsHeld;
+        if (TotalSecondsMoveHeld > secondsHoldMoveToHideTutorial)
+        {
+            // autosave is false but itll get save soon 
+            SaveDataManager.Instance.SetHasPlayerMovedWithCar(true, autoSave: false);
+        }
+    }
     #endregion
 
 
