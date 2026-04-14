@@ -72,6 +72,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
 
     [Header("Other")]
+    [SerializeField] private ParticleSystem possessableParticles;
     [SerializeField] private bool isGhost = false;
 
     [HideInInspector] public bool CanUnPossess = true;
@@ -246,6 +247,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
         possessionLow = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionLow);
         possessionOut = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionOut);
         possessionRefill = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.PossessionRefill);
+
+        if (possessableParticles != null)
+            possessableParticles.Stop(false);
     }
 
     public IInputHandler GetInputHandler()
@@ -339,6 +343,9 @@ public class PossessableObject : MonoBehaviour, IInteractable
             if(dischargeCoroutine == null)
                 dischargeCoroutine = StartCoroutine(StartDischarge());
         }
+
+        if(possessableParticles != null)
+            possessableParticles.Play(false);
     }
 
     /// <summary>
