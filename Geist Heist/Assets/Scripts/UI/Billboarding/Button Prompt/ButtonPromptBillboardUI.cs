@@ -16,6 +16,7 @@ using UnityEngine.UI;
 
 public class ButtonPromptBillboardUI : IBillboardUI
 {
+    [SerializeField] public bool HideIfPlayerIsPossessing = true;
     [SerializeField, Required] private RectTransform popupParent;
     //[SerializeField, Required] private TMP_Text interactText;
     [SerializeField, Required] private Image image;
@@ -99,6 +100,8 @@ public class ButtonPromptBillboardUI : IBillboardUI
     {
         if (buttomPrompt.IsParentInteractable() == false || IsPlayerLooking == false)
             return 0;
+
+        if(HideIfPlayerIsPossessing && buttomPrompt.IsPlayerPossessing()) return 0;
 
         return base.CalculateOpacity(playerDistance, cameraDistance, UIPosition);
     }
