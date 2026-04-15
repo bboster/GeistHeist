@@ -52,4 +52,11 @@ public class FMODEvents : Singleton<FMODEvents>
     [field: SerializeField] public EventReference VLLobbyNightOne { get; private set; }
     [field: SerializeField] public EventReference VLParlor { get; private set; }
     [field: SerializeField] public EventReference VLLobbyNightTwo { get; private set; }
+    [field: SerializeField] public EventReference VLGallery { get; private set; }
+    [field: SerializeField] public EventReference VLLobbyNightThree { get; private set; }
+    [field: SerializeField] public EventReference VLPantry { get; private set; }
+    [field: SerializeField] public EventReference VLLobbyNightFour { get; private set; }
+    [field: SerializeField] public EventReference VLCanteen { get; private set; }
+    [field: SerializeField] public EventReference VLLobbyNightFive { get; private set; }
+    [field: SerializeField] public EventReference VLBedroom { get; private set; }
 }
