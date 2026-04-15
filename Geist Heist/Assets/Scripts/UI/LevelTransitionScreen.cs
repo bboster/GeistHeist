@@ -52,7 +52,7 @@ public class LevelTransitionScreen : MonoBehaviour
         group.alpha = 0;
         yield return StaticUtilities.FadeOpacity(group, 0, 1, fadeInSeconds);
 
-        SceneManager.LoadScene(_sceneToLoad);
+        SceneLoadManager.Instance.LoadScene(_sceneToLoad);
     }
 
     void OnSceneLoaded(Scene s, LoadSceneMode lsm)
