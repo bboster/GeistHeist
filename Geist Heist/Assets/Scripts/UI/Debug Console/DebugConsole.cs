@@ -265,12 +265,12 @@ public class DebugConsole : MonoBehaviour
         int Temp;
         if (int.TryParse(sceneName, out Temp))
         {
-            SceneManager.LoadScene(Temp);
+            SceneLoadManager.Instance.LoadScene(Temp);
         }
         else
         {
 
-            SceneManager.LoadScene(sceneName);
+            SceneLoadManager.Instance.LoadScene(sceneName);
         }
     }
 
