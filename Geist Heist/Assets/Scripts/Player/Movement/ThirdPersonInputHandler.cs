@@ -40,11 +40,11 @@ public class ThirdPersonInputHandler : IInputHandler
     //[SerializeField] private float stepSmooth = 2f;
 
     [Tooltip("Approximate degrees per second")]
-    [Foldout("Animation Settings"), SerializeField] private float rotationSpeed = 60f;
+    [Foldout ("Animation Settings"), SerializeField] private float rotationSpeed = 60f;
     [Tooltip("How much up/down player goes. value of 0.1 will go -0.1 to +0.1. total height of 0.2")]
-    [Foldout("Animation Settings"), SerializeField] private float hoverHeight = 0.2f;
-    [Foldout("Animation Settings"), SerializeField] private float hoverSpeed = 0.75f;
-    [Foldout("Animation Settings"), SerializeField] private GameObject playerModel;
+    [Foldout ("Animation Settings"), SerializeField] private float hoverHeight = 0.2f;
+    [Foldout ("Animation Settings"), SerializeField] private float hoverSpeed = 0.75f;
+    [Foldout ("Animation Settings"), SerializeField] private GameObject playerModel;
     private float currentHeight;
 
     [Header("Interaction")]
@@ -58,12 +58,12 @@ public class ThirdPersonInputHandler : IInputHandler
     [Header("Components")]
     [SerializeField, Required] public Animator animator;
     [SerializeField] private ParticleSystem OllieParticles;
-
+    
     //[SerializeField] private GameObject stepRayUpper;
     //[SerializeField] private GameObject stepRayLower;
     //[SerializeField] private GameObject stepRayTop;
 
-    [Foldout("Debug"), SerializeField] private bool drawInteractRay = true;
+    [Foldout("Debug"), SerializeField] private bool drawInteractRay=true;
 
     private Rigidbody rigidbody;
 
@@ -229,7 +229,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void LookAtActionableStart(GameObject obj)
     {
-        if (obj == null)
+        if (obj == null) 
             return;
 
         if (obj.TryGetComponent<Outline>(out Outline outline))
@@ -364,15 +364,15 @@ public class ThirdPersonInputHandler : IInputHandler
         // Filter interactables in spherecast
         var filteredSphereCastResults = GetAllInteractablesSphereCast();
 
-        if (filteredSphereCastResults.IsNullOrEmpty()) return null;
+        if(filteredSphereCastResults.IsNullOrEmpty()) return null;
 
         // Sort by which one the player is looking at most. 
         return filteredSphereCastResults
             .Where(r => r.transform.gameObject != this.transform.gameObject)
-            .OrderBy(r =>
+            .OrderBy(r => 
                 // Ref: dot product returns value -1 to 1. -1 for completely opposite directions and 1 for perfectly perpendicular.
                 Vector3.Dot(
-                    thirdPersonCinemachineCamera.transform.forward,
+                    thirdPersonCinemachineCamera.transform.forward, 
                     r.transform.position - gameObject.transform.position
                 ))
            .Last()
@@ -391,14 +391,14 @@ public class ThirdPersonInputHandler : IInputHandler
 
         var allInteractables = result.GetComponentsInChildren<IInteractable>();
 
-        foreach (var interactable in allInteractables)
+        foreach(var interactable in allInteractables)
         {
             if (interactable == null)
                 continue;
 
             interactable.Interact();
-
-            if (interactable is PossessableObject)
+            
+            if(interactable is PossessableObject)
                 OnPossessObject?.Invoke(GuardStates.returnToPath);
         }
         LookAtInteractableStop(lastInteractableLookedAt);
@@ -427,7 +427,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void LookAtInteractableStart(GameObject obj)
     {
-        if (obj == null) return;
+        if(obj == null) return;
 
         if (obj.TryGetComponent<Outline>(out Outline outline))
             outline.enabled = true;
@@ -440,7 +440,7 @@ public class ThirdPersonInputHandler : IInputHandler
                 // Display Interact UI, most of the time
                 interactable.OnPlayerLookStart();
             }
-
+            
         }
     }
 
@@ -493,29 +493,15 @@ public class ThirdPersonInputHandler : IInputHandler
 
         var direction = InputEvents.Instance.FirstPersonInputDirection;
 
-        if (onSlope & rigidbody.linearVelocity.y >= 0)
-        {
-            //match velocity to slope incline
-            Vector3 slopeDirection = Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
-            Vector3 desiredVelocity = slopeDirection * speed;
+        // calculate flat ground movement direction
+        Vector3 flatDesired = direction * speed;
 
-            Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
-            Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, desiredVelocity, speed * speedPickup * Time.fixedDeltaTime);
+        // Lerp current horizontal velocity towards desired velocity
+        Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
+        Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, flatDesired, speed * speedPickup * Time.fixedDeltaTime);
 
-            rigidbody.linearVelocity = newHorizontal;
-        }
-        else
-        {
-            Vector3 flatDesired = direction * speed;
+        rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
 
-            Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
-            Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, flatDesired, speed * speedPickup * Time.fixedDeltaTime);
-
-            float yVel = rigidbody.linearVelocity.y;
-            if (yVel > 0) yVel = 0;
-
-            rigidbody.linearVelocity = newHorizontal.WithY(yVel);
-        }
     }
 
     public override void WhileMoveNotHeld()
@@ -531,15 +517,12 @@ public class ThirdPersonInputHandler : IInputHandler
         //rigidbody.linearVelocity = Vector3.MoveTowards(rigidbody.linearVelocity, new Vector3(0, rigidbody.linearVelocity.y, 0), slowDownFactor * Time.fixedDeltaTime);
         Vector3 currentHorizontal = rigidbody.linearVelocity.WithY(0);
         Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, Vector3.zero, Time.fixedDeltaTime * slowDownFactor);
-        float mass = this.rigidbody.mass;
-        Vector3 force = (newHorizontal - currentHorizontal) * mass * Mathf.Abs(Physics.gravity.y) / Time.fixedDeltaTime;
-
-        rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);
-        rigidbody.AddForce(force, ForceMode.Force);
+         
+        rigidbody.linearVelocity = newHorizontal.WithY(rigidbody.linearVelocity.y);         
     }
 
 
-    public override void OnMoveCanceled(float secondsHeld)
+    public override void OnMoveCanceled(float secondsHeld) 
     {
         OllieParticles.Stop();
 
@@ -555,7 +538,7 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private void RotatePlayer()
     {
-        if (transform.rotation != targetRotation)
+        if(transform.rotation != targetRotation)
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
         Vector3 diff = (transform.position - positionLastFrame).WithY(0);
@@ -570,7 +553,7 @@ public class ThirdPersonInputHandler : IInputHandler
         positionLastFrame = transform.position;
     }
 
-
+    
     private void HoverBob() // squarepants
     {
         //float height = modelStartYPosition + StaticUtilities.SinRange(Time.time * hoverSpeed / MathF.PI, -hoverHeight, hoverHeight);
@@ -578,7 +561,7 @@ public class ThirdPersonInputHandler : IInputHandler
         float height = currentHeight + hoverHeight;
         playerModel.transform.localPosition = playerModel.transform.localPosition.WithY(height);
     }
-
+    
 
     private bool OnSlope()
     {

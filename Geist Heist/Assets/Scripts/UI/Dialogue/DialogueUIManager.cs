@@ -169,6 +169,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
 
         while (viewModels.Count > 0)
         {
+            Debug.Log("viewModels: " + viewModels.Count);
             viewModels.RemoveAll(vm => vm == null);
             float totalHeight = 0;
             for (int i = 0; i < viewModels.Count; i++)
@@ -179,6 +180,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
 
                 // manipulate y position
                 Vector2 desiredPosition = new Vector2(0, totalHeight);
+                Debug.Log(desiredPosition);
                 dialogueBubble.rectTransform.anchoredPosition = Vector2.MoveTowards(dialogueBubble.rectTransform.anchoredPosition, desiredPosition, positionTransitionSpeed * Time.deltaTime);
                     
                 totalHeight += dialogueBubble.rectTransform.rect.height + pixelsGapBetweenDialogueBubbles;
