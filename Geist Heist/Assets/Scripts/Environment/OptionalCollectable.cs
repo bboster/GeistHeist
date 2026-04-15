@@ -340,7 +340,4 @@ public enum Collectable
 	Wizard_Hat,
 	Fedora_Hat,
 	Nightcap_Hat,
-	ChefCollectable,
-	LobsterCollectable,
-	TeacupCollectable,
 }
