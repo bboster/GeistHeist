@@ -304,6 +304,13 @@ public class ToyCar : IInputHandler
                 rotation *= rotationSensitivityMod;
             transform.Rotate(new Vector3(rotation, 0, 0) * Time.deltaTime);
         }
+
+        // try to hide the tutorial popup
+        if (TotalSecondsMoveHeld + secondsHeld > secondsHoldMoveToHideTutorial)
+        {
+            // autosave is false but itll probably get saved soon 
+            SaveDataManager.Instance.SetHasPlayerMovedWithCar(true, autoSave: false);
+        }
     }
 
     public override void WhileMoveNotHeld()
@@ -313,11 +320,6 @@ public class ToyCar : IInputHandler
     {
         // try hide tutorial popup
         TotalSecondsMoveHeld += secondsHeld;
-        if (TotalSecondsMoveHeld > secondsHoldMoveToHideTutorial)
-        {
-            // autosave is false but itll get save soon 
-            SaveDataManager.Instance.SetHasPlayerMovedWithCar(true, autoSave: false);
-        }
     }
     #endregion
 

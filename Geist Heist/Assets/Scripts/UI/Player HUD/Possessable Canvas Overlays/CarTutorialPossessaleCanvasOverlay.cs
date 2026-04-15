@@ -7,6 +7,8 @@
  */
 
 using NaughtyAttributes;
+using System.Collections;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEditor;
@@ -23,6 +25,11 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
     [SerializeField] private string KeyboardText;
     [SerializeField] private string ControllerText;
 
+    [Header("Misc")]
+    [SerializeField] private float fadeAnimationSeconds = 1;
+
+    private Coroutine fadeOpacityCoroutine;
+
     public override void Initialize()
     {
         if (SaveDataManager.Instance.HasPlayerMovedWithCar())
@@ -32,12 +39,16 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
             return;
         }
 
+        fadeOpacityCoroutine = StaticUtilities.FadeOpacity(group, 0, 1, seconds: fadeAnimationSeconds, unscaledTime: false);
+
         wavyTextBox.SetText(   InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText   );
     }
 
     public override void WhilePossessedUpdate()
     {
-        PossessableToolbar.Instance?.currentCanvasOverlay?.WhilePossessedUpdate();
+        if (isDeinitializing) return;
+
+        //PossessableToolbar.Instance?.currentCanvasOverlay?.WhilePossessedUpdate();
 
         // if the player has now moved with the car
         if (SaveDataManager.Instance.HasPlayerMovedWithCar())
@@ -46,9 +57,9 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
         }
     }
 
-    public override Task ThisDeinitialize()
+    public override IEnumerator ThisDeinitialize()
     {
-        throw new System.NotImplementedException();
+        yield return StaticUtilities.FadeOpacity(group, group.alpha, 0, fadeAnimationSeconds, unscaledTime: true, currentCoroutineToCancel: fadeOpacityCoroutine);
     }
 
     private void OnDrawGizmosSelected()
@@ -59,5 +70,10 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
             wavyTextBox.SetText( KeyboardText );
         else
             wavyTextBox.SetText( ControllerText );
+    }
+
+    public override bool ShouldSpawnOverlay()
+    {
+        return ! SaveDataManager.Instance.HasPlayerMovedWithCar();
     }
 }

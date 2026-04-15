@@ -22,6 +22,8 @@ using UnityEngine.UIElements;
 
 public static class StaticUtilities
 {
+    private static StaticUtilitiesCoroutineRunner CoroutineRunner => CoroutineUtilities.CoroutineRunner;
+
     #region Gameplay
 
     /// <summary>
@@ -298,6 +300,18 @@ public static class StaticUtilities
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
         return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: start_a, target_a: target_a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+    }
+
+    public static Coroutine FadeOpacityBySpeed(CanvasGroup group, float start_a, float end_a, float alpha_perSecond,
+       bool unscaledTime = true, UnityAction afterFadeCallback = null, Coroutine currentCoroutineToCancel = null)
+    {
+        if (currentCoroutineToCancel != null)
+            CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
+
+        float diff = Mathf.Abs(end_a - start_a);
+        float seconds = diff / alpha_perSecond;
+
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: start_a, target_a: end_a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
     private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float start_a, float target_a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
@@ -734,35 +748,5 @@ public static class StaticUtilities
         return false;
 #endif
     }
-    #endregion
-
-    #region Static Utilities Utilities
-
-    public class StaticUtilitiesCoroutineRunner : MonoBehaviour
-    {
-        // doesnt need to do anything besides exist
-        private void OnDestroy()
-        {
-            StopAllCoroutines();
-        }
-    }
-
-    private static StaticUtilitiesCoroutineRunner CoroutineRunner => GetCoroutineRunner();
-    private static StaticUtilitiesCoroutineRunner _coroutineRunner;
-
-    private static StaticUtilitiesCoroutineRunner GetCoroutineRunner()
-    {
-        // if no coroutine runner in scene, make one
-        if(_coroutineRunner == null)
-        {
-            var coroutineGameobject = new GameObject();
-            GameObject.DontDestroyOnLoad(coroutineGameobject);
-            coroutineGameobject.name = "Static Utilities Coroutine Runner";
-            _coroutineRunner = coroutineGameobject.AddComponent<StaticUtilitiesCoroutineRunner>();
-        }
-
-        return _coroutineRunner;
-    }
-
     #endregion
 }

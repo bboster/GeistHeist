@@ -137,11 +137,10 @@ public class PossessableToolbar : Singleton<PossessableToolbar>
         if (currentCanvasOverlay != null)
             currentCanvasOverlay.DeinitializeThenDestroy();
 
-        if (canvasOverlayPrefab == null)
-        {
-            //Debug.LogWarning($"{sourcePossessable.gameObject.name} does not have a set text for the possession toolbar");
-            return;
-        }
+        if (canvasOverlayPrefab == null) return;
+
+        // ask the prefab first
+        if (canvasOverlayPrefab.ShouldSpawnOverlay() == false) return;
 
         // Childed to uniqueIconPossessableParent
         currentCanvasOverlay = Instantiate(canvasOverlayPrefab, canvasOverlayParent);

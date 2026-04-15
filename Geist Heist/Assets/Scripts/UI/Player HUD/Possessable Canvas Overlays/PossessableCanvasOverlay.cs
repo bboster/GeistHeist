@@ -14,16 +14,24 @@ public abstract class PossessableCanvasOverlay : MonoBehaviour
 {
     public abstract void Initialize();
     public abstract void WhilePossessedUpdate();
-    public abstract Task ThisDeinitialize();
+    public abstract IEnumerator ThisDeinitialize();
 
-    private bool isDeinitializing;
-    public async Task DeinitializeThenDestroy()
+    /// <summary>
+    /// Call this function from the prefab, not from an instantiated object
+    /// </summary>
+    public abstract bool ShouldSpawnOverlay();
+
+    protected bool isDeinitializing;
+    public void DeinitializeThenDestroy()
     {
+        Debug.Log($"Deinitializing {gameObject.name}");
+
         // Prevent from deinitializing
         if (isDeinitializing) return;
         isDeinitializing = true;
 
-        await ThisDeinitialize();
-        Destroy(this.gameObject);
+        StartCoroutine(ThisDeinitialize()).
+            Then(() => Destroy(this.gameObject));
+        
     }
 }
