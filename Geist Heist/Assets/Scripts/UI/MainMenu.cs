@@ -428,6 +428,9 @@ public class MainMenu : MonoBehaviour
         bool wasActive = false;
         while (true)
         {
+            if (mainMenuAnimator == null)
+                yield break;
+
             // refresh timer so menu doesnt go back to idle while user is in submenu
             if (settingsOpen || creditsOpen)
                 TimeOfLastAnyButtonPressed = Time.unscaledTime;

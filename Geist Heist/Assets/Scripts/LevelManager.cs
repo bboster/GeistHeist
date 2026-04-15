@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using Unity.Cinemachine;
+using NaughtyAttributes;
+using System.Linq;
 
 public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 {
@@ -23,6 +25,9 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     private readonly HashSet<string> savedDoorIds = new();
     private readonly HashSet<string> activatedCheckpointIds = new();
     [SerializeField] private GameObject fadeToBlack;
+
+    [Header("Scene Name Pairing")]
+    [ReorderableList] public List<LevelNamePair> LevelNames;
 
     /// <summary>
     /// Initializes the LevelManager every time a scene is loaded
@@ -156,4 +161,23 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     }
 
     #endregion
+
+    public string GetLevelDisplayName(string sceneName)
+    {
+        var filtered = LevelNames.Where(l => l.SceneName == sceneName);
+        if(filtered.Any() == false)
+        {
+            Debug.LogError($"{sceneName} does not have a display name in Level Manager. Please go to the Level Manager Prefab and set one.");
+            return sceneName;
+        }
+        return filtered.First().DisplayName;
+    }
+}
+
+[System.Serializable]
+public class LevelNamePair
+{
+    [AllowNesting, Scene]
+    public string SceneName;
+    public string DisplayName;
 }
