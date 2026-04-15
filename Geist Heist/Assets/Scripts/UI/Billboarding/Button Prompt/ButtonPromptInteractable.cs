@@ -26,10 +26,13 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
     [HideInInspector] public UnityEvent ShowUIEvent = new();
     [HideInInspector] public UnityEvent HideUIEvent = new();
 
+    private PossessableObject parentPossessableObject;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void InitializeFromBillboardUI(ButtonPromptBillboardUI buttonPrompt)
     {
         billboardUI = buttonPrompt;
+        parentPossessableObject = transform.GetComponentInParent <PossessableObject>();
     }
 
     void IInteractable.Interact()
@@ -117,5 +120,13 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
 
         Debug.LogWarning($"{gameObject.name}'s parent does not have an interactable or actionable component");
         return false;
+    }
+
+    public bool IsPlayerPossessing()
+    {
+        if (parentPossessableObject == null) return false;
+
+        // true if player is possessing
+        return  (PlayerManager.Instance.CurrentObject == parentPossessableObject) ;
     }
 }
