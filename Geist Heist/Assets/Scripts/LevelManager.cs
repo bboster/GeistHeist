@@ -149,14 +149,14 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     public void ChangeScene(string sceneName)
     {
         //currentLevel++;
-        SceneManager.LoadScene(sceneName);
+        SceneLoadManager.Instance.LoadScene(sceneName);
         Debug.Log("Advancing to level: " + sceneName);
     }
 
     public void ChangeScene(int sceneNum)
     {
         //currentLevel++;
-        SceneManager.LoadScene(sceneNum);
+        SceneLoadManager.Instance.LoadScene(sceneNum);
         Debug.Log("Advancing to level: " + sceneNum);
     }
 
