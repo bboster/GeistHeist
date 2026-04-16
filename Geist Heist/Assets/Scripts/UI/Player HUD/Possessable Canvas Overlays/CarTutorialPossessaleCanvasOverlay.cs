@@ -41,7 +41,8 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
 
         fadeOpacityCoroutine = StaticUtilities.FadeOpacity(group, 0, 1, seconds: fadeAnimationSeconds, unscaledTime: false);
 
-        wavyTextBox.SetText(   InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText   );
+        InputEvents.Instance.OnControllerChanged.AddListener(OnControllerUpdated);
+        OnControllerUpdated();
     }
 
     public override void WhilePossessedUpdate()
@@ -70,6 +71,11 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
             wavyTextBox.SetText( KeyboardText );
         else
             wavyTextBox.SetText( ControllerText );
+    }
+
+    private void OnControllerUpdated()
+    {
+        wavyTextBox.SetText(InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText);
     }
 
     public override bool ShouldSpawnOverlay()
