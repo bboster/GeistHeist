@@ -35,7 +35,6 @@ public class MainMenu : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField, Required] private ConfirmationPopup confirmationPopup;
-    [SerializeField, Required] private GameObject loadingScreenPrefab;
 
     [Header("Fog")]
     [SerializeField, Required] private RenderTexture leftFogRenderTexture;
@@ -205,16 +204,10 @@ public class MainMenu : MonoBehaviour
 
     void LoadScene(string sceneToLoad, GameObject loadingCardPrefab)
     {
-        if (loadingScreenPrefab == null)
-        {
-            Debug.LogError("No transition card set on " + gameObject.name);
-            LevelManager.Instance.ChangeScene(sceneToLoad);
-            return;
-        }
-        var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
-        levelTransition.StartTransition(sceneToLoad, loadingCardPrefab);
+        Debug.LogError("No transition card set on " + gameObject.name);
+        //SceneLoadManager.Instance.LoadScene(sceneToLoad);
+        LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(HubScene));
     }
-
 
     #region Buttons OnClicked
 
