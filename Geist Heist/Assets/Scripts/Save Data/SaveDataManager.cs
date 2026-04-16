@@ -139,7 +139,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         {
             if (currentSaveDta.ScenesCompleted.Contains(level) == false)
             {
-                Debug.Log($"Player has not completed game because they need to complete {level}");
+                //Debug.Log($"Player has not completed game because they need to complete {level}");
                 return false;
             }
         }
