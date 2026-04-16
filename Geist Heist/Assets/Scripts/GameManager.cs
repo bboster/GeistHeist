@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject MusicManagerPrefab;
     [SerializeField, Required] GameObject KeyManagerPrefab;
     [SerializeField, Required] GameObject SoundWaveManagerPrefab;
+    [SerializeField, Required] GameObject SceneLoadManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject PauseMenuPrefab;
@@ -123,7 +124,7 @@ public class GameManager : Singleton<GameManager>
         if (!InGodMode)
         {
             DialogueUIManager.Instance.StopVoiceLine();
-            LevelManager.Instance.InstantiateFadeToBlack(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
+            LevelManager.Instance.InstantiateFadeToBlack(() => SceneLoadManager.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex));
         }
     }
 
@@ -150,6 +151,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(MusicManagerPrefab).GetComponent<MusicManager>().Initialize();
         Instantiate(KeyManagerPrefab).GetComponent<KeyManager>().Initialize();
         Instantiate(SoundWaveManagerPrefab);
+        Instantiate(SceneLoadManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
