@@ -27,7 +27,7 @@ public class WavyTextAnimation : MonoBehaviour
     {
         if (PlayAnimation) t = 1;
 
-        if(textString == default) textString = textBox.text;
+        if(textString == default || textString == "" || textString == null) textString = textBox.text;
         defaultCharacterSpacing = textBox.characterSpacing;
     }
 
