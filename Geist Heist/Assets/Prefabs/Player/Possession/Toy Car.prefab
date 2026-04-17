@@ -136,7 +136,6 @@ GameObject:
   - component: {fileID: 1174134053591356350}
   - component: {fileID: 2667771672078999720}
   - component: {fileID: 7862096149762473002}
-  - component: {fileID: 6480417976091650489}
   - component: {fileID: -7755143116239034038}
   - component: {fileID: 2279748789752088073}
   m_Layer: 10
@@ -282,6 +281,7 @@ MonoBehaviour:
   tetherPossessStateName: tetherpossess
   possessCameraTransitionDelay: 0.35
   tetherCameraTransitionDelay: 0.75
+  possessableParticles: {fileID: 5204108424967083764}
   isGhost: 0
   CanUnPossess: 0
   meshRenderer: {fileID: 0}
@@ -290,25 +290,6 @@ MonoBehaviour:
       m_Calls: []
   PauseDischargeTimer: 0
   IsMoving: 0
---- !u!114 &6480417976091650489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3402368958818299834}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
 --- !u!114 &-7755143116239034038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -647,6 +628,7 @@ GameObject:
   - component: {fileID: 8698059868396046234}
   - component: {fileID: 5699987888748152895}
   - component: {fileID: 7565655402898799861}
+  - component: {fileID: 2768688573866506490}
   m_Layer: 10
   m_Name: TEMP_ToyCar
   m_TagString: Untagged
@@ -725,6 +707,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2768688573866506490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8358232243908615456}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+  outlineFillMaterial: {fileID: 0}
 --- !u!1 &8890379919832926197
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,14 +910,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1148149316958636690}
     m_Modifications:
-    - target: {fileID: 2054119106626406797, guid: 69c87491fb8b91841846ef414b4805a4, type: 3}
-      propertyPath: ShapeModule.m_Scale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054119106626406797, guid: 69c87491fb8b91841846ef414b4805a4, type: 3}
-      propertyPath: ShapeModule.m_Scale.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2054119106626406797, guid: 69c87491fb8b91841846ef414b4805a4, type: 3}
       propertyPath: ShapeModule.m_Scale.z
       value: 1
