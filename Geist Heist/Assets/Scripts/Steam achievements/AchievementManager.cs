@@ -4,7 +4,7 @@ using static Unity.Collections.AllocatorManager;
 public class AchievementManager : Singleton<AchievementManager>
 {
     public static AchievementManager instance;
-    private uint appID = 000000;
+    private uint appID = 4476090;//giest heists appID
     private bool connectedToSteam = false;
     private int totalNumberOfAchievements = 30;
 
@@ -22,6 +22,8 @@ public class AchievementManager : Singleton<AchievementManager>
         {
             connectedToSteam = false;
         }
+
+        UnlockAchievement(eAchievements.OpenGame);
     }
 
     // Update is called once per frame

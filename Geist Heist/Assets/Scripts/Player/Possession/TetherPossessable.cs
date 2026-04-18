@@ -23,6 +23,9 @@ public class TetherPossessable : IInputHandler
 
     private Coroutine victoryAnimation;
 
+    [SerializeField] bool hasAchievement;
+    [SerializeField] AchievementManager.eAchievements WhatAcheivement;
+
     private void Start()
     {
         if(thirdPersoncinemachineCamera != null)
@@ -32,6 +35,10 @@ public class TetherPossessable : IInputHandler
     public override void OnPossessionStart()
     {
         victoryAnimation = StartCoroutine(LoadNextSceneCooldown());
+        if (hasAchievement)
+        {
+            AchievementManager.instance.UnlockAchievement(WhatAcheivement);
+        }
     }
 
     public override void OnPossessionEnded()
