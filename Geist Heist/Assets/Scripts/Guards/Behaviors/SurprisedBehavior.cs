@@ -19,8 +19,6 @@ public class SurprisedBehavior : Behavior
     [Tooltip("The length that the guard will pause before chasing after seeing the player")]
     [SerializeField] private float reactionLength;
 
-    private EventInstance guardGasp;
-
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
@@ -35,7 +33,7 @@ public class SurprisedBehavior : Behavior
 
     private void Start()
     {
-        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);
+        //guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);
         //guardGasp.set3DAttributes(RuntimeUtils.To3DAttributes(this.GetComponent<transform>(), this.GetComponent<Rigidbody>()));
     }
 
@@ -46,15 +44,9 @@ public class SurprisedBehavior : Behavior
     public override IEnumerator BehaviorLoop()
     {
         //AudioManager.Instance.PlayOneShot(FMODEvents.Instance.GuardReactions);
-        guardGasp = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardReactions);
-
-        PLAYBACK_STATE playbackState;
-        guardGasp.getPlaybackState(out playbackState);
-        if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
-        {
-            guardGasp.start();
-            contRef.GuardTalking("Ghost! WHAT IS A GHOST DOING HERE?");
-        }
+        
+        contRef.PlayVoiceline(1);
+        contRef.GuardTalking("Ghost! WHAT IS A GHOST DOING HERE?");
 
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
 
