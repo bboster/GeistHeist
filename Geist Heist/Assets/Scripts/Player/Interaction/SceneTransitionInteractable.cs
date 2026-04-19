@@ -33,6 +33,7 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
     [Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
     [SerializeField] private bool hasConfirmationPopup = true;
 
+
     public void Interact()
     {
         if(ConfirmationPopup.AnyConfirmationMenuOpen == true)

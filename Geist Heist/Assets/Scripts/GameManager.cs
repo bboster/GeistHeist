@@ -123,6 +123,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (!InGodMode)
         {
+            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.getcaught);
             DialogueUIManager.Instance.StopVoiceLine();
             LevelManager.Instance.InstantiateFadeToBlack(() => SceneLoadManager.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex));
         }

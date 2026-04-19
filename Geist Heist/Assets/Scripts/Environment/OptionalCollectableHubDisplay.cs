@@ -25,6 +25,9 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     private WearableCollectible wearableCollectible;
     private ButtonPromptInteractable buttonPrompt;
 
+    [Foldout("Achievements"), SerializeField] bool hasAchievement;
+    [Foldout("Achievements"), SerializeField] AchievementManager.eAchievements WhatAcheivement;
+
     #region Unity Lifecycle
     private void OnValidate()
     {
@@ -53,6 +56,13 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     #region Interaction
     void IInteractable.Interact()
     {
+        if (hasAchievement)
+        {
+            AchievementManager.instance.UnlockAchievement(WhatAcheivement);
+        }
+
+        AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.TryOnHat);
+
         if (SaveDataManager.Instance.EquipedHat() == (int)ThisCollectable)
         {
             Debug.Log($"{ThisCollectable} is already equipped.");

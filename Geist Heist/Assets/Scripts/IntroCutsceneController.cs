@@ -105,6 +105,8 @@ public class IntroCutsceneController : MonoBehaviour
     /// <param name="player"></param>
     private void LoadHub(VideoPlayer player)
     {
+        AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.FinishGame);
+
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);

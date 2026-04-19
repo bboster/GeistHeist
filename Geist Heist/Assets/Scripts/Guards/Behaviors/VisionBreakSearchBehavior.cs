@@ -32,6 +32,7 @@ public class VisionBreakSearchBehavior : GuardMovement
     {
         base.InitializeBehavior(selfRef);
         SearchLocation = PlayerManager.Instance.CurrentObject.transform.position;
+        AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.EscapeGuard);
         MoveToPoint(SearchLocation);
         GuardCoroutineManager.Instance.StartBehaviorTimer(lengthBeforePathInvalid, this);
         thisAgent.isStopped = false;
