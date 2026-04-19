@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.ProBuilder.AutoUnwrapSettings;
 
 [RequireComponent(typeof(Canvas))]
 public class BillboardUIManager : Singleton<BillboardUIManager>
@@ -66,38 +67,46 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
                 continue;
 
             var elem = uiAnchorPair.Item2;
-            var elemTransform = elem.transform;
             var anchor = uiAnchorPair.Item1;
 
-            float playerDistance = 
-                Vector3.Distance(anchor.position, PlayerManager.Instance.CurrentObject.transform.position);
-
-            float cameraDistance =
-                Vector3.Distance(anchor.position, _camera.transform.position);
-
-            // Set Position
-            elemTransform.position = anchor.position;
-
-            // Set baseOpacity
-            Vector3 screenPos = _camera.WorldToScreenPoint(anchor.position);
-            Vector3 uiPos = new Vector3(screenPos.x, /*Screen.height - */screenPos.y, screenPos.z);
-
-            elem.CalculateAndSetOpacity(playerDistance, cameraDistance, uiPos);
-
-            //if (elem.CurrentAlpha == 0)
-            //    continue; // dont bother with anything else if we dont need to.
-
-            // Face camera
-            if (elem.MirrorBillboard)
-                elemTransform.LookAway(_camera.transform);
-            else
-                elemTransform.LookAt(_camera.transform);
-
-            // Set Scale
-            elem.CalculateAndSetScale(playerDistance);
+            RefreshBillboardDisplay(anchor, elem, applySmooth: true);
         }
     }
 
+    /// <summary>
+    /// Refresh opacity, scale, rotation
+    /// </summary>
+    /// <param name="billboard"></param>
+    /// <param name="SmoothOpacity"></param>
+    public void RefreshBillboardDisplay(Transform anchorPoint, IBillboardUI billboard, bool applySmooth = true)
+    {
+        float playerDistance =
+                Vector3.Distance(anchorPoint.position, PlayerManager.Instance.CurrentObject.transform.position);
+
+        float cameraDistance =
+            Vector3.Distance(anchorPoint.position, _camera.transform.position);
+
+        // Set Position
+        billboard.transform.position = anchorPoint.position;
+
+        // Set baseOpacity
+        Vector3 screenPos = _camera.WorldToScreenPoint(anchorPoint.position);
+        Vector3 uiPos = new Vector3(screenPos.x, /*Screen.height - */screenPos.y, screenPos.z);
+
+        billboard.CalculateAndSetOpacity(playerDistance, cameraDistance, uiPos, smoothOpacity: applySmooth);
+
+        //if (elem.CurrentAlpha == 0)
+        //    continue; // dont bother with anything else if we dont need to.
+
+        // Face camera
+        if (billboard.MirrorBillboard)
+            billboard.transform.LookAway(_camera.transform);
+        else
+            billboard.transform.LookAt(_camera.transform);
+
+        // Set Scale
+        billboard.CalculateAndSetScale(playerDistance, smoothScale: applySmooth);
+    }
 
     public Tuple<Transform, IBillboardUI> RegisterAndInitializeBillboardUIPoint(Transform worldPoint, IBillboardUI UIElement, GameObject SourceGameObject)
     {
@@ -119,6 +128,7 @@ public class BillboardUIManager : Singleton<BillboardUIManager>
 
         UIElement.OnInitialize(SourceGameObject);
         UIElement.ToggleVisibility(!UIElement.HideByDefault);
+        RefreshBillboardDisplay(worldPoint, UIElement, applySmooth: false);
 
         return pair;
     }

@@ -35,7 +35,6 @@ public class MainMenu : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField, Required] private ConfirmationPopup confirmationPopup;
-    [SerializeField, Required] private GameObject loadingScreenPrefab;
 
     [Header("Fog")]
     [SerializeField, Required] private RenderTexture leftFogRenderTexture;
@@ -205,16 +204,10 @@ public class MainMenu : MonoBehaviour
 
     void LoadScene(string sceneToLoad, GameObject loadingCardPrefab)
     {
-        if (loadingScreenPrefab == null)
-        {
-            Debug.LogError("No transition card set on " + gameObject.name);
-            LevelManager.Instance.ChangeScene(sceneToLoad);
-            return;
-        }
-        var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
-        levelTransition.StartTransition(sceneToLoad, loadingCardPrefab);
+        Debug.LogError("No transition card set on " + gameObject.name);
+        //SceneLoadManager.Instance.LoadScene(sceneToLoad);
+        LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneToLoad));
     }
-
 
     #region Buttons OnClicked
 
@@ -428,13 +421,16 @@ public class MainMenu : MonoBehaviour
         bool wasActive = false;
         while (true)
         {
+            if (mainMenuAnimator == null)
+                yield break;
+
             // refresh timer so menu doesnt go back to idle while user is in submenu
             if (settingsOpen || creditsOpen)
                 TimeOfLastAnyButtonPressed = Time.unscaledTime;
 
             //Debug.Log(Time.unscaledTime - TimeOfLastAnyButtonPressed);
             menuActive = (Time.unscaledTime - TimeOfLastAnyButtonPressed <= secondsOfInactivityForIdle);
-            mainMenuAnimator.SetBool("Active", menuActive);
+            if(mainMenuAnimator != null) mainMenuAnimator.SetBool("Active", menuActive);
 
             // frame that menu became inactive
             if (!menuActive &&  wasActive) OnMenuEnterIdle();
