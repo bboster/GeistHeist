@@ -232,8 +232,15 @@ public class ThirdPersonInputHandler : IInputHandler
         if (obj == null) 
             return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
+        //outline
+        bool outlineExists = obj.TryGetComponent<Outline>(out Outline outline);
+
+        if (outlineExists)
             outline.enabled = true;
+        else if (obj.TryGetComponentInChildren<Outline>(out outline))
+        {
+            outline.enabled = true;
+        }
 
         var allActionables = obj.GetComponentsInChildren<IActionable>();
         foreach (var actionable in allActionables)
@@ -252,8 +259,15 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         if (obj == null) return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
+        //outline
+        bool outlineExists = obj.TryGetComponent<Outline>(out Outline outline);
+
+        if (outlineExists)
             outline.enabled = false;
+        else if (obj.TryGetComponentInChildren<Outline>(out outline))
+        {
+            outline.enabled = false;
+        }
 
         var allActionables = obj.GetComponentsInChildren<IActionable>();
         foreach (var actionable in allActionables)
@@ -429,8 +443,17 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         if(obj == null) return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
+        //outline
+        bool outlineExists = obj.TryGetComponent<Outline>(out Outline outline);
+
+        if (outlineExists)
             outline.enabled = true;
+        else if (obj.TryGetComponentInChildren<Outline>(out outline))
+        {
+
+            Debug.Log("horse " + outline);
+            outline.enabled = true;
+        }
 
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
@@ -450,8 +473,15 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         if (obj == null) return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
+        //outline
+        bool outlineExists = obj.TryGetComponent<Outline>(out Outline outline);
+
+        if (outlineExists)
             outline.enabled = false;
+        else if (obj.TryGetComponentInChildren<Outline>(out outline))
+        {
+            outline.enabled = false;
+        }
 
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
