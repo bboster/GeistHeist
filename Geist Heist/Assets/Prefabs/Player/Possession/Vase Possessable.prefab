@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 1595637412969543280}
   - component: {fileID: 261295155624401962}
   - component: {fileID: 2735227599938183973}
+  - component: {fileID: 4984831599448095111}
   m_Layer: 6
   m_Name: Vase Possessable
   m_TagString: Untagged
@@ -144,7 +145,6 @@ MonoBehaviour:
   tetherPossessStateName: tetherpossess
   possessCameraTransitionDelay: 0.35
   tetherCameraTransitionDelay: 0.75
-  possessableParticles: {fileID: 5219996038768564688}
   isGhost: 0
   CanUnPossess: 1
   meshRenderer: {fileID: 0}
@@ -167,6 +167,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VaseObject
   thirdPersoncinemachineCamera: {fileID: 0}
   possessableParticles: {fileID: 5219996038768564688}
+--- !u!114 &4984831599448095111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726645532892400056}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+  outlineFillMaterial: {fileID: 0}
 --- !u!1 &2593252985575565568
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +378,7 @@ GameObject:
   - component: {fileID: 6264839675720150942}
   - component: {fileID: 7016315660500049979}
   - component: {fileID: 5096388826252530929}
-  - component: {fileID: 8053303383694714819}
+  - component: {fileID: 4749457882462358604}
   m_Layer: 0
   m_Name: TEMP_Vase
   m_TagString: Untagged
@@ -438,25 +457,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8053303383694714819
-MonoBehaviour:
+--- !u!95 &4749457882462358604
+Animator:
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6753990771451557156}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  outlineFillMaterial: {fileID: 0}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c7467efc7a8447440a3ae8d3c3c2bee0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &3195886583315952609
 PrefabInstance:
   m_ObjectHideFlags: 0
