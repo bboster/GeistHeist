@@ -1,16 +1,18 @@
 /*
  * Contributors: Brenden
  * Creation Date: 10/21/25
- * Last Modified: 1/27/2026
+ * Last Modified: 4/20/2026
  * 
  * Brief Description: handles the commands from the debug console
  */
 
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class DebugConsole : MonoBehaviour
 {
@@ -91,8 +93,13 @@ public class DebugConsole : MonoBehaviour
         if (Command == "help")
         {
             AppendConsoleLine(
-                Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
-                "\nList Scene: ls \nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value(or \"default\") >"
+                Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \n"+
+                "Freeze Guards: freeze \n" +
+                "List Scenes: list \n"+
+                "Load Scene: scene <Scene Name/Scene Index> \n"+
+                "Complete Level: c <Scene Name/Scene Index/\"all\">\n"+
+                "Spawn Item on camera: spawn <Item Name/Item Index> \n"+
+                "Change Players Speed: speed <Speed Value(or \"default\")>"
             );
             return;
         }
@@ -122,7 +129,7 @@ public class DebugConsole : MonoBehaviour
         }
 
         // List Scene
-        if (Command.StartsWith("ls"))
+        if (Command.StartsWith("ls") || Command.StartsWith("list"))
         {
             listScenes();
             return;
@@ -134,13 +141,40 @@ public class DebugConsole : MonoBehaviour
         {
             if (Command.Length >= 7)
             {
-                LoadNewScene(Command.Substring(6, Command.Length - 6));
-                AppendConsoleLine("Scene Failed to load, Please input a valid scene");
+                TryLoadNewScene(Command.Substring(6, Command.Length - 6));
+                AppendConsoleLine("<color=red>Scene Failed to load, Please input a valid scene</color>");
             }
             else
             {
-                AppendConsoleLine(Command + " Invalid Scene name or index, Please input a valid scene");
+                AppendConsoleLine($"<color=red>{Command} Invalid Scene name or index, Please input a valid scene</color>");
+                listScenes();
             }
+            return;
+        }
+
+        if (Command.StartsWith("c"))
+        {
+            if(Command.Length <= 2)
+            {
+                AppendConsoleLine($"<color=red>{Command} Invalid Scene name or index, Please input a valid scene</color>");
+                listScenes();
+                return;
+            }
+
+            TryCompleteScene(Command.Substring(2, Command.Length-2));
+            return;
+        }
+
+        if (Command.StartsWith("complete"))
+        {
+            if (Command.Length <= 9)
+            {
+                AppendConsoleLine($"<color=red>{Command} Invalid Scene name or index, Please input a valid scene</color>");
+                listScenes();
+                return;
+            }
+
+            TryCompleteScene(Command.Substring(9, Command.Length-9));
             return;
         }
 
@@ -231,13 +265,29 @@ public class DebugConsole : MonoBehaviour
 
     private void listScenes()
     {
-        AppendConsoleLine("ls");
+        AppendConsoleLine("All Scenes (Debug Names)");
+        /*
         for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
         {
             string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
             string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
             AppendConsoleLine(i + ": " + sceneName);
-        }   
+        } 
+        */
+        for (int i = 0; i<LevelManager.Instance.LevelNames.Count; i++)
+        {
+            var debugName = LevelManager.Instance.LevelNames[i].InternalDebugName;
+            var sceneName = LevelManager.Instance.LevelNames[i].SceneName;
+            if (debugName == "")
+            {
+                Debug.Log(sceneName + " does not have an internal debug name");
+                continue;
+            }
+            bool completed = SaveDataManager.Instance.IsLevelCompleted(sceneName);
+            //bool isCurrentLevel = SceneManager.GetActiveScene().name == sceneName;
+
+            AppendConsoleLine($"{i}: {debugName} {(completed ? "(<color=yellow>Completed</color>)" : "")}");
+        }
     }
 
     private void AppendConsoleLine(string line)
@@ -260,21 +310,91 @@ public class DebugConsole : MonoBehaviour
         logScrollRect.verticalNormalizedPosition = 0f;
     }
 
-    private void LoadNewScene(String sceneName)
+    private string GetRealSceneIndexFromInput(int input)
     {
-        int Temp;
-        if (int.TryParse(sceneName, out Temp))
+        int index = 0;
+        // make the index match the list that appears with the 'list' command
+        for (int i = 0; i < LevelManager.Instance.LevelNames.Count; i++)
         {
-            SceneLoadManager.Instance.LoadScene(Temp);
-        }
-        else
-        {
+            var debugName = LevelManager.Instance.LevelNames[i].InternalDebugName;
+            if (debugName == "")
+            {
+                continue;
+            }
+            index++;
 
-            SceneLoadManager.Instance.LoadScene(sceneName);
+            if (index == input)
+            {
+                return LevelManager.Instance.LevelNames[i].SceneName;
+            }
         }
+        return "";
+        
     }
 
-    private void spawnItem(String itemName)
+    private void TryLoadNewScene(string input)
+    {
+        // if user entered index
+        int Temp;
+        if (int.TryParse(input, out Temp))
+        {
+            SceneLoadManager.Instance.LoadScene(GetRealSceneIndexFromInput(Temp));
+            return;
+        }
+
+        // if user entered debug name
+        if(LevelManager.Instance.LevelNames.Select(n => n.InternalDebugName).Contains(input))
+        {
+            string sceneToLoad = LevelManager.Instance.LevelNames.Where(n => n.InternalDebugName == input).First().SceneName;
+            SceneLoadManager.Instance.LoadScene(sceneToLoad);
+        }
+
+        // if user entered scene name
+        SceneLoadManager.Instance.LoadScene(input);
+    }
+
+    private void TryCompleteScene(string input)
+    {
+        if (input == "all")
+        {
+            foreach (var sceneName in LevelManager.Instance.LevelNames.Select(n => n.SceneName))
+            {
+                SaveDataManager.Instance.MarkSceneAsCompleted(sceneName, autoSave: false);
+            }
+            SaveDataManager.Instance.SaveData();
+            listScenes();
+            AppendConsoleLine($"<color=green>all scenes have been marked as completed</color>");
+        }
+
+        // if user entered index
+        int Temp;
+        if (int.TryParse(input, out Temp))
+        {
+            FulfillCompleteScene(GetRealSceneIndexFromInput(Temp));
+            return;
+        }
+
+        // if user entered debug name
+        if (LevelManager.Instance.LevelNames.Select(n => n.InternalDebugName).Contains(input))
+        {
+            string sceneToLoad = LevelManager.Instance.LevelNames.Where(n => n.InternalDebugName == input).First().SceneName;
+            FulfillCompleteScene(sceneToLoad);
+            return;
+        }
+
+        // if user entered scene name
+        FulfillCompleteScene(input);
+        return;
+    }
+
+    private void FulfillCompleteScene(string sceneName)
+    {
+        SaveDataManager.Instance.MarkSceneAsCompleted(sceneName);
+        listScenes();
+        AppendConsoleLine($"<color=green>{sceneName} has been marked as completed</color>");
+    }
+
+    private void spawnItem(string itemName)
     {
         int Temp;
         if (int.TryParse(itemName, out Temp))

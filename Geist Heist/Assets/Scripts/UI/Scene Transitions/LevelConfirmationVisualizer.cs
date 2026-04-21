@@ -68,7 +68,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
 
         // make a copy of the material, to not flood github
         notCollectedMaterialInstance = Instantiate(notCollectedMaterial);
-        notCollectedMaterialInstance.SetTexture("_Background_Image", notCollectedTexture)
+        notCollectedMaterialInstance.SetTexture("_Background_Image", notCollectedTexture);
 
         foreach (var tetherModel in TetherModels)
         {

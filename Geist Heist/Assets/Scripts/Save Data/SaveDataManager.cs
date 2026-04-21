@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 {
@@ -115,6 +116,12 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 
         if (autoSave)
             SaveData();
+    }
+
+    public void MarkSceneAsCompleted(int sceneIndex, bool autoSave = true)
+    {
+        string sceneName = StaticUtilities.BuildIndexToSceneName(sceneIndex);
+        MarkSceneAsCompleted(sceneName, autoSave);
     }
 
     /// <summary>
