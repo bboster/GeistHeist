@@ -14,7 +14,10 @@ public class FMODEvents : Singleton<FMODEvents>
 
 
     [field: Header("Enemy SFX")]
-    [field: SerializeField] public EventReference GuardReactions { get; private set; }
+    [field: SerializeField] public EventReference GuardOne { get; private set; }
+    [field: SerializeField] public EventReference GuardTwo { get; private set; }
+    [field: SerializeField] public EventReference GuardThree { get; private set; }
+    [field: SerializeField] public EventReference GuardFour { get; private set; }
     [field: SerializeField] public EventReference GuardRun { get; private set; }
     [field: SerializeField] public EventReference GuardWalk { get; private set; }
     [field: SerializeField] public EventReference PlayerSpotted { get; private set; }
