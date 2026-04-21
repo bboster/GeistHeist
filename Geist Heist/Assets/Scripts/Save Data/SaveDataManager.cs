@@ -64,6 +64,30 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             SaveData();
     }
 
+    public void SetCollectableState(Collectable collectable, bool collectedState, bool autoSave = true)
+    {
+        EnsureSaveData();
+
+        // try to collect
+        if (collectedState)
+        {
+            if (IsCollectableCollected(collectable))
+                Debug.Log($"{collectable.ToString()} has already been collected");
+            else
+                currentSaveDta.CollectablesCollected.Add((int)collectable);
+        }
+        else
+        {
+            if (IsCollectableCollected(collectable))
+                currentSaveDta.CollectablesCollected.Remove((int)collectable);
+            else
+                Debug.Log($"{collectable.ToString()} has already been collected");
+        }
+
+        if (autoSave)
+            SaveData();
+    }
+
     #endregion
 
     #region Hats
@@ -113,6 +137,30 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             Debug.Log("This level has already been completed");
         else
             currentSaveDta.ScenesCompleted.Add(sceneName);
+
+        if (autoSave)
+            SaveData();
+    }
+
+    public void SetLevelCompletionState(string sceneName, bool collectedState, bool autoSave = true)
+    {
+        EnsureSaveData();
+
+        // try to collect
+        if (collectedState)
+        {
+            if (IsLevelCompleted(sceneName) && collectedState)
+                Debug.Log($"{sceneName} has already been completed");
+            else
+                currentSaveDta.ScenesCompleted.Add(sceneName);
+        }
+        else
+        {
+            if (IsLevelCompleted(sceneName) && collectedState)
+                currentSaveDta.ScenesCompleted.Remove(sceneName);
+            else
+                Debug.Log($"{sceneName} has already been not completed");
+        }
 
         if (autoSave)
             SaveData();
