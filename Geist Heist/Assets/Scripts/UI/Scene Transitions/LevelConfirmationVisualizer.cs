@@ -41,7 +41,6 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     [SerializeField] private float collectableRotationSeconds = 6;
     [SerializeField] private float tetherRotationSeconds = 20;
     [SerializeField, Required] private Material notCollectedMaterial;
-    private Material notCollectedMaterialInstance;
 
 
     [Foldout("Advanced"), Required, SerializeField] private Camera renderCamera;
@@ -52,6 +51,8 @@ public class LevelConfirmationVisualizer : MonoBehaviour
 
     private static CollectableRegistry collectableRegistry;
     private static RenderTexture renderCameraOutputTexture;
+    private static Material notCollectedMaterialInstance;
+
     private Vector2 lastResolution;
 
     private string tetherToDisplay;
@@ -66,9 +67,8 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         if (collectableRegistry == null)
             collectableRegistry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
 
-        // make a copy of the material, to not flood github
-        notCollectedMaterialInstance = Instantiate(notCollectedMaterial);
-        notCollectedMaterialInstance.SetTexture("_Background_Image", notCollectedTexture);
+        
+        
 
         foreach (var tetherModel in TetherModels)
         {
@@ -84,6 +84,20 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     }
 
     #region Viewport Objects
+
+    private Material GetNotCollectedMaterialInstance()
+    {
+        if(notCollectedMaterialInstance == null)
+        {
+            // make a copy of the material, to not flood github
+            notCollectedMaterialInstance = Instantiate(notCollectedMaterial);
+            notCollectedMaterialInstance.SetTexture("_Background_Image", notCollectedTexture);
+        }
+
+        notCollectedMaterialInstance.SetTexture("_Background_Image", notCollectedTexture);
+
+        return notCollectedMaterialInstance;
+    }
 
     #region Viewport Objects Initialization
     private void RefreshTether(MeshRenderer tetherMesh)
@@ -102,7 +116,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         {
             // Set materials to uncollected
             int count = tetherMesh.materials.Count();
-            var emptyMaterials = Enumerable.Repeat(notCollectedMaterial, count).ToList();
+            var emptyMaterials = Enumerable.Repeat(GetNotCollectedMaterialInstance(), count).ToList();
             tetherMesh.SetMaterials(emptyMaterials);
         }
     }
@@ -112,12 +126,15 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         var mesh = collectableRegistry.GetMesh(collectable.collectable);
         if(mesh == null)
         {
-            Debug.LogWarning($"There is no mesh associated with the hat {collectable.ToString()} in collectible registry");
+            Debug.LogError($"There is no mesh associated with the hat {collectable.ToString()} in collectible registry");
             return;
         }
-        collectable.meshFilter.mesh = mesh;
-        ScaleToFitBounds(collectable.meshFilter, sizeToFitForCollectable);
-
+        else
+        {
+            collectable.meshFilter.mesh = mesh;
+            ScaleToFitBounds(collectable.meshFilter, sizeToFitForCollectable);
+        }
+        
         // if its null then its probably because this is being run from the debug button.
         if (SaveDataManager.Instance == null) return;
 
@@ -128,9 +145,8 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         }
         else
         {
-            // Set all materials to black / empty
             int count = collectable.meshRenderer.materials.Count();
-            var emptyMaterials = Enumerable.Repeat(notCollectedMaterial, count).ToList();
+            var emptyMaterials = Enumerable.Repeat(GetNotCollectedMaterialInstance(), count).ToList();
             collectable.meshRenderer.SetMaterials(emptyMaterials);
         }
     }
@@ -209,11 +225,13 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     #region Resolution
     void OnResolutionChanged()
     {
+        /*
         Debug.Log($"new resolution: {Screen.width} x {Screen.height}");
         renderCameraOutputTexture.width = Screen.width;
         renderCameraOutputTexture.height = Screen.height;
 
         renderCamera.orthographicSize = renderCameraSize * Screen.width / 1920;
+        */
     }
     #endregion
 

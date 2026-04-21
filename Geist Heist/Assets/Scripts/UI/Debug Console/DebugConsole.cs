@@ -364,6 +364,7 @@ public class DebugConsole : MonoBehaviour
             SaveDataManager.Instance.SaveData();
             listScenes();
             AppendConsoleLine($"<color=green>all scenes have been marked as completed</color>");
+            return;
         }
 
         // if user entered index
