@@ -31,6 +31,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     [InfoBox("Collectable Models and Materials will be automatically retrieved from the collectable registry")]
     [SerializeField] private List<LevelConfirmCollectableMesh> CollectableMeshes;
     [SerializeField] private Texture2D notCollectedTexture;
+    [SerializeField] private Vector3 tetherRotationOffset;
 
 
     [Header("Settings")]
@@ -134,7 +135,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
             collectable.meshFilter.mesh = mesh;
             ScaleToFitBounds(collectable.meshFilter, sizeToFitForCollectable);
         }
-        
+
         // if its null then its probably because this is being run from the debug button.
         if (SaveDataManager.Instance == null) return;
 
@@ -181,7 +182,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         for (int i = 0; i < TetherModels.Count; i++)
         {
             var tetherMesh = TetherModels[i];
-            RotateItem(tetherMesh.transform, tetherRotationSeconds, 0, 0, Vector3.zero);
+            RotateItem(tetherMesh.transform, tetherRotationSeconds, 0, 0, tetherRotationOffset);
         }
 
     }
