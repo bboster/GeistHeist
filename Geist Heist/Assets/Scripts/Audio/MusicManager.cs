@@ -8,6 +8,7 @@ using FMOD.Studio;
 public class MusicManager : Singleton<MusicManager>
 {
     [SerializeField, NaughtyAttributes.Scene] private string hubName;
+    [SerializeField, NaughtyAttributes.Scene] private string tutorialName;
     [SerializeField, NaughtyAttributes.Scene] private string wing1Name;
     [SerializeField, NaughtyAttributes.Scene] private string wing2Name;
     [SerializeField, NaughtyAttributes.Scene] private string wing3Name;
@@ -20,6 +21,7 @@ public class MusicManager : Singleton<MusicManager>
     private EventInstance hubBGM;
     private EventInstance globeBGM;
     private EventInstance menuBGM;
+    //private EventInstance tutorialBGM;
     private EventInstance wing1BGM;
     private EventInstance wing2BGM;
     private EventInstance wing3BGM;
@@ -35,6 +37,7 @@ public class MusicManager : Singleton<MusicManager>
 
         globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GlobeBGM);
         hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.HubBGM);
+        //tutorialBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.TutorialBGM);
         //levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.LevelBGM);
         menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.MenuBGM);
         wing1BGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.Wing1BGM);
@@ -89,12 +92,29 @@ public class MusicManager : Singleton<MusicManager>
         {
             wing3BGM.start();
         }
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(tutorialName)))
+        {
+            //tutorialBGM.start();
+        }
     }
 
-    public IEnumerator MusicToHidden(float val)
+    public void MusicSwitch(bool hiding)
+    {
+        if (hiding)
+        {
+            StartCoroutine(MusicToHidden(0));
+        }
+        else
+        {
+            StartCoroutine(MusicToNormal(1));
+        }
+    }
+
+    IEnumerator MusicToHidden(float val)
     {
         val += 0.05f;
         hubBGM.setParameterByName("Hiding", val);
+        //tutorialBGM.setParameterByName("Hiding", val);
         wing1BGM.setParameterByName("Hiding", val);
         wing2BGM.setParameterByName("Hiding", val);
         wing3BGM.setParameterByName("Hiding", val);
@@ -105,10 +125,11 @@ public class MusicManager : Singleton<MusicManager>
         }
     }
 
-    public IEnumerator MusicToNormal(float val)
+    IEnumerator MusicToNormal(float val)
     {
         val -= 0.05f;
         hubBGM.setParameterByName("Hiding", val);
+        //tutorialBGM.setParameterByName("Hiding", val);
         wing1BGM.setParameterByName("Hiding", val);
         wing2BGM.setParameterByName("Hiding", val);
         wing3BGM.setParameterByName("Hiding", val);
@@ -130,6 +151,7 @@ public class MusicManager : Singleton<MusicManager>
     {
         //levelBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         hubBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        //tutorialBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         globeBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         menuBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         wing1BGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
