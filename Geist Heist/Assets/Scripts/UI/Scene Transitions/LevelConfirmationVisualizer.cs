@@ -27,11 +27,11 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         public MeshFilter meshFilter => collectableObject.GetComponent<MeshFilter>();
     }
 
-    // i know theres only one tether in our game but scalability (also there may be an animation later that duplicates the tethers)
-    [SerializeField] private List<MeshRenderer> TetherModels;
-
+    [Header("Per-level settings")]
     [InfoBox("Collectable Models and Materials will be automatically retrieved from the collectable registry")]
     [SerializeField] private List<LevelConfirmCollectableMesh> CollectableMeshes;
+    [SerializeField] private Texture2D notCollectedTexture;
+
 
     [Header("Settings")]
     [SerializeField] private float sizeToFitForTether = 5.0f;
@@ -47,6 +47,8 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     [Foldout("Advanced"), Required, SerializeField] private Camera renderCamera;
     [Foldout("Advanced"), Required, SerializeField] private RawImage renderCameraOverlayImage;
     [Foldout("Advanced"), Required, SerializeField] private int renderCameraSize = 5;
+    // i know theres only one tether in our game but scalability (also there may be an animation later that duplicates the tethers)
+    [Foldout("Advanced"), SerializeField] private List<MeshRenderer> TetherModels;
 
     private static CollectableRegistry collectableRegistry;
     private static RenderTexture renderCameraOutputTexture;
@@ -66,6 +68,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
 
         // make a copy of the material, to not flood github
         notCollectedMaterialInstance = Instantiate(notCollectedMaterial);
+        notCollectedMaterialInstance.SetTexture("_Background_Image", notCollectedTexture)
 
         foreach (var tetherModel in TetherModels)
         {
