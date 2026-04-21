@@ -14,7 +14,10 @@ public class FMODEvents : Singleton<FMODEvents>
 
 
     [field: Header("Enemy SFX")]
-    [field: SerializeField] public EventReference GuardReactions { get; private set; }
+    [field: SerializeField] public EventReference GuardOne { get; private set; }
+    [field: SerializeField] public EventReference GuardTwo { get; private set; }
+    [field: SerializeField] public EventReference GuardThree { get; private set; }
+    [field: SerializeField] public EventReference GuardFour { get; private set; }
     [field: SerializeField] public EventReference GuardRun { get; private set; }
     [field: SerializeField] public EventReference GuardWalk { get; private set; }
     [field: SerializeField] public EventReference PlayerSpotted { get; private set; }
@@ -52,4 +55,11 @@ public class FMODEvents : Singleton<FMODEvents>
     [field: SerializeField] public EventReference VLLobbyNightOne { get; private set; }
     [field: SerializeField] public EventReference VLParlor { get; private set; }
     [field: SerializeField] public EventReference VLLobbyNightTwo { get; private set; }
+    [field: SerializeField] public EventReference VLGallery { get; private set; }
+    [field: SerializeField] public EventReference VLLobbyNightThree { get; private set; }
+    [field: SerializeField] public EventReference VLPantry { get; private set; }
+    [field: SerializeField] public EventReference VLLobbyNightFour { get; private set; }
+    [field: SerializeField] public EventReference VLCanteen { get; private set; }
+    [field: SerializeField] public EventReference VLLobbyNightFive { get; private set; }
+    [field: SerializeField] public EventReference VLBedroom { get; private set; }
 }

@@ -7,6 +7,7 @@
  */
 
 using NaughtyAttributes;
+using System;
 using System.Collections;
 using TMPro;
 using Unity.Cinemachine;
@@ -29,6 +30,9 @@ public class GlobeInputHandler : IInputHandler
     [SerializeField] private TMP_Text buttonPressText;
     [Tooltip("Scene that contains the ending cutscene video.")]
     [SerializeField, Scene] private string endCutsceneScene = "Main Menu";
+
+    [Tooltip("Canvas prefab that has the FadeToBlack script.")]
+    [SerializeField] private GameObject fadeToWhite;
 
 
     [Header("Design Variables")]
@@ -174,6 +178,11 @@ public class GlobeInputHandler : IInputHandler
         DecreaseCameraPriority(globeRollCamera);
     }
 
+    public void FadeToWhite()
+    {
+        FadeToBlack ftb = Instantiate(fadeToWhite).GetComponent<FadeToBlack>();
+        ftb.Initialize(LoadEndScene);
+    }
 
     public void LoadEndScene()
     {
