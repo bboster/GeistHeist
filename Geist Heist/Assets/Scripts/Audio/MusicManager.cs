@@ -1,20 +1,28 @@
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 using FMODUnity;
 using FMOD.Studio;
 
 public class MusicManager : Singleton<MusicManager>
 {
     [SerializeField, NaughtyAttributes.Scene] private string hubName;
-    [SerializeField] private string[] levelNames;
+    [SerializeField, NaughtyAttributes.Scene] private string wing1Name;
+    [SerializeField, NaughtyAttributes.Scene] private string wing2Name;
+    [SerializeField, NaughtyAttributes.Scene] private string wing3Name;
+    [SerializeField, NaughtyAttributes.Scene] private string wing4Name;
+    [SerializeField, NaughtyAttributes.Scene] private string wing5Name;
     [SerializeField, NaughtyAttributes.Scene] private string globeName;
     [SerializeField, NaughtyAttributes.Scene] private string menuName;
     
-    private EventInstance levelBGM;
+    //private EventInstance levelBGM;
     private EventInstance hubBGM;
     private EventInstance globeBGM;
     private EventInstance menuBGM;
+    private EventInstance wing1BGM;
+    private EventInstance wing2BGM;
+    private EventInstance wing3BGM;
 
     protected override void Awake()
     {
@@ -27,8 +35,11 @@ public class MusicManager : Singleton<MusicManager>
 
         globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GlobeBGM);
         hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.HubBGM);
-        levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.LevelBGM);
-
+        //levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.LevelBGM);
+        menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.MenuBGM);
+        wing1BGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.Wing1BGM);
+        wing2BGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.Wing2BGM);
+        wing3BGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.Wing3BGM);
 
 
         //the following if-else block could be changed to a Switch statement -Josh
@@ -48,7 +59,6 @@ public class MusicManager : Singleton<MusicManager>
 
         if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(menuName)))
         {
-            menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.MenuBGM);
             menuBGM.start();
         }
         else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(hubName)))
@@ -59,9 +69,53 @@ public class MusicManager : Singleton<MusicManager>
         {
             globeBGM.start();
         }
-        else
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(wing1Name)))
         {
-            levelBGM.start();
+            wing1BGM.start();
+        }
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(wing2Name)))
+        {
+            wing1BGM.start();
+        }
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(wing3Name)))
+        {
+            wing2BGM.start();
+        }
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(wing4Name)))
+        {
+            wing2BGM.start();
+        }
+        else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(wing5Name)))
+        {
+            wing3BGM.start();
+        }
+    }
+
+    public IEnumerator MusicToHidden(float val)
+    {
+        val += 0.05f;
+        hubBGM.setParameterByName("Hiding", val);
+        wing1BGM.setParameterByName("Hiding", val);
+        wing2BGM.setParameterByName("Hiding", val);
+        wing3BGM.setParameterByName("Hiding", val);
+        yield return new WaitForSecondsRealtime(0.1f);
+        if (val < 1)
+        {
+            StartCoroutine(MusicToHidden(val));
+        }
+    }
+
+    public IEnumerator MusicToNormal(float val)
+    {
+        val -= 0.05f;
+        hubBGM.setParameterByName("Hiding", val);
+        wing1BGM.setParameterByName("Hiding", val);
+        wing2BGM.setParameterByName("Hiding", val);
+        wing3BGM.setParameterByName("Hiding", val);
+        yield return new WaitForSecondsRealtime(0.1f);
+        if (val > 0)
+        {
+            StartCoroutine(MusicToNormal(val));
         }
     }
 
@@ -74,9 +128,12 @@ public class MusicManager : Singleton<MusicManager>
 
     void StopAll()
     {
-        levelBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        //levelBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         hubBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         globeBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         menuBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        wing1BGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        wing2BGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        wing3BGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
 }
