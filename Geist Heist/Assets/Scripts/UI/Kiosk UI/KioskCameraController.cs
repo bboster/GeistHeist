@@ -18,11 +18,13 @@ public class KioskCameraController : MonoBehaviour
     public Dictionary<Collectable, GameObject> CollectableObjects = new();
 
     // i know theres only one tether in our game but scalability (also there may be an animation later that duplicates the tethers)
-    [SerializeField] public List<MeshRenderer> TetherModels;
+    [SerializeField] public List<GameObject> TetherModels;
 
-    public void Initialize(List<LevelConfirmCollectableMesh> collectableInfo)
+    public void Initialize(List<LevelConfirmCollectableMesh> collectableInfo, Vector2 tetherPositionOffset, float tetherSizeMultiplier, MeshRenderer tetherMeshPrefab)
     {
-        if(collectableObjectsList.Count != collectableInfo.Count)
+        DontDestroyOnLoad(this.gameObject);
+
+        if (collectableObjectsList.Count != collectableInfo.Count)
         {
             Debug.LogError("there is a different amount of hats in the camera.");
         }
@@ -37,6 +39,18 @@ public class KioskCameraController : MonoBehaviour
             collectableObjectsList[i].transform.position += (Vector3) collectableInfo[i].positionOffset;
         }
 
-        DontDestroyOnLoad(this.gameObject);
+        for (int i = 0; i < TetherModels.Count; i++)
+        {
+            TetherModels[i].transform.position += (Vector3)tetherPositionOffset;
+            TetherModels[i].transform.localScale *= tetherSizeMultiplier;
+
+            // tetherMeshPrefab is intentionally null on some kiosks (with tethers with complicated models)
+            if (tetherMeshPrefab != null)
+            {
+                TetherModels[i].GetComponent<MeshFilter>().mesh = tetherMeshPrefab.GetComponent<MeshFilter>().sharedMesh;
+                TetherModels[i].GetComponent<MeshRenderer>().materials = tetherMeshPrefab.sharedMaterials;
+            }
+        }
+
     }
 }

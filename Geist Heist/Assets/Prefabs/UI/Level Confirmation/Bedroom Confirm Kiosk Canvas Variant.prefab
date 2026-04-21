@@ -101,6 +101,10 @@ PrefabInstance:
       value: Collectable 3
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+      propertyPath: renderCameraPrefab
+      value: 
+      objectReference: {fileID: 6930811881115633623, guid: 7a2bbc880f24e1441b0815b60d63efb0, type: 3}
+    - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: uncollectedTexture
       value: 
       objectReference: {fileID: 2800000, guid: 2fc3342e176368f41ab045bd710d3687, type: 3}
@@ -108,6 +112,22 @@ PrefabInstance:
       propertyPath: notCollectedTexture
       value: 
       objectReference: {fileID: 2800000, guid: 2fc3342e176368f41ab045bd710d3687, type: 3}
+    - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+      propertyPath: tetherSizeMultiplier
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+      propertyPath: tetherPositionOffset.y
+      value: -1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+      propertyPath: tetherRotationOffset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+      propertyPath: tetherRotationOffset.y
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: sizeToFitForCollectable
       value: 2.8
@@ -125,36 +145,48 @@ PrefabInstance:
       value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+      propertyPath: CollectableMeshes.Array.data[0].scaleMultiplier
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: CollectableMeshes.Array.data[2].scaleMultiplier
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: CollectableMeshes.Array.data[0].positionOffset.y
-      value: 0.13
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: CollectableMeshes.Array.data[0].rotationOffset.x
-      value: -100
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: CollectableMeshes.Array.data[0].rotationOffset.z
-      value: 33
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: CollectableMeshes.Array.data[1].positionOffset.y
-      value: -1.1
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: CollectableMeshes.Array.data[1].rotationOffset.x
-      value: -100
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+      propertyPath: CollectableMeshes.Array.data[1].rotationOffset.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: CollectableMeshes.Array.data[2].positionOffset.x
-      value: 0.57
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
+      propertyPath: CollectableMeshes.Array.data[2].positionOffset.y
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: CollectableMeshes.Array.data[2].rotationOffset.x
-      value: -100
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 3593157087524228998, guid: 78f0f09841247754e97f0f38056490f9, type: 3}
       propertyPath: CollectableMeshes.Array.data[2].rotationOffset.z

@@ -20,10 +20,11 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     {
         public Collectable collectable;
         [HideInInspector] public GameObject collectableObject;
-        
-        [Foldout("Advanced")] public Vector3 rotationOffset = Vector3.zero;
-        [Foldout("Advanced")] public float scaleMultiplier = 1;
-        [Foldout("Advanced")] public Vector2 positionOffset;
+        [HideInInspector] public Transform transform => collectableObject.transform;
+
+        public Vector2 positionOffset;
+        public Vector3 rotationOffset = Vector3.zero;
+        public float scaleMultiplier = 1;
 
         [HideInInspector] public MeshRenderer meshRenderer;
         [HideInInspector] public MeshFilter meshFilter;
@@ -32,8 +33,13 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     [Header("Per-level settings")]
     [InfoBox("Collectable Models and Materials will be automatically retrieved from the collectable registry")]
     [SerializeField] private List<LevelConfirmCollectableMesh> CollectableMeshes;
+
+    [BoxGroup("Tether Settings"), SerializeField] private MeshRenderer tetherMeshPrefab;
+    [BoxGroup("Tether Settings"), SerializeField] private Vector2 tetherPositionOffset;
+    [BoxGroup("Tether Settings"), SerializeField] private Vector3 tetherRotationOffset;
+    [BoxGroup("Tether Settings"), SerializeField] private float tetherSizeMultiplier = 1;
+
     [SerializeField] private Texture2D notCollectedTexture;
-    [SerializeField] private Vector3 tetherRotationOffset;
 
 
     [Header("Settings")]
@@ -64,13 +70,15 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     /// </summary>
     public void Initialize(string sceneToLoad)
     {
+        tetherToDisplay = sceneToLoad;
+
         GameManager.Instance.SetPlayerInMenu(true);
 
         if (collectableRegistry == null)
             collectableRegistry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
 
         kioskRenderCameraInstance = Instantiate(renderCameraPrefab);
-        kioskRenderCameraInstance.Initialize(CollectableMeshes);
+        kioskRenderCameraInstance.Initialize(CollectableMeshes, tetherPositionOffset, tetherSizeMultiplier, tetherMeshPrefab);
 
         foreach (var tetherModel in kioskRenderCameraInstance.TetherModels)
         {
@@ -102,9 +110,9 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     }
 
     #region Viewport Objects Initialization
-    private void RefreshTether(MeshRenderer tetherMesh)
+    private void RefreshTether(GameObject tetherMesh)
     {
-        ScaleToFitBounds(tetherMesh.GetComponent<MeshFilter>(), sizeToFitForTether, 1);
+        ScaleToFitBounds(tetherMesh.transform, sizeToFitForTether, 1);
 
         // if its null then its probably because this is being run from the debug button.
         if (SaveDataManager.Instance == null) return;
@@ -116,11 +124,16 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         }
         else
         {
-            // Set materials to uncollected
-            int count = tetherMesh.materials.Count();
+            MeshRenderer[] tetherMeshRenderers = tetherMesh.GetComponentsInChildren<MeshRenderer>();
 
-            var emptyMaterials = Enumerable.Repeat(GetNotCollectedMaterialInstance(), count).ToList();
-            tetherMesh.SetMaterials(emptyMaterials);
+            foreach(MeshRenderer mr in tetherMeshRenderers)
+            {
+                // Set materials to uncollected
+                int count = mr.materials.Count();
+
+                var emptyMaterials = Enumerable.Repeat(GetNotCollectedMaterialInstance(), count).ToList();
+                mr.SetMaterials(emptyMaterials);
+            }
         }
     }
 
@@ -136,7 +149,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         else
         {
             collectable.meshFilter.mesh = mesh;
-            ScaleToFitBounds(collectable.meshFilter, sizeToFitForCollectable, collectable.scaleMultiplier);
+            ScaleToFitBounds(collectable.transform, sizeToFitForCollectable, collectable.scaleMultiplier);
         }
 
         // if its null then its probably because this is being run from the debug button.
@@ -151,7 +164,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         {
             int count = collectable.meshRenderer.materials.Count();
 
-            #region specific tether hard coding (sorry
+            #region specific tether hard coding (sorry)
 
             if (collectable.collectable == Collectable.Nightcap_Hat)
                 count = 3;
@@ -166,10 +179,19 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         }
     }
 
-    private void ScaleToFitBounds(MeshFilter mesh, float sizeToFit, float scaleMultiplier)
+    private void ScaleToFitBounds(Transform mesh, float sizeToFit, float scaleMultiplier)
     {
+
+        MeshFilter meshFilter = mesh.GetComponent<MeshFilter>();
+
+        if (meshFilter == null)
+        {
+            mesh.transform.localScale *= scaleMultiplier;
+            return;
+        }
+
         mesh.transform.localScale = Vector3.one;
-        Vector3 meshSize = mesh.sharedMesh.bounds.extents * 2;
+        Vector3 meshSize = meshFilter.sharedMesh.bounds.extents * 2;
         Vector3 scaledSize = new Vector3(sizeToFit / meshSize.x, sizeToFit / meshSize.y, sizeToFit / meshSize.z);
         mesh.transform.localScale = Vector3.one * scaledSize.Min() * scaleMultiplier;
     }
@@ -179,7 +201,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     #region Viewport Objects Animation
     private void Update()
     {
-        notCollectedMaterialInstance.SetFloat("_Unscaled_Time", Time.unscaledTime);
+        GetNotCollectedMaterialInstance().SetFloat("_Unscaled_Time", Time.unscaledTime);
 
         for (int i=0; i<CollectableMeshes.Count; i++)
         {
@@ -190,7 +212,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         for (int i = 0; i < kioskRenderCameraInstance.TetherModels.Count; i++)
         {
             var tetherMesh = kioskRenderCameraInstance.TetherModels[i];
-            RotateItem(tetherMesh.transform, tetherRotationSeconds, 0, 0, tetherRotationOffset);
+            RotateItem(tetherMesh.transform, tetherRotationSeconds, 0, tiltAngle, tetherRotationOffset);
         }
 
     }
@@ -230,33 +252,6 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         confirmation.OnLoadingAnimationFinished();
         GameManager.Instance.SetPlayerInMenu(false);
     }
-
-    #region Debug
-
-    [Button]
-    private void Debug_RefreshCollectableDisplays()
-    {
-        // idk what scene to put in there, it doesnt matter
-        Initialize("Main Menu");
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.orange;
-        foreach(var tether in kioskRenderCameraInstance.TetherModels)
-        {
-            Gizmos.DrawWireCube(tether.transform.position, Vector3.one * sizeToFitForTether);
-        }
-
-        Gizmos.color = Color.blue;
-        foreach (var collectable in CollectableMeshes)
-        {
-            Gizmos.DrawWireCube(collectable.collectableObject.transform.position, Vector3.one * sizeToFitForCollectable);
-            collectable.collectableObject.transform.localEulerAngles = collectable.rotationOffset;
-        }
-    }
-
-    #endregion debug
 
     private void OnDestroy()
     {
