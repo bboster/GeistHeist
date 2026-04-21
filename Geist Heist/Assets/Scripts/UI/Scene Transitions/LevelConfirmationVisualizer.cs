@@ -23,6 +23,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         
         [Foldout("Advanced")] public Vector3 rotationOffset = Vector3.zero;
         [Foldout("Advanced")] public float scaleMultiplier = 1;
+        [Foldout("Advanced")] public Vector2 positionOffset;
 
         [HideInInspector] public MeshRenderer meshRenderer;
         [HideInInspector] public MeshFilter meshFilter;
@@ -55,7 +56,6 @@ public class LevelConfirmationVisualizer : MonoBehaviour
 
     private KioskCameraController kioskRenderCameraInstance;
 
-    private Vector2 lastResolution;
     private string tetherToDisplay;
     
 
@@ -118,6 +118,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         {
             // Set materials to uncollected
             int count = tetherMesh.materials.Count();
+
             var emptyMaterials = Enumerable.Repeat(GetNotCollectedMaterialInstance(), count).ToList();
             tetherMesh.SetMaterials(emptyMaterials);
         }
@@ -149,6 +150,17 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         else
         {
             int count = collectable.meshRenderer.materials.Count();
+
+            #region specific tether hard coding (sorry
+
+            if (collectable.collectable == Collectable.Nightcap_Hat)
+                count = 3;
+
+            if (collectable.collectable == Collectable.Wizard_Hat)
+                count = 20;
+
+            #endregion
+
             var emptyMaterials = Enumerable.Repeat(GetNotCollectedMaterialInstance(), count).ToList();
             collectable.meshRenderer.SetMaterials(emptyMaterials);
         }
@@ -167,12 +179,6 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     #region Viewport Objects Animation
     private void Update()
     {
-        if (Screen.width != lastResolution.x || Screen.height != lastResolution.y)
-        {
-            lastResolution = new Vector2(Screen.width, Screen.height);
-            OnResolutionChanged();
-        }
-
         notCollectedMaterialInstance.SetFloat("_Unscaled_Time", Time.unscaledTime);
 
         for (int i=0; i<CollectableMeshes.Count; i++)
@@ -224,19 +230,6 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         confirmation.OnLoadingAnimationFinished();
         GameManager.Instance.SetPlayerInMenu(false);
     }
-
-    #region Resolution
-    void OnResolutionChanged()
-    {
-        /*
-        Debug.Log($"new resolution: {Screen.width} x {Screen.height}");
-        renderCameraOutputTexture.width = Screen.width;
-        renderCameraOutputTexture.height = Screen.height;
-
-        renderCamera.orthographicSize = renderCameraSize * Screen.width / 1920;
-        */
-    }
-    #endregion
 
     #region Debug
 

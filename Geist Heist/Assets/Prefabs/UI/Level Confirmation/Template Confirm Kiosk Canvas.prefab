@@ -173,8 +173,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 70, y: 60}
-  m_SizeDelta: {x: 379.88, y: 100}
+  m_AnchoredPosition: {x: 140, y: 120}
+  m_SizeDelta: {x: 759.76, y: 200}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &4871857950729363463
 CanvasRenderer:
@@ -247,8 +247,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 144
+  m_fontSizeBase: 144
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -891,18 +891,21 @@ MonoBehaviour:
     collectableObject: {fileID: 0}
     rotationOffset: {x: 0, y: 0, z: 0}
     scaleMultiplier: 1
+    positionOffset: {x: 0, y: 0}
     meshRenderer: {fileID: 0}
     meshFilter: {fileID: 0}
   - collectable: 19
     collectableObject: {fileID: 0}
     rotationOffset: {x: 0, y: 0, z: 0}
     scaleMultiplier: 1
+    positionOffset: {x: 0, y: 0}
     meshRenderer: {fileID: 0}
     meshFilter: {fileID: 0}
   - collectable: 18
     collectableObject: {fileID: 0}
     rotationOffset: {x: 0, y: 0, z: 0}
     scaleMultiplier: 1
+    positionOffset: {x: 0, y: 0}
     meshRenderer: {fileID: 0}
     meshFilter: {fileID: 0}
   notCollectedTexture: {fileID: 0}
@@ -1203,8 +1206,28 @@ PrefabInstance:
     - {fileID: 4286705086980755500, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4801289806046254294, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1458577861983255907}
   m_SourcePrefab: {fileID: 100100000, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
+--- !u!1 &5834326724406963994 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4801289806046254294, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
+  m_PrefabInstance: {fileID: 1321290396337126348}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &1458577861983255907
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5834326724406963994}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!224 &5935931735928527770 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4627027416864514134, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
@@ -1215,7 +1238,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4728054709059538163, guid: f5574bfd1b685a04681c630517f1666a, type: 3}
   m_PrefabInstance: {fileID: 1321290396337126348}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 5834326724406963994}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}

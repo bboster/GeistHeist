@@ -400,11 +400,10 @@ public class DebugConsole : MonoBehaviour
     private void TryCompleteCommand(string command)
     {
         // Get the word before the space, or the whole string if no space exists
-        int index = command.IndexOf(' ');
-        string firstWord = index == -1 ? command : command.Substring(0, index);
+        string firstWord = StaticUtilities.FirstWord(command);
 
         // complete levels
-        if (firstWord == "level" || firstWord == "scene" || firstWord == "l" || firstWord == "h")
+        if (firstWord == "level" || firstWord =="levels" || firstWord == "scene" || firstWord == "scenes" || firstWord == "l" || firstWord == "s")
         {
             TryCompleteScene(command.Substring(firstWord.Length + 1, command.Length - firstWord.Length - 1));
             return;

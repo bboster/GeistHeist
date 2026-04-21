@@ -33,6 +33,10 @@ public class KioskCameraController : MonoBehaviour
             collectableInfo[i].collectableObject = collectableObjectsList[i].gameObject;
             collectableInfo[i].meshFilter = collectableObjectsList[i].gameObject.GetComponent<MeshFilter>();
             collectableInfo[i].meshRenderer = collectableObjectsList[i].gameObject.GetComponent<MeshRenderer>();
+
+            collectableObjectsList[i].transform.position += (Vector3) collectableInfo[i].positionOffset;
         }
+
+        DontDestroyOnLoad(this.gameObject);
     }
 }
