@@ -62,6 +62,7 @@ public class GuardController : MonoBehaviour
     [SerializeField] private ParticleSystem dustParticles;
     [SerializeField] private ParticleSystem smokeParticlesL;
     [SerializeField] private ParticleSystem smokeParticlesR;
+    [SerializeField] private Light flashlight;
     public Animator searchAnimator;
 
     [HideInInspector] public Vector3 SearchLocation; //TEMP VAR UNTIL I FIND A BETTER WAY TO PASS A SEARCH LOCATION TO A BEHAVIOR
@@ -338,6 +339,8 @@ public class GuardController : MonoBehaviour
             currentPriority = currentBehavior.Priority;
             activeBehaviorLoop = StartCoroutine(currentBehavior.BehaviorLoop());
             OnBehaviorStarted.Invoke(currentBehavior.StateName);
+
+            flashlight.color = currentBehavior.FlashlightColor;
         }
     }
 
