@@ -16,16 +16,16 @@ using UnityEngine.UI;
 public class LevelConfirmationVisualizer : MonoBehaviour
 {
     [Serializable]
-    private class LevelConfirmCollectableMesh
+    public class LevelConfirmCollectableMesh
     {
         public Collectable collectable;
-        public GameObject collectableObject;
+        [HideInInspector] public GameObject collectableObject;
         
         [Foldout("Advanced")] public Vector3 rotationOffset = Vector3.zero;
         [Foldout("Advanced")] public float scaleMultiplier = 1;
 
-        public MeshRenderer meshRenderer => collectableObject.GetComponent<MeshRenderer>();
-        public MeshFilter meshFilter => collectableObject.GetComponent<MeshFilter>();
+        [HideInInspector] public MeshRenderer meshRenderer;
+        [HideInInspector] public MeshFilter meshFilter;
     }
 
     [Header("Per-level settings")]
@@ -45,19 +45,19 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     [SerializeField, Required] private Material notCollectedMaterial;
 
 
-    [Foldout("Advanced"), Required, SerializeField] private Camera renderCamera;
+    [Foldout("Advanced"), Required, SerializeField] private KioskCameraController renderCameraPrefab;
     [Foldout("Advanced"), Required, SerializeField] private RawImage renderCameraOverlayImage;
     [Foldout("Advanced"), Required, SerializeField] private int renderCameraSize = 5;
-    // i know theres only one tether in our game but scalability (also there may be an animation later that duplicates the tethers)
-    [Foldout("Advanced"), SerializeField] private List<MeshRenderer> TetherModels;
 
     private static CollectableRegistry collectableRegistry;
     private static RenderTexture renderCameraOutputTexture;
     private static Material notCollectedMaterialInstance;
 
-    private Vector2 lastResolution;
+    private KioskCameraController kioskRenderCameraInstance;
 
+    private Vector2 lastResolution;
     private string tetherToDisplay;
+    
 
     /// <summary>
     /// Initialized from kiosk
@@ -69,10 +69,10 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         if (collectableRegistry == null)
             collectableRegistry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
 
-        
-        
+        kioskRenderCameraInstance = Instantiate(renderCameraPrefab);
+        kioskRenderCameraInstance.Initialize(CollectableMeshes);
 
-        foreach (var tetherModel in TetherModels)
+        foreach (var tetherModel in kioskRenderCameraInstance.TetherModels)
         {
             RefreshTether(tetherModel);
         }
@@ -126,7 +126,8 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     private void RefreshCollectable(LevelConfirmCollectableMesh collectable)
     {
         var mesh = collectableRegistry.GetMesh(collectable.collectable);
-        if(mesh == null)
+
+        if (mesh == null)
         {
             Debug.LogError($"There is no mesh associated with the hat {collectable.ToString()} in collectible registry");
             return;
@@ -180,9 +181,9 @@ public class LevelConfirmationVisualizer : MonoBehaviour
             RotateItem(collectableMesh.collectableObject.transform, collectableRotationSeconds, i, tiltAngle, collectableMesh.rotationOffset);
         }
 
-        for (int i = 0; i < TetherModels.Count; i++)
+        for (int i = 0; i < kioskRenderCameraInstance.TetherModels.Count; i++)
         {
-            var tetherMesh = TetherModels[i];
+            var tetherMesh = kioskRenderCameraInstance.TetherModels[i];
             RotateItem(tetherMesh.transform, tetherRotationSeconds, 0, 0, tetherRotationOffset);
         }
 
@@ -209,7 +210,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         }
 
         // set render cameras output
-        renderCamera.targetTexture = renderCameraOutputTexture;
+        kioskRenderCameraInstance.camera.targetTexture = renderCameraOutputTexture;
         
         // apply render texture as overlay
         renderCameraOverlayImage.texture = renderCameraOutputTexture;
@@ -249,7 +250,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.orange;
-        foreach(var tether in TetherModels)
+        foreach(var tether in kioskRenderCameraInstance.TetherModels)
         {
             Gizmos.DrawWireCube(tether.transform.position, Vector3.one * sizeToFitForTether);
         }
@@ -266,6 +267,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
 
     private void OnDestroy()
     {
+        Destroy(kioskRenderCameraInstance.gameObject);
         GameManager.Instance.SetPlayerInMenu(false);
     }
 }
