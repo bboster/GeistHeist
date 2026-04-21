@@ -128,7 +128,7 @@ public abstract class IBillboardUI : MonoBehaviour
     #endregion
 
     // Can be overridden for custom behavior
-    public virtual void CalculateAndSetScale(float playerDistance)
+    public virtual void CalculateAndSetScale(float playerDistance, bool smoothScale = true)
     {
         float t = Mathf.InverseLerp(closeScaleDistance, farScaleDistance, playerDistance);
         transform.localScale = Vector3.one * Mathf.Lerp(closeScale, farScale, t);
@@ -136,12 +136,21 @@ public abstract class IBillboardUI : MonoBehaviour
 
     // Can be overridden for custom behavior
     /// <param name="UIPosition">The position of this UI element on the screen</param>
-    public void CalculateAndSetOpacity(float playerDistance, float cameraDistance, Vector3 UIPosition)
+    public void CalculateAndSetOpacity(float playerDistance, float cameraDistance, Vector3 UIPosition, bool smoothOpacity = true)
     {
         float a = CalculateOpacity(playerDistance, cameraDistance, UIPosition);
+
         // Smooth it
-        CurrentAlpha = Mathf.MoveTowards(CurrentAlpha, a, Time.deltaTime * SMOOTH_SPEED);
-        canvasGroup.alpha = CurrentAlpha;
+        if (smoothOpacity)
+        {
+            CurrentAlpha = Mathf.MoveTowards(CurrentAlpha, a, Time.deltaTime * SMOOTH_SPEED);
+            canvasGroup.alpha = CurrentAlpha;
+        }
+        else
+        {
+            CurrentAlpha = a;
+            canvasGroup.alpha = a;
+        }
     }
 
     protected virtual float CalculateOpacity(float playerDistance, float cameraDistance, Vector3 UIPosition)

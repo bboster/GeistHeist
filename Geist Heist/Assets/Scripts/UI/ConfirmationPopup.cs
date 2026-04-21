@@ -163,6 +163,7 @@ public class ConfirmationPopup : MonoBehaviour
         {
             StaticUtilities.DisableCanvasGroup(canvasGroup);
         }
+        InputEvents.PauseStartedOverride = lastPauseStartedOverride == null ? null : lastPauseStartedOverride;
     }
 
     private void RestorePreviousSelectionIfNeeded()
