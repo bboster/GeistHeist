@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class WavyTextAnimation : MonoBehaviour
 {
-    [SerializeField] private float waveSpeed = 1;
-    [SerializeField] private float waveHeight = 1;
+    [SerializeField] private float waveSpeed = 0.5f;
+    [SerializeField] private float waveHeight = 0.1f;
     public bool PlayAnimation = true;
 
 
@@ -15,7 +15,7 @@ public class WavyTextAnimation : MonoBehaviour
     [SerializeField, Foldout("Advanced Settings")] private bool changeCharacterSpacing = true;
     [SerializeField, Foldout("Advanced Settings"), ShowIf(nameof(changeCharacterSpacing))] private float characterSpacingWhileWavy = 8;
 
-    private string textString;
+    [SerializeField, ReadOnly] private string textString;
     private float defaultCharacterSpacing;
 
     private float t;
@@ -27,7 +27,7 @@ public class WavyTextAnimation : MonoBehaviour
     {
         if (PlayAnimation) t = 1;
 
-        textString = textBox.text;
+        if(textString == default || textString == "" || textString == null) textString = textBox.text;
         defaultCharacterSpacing = textBox.characterSpacing;
     }
 
@@ -40,13 +40,22 @@ public class WavyTextAnimation : MonoBehaviour
 
         if (t > 0)
         {
+            bool isStyleTag = false;
             string waveString = "";
             for (int i = 0; i < textString.Length; i++)
             {
                 char c = textString[i];
+
+                // Skip style tags
+                if (c == '<') { isStyleTag = true; }
+                if (c == '>') { isStyleTag = false; waveString += c; continue; } // next character will get wavy
+                if (isStyleTag) { waveString += c; continue; }
+
+                // calculate height using a sin wave
                 float height = StaticUtilities.SinRange((Time.unscaledTime + i) * waveSpeed, -waveHeight, waveHeight);
                 height = StaticUtilities.RoundToHundreth(height * t);
-                waveString += $"<voffset={height}em>{c}</voffset>";
+
+                waveString += $"<voffset={height}em>{c}";//</voffset>";
             }
             textBox.text = waveString;
             if(changeCharacterSpacing)
@@ -59,5 +68,10 @@ public class WavyTextAnimation : MonoBehaviour
             if(changeCharacterSpacing)  
                 textBox.characterSpacing = defaultCharacterSpacing;
         }
+    }
+
+    public void SetText(string text)
+    {
+        textString = text;
     }
 }
