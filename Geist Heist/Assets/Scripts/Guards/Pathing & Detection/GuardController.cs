@@ -71,6 +71,7 @@ public class GuardController : MonoBehaviour
 
     private EventInstance guardWalkSFX;
     private EventInstance guardRunSFX;
+    private EventInstance guardReaction;
 
     #endregion
 
@@ -122,6 +123,29 @@ public class GuardController : MonoBehaviour
         //only for sfx for now
         guardWalkSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardWalk);
         guardRunSFX = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardRun);
+
+        //randomize which guard lines get played
+        System.Random r = new System.Random();
+        int whichGuard = r.Next(0, 4);
+        switch (whichGuard)
+        {
+            case 0:
+                guardReaction = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardOne);
+                break;
+            case 1:
+                guardReaction = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardTwo);
+                break;
+            case 2:
+                guardReaction = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardThree);
+                break;
+            case 3:
+                guardReaction = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardFour);
+                break;
+            default:
+                guardReaction = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardOne);
+                break;
+        }
+        
     }
 
     /// <summary>
@@ -135,6 +159,7 @@ public class GuardController : MonoBehaviour
         //only for sfx for now
         guardWalkSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
         guardRunSFX.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
+        guardReaction.set3DAttributes(RuntimeUtils.To3DAttributes(GetComponent<Transform>(), GetComponent<Rigidbody>()));
 
         if (currentBehavior.StateName == GuardStates.chase)
         {
@@ -212,6 +237,15 @@ public class GuardController : MonoBehaviour
     {
         guardRunSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         guardWalkSFX.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        guardReaction.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+
+    public void PlayVoiceline(int whichline)
+    {
+        //change the parameter
+        RuntimeManager.StudioSystem.setParameterByName("GuardReact", whichline);
+        //play the voiceline
+        guardReaction.start();
     }
     #endregion
 
