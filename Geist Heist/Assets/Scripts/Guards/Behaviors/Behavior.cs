@@ -32,6 +32,8 @@ public class Behavior : ScriptableObject
     [Foldout("Base Values"), MaxValue(10), MinValue(1)] public int Priority;
     [Tooltip("The animator controller for the behavior. Can be left blank if there are no animations")]
     [Foldout("Base Values")] public RuntimeAnimatorController stateController;
+    [Tooltip("The color the flashlight should be during this state")]
+    [Foldout("Base Values")] public Color FlashlightColor;
 
     [Tooltip("Reference to the gameObject")]
     protected GameObject selfRef;
