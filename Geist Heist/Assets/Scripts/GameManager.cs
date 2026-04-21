@@ -37,6 +37,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject KeyManagerPrefab;
     [SerializeField, Required] GameObject SoundWaveManagerPrefab;
     [SerializeField, Required] GameObject SceneLoadManagerPrefab;
+    [SerializeField, Required] GameObject AchievementManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject PauseMenuPrefab;

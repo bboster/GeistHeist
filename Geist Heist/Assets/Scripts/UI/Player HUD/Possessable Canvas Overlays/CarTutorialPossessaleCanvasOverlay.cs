@@ -63,16 +63,18 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
         yield return StaticUtilities.FadeOpacity(group, group.alpha, 0, fadeAnimationSeconds, unscaledTime: true, currentCoroutineToCancel: fadeOpacityCoroutine);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
+        
         if (Application.isPlaying) return;
-
+        
         if(Mathf.RoundToInt((float)EditorApplication.timeSinceStartup / 5) % 2 == 0)
             wavyTextBox.SetText( KeyboardText );
         else
             wavyTextBox.SetText( ControllerText );
     }
-
+#endif
     private void OnControllerUpdated()
     {
         wavyTextBox.SetText(InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText);
