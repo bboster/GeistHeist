@@ -10,6 +10,13 @@ public class AchievementManager : Singleton<AchievementManager>
 
     public enum eAchievements {OpenGame, Credits, BeatTutorial, BeatLevel1, BeatLevel2, BeatLevel3, BeatLevel4, BeatLevel5, InteractWithLore, RollOut, FinishGame, OpenDoor, OpenPeachDoor, CollectFirstHat, TryOnHat, TryOnLobster, TryOnSleepy, TryOnJester, CollecttwelveHats, CollectAllHats, PosessVase20, throwCan, ThrowCan20, Drive, Bonk5, Drive20, getcaught, EscapeGuard }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        DontDestroyOnLoad(this);
+        instance = this;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
