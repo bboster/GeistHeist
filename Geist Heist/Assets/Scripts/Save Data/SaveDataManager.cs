@@ -136,7 +136,10 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         if (IsLevelCompleted(sceneName))
             Debug.Log("This level has already been completed");
         else
+        {
             currentSaveDta.ScenesCompleted.Add(sceneName);
+        }
+            
 
         if (autoSave)
             SaveData();
@@ -147,23 +150,19 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         EnsureSaveData();
 
         // try to collect
-        if (collectedState)
+        if (collectedState && !IsLevelCompleted(sceneName))
         {
-            if (IsLevelCompleted(sceneName) && collectedState)
-                Debug.Log($"{sceneName} has already been completed");
-            else
-                currentSaveDta.ScenesCompleted.Add(sceneName);
+            currentSaveDta.ScenesCompleted.Add(sceneName);
+
+            if (autoSave) SaveData();
         }
-        else
+        else if (!collectedState && IsLevelCompleted(sceneName))
         {
-            if (IsLevelCompleted(sceneName) && collectedState)
-                currentSaveDta.ScenesCompleted.Remove(sceneName);
-            else
-                Debug.Log($"{sceneName} has already been not completed");
+            currentSaveDta.ScenesCompleted.Remove(sceneName);
+
+            if (autoSave) SaveData();
         }
 
-        if (autoSave)
-            SaveData();
     }
 
     public void MarkSceneAsCompleted(int sceneIndex, bool autoSave = true)
