@@ -1152,7 +1152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 20, y: -20}
+  m_EffectDistance: {x: 30, y: -30}
   m_UseGraphicAlpha: 1
 --- !u!1 &6959300978559538777
 GameObject:
@@ -1496,18 +1496,22 @@ MonoBehaviour:
   - collectable: 20
     collectableObject: {fileID: 2676221549897066126}
     rotationOffset: {x: 0, y: 0, z: 0}
+    scaleMultiplier: 1
   - collectable: 19
     collectableObject: {fileID: 8552980683443137630}
     rotationOffset: {x: 0, y: 0, z: 0}
+    scaleMultiplier: 1
   - collectable: 18
     collectableObject: {fileID: 6959300978559538777}
     rotationOffset: {x: 0, y: 0, z: 0}
+    scaleMultiplier: 1
   notCollectedTexture: {fileID: 0}
+  tetherRotationOffset: {x: 0, y: 0, z: 0}
   sizeToFitForTether: 5
   sizeToFitForCollectable: 2.5
   tiltAngle: 15
-  collectableRotationSeconds: 8
-  tetherRotationSeconds: 20
+  collectableRotationSeconds: 13
+  tetherRotationSeconds: 25
   notCollectedMaterial: {fileID: 2100000, guid: c57756e97d4c1d94eb245d28d25115af, type: 2}
   renderCamera: {fileID: 593068301388323175}
   renderCameraOverlayImage: {fileID: 1037326463120046110}

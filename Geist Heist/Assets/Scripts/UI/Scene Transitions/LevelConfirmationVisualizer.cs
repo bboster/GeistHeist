@@ -22,6 +22,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         public GameObject collectableObject;
         
         [Foldout("Advanced")] public Vector3 rotationOffset = Vector3.zero;
+        [Foldout("Advanced")] public float scaleMultiplier = 1;
 
         public MeshRenderer meshRenderer => collectableObject.GetComponent<MeshRenderer>();
         public MeshFilter meshFilter => collectableObject.GetComponent<MeshFilter>();
@@ -103,7 +104,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     #region Viewport Objects Initialization
     private void RefreshTether(MeshRenderer tetherMesh)
     {
-        ScaleToFitBounds(tetherMesh.GetComponent<MeshFilter>(), sizeToFitForTether);
+        ScaleToFitBounds(tetherMesh.GetComponent<MeshFilter>(), sizeToFitForTether, 1);
 
         // if its null then its probably because this is being run from the debug button.
         if (SaveDataManager.Instance == null) return;
@@ -133,7 +134,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         else
         {
             collectable.meshFilter.mesh = mesh;
-            ScaleToFitBounds(collectable.meshFilter, sizeToFitForCollectable);
+            ScaleToFitBounds(collectable.meshFilter, sizeToFitForCollectable, collectable.scaleMultiplier);
         }
 
         // if its null then its probably because this is being run from the debug button.
@@ -152,12 +153,12 @@ public class LevelConfirmationVisualizer : MonoBehaviour
         }
     }
 
-    private void ScaleToFitBounds(MeshFilter mesh, float sizeToFit)
+    private void ScaleToFitBounds(MeshFilter mesh, float sizeToFit, float scaleMultiplier)
     {
         mesh.transform.localScale = Vector3.one;
         Vector3 meshSize = mesh.sharedMesh.bounds.extents * 2;
         Vector3 scaledSize = new Vector3(sizeToFit / meshSize.x, sizeToFit / meshSize.y, sizeToFit / meshSize.z);
-        mesh.transform.localScale = Vector3.one * scaledSize.Min();
+        mesh.transform.localScale = Vector3.one * scaledSize.Min() * scaleMultiplier;
     }
 
     #endregion
