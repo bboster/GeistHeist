@@ -85,8 +85,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private EventInstance playerMoveSFX;
 
-    private string isMovingParam = "isMoving";
-    private string isIdleParam = "isIdle";
+    private const string isMovingParam = "isMoving";
+    private const string isIdleParam = "isIdle";
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -518,6 +518,8 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void WhileMoveHeld(float secondsHeld)
     {
         playerMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
+        animator.SetBool(isMovingParam, true);
+        animator.SetBool(isIdleParam, false);
 
         onSlope = OnSlope();
 
