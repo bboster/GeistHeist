@@ -233,7 +233,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
 
         if (renderCameraOutputTexture == null)
         {
-            renderCameraOutputTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32); // 1920 x 1080 resolution
+            renderCameraOutputTexture = new RenderTexture(3840, 2160, 24, RenderTextureFormat.ARGB32); // 1920 x 1080 resolution
             renderCameraOutputTexture.Create();
         }
 
