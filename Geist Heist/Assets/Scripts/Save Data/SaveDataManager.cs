@@ -27,6 +27,7 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     [Header("Scene Transition")]
     [SerializeField, Scene] private List<string> ScenesToExcludeFromCompletionCount;
     [SerializeField, Scene] private List<string> ScenesRequiredForCompletion;
+    [SerializeField, Scene] private List<string> ScenesForCutscenes;
 
     [Header("Debug")]
     [Tooltip("If true, does not save any data")]
@@ -145,6 +146,28 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Return true if level is stored in list of saved completed levels
+    /// </summary>
+    public bool IsSceneCutsceneCompleted(string sceneName)
+    {
+        EnsureSaveData();
+        return currentSaveDta.CutscenesCompleted.Contains(sceneName);
+    }
+
+    public void MarkSceneCutsceneAsCompleted(string sceneName, bool autoSave = true)
+    {
+        EnsureSaveData();
+
+        if (IsSceneCutsceneCompleted(sceneName))
+            Debug.Log("This cutscene has already been completed");
+        else
+            currentSaveDta.CutscenesCompleted.Add(sceneName);
+
+        if (autoSave)
+            SaveData();
     }
 
     #endregion

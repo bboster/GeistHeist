@@ -33472,11 +33472,19 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2774012598759010100, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 262071276}
+    - targetCorrespondingSourceObject: {fileID: 2983350911294381107, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 610208329}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
 --- !u!4 &452556362 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2774012598759010100, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
+  m_PrefabInstance: {fileID: 452556361}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &452556363 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2983350911294381107, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
   m_PrefabInstance: {fileID: 452556361}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &452564957
@@ -40158,6 +40166,126 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.9090347, y: 3.5, z: 0.90903497}
   m_Center: {x: -0.000000044703484, y: 1.7499998, z: 0.000000059604645}
+--- !u!1 &610208328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 610208329}
+  - component: {fileID: 610208331}
+  - component: {fileID: 610208330}
+  - component: {fileID: 610208332}
+  m_Layer: 3
+  m_Name: Hub Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &610208329
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610208328}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.23989071, y: -0.59018946, z: 0.18508215, w: 0.7482469}
+  m_LocalPosition: {x: -0.7056732, y: 0.49583542, z: -4.2021}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 452556363}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &610208330
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610208328}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: aadc7fc11c1ee77409500b0173062f98, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &610208331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610208328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 63.19626
+    OrthographicSize: 5
+    NearClipPlane: 0.01
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!114 &610208332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610208328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc44def1d09e1443a0a7d07e3956a51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraHubPreview
+  hubCamera: {fileID: 610208331}
+  camAnimator: {fileID: 610208330}
+  ScenesToCutscene:
+  - TutorialHallway
+  - FINAL Parlour Room
+  - Exhibit 1 Wing 2 - Library
+  - KitchenWing1
+  - Exibit 2 Wing 2
+  - Wing 3 - Bedroom Greybox
 --- !u!43 &610796108
 Mesh:
   m_ObjectHideFlags: 0

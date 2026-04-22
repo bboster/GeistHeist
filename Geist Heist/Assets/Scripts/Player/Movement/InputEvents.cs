@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -64,8 +65,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         + (movementOrigin.right * InputDirection2D.x))
         .WithY(0)
         .normalized;
-
-    public Vector2 InputDirection2D => (FadeToBlack.Instance == null) ? Move.ReadValue<Vector2>() : Vector2.zero;
+    [HideInInspector] public bool CutsceneRunning = false;
+    public Vector2 InputDirection2D => (FadeToBlack.Instance == null || !CutsceneRunning) ? Move.ReadValue<Vector2>() : Vector2.zero;
     public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed, PausePressed/*, SpacePressed*/;
 
     public UnityEvent OnControllerChanged = new();
