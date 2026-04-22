@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraHubPreview : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class CameraHubPreview : MonoBehaviour
 
     private void Start()
     {
+        SaveDataManager.Instance.MarkSceneAsCompleted(SceneManager.GetActiveScene().name);
         CheckForCameraTransition();
     }
 
@@ -22,8 +24,10 @@ public class CameraHubPreview : MonoBehaviour
             if (IsSceneCompletedAndCutsceneNotPlayed(ScenesToCutscene[i]))
             {
                 camAnimator.SetInteger("Cutscene", i);
+                hubCamera.Priority = 50;
                 SaveDataManager.Instance.MarkSceneCutsceneAsCompleted(ScenesToCutscene[i]);
                 InputEvents.Instance.CutsceneRunning = true;
+                Debug.Log("horse");
                 return;
             }
         }
@@ -44,5 +48,8 @@ public class CameraHubPreview : MonoBehaviour
     public void OnCutsceneEnd()
     {
         InputEvents.Instance.CutsceneRunning = false;
+        hubCamera.Priority = 0;
+
+        camAnimator.SetInteger("Cutscene", 50);
     }
 }

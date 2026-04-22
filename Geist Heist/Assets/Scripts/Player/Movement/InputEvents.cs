@@ -66,7 +66,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
         .WithY(0)
         .normalized;
     [HideInInspector] public bool CutsceneRunning = false;
-    public Vector2 InputDirection2D => (FadeToBlack.Instance == null || !CutsceneRunning) ? Move.ReadValue<Vector2>() : Vector2.zero;
+    public Vector2 InputDirection2D => (FadeToBlack.Instance == null && !CutsceneRunning) ? Move.ReadValue<Vector2>() : Vector2.zero;
     public static bool MovePressed, /*JumpPressed,*/ ActionPressed, InteractPressed, PausePressed/*, SpacePressed*/;
 
     public UnityEvent OnControllerChanged = new();
