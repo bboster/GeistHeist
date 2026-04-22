@@ -27,7 +27,6 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     [Header("Scene Transition")]
     [SerializeField, Scene] private List<string> ScenesToExcludeFromCompletionCount;
     [SerializeField, Scene] private List<string> ScenesRequiredForCompletion;
-    [SerializeField, Scene] private List<string> ScenesForCutscenes;
 
     [Header("Debug")]
     [Tooltip("If true, does not save any data")]
