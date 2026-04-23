@@ -34,6 +34,4 @@ public class FadeToBlack : Singleton<FadeToBlack>
         Destroy(gameObject);
         fadeCoroutine = null;
     }
-
-
 }
