@@ -28,6 +28,7 @@ public class MusicManager : Singleton<MusicManager>
 
     protected override void Awake()
     {
+        base.Awake();
         //SceneManager.sceneLoaded += StartMusic;
     }
 
@@ -110,7 +111,7 @@ public class MusicManager : Singleton<MusicManager>
         }
     }
 
-    IEnumerator MusicToHidden(float val)
+    public IEnumerator MusicToHidden(float val)
     {
         val += 0.05f;
         hubBGM.setParameterByName("Hiding", val);
@@ -125,7 +126,7 @@ public class MusicManager : Singleton<MusicManager>
         }
     }
 
-    IEnumerator MusicToNormal(float val)
+    public IEnumerator MusicToNormal(float val)
     {
         val -= 0.05f;
         hubBGM.setParameterByName("Hiding", val);
