@@ -2,7 +2,7 @@
  * Author: Jacob Bateman
  * Contributors: Toby
  * Creation: 10/21/25
- * Last Edited: 10/27/25
+ * Last Edited: 4/20/2026
  * Summary: Stores data for a level that needs to carry over between scene reloads
  */
 
@@ -180,4 +180,5 @@ public class LevelNamePair
     [AllowNesting, Scene]
     public string SceneName;
     public string DisplayName;
+    public string InternalDebugName;
 }
