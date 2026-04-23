@@ -28,6 +28,7 @@ public class ReturnBehavior : GuardMovement
             thisAgent.isStopped = false;
         }
 
+        contRef.PlayVoiceline(5);
         contRef.GetAnimator().SetBool("isPatrolling", true);
     }
 
