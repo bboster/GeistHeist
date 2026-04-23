@@ -1,16 +1,18 @@
 /*
- * Contributors: Brenden
+ * Contributors: Brenden, Toby
  * Creation Date: 10/21/25
- * Last Modified: 1/27/2026
+ * Last Modified: 4/20/2026
  * 
  * Brief Description: handles the commands from the debug console
  */
 
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class DebugConsole : MonoBehaviour
 {
@@ -32,11 +34,16 @@ public class DebugConsole : MonoBehaviour
 
     GameObject cameraGO => PlayerManager.Instance.camera.gameObject;
 
+    private static CollectableRegistry collectableRegistry;
+
     private void Start()
     {
         Console.SetActive(false);
         InputEvents.DebugStarted.AddListener(ToggleConsole);
         FreeCamInstance = Instantiate(FreeCamPrefab, cameraGO.transform.position, Quaternion.identity);
+
+        if (collectableRegistry == null)
+            collectableRegistry = Resources.Load<CollectableRegistry>(CollectableRegistry.RESOURCE_PATH);
 
         if (logScrollRect == null && TextArea != null)
             logScrollRect = TextArea.GetComponentInParent<ScrollRect>();
@@ -91,8 +98,13 @@ public class DebugConsole : MonoBehaviour
         if (Command == "help")
         {
             AppendConsoleLine(
-                Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \nFreeze Guards: freeze " +
-                "\nList Scene: ls \nLoad Scene: scene <Scene Name/Scene Index> \nSpawn Item on camera: spawn <Item Name/Item Index> \nChange Players Speed: speed <Speed Value(or \"default\") >"
+                Command + "\nNo Clip: nc \nGod Mode: god \nDetatch Camera: dc \n"+
+                "Freeze Guards: freeze \n" +
+                "List: list <\"scenes\"/\"hats\">\n"+
+                "Load Scene: scene <Scene Name/Scene Index> \n"+
+                "Complete: c <\"scene\"/\"hat\"> <Scene Name/Scene Index/\"all\"/\"none\"/\"random\">\n" +
+                "Spawn Item on camera: spawn <Item Name/Item Index> \n"+
+                "Change Players Speed: speed <Speed Value(or \"default\")>"
             );
             return;
         }
@@ -122,9 +134,21 @@ public class DebugConsole : MonoBehaviour
         }
 
         // List Scene
-        if (Command.StartsWith("ls"))
+        if (Command.StartsWith("ls") || Command.StartsWith("list"))
         {
-            listScenes();
+            if(Command.EndsWith("hats") || Command.EndsWith("h") || Command.EndsWith("hat"))
+            {
+                ListHats();
+                return;
+            }
+
+            if(Command.EndsWith("scene") || Command.EndsWith("s") || Command.EndsWith("scenes") || Command.EndsWith("levels"))
+            {
+                listScenes();
+                return;
+            }
+
+            AppendConsoleLine("<color=red>Please enter \"list hats\" or \"list scenes\"</color>");
             return;
         }
 
@@ -134,15 +158,44 @@ public class DebugConsole : MonoBehaviour
         {
             if (Command.Length >= 7)
             {
-                LoadNewScene(Command.Substring(6, Command.Length - 6));
-                AppendConsoleLine("Scene Failed to load, Please input a valid scene");
+                TryLoadNewScene(Command.Substring(6, Command.Length - 6));
+                AppendConsoleLine("<color=red>Scene Failed to load, Please input a valid scene</color>");
             }
             else
             {
-                AppendConsoleLine(Command + " Invalid Scene name or index, Please input a valid scene");
+                AppendConsoleLine($"<color=red>{Command} Invalid Scene name or index, Please input a valid scene</color>");
+                listScenes();
             }
             return;
         }
+
+        #region c / complete / collect
+
+        if (Command.StartsWith("c"))
+        {
+            if(Command.Length <= 2)
+            {
+                AppendConsoleLine($"<color=red>{Command} <\"scene\"/\"hat\"> <name/index></color>");
+                return;
+            }
+
+            TryCompleteCommand(Command.Substring(2, Command.Length-2));
+            return;
+        }
+
+        if (Command.StartsWith("collect"))
+        {
+            TryCompleteCommand(Command.Substring(8, Command.Length - 2));
+            return;
+        }
+
+        if (Command.StartsWith("complete"))
+        {
+            TryCompleteCommand(Command.Substring(9, Command.Length-9));
+            return;
+        }
+
+        #endregion
 
         if (Command == "freeze")
         {
@@ -202,6 +255,12 @@ public class DebugConsole : MonoBehaviour
 
     }
 
+    private void AppendConsoleLine(string line)
+    {
+        TextArea.text = TextArea.text + "\n" + line;
+        StartCoroutine(ScrollToBottomNextFrame());
+    }
+
     private void NoClip()
     {
         noClipToggle = !noClipToggle;
@@ -231,20 +290,45 @@ public class DebugConsole : MonoBehaviour
 
     private void listScenes()
     {
-        AppendConsoleLine("ls");
+        AppendConsoleLine("All Scenes (Debug Names)");
+        /*
         for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
         {
             string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
             string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
             AppendConsoleLine(i + ": " + sceneName);
-        }   
+        } 
+        */
+        for (int i = 0; i<LevelManager.Instance.LevelNames.Count; i++)
+        {
+            var debugName = LevelManager.Instance.LevelNames[i].InternalDebugName;
+            var sceneName = LevelManager.Instance.LevelNames[i].SceneName;
+            if (debugName == "")
+            {
+                Debug.Log(sceneName + " does not have an internal debug name");
+                continue;
+            }
+            bool completed = SaveDataManager.Instance.IsLevelCompleted(sceneName);
+            //bool isCurrentLevel = SceneManager.GetActiveScene().name == sceneName;
+
+            AppendConsoleLine($"{i}: {debugName} {(completed ? "(<color=yellow>Completed</color>)" : "")}");
+        }
     }
 
-    private void AppendConsoleLine(string line)
+    private void ListHats()
     {
-        TextArea.text = TextArea.text + "\n" + line;
-        StartCoroutine(ScrollToBottomNextFrame());
+        AppendConsoleLine("All Hats");
+        
+        for (int i = 0; i < collectableRegistry.Entries.Count; i++)
+        {
+            var hat = collectableRegistry.Entries[i];
+            bool collected = SaveDataManager.Instance.IsCollectableCollected(hat.collectable);
+            //bool isCurrentLevel = SceneManager.GetActiveScene().name == sceneName;
+
+            AppendConsoleLine($"{i}: {hat.collectable.ToString()} {(collected ? "(<color=yellow>Collected</color>)" : "")}");
+        }
     }
+
 
     private IEnumerator ScrollToBottomNextFrame()
     {
@@ -260,21 +344,204 @@ public class DebugConsole : MonoBehaviour
         logScrollRect.verticalNormalizedPosition = 0f;
     }
 
-    private void LoadNewScene(String sceneName)
+    private string GetRealSceneIndexFromInput(int input)
     {
-        int Temp;
-        if (int.TryParse(sceneName, out Temp))
+        int index = 0;
+        // make the index match the list that appears with the 'list' command
+        for (int i = 0; i < LevelManager.Instance.LevelNames.Count; i++)
         {
-            SceneLoadManager.Instance.LoadScene(Temp);
-        }
-        else
-        {
+            var debugName = LevelManager.Instance.LevelNames[i].InternalDebugName;
+            if (debugName == "")
+            {
+                continue;
+            }
+            index++;
 
-            SceneLoadManager.Instance.LoadScene(sceneName);
+            if (index == input)
+            {
+                return LevelManager.Instance.LevelNames[i].SceneName;
+            }
         }
+        return "";
+        
     }
 
-    private void spawnItem(String itemName)
+    private string GetRealHatNameFromInput(int input)
+    {
+        return collectableRegistry.Entries[input].collectable.ToString();
+    }
+
+
+    private void TryLoadNewScene(string input)
+    {
+        // if user entered index
+        int Temp;
+        if (int.TryParse(input, out Temp))
+        {
+            SceneLoadManager.Instance.LoadScene(GetRealSceneIndexFromInput(Temp));
+            return;
+        }
+
+        // if user entered debug name
+        if(LevelManager.Instance.LevelNames.Select(n => n.InternalDebugName).Contains(input))
+        {
+            string sceneToLoad = LevelManager.Instance.LevelNames.Where(n => n.InternalDebugName == input).First().SceneName;
+            SceneLoadManager.Instance.LoadScene(sceneToLoad);
+        }
+
+        // if user entered scene name
+        SceneLoadManager.Instance.LoadScene(input);
+    }
+
+    /// <summary>
+    /// Command is input string without "c " or "complete "
+    /// </summary>
+    /// <param name="command"></param>
+    private void TryCompleteCommand(string command)
+    {
+        // Get the word before the space, or the whole string if no space exists
+        string firstWord = StaticUtilities.FirstWord(command);
+
+        // complete levels
+        if (firstWord == "level" || firstWord =="levels" || firstWord == "scene" || firstWord == "scenes" || firstWord == "l" || firstWord == "s")
+        {
+            TryCompleteScene(command.Substring(firstWord.Length + 1, command.Length - firstWord.Length - 1));
+            return;
+        }
+
+        if (firstWord == "hats" || firstWord == "h" || firstWord == "hat")
+        {
+            TryCollectHat(command.Substring(firstWord.Length + 1, command.Length - firstWord.Length - 1));
+            return;
+        }
+
+        AppendConsoleLine($"<color=red>{command} Invalid Scene name or index or hat, Please input a valid scene or hat</color>");
+        AppendConsoleLine($"<color=red>{command} Use the \"list scenes\" or \"list hats\" command</color>");
+    }
+    private void TryCompleteScene(string input)
+    {
+        if (input == "all")
+        {
+            foreach (var sceneName in LevelManager.Instance.LevelNames.Select(n => n.SceneName))
+            {
+                SaveDataManager.Instance.MarkSceneAsCompleted(sceneName, autoSave: false);
+            }
+            SaveDataManager.Instance.SaveData();
+            listScenes();
+            AppendConsoleLine($"<color=green>all scenes have been marked as completed</color>");
+            return;
+        }
+
+        if (input == "random")
+        {
+            foreach (var sceneName in LevelManager.Instance.LevelNames.Select(n => n.SceneName))
+            {
+                SaveDataManager.Instance.SetLevelCompletionState(sceneName, (UnityEngine.Random.value > 0.5), autoSave: false);
+            }
+            SaveDataManager.Instance.SaveData();
+            listScenes();
+            AppendConsoleLine($"<color=green>random levels have been marked as completed</color>");
+            return;
+        }
+
+        if (input == "none")
+        {
+            foreach (var sceneName in LevelManager.Instance.LevelNames.Select(n => n.SceneName))
+            {
+                SaveDataManager.Instance.SetLevelCompletionState(sceneName, false, autoSave: false);
+            }
+            SaveDataManager.Instance.SaveData();
+            listScenes();
+            AppendConsoleLine($"<color=green>all levels have been marked as not completed</color>");
+            return;
+        }
+
+        // if user entered index
+        int Temp;
+        if (int.TryParse(input, out Temp))
+        {
+            FulfillCompleteScene(GetRealSceneIndexFromInput(Temp));
+            return;
+        }
+
+        // if user entered debug name
+        if (LevelManager.Instance.LevelNames.Select(n => n.InternalDebugName).Contains(input))
+        {
+            string sceneToLoad = LevelManager.Instance.LevelNames.Where(n => n.InternalDebugName == input).First().SceneName;
+            FulfillCompleteScene(sceneToLoad);
+            return;
+        }
+
+        // if user entered scene name
+        FulfillCompleteScene(input);
+        return;
+    }
+    private void FulfillCompleteScene(string sceneName)
+    {
+        SaveDataManager.Instance.MarkSceneAsCompleted(sceneName);
+        listScenes();
+        AppendConsoleLine($"<color=green>{sceneName} has been marked as completed</color>");
+    }
+
+    private void TryCollectHat(string input)
+    {
+        if (input == "all")
+        {
+            foreach(var hat in collectableRegistry.Entries.Select(e => e.collectable))
+            {
+                SaveDataManager.Instance.MarkCollectableAsCollected(hat, autoSave: false);
+            }
+            SaveDataManager.Instance.SaveData();
+            ListHats();
+            AppendConsoleLine($"<color=green>all hats have been marked as collected</color>");
+            return;
+        }
+
+        if (input == "random")
+        {
+            foreach (var hat in collectableRegistry.Entries.Select(e => e.collectable))
+            {
+                SaveDataManager.Instance.SetCollectableState(hat, (UnityEngine.Random.value > 0.5f), autoSave: false);
+            }
+            SaveDataManager.Instance.SaveData();
+            ListHats();
+            AppendConsoleLine($"<color=green>random hats have been marked as collected</color>");
+            return;
+        }
+
+        if (input == "none")
+        {
+            foreach (var hat in collectableRegistry.Entries.Select(e => e.collectable))
+            {
+                SaveDataManager.Instance.SetCollectableState(hat, false, autoSave: false);
+            }
+            SaveDataManager.Instance.SaveData();
+            ListHats();
+            AppendConsoleLine($"<color=green>all hats have been marked as not collected</color>");
+            return;
+        }
+
+        // if user entered index
+        int Temp;
+        if (int.TryParse(input, out Temp))
+        {
+            FulfillCollectHat(GetRealHatNameFromInput(Temp));
+            return;
+        }
+
+        // if user entered hat name
+        FulfillCollectHat(input);
+        return;
+    }
+    private void FulfillCollectHat(string hatName, bool collected = true)
+    {
+        Collectable hat = collectableRegistry.Entries.Where(e=> e.collectable.ToString() == hatName).First().collectable;
+        SaveDataManager.Instance.MarkCollectableAsCollected(hat);
+        ListHats();
+        AppendConsoleLine($"<color=green>{hatName} has been marked as collected</color>");
+    }
+
+    private void spawnItem(string itemName)
     {
         int Temp;
         if (int.TryParse(itemName, out Temp))
