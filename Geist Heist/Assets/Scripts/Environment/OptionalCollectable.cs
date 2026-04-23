@@ -40,6 +40,8 @@ public class OptionalCollectable : MonoBehaviour
 
     private void Awake()
     {
+        if (IsCollected)
+            this.gameObject.SetActive(false);
         childCollider = GetComponentInChildren<Collider>();
         particleSystem = GetComponentInChildren<ParticleSystem>();
     }
@@ -55,7 +57,8 @@ public class OptionalCollectable : MonoBehaviour
         }
 
         StaticUtilities.PlayAndDestroyParticle(CollectionParticlePrefab, transform.position);
-        SaveDataManager.Instance.MarkCollectableAsCollected(ThisCollectable);
+        LevelManager.Instance.CollectHat(ThisCollectable);
+        //SaveDataManager.Instance.MarkCollectableAsCollected(ThisCollectable); Moved this to LevelManager.CollectHat() so that the collectable can be queue to be saved at the checkpoint instead of immediately.
         Destroy(childCollider);
         StartCoroutine(CollectAnimation());
     }
@@ -290,54 +293,20 @@ public class OptionalCollectable : MonoBehaviour
 public enum Collectable
 {
     None,
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-    
-    
-    
-	
-	
-	
-	Purple_Hat,
-	Newsboy_Hat,
-	Cowboy_Hat,
-	Jester_Hat,
-	Alt_Newsboy_Hat,
-	Alt_Cowboy_Hat,
-	Alt_Jester_Hat,
-	Chefs_Hat,
-	Lobster_Hat,
-	Tea_Cup_Hat,
-	Alt_Chefs_Hat,
-	Alt_Lobster_Hat,
-	Alt_Tea_Cup_Hat,
-	Wizard_Hat,
-	Fedora_Hat,
-	Nightcap_Hat,
+    Purple_Hat,
+    Newsboy_Hat,
+    Cowboy_Hat,
+    Jester_Hat,
+    Alt_Newsboy_Hat,
+    Alt_Cowboy_Hat,
+    Alt_Jester_Hat,
+    Chefs_Hat,
+    Lobster_Hat,
+    Tea_Cup_Hat,
+    Alt_Chefs_Hat,
+    Alt_Lobster_Hat,
+    Alt_Tea_Cup_Hat,
+    Wizard_Hat,
+    Fedora_Hat,
+    Nightcap_Hat,
 }
