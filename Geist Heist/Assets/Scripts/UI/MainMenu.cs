@@ -132,14 +132,25 @@ public class MainMenu : MonoBehaviour
 
         // Hide other pages
         // The only reason im setting them active in code instead of having them active in scene is that i do not trust game designers
-        creditsPage.gameObject.SetActive(true);
-        StaticUtilities.DisableCanvasGroup(creditsPage);
         howToPlayPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         settingsPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(settingsPage);
         settingsOpen = false;
-        creditsOpen = false;
+        creditsPage.gameObject.SetActive(true);
+        // open credits if the player just beat the game
+        if (SceneLoadManager.Instance.PlayCreditsQueued)
+        {
+            StaticUtilities.EnableCanvasGroup(creditsPage);
+            creditsOpen = true;
+            SceneLoadManager.Instance.PlayCreditsQueued = false;
+        }
+        else
+        {
+            StaticUtilities.DisableCanvasGroup(creditsPage);
+            creditsOpen = false;
+        }
+            
 
         InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
         OnControllerChanged();
