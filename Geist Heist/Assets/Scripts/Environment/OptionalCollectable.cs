@@ -40,6 +40,8 @@ public class OptionalCollectable : MonoBehaviour
 
     private void Awake()
     {
+        if (IsCollected)
+            this.gameObject.SetActive(false);
         childCollider = GetComponentInChildren<Collider>();
         particleSystem = GetComponentInChildren<ParticleSystem>();
     }
@@ -290,40 +292,6 @@ public class OptionalCollectable : MonoBehaviour
 public enum Collectable
 {
     None,
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-    
-    
-    
-	
-	
-	
 	Purple_Hat,
 	Newsboy_Hat,
 	Cowboy_Hat,
