@@ -55,7 +55,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private Button quitGameButton;
 
     [Header("Credits Page")]
+    [SerializeField] private float SecondsForFullCreditsScroll = 60;
+    [SerializeField] private float CreditsSpeedMultiplierIfButtonHeld = 3;
     [SerializeField, Required] private CanvasGroup creditsPage;
+    [SerializeField, Required] private RectTransform creditsScrollArea;
     [SerializeField, Required] private Button closeCreditsButton;
 
     [Header("How to Play Page")]
@@ -85,6 +88,10 @@ public class MainMenu : MonoBehaviour
     private bool menuActive = false;
     private bool? gamepadActive = null;
 
+    // credits
+    private float creditsStartY;
+    private Coroutine creditsCoroutine;
+
     private void OnEnable()
     {
         TrySubscribeToUICancel();
@@ -113,6 +120,8 @@ public class MainMenu : MonoBehaviour
         playerHasSignificantSaveData =
                SaveDataManager.Instance.DoesSaveDataExist()
             && SaveDataManager.Instance.GetLevelsCompletedCount() > 0;
+
+        creditsStartY = creditsScrollArea.position.y;
 
         // hide/show continue button based on if save data exists
         continueGameButton.gameObject.SetActive(playerHasSignificantSaveData);
@@ -281,10 +290,7 @@ public class MainMenu : MonoBehaviour
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         StaticUtilities.EnableCanvasGroup(creditsPage);
 
-        if (InputEvents.Instance.IsGamepadActive())
-        {
-            EventSystem.current.SetSelectedGameObject(closeCreditsButton.gameObject);
-        }
+        InitializeCredits();
     }
 
     void OnHowToPlayButtonClicked()
@@ -328,18 +334,7 @@ public class MainMenu : MonoBehaviour
 
     #endregion
 
-    #region Credits
-
-    void OnCreditsBackButtonClicked()
-    {
-        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
-        creditsOpen = false;
-
-        StaticUtilities.DisableCanvasGroup(creditsPage);
-        EventSystem.current.SetSelectedGameObject(creditsButton.gameObject);
-    }
-
-    #endregion
+    
 
     #region Settings
 
@@ -374,8 +369,6 @@ public class MainMenu : MonoBehaviour
     #endregion
 
     #endregion
-
-    
 
     #region Animations
 
@@ -568,29 +561,57 @@ public class MainMenu : MonoBehaviour
 
     #endregion
 
-    #region Resolution
-    Vector2 lastResolution;
+    #region Credits
 
-    void Update()
+    void InitializeCredits()
     {
-        if (Screen.width != lastResolution.x || Screen.height != lastResolution.y)
+        if (InputEvents.Instance.IsGamepadActive())
         {
-            lastResolution = new Vector2(Screen.width, Screen.height);
-            OnResolutionChanged();
+            EventSystem.current.SetSelectedGameObject(closeCreditsButton.gameObject);
+        }
+
+        StaticUtilities.StopAndStartCoroutine(ref creditsCoroutine, ScrollCredits());
+    }
+
+    IEnumerator ScrollCredits()
+    {
+        float creditsPivotX = creditsScrollArea.pivot.x;
+        float creditsXPos = creditsScrollArea.position.x;
+
+        // reset position, in case player quit-mid credits and then went back to them
+        creditsScrollArea.pivot = new Vector2(creditsPivotX, 1);
+        creditsScrollArea.position = new Vector2(creditsXPos, 0);
+
+        // hard coded delay so the credits are tasteful
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        float timeStarted = Time.unscaledTime;
+        float timeElapsed = 0;
+        float t;
+        while (timeElapsed < SecondsForFullCreditsScroll)
+        {
+            timeElapsed = Time.unscaledTime - timeStarted;
+            t = timeElapsed / SecondsForFullCreditsScroll; // 0-1
+
+            // move the anchor point to scroll the credits, keep the y position the same. 
+            // this guarantees that the credits will always play the whole thing through. even if 
+            creditsScrollArea.pivot = new Vector2(creditsPivotX, 1 - t);
+            creditsScrollArea.position = new Vector2(creditsXPos, creditsStartY);
+
+            Debug.Log(t);
+
+            yield return null;
         }
     }
 
-    void OnResolutionChanged()
+    void OnCreditsBackButtonClicked()
     {
-        /*
-        Debug.Log($"new resolution: {Screen.width} x {Screen.height}");
-        leftFogRenderTexture.width  = Screen.width;
-        leftFogRenderTexture.height = Screen.height;
-        leftFogRenderTexture.Create();
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
+        creditsOpen = false;
 
-        rightFogRenderTexture.width = Screen.width;
-        rightFogRenderTexture.height = Screen.height;
-        rightFogRenderTexture.Create();*/
+        StaticUtilities.DisableCanvasGroup(creditsPage);
+        EventSystem.current.SetSelectedGameObject(creditsButton.gameObject);
     }
+
     #endregion
 }
