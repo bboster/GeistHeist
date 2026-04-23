@@ -338,8 +338,7 @@ public class PossessableObject : MonoBehaviour, IInteractable
         if(possessableParticles != null)
             possessableParticles.Play(false);
 
-        //music to hidden
-        MusicManager.Instance.MusicSwitch(true);
+        
     }
 
     /// <summary>
@@ -400,9 +399,6 @@ public class PossessableObject : MonoBehaviour, IInteractable
             }
             
         }
-
-        //music to normal
-        MusicManager.Instance.MusicSwitch(false);
     }
 
     /// <summary>

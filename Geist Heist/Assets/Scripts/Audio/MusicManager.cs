@@ -99,27 +99,28 @@ public class MusicManager : Singleton<MusicManager>
         }
     }
 
-    public void MusicSwitch(bool hiding)
+    public void MusicSwitch(bool hiding, float val)
     {
         if (hiding)
         {
-            StartCoroutine(MusicToHidden(0));
+            StartCoroutine(MusicToHidden(val));
         }
         else
         {
-            StartCoroutine(MusicToNormal(1));
+            StartCoroutine(MusicToNormal(val));
         }
     }
 
     public IEnumerator MusicToHidden(float val)
     {
         val += 0.05f;
+        PlayerManager.Instance.UpdateMusicSwitch(val);
         hubBGM.setParameterByName("Hiding", val);
         //tutorialBGM.setParameterByName("Hiding", val);
         wing1BGM.setParameterByName("Hiding", val);
         wing2BGM.setParameterByName("Hiding", val);
         wing3BGM.setParameterByName("Hiding", val);
-        yield return new WaitForSecondsRealtime(0.1f);
+        yield return new WaitForSecondsRealtime(0.03f);
         if (val < 1)
         {
             StartCoroutine(MusicToHidden(val));
@@ -129,12 +130,13 @@ public class MusicManager : Singleton<MusicManager>
     public IEnumerator MusicToNormal(float val)
     {
         val -= 0.05f;
+        PlayerManager.Instance.UpdateMusicSwitch(val);
         hubBGM.setParameterByName("Hiding", val);
         //tutorialBGM.setParameterByName("Hiding", val);
         wing1BGM.setParameterByName("Hiding", val);
         wing2BGM.setParameterByName("Hiding", val);
         wing3BGM.setParameterByName("Hiding", val);
-        yield return new WaitForSecondsRealtime(0.1f);
+        yield return new WaitForSecondsRealtime(0.03f);
         if (val > 0)
         {
             StartCoroutine(MusicToNormal(val));
