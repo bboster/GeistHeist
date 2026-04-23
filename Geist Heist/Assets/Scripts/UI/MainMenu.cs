@@ -55,6 +55,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private Button quitGameButton;
 
     [Header("Credits Page")]
+    [SerializeField] private PlayerInput playerInput;
     [SerializeField] private float SecondsForFullCreditsScroll = 60;
     [SerializeField] private float CreditsSpeedMultiplierIfButtonHeld = 3;
     [SerializeField, Required] private CanvasGroup creditsPage;
@@ -91,6 +92,7 @@ public class MainMenu : MonoBehaviour
     // credits
     private float creditsStartY;
     private Coroutine creditsCoroutine;
+    private InputAction speedUpCreditsAction;
 
     private void OnEnable()
     {
@@ -122,6 +124,7 @@ public class MainMenu : MonoBehaviour
             && SaveDataManager.Instance.GetLevelsCompletedCount() > 0;
 
         creditsStartY = creditsScrollArea.position.y;
+        speedUpCreditsAction = playerInput.actions.FindAction("SpeedUpCredits");
 
         // hide/show continue button based on if save data exists
         continueGameButton.gameObject.SetActive(playerHasSignificantSaveData);
@@ -584,13 +587,14 @@ public class MainMenu : MonoBehaviour
 
         // hard coded delay so the credits are tasteful
         yield return new WaitForSecondsRealtime(0.5f);
-
-        float timeStarted = Time.unscaledTime;
+        
         float timeElapsed = 0;
         float t;
         while (timeElapsed < SecondsForFullCreditsScroll)
         {
-            timeElapsed = Time.unscaledTime - timeStarted;
+            float speedMultiplier = speedUpCreditsAction.IsPressed() ? CreditsSpeedMultiplierIfButtonHeld : 1;
+
+            timeElapsed += Time.unscaledDeltaTime * speedMultiplier; 
             t = timeElapsed / SecondsForFullCreditsScroll; // 0-1
 
             // move the anchor point to scroll the credits, keep the y position the same. 
@@ -598,10 +602,17 @@ public class MainMenu : MonoBehaviour
             creditsScrollArea.pivot = new Vector2(creditsPivotX, 1 - t);
             creditsScrollArea.position = new Vector2(creditsXPos, creditsStartY);
 
-            Debug.Log(t);
-
             yield return null;
         }
+    }
+
+    void OnCreditsSpeedUpKeyPressed()
+    {
+
+    }
+    void OnCreditsSpeedUpKeyUnpressed()
+    {
+
     }
 
     void OnCreditsBackButtonClicked()
