@@ -24,6 +24,7 @@ public class IntroCutsceneController : MonoBehaviour
     private VideoPlayer player;
 
     [SerializeField, Scene] private string hubScene;
+    [SerializeField] private bool queueCreditsAfterPlaying;
     [SerializeField, Required] private GameObject loadingScreenPrefab;
     [SerializeField, Required] private GameObject loadingCardPrefab;
     [SerializeField] private TextMeshProUGUI skipText; //THIS NEEDS TO BE SWAPPED OUT WITH CONTROLLER ICONS
@@ -33,6 +34,7 @@ public class IntroCutsceneController : MonoBehaviour
     [SerializeField] private string KeyboardText;
 
     [SerializeField] private RawImage outputImage;
+
 
     private RenderTexture renderTexture;
     private EventInstance introVl;
@@ -89,6 +91,8 @@ public class IntroCutsceneController : MonoBehaviour
     /// <param name="player"></param>
     private void LoadHub()
     {
+        if (queueCreditsAfterPlaying) SceneLoadManager.Instance.PlayCreditsQueued = true;
+
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);
@@ -105,6 +109,8 @@ public class IntroCutsceneController : MonoBehaviour
     /// <param name="player"></param>
     private void LoadHub(VideoPlayer player)
     {
+        if (queueCreditsAfterPlaying) SceneLoadManager.Instance.PlayCreditsQueued = true;
+
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);
