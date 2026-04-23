@@ -257,5 +257,7 @@ public class LevelConfirmationVisualizer : MonoBehaviour
     {
         Destroy(kioskRenderCameraInstance.gameObject);
         GameManager.Instance.SetPlayerInMenu(false);
+
+        StaticUtilities.HideCursor();
     }
 }
