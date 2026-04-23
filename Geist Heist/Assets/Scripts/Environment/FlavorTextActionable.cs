@@ -57,7 +57,10 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
     void Start()
     {
         outline = GetComponent<Outline>();
-        outline.enabled = false;
+        if (outline != null)
+            outline.enabled = false;
+        else
+            Debug.LogError($"{gameObject.name} does not have an outline component");
 
         if (flavorText.Count == 0)
         {
