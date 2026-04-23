@@ -123,6 +123,22 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
         {
             PlayVoiceLine(FMODEvents.Instance.VLParlor, "VLParlor", textData);
         }
+        if (thisLevel == currentLevel.Gallery)
+        {
+            PlayVoiceLine(FMODEvents.Instance.VLGallery, "VLGallery", textData);
+        }
+        if (thisLevel == currentLevel.Pantry)
+        {
+            PlayVoiceLine(FMODEvents.Instance.VLPantry, "VLPantry", textData);
+        }
+        if (thisLevel == currentLevel.Canteen)
+        {
+            PlayVoiceLine(FMODEvents.Instance.VLCanteen, "VLCanteen", textData);
+        }
+        if (thisLevel == currentLevel.Bedroom)
+        {
+            PlayVoiceLine(FMODEvents.Instance.VLBedroom, "VLBedroom", textData);
+        }
         if (thisLevel == currentLevel.Lobby)
         {
             int levelCount = SaveDataManager.Instance.GetLevelsCompletedCount();
@@ -134,6 +150,15 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
                     break;
                 case 2:
                     PlayVoiceLine(FMODEvents.Instance.VLLobbyNightTwo, "VLLobbyNightTwo", textData);
+                    break;
+                case 3:
+                    PlayVoiceLine(FMODEvents.Instance.VLLobbyNightThree, "VLLobbyNightThree", textData);
+                    break;
+                case 4:
+                    PlayVoiceLine(FMODEvents.Instance.VLLobbyNightFour, "VLLobbyNightFour", textData);
+                    break;
+                case 5:
+                    PlayVoiceLine(FMODEvents.Instance.VLLobbyNightFive, "VLLobbyNightFive", textData);
                     break;
                 default:
                     break;
