@@ -16,7 +16,11 @@ public class ReturnBehavior : GuardMovement
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
-        AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.EscapeGuard);
+        if (contRef.SawPlayer)
+        {
+            contRef.SawPlayer = false;
+            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.EscapeGuard);
+        }
         if (contRef.DefaultBehavior.StateName == GuardStates.idle)
         {
             MoveToPoint(contRef.ReturnLocation.position);
