@@ -219,5 +219,9 @@ public enum currentLevel
 {
     Tutorial,
     Lobby,
-    Parlor
+    Parlor,
+    Gallery,
+    Pantry,
+    Canteen,
+    Bedroom
 }
