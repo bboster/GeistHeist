@@ -12,11 +12,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -39,6 +41,7 @@ public static class StaticUtilities
             + referencePoint.right * inputDirection.x)
             .normalized;
     }
+
 
     #endregion
 
@@ -712,11 +715,46 @@ public static class StaticUtilities
 
     #endregion
 
+    #region Strings
+
+    /// <summary>
+    /// Returns the first word of a sentence.
+    /// ex: "This is a sentence" => "This"
+    /// </summary>
+    public static string FirstWord(string str, char sperationCharacter = ' ')
+    {
+        int index = str.IndexOf(sperationCharacter);
+        return index == -1 ? str : str.Substring(0, index);
+    }
+
+    /// <summary>
+    /// Returns the last word of a sentence.
+    /// ex: "This is a sentence" => "sentence"
+    /// </summary>
+    public static string LasttWord(string str, char sperationCharacter = ' ')
+    {
+        int index = str.LastIndexOf(sperationCharacter);
+        return index == -1 ? str : str.Substring(index, str.Length - index - 1);
+    }
+
+    #endregion
+
     #region Color
 
     public static string ToHex(this Color color)
     {
         return ColorUtility.ToHtmlStringRGB(color);
+    }
+
+    #endregion
+
+    #region Scenes
+
+
+    public static string BuildIndexToSceneName(int buildIndex)
+    {
+        string path = SceneUtility.GetScenePathByBuildIndex(buildIndex);
+        return Path.GetFileNameWithoutExtension(path);
     }
 
     #endregion
