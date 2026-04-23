@@ -201,7 +201,7 @@ public class ToyCar : IInputHandler
         SaveDataManager.Instance.CarDiven();
         if (SaveDataManager.Instance.getCarsDriven() >= 20)
         {
-            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.PosessVase20);
+            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.Drive20);
         }
 
         if (rb.linearVelocity.magnitude <= maxSpeedToZoom)

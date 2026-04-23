@@ -30,6 +30,7 @@ public class AchievementManager : Singleton<AchievementManager>
             connectedToSteam = false;
         }
 
+        ClearAchievements();
         UnlockAchievement(eAchievements.OpenGame);
     }
 

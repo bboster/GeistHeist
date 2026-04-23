@@ -26,11 +26,9 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
     [SerializeField, ShowIf("hasConfirmationPopup")] private GameObject confirmationPopupPrefab;
 
     [Foldout("Advanced"), SerializeField, ShowIf("hasConfirmationPopup")] private bool closeMenuOnConfirm = false;
-    [Foldout("Advanced"), SerializeField] bool hasAchievement;
-    [Foldout("Advanced"), SerializeField] AchievementManager.eAchievements WhatAcheivement;
 
-    //private static bool anyLevelConfirmScreenOpen = false;
-    [Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
+//private static bool anyLevelConfirmScreenOpen = false;
+[Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
     [SerializeField] private bool hasConfirmationPopup = true;
 
 
@@ -42,10 +40,7 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
             return;
         }
 
-        if (hasAchievement)
-        {
-            AchievementManager.instance.UnlockAchievement(WhatAcheivement);
-        }
+        
 
         if (!hasConfirmationPopup)
         {
