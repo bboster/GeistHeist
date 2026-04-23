@@ -197,12 +197,7 @@ public class ToyCar : IInputHandler
 
     public override void WhileActionNotHeld(float secondsNotHeld)
     {
-        AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.Drive);
-        SaveDataManager.Instance.CarDiven();
-        if (SaveDataManager.Instance.getCarsDriven() >= 20)
-        {
-            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.Drive20);
-        }
+        
 
         if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
@@ -225,6 +220,12 @@ public class ToyCar : IInputHandler
     {
         // Fake charge amount calculation (this is a failsafe, sanity thing)
         //currentStrength = Mathf.Min((secondsHeld * chargeRate) + minStrength, maxStrength);
+        AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.Drive);
+        SaveDataManager.Instance.CarDiven();
+        if (SaveDataManager.Instance.getCarsDriven() >= 20)
+        {
+            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.Drive20);
+        }
 
         if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
