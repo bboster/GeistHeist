@@ -104,7 +104,7 @@ public class IntroCutsceneController : MonoBehaviour
             return;
         }
         var levelTransition = Instantiate(loadingScreenPrefab);
-        levelTransition.Initialize(() => LevelManager.Instance.ChangeScene(hubScene));
+        levelTransition.Initialize(() => LevelManager.Instance.ChangeScene(hubScene), 1.5f);
     }
 
     /// <summary>

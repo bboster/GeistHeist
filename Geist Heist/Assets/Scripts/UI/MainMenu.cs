@@ -599,7 +599,11 @@ public class MainMenu : MonoBehaviour
 
         // hard coded delay so the credits are tasteful
         yield return new WaitForSecondsRealtime(0.5f);
-        
+
+        // wait an extra hard-coded second to account for the fade to black.
+        if (SceneLoadManager.Instance.PlayCreditsQueued)
+            yield return new WaitForSecondsRealtime(1);
+
         float timeElapsed = 0;
         float t;
         while (timeElapsed < SecondsForFullCreditsScroll)
