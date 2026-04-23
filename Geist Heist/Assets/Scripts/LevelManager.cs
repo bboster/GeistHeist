@@ -2,18 +2,19 @@
  * Author: Jacob Bateman
  * Contributors: Toby
  * Creation: 10/21/25
- * Last Edited: 4/20/2026
+ * Last Edited: 10/27/25
  * Summary: Stores data for a level that needs to carry over between scene reloads
  */
 
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using UnityEngine.Events;
-using Unity.Cinemachine;
 using NaughtyAttributes;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Unity.Cinemachine;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.ProBuilder.Shapes;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 {
@@ -22,6 +23,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     [HideInInspector] public Vector3 SpawnLocation;
     [HideInInspector] public Vector3 SpawnRotation;
     private readonly HashSet<KeyType> savedKeys = new();
+    private readonly HashSet<Collectable> collectedHats = new();
     private readonly HashSet<string> savedDoorIds = new();
     private readonly HashSet<string> activatedCheckpointIds = new();
     [SerializeField] private GameObject fadeToBlack;
@@ -75,9 +77,22 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         SpawnRotation = rotation;
         SaveCurrentKeys();
         SaveCurrentDoors();
+        SaveCurrentHats();
         return true;
     }
+    public void CollectHat(Collectable collectable)
+    {
+        collectedHats.Add(collectable);
+    }
 
+
+    public void SaveCurrentHats()
+    {
+        foreach (var collectable in collectedHats)
+        {
+            SaveDataManager.Instance.MarkCollectableAsCollected(collectable);
+        }
+    }
     public void SaveCurrentKeys()
     {
         savedKeys.Clear();
@@ -165,7 +180,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     public string GetLevelDisplayName(string sceneName)
     {
         var filtered = LevelNames.Where(l => l.SceneName == sceneName);
-        if(filtered.Any() == false)
+        if (filtered.Any() == false)
         {
             Debug.LogError($"{sceneName} does not have a display name in Level Manager. Please go to the Level Manager Prefab and set one.");
             return sceneName;
@@ -180,5 +195,4 @@ public class LevelNamePair
     [AllowNesting, Scene]
     public string SceneName;
     public string DisplayName;
-    public string InternalDebugName;
 }
