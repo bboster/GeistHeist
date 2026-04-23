@@ -141,9 +141,10 @@ public class MainMenu : MonoBehaviour
         // open credits if the player just beat the game
         if (SceneLoadManager.Instance.PlayCreditsQueued)
         {
-            StaticUtilities.EnableCanvasGroup(creditsPage);
-            creditsOpen = true;
-            SceneLoadManager.Instance.PlayCreditsQueued = false;
+            Debug.Log("Opening credits since they are queued");
+            //StaticUtilities.EnableCanvasGroup(creditsPage);
+            //creditsOpen = true;
+            OnCreditsButtonClicked();
         }
         else
         {
@@ -490,7 +491,7 @@ public class MainMenu : MonoBehaviour
             return;
         }
 
-        if (creditsPage != null && creditsPage.interactable && creditsPage.alpha > 0.001f)
+        if (creditsPage != null && creditsPage.interactable && creditsPage.alpha > 0.001f && !SceneLoadManager.Instance.PlayCreditsQueued)
         {
             OnCreditsBackButtonClicked();
             return;
@@ -617,22 +618,18 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    void OnCreditsSpeedUpKeyPressed()
-    {
-
-    }
-    void OnCreditsSpeedUpKeyUnpressed()
-    {
-
-    }
 
     void OnCreditsBackButtonClicked()
     {
+        Debug.Log("close credits");
+
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
         creditsOpen = false;
 
         StaticUtilities.DisableCanvasGroup(creditsPage);
         EventSystem.current.SetSelectedGameObject(creditsButton.gameObject);
+
+        SceneLoadManager.Instance.PlayCreditsQueued = false;
     }
 
     #endregion
