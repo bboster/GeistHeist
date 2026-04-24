@@ -48,9 +48,11 @@ public class WearableCollectible : MonoBehaviour
     {
         // Load what the player had equipped last
         RefreshHubDisplays();
-        currentHat = GetEquippedCollectable(SaveDataManager.Instance.EquipedHat());
+        int savedHatValue = SaveDataManager.Instance.EquipedHat();
+        currentHat = GetEquippedCollectable(savedHatValue);
 
-        if (currentHat == Collectable.None)
+        // Keep default hat only for an uninitialized save value (< 0).
+        if (savedHatValue < 0 && currentHat == Collectable.None)
             currentHat = defaultHat;
         
         EquipHat(currentHat);
@@ -101,6 +103,14 @@ public class WearableCollectible : MonoBehaviour
         }
 
         // Instantiate the new hat if it isnt none
+
+        if (currentHat == Collectable.None)
+        {
+            if (Application.isPlaying)
+                ReplaceHat(previousHat);
+
+            return;
+        }
 
         // Get the correct mesh *each time*
         MeshRenderer meshPrefab = Registry.GetWearableMeshRenderer(currentHat);
