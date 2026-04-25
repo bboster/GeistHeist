@@ -28,7 +28,6 @@ public class SearchBehavior : GuardMovement
         MoveToPoint(SearchLocation);
         thisAgent.isStopped = false;
         behaviorComplete = false;
-        contRef.PlayVoiceline(0);
         contRef.GetAnimator().SetBool("isSearching", true);
         contRef.searchAnimator.runtimeAnimatorController = stateController;
     }
