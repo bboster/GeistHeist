@@ -7,12 +7,15 @@
  */
 
 using NaughtyAttributes;
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GlobeInputHandler : IInputHandler
 {
@@ -26,8 +29,21 @@ public class GlobeInputHandler : IInputHandler
     [SerializeField] private CinemachineCamera globeHallwayCamera;
 
     //will likely change with later UI assets
-    [Tooltip("UI for the button pressing minigame.")]
-    [SerializeField] private TMP_Text buttonPressText;
+    [Tooltip("UI image for the button pressing minigame.")]
+    [SerializeField] private Image buttonPressUI;
+
+
+    [Tooltip("Rect Transform for the button press UI.")]
+    [SerializeField] private RectTransform buttonTransform;
+
+
+    [Tooltip("Keyboard button sprite.")]
+    [SerializeField] private Sprite keyboardButton;
+    [Tooltip("Controller button sprite.")]
+    [SerializeField] private Sprite controllerButton;
+
+    //[SerializeField] private List<Sprite> explosionSprites;
+
     [Tooltip("Scene that contains the ending cutscene video.")]
     [SerializeField, Scene] private string endCutsceneScene = "Main Menu";
 
@@ -46,10 +62,11 @@ public class GlobeInputHandler : IInputHandler
 
     private Animator animator => GetComponent<Animator>();
     private SceneTransitionInteractable sceneTransitionInteractable => GetComponent<SceneTransitionInteractable>();
+    private Coroutine buttonPressAnimation;
 
     private void Start()
     {
-        
+        InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
     }
     public override void WhilePossessingUpdate()
     {
@@ -81,7 +98,8 @@ public class GlobeInputHandler : IInputHandler
         {
             animator.SetBool("EndingStarted", true);
             currentButtonPresses++;
-            endingButtonPresses--;
+
+            StaticUtilities.StopAndStartCoroutine(ref buttonPressAnimation, PressButtonAnimation());
         }
     }
 
@@ -132,18 +150,11 @@ public class GlobeInputHandler : IInputHandler
     #region Other
     public IEnumerator ButtonPressMinigame()
     {
-        buttonPressText.enabled = true;
-        int buttonPresses = endingButtonPresses;
+        buttonPressUI.enabled = true;
 
         while (EndingActive)
         {
-            //UI update
-            if (currentButtonPresses > 0 && currentButtonPresses < 11)
-            {
-                buttonPressText.text = currentButtonPresses.ToString() + " / " + buttonPresses.ToString();
-            }
-
-            if (endingButtonPresses <= 0)
+            if (currentButtonPresses >= endingButtonPresses)
             {
                 //animation will be adjusted here later
                 animator.SetBool("EndRoll", true);
@@ -188,6 +199,33 @@ public class GlobeInputHandler : IInputHandler
     {
         StopAllCoroutines();
         LevelManager.Instance.ChangeScene(endCutsceneScene);
+    }
+
+    protected void OnControllerChanged()
+    {
+        RefreshUI();
+    }
+
+    public void RefreshUI()
+    {
+        bool controller = InputEvents.Instance.IsGamepadActive();
+
+        if (controller)
+        {
+            buttonPressUI.sprite = controllerButton;
+        }
+        else
+        {
+            buttonPressUI.sprite = keyboardButton;
+        }
+    }
+
+    private IEnumerator PressButtonAnimation()
+    {
+        // expand
+        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: Vector3.one, endScale: new Vector3(1.25f, 1.25f, 1), seconds: 0.1f);
+        // shrink
+        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: new Vector3(1.25f, 1.25f, 1), endScale: Vector3.one, seconds: 0.1f);
     }
     #endregion
 }
