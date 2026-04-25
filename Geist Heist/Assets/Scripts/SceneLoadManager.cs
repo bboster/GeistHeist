@@ -8,7 +8,6 @@
 
 using FMOD.Studio;
 using FMODUnity;
-using NaughtyAttributes;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -18,8 +17,6 @@ public class SceneLoadManager : DontDestroyOnLoadSingleton<SceneLoadManager>
 {
     public static Action OnLoadStarted;
     public static Action OnLoadCompleted;
-
-    [ReadOnly] public bool PlayCreditsQueued;
 
     public void LoadScene(string sceneToLoad)
     {

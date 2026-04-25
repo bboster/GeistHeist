@@ -299,8 +299,7 @@ public static class StaticUtilities
         if (currentCoroutineToCancel != null)
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: group.alpha, target_a: 0, seconds: seconds, 
-            afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: group.alpha, target_a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
     public static Coroutine FadeOpacity(CanvasGroup group, float start_a, float target_a, float seconds,
@@ -309,8 +308,7 @@ public static class StaticUtilities
         if (currentCoroutineToCancel != null)
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: start_a, target_a: target_a, seconds: seconds, 
-            afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: start_a, target_a: target_a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
     public static Coroutine FadeOpacityBySpeed(CanvasGroup group, float start_a, float end_a, float alpha_perSecond,
@@ -325,8 +323,7 @@ public static class StaticUtilities
         return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: start_a, target_a: end_a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
-    private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float start_a, float target_a, float seconds, UnityAction afterFadeCallback = null, 
-        bool unscaledTime = true)
+    private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float start_a, float target_a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
     {
         float startTime = unscaledTime ? Time.unscaledTime : Time.time;
         float time = startTime;
