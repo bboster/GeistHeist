@@ -337,6 +337,8 @@ public class PossessableObject : MonoBehaviour, IInteractable
 
         if(possessableParticles != null)
             possessableParticles.Play(false);
+
+        
     }
 
     /// <summary>

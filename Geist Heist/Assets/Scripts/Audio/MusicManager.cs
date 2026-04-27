@@ -16,7 +16,7 @@ public class MusicManager : Singleton<MusicManager>
     [SerializeField, NaughtyAttributes.Scene] private string wing5Name;
     [SerializeField, NaughtyAttributes.Scene] private string globeName;
     [SerializeField, NaughtyAttributes.Scene] private string menuName;
-
+    
     //private EventInstance levelBGM;
     private EventInstance hubBGM;
     private EventInstance globeBGM;

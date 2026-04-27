@@ -39,6 +39,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
     [HideInInspector] public static UnityEvent<PossessableObject> OnPossessionObjectChanged = new();
 
+    private float musicSwitch;
+
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     public void Start()
     {
@@ -100,6 +102,9 @@ public class PlayerManager : Singleton<PlayerManager>
             StopCoroutine(possessionTransitionCoroutine);
 
         possessionTransitionCoroutine = StartCoroutine(PossessObjectAfterAnimation(possessable, oldObject, isTetherPossession));
+
+        //music to hidden
+        MusicManager.Instance.MusicSwitch(true, musicSwitch);
     }
 
     private IEnumerator PossessObjectAfterAnimation(PossessableObject possessable, PossessableObject oldObject, bool isTetherPossession)
@@ -187,6 +192,9 @@ public class PlayerManager : Singleton<PlayerManager>
         //DeRegisterInputs(possessable);
 
         OnPossessionObjectChanged.Invoke(CurrentObject);
+
+        //music to normal
+        MusicManager.Instance.MusicSwitch(false, musicSwitch);
     }
 
     /// <summary>
@@ -400,5 +408,10 @@ public class PlayerManager : Singleton<PlayerManager>
 
         DeRegisterInputs(CurrentObject);
         CurrentObject = possessable;
+    }
+
+    public void UpdateMusicSwitch(float val)
+    {
+        musicSwitch = val;
     }
 }
