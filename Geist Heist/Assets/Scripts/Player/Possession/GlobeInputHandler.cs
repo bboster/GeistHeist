@@ -61,20 +61,38 @@ public class GlobeInputHandler : IInputHandler
     [HideInInspector] public bool EndingActive = false;
 
 
+    [Foldout("Fog Bubbles"), SerializeField] private float maxFogBubbleEmissionRate;
+    [Foldout("Fog Bubbles"), SerializeField] private float minFogBubbleStartSpeed = 1;
+    [Foldout("Fog Bubbles"), SerializeField] private float maxFogBubbleStartSpeed = 3.5f;
     [Foldout("Fog Bubbles"), SerializeField] private Camera LeftFogBubblesPrefab;
     [Foldout("Fog Bubbles"), SerializeField] private Camera RightFogBubblesPrefab;
-    [Foldout("Fog Bubbles"), SerializeField] private RawImage LeftFogBubbleOutputImage;
-    [Foldout("Fog Bubbles"), SerializeField] private RawImage RightFogBubbleOutputImage;
+    [Foldout("Fog Bubbles"), SerializeField] private RawImage leftFogBubbleOutputImage;
+    [Foldout("Fog Bubbles"), SerializeField] private RawImage rightFogBubbleOutputImage;
+    [Foldout("Fog Bubbles"), SerializeField] private Material leftFogBubbleMaterial;
+    [Foldout("Fog Bubbles"), SerializeField] private Material rightFogBubbleMaterial;
+    [Foldout("Fog Bubbles"), SerializeField] private RenderTexture leftFogRenderTexture;
+    [Foldout("Fog Bubbles"), SerializeField] private RenderTexture rightFogRenderTexture;
 
-    private RenderTexture leftFogRenderTexture, rightFogRenderTexture;
+    private Camera leftFogBubblesInstance, rightFogBubblesInstance;
+    private ParticleSystem[] leftParticleSystems;
+    private ParticleSystem[] rightParticleSystems;
 
-    private Animator animator => GetComponent<Animator>();
-    private SceneTransitionInteractable sceneTransitionInteractable => GetComponent<SceneTransitionInteractable>();
+    private Animator animator;
+    private SceneTransitionInteractable sceneTransitionInteractable;
     private Coroutine buttonPressAnimation;
+    private Coroutine buttonRotationAnimation;
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
+        sceneTransitionInteractable = GetComponent<SceneTransitionInteractable>();
         InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
+
+        // YES, fog bubbles wont be needed most of the time,
+        // BUT its an expensive operation that would cause a fps spike at the ending (not good!)
+        InitializeFogBubbles();
+
+        overlayCanvas.gameObject.SetActive(false);
     }
     public override void WhilePossessingUpdate()
     {
@@ -90,10 +108,17 @@ public class GlobeInputHandler : IInputHandler
             EndingActive = true;
             endCoroutine = StartCoroutine(ButtonPressMinigame());
         }
+
+        overlayCanvas.gameObject.SetActive(true);
+
+        leftFogBubblesInstance.gameObject.SetActive(true);
+        rightFogBubblesInstance.gameObject.SetActive(true);
     }
 
     public override void OnPossessionEnded()
     {
+        Destroy(leftFogBubblesInstance.gameObject);
+        Destroy(rightFogBubblesInstance.gameObject);
     }
 
     public override bool IsDetectable() { return false; }
@@ -108,6 +133,7 @@ public class GlobeInputHandler : IInputHandler
             currentButtonPresses++;
 
             StaticUtilities.StopAndStartCoroutine(ref buttonPressAnimation, ExpandPressButton());
+
             SetFogBubbleAmount((float)currentButtonPresses / endingButtonPresses);
         }
     }
@@ -173,6 +199,8 @@ public class GlobeInputHandler : IInputHandler
                 animator.SetBool("EndRoll", true);
                 EndingActive = false;
 
+                StaticUtilities.FadeToHidden(buttonPressUI.GetComponent<CanvasGroup>(), unscaledTime: true, seconds: 0.5f);
+
                 IncreaseCameraPriority(globeRollCamera, 1);
                 DecreaseCameraPriority(globeSwingCamera);
             }
@@ -236,32 +264,78 @@ public class GlobeInputHandler : IInputHandler
 
     private IEnumerator ExpandPressButton()
     {
-        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: Vector3.one, endScale: new Vector3(1.25f, 1.25f, 1), seconds: 0.1f);
+        float rotation = UnityEngine.Random.Range(-30f, 30f);
+
+        // scale
+        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: Vector3.one, endScale: new Vector3(1.25f, 1.25f, 1), seconds: 0.1f)
+            // rotate
+            .And(StaticUtilities.AnimateRotation(buttonTransform, endRotation: new Vector3(0, 0, rotation), seconds: 0.1f));
     }
     private IEnumerator ShrinkPressButton()
     {
-        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: new Vector3(1.25f, 1.25f, 1), endScale: Vector3.one, seconds: 0.1f);
+        // scale
+        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: new Vector3(1.25f, 1.25f, 1), endScale: Vector3.one, seconds: 0.1f)
+            // rotate
+            .And(StaticUtilities.AnimateRotation(buttonTransform, Quaternion.identity, seconds: 0.1f));
     }
 
-    private IEnumerator PressButtonAnimation()
-    {
-        // expand
-        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: Vector3.one, endScale: new Vector3(1.25f, 1.25f, 1), seconds: 0.1f);
-        // shrink
-        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: new Vector3(1.25f, 1.25f, 1), endScale: Vector3.one, seconds: 0.1f);
-    }
     #endregion
 
     #region Fog Bubbles
 
-    void InitializeFogBubbles()
+    void InitializeFogBubbles(bool disableAfterInit = true)
     {
+        leftFogBubblesInstance = Instantiate(LeftFogBubblesPrefab);
+        rightFogBubblesInstance = Instantiate(RightFogBubblesPrefab);
 
+        // initialize left render texture
+        leftFogRenderTexture = new RenderTexture(3840, 2160, leftFogRenderTexture.depth, leftFogRenderTexture.format);
+        leftFogRenderTexture.Create();
+        leftFogBubblesInstance.targetTexture = leftFogRenderTexture;
+        var leftFogMaterialCopy = Instantiate(leftFogBubbleMaterial);
+        leftFogMaterialCopy.SetTexture("_Render_Texture", leftFogRenderTexture);
+        leftFogBubbleOutputImage.material = leftFogMaterialCopy;
+
+        // initialize right render texture
+        rightFogRenderTexture = new RenderTexture(3840, 2160, rightFogRenderTexture.depth, rightFogRenderTexture.format);
+        rightFogBubblesInstance.targetTexture = rightFogRenderTexture;
+        var rightFogMaterialCopy = Instantiate(rightFogBubbleMaterial);
+        rightFogMaterialCopy.SetTexture("_Render_Texture", rightFogRenderTexture);
+        rightFogBubbleOutputImage.material = rightFogMaterialCopy;
+
+        // initialize particles
+        leftParticleSystems = leftFogBubblesInstance.GetComponentsInChildren<ParticleSystem>();
+        rightParticleSystems = rightFogBubblesInstance.GetComponentsInChildren<ParticleSystem>();
+        SetFogBubbleAmount(0);
+
+        if (disableAfterInit)
+        {
+            //leftFogBubblesInstance.gameObject.SetActive(false);
+            //rightFogBubblesInstance.gameObject.SetActive(false);
+        }
     }
 
     void SetFogBubbleAmount(float t)
     {
-        Debug.Log(t);
+        float speed = Mathf.Lerp(minFogBubbleStartSpeed, maxFogBubbleStartSpeed, t);
+        leftParticleSystems.ForEach(ps => SetParticleSystemSpeed(ps, speed));
+        rightParticleSystems.ForEach(ps => SetParticleSystemSpeed(ps, speed));
+
+        float rate = Mathf.Lerp(0, maxFogBubbleEmissionRate, t);
+        leftParticleSystems.ForEach(ps => SetParticleSystemRate(ps, rate));
+        rightParticleSystems.ForEach(ps => SetParticleSystemRate(ps, rate));
+    }
+
+    void SetParticleSystemRate(ParticleSystem ps, float rate)
+    {
+        var emission = ps.emission;
+        emission.rateOverTime = rate;
+    }
+
+    void SetParticleSystemSpeed(ParticleSystem ps, float speed)
+    {
+        var main = ps.main;
+        main.startSpeed = speed;
     }
 
     #endregion

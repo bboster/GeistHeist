@@ -63,6 +63,17 @@ public static class CoroutineUtilities
     }
 
     /// <summary>
+    /// Plays coroutine at the same time as coroutine. Waits for both coroutines to be finished.
+    /// </summary>
+    /// <param name="currentCoroutine">Coroutine already started</param>
+    /// <param name="coroutine">Coroutine to start</param>
+    /// <returns>Awaitable coroutine that becomes null when all coroutines are done playing</returns>
+    public static Coroutine And(this Coroutine currentCoroutine, Coroutine coroutine)
+    {
+        return CoroutineRunner.StartCoroutine(StartAndWaitForCoroutines(currentCoroutine, coroutine));
+    }
+
+    /// <summary>
     /// Starts coroutine after coroutines is completed
     /// </summary>
     /// <param name="currentCoroutine">Coroutine already started</param>
@@ -124,6 +135,16 @@ public static class CoroutineUtilities
 
         var coroutineInstance = CoroutineRunner.StartCoroutine(newCoroutine);
         coroutinesPlaying.Push(coroutineInstance);
+
+        yield return WaitForCoroutinesToFinish(coroutinesPlaying);
+    }
+
+    private static IEnumerator StartAndWaitForCoroutines(Coroutine existingCoroutine, Coroutine coroutine)
+    {
+        Stack<Coroutine> coroutinesPlaying = new Stack<Coroutine>();
+        coroutinesPlaying.Push(existingCoroutine);
+
+        coroutinesPlaying.Push(coroutine);
 
         yield return WaitForCoroutinesToFinish(coroutinesPlaying);
     }

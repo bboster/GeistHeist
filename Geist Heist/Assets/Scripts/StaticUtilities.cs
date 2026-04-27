@@ -180,14 +180,14 @@ public static class StaticUtilities
     /// <summary>
     /// Smooth current rotation towards endEulerAngles;
     /// </summary>
-    public static Coroutine AnimateRotation(Transform transform, Vector3 endEulerAngles, float seconds,
+    public static Coroutine AnimateRotation(Transform transform, Vector3 endRotation, float seconds,
         bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
         return CoroutineRunner.StartCoroutine(
-            AnimateRotationCoroutine(transform, transform.rotation, Quaternion.Euler(endEulerAngles), seconds, 
+            AnimateRotationCoroutine(transform, transform.rotation, Quaternion.Euler(endRotation), seconds, 
                                      unscaledTime, currentCoroutineToCancel)
         );
     }
@@ -196,13 +196,16 @@ public static class StaticUtilities
     /// Smooth current rotation towards endRotation;
     /// </summary>
     public static Coroutine AnimateRotation(Transform transform, Quaternion endRotation, float seconds,
+        Quaternion? startRotation = null,
         bool unscaledTime = true, Coroutine currentCoroutineToCancel = null)
     {
         if (currentCoroutineToCancel != null)
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
+        startRotation = startRotation ?? transform.rotation;
+
         return CoroutineRunner.StartCoroutine(
-            AnimateRotationCoroutine(transform, transform.rotation, endRotation, seconds,
+            AnimateRotationCoroutine(transform, startRotation.Value, endRotation, seconds,
                                      unscaledTime, currentCoroutineToCancel)
         );
     }
