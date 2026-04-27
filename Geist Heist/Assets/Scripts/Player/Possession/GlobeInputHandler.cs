@@ -99,7 +99,8 @@ public class GlobeInputHandler : IInputHandler
             animator.SetBool("EndingStarted", true);
             currentButtonPresses++;
 
-            StaticUtilities.StopAndStartCoroutine(ref buttonPressAnimation, PressButtonAnimation());
+            StaticUtilities.StopAndStartCoroutine(ref buttonPressAnimation, ExpandPressButton());
+            SetFogBubbleAmount((float)currentButtonPresses / endingButtonPresses);
         }
     }
 
@@ -109,10 +110,14 @@ public class GlobeInputHandler : IInputHandler
 
     public override void WhileActionNotHeld(float secondsNotHeld)
     {
+        
     }
 
     public override void OnActionCanceled(float secondsHeld)
     {
+        buttonPressAnimation = 
+            buttonPressAnimation
+            .Then(ShrinkPressButton());
     }
 
     #endregion
@@ -220,6 +225,16 @@ public class GlobeInputHandler : IInputHandler
         }
     }
 
+
+    private IEnumerator ExpandPressButton()
+    {
+        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: Vector3.one, endScale: new Vector3(1.25f, 1.25f, 1), seconds: 0.1f);
+    }
+    private IEnumerator ShrinkPressButton()
+    {
+        yield return StaticUtilities.AnimateScale(buttonTransform, startScale: new Vector3(1.25f, 1.25f, 1), endScale: Vector3.one, seconds: 0.1f);
+    }
+
     private IEnumerator PressButtonAnimation()
     {
         // expand
@@ -227,5 +242,14 @@ public class GlobeInputHandler : IInputHandler
         // shrink
         yield return StaticUtilities.AnimateScale(buttonTransform, startScale: new Vector3(1.25f, 1.25f, 1), endScale: Vector3.one, seconds: 0.1f);
     }
+    #endregion
+
+    #region Fog Bubbles
+
+    void SetFogBubbleAmount(float t)
+    {
+        Debug.Log(t);
+    }
+
     #endregion
 }
