@@ -90,6 +90,11 @@ public class MainMenu : MonoBehaviour
         TrySubscribeToUICancel();
     }
 
+    private void Awake()
+    {
+        MusicManager.Instance.Initialize(); //Music cannot play in menu without this line
+    }
+
     private void Start()
     {
         mainMenuAnimator = GetComponent<Animator>();
