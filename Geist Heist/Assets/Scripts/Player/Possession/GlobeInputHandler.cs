@@ -31,12 +31,13 @@ public class GlobeInputHandler : IInputHandler
     //will likely change with later UI assets
     [Tooltip("UI image for the button pressing minigame.")]
     [SerializeField] private Image buttonPressUI;
-
+    [SerializeField, Required]
+    private Canvas overlayCanvas;
 
     [Tooltip("Rect Transform for the button press UI.")]
     [SerializeField] private RectTransform buttonTransform;
 
-
+    [Header("Button sprites")]
     [Tooltip("Keyboard button sprite.")]
     [SerializeField] private Sprite keyboardButton;
     [Tooltip("Controller button sprite.")]
@@ -59,6 +60,13 @@ public class GlobeInputHandler : IInputHandler
     private Coroutine endCoroutine;
     [HideInInspector] public bool EndingActive = false;
 
+
+    [Foldout("Fog Bubbles"), SerializeField] private Camera LeftFogBubblesPrefab;
+    [Foldout("Fog Bubbles"), SerializeField] private Camera RightFogBubblesPrefab;
+    [Foldout("Fog Bubbles"), SerializeField] private RawImage LeftFogBubbleOutputImage;
+    [Foldout("Fog Bubbles"), SerializeField] private RawImage RightFogBubbleOutputImage;
+
+    private RenderTexture leftFogRenderTexture, rightFogRenderTexture;
 
     private Animator animator => GetComponent<Animator>();
     private SceneTransitionInteractable sceneTransitionInteractable => GetComponent<SceneTransitionInteractable>();
@@ -245,6 +253,11 @@ public class GlobeInputHandler : IInputHandler
     #endregion
 
     #region Fog Bubbles
+
+    void InitializeFogBubbles()
+    {
+
+    }
 
     void SetFogBubbleAmount(float t)
     {
