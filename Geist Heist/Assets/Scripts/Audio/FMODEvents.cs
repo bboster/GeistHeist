@@ -7,14 +7,20 @@ using UnityEngine;
 public class FMODEvents : Singleton<FMODEvents>
 {
     [field: Header("BGM")]
-    [field: SerializeField] public EventReference LevelBGM { get; private set; }
+    [field: SerializeField] public EventReference TutorialBGM { get; private set; }
+    [field: SerializeField] public EventReference Wing1BGM { get; private set; }
+    [field: SerializeField] public EventReference Wing2BGM { get; private set; }
+    [field: SerializeField] public EventReference Wing3BGM { get; private set; }
     [field: SerializeField] public EventReference GlobeBGM { get; private set; }
     [field: SerializeField] public EventReference HubBGM { get; private set; }
     [field: SerializeField] public EventReference MenuBGM { get; private set; }
 
 
     [field: Header("Enemy SFX")]
-    [field: SerializeField] public EventReference GuardReactions { get; private set; }
+    [field: SerializeField] public EventReference GuardOne { get; private set; }
+    [field: SerializeField] public EventReference GuardTwo { get; private set; }
+    [field: SerializeField] public EventReference GuardThree { get; private set; }
+    [field: SerializeField] public EventReference GuardFour { get; private set; }
     [field: SerializeField] public EventReference GuardRun { get; private set; }
     [field: SerializeField] public EventReference GuardWalk { get; private set; }
     [field: SerializeField] public EventReference PlayerSpotted { get; private set; }
