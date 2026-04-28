@@ -122,6 +122,7 @@ public class ConfirmationPopup : MonoBehaviour
         {
             StaticUtilities.DisableCanvasGroup(canvasGroup);
             RestorePreviousSelectionIfNeeded();
+            AnyConfirmationMenuOpen = false;
             if(afterCancelClicked != null)
                 afterCancelClicked();
         }
@@ -160,6 +161,7 @@ public class ConfirmationPopup : MonoBehaviour
         if (closeMenuOnConfirm)
         {
             StaticUtilities.DisableCanvasGroup(canvasGroup);
+            AnyConfirmationMenuOpen = false;
         }
         InputEvents.PauseStartedOverride = lastPauseStartedOverride == null ? null : lastPauseStartedOverride;
     }

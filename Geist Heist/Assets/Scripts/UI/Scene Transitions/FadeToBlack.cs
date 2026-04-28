@@ -33,8 +33,8 @@ public class FadeToBlack : Singleton<FadeToBlack>
         action();
         yield return new WaitForSeconds(delayAfterAction);
         yield return StaticUtilities.FadeToHidden(fadeCanvasGroup, secondsForFade);
+        GameManager.Instance.fadingToBlack = false;
         Destroy(gameObject);
         fadeCoroutine = null;
-        GameManager.Instance.fadingToBlack = false;
     }
 }

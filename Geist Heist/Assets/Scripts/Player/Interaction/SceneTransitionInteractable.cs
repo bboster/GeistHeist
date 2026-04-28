@@ -82,7 +82,7 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
     {
         Debug.Log("Confirm Pressed");
         //SaveDataManager.Instance.MarkSceneAsCompleted(sceneName);
-        LevelManager.Instance.ChangeScene(sceneName);
+        StartCoroutine(InstantiateFade());
         return;
 
     }

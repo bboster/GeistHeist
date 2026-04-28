@@ -235,7 +235,7 @@ public class MainMenu : MonoBehaviour
     {
         Debug.LogError("No transition card set on " + gameObject.name);
         //SceneLoadManager.Instance.LoadScene(sceneToLoad);
-        LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneToLoad));
+        StartCoroutine(LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneToLoad)));
     }
 
     #region Buttons OnClicked
