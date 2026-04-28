@@ -56,6 +56,11 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     #region Interaction
     void IInteractable.Interact()
     {
+        if (hasAchievement)
+        {
+            AchievementManager.instance.UnlockAchievement(WhatAcheivement);
+        }
+
         if (SaveDataManager.Instance.IsCollectableCollected(ThisCollectable) == false)
             return;
 
