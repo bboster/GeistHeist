@@ -24,8 +24,8 @@ public class IntroCutsceneController : MonoBehaviour
     private VideoPlayer player;
 
     [SerializeField, Scene] private string hubScene;
-    [SerializeField, Required] private GameObject loadingScreenPrefab;
-    [SerializeField, Required] private GameObject loadingCardPrefab;
+    [SerializeField] private bool queueCreditsAfterPlaying;
+    [SerializeField, Required] private FadeToBlack loadingScreenPrefab;
     [SerializeField] private TextMeshProUGUI skipText; //THIS NEEDS TO BE SWAPPED OUT WITH CONTROLLER ICONS
     [SerializeField] private float skipTextActiveTime;
 
@@ -33,6 +33,7 @@ public class IntroCutsceneController : MonoBehaviour
     [SerializeField] private string KeyboardText;
 
     [SerializeField] private RawImage outputImage;
+
 
     private RenderTexture renderTexture;
     private EventInstance introVl;
@@ -69,6 +70,11 @@ public class IntroCutsceneController : MonoBehaviour
         InputEvents.InteractStarted.AddListener(SkipCutscene);
 
         InputEvents.Instance.OnControllerChanged.AddListener(OnControllerUpdated);
+
+        if (queueCreditsAfterPlaying)
+        {
+            SceneLoadManager.Instance.PlayCreditsQueued = true;
+        }
     }
 
     private IEnumerator PrepareWait()
@@ -89,14 +95,21 @@ public class IntroCutsceneController : MonoBehaviour
     /// <param name="player"></param>
     private void LoadHub()
     {
+        InputEvents.PauseStarted.RemoveListener(SkipCutscene);
+        InputEvents.InteractStarted.RemoveListener(SkipCutscene);
+
+        InputEvents.Instance.OnControllerChanged.RemoveListener(OnControllerUpdated);
+
+        if (queueCreditsAfterPlaying) SceneLoadManager.Instance.PlayCreditsQueued = true;
+
         if (loadingScreenPrefab == null)
         {
             Debug.LogError("No transition card set on " + gameObject.name);
             LevelManager.Instance.ChangeScene(hubScene);
             return;
         }
-        var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
-        levelTransition.StartTransition(hubScene, loadingCardPrefab);
+        var levelTransition = Instantiate(loadingScreenPrefab);
+        levelTransition.Initialize(() => LevelManager.Instance.ChangeScene(hubScene), 1.5f);
     }
 
     /// <summary>
@@ -105,20 +118,9 @@ public class IntroCutsceneController : MonoBehaviour
     /// <param name="player"></param>
     private void LoadHub(VideoPlayer player)
     {
-        if (loadingScreenPrefab == null)
-        {
-            Debug.LogError("No transition card set on " + gameObject.name);
-            LevelManager.Instance.ChangeScene(hubScene);
-            return;
-        }
+        //LoadHub();
 
-        InputEvents.PauseStarted.RemoveListener(SkipCutscene);
-        InputEvents.InteractStarted.RemoveListener(SkipCutscene);
 
-        InputEvents.Instance.OnControllerChanged.RemoveListener(OnControllerUpdated);
-
-        var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
-        levelTransition.StartTransition(hubScene, loadingCardPrefab);
     }
 
     /// <summary>
