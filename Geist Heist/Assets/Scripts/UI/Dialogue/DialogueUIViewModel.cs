@@ -54,16 +54,27 @@ public class DialogueUIViewModel : MonoBehaviour
     {
         //yield return new WaitForSeconds(textData.StayLength);
 
-        animator.SetTrigger("Ending");
-
         float timeStarted = Time.time;
-        while(Time.time - timeStarted < textData.StayLength)
+
+        // first half of fadeout 
+        while (Time.time - timeStarted < textData.StayLength / 2)
         {
             // baseOpacity gets updated in DialogueUIManager 
             group.alpha = Mathf.MoveTowards(group.alpha, opacity, Time.deltaTime / 10);
             yield return null;
         }
-        
+
+        animator.SetTrigger("Ending");
+
+        // second half of fadeout 
+        while (Time.time - timeStarted < textData.StayLength)
+        {
+            // baseOpacity gets updated in DialogueUIManager 
+            group.alpha = Mathf.MoveTowards(group.alpha, opacity, Time.deltaTime / 10);
+            yield return null;
+        }
+
+
         yield return StaticUtilities.FadeToHidden(group, seconds: 0.4f);
         Destroy(this.gameObject);
     }
