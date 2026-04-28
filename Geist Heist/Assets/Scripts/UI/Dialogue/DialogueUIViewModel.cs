@@ -16,6 +16,7 @@ public class DialogueUIViewModel : MonoBehaviour
 {
     [SerializeField, Required] private TMP_Text textBox;
     [SerializeField, Required] public CanvasGroup group;
+    [SerializeField, Required] public Animator animator;
     [SerializeField] public float baseOpacity = 0.9f;
 
     [ReadOnly] public RectTransform rectTransform;
@@ -52,6 +53,8 @@ public class DialogueUIViewModel : MonoBehaviour
     public IEnumerator WaitToDestroySelf()
     {
         //yield return new WaitForSeconds(textData.StayLength);
+
+        animator.SetTrigger("Ending");
 
         float timeStarted = Time.time;
         while(Time.time - timeStarted < textData.StayLength)
