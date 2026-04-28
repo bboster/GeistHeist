@@ -327,7 +327,10 @@ MonoBehaviour:
   endingButtonPresses: 10
   currentButtonPresses: 0
   EndingActive: 0
+  fubblesPerButtonPress: 3
   maxFogBubbleEmissionRate: 0
+  minFogBubbleStartSpeed: 1
+  maxFogBubbleStartSpeed: 3.5
   LeftFogBubblesPrefab: {fileID: 0}
   RightFogBubblesPrefab: {fileID: 0}
   leftFogBubbleOutputImage: {fileID: 0}
@@ -602,7 +605,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00012207031, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 3840, y: 0}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &6899309687421701823
@@ -1656,7 +1659,7 @@ MonoBehaviour:
   globeRollCamera: {fileID: 5263451495580764414}
   globeHallwayCamera: {fileID: 8709068852195673654}
   buttonPressUI: {fileID: 3949312032645654307}
-  overlayCanvas: {fileID: 0}
+  overlayCanvas: {fileID: 6203187513541557138}
   buttonTransform: {fileID: 4219823178034270640}
   keyboardButton: {fileID: -1433908239, guid: 6bacc939aa13a6c43a44c7be2c2b62bb, type: 3}
   controllerButton: {fileID: 1430946032, guid: 6bacc939aa13a6c43a44c7be2c2b62bb, type: 3}
@@ -1665,15 +1668,18 @@ MonoBehaviour:
   endingButtonPresses: 20
   currentButtonPresses: 0
   EndingActive: 0
-  maxFogBubbleEmissionRate: 0
+  fubblesPerButtonPress: 3
+  maxFogBubbleEmissionRate: 0.3
+  minFogBubbleStartSpeed: 1
+  maxFogBubbleStartSpeed: 8
   LeftFogBubblesPrefab: {fileID: 5923461701910475596, guid: 05cacc7ce83261a46b29fecd1def7f2d, type: 3}
   RightFogBubblesPrefab: {fileID: 4059023111034275776, guid: c4443c01be05d724b8d9ccd21e116fcd, type: 3}
   leftFogBubbleOutputImage: {fileID: 4528883342921804581}
   rightFogBubbleOutputImage: {fileID: 4194540386641709423}
-  leftFogBubbleMaterial: {fileID: 0}
-  rightFogBubbleMaterial: {fileID: 0}
-  leftFogRenderTexture: {fileID: 0}
-  rightFogRenderTexture: {fileID: 0}
+  leftFogBubbleMaterial: {fileID: 2100000, guid: b73b6a5c37f74134f896464dd0546255, type: 2}
+  rightFogBubbleMaterial: {fileID: 2100000, guid: 7b118109abaa343488b729e004b0abea, type: 2}
+  leftFogRenderTexture: {fileID: 8400000, guid: 0dab16b3a380b5f439bc1c6471b2dc78, type: 2}
+  rightFogRenderTexture: {fileID: 8400000, guid: 701694761b2faee44857422d4799716c, type: 2}
 --- !u!114 &319195180727627934
 MonoBehaviour:
   m_ObjectHideFlags: 0

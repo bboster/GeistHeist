@@ -61,6 +61,7 @@ public class GlobeInputHandler : IInputHandler
     [HideInInspector] public bool EndingActive = false;
 
 
+    [Foldout("Fog Bubbles"), SerializeField] private int fubblesPerButtonPress =3 ;
     [Foldout("Fog Bubbles"), SerializeField] private float maxFogBubbleEmissionRate;
     [Foldout("Fog Bubbles"), SerializeField] private float minFogBubbleStartSpeed = 1;
     [Foldout("Fog Bubbles"), SerializeField] private float maxFogBubbleStartSpeed = 3.5f;
@@ -76,6 +77,7 @@ public class GlobeInputHandler : IInputHandler
     private Camera leftFogBubblesInstance, rightFogBubblesInstance;
     private ParticleSystem[] leftParticleSystems;
     private ParticleSystem[] rightParticleSystems;
+    ParticleSystemForceField fogForceField;
 
     private Animator animator;
     private SceneTransitionInteractable sceneTransitionInteractable;
@@ -113,6 +115,9 @@ public class GlobeInputHandler : IInputHandler
 
         leftFogBubblesInstance.gameObject.SetActive(true);
         rightFogBubblesInstance.gameObject.SetActive(true);
+
+        // hide the hud
+        StaticUtilities.FadeToHidden(PlayerHUDManager.Instance.GetComponent<CanvasGroup>(), seconds: 0.5f);
     }
 
     public override void OnPossessionEnded()
@@ -288,6 +293,9 @@ public class GlobeInputHandler : IInputHandler
         leftFogBubblesInstance = Instantiate(LeftFogBubblesPrefab);
         rightFogBubblesInstance = Instantiate(RightFogBubblesPrefab);
 
+        fogForceField = leftFogBubblesInstance.GetComponentInChildren<ParticleSystemForceField>();
+        fogForceField.gameObject.SetActive(false);
+
         // initialize left render texture
         leftFogRenderTexture = new RenderTexture(3840, 2160, leftFogRenderTexture.depth, leftFogRenderTexture.format);
         leftFogRenderTexture.Create();
@@ -317,25 +325,36 @@ public class GlobeInputHandler : IInputHandler
 
     void SetFogBubbleAmount(float t)
     {
-        float speed = Mathf.Lerp(minFogBubbleStartSpeed, maxFogBubbleStartSpeed, t);
-        leftParticleSystems.ForEach(ps => SetParticleSystemSpeed(ps, speed));
-        rightParticleSystems.ForEach(ps => SetParticleSystemSpeed(ps, speed));
+        if(t>= 1)
+        {
+            fogForceField.gameObject.SetActive(true);
+        }
 
-        float rate = Mathf.Lerp(0, maxFogBubbleEmissionRate, t);
-        leftParticleSystems.ForEach(ps => SetParticleSystemRate(ps, rate));
-        rightParticleSystems.ForEach(ps => SetParticleSystemRate(ps, rate));
+        float speed = Mathf.Lerp(minFogBubbleStartSpeed, maxFogBubbleStartSpeed, t);
+        float rate = t >= 1 ? 0 : Mathf.Lerp(0, maxFogBubbleEmissionRate, t);
+
+        leftParticleSystems.ForEach(ps => {
+            SetParticleSystem(ps, rate, speed);
+
+            if(t > 0)
+                ps.Emit(fubblesPerButtonPress);
+            });
+        rightParticleSystems.ForEach(ps => { 
+            SetParticleSystem(ps, rate, speed);
+
+            if (t > 0)
+                ps.Emit(fubblesPerButtonPress);
+        });
     }
 
-    void SetParticleSystemRate(ParticleSystem ps, float rate)
+    void SetParticleSystem(ParticleSystem ps, float emissionRate, float speed)
     {
         var emission = ps.emission;
-        emission.rateOverTime = rate;
-    }
+        emission.rateOverTime = emissionRate;
+        emission.enabled = emissionRate > 0;
 
-    void SetParticleSystemSpeed(ParticleSystem ps, float speed)
-    {
         var main = ps.main;
-        main.startSpeed = speed;
+        main.simulationSpeed = speed;
     }
 
     #endregion
