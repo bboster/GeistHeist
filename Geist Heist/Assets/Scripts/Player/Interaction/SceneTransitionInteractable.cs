@@ -27,8 +27,6 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
     [SerializeField, ShowIf("hasConfirmationPopup")] private GameObject confirmationPopupPrefab;
 
     [Foldout("Advanced"), SerializeField, ShowIf("hasConfirmationPopup")] private bool closeMenuOnConfirm = false;
-
-    //private static bool anyLevelConfirmScreenOpen = false;
     [Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
     [SerializeField] private bool hasConfirmationPopup = true;
 
@@ -65,7 +63,10 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
 
     IEnumerator InstantiateFade()
     {
-        yield return LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneName));  
+        if (!GameManager.Instance.fadingToBlack)
+        {
+            yield return LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneName));
+        }
     }
 
     void OnCancelPressed(GameObject confirmationPopup)

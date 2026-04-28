@@ -30,12 +30,13 @@ public class AttackBehavior : Behavior
         NavMeshAgent thisAgent = selfRef.GetComponent<NavMeshAgent>();
         thisAgent.isStopped = true;
 
-        for(; ; )
+        for (; ; )
         {
-            if(performingAttack == true && contRef.currentBehavior.StateName == GuardStates.attack)
+            if (performingAttack == true && contRef.currentBehavior.StateName == GuardStates.attack)
             {
                 //Debug.Log("Player Caught");
-                GameManager.Instance.DeathReset();
+                if (!GameManager.Instance.fadingToBlack)
+                    GameManager.Instance.DeathReset();
                 performingAttack = false; //This should be removed later and the variable should be changed by an animation keyframe.
                 yield return new WaitForSeconds(attackLength);
             }

@@ -34,5 +34,6 @@ public class FadeToBlack : Singleton<FadeToBlack>
         yield return StaticUtilities.FadeToHidden(fadeCanvasGroup, secondsForFade);
         Destroy(gameObject);
         fadeCoroutine = null;
+        GameManager.Instance.fadingToBlack = false;
     }
 }

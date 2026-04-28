@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Events;
 using UnityEditor;
+using System.Collections;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -52,6 +53,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject PlayerPrefab;
     [Required] public Transform PlayerStart;
 
+    public bool fadingToBlack = false;
     public bool IsPaused { get; private set; } = false;
     public bool IsPlayerInMenu { get; private set; } = false;
     public UnityEvent OnPauseChanged = new();
@@ -124,7 +126,14 @@ public class GameManager : Singleton<GameManager>
         if (!InGodMode)
         {
             DialogueUIManager.Instance.StopVoiceLine();
-            LevelManager.Instance.InstantiateFadeToBlack(() => SceneLoadManager.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex));
+            StartCoroutine(InstantiateFade());
+        }
+    }
+    public IEnumerator InstantiateFade()
+    {
+        if (!fadingToBlack)
+        {
+            yield return LevelManager.Instance.InstantiateFadeToBlack(() => SceneLoadManager.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex));
         }
     }
 

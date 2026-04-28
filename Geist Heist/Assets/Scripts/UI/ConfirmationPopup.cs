@@ -111,8 +111,6 @@ public class ConfirmationPopup : MonoBehaviour
     {
         InputEvents.PauseStartedOverride = lastPauseStartedOverride == null ? null : lastPauseStartedOverride;
 
-        AnyConfirmationMenuOpen = false;
-
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
@@ -133,7 +131,7 @@ public class ConfirmationPopup : MonoBehaviour
     {
         StaticUtilities.DisableCanvasGroup(canvasGroup);
         RestorePreviousSelectionIfNeeded();
-
+        AnyConfirmationMenuOpen = false;
         if (afterCancelClicked != null)
             afterCancelClicked();
     }

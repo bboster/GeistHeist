@@ -141,6 +141,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 
     public IEnumerator InstantiateFadeToBlack(UnityAction action)
     {
+        GameManager.Instance.fadingToBlack = true;
         FadeToBlack ftb = Instantiate(fadeToBlack).GetComponent<FadeToBlack>();
         yield return ftb.Initialize(action);
     }
