@@ -27,13 +27,10 @@ public class GlobeInputHandler : IInputHandler
     [SerializeField] private CinemachineCamera globeRollCamera;
     [Tooltip("Camera for the ending rolling through the hallway.")]
     [SerializeField] private CinemachineCamera globeHallwayCamera;
-
-    //will likely change with later UI assets
     [Tooltip("UI image for the button pressing minigame.")]
     [SerializeField] private Image buttonPressUI;
     [SerializeField, Required]
     private Canvas overlayCanvas;
-
     [Tooltip("Rect Transform for the button press UI.")]
     [SerializeField] private RectTransform buttonTransform;
 
@@ -43,11 +40,10 @@ public class GlobeInputHandler : IInputHandler
     [Tooltip("Controller button sprite.")]
     [SerializeField] private Sprite controllerButton;
 
-    //[SerializeField] private List<Sprite> explosionSprites;
 
+    [Header("Scene Transition")]
     [Tooltip("Scene that contains the ending cutscene video.")]
     [SerializeField, Scene] private string endCutsceneScene = "Main Menu";
-
     [Tooltip("Canvas prefab that has the FadeToBlack script.")]
     [SerializeField] private GameObject fadeToWhite;
 
@@ -144,15 +140,17 @@ public class GlobeInputHandler : IInputHandler
 
             SetFogBubbleAmount((float)currentButtonPresses / endingButtonPresses);
 
+            #region Explosions
             //new explosion, parent
             GameObject explosion = Instantiate(explosionContainer, Vector3.zero, Quaternion.identity, explosionParent);
 
             //position, behind button
-            RectTransform rte = explosion.GetComponent<RectTransform>();
-            RectTransform rt = explosionParent.GetComponent<RectTransform>();
-            float x = UnityEngine.Random.Range(-100, 100) ;
-            float y = UnityEngine.Random.Range(-100, 100) ;
-            rte.anchoredPosition = new Vector3(x, y, 0);
+            RectTransform rt = explosion.GetComponent<RectTransform>();
+
+            float x = UnityEngine.Random.Range(-100, 100);
+            float y = UnityEngine.Random.Range(-100, 100);
+
+            rt.anchoredPosition = new Vector3(x, y, 0);
             explosion.transform.SetAsFirstSibling();
 
             //swap in sprite
@@ -161,9 +159,10 @@ public class GlobeInputHandler : IInputHandler
             explosionImage.SetNativeSize();
 
             //animation
-            StaticUtilities.AnimateScale(rte, Vector3.zero, Vector3.one, 0.2f);
+            StaticUtilities.AnimateScale(rt, Vector3.zero, Vector3.one, 0.2f);
             int rotation = UnityEngine.Random.Range(30, -30);
-            StaticUtilities.AnimateRotation(rte, new Vector3(0, 0, rotation), 0.2f).Then(() => StaticUtilities.AnimateScale(rte, Vector3.zero, 0.15f));
+            StaticUtilities.AnimateRotation(rt, new Vector3(0, 0, rotation), 0.2f).Then(() => StaticUtilities.AnimateScale(rt, Vector3.zero, 0.15f));
+            #endregion
         }
     }
 
