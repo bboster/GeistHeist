@@ -64,6 +64,7 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
     }
 
 #if UNITY_EDITOR
+
     private void OnDrawGizmosSelected()
     {
         
@@ -74,7 +75,9 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
         else
             wavyTextBox.SetText( ControllerText );
     }
+
 #endif
+
     private void OnControllerUpdated()
     {
         wavyTextBox.SetText(InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText);
