@@ -95,6 +95,11 @@ public class IntroCutsceneController : MonoBehaviour
     /// <param name="player"></param>
     private void LoadHub()
     {
+        InputEvents.PauseStarted.RemoveListener(SkipCutscene);
+        InputEvents.InteractStarted.RemoveListener(SkipCutscene);
+
+        InputEvents.Instance.OnControllerChanged.RemoveListener(OnControllerUpdated);
+
         if (queueCreditsAfterPlaying) SceneLoadManager.Instance.PlayCreditsQueued = true;
 
         if (loadingScreenPrefab == null)
@@ -113,12 +118,9 @@ public class IntroCutsceneController : MonoBehaviour
     /// <param name="player"></param>
     private void LoadHub(VideoPlayer player)
     {
-        LoadHub();
+        //LoadHub();
 
-        InputEvents.PauseStarted.RemoveListener(SkipCutscene);
-        InputEvents.InteractStarted.RemoveListener(SkipCutscene);
 
-        InputEvents.Instance.OnControllerChanged.RemoveListener(OnControllerUpdated);
     }
 
     /// <summary>
