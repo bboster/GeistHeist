@@ -137,7 +137,6 @@ GameObject:
   - component: {fileID: 2667771672078999720}
   - component: {fileID: 7862096149762473002}
   - component: {fileID: 6480417976091650489}
-  - component: {fileID: -7755143116239034038}
   - component: {fileID: 2279748789752088073}
   m_Layer: 10
   m_Name: Toy Car
@@ -194,6 +193,7 @@ MonoBehaviour:
   OnomatopoeiaScale: 0.5
   onomatopoeiaLifetime: 1
   possessableParticle: {fileID: 5204108424967083764}
+  secondsHoldMoveToHideTutorial: 4
 --- !u!65 &1174134053591356350
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -274,12 +274,14 @@ MonoBehaviour:
   VisibleUnPossessedMaterial: {fileID: 2100000, guid: 08d18bb6619bd9a43834063fa390d7a1, type: 2}
   AbilityIconPrefab: {fileID: 4491390581451361740, guid: 2c1cc0c85f1aab149862c1a9d7334228, type: 3}
   PossessableTextPrefab: {fileID: 4491390581451361740, guid: 44a053911b752e24ab1558b2e674d348, type: 3}
+  CanvasOverlayPrefab: {fileID: 0}
   HasChargeAbility: 1
   animator: {fileID: 0}
   possessStateName: possess
   tetherPossessStateName: tetherpossess
   possessCameraTransitionDelay: 0.35
   tetherCameraTransitionDelay: 0.75
+  possessableParticles: {fileID: 0}
   isGhost: 0
   CanUnPossess: 0
   meshRenderer: {fileID: 0}
@@ -307,20 +309,6 @@ MonoBehaviour:
   bakeKeys: []
   bakeValues: []
   outlineFillMaterial: {fileID: 0}
---- !u!114 &-7755143116239034038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3402368958818299834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37c98284e2a096b46b95d5b8d2631a3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GuardStunner
-  stunVelocityThreshold: 1
-  isCar: 1
 --- !u!114 &2279748789752088073
 MonoBehaviour:
   m_ObjectHideFlags: 0

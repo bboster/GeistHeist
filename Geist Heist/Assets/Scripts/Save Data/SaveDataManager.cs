@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
 {
@@ -28,6 +29,9 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     [Header("Scene Transition")]
     [SerializeField, Scene] private List<string> ScenesToExcludeFromCompletionCount;
     [SerializeField, Scene] private List<string> ScenesRequiredForCompletion;
+
+    //the scene needed to be completed before a cutscene happens (ex. level 1 is required for level 2 cutscene)
+    [Scene] public List<string> ScenesToCutscene;
 
     [Header("Debug")]
     [Tooltip("If true, does not save any data")]
@@ -59,6 +63,30 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             Debug.Log($"{collectable.ToString()} has already been collected");
         else
             currentSaveDta.CollectablesCollected.Add((int)collectable);
+
+        if (autoSave)
+            SaveData();
+    }
+
+    public void SetCollectableState(Collectable collectable, bool collectedState, bool autoSave = true)
+    {
+        EnsureSaveData();
+
+        // try to collect
+        if (collectedState)
+        {
+            if (IsCollectableCollected(collectable))
+                Debug.Log($"{collectable.ToString()} has already been collected");
+            else
+                currentSaveDta.CollectablesCollected.Add((int)collectable);
+        }
+        else
+        {
+            if (IsCollectableCollected(collectable))
+                currentSaveDta.CollectablesCollected.Remove((int)collectable);
+            else
+                Debug.Log($"{collectable.ToString()} has already been collected");
+        }
 
         if (autoSave)
             SaveData();
@@ -112,10 +140,39 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         if (IsLevelCompleted(sceneName))
             Debug.Log("This level has already been completed");
         else
+        {
             currentSaveDta.ScenesCompleted.Add(sceneName);
+        }
+            
 
         if (autoSave)
             SaveData();
+    }
+
+    public void SetLevelCompletionState(string sceneName, bool collectedState, bool autoSave = true)
+    {
+        EnsureSaveData();
+
+        // try to collect
+        if (collectedState && !IsLevelCompleted(sceneName))
+        {
+            currentSaveDta.ScenesCompleted.Add(sceneName);
+
+            if (autoSave) SaveData();
+        }
+        else if (!collectedState && IsLevelCompleted(sceneName))
+        {
+            currentSaveDta.ScenesCompleted.Remove(sceneName);
+
+            if (autoSave) SaveData();
+        }
+
+    }
+
+    public void MarkSceneAsCompleted(int sceneIndex, bool autoSave = true)
+    {
+        string sceneName = StaticUtilities.BuildIndexToSceneName(sceneIndex);
+        MarkSceneAsCompleted(sceneName, autoSave);
     }
 
     /// <summary>
@@ -146,6 +203,28 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Return true if level is stored in list of saved completed levels
+    /// </summary>
+    public bool IsSceneCutsceneCompleted(string sceneName)
+    {
+        EnsureSaveData();
+        return currentSaveDta.CutscenesCompleted.Contains(sceneName);
+    }
+
+    public void MarkSceneCutsceneAsCompleted(string sceneName, bool autoSave = true)
+    {
+        EnsureSaveData();
+
+        if (IsSceneCutsceneCompleted(sceneName))
+            Debug.Log("This cutscene has already been completed");
+        else
+            currentSaveDta.CutscenesCompleted.Add(sceneName);
+
+        if (autoSave)
+            SaveData();
     }
 
     #endregion

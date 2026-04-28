@@ -12,11 +12,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -39,6 +41,7 @@ public static class StaticUtilities
             + referencePoint.right * inputDirection.x)
             .normalized;
     }
+
 
     #endregion
 
@@ -296,7 +299,8 @@ public static class StaticUtilities
         if (currentCoroutineToCancel != null)
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: group.alpha, target_a: 0, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: group.alpha, target_a: 0, seconds: seconds, 
+            afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
     public static Coroutine FadeOpacity(CanvasGroup group, float start_a, float target_a, float seconds,
@@ -305,7 +309,8 @@ public static class StaticUtilities
         if (currentCoroutineToCancel != null)
             CoroutineRunner.StopCoroutine(currentCoroutineToCancel);
 
-        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: start_a, target_a: target_a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
+        return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: start_a, target_a: target_a, seconds: seconds, 
+            afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
     public static Coroutine FadeOpacityBySpeed(CanvasGroup group, float start_a, float end_a, float alpha_perSecond,
@@ -320,7 +325,8 @@ public static class StaticUtilities
         return CoroutineRunner.StartCoroutine(FadeOpacityCoroutine(group, start_a: start_a, target_a: end_a, seconds: seconds, afterFadeCallback: afterFadeCallback, unscaledTime: unscaledTime));
     }
 
-    private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float start_a, float target_a, float seconds, UnityAction afterFadeCallback = null, bool unscaledTime = true)
+    private static IEnumerator FadeOpacityCoroutine(CanvasGroup group, float start_a, float target_a, float seconds, UnityAction afterFadeCallback = null, 
+        bool unscaledTime = true)
     {
         float startTime = unscaledTime ? Time.unscaledTime : Time.time;
         float time = startTime;
@@ -712,11 +718,46 @@ public static class StaticUtilities
 
     #endregion
 
+    #region Strings
+
+    /// <summary>
+    /// Returns the first word of a sentence.
+    /// ex: "This is a sentence" => "This"
+    /// </summary>
+    public static string FirstWord(string str, char sperationCharacter = ' ')
+    {
+        int index = str.IndexOf(sperationCharacter);
+        return index == -1 ? str : str.Substring(0, index);
+    }
+
+    /// <summary>
+    /// Returns the last word of a sentence.
+    /// ex: "This is a sentence" => "sentence"
+    /// </summary>
+    public static string LasttWord(string str, char sperationCharacter = ' ')
+    {
+        int index = str.LastIndexOf(sperationCharacter);
+        return index == -1 ? str : str.Substring(index, str.Length - index - 1);
+    }
+
+    #endregion
+
     #region Color
 
     public static string ToHex(this Color color)
     {
         return ColorUtility.ToHtmlStringRGB(color);
+    }
+
+    #endregion
+
+    #region Scenes
+
+
+    public static string BuildIndexToSceneName(int buildIndex)
+    {
+        string path = SceneUtility.GetScenePathByBuildIndex(buildIndex);
+        return Path.GetFileNameWithoutExtension(path);
     }
 
     #endregion

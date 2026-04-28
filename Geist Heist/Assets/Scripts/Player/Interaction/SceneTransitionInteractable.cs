@@ -77,7 +77,7 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
     void OnConfirmPressed(GameObject confirmationPopup)
     {
         Debug.Log("Confirm Pressed");
-        SaveDataManager.Instance.MarkSceneAsCompleted(sceneName);
+        //SaveDataManager.Instance.MarkSceneAsCompleted(sceneName);
         LevelManager.Instance.ChangeScene(sceneName);
         return;
 
