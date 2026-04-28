@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using NaughtyAttributes;
 using UnityEngine.Events;
+using System.Collections;
 
 public class SceneTransitionInteractable : MonoBehaviour, IInteractable
 {
@@ -42,7 +43,7 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
         if (!hasConfirmationPopup)
         {
             Debug.Log("Going straight to fade");
-            LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneName));
+            StartCoroutine(InstantiateFade());
             return;
         }
 
@@ -60,6 +61,11 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
         GameManager.Instance.InGodMode = true;
 
         popup.GetComponentInParent<LevelConfirmationVisualizer>()?.Initialize(sceneName);
+    }
+
+    IEnumerator InstantiateFade()
+    {
+        yield return LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneName));  
     }
 
     void OnCancelPressed(GameObject confirmationPopup)

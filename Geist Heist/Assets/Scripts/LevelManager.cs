@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using Unity.Cinemachine;
 using NaughtyAttributes;
 using System.Linq;
+using System.Collections;
 
 public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
 {
@@ -138,10 +139,10 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         }
     }
 
-    public void InstantiateFadeToBlack(UnityAction action)
+    public IEnumerator InstantiateFadeToBlack(UnityAction action)
     {
         FadeToBlack ftb = Instantiate(fadeToBlack).GetComponent<FadeToBlack>();
-        ftb.Initialize(action);
+        yield return ftb.Initialize(action);
     }
 
     #region Scene Transition Scripts
