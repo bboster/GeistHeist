@@ -60,6 +60,9 @@ public class GlobeInputHandler : IInputHandler
     private Coroutine endCoroutine;
     [HideInInspector] public bool EndingActive = false;
 
+    [Foldout("Explosions"), SerializeField] private GameObject explosionContainer;
+    [Foldout("Explosions"), SerializeField] private Transform explosionParent;
+    [Foldout("Explosions"), SerializeField] private List<Sprite> explosionSprites;
 
     [Foldout("Fog Bubbles"), SerializeField] private int fubblesPerButtonPress =3 ;
     [Foldout("Fog Bubbles"), SerializeField] private float maxFogBubbleEmissionRate;
@@ -140,6 +143,27 @@ public class GlobeInputHandler : IInputHandler
             StaticUtilities.StopAndStartCoroutine(ref buttonPressAnimation, ExpandPressButton());
 
             SetFogBubbleAmount((float)currentButtonPresses / endingButtonPresses);
+
+            //new explosion, parent
+            GameObject explosion = Instantiate(explosionContainer, Vector3.zero, Quaternion.identity, explosionParent);
+
+            //position, behind button
+            RectTransform rte = explosion.GetComponent<RectTransform>();
+            RectTransform rt = explosionParent.GetComponent<RectTransform>();
+            float x = UnityEngine.Random.Range(-100, 100) ;
+            float y = UnityEngine.Random.Range(-100, 100) ;
+            rte.anchoredPosition = new Vector3(x, y, 0);
+            explosion.transform.SetAsFirstSibling();
+
+            //swap in sprite
+            Image explosionImage = explosion.GetComponent<Image>();
+            explosionImage.sprite = explosionSprites[UnityEngine.Random.Range(0, explosionSprites.Count - 1)];
+            explosionImage.SetNativeSize();
+
+            //animation
+            StaticUtilities.AnimateScale(rte, Vector3.zero, Vector3.one, 0.2f);
+            int rotation = UnityEngine.Random.Range(30, -30);
+            StaticUtilities.AnimateRotation(rte, new Vector3(0, 0, rotation), 0.2f).Then(() => StaticUtilities.AnimateScale(rte, Vector3.zero, 0.15f));
         }
     }
 

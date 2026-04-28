@@ -95,6 +95,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8886895077823007569}
   - {fileID: 4219823178034270640}
   - {fileID: 3685714368995276236}
   - {fileID: 7120849993795868843}
@@ -327,6 +328,9 @@ MonoBehaviour:
   endingButtonPresses: 10
   currentButtonPresses: 0
   EndingActive: 0
+  explosionContainer: {fileID: 0}
+  explosionParent: {fileID: 0}
+  explosionSprites: []
   fubblesPerButtonPress: 3
   maxFogBubbleEmissionRate: 0
   minFogBubbleStartSpeed: 1
@@ -643,6 +647,41 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!1 &5559332523204355699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8886895077823007569}
+  m_Layer: 5
+  m_Name: ExplosionParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8886895077823007569
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5559332523204355699}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2670837819561023166}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -630}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6013335375432098267
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,7 +821,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.00017089845, y: 450}
+  m_AnchoredPosition: {x: 0, y: 450}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1795024466689536567
@@ -1668,6 +1707,33 @@ MonoBehaviour:
   endingButtonPresses: 20
   currentButtonPresses: 0
   EndingActive: 0
+  explosionContainer: {fileID: 1888542764079159742, guid: dddbdeafd8c775443bf71df675cee83d, type: 3}
+  explosionParent: {fileID: 8886895077823007569}
+  explosionSprites:
+  - {fileID: 21300000, guid: ed15eec213ecada448099d3ffd8f4a3a, type: 3}
+  - {fileID: 21300000, guid: 23b74c982530579479f8ed46cc7b0e32, type: 3}
+  - {fileID: 21300000, guid: 181500d49df865a48822d78f374e6ac5, type: 3}
+  - {fileID: 21300000, guid: b79fa2e8f04f1e441afe88aacb13f021, type: 3}
+  - {fileID: 21300000, guid: dee02740a09329c42bb15eb752cf1a8b, type: 3}
+  - {fileID: 21300000, guid: e1d0df3e3ccd0d0409d63946215e4035, type: 3}
+  - {fileID: 21300000, guid: 4fbf590536d955640af84ad6dea6f546, type: 3}
+  - {fileID: 21300000, guid: 71139dc91c244b54ebecc22f806cb5c6, type: 3}
+  - {fileID: 21300000, guid: e698ad5bc5221f6428231f38b515d947, type: 3}
+  - {fileID: 21300000, guid: 324b8cddbcfe62d4d9726c62ef45f022, type: 3}
+  - {fileID: 21300000, guid: 0917e651b70687442854c7a99e2f493c, type: 3}
+  - {fileID: 21300000, guid: 83862df7a5a2013479eeef2fa210ec4a, type: 3}
+  - {fileID: 21300000, guid: 4a49f34305c85fc4eb94dc630bbe98ac, type: 3}
+  - {fileID: 21300000, guid: 9a6adf4f9572cad4383acadac005334b, type: 3}
+  - {fileID: 21300000, guid: dafa2af88752dcf42a993d174fd946da, type: 3}
+  - {fileID: 21300000, guid: de548c8032888414db385733cd52450b, type: 3}
+  - {fileID: 21300000, guid: 4c8e97b2cc309134b831e1df7bf6dada, type: 3}
+  - {fileID: 21300000, guid: 8ebca7582d7a7714d858112f5ea410da, type: 3}
+  - {fileID: 21300000, guid: 7e4c4902f294a3f4b975ba163e999edc, type: 3}
+  - {fileID: 21300000, guid: 21f26da20bf78424ab09a4cdd1707208, type: 3}
+  - {fileID: 21300000, guid: 262640a12372f454fb8e3616e3816e30, type: 3}
+  - {fileID: 21300000, guid: 023bf14425f4c1545bcacaa46daceaf2, type: 3}
+  - {fileID: 21300000, guid: b9f45537ade3f31469e5b21b8a52e2d0, type: 3}
+  - {fileID: 21300000, guid: 8d6d047f4bdc92a4a8985197df5f74a9, type: 3}
   fubblesPerButtonPress: 3
   maxFogBubbleEmissionRate: 0.3
   minFogBubbleStartSpeed: 1
