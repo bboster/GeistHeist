@@ -84,6 +84,8 @@ public static class SettingsProfile
     /// </summary>
     public static void ReadSavedSettings()
     {
+        Debug.Log("Reading Settings Profile");
+
         LookSensitivity = PlayerPrefs.GetFloat(LOOK_SENSITIVITY_KEY, DEFAULT_LOOK_SENSITIVITY);
         InvertXLook = PlayerPrefs.GetInt(INVERT_X_LOOK_KEY, DEFAULT_INVERT_X_LOOK ? 1 : 0) == 1; // Playerprefs cant store bools, so just store an int
         InvertYLook = PlayerPrefs.GetInt(INVERT_Y_LOOK_KEY, DEFAULT_INVERT_Y_LOOK ? 1 : 0) == 1; 
