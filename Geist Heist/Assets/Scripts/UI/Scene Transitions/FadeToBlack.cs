@@ -1,7 +1,7 @@
 /*
- * Contributors: Sky
+ * Contributors: Sky, Josh
  * Creation Date: 2/26/26
- * Last Modified: 2/26/26
+ * Last Modified: 4/28/26
  * 
  * Brief Description: Reference for a fade to black, calls the coroutine from the static utilities class
  */
