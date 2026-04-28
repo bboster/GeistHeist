@@ -20,6 +20,7 @@ public class FadeToBlack : Singleton<FadeToBlack>
 
         if (fadeCoroutine == null)
         {
+            GameManager.Instance.fadingToBlack = true;
             fadeCanvasGroup.alpha = 0;
             yield return fadeCoroutine = StartCoroutine(FadeAnimation(action, delayAfterAction));
         }
