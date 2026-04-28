@@ -35,7 +35,6 @@ public class MainMenu : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField, Required] private ConfirmationPopup confirmationPopup;
-    [SerializeField, Required] private GameObject loadingScreenPrefab;
 
     [Header("Fog")]
     [SerializeField, Required] private RenderTexture leftFogRenderTexture;
@@ -56,7 +55,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private Button quitGameButton;
 
     [Header("Credits Page")]
+    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private float SecondsForFullCreditsScroll = 60;
+    [SerializeField] private float CreditsSpeedMultiplierIfButtonHeld = 3;
     [SerializeField, Required] private CanvasGroup creditsPage;
+    [SerializeField, Required] private RectTransform creditsScrollArea;
     [SerializeField, Required] private Button closeCreditsButton;
 
     [Header("How to Play Page")]
@@ -86,9 +89,19 @@ public class MainMenu : MonoBehaviour
     private bool menuActive = false;
     private bool? gamepadActive = null;
 
+    // credits
+    private float creditsStartY;
+    private Coroutine creditsCoroutine;
+    private InputAction speedUpCreditsAction;
+
     private void OnEnable()
     {
         TrySubscribeToUICancel();
+    }
+
+    private void Awake()
+    {
+        MusicManager.Instance.Initialize(); //Music cannot play in menu without this line
     }
 
     private void Start()
@@ -115,20 +128,35 @@ public class MainMenu : MonoBehaviour
                SaveDataManager.Instance.DoesSaveDataExist()
             && SaveDataManager.Instance.GetLevelsCompletedCount() > 0;
 
+        creditsStartY = creditsScrollArea.position.y;
+        speedUpCreditsAction = playerInput.actions.FindAction("SpeedUpCredits");
+
         // hide/show continue button based on if save data exists
         continueGameButton.gameObject.SetActive(playerHasSignificantSaveData);
         EventSystem.current.SetSelectedGameObject(pressAnyButtonButton.gameObject);
 
         // Hide other pages
         // The only reason im setting them active in code instead of having them active in scene is that i do not trust game designers
-        creditsPage.gameObject.SetActive(true);
-        StaticUtilities.DisableCanvasGroup(creditsPage);
         howToPlayPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         settingsPage.gameObject.SetActive(true);
         StaticUtilities.DisableCanvasGroup(settingsPage);
         settingsOpen = false;
-        creditsOpen = false;
+        creditsPage.gameObject.SetActive(true);
+        // open credits if the player just beat the game
+        if (SceneLoadManager.Instance.PlayCreditsQueued)
+        {
+            Debug.Log("Opening credits since they are queued");
+            //StaticUtilities.EnableCanvasGroup(creditsPage);
+            //creditsOpen = true;
+            OnCreditsButtonClicked();
+        }
+        else
+        {
+            StaticUtilities.DisableCanvasGroup(creditsPage);
+            creditsOpen = false;
+        }
+            
 
         InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
         OnControllerChanged();
@@ -205,16 +233,10 @@ public class MainMenu : MonoBehaviour
 
     void LoadScene(string sceneToLoad, GameObject loadingCardPrefab)
     {
-        if (loadingScreenPrefab == null)
-        {
-            Debug.LogError("No transition card set on " + gameObject.name);
-            LevelManager.Instance.ChangeScene(sceneToLoad);
-            return;
-        }
-        var levelTransition = Instantiate(loadingScreenPrefab).GetComponent<LevelTransitionScreen>();
-        levelTransition.StartTransition(sceneToLoad, loadingCardPrefab);
+        Debug.LogError("No transition card set on " + gameObject.name);
+        //SceneLoadManager.Instance.LoadScene(sceneToLoad);
+        LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneToLoad));
     }
-
 
     #region Buttons OnClicked
 
@@ -288,10 +310,7 @@ public class MainMenu : MonoBehaviour
         StaticUtilities.DisableCanvasGroup(howToPlayPage);
         StaticUtilities.EnableCanvasGroup(creditsPage);
 
-        if (InputEvents.Instance.IsGamepadActive())
-        {
-            EventSystem.current.SetSelectedGameObject(closeCreditsButton.gameObject);
-        }
+        InitializeCredits();
     }
 
     void OnHowToPlayButtonClicked()
@@ -335,18 +354,7 @@ public class MainMenu : MonoBehaviour
 
     #endregion
 
-    #region Credits
-
-    void OnCreditsBackButtonClicked()
-    {
-        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
-        creditsOpen = false;
-
-        StaticUtilities.DisableCanvasGroup(creditsPage);
-        EventSystem.current.SetSelectedGameObject(creditsButton.gameObject);
-    }
-
-    #endregion
+    
 
     #region Settings
 
@@ -381,8 +389,6 @@ public class MainMenu : MonoBehaviour
     #endregion
 
     #endregion
-
-    
 
     #region Animations
 
@@ -490,7 +496,7 @@ public class MainMenu : MonoBehaviour
             return;
         }
 
-        if (creditsPage != null && creditsPage.interactable && creditsPage.alpha > 0.001f)
+        if (creditsPage != null && creditsPage.interactable && creditsPage.alpha > 0.001f && !SceneLoadManager.Instance.PlayCreditsQueued)
         {
             OnCreditsBackButtonClicked();
             return;
@@ -575,29 +581,65 @@ public class MainMenu : MonoBehaviour
 
     #endregion
 
-    #region Resolution
-    Vector2 lastResolution;
+    #region Credits
 
-    void Update()
+    void InitializeCredits()
     {
-        if (Screen.width != lastResolution.x || Screen.height != lastResolution.y)
+        if (InputEvents.Instance.IsGamepadActive())
         {
-            lastResolution = new Vector2(Screen.width, Screen.height);
-            OnResolutionChanged();
+            EventSystem.current.SetSelectedGameObject(closeCreditsButton.gameObject);
+        }
+
+        StaticUtilities.StopAndStartCoroutine(ref creditsCoroutine, ScrollCredits());
+    }
+
+    IEnumerator ScrollCredits()
+    {
+        float creditsPivotX = creditsScrollArea.pivot.x;
+        float creditsXPos = creditsScrollArea.position.x;
+
+        // reset position, in case player quit-mid credits and then went back to them
+        creditsScrollArea.pivot = new Vector2(creditsPivotX, 1);
+        creditsScrollArea.position = new Vector2(creditsXPos, 0);
+
+        // hard coded delay so the credits are tasteful
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        // wait an extra hard-coded second to account for the fade to black.
+        if (SceneLoadManager.Instance.PlayCreditsQueued)
+            yield return new WaitForSecondsRealtime(1);
+
+        float timeElapsed = 0;
+        float t;
+        while (timeElapsed < SecondsForFullCreditsScroll)
+        {
+            float speedMultiplier = speedUpCreditsAction.IsPressed() ? CreditsSpeedMultiplierIfButtonHeld : 1;
+
+            timeElapsed += Time.unscaledDeltaTime * speedMultiplier; 
+            t = timeElapsed / SecondsForFullCreditsScroll; // 0-1
+
+            // move the anchor point to scroll the credits, keep the y position the same. 
+            // this guarantees that the credits will always play the whole thing through. even if 
+            creditsScrollArea.pivot = new Vector2(creditsPivotX, 1 - t);
+            creditsScrollArea.position = new Vector2(creditsXPos, creditsStartY);
+
+            yield return null;
         }
     }
 
-    void OnResolutionChanged()
-    {
-        /*
-        Debug.Log($"new resolution: {Screen.width} x {Screen.height}");
-        leftFogRenderTexture.width  = Screen.width;
-        leftFogRenderTexture.height = Screen.height;
-        leftFogRenderTexture.Create();
 
-        rightFogRenderTexture.width = Screen.width;
-        rightFogRenderTexture.height = Screen.height;
-        rightFogRenderTexture.Create();*/
+    void OnCreditsBackButtonClicked()
+    {
+        Debug.Log("close credits");
+
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
+        creditsOpen = false;
+
+        StaticUtilities.DisableCanvasGroup(creditsPage);
+        EventSystem.current.SetSelectedGameObject(creditsButton.gameObject);
+
+        SceneLoadManager.Instance.PlayCreditsQueued = false;
     }
+
     #endregion
 }

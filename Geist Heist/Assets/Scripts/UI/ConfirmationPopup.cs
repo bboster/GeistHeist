@@ -107,7 +107,7 @@ public class ConfirmationPopup : MonoBehaviour
             canvasGroup.alpha = 1;
     }
 
-    public void HideConfirmationPopup()
+    public virtual void HideConfirmationPopup()
     {
         InputEvents.PauseStartedOverride = lastPauseStartedOverride == null ? null : lastPauseStartedOverride;
 
@@ -163,6 +163,7 @@ public class ConfirmationPopup : MonoBehaviour
         {
             StaticUtilities.DisableCanvasGroup(canvasGroup);
         }
+        InputEvents.PauseStartedOverride = lastPauseStartedOverride == null ? null : lastPauseStartedOverride;
     }
 
     private void RestorePreviousSelectionIfNeeded()

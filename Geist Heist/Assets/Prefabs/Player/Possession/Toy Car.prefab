@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b3fe61085f9b94186df4016697fd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AddGizmo
+  shape: 0
+  cubeSize: {x: 0, y: 0, z: 0}
 --- !u!1 &1090175418796945064
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b3fe61085f9b94186df4016697fd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AddGizmo
+  shape: 0
+  cubeSize: {x: 0, y: 0, z: 0}
 --- !u!1 &3402368958818299834
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +137,6 @@ GameObject:
   - component: {fileID: 2667771672078999720}
   - component: {fileID: 7862096149762473002}
   - component: {fileID: 6480417976091650489}
-  - component: {fileID: -7755143116239034038}
   - component: {fileID: 2279748789752088073}
   m_Layer: 10
   m_Name: Toy Car
@@ -190,6 +193,7 @@ MonoBehaviour:
   OnomatopoeiaScale: 0.5
   onomatopoeiaLifetime: 1
   possessableParticle: {fileID: 5204108424967083764}
+  secondsHoldMoveToHideTutorial: 4
 --- !u!65 &1174134053591356350
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -270,12 +274,14 @@ MonoBehaviour:
   VisibleUnPossessedMaterial: {fileID: 2100000, guid: 08d18bb6619bd9a43834063fa390d7a1, type: 2}
   AbilityIconPrefab: {fileID: 4491390581451361740, guid: 2c1cc0c85f1aab149862c1a9d7334228, type: 3}
   PossessableTextPrefab: {fileID: 4491390581451361740, guid: 44a053911b752e24ab1558b2e674d348, type: 3}
+  CanvasOverlayPrefab: {fileID: 0}
   HasChargeAbility: 1
   animator: {fileID: 0}
   possessStateName: possess
   tetherPossessStateName: tetherpossess
   possessCameraTransitionDelay: 0.35
   tetherCameraTransitionDelay: 0.75
+  possessableParticles: {fileID: 0}
   isGhost: 0
   CanUnPossess: 0
   meshRenderer: {fileID: 0}
@@ -303,20 +309,6 @@ MonoBehaviour:
   bakeKeys: []
   bakeValues: []
   outlineFillMaterial: {fileID: 0}
---- !u!114 &-7755143116239034038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3402368958818299834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37c98284e2a096b46b95d5b8d2631a3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GuardStunner
-  stunVelocityThreshold: 1
-  isCar: 1
 --- !u!114 &2279748789752088073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +378,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b3fe61085f9b94186df4016697fd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AddGizmo
+  shape: 0
+  cubeSize: {x: 0, y: 0, z: 0}
 --- !u!1 &4987588026841888006
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,6 +574,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b3fe61085f9b94186df4016697fd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AddGizmo
+  shape: 0
+  cubeSize: {x: 0, y: 0, z: 0}
 --- !u!1 &8266095108015759965
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +620,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b3fe61085f9b94186df4016697fd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AddGizmo
+  shape: 0
+  cubeSize: {x: 0, y: 0, z: 0}
 --- !u!1 &8358232243908615456
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,6 +633,7 @@ GameObject:
   - component: {fileID: 8698059868396046234}
   - component: {fileID: 5699987888748152895}
   - component: {fileID: 7565655402898799861}
+  - component: {fileID: 7514849727348675603}
   m_Layer: 10
   m_Name: TEMP_ToyCar
   m_TagString: Untagged
@@ -713,6 +712,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &7514849727348675603
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8358232243908615456}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 94f03f50e40f09d46b89a6e27b707450, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8890379919832926197
 GameObject:
   m_ObjectHideFlags: 0

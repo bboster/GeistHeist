@@ -53,24 +53,11 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     #region Interaction
     void IInteractable.Interact()
     {
-        if (SaveDataManager.Instance.EquipedHat() == (int)ThisCollectable)
-        {
-            Debug.Log($"{ThisCollectable} is already equipped.");
+        if (SaveDataManager.Instance.IsCollectableCollected(ThisCollectable) == false)
             return;
-        }
 
-        MeshRenderer meshPrefab = Registry.GetWearableMeshRenderer(ThisCollectable);
-        if (meshPrefab == null)
-        {
-            Debug.LogWarning($"No prefab found in Registry for {ThisCollectable}.");
-            return;
-        }
-
-        Debug.Log($"Attempting to wear: {ThisCollectable}");
-
-        if(wearableCollectible == null)
+        if (wearableCollectible == null)
             wearableCollectible = FindAnyObjectByType<WearableCollectible>();
-
 
         if (wearableCollectible == null)
         {
@@ -78,16 +65,33 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
             return;
         }
 
-        wearableCollectible.EquipHat(ThisCollectable);
+        //bald logic below
+        bool isThisHatEquipped = SaveDataManager.Instance.EquipedHat() == (int)ThisCollectable;
 
-        Debug.Log($"{ThisCollectable} equipped successfully!");
+        if (isThisHatEquipped)
+        {
+            wearableCollectible.EquipHat(Collectable.None);
+            Debug.Log($"{ThisCollectable} placed back in display.");
+        }
+        else
+        {
+            MeshRenderer meshPrefab = Registry.GetWearableMeshRenderer(ThisCollectable);
+            if (meshPrefab == null)
+            {
+                Debug.LogWarning($"No prefab found in Registry for {ThisCollectable}.");
+                return;
+            }
+
+            wearableCollectible.EquipHat(ThisCollectable);
+            Debug.Log($"{ThisCollectable} equipped successfully!");
+        }
+
         UpdateVisibility();
     }
 
     bool IInteractable.IsInteractable()
     {
-        return SaveDataManager.Instance.IsCollectableCollected(ThisCollectable)
-            && SaveDataManager.Instance.EquipedHat() != (int)ThisCollectable;
+        return SaveDataManager.Instance.IsCollectableCollected(ThisCollectable);
     }
     #endregion
 
@@ -168,10 +172,13 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
 
     public void UpdateVisibility()
     {
-        gameObject.SetActive((DebugAlwaysDisplay || SaveDataManager.Instance.IsCollectableCollected(ThisCollectable)) && SaveDataManager.Instance.EquipedHat() != (int)ThisCollectable);
+        bool isCollected = SaveDataManager.Instance.IsCollectableCollected(ThisCollectable);
+        bool isThisHatEquipped = SaveDataManager.Instance.EquipedHat() == (int)ThisCollectable;
+
+        gameObject.SetActive(DebugAlwaysDisplay || isCollected);
         MeshRenderer existingMesh = GetComponentInChildren<MeshRenderer>();
         if (existingMesh != null)
-            existingMesh.enabled = SaveDataManager.Instance.IsCollectableCollected(ThisCollectable) && SaveDataManager.Instance.EquipedHat() != (int)ThisCollectable;
+                existingMesh.enabled = isCollected && !isThisHatEquipped;
     }
     #endregion
 

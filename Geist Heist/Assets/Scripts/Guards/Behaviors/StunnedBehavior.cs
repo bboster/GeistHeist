@@ -19,6 +19,7 @@ public class StunnedBehavior : Behavior
     public override void InitializeBehavior(GameObject selfRef)
     {
         base.InitializeBehavior(selfRef);
+        contRef.PlayVoiceline(2);
         contRef.GetAnimator().SetBool("isStunned", true);
     }
 

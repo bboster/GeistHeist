@@ -85,8 +85,8 @@ public class ThirdPersonInputHandler : IInputHandler
 
     private EventInstance playerMoveSFX;
 
-    private string isMovingParam = "isMoving";
-    private string isIdleParam = "isIdle";
+    private const string isMovingParam = "isMoving";
+    private const string isIdleParam = "isIdle";
 
     // Start is called once before the first execution of WhilePossessingUpdate after the MonoBehaviour is created
     void Start()
@@ -232,8 +232,15 @@ public class ThirdPersonInputHandler : IInputHandler
         if (obj == null) 
             return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
+        //outline
+        bool outlineExists = obj.TryGetComponent<Outline>(out Outline outline);
+
+        if (outlineExists)
             outline.enabled = true;
+        else if (obj.TryGetComponentInChildren<Outline>(out outline))
+        {
+            outline.enabled = true;
+        }
 
         var allActionables = obj.GetComponentsInChildren<IActionable>();
         foreach (var actionable in allActionables)
@@ -252,8 +259,15 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         if (obj == null) return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
+        //outline
+        bool outlineExists = obj.TryGetComponent<Outline>(out Outline outline);
+
+        if (outlineExists)
             outline.enabled = false;
+        else if (obj.TryGetComponentInChildren<Outline>(out outline))
+        {
+            outline.enabled = false;
+        }
 
         var allActionables = obj.GetComponentsInChildren<IActionable>();
         foreach (var actionable in allActionables)
@@ -429,8 +443,17 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         if(obj == null) return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
+        //outline
+        bool outlineExists = obj.TryGetComponent<Outline>(out Outline outline);
+
+        if (outlineExists)
             outline.enabled = true;
+        else if (obj.TryGetComponentInChildren<Outline>(out outline))
+        {
+
+            Debug.Log("horse " + outline);
+            outline.enabled = true;
+        }
 
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
@@ -450,8 +473,15 @@ public class ThirdPersonInputHandler : IInputHandler
     {
         if (obj == null) return;
 
-        if (obj.TryGetComponent<Outline>(out Outline outline))
+        //outline
+        bool outlineExists = obj.TryGetComponent<Outline>(out Outline outline);
+
+        if (outlineExists)
             outline.enabled = false;
+        else if (obj.TryGetComponentInChildren<Outline>(out outline))
+        {
+            outline.enabled = false;
+        }
 
         var allInteractables = obj.GetComponentsInChildren<IInteractable>();
         foreach (var interactable in allInteractables)
@@ -488,6 +518,8 @@ public class ThirdPersonInputHandler : IInputHandler
     public override void WhileMoveHeld(float secondsHeld)
     {
         playerMoveSFX.set3DAttributes(RuntimeUtils.To3DAttributes(transform, GetComponent<Rigidbody>()));
+        animator.SetBool(isMovingParam, true);
+        animator.SetBool(isIdleParam, false);
 
         onSlope = OnSlope();
 
