@@ -92,6 +92,12 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
             SaveData();
     }
 
+    public int GetCollectedCount()
+    {
+        EnsureSaveData();
+        return currentSaveDta.CollectablesCollected.Count();
+    }
+
     #endregion
 
     #region Hats

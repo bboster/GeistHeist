@@ -79,14 +79,7 @@ public class AchievementManager : Singleton<AchievementManager>
 
     public void checkHatAchievements()
     {
-        int numberCollected = 0;
-        for(int i = 0; i <= 16; i++)
-        {
-            if (SaveDataManager.Instance.IsCollectableCollected((Collectable)i))
-            {
-                numberCollected++;
-            }
-        }
+        int numberCollected = SaveDataManager.Instance.GetCollectedCount();
 
         if (numberCollected >= 12)
         {
