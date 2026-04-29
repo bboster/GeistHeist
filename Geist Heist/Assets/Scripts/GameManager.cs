@@ -1,7 +1,7 @@
 /*
  * Contributors:  Josh, Toby, Jacob
  * Creation Date: 10/1/25
- * Last Modified: 11/3/25
+ * Last Modified: 4/29/2026
  * 
  * Brief Description: Instantiates managers scripts that are required for scene to function.
  * Keeps track of game state, such as level.

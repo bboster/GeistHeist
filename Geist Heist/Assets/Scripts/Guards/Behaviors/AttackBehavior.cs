@@ -1,8 +1,8 @@
 /*
  * Author: Jacob Bateman
- * Contributors:
+ * Contributors: Josh Kelly
  * Creation: 9/18/25
- * Last Edited: 9/18/25
+ * Last Edited: 4/29/2026
  * Summary: Handles behavior for the enemy when it is attacking the player.
  * TO DO: Replace marked lines when animations are implemented
  */

@@ -1,8 +1,8 @@
 /*
  * Author: Jacob Bateman
- * Contributors: Toby
+ * Contributors: Toby, Josh
  * Creation: 10/21/25
- * Last Edited: 4/20/2026
+ * Last Edited: 4/29/2026
  * Summary: Stores data for a level that needs to carry over between scene reloads
  */
 
