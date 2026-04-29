@@ -9787,6 +9787,37 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &187226129
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 187226130}
+  m_Layer: 0
+  m_Name: ExplosionBubbles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &187226130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187226129}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 47.1016, y: 29.5, z: 7.3459897}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &187811691
 GameObject:
   m_ObjectHideFlags: 0
@@ -13465,65 +13496,53 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1947103047}
     m_Modifications:
-    - target: {fileID: 63192768418683518, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: endCutsceneScene
-      value: OutroCutscene
+    - target: {fileID: 1110696852583975983, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: UIObjectPrefab
+      value: 
+      objectReference: {fileID: 5241587384657557485, guid: 216186ace5e58fb4cb97becb851cd3e9, type: 3}
+    - target: {fileID: 1514117580721305615, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.401
       objectReference: {fileID: 0}
-    - target: {fileID: 116407751311461491, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
+    - target: {fileID: 1514117580721305615, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.135
       objectReference: {fileID: 0}
-    - target: {fileID: 151533735443178336, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
+    - target: {fileID: 1514117580721305615, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.238
       objectReference: {fileID: 0}
-    - target: {fileID: 319195180727627934, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: debugAlwaysPossessable
+    - target: {fileID: 2235791386393734475, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: buttonKey
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 962496565493810803, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_Controller
+    - target: {fileID: 2235791386393734475, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: additionalButtonText
+      value: ' To Enter Globe'
+      objectReference: {fileID: 0}
+    - target: {fileID: 2428267842161985083, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: UIObjectPrefab
       value: 
-      objectReference: {fileID: 9100000, guid: 1cbc835c42dfade4e902d2d8dfc8cbbd, type: 2}
-    - target: {fileID: 1247365332119119820, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: sceneName
-      value: InsideGlobeALPHA
-      objectReference: {fileID: 0}
-    - target: {fileID: 1876427650027056345, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 2028572975817648515, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 3406582104735991399, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5241587384657557485, guid: 1f1dcd9e4f5071044bd106b058171592, type: 3}
     - target: {fileID: 3570522730866818126, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
       propertyPath: m_Name
       value: Globe
       objectReference: {fileID: 0}
-    - target: {fileID: 3570522730866818126, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
+    - target: {fileID: 3592795187960096607, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: additionalButtonText
+      value: ' (Ends Game)'
       objectReference: {fileID: 0}
-    - target: {fileID: 4198943637080892875, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
+    - target: {fileID: 4312255678940541467, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.4009995
       objectReference: {fileID: 0}
-    - target: {fileID: 5225363458447540929, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.7
+    - target: {fileID: 4312255678940541467, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.1349999
       objectReference: {fileID: 0}
-    - target: {fileID: 5225363458447540929, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5225363458447540929, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.7
+    - target: {fileID: 4312255678940541467, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 5225363458447540929, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13563,46 +13582,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5225363458447540929, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6354221562333371684, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6583259902969238225, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6794917190239968172, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798437265239644922, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6837122718734016892, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 8193322286083060153, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 8621185173536932040, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862898906648144643, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8871367632489137557, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: endCutsceneScene
-      value: OutroCutscene
-      objectReference: {fileID: 0}
-    - target: {fileID: 9021693717623061138, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
-      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -150891,6 +150870,7 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 187226130}
   - {fileID: 1450827580}
   - {fileID: 1952607944}
   - {fileID: 1952189142}
