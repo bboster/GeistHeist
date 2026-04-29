@@ -1,21 +1,13 @@
 using UnityEngine;
 using static Unity.Collections.AllocatorManager;
 
-public class AchievementManager : Singleton<AchievementManager>
+public class AchievementManager : DontDestroyOnLoadSingleton<AchievementManager>
 {
-    public static AchievementManager instance;
     private uint appID = 4476090;//giest heists appID
     private bool connectedToSteam = false;
     private int totalNumberOfAchievements = 30;
 
     public enum eAchievements {OpenGame, Credits, BeatTutorial, BeatLevel1, BeatLevel2, BeatLevel3, BeatLevel4, BeatLevel5, InteractWithLore, RollOut, FinishGame, OpenDoor, OpenPeachDoor, CollectFirstHat, TryOnHat, TryOnLobster, TryOnSleepy, TryOnJester, CollecttwelveHats, CollectAllHats, PosessVase20, throwCan, ThrowCan20, Drive, Bonk5, Drive20, getcaught, EscapeGuard }
-
-    protected override void Awake()
-    {
-        base.Awake();
-        DontDestroyOnLoad(this);
-        instance = this;
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

@@ -80,10 +80,10 @@ public class LockedDoorInteractable : MonoBehaviour, IInteractable
         Vector3 pivotWorld = ResolvePivotWorld();
 
 
-        AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.OpenDoor);
+        AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.OpenDoor);
         if(hasAchievement)
         {
-            AchievementManager.instance.UnlockAchievement(WhatAcheivement);
+            AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
         }
        
 

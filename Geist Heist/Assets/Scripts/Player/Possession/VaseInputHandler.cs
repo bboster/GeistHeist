@@ -28,7 +28,7 @@ public class VaseInputHandler : IInputHandler
         SaveDataManager.Instance.VasePossessed();
         if(SaveDataManager.Instance.getVasesPossessed() >= 20)
         {
-            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.PosessVase20);
+            AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.PosessVase20);
         }
     }
 

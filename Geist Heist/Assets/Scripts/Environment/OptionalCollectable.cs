@@ -58,9 +58,9 @@ public class OptionalCollectable : MonoBehaviour
         SaveDataManager.Instance.MarkCollectableAsCollected(ThisCollectable);
         if(ThisCollectable != Collectable.Purple_Hat)
         {
-            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.CollectFirstHat);
+            AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.CollectFirstHat);
         }
-        AchievementManager.instance.checkHatAchievements();
+        AchievementManager.Instance.checkHatAchievements();
         Destroy(childCollider);
         StartCoroutine(CollectAnimation());
     }

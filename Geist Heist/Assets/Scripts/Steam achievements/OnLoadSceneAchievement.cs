@@ -10,7 +10,7 @@ public class OnLoadSceneAchievement : MonoBehaviour
     {
         if(hasAchievement)
         {
-            AchievementManager.instance.UnlockAchievement(WhatAcheivement);
+            AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
         }
     }
 

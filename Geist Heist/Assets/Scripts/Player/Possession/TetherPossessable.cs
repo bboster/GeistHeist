@@ -37,7 +37,7 @@ public class TetherPossessable : IInputHandler
         victoryAnimation = StartCoroutine(LoadNextSceneCooldown());
         if (hasAchievement)
         {
-            AchievementManager.instance.UnlockAchievement(WhatAcheivement);
+            AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
         }
     }
 

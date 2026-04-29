@@ -19,7 +19,7 @@ public class ReturnBehavior : GuardMovement
         if (contRef.SawPlayer)
         {
             contRef.SawPlayer = false;
-            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.EscapeGuard);
+            AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.EscapeGuard);
         }
         if (contRef.DefaultBehavior.StateName == GuardStates.idle)
         {

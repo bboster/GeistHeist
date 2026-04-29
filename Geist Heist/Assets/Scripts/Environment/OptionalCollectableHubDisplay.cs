@@ -58,7 +58,7 @@ public class OptionalCollectableHubDisplay : MonoBehaviour, IInteractable
     {
         if (hasAchievement)
         {
-            AchievementManager.instance.UnlockAchievement(WhatAcheivement);
+            AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
         }
 
         if (SaveDataManager.Instance.IsCollectableCollected(ThisCollectable) == false)

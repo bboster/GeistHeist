@@ -101,11 +101,11 @@ public class VendingObject : IInputHandler, IInteractable
         hasThrownThisPossession = true;
         StartCoroutine(DetectableTimer());
 
-        AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.throwCan);
+        AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.throwCan);
         SaveDataManager.Instance.CanThrown();
         if (SaveDataManager.Instance.getCansThrown() >= 20)
         {
-            AchievementManager.instance.UnlockAchievement(AchievementManager.eAchievements.ThrowCan20);
+            AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.ThrowCan20);
 
         }
 

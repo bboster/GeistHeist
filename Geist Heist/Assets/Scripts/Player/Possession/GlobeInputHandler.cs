@@ -62,7 +62,7 @@ public class GlobeInputHandler : IInputHandler
         IncreaseCameraPriority(globeSwingCamera, 1);
         if (hasAchievement)
         {
-            AchievementManager.instance.UnlockAchievement(WhatAcheivement);
+            AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
         }
 
         if (endCoroutine == null)
