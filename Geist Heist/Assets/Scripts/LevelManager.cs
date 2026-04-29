@@ -52,6 +52,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         player.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>().HorizontalAxis.Value = SpawnRotation.y;
         RestoreKeys();
         RestoreDoors();
+        RestoreSettings();
         return Task.CompletedTask;
     }
 
@@ -139,7 +140,12 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         }
     }
 
-    public IEnumerator InstantiateFadeToBlack(UnityAction action)
+    private void RestoreSettings()
+    {
+        SettingsProfile.ReadSavedSettings();
+    }
+
+    public void InstantiateFadeToBlack(UnityAction action)
     {
         FadeToBlack ftb = Instantiate(fadeToBlack).GetComponent<FadeToBlack>();
         yield return ftb.Initialize(action);
