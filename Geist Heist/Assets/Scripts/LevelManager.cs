@@ -52,6 +52,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         player.CinemachineCamera.GetComponent<CinemachineOrbitalFollow>().HorizontalAxis.Value = SpawnRotation.y;
         RestoreKeys();
         RestoreDoors();
+        RestoreSettings();
         return Task.CompletedTask;
     }
 
@@ -137,6 +138,11 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         {
             door.RestoreCheckpointStateIfNeeded();
         }
+    }
+
+    private void RestoreSettings()
+    {
+        SettingsProfile.ReadSavedSettings();
     }
 
     public IEnumerator InstantiateFadeToBlack(UnityAction action)
