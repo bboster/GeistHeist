@@ -355,12 +355,13 @@ public class DebugConsole : MonoBehaviour
             {
                 continue;
             }
-            index++;
 
             if (index == input)
             {
                 return LevelManager.Instance.LevelNames[i].SceneName;
             }
+
+            index++;
         }
         return "";
         
