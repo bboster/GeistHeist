@@ -1,7 +1,7 @@
 /*
- * Contributors: Toby
+ * Contributors: Toby, Josh
  * Creation Date: 10/20/25
- * Last Modified: 11/5/25
+ * Last Modified: 4/29/2026
  * 
  * Brief Description: Resusable & modular UI popup for confirming the users choice.
  */
@@ -21,6 +21,8 @@ public class LevelConfirmationPopup : ConfirmationPopup
     [SerializeField, Required] private Transform parent;
 
     private bool loadingAnimationFinished = false;
+    private bool closeSequenceStarted = false;
+    private CanvasGroup parentCanvasGroup;
 
     public override void OpenConfirmationPopup(string text = null, UnityAction OnConfirmationButtonClicked = null, UnityAction OnCancelButtonClicked = null, float fadeSeconds = -1, bool closeMenuOnConfirm = true, bool freezeTime = true)
     {
@@ -30,6 +32,13 @@ public class LevelConfirmationPopup : ConfirmationPopup
         confirmButton?.onClick.AddListener(OnConfirmButtonClicked);
 
         loadingText.alpha = 0;
+
+        loadingAnimationFinished = false;
+        closeSequenceStarted = false;
+        parentCanvasGroup = parent.gameObject.GetOrAddComponent<CanvasGroup>();
+        parentCanvasGroup.alpha = 1f;
+        parentCanvasGroup.interactable = true;
+        parentCanvasGroup.blocksRaycasts = true;
 
         DontDestroyOnLoad(parent.gameObject);
     }
@@ -45,10 +54,8 @@ public class LevelConfirmationPopup : ConfirmationPopup
         confirmButton.SetColors(disabledColor: Color.white); // so the player cant tell i just disabled it lolz
         confirmButton.enabled = false;
 
-        SceneManager.sceneLoaded += (_,_) => { 
-            if(this != null)
-                StartCoroutine(CloseLevelConfirmation()); 
-        };
+        SceneManager.sceneLoaded -= OnSceneLoadedAfterConfirmation;
+        SceneManager.sceneLoaded += OnSceneLoadedAfterConfirmation;
     }
 
     // Called from the animation clip that shows the "Loading..." text
@@ -71,9 +78,35 @@ public class LevelConfirmationPopup : ConfirmationPopup
         while (!loadingAnimationFinished)
             yield return null;
 
-        yield return StaticUtilities.FadeToHidden(canvasGroup, lastFadeSecondsUsed);
+        if (parentCanvasGroup == null && parent != null)
+            parentCanvasGroup = parent.GetComponent<CanvasGroup>();
+
+        CanvasGroup groupToFade = parentCanvasGroup != null ? parentCanvasGroup : canvasGroup;
+        yield return StaticUtilities.FadeToHidden(groupToFade, lastFadeSecondsUsed);
+
+        if (parentCanvasGroup != null)
+        {
+            parentCanvasGroup.interactable = false;
+            parentCanvasGroup.blocksRaycasts = false;
+        }
 
         HideConfirmationPopup();
+    }
+
+    private void OnSceneLoadedAfterConfirmation(Scene _, LoadSceneMode __)
+    {
+        SceneManager.sceneLoaded -= OnSceneLoadedAfterConfirmation;
+
+        if (this == null || closeSequenceStarted)
+            return;
+
+        closeSequenceStarted = true;
+        StartCoroutine(CloseLevelConfirmation());
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoadedAfterConfirmation;
     }
 
     protected override void AfterFadeToHidden()
