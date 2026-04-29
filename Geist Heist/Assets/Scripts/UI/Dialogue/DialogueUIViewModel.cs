@@ -34,11 +34,11 @@ public class DialogueUIViewModel : MonoBehaviour
         AnchorToBottomStretch(rectTransform);
 
         StaticUtilities.FadeOpacity(group, 0, baseOpacity, seconds: 0.25f);
+        StartCoroutine(DelayEndingAnimation());
     }
 
     public IEnumerator TypewriterAnimation()
     {
-
         textBox.text = "";
         for (int i = 1; i < textData.BodyText.Length; i++)
         {
@@ -57,7 +57,7 @@ public class DialogueUIViewModel : MonoBehaviour
         float timeStarted = Time.time;
 
         // first half of fadeout 
-        while (Time.time - timeStarted < textData.StayLength / 2)
+        while (Time.time - timeStarted < textData.StayLength - 1)
         {
             // baseOpacity gets updated in DialogueUIManager 
             group.alpha = Mathf.MoveTowards(group.alpha, opacity, Time.deltaTime / 10);
@@ -74,9 +74,14 @@ public class DialogueUIViewModel : MonoBehaviour
             yield return null;
         }
 
-
         yield return StaticUtilities.FadeToHidden(group, seconds: 0.4f);
         Destroy(this.gameObject);
+    }
+
+    private IEnumerator DelayEndingAnimation()
+    {
+        float secondsToTypeWrite = (float)textData.BodyText.Length * DialogueUIManager.Instance.secondsBetweenLetters;
+        yield return new WaitForSeconds(secondsToTypeWrite + textData.StayLength);
     }
 
     private static void AnchorToBottomStretch(RectTransform rectTransform)
@@ -99,4 +104,5 @@ public class DialogueUIViewModel : MonoBehaviour
         rectTransform.pivot = new Vector2(0.5f, 0f);
 
     }
+
 }
