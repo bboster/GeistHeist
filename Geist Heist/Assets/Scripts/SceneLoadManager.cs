@@ -52,6 +52,8 @@ public class SceneLoadManager : DontDestroyOnLoadSingleton<SceneLoadManager>
 
         OnLoadCompleted?.Invoke();
 
+        SettingsProfile.ReadSavedSettings();
+
         yield return true;
     }
 
