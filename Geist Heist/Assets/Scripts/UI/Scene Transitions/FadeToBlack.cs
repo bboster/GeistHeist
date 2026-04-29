@@ -20,7 +20,9 @@ public class FadeToBlack : Singleton<FadeToBlack>
 
         if (fadeCoroutine == null)
         {
-            GameManager.Instance.fadingToBlack = true;
+            if(GameManager.Instance != null)
+                GameManager.Instance.fadingToBlack = true;
+
             fadeCanvasGroup.alpha = 0;
             yield return fadeCoroutine = StartCoroutine(FadeAnimation(action, delayAfterAction));
         }
@@ -33,7 +35,10 @@ public class FadeToBlack : Singleton<FadeToBlack>
         action();
         yield return new WaitForSeconds(delayAfterAction);
         yield return StaticUtilities.FadeToHidden(fadeCanvasGroup, secondsForFade);
-        GameManager.Instance.fadingToBlack = false;
+
+        if(GameManager.Instance != null)
+            GameManager.Instance.fadingToBlack = false;
+
         Destroy(gameObject);
         fadeCoroutine = null;
     }
