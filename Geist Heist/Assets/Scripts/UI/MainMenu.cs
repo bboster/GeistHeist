@@ -157,13 +157,13 @@ public class MainMenu : MonoBehaviour
             StaticUtilities.DisableCanvasGroup(creditsPage);
             creditsOpen = false;
         }
-            
+
 
         InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
         OnControllerChanged();
 
-        InputEvents.PauseStarted.AddListener(OnSettingsBackButtonClicked);
-        InputEvents.ActionStarted.AddListener(OnSettingsBackButtonClicked); // because its B on controller
+        InputEvents.PauseStarted.AddListener(OnCloseMenuButtonClicked);
+        InputEvents.ActionStarted.AddListener(() => {if (InputEvents.Instance.IsGamepadActive()) OnCloseMenuButtonClicked(); }); // because its B on controller
 
         InputSystem.onAnyButtonPress.Call((ctrl) => OnAnyButtonPressed());
         pressAnyButtonButton.onClick.AddListener(OnAnyButtonPressed);
@@ -184,7 +184,7 @@ public class MainMenu : MonoBehaviour
         if (closeHowToPlayButton != null) closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
 
         // settings
-        closeSettingsButton.onClick.AddListener(OnSettingsBackButtonClicked);
+        closeSettingsButton.onClick.AddListener(OnCloseMenuButtonClicked);
 
         // Confirmation Popup
         confirmationPopup.HideConfirmationPopup();
@@ -385,20 +385,31 @@ public class MainMenu : MonoBehaviour
 
     #region Settings
 
-    void OnSettingsBackButtonClicked()
+    void OnCloseMenuButtonClicked()
     {
-        // since player can activate this by pressing esc
-        if(settingsOpen == false) { return; }   
+        if (creditsOpen)
+        {
+            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
-        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
+            StaticUtilities.DisableCanvasGroup(creditsPage);
+            if (InputEvents.Instance.IsGamepadActive())
+                EventSystem.current.SetSelectedGameObject(creditsButton.gameObject);
 
-        StaticUtilities.DisableCanvasGroup(settingsPage);
-        if(InputEvents.Instance.IsGamepadActive())
-            EventSystem.current.SetSelectedGameObject(settingsButton.gameObject);
+            creditsOpen = false;
+        }
 
-        settingsOpen = false;
+        if (settingsOpen)
+        {
+            AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
-        settingsTab.CloseTab();
+            StaticUtilities.DisableCanvasGroup(settingsPage);
+            if (InputEvents.Instance.IsGamepadActive())
+                EventSystem.current.SetSelectedGameObject(settingsButton.gameObject);
+
+            settingsOpen = false;
+
+            settingsTab.CloseTab();
+        }
     }
 
     #endregion
