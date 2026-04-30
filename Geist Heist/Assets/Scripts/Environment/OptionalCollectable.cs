@@ -56,6 +56,11 @@ public class OptionalCollectable : MonoBehaviour
 
         StaticUtilities.PlayAndDestroyParticle(CollectionParticlePrefab, transform.position);
         SaveDataManager.Instance.MarkCollectableAsCollected(ThisCollectable);
+        if(ThisCollectable != Collectable.Purple_Hat)
+        {
+            AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.CollectFirstHat);
+        }
+        AchievementManager.Instance.checkHatAchievements();
         Destroy(childCollider);
         StartCoroutine(CollectAnimation());
     }

@@ -178,6 +178,11 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
         }
         return filtered.First().DisplayName;
     }
+
+    public string GetSceneName(string debugName)
+    {
+        return LevelNames.Where(n => n.InternalDebugName == debugName).First().SceneName;
+    }
 }
 
 [System.Serializable]

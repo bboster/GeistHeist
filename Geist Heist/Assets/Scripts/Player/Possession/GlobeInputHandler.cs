@@ -55,6 +55,8 @@ public class GlobeInputHandler : IInputHandler
 
     private Coroutine endCoroutine;
     [HideInInspector] public bool EndingActive = false;
+    [Foldout("Achievements"), SerializeField] bool hasAchievement;
+    [Foldout("Achievements"), SerializeField] AchievementManager.eAchievements WhatAcheivement;
 
     [Foldout("Explosions"), SerializeField] private GameObject explosionContainer;
     [Foldout("Explosions"), SerializeField] private Transform explosionParent;
@@ -102,6 +104,10 @@ public class GlobeInputHandler : IInputHandler
     public override void OnPossessionStart()
     {
         IncreaseCameraPriority(globeSwingCamera, 1);
+        if (hasAchievement)
+        {
+            AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
+        }
 
         if (endCoroutine == null)
         {

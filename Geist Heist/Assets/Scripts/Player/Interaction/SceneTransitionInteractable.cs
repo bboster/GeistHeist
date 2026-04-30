@@ -27,9 +27,10 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
 
     [Foldout("Advanced"), SerializeField, ShowIf("hasConfirmationPopup")] private bool closeMenuOnConfirm = false;
 
-    //private static bool anyLevelConfirmScreenOpen = false;
-    [Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
+//private static bool anyLevelConfirmScreenOpen = false;
+[Tooltip ("Setting this to false means the transition will ONLY do a fade to black.")]
     [SerializeField] private bool hasConfirmationPopup = true;
+
 
     public void Interact()
     {
@@ -38,6 +39,8 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
             Debug.Log("can't open new confirm screen, player is already in a confirmation menu");
             return;
         }
+
+        
 
         if (!hasConfirmationPopup)
         {
