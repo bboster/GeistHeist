@@ -44,6 +44,9 @@ public class PlayerCameraController : MonoBehaviour
             minFov = cinemachineCamera.Lens.FieldOfView;
 
         tempCameraPivot = new GameObject("Temp camera pivot").transform;
+
+        SettingsProfile.ReadSavedSettings();
+        UpdateAllSettings();
     }
 
     private void Update()

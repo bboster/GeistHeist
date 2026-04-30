@@ -152,7 +152,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
                     PlayVoiceLine(FMODEvents.Instance.VLLobbyNightTwo, "VLLobbyNightTwo", textData);
                     break;
                 case 3:
-                    PlayVoiceLine(FMODEvents.Instance.VLLobbyNightThree, "VLLobbyNightThree", textData);
+                    PlayVoiceLine(FMODEvents.Instance.VLLobbyNightThree, "LVLobbyNightThree", textData);
                     break;
                 case 4:
                     PlayVoiceLine(FMODEvents.Instance.VLLobbyNightFour, "VLLobbyNightFour", textData);

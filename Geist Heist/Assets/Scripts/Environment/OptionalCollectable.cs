@@ -195,7 +195,7 @@ public class OptionalCollectable : MonoBehaviour
                 return;
             }
 
-            Registry.AddOrUpdate(ThisCollectable, CollectableModel);
+            //Registry.AddOrUpdate(ThisCollectable, CollectableModel);
 
             Debug.Log($"✅ Auto-registered {ThisCollectable} mesh into CollectableRegistry (delayed).");
         };
