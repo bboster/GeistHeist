@@ -38,8 +38,6 @@ public class GlobeInputHandler : IInputHandler
     private Canvas overlayCanvas;
     [Tooltip("Rect Transform for the button press UI.")]
     [SerializeField] private RectTransform buttonTransform;
-    [SerializeField] private EndingAnimationController doorController;
-    [SerializeField] private EndingAnimationController guardController;
 
     [Header("Button sprites")]
     [Tooltip("Keyboard button sprite.")]
@@ -116,9 +114,10 @@ public class GlobeInputHandler : IInputHandler
 
     public override void OnPossessionStart()
     {
+        //start cinematic
         IncreaseCameraPriority(toGuardCamera, 1);
+        EndingDoorController.Instance.DoorAnimator.SetBool("ENDSCENESTARTED", true);
 
-        doorController.DoorAnimator.SetBool("ENDSCENESTARTED", true);
         if (hasAchievement)
         {
             AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
@@ -284,6 +283,11 @@ public class GlobeInputHandler : IInputHandler
         IncreaseCameraPriority(globeHallwayCamera, 2);
         DecreaseCameraPriority(globeRollCamera);
     }
+    public void SwitchToSwingingCamera()
+    {
+        IncreaseCameraPriority(globeSwingCamera, 2);
+        DecreaseCameraPriority(toGuardCamera);
+    }
 
     public void FadeToWhite()
     {
@@ -332,6 +336,11 @@ public class GlobeInputHandler : IInputHandler
         yield return StaticUtilities.AnimateScale(buttonTransform, startScale: new Vector3(1.25f, 1.25f, 1), endScale: Vector3.one, seconds: 0.1f)
             // rotate
             .And(StaticUtilities.AnimateRotation(buttonTransform, Quaternion.identity, seconds: 0.1f));
+    }
+
+    public void KnockOverGuards()
+    {
+        EndingGuardController.Instance.KnockOverGuards();
     }
 
     #endregion
