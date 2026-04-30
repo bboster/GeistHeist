@@ -56,7 +56,7 @@ public class SettingsTab : PauseMenuTab
     public override void OpenTab()
     {
         base.OpenTab();
-        EventSystem.current?.SetSelectedGameObject(lookSensitivityAttributes.SliderComponent.gameObject);
+        //EventSystem.current?.SetSelectedGameObject(lookSensitivityAttributes.SliderComponent.gameObject);
     }
 
     public override void CloseTab()

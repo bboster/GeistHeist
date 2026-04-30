@@ -93,6 +93,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private InputControlScheme? _gamepadScheme;
     private InputControlScheme? _kbmScheme;
 
+    private bool isCurrentlyKeyboard;
     private InputDevice _currentDevice = null;
     private bool _canUseControlSwap = true;
     private WaitForEndOfFrame _endOfFrame = null;
@@ -142,7 +143,11 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, device);
             _currentDevice = device;
             _canUseControlSwap = false;
-            OnControllerChanged.Invoke();
+
+            if(isCurrentlyKeyboard)
+                OnControllerChanged.Invoke();
+            isCurrentlyKeyboard = false;
+
             StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
         else if ((device is Keyboard || device is Mouse) && _kbmScheme.HasValue && playerInput.currentControlScheme != _kbmScheme.Value.name)
@@ -150,7 +155,11 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
             _currentDevice = device;
             _canUseControlSwap = false;
-            OnControllerChanged.Invoke();
+
+            if(!isCurrentlyKeyboard)
+                OnControllerChanged.Invoke();
+            isCurrentlyKeyboard = true;
+
             StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
     }
@@ -318,9 +327,10 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             if (!WasAnySwitchRelevantDeviceUpdatedThisFrame())
                 continue;
 
-            OnControllerChanged.Invoke();
+            //OnControllerChanged.Invoke();
 
             string currentScheme = playerInput.currentControlScheme;
+
             if (TrySwitchToKeyboardMouseScheme(currentScheme))
                 continue;
 
@@ -348,7 +358,11 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
                 playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
                 _currentDevice = Keyboard.current;
                 _canUseControlSwap = false;
-                OnControllerChanged.Invoke();
+
+                if(!isCurrentlyKeyboard)
+                    OnControllerChanged.Invoke();
+                isCurrentlyKeyboard = true;
+
                 StartCoroutine(PreventControlSwapUntilEndOfFrame());
             }
             return true;
@@ -364,9 +378,12 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         if (Gamepad.current != null && IsInputFromGamepad())
         {
-            OnControllerChanged.Invoke();
+            if(isCurrentlyKeyboard)
+                OnControllerChanged.Invoke();
+
             if (_gamepadScheme.HasValue)
             {
+                isCurrentlyKeyboard = false;
                 playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
                 _currentDevice = Gamepad.current;
                 _canUseControlSwap = false;

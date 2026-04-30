@@ -49,7 +49,6 @@ public class PauseMenu : MonoBehaviour
     private static float timeOfLastPause;
     private InputAction menuBackAction;
     private Color defaultNormalTabTextColor;
-    private PauseMenuTab currentTab;
 
     private void OnEnable()
     {
@@ -117,7 +116,11 @@ public class PauseMenu : MonoBehaviour
 
         pauseScreenParent.gameObject.SetActive(true);
         StaticUtilities.EnableCanvasGroup(pauseGroup);
-        StaticUtilities.ShowCursor();
+
+        if(InputEvents.Instance.IsGamepadActive())
+            StaticUtilities.HideCursor();
+        else
+            StaticUtilities.ShowCursor();
 
         settingsTab.CloseTab();
         controlsTab.CloseTab();
@@ -175,7 +178,9 @@ public class PauseMenu : MonoBehaviour
         if (settingsOpen || controlsOpen)
         {
             generalTab.OpenTab();
-            EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
+
+            if(InputEvents.Instance.IsGamepadActive())
+                EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
             return;
         }
 
@@ -221,10 +226,14 @@ public class PauseMenu : MonoBehaviour
 
     private void SelectDefaultForCurrentTab()
     {
+        if (InputEvents.Instance.IsGamepadActive() == false) return;
+
         if (settingsTab.canvasGroup != null && settingsTab.canvasGroup.alpha > 0.001f)
             EventSystem.current.SetSelectedGameObject(settingsTab.toggleButton.gameObject);
+
         else if (controlsTab.canvasGroup != null && controlsTab.canvasGroup.alpha > 0.001f)
             EventSystem.current.SetSelectedGameObject(controlsTab.toggleButton.gameObject);
+
         else
             EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
     }
@@ -233,7 +242,6 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenGeneralButtonSelected()
     {
-        currentTab = generalTab;
         generalTab.OpenTab();
 
         DisableAllWavyTexts();
@@ -248,7 +256,6 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenControlsButtonSelected()
     {
-        currentTab = controlsTab;
         controlsTab.OpenTab();
 
         DisableAllWavyTexts();
@@ -263,7 +270,6 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenSettingsButtonSelected()
     {
-        currentTab = settingsTab;
         settingsTab.OpenTab();
 
         DisableAllWavyTexts();
@@ -402,6 +408,11 @@ public class PauseMenu : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
 
             ResetAllToggleButtonColors();
+
+            if (IsConfirmationPopupOpen())
+                EventSystem.current.SetSelectedGameObject(confirmationPopup.confirmButton.gameObject);
+            else
+                EventSystem.current.SetSelectedGameObject(PauseMenuTab.currentOpenTab.toggleButton.gameObject);
         }
 
     }
