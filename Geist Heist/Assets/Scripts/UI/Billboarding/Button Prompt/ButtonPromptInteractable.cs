@@ -12,6 +12,7 @@
  * TODO: swap UI for controller support eventually.
  */
 
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,6 +28,8 @@ public class ButtonPromptInteractable : MonoBehaviour, IInteractable, IActionabl
     [HideInInspector] public UnityEvent HideUIEvent = new();
 
     private PossessableObject parentPossessableObject;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void InitializeFromBillboardUI(ButtonPromptBillboardUI buttonPrompt)

@@ -101,6 +101,14 @@ public class VendingObject : IInputHandler, IInteractable
         hasThrownThisPossession = true;
         StartCoroutine(DetectableTimer());
 
+        AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.throwCan);
+        SaveDataManager.Instance.CanThrown();
+        if (SaveDataManager.Instance.getCansThrown() >= 20)
+        {
+            AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.ThrowCan20);
+
+        }
+
         if (possessableObject.VisiblePossessionMaterial != null)
         {
             possessableObject.meshRenderer.material = possessableObject.VisiblePossessionMaterial;

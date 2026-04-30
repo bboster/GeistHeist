@@ -21,7 +21,7 @@ public class MusicManager : Singleton<MusicManager>
     private EventInstance hubBGM;
     private EventInstance globeBGM;
     private EventInstance menuBGM;
-    //private EventInstance tutorialBGM;
+    private EventInstance tutorialBGM;
     private EventInstance wing1BGM;
     private EventInstance wing2BGM;
     private EventInstance wing3BGM;
@@ -38,7 +38,7 @@ public class MusicManager : Singleton<MusicManager>
 
         globeBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GlobeBGM);
         hubBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.HubBGM);
-        //tutorialBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.TutorialBGM);
+        tutorialBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.TutorialBGM);
         //levelBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.LevelBGM);
         menuBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.MenuBGM);
         wing1BGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.Wing1BGM);
@@ -95,7 +95,7 @@ public class MusicManager : Singleton<MusicManager>
         }
         else if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName(tutorialName)))
         {
-            //tutorialBGM.start();
+            tutorialBGM.start();
         }
     }
 
@@ -116,7 +116,7 @@ public class MusicManager : Singleton<MusicManager>
         val += 0.05f;
         PlayerManager.Instance.UpdateMusicSwitch(val);
         hubBGM.setParameterByName("Hiding", val);
-        //tutorialBGM.setParameterByName("Hiding", val);
+        tutorialBGM.setParameterByName("Hiding", val);
         wing1BGM.setParameterByName("Hiding", val);
         wing2BGM.setParameterByName("Hiding", val);
         wing3BGM.setParameterByName("Hiding", val);
@@ -132,7 +132,7 @@ public class MusicManager : Singleton<MusicManager>
         val -= 0.05f;
         PlayerManager.Instance.UpdateMusicSwitch(val);
         hubBGM.setParameterByName("Hiding", val);
-        //tutorialBGM.setParameterByName("Hiding", val);
+        tutorialBGM.setParameterByName("Hiding", val);
         wing1BGM.setParameterByName("Hiding", val);
         wing2BGM.setParameterByName("Hiding", val);
         wing3BGM.setParameterByName("Hiding", val);
@@ -154,7 +154,7 @@ public class MusicManager : Singleton<MusicManager>
     {
         //levelBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         hubBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-        //tutorialBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        tutorialBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         globeBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         menuBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         wing1BGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);

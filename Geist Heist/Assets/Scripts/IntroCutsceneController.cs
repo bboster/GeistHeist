@@ -37,9 +37,11 @@ public class IntroCutsceneController : MonoBehaviour
 
     [SerializeField] private RawImage outputImage;
 
+    [SerializeField] private bool isIntro;
 
     private RenderTexture renderTexture;
     private EventInstance introVl;
+    private EventInstance outroVl;
 
     private void Awake()
     {
@@ -89,7 +91,15 @@ public class IntroCutsceneController : MonoBehaviour
 
         player.Play();
         introVl = RuntimeManager.CreateInstance(FMODEvents.Instance.VLIntro);
-        introVl.start();
+        outroVl = RuntimeManager.CreateInstance(FMODEvents.Instance.VLOutro);
+        if (isIntro)
+        {
+            introVl.start();
+        }
+        else
+        {
+            outroVl.start();
+        }
     }
 
     /// <summary>
@@ -179,6 +189,7 @@ public class IntroCutsceneController : MonoBehaviour
         player.loopPointReached -= LoadHub;
 
         introVl.stop(STOP_MODE.ALLOWFADEOUT);
+        outroVl.stop(STOP_MODE.ALLOWFADEOUT);
     }
 
     private void OnControllerUpdated()

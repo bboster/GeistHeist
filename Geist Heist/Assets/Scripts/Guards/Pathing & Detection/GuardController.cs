@@ -73,6 +73,8 @@ public class GuardController : MonoBehaviour
     private EventInstance guardRunSFX;
     private EventInstance guardReaction;
 
+    public bool SawPlayer; 
+
     #endregion
 
     #region Getters
@@ -126,7 +128,7 @@ public class GuardController : MonoBehaviour
 
         //randomize which guard lines get played
         System.Random r = new System.Random();
-        int whichGuard = r.Next(0, 4);
+        int whichGuard = r.Next(0, 3);
         switch (whichGuard)
         {
             case 0:
@@ -137,9 +139,6 @@ public class GuardController : MonoBehaviour
                 break;
             case 2:
                 guardReaction = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardThree);
-                break;
-            case 3:
-                guardReaction = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardFour);
                 break;
             default:
                 guardReaction = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GuardOne);
