@@ -27,6 +27,7 @@ public class ChaseBehavior : GuardMovement
         MoveToPoint(GetPlayerLocation());
         thisAgent.isStopped = false;
 
+        contRef.SawPlayer = true;
         contRef.PlayVoiceline(3);
         contRef.GetAnimator().SetBool("isChasing", true);
     }

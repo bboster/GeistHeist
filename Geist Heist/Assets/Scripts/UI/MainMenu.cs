@@ -651,6 +651,8 @@ public class MainMenu : MonoBehaviour
 
             yield return null;
         }
+
+        AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.Credits);
     }
 
 

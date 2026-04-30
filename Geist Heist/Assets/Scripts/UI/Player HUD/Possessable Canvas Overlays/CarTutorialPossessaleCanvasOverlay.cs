@@ -67,8 +67,9 @@ public class CarTutorialPossessaleCanvasOverlay : PossessableCanvasOverlay
 
     private void OnDrawGizmosSelected()
     {
+        
         if (Application.isPlaying) return;
-
+        
         if(Mathf.RoundToInt((float)EditorApplication.timeSinceStartup / 5) % 2 == 0)
             wavyTextBox.SetText( KeyboardText );
         else

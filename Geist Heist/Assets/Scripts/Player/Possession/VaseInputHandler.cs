@@ -25,6 +25,11 @@ public class VaseInputHandler : IInputHandler
     public override void OnPossessionStart()
     {
         possessableParticles.Play();
+        SaveDataManager.Instance.VasePossessed();
+        if(SaveDataManager.Instance.getVasesPossessed() >= 20)
+        {
+            AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.PosessVase20);
+        }
     }
 
     public override void OnPossessionEnded()
