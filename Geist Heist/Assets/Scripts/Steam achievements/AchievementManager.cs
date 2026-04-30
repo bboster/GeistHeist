@@ -9,6 +9,12 @@ public class AchievementManager : DontDestroyOnLoadSingleton<AchievementManager>
 
     public enum eAchievements {OpenGame, Credits, BeatTutorial, BeatLevel1, BeatLevel2, BeatLevel3, BeatLevel4, BeatLevel5, InteractWithLore, RollOut, FinishGame, OpenDoor, OpenPeachDoor, CollectFirstHat, TryOnHat, TryOnLobster, TryOnSleepy, TryOnJester, CollecttwelveHats, CollectAllHats, PosessVase20, throwCan, ThrowCan20, Drive, Bonk5, Drive20, getcaught, EscapeGuard }
 
+    protected override void Awake()
+    {
+        TryUnlockAllAchievements();
+        base.Awake();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -82,6 +88,33 @@ public class AchievementManager : DontDestroyOnLoadSingleton<AchievementManager>
         {
             UnlockAchievement(eAchievements.CollectAllHats);
         }
+    }
+
+    public void TryUnlockAllAchievements()
+    {
+        UnlockAchievement(eAchievements.OpenGame);
+
+        if (SaveDataManager.Instance.IsLevelCompleted(LevelManager.Instance.GetSceneName("tutorial")))
+            UnlockAchievement(eAchievements.BeatTutorial);
+
+        if (SaveDataManager.Instance.IsLevelCompleted(LevelManager.Instance.GetSceneName("parlor")))
+            UnlockAchievement(eAchievements.BeatLevel1);
+
+        if (SaveDataManager.Instance.IsLevelCompleted(LevelManager.Instance.GetSceneName("gallery")))
+            UnlockAchievement(eAchievements.BeatLevel2);
+
+        if (SaveDataManager.Instance.IsLevelCompleted(LevelManager.Instance.GetSceneName("kitchen")))
+            UnlockAchievement(eAchievements.BeatLevel3);
+
+        if (SaveDataManager.Instance.IsLevelCompleted(LevelManager.Instance.GetSceneName("canteen")))
+            UnlockAchievement(eAchievements.BeatLevel4);
+
+        if (SaveDataManager.Instance.IsLevelCompleted(LevelManager.Instance.GetSceneName("bedroom")))
+            UnlockAchievement(eAchievements.BeatLevel5);
+
+        checkHatAchievements();
+
+        // there are more achievements missing, but i think this is the important one.
     }
     
 }

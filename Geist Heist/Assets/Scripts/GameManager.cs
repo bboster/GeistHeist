@@ -37,6 +37,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField, Required] GameObject KeyManagerPrefab;
     [SerializeField, Required] GameObject SoundWaveManagerPrefab;
     [SerializeField, Required] GameObject SceneLoadManagerPrefab;
+    [SerializeField, Required] AchievementManager steamAchievementManagerPrefab;
 
     [Header("Canvases")]
     [SerializeField, Required] GameObject PauseMenuPrefab;
@@ -153,6 +154,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(KeyManagerPrefab).GetComponent<KeyManager>().Initialize();
         Instantiate(SoundWaveManagerPrefab);
         Instantiate(SceneLoadManagerPrefab);
+        Instantiate(steamAchievementManagerPrefab);
 
         Instantiate(BillboardUIManagerPrefab).GetComponent<BillboardUIManager>().Initialize();
         Instantiate(GuardManagerPrefab).GetComponent<GuardManager>().Initialize();
