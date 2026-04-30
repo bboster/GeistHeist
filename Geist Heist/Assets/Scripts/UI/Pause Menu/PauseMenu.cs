@@ -40,6 +40,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private string exitToMainMenuText = "Are you sure you want to exit to the main menu?\nYou will lose all progress in the current level";
 
     [Header("Debug Buttons")]
+    [SerializeField, Required] private RectTransform debugButtonsArea;
     [SerializeField, Required] private Button restartLevelButton;
     [SerializeField, Required] private Button resetSaveButton;
 
@@ -94,6 +95,12 @@ public class PauseMenu : MonoBehaviour
 
         resetSaveButton.onClick.AddListener(ResetSaveDataButtonClicked);
         restartLevelButton.onClick.AddListener(RestartLevelButtonClicked);
+
+        // if is build
+        if(Application.isPlaying && !Application.isEditor)
+        {
+            debugButtonsArea.gameObject.SetActive(false);
+        }
 
         ClosePauseMenu();
     }
