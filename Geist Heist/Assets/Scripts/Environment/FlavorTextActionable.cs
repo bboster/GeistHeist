@@ -73,8 +73,8 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
             flavorText.Add(temp);
         }
 
-        if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
-            DisableTextActionable();
+        //if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
+            //DisableTextActionable();
     }
 
     public void Interact()
@@ -82,8 +82,14 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
         DialogueUIManager.Instance.DisplayText_Dialogue(flavorText, thisLevel, 
             useOldAudioSystem, audioEventReference, AudioParameterName,
             onDialogueEndCallback: OnFlavorTextEnd);
-        SaveDataManager.Instance.MarkFlavorTextAsRead(flavorText, autoSave: true);
-        DisableTextActionable();
+        if (!SaveDataManager.Instance.IsFlavorTextRead(flavorText))
+        {
+            SaveDataManager.Instance.MarkFlavorTextAsRead(flavorText, autoSave: true);
+            SaveDataManager.Instance.flavorTextRead();
+            AchievementManager.Instance.checkHatAchievements();
+        }
+        //DisableTextActionable();
+        EnableTextInteractable();
     }
 
     private void OnFlavorTextEnd()
@@ -155,8 +161,8 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
         // only decide actionability first time you look at the object. Like shroedingers cat.
         cached_isActionable = cached_isActionable ?? HasMetConditionsToAppear();
 
-        if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
-            return false;
+        /*if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
+            return false;*/
 
         return cached_isActionable.Value;
     }

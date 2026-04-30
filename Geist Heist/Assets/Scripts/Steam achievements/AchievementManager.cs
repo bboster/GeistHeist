@@ -116,5 +116,13 @@ public class AchievementManager : DontDestroyOnLoadSingleton<AchievementManager>
 
         // there are more achievements missing, but i think this is the important one.
     }
+
+    public void checkFlavorText()
+    {
+        if(SaveDataManager.Instance.getFlavorTextRead() >= 12)
+        {
+            UnlockAchievement(eAchievements.InteractWithLore);
+        }
+    }
     
 }
