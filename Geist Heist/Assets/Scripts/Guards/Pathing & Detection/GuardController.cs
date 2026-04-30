@@ -73,6 +73,8 @@ public class GuardController : MonoBehaviour
     private EventInstance guardRunSFX;
     private EventInstance guardReaction;
 
+    public bool SawPlayer; 
+
     #endregion
 
     #region Getters
