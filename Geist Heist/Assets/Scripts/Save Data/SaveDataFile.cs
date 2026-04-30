@@ -24,5 +24,4 @@ public class SaveDataFile
     public int CarsBonked = 0;
     public int CarsDriven = 0;
     public int CansThrown = 0;
-    public int FlavorTextRead = 0;
 }

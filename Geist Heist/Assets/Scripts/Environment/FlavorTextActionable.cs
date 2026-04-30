@@ -15,6 +15,7 @@ using UnityEngine;
 
 public class FlavorTextActionable : MonoBehaviour, IInteractable
 {
+    private bool PlayedAlready = false;
     [SerializeField] private List<DialogueTextData> flavorText = new();
 
     // IMPLEMENT THIS AFTER FUSE
@@ -85,11 +86,10 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
         if (!SaveDataManager.Instance.IsFlavorTextRead(flavorText))
         {
             SaveDataManager.Instance.MarkFlavorTextAsRead(flavorText, autoSave: true);
-            SaveDataManager.Instance.flavorTextRead();
             AchievementManager.Instance.checkHatAchievements();
         }
-        //DisableTextActionable();
-        EnableTextInteractable();
+        PlayedAlready = true;
+        DisableTextActionable();
     }
 
     private void OnFlavorTextEnd()
@@ -159,7 +159,14 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
     bool IInteractable.IsInteractable()
     {
         // only decide actionability first time you look at the object. Like shroedingers cat.
-        cached_isActionable = cached_isActionable ?? HasMetConditionsToAppear();
+        if (!PlayedAlready)
+        {
+            cached_isActionable = cached_isActionable ?? HasMetConditionsToAppear();
+        }
+        else
+        {
+            return false;
+        }
 
         /*if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
             return false;*/

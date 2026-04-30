@@ -114,6 +114,7 @@ public class AchievementManager : DontDestroyOnLoadSingleton<AchievementManager>
 
         checkHatAchievements();
 
+        checkFlavorText();
         // there are more achievements missing, but i think this is the important one.
     }
 
