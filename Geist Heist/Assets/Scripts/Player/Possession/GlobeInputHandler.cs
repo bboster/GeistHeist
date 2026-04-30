@@ -16,6 +16,8 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using FMODUnity;
+using FMOD.Studio;
 
 public class GlobeInputHandler : IInputHandler
 {
@@ -85,6 +87,8 @@ public class GlobeInputHandler : IInputHandler
     private Coroutine buttonPressAnimation;
     private Coroutine buttonRotationAnimation;
 
+    private EventInstance orchHit;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -96,6 +100,8 @@ public class GlobeInputHandler : IInputHandler
         InitializeFogBubbles();
 
         overlayCanvas.gameObject.SetActive(false);
+
+        orchHit = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GlobeClick);
     }
     public override void WhilePossessingUpdate()
     {
@@ -141,6 +147,8 @@ public class GlobeInputHandler : IInputHandler
         {
             animator.SetBool("EndingStarted", true);
             currentButtonPresses++;
+            orchHit.start();
+            orchHit.setParameterByName("GlobeRamp", currentButtonPresses);
 
             StaticUtilities.StopAndStartCoroutine(ref buttonPressAnimation, ExpandPressButton());
 
