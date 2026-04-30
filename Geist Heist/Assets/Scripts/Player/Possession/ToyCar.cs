@@ -197,6 +197,8 @@ public class ToyCar : IInputHandler
 
     public override void WhileActionNotHeld(float secondsNotHeld)
     {
+        
+
         if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
             if (freezeCoroutine == null)
@@ -218,6 +220,12 @@ public class ToyCar : IInputHandler
     {
         // Fake charge amount calculation (this is a failsafe, sanity thing)
         //currentStrength = Mathf.Min((secondsHeld * chargeRate) + minStrength, maxStrength);
+        AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.Drive);
+        SaveDataManager.Instance.CarDiven();
+        if (SaveDataManager.Instance.getCarsDriven() >= 20)
+        {
+            AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.Drive20);
+        }
 
         if (rb.linearVelocity.magnitude <= maxSpeedToZoom)
         {
@@ -338,6 +346,12 @@ public class ToyCar : IInputHandler
             animateScaleOverTime:true);
 
         lastCrashOnomatopoeiaTimeStamp = Time.time;
+
+        SaveDataManager.Instance.CarBonked();
+        if (SaveDataManager.Instance.getCarsBonked() >= 5)
+        {
+            AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.Bonk5);
+        }
 
         //TODO: add Bonk sound
 
