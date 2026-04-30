@@ -21,6 +21,9 @@ public class GlobeInputHandler : IInputHandler
 {
     [Header ("Required Variables")]
 
+
+    [Tooltip("Camera that watches the guards.")]
+    [SerializeField] private CinemachineCamera toGuardCamera;
     [Tooltip("Camera for the ending swinging.")]
     [SerializeField] private CinemachineCamera globeSwingCamera;
     [Tooltip("Camera for the ending rolling before hallway.")]
@@ -33,6 +36,8 @@ public class GlobeInputHandler : IInputHandler
     private Canvas overlayCanvas;
     [Tooltip("Rect Transform for the button press UI.")]
     [SerializeField] private RectTransform buttonTransform;
+    [SerializeField] private Animator doorAnimator;
+    [SerializeField] private Animator guardAnimator;
 
     [Header("Button sprites")]
     [Tooltip("Keyboard button sprite.")]
@@ -62,6 +67,7 @@ public class GlobeInputHandler : IInputHandler
     [Foldout("Explosions"), SerializeField] private Transform explosionParent;
     [Foldout("Explosions"), SerializeField] private List<Sprite> explosionSprites;
 
+    #region Fubbles
     [Foldout("Fog Bubbles"), SerializeField] private int fubblesPerButtonPress =3 ;
     [Foldout("Fog Bubbles"), SerializeField] private float maxFogBubbleEmissionRate;
     [Foldout("Fog Bubbles"), SerializeField] private float minFogBubbleStartSpeed = 1;
@@ -74,6 +80,7 @@ public class GlobeInputHandler : IInputHandler
     [Foldout("Fog Bubbles"), SerializeField] private Material rightFogBubbleMaterial;
     [Foldout("Fog Bubbles"), SerializeField] private RenderTexture leftFogRenderTexture;
     [Foldout("Fog Bubbles"), SerializeField] private RenderTexture rightFogRenderTexture;
+    #endregion
 
     private Camera leftFogBubblesInstance, rightFogBubblesInstance;
     private ParticleSystem[] leftParticleSystems;
@@ -103,7 +110,7 @@ public class GlobeInputHandler : IInputHandler
 
     public override void OnPossessionStart()
     {
-        IncreaseCameraPriority(globeSwingCamera, 1);
+        IncreaseCameraPriority(toGuardCamera, 1);
         if (hasAchievement)
         {
             AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
@@ -137,7 +144,7 @@ public class GlobeInputHandler : IInputHandler
     #region action
     public override void OnActionStarted()
     {
-        if (EndingActive)
+        if (EndingActive && toGuardCamera.Priority <= 0)
         {
             animator.SetBool("EndingStarted", true);
             currentButtonPresses++;
