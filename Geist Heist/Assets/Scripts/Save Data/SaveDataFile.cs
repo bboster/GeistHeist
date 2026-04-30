@@ -20,4 +20,8 @@ public class SaveDataFile
     public List<int> FlavorTextsRead = new(); // int because it hashes the display string. might save memory or be faster or something. 
     public int CollectableWearing = -1; // TODO: not implementing, just assuming we will be doing wearable stuff
     public bool HasPlayerMovedWithCar = false;
+    public int VasesPossesed = 0;
+    public int CarsBonked = 0;
+    public int CarsDriven = 0;
+    public int CansThrown = 0;
 }

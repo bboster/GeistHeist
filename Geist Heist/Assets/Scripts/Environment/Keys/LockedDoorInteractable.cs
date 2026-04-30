@@ -38,6 +38,9 @@ public class LockedDoorInteractable : MonoBehaviour, IInteractable
     [Header("Debug (Editor only)")]
     [SerializeField] private bool ShowDebugGizmos = true;
 
+    [Foldout("Achievements"), SerializeField] bool hasAchievement;
+    [Foldout("Achievements"), SerializeField] AchievementManager.eAchievements WhatAcheivement;
+
     // runtime
     private Vector3? _computedPivotWorld = null;
     private bool _isOpen;
@@ -75,6 +78,14 @@ public class LockedDoorInteractable : MonoBehaviour, IInteractable
     private IEnumerator OpenDoorRoutine()
     {
         Vector3 pivotWorld = ResolvePivotWorld();
+
+
+        AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.OpenDoor);
+        if(hasAchievement)
+        {
+            AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
+        }
+       
 
         Vector3 axis = transform.up;
         float angle = openAngle;
