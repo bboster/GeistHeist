@@ -1,7 +1,7 @@
 /*
  * Contributors: Toby Schamberger, Joshua Kelly
  * Creation: 10/20/25
- * Last Edited: 4/6/2026
+ * Last Edited: 4/29/2026
  * Summary: Handles button functionality for main menu.
  * The player will be prompted to delete their save if they press new game after having save data.
  */
@@ -21,6 +21,7 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField, Required] private RectTransform canvasRectTransform;
 
     [SerializeField, BoxGroup("Idle Animation")] private float secondsOfInactivityForIdle = 10;
     [SerializeField, BoxGroup("Idle Animation"), Required] private Button pressAnyButtonButton;
@@ -71,7 +72,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField, Required] private CanvasGroup settingsPage;
     [SerializeField, Required] private Button closeSettingsButton;
 
-    private static float SECONDS_UNTIL_PLAYER_CAN_PLAY_THE_GAME = 2;
+    private static float SECONDS_UNTIL_PLAYER_CAN_PLAY_THE_GAME = 0.25f;
 
     // this shouldve been an enum
     private bool settingsOpen = false;
@@ -165,7 +166,7 @@ public class MainMenu : MonoBehaviour
         InputEvents.ActionStarted.AddListener(OnSettingsBackButtonClicked); // because its B on controller
 
         InputSystem.onAnyButtonPress.Call((ctrl) => OnAnyButtonPressed());
-        pressAnyButtonButton.onClick.AddListener(() => OnAnyButtonPressed());
+        pressAnyButtonButton.onClick.AddListener(OnAnyButtonPressed);
 
 
         // Main Menu
@@ -244,6 +245,12 @@ public class MainMenu : MonoBehaviour
 
     void OnNewGameButtonClicked()
     {
+        if (IsOffScreen(newGameButton))
+        {
+            Debug.LogWarning("newGameButton not on screen yet");
+            return;
+        }
+
         if (timeOfFirstAnyButton == null) return;
 
         // dont let player skip right into gameplay 
@@ -272,6 +279,12 @@ public class MainMenu : MonoBehaviour
 
     void OnContinueButtonClicked()
     {
+        if (IsOffScreen(continueGameButton))
+        {
+            Debug.LogWarning("continueGameButton not on screen yet");
+            return;
+        }
+
         if (timeOfFirstAnyButton == null) return;
 
         // dont let player skip right into gameplay 
@@ -289,6 +302,12 @@ public class MainMenu : MonoBehaviour
 
     void OnSettingsButtonClicked()
     {
+        if (IsOffScreen(settingsButton))
+        {
+            Debug.LogWarning("settings button not on screen yet");
+            return;
+        }
+
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
         settingsOpen = true;
         PauseMenuTab.currentOpenTab = null;
@@ -324,10 +343,18 @@ public class MainMenu : MonoBehaviour
 
     void OnQuitButtonClicked()
     {
+        // check if button is on screen.
+        if (IsOffScreen(quitGameButton))
+        {
+            Debug.LogWarning("quit button not on screen yet");
+            return;
+        }
+
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.UIClick);
 
 #if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
+        //EditorApplication.isPlaying = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 #else
         Application.Quit();
 #endif
@@ -534,11 +561,10 @@ public class MainMenu : MonoBehaviour
         // bad solution, refreshes ui countdown
         //OnAnyButtonPressed(null, null);
 
-        if (!menuActive && !settingsOpen)
+        if (!menuActive && !settingsOpen && !creditsOpen)
         {
             EventSystem.current?.SetSelectedGameObject(pressAnyButtonButton.gameObject);
         }
-
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -639,6 +665,28 @@ public class MainMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(creditsButton.gameObject);
 
         SceneLoadManager.Instance.PlayCreditsQueued = false;
+    }
+
+    #endregion
+
+    #region Utility
+
+    /// i took this code from the goog tbh
+    bool IsOffScreen(Button button)
+    {
+        Vector3[] corners = new Vector3[4];
+        button.GetComponent<RectTransform>().GetWorldCorners(corners);
+
+        foreach (Vector3 corner in corners)
+        {
+            // Screen.width and Screen.height define the visible area
+            if (corner.x < 0 || corner.x > Screen.width ||
+                corner.y < 0 || corner.y > Screen.height)
+            {
+                return true; // At least one corner is outside
+            }
+        }
+        return false;
     }
 
     #endregion
