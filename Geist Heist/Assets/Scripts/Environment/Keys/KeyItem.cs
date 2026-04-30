@@ -47,6 +47,8 @@ public class KeyItem : MonoBehaviour
         _collected = true;
         if (childCollider != null) childCollider.enabled = false;
 
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.KeyJingle);
+
         RegisterKey();
 
         /*
