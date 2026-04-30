@@ -108,13 +108,17 @@ public class IntroCutsceneController : MonoBehaviour
     /// <param name="player"></param>
     private void LoadHub()
     {
-        InputEvents.PauseStarted.RemoveListener(SkipCutscene);
-        InputEvents.InteractStarted.RemoveListener(SkipCutscene);
-
+        if (!EndingCutscene)
+        {
+            InputEvents.PauseStarted.RemoveListener(SkipCutscene);
+            InputEvents.InteractStarted.RemoveListener(SkipCutscene);
+        }
         InputEvents.Instance.OnControllerChanged.RemoveListener(OnControllerUpdated);
 
         if (EndingCutscene && PressedSkip)
         {
+            InputEvents.PauseStarted.RemoveListener(SkipCutscene);
+            InputEvents.InteractStarted.RemoveListener(SkipCutscene);
             SceneLoadManager.Instance.PlayCreditsQueued = true;
             var levelTransition = Instantiate(loadingScreenPrefab);
             levelTransition.Initialize(() => LevelManager.Instance.ChangeScene(hubScene), 1.5f);
