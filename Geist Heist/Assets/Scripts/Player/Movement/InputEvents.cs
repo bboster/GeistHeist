@@ -37,6 +37,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static UnityEvent<float> MoveCanceled = new();
 
     public static UnityEvent ActionStarted = new UnityEvent();
+    public static UnityEvent ActionStarted_WhilePaused = new UnityEvent();
     public static UnityEvent<float> ActionHeld = new();
     public static UnityEvent<float> ActionNotHeld = new();
     public static UnityEvent<float> ActionCanceled = new();
@@ -216,7 +217,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         Move.started += ctx => InputActionStarted(ref MovePressed, MoveStarted, ref moveTimeStarted);
         //Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
-        Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted, ref actionTimeStarted);
+        Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted, ref actionTimeStarted, ignorePaused: false);
+        Action.started += ctx => InputActionStarted(ActionStarted_WhilePaused, ignorePaused: true);
         Interact.started += ctx => InputActionStarted(ref InteractPressed, InteractStarted, ref interactTimeStarted);
         //Space.started += ctx => InputActionStarted(ref SpacePressed, SpaceStarted, ref spaceTimeStarted);
         Pause.started += ctx => OnPauseStarted();
@@ -245,6 +247,15 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         timeStartedFlag = Time.time;
         pressedFlag = true;
+        actionEvent?.Invoke();
+    }
+
+    void InputActionStarted(UnityEvent actionEvent, bool ignorePaused = false)
+    {
+        if (GameManager.Instance == null) return;
+        if (GameManager.Instance.IsPaused && !ignorePaused)
+            return;
+
         actionEvent?.Invoke();
     }
 

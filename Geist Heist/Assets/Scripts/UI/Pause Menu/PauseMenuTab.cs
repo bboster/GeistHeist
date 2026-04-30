@@ -27,10 +27,20 @@ public class PauseMenuTab : MonoBehaviour
 
     public virtual void OpenTab()
     {
+        if (pauseMenu == null) pauseMenu = GetComponentInParent<PauseMenu>();
+
         RefreshUI();
         if(toggleButton != null) toggleButton.isOn = true;
 
-        if (currentOpenTab == this) return;
+        // if already open
+        if (currentOpenTab == this)
+        {
+            var firstSelected = GetFirstSelectedElementInMenu();
+            if(firstSelected != null)
+                EventSystem.current.SetSelectedGameObject(firstSelected.gameObject);
+
+            return;
+        }
 
         if(currentOpenTab != null)
             currentOpenTab.CloseTab();
@@ -39,9 +49,7 @@ public class PauseMenuTab : MonoBehaviour
 
         StaticUtilities.EnableCanvasGroup(canvasGroup);
 
-        if (pauseMenu == null) pauseMenu = GetComponentInParent<PauseMenu>();
-
-        InputEvents.ActionStarted.AddListener(OnControllerBackButtonPressed);
+        InputEvents.ActionStarted_WhilePaused.AddListener(OnControllerBackButtonPressed);
 
         /*StaticUtilities.DisableCanvasGroup(pauseMenu.pauseGroup);
         InputEvents.PauseStartedOverride = () => CloseTab();*/
@@ -70,6 +78,7 @@ public class PauseMenuTab : MonoBehaviour
         else
             return firstSelectedElement;
     }
+
 
     private void OnControllerBackButtonPressed()
     {
