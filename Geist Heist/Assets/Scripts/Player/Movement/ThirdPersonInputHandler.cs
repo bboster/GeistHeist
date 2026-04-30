@@ -509,7 +509,12 @@ public class ThirdPersonInputHandler : IInputHandler
         animator.SetBool(isMovingParam, true);
         animator.SetBool(isIdleParam, false);
 
-        playerMoveSFX.start();
+        FMOD.Studio.PLAYBACK_STATE playbackState;
+        playerMoveSFX.getPlaybackState(out playbackState);
+        if (playbackState != FMOD.Studio.PLAYBACK_STATE.PLAYING)
+        {
+            playerMoveSFX.start();
+        }
 
         rigidbody.linearDamping = 0;
 
