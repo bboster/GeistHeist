@@ -19,8 +19,11 @@ public class PauseMenuTab : MonoBehaviour
     [SerializeField, Required] public WavyTextAnimation wavyTextAnimation;
     [SerializeField, Required] private Selectable firstSelectedElement;
     [SerializeField, HideIf(nameof(_firstSelectedElementIsNull))] private Selectable secondSelectedElement;
-
     private bool _firstSelectedElementIsNull => firstSelectedElement == null;
+
+    public bool IsOpen => currentOpenTab == this;
+
+    private PauseMenu pauseMenu;
 
     public virtual void OpenTab()
     {
@@ -36,6 +39,10 @@ public class PauseMenuTab : MonoBehaviour
 
         StaticUtilities.EnableCanvasGroup(canvasGroup);
 
+        if (pauseMenu == null) pauseMenu = GetComponentInParent<PauseMenu>();
+
+        InputEvents.ActionStarted.AddListener(OnControllerBackButtonPressed);
+
         /*StaticUtilities.DisableCanvasGroup(pauseMenu.pauseGroup);
         InputEvents.PauseStartedOverride = () => CloseTab();*/
     }
@@ -44,6 +51,8 @@ public class PauseMenuTab : MonoBehaviour
     {
         if(toggleButton != null) toggleButton.isOn = false;
         StaticUtilities.DisableCanvasGroup(canvasGroup);
+
+        //InputEvents.ActionStarted.RemoveListener(OnControllerBackButtonPressed);
         //InputEvents.PauseStartedOverride = null;
         //pauseMenu.OpenPauseMenu();
     }
@@ -60,5 +69,20 @@ public class PauseMenuTab : MonoBehaviour
             return secondSelectedElement;
         else
             return firstSelectedElement;
+    }
+
+    private void OnControllerBackButtonPressed()
+    {
+        Debug.Log("Back button pressed");
+
+        if (InputEvents.Instance.IsGamepadActive() == false)
+            return;
+
+        if (!IsOpen)
+            return;
+
+        if(pauseMenu == null) return;
+
+        EventSystem.current.SetSelectedGameObject(pauseMenu.continueGameButton.gameObject);
     }
 }

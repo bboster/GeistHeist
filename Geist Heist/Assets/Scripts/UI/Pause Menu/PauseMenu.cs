@@ -30,7 +30,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] public GeneralTab generalTab;
 
     [Header("Buttons")]
-    [SerializeField, Required] private Button continueGameButton; 
+    [SerializeField, Required] public Button continueGameButton; 
     [SerializeField, Required] private Button quitToHubButton; 
     [SerializeField, Required] private Button quitToMainMenuButton; 
 

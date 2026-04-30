@@ -172,6 +172,7 @@ public class SettingsTab : PauseMenuTab
         if (onSettingsUpdatedCallback != null)
             onSettingsUpdatedCallback();
     }
+
     #endregion
 
     /// <summary>
