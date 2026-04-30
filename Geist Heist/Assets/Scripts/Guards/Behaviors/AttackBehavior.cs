@@ -21,6 +21,19 @@ public class AttackBehavior : Behavior
 
     [SerializeField] private float attackLength; //REPLACE WITH ANIMATION STUFF LATER
 
+    public override void InitializeBehavior(GameObject selfRef)
+    {
+        base.InitializeBehavior(selfRef);
+        contRef.GetAnimator().SetBool("isCatching", true);
+    }
+
+    public override void StopBehavior()
+    {
+        base.StopBehavior();
+        contRef.GetAnimator().SetBool("isCatching", false);
+
+    }
+
     /// <summary>
     /// Controls the flow of the attack behavior for the enemy.
     /// </summary>
