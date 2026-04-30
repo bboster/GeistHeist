@@ -38,8 +38,8 @@ public class GlobeInputHandler : IInputHandler
     private Canvas overlayCanvas;
     [Tooltip("Rect Transform for the button press UI.")]
     [SerializeField] private RectTransform buttonTransform;
-    [SerializeField] private Animator doorAnimator;
-    [SerializeField] private Animator guardAnimator;
+    [SerializeField] private EndingAnimationController doorController;
+    [SerializeField] private EndingAnimationController guardController;
 
     [Header("Button sprites")]
     [Tooltip("Keyboard button sprite.")]
@@ -117,6 +117,8 @@ public class GlobeInputHandler : IInputHandler
     public override void OnPossessionStart()
     {
         IncreaseCameraPriority(toGuardCamera, 1);
+
+        doorController.DoorAnimator.SetBool("ENDSCENESTARTED", true);
         if (hasAchievement)
         {
             AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
@@ -238,10 +240,14 @@ public class GlobeInputHandler : IInputHandler
     #region Other
     public IEnumerator ButtonPressMinigame()
     {
-        buttonPressUI.enabled = true;
 
         while (EndingActive)
         {
+            if (toGuardCamera.Priority <= 0)
+            {
+                buttonPressUI.enabled = true;
+            }
+
             if (currentButtonPresses >= endingButtonPresses)
             {
                 //animation will be adjusted here later
