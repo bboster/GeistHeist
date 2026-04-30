@@ -14,14 +14,13 @@ public class FadeToBlack : Singleton<FadeToBlack>
     private Coroutine fadeCoroutine;
     [SerializeField] private CanvasGroup fadeCanvasGroup;
     [SerializeField] private float secondsForFade = 1;
-    public IEnumerator Initialize(UnityAction action, float delayAfterAction=0.5f)
+    public IEnumerator Initialize(UnityAction action, float delayAfterAction = 0.5f)
     {
         DontDestroyOnLoad(gameObject);
 
         if (fadeCoroutine == null)
         {
-            if(GameManager.Instance != null)
-                GameManager.Instance.fadingToBlack = true;
+            LevelManager.Instance.fadingToBlack = true;
 
             fadeCanvasGroup.alpha = 0;
             yield return fadeCoroutine = StartCoroutine(FadeAnimation(action, delayAfterAction));
@@ -36,8 +35,8 @@ public class FadeToBlack : Singleton<FadeToBlack>
         yield return new WaitForSeconds(delayAfterAction);
         yield return StaticUtilities.FadeToHidden(fadeCanvasGroup, secondsForFade);
 
-        if(GameManager.Instance != null)
-            GameManager.Instance.fadingToBlack = false;
+
+        LevelManager.Instance.fadingToBlack = false;
 
         Destroy(gameObject);
         fadeCoroutine = null;

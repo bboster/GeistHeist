@@ -88,11 +88,14 @@ public class MainMenu : MonoBehaviour
     private bool introAnimationFinished = false;
     private bool menuActive = false;
     private bool? gamepadActive = null;
+    private bool closeSequenceStarted = false;
+    private CanvasGroup parentCanvasGroup;
 
     // credits
     private float creditsStartY;
     private Coroutine creditsCoroutine;
     private InputAction speedUpCreditsAction;
+    private bool transitionInProgress = false;
 
     private void OnEnable()
     {
@@ -233,9 +236,14 @@ public class MainMenu : MonoBehaviour
 
     void LoadScene(string sceneToLoad, GameObject loadingCardPrefab)
     {
-        Debug.LogError("No transition card set on " + gameObject.name);
-        //SceneLoadManager.Instance.LoadScene(sceneToLoad);
-        StartCoroutine(LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneToLoad)));
+        if (transitionInProgress)
+            return;
+
+        transitionInProgress = true;
+        newGameButton.interactable = false;
+        continueGameButton.interactable = false;
+
+        StartCoroutine(LevelManager.Instance.InstantiateFadeToBlack(() => SceneLoadManager.Instance.LoadScene(sceneToLoad)));
     }
 
     #region Buttons OnClicked
@@ -489,7 +497,7 @@ public class MainMenu : MonoBehaviour
                 playerHasSignificantSaveData ? continueGameButton.gameObject : newGameButton.gameObject);
             return;
         }
-
+            
         if (howToPlayPage != null && howToPlayPage.interactable && howToPlayPage.alpha > 0.001f)
         {
             OnCloseHowToPlayButtonClicked();

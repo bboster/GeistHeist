@@ -52,8 +52,6 @@ public class GameManager : Singleton<GameManager>
     [Header("Player Variables")]
     [SerializeField, Required] GameObject PlayerPrefab;
     [Required] public Transform PlayerStart;
-
-    public bool fadingToBlack = false;
     public bool IsPaused { get; private set; } = false;
     public bool IsPlayerInMenu { get; private set; } = false;
     public UnityEvent OnPauseChanged = new();
@@ -131,7 +129,7 @@ public class GameManager : Singleton<GameManager>
     }
     public IEnumerator InstantiateFade()
     {
-        if (!fadingToBlack)
+        if (!LevelManager.Instance.fadingToBlack)
         {
             yield return LevelManager.Instance.InstantiateFadeToBlack(() => SceneLoadManager.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex));
         }

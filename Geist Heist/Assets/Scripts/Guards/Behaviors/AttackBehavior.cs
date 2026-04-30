@@ -35,7 +35,7 @@ public class AttackBehavior : Behavior
             if (performingAttack == true && contRef.currentBehavior.StateName == GuardStates.attack)
             {
                 //Debug.Log("Player Caught");
-                if (!GameManager.Instance.fadingToBlack)
+                if (!LevelManager.Instance.fadingToBlack)
                     GameManager.Instance.DeathReset();
                 performingAttack = false; //This should be removed later and the variable should be changed by an animation keyframe.
                 yield return new WaitForSeconds(attackLength);

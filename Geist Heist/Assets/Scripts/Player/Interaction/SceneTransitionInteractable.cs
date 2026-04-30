@@ -63,7 +63,7 @@ public class SceneTransitionInteractable : MonoBehaviour, IInteractable
 
     IEnumerator InstantiateFade()
     {
-        if (!GameManager.Instance.fadingToBlack)
+        if (!LevelManager.Instance.fadingToBlack)
         {
             yield return LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneName));
         }

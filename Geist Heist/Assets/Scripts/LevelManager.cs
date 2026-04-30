@@ -26,6 +26,7 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     private readonly HashSet<string> savedDoorIds = new();
     private readonly HashSet<string> activatedCheckpointIds = new();
     [SerializeField] private GameObject fadeToBlack;
+    public bool fadingToBlack = false;
 
     [Header("Scene Name Pairing")]
     [ReorderableList] public List<LevelNamePair> LevelNames;
@@ -149,6 +150,12 @@ public class LevelManager : DontDestroyOnLoadSingleton<LevelManager>
     {
         FadeToBlack ftb = Instantiate(fadeToBlack).GetComponent<FadeToBlack>();
         yield return ftb.Initialize(action);
+    }
+
+    public IEnumerator InstantiateFadeToBlack(UnityAction action, float duration)
+    {
+        FadeToBlack ftb = Instantiate(fadeToBlack).GetComponent<FadeToBlack>();
+        yield return ftb.Initialize(action, duration);
     }
 
     #region Scene Transition Scripts

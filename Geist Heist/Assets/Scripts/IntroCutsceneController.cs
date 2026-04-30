@@ -108,21 +108,28 @@ public class IntroCutsceneController : MonoBehaviour
             LevelManager.Instance.ChangeScene(hubScene);
             return;
         }
-        var levelTransition = Instantiate(loadingScreenPrefab);
-        levelTransition.Initialize(() => LevelManager.Instance.ChangeScene(hubScene), 1.5f);
+        StartCoroutine(InstantiateFade());
     }
 
+    IEnumerator InstantiateFade()
+    {
+        if (!LevelManager.Instance.fadingToBlack)
+        {
+            yield return LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(hubScene), 1.5f);
+        }
+    }
     /// <summary>
     /// Loads the player into the hub using the specified loading screen and loading card
     /// </summary>
     /// <param name="player"></param>
+    
     private void LoadHub(VideoPlayer player)
     {
-        //LoadHub();
+       // LoadHub();
 
 
     }
-
+    
     /// <summary>
     /// Skips the cutscene
     /// </summary>
