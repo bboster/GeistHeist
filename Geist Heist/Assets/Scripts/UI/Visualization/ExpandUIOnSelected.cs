@@ -24,7 +24,9 @@ public class ExpandUIOnSelected : MonoBehaviour, ISelectHandler, IDeselectHandle
 
     void Start()
     {
-        baseScale = transform.localScale;
+        if (elementToScale == null) elementToScale = GetComponent<RectTransform>();
+
+        baseScale = elementToScale.localScale;
     }
 
     public void OnSelect(BaseEventData eventData)
