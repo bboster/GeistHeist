@@ -14,6 +14,8 @@ public class FMODEvents : Singleton<FMODEvents>
     [field: SerializeField] public EventReference GlobeBGM { get; private set; }
     [field: SerializeField] public EventReference HubBGM { get; private set; }
     [field: SerializeField] public EventReference MenuBGM { get; private set; }
+    [field: SerializeField] public EventReference EndingBGM { get; private set; }
+    [field: SerializeField] public EventReference Silence { get; private set; }
 
 
     [field: Header("Enemy SFX")]
@@ -70,4 +72,5 @@ public class FMODEvents : Singleton<FMODEvents>
     [field: SerializeField] public EventReference VLLobbyNightFive { get; private set; }
     [field: SerializeField] public EventReference VLBedroom { get; private set; }
     [field: SerializeField] public EventReference VLLobbyNightFinale { get; private set; }
+    [field: SerializeField] public EventReference VLOutro { get; private set; }
 }
