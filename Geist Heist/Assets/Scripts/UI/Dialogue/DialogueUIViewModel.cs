@@ -16,6 +16,7 @@ public class DialogueUIViewModel : MonoBehaviour
 {
     [SerializeField, Required] private TMP_Text textBox;
     [SerializeField, Required] public CanvasGroup group;
+    [SerializeField, Required] public Animator animator;
     [SerializeField] public float baseOpacity = 0.9f;
 
     [ReadOnly] public RectTransform rectTransform;
@@ -33,11 +34,11 @@ public class DialogueUIViewModel : MonoBehaviour
         AnchorToBottomStretch(rectTransform);
 
         StaticUtilities.FadeOpacity(group, 0, baseOpacity, seconds: 0.25f);
+        StartCoroutine(DelayEndingAnimation());
     }
 
     public IEnumerator TypewriterAnimation()
     {
-
         textBox.text = "";
         for (int i = 1; i < textData.BodyText.Length; i++)
         {
@@ -54,15 +55,33 @@ public class DialogueUIViewModel : MonoBehaviour
         //yield return new WaitForSeconds(textData.StayLength);
 
         float timeStarted = Time.time;
-        while(Time.time - timeStarted < textData.StayLength)
+
+        // first half of fadeout 
+        while (Time.time - timeStarted < textData.StayLength - 1)
         {
             // baseOpacity gets updated in DialogueUIManager 
             group.alpha = Mathf.MoveTowards(group.alpha, opacity, Time.deltaTime / 10);
             yield return null;
         }
-        
+
+        animator.SetTrigger("Ending");
+
+        // second half of fadeout 
+        while (Time.time - timeStarted < textData.StayLength)
+        {
+            // baseOpacity gets updated in DialogueUIManager 
+            group.alpha = Mathf.MoveTowards(group.alpha, opacity, Time.deltaTime / 10);
+            yield return null;
+        }
+
         yield return StaticUtilities.FadeToHidden(group, seconds: 0.4f);
         Destroy(this.gameObject);
+    }
+
+    private IEnumerator DelayEndingAnimation()
+    {
+        float secondsToTypeWrite = (float)textData.BodyText.Length * DialogueUIManager.Instance.secondsBetweenLetters;
+        yield return new WaitForSeconds(secondsToTypeWrite + textData.StayLength);
     }
 
     private static void AnchorToBottomStretch(RectTransform rectTransform)
@@ -85,4 +104,5 @@ public class DialogueUIViewModel : MonoBehaviour
         rectTransform.pivot = new Vector2(0.5f, 0f);
 
     }
+
 }
