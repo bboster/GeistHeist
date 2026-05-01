@@ -21,16 +21,19 @@ using UnityEngine.Video;
 public class IntroCutsceneController : MonoBehaviour
 {
     private bool skippable = false;
+    private bool PressedSkip = false;
     private VideoPlayer player;
 
     [SerializeField, Scene] private string hubScene;
-    [SerializeField] private bool queueCreditsAfterPlaying;
+    [SerializeField, Scene] private string mainMenu;
+    [SerializeField] private bool EndingCutscene;
     [SerializeField, Required] private FadeToBlack loadingScreenPrefab;
-    [SerializeField] private TextMeshProUGUI skipText; //THIS NEEDS TO BE SWAPPED OUT WITH CONTROLLER ICONS
+    [SerializeField] private Image skipText; //THIS NEEDS TO BE SWAPPED OUT WITH CONTROLLER ICONS
     [SerializeField] private float skipTextActiveTime;
+    [SerializeField] private VideoClip LoopingEndClip;
 
-    [SerializeField] private string ControllerText;
-    [SerializeField] private string KeyboardText;
+    [SerializeField] private Sprite ControllerText;
+    [SerializeField] private Sprite KeyboardText;
 
     [SerializeField] private RawImage outputImage;
 
@@ -71,7 +74,7 @@ public class IntroCutsceneController : MonoBehaviour
 
         InputEvents.Instance.OnControllerChanged.AddListener(OnControllerUpdated);
 
-        if (queueCreditsAfterPlaying)
+        if (EndingCutscene)
         {
             SceneLoadManager.Instance.PlayCreditsQueued = true;
         }
@@ -95,12 +98,29 @@ public class IntroCutsceneController : MonoBehaviour
     /// <param name="player"></param>
     private void LoadHub()
     {
-        InputEvents.PauseStarted.RemoveListener(SkipCutscene);
-        InputEvents.InteractStarted.RemoveListener(SkipCutscene);
-
+        if (!EndingCutscene)
+        {
+            InputEvents.PauseStarted.RemoveListener(SkipCutscene);
+            InputEvents.InteractStarted.RemoveListener(SkipCutscene);
+        }
         InputEvents.Instance.OnControllerChanged.RemoveListener(OnControllerUpdated);
 
-        if (queueCreditsAfterPlaying) SceneLoadManager.Instance.PlayCreditsQueued = true;
+        if (EndingCutscene && PressedSkip)
+        {
+            InputEvents.PauseStarted.RemoveListener(SkipCutscene);
+            InputEvents.InteractStarted.RemoveListener(SkipCutscene);
+            SceneLoadManager.Instance.PlayCreditsQueued = true;
+            var levelTransition = Instantiate(loadingScreenPrefab);
+            levelTransition.Initialize(() => LevelManager.Instance.ChangeScene(hubScene), 1.5f);
+        }
+        else if (EndingCutscene)
+        {
+            player.clip = LoopingEndClip;
+            player.isLooping = true;
+            skippable = true;
+            skipText.gameObject.SetActive(true);
+        }
+
 
         if (loadingScreenPrefab == null)
         {
@@ -125,7 +145,7 @@ public class IntroCutsceneController : MonoBehaviour
     
     private void LoadHub(VideoPlayer player)
     {
-       // LoadHub();
+        LoadHub();
 
 
     }
@@ -138,7 +158,11 @@ public class IntroCutsceneController : MonoBehaviour
         Debug.Log("skipping!");
 
         if (skippable)
+        {
+            PressedSkip = true;
             LoadHub();
+        }
+
 
         skippable = true;
         skipText.gameObject.SetActive(true);
@@ -167,6 +191,7 @@ public class IntroCutsceneController : MonoBehaviour
     private void OnControllerUpdated()
     {
         Debug.Log("controller updated "+ InputEvents.Instance.IsGamepadActive().ToString());
-        skipText.text = InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText;
+        skipText.sprite = InputEvents.Instance.IsGamepadActive() ? ControllerText : KeyboardText;
+        skipText.SetNativeSize();
     }
 }

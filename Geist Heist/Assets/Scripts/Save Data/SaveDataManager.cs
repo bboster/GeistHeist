@@ -274,7 +274,55 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
         if (autoSave) SaveData();
     }
 
-    #endregion 
+    #endregion
+
+    #region Achievements
+    public void VasePossessed()
+    {
+        currentSaveDta.VasesPossesed++;
+    }
+
+    public int getVasesPossessed()
+    {
+        return currentSaveDta.VasesPossesed;
+    }
+
+    public void CarDiven()
+    {
+        currentSaveDta.CarsDriven++;
+    }
+
+    public int getCarsDriven()
+    {
+        return currentSaveDta.CarsDriven;
+    }
+
+    public void CarBonked()
+    {
+        currentSaveDta.CarsBonked++;
+    }
+
+    public int getCarsBonked()
+    {
+        return currentSaveDta.CarsBonked;
+    }
+
+    public void CanThrown()
+    {
+        currentSaveDta.CansThrown++;
+    }
+
+    public int getCansThrown()
+    {
+        return currentSaveDta.CansThrown;
+    }
+    public int getFlavorTextRead()
+    {
+        return currentSaveDta.FlavorTextsRead.Count();
+    }
+
+
+    #endregion
 
 
     #region File Manipulation
