@@ -160,7 +160,7 @@ public class GlobeInputHandler : IInputHandler
             animator.SetBool("EndingStarted", true);
             currentButtonPresses++;
             orchHit.start();
-            orchHit.setParameterByName("GlobeRamp", currentButtonPresses);
+            RuntimeManager.StudioSystem.setParameterByName("GlobeRamp", currentButtonPresses);
 
             StaticUtilities.StopAndStartCoroutine(ref buttonPressAnimation, ExpandPressButton());
 
@@ -255,6 +255,8 @@ public class GlobeInputHandler : IInputHandler
             {
                 //animation will be adjusted here later
                 animator.SetBool("EndRoll", true);
+                MusicManager.Instance.EndSequenceStart();
+
                 EndingActive = false;
 
                 StaticUtilities.FadeToHidden(buttonPressUI.GetComponent<CanvasGroup>(), unscaledTime: true, seconds: 0.5f);
