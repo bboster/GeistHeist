@@ -37,6 +37,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     public static UnityEvent<float> MoveCanceled = new();
 
     public static UnityEvent ActionStarted = new UnityEvent();
+    public static UnityEvent ActionStarted_WhilePaused = new UnityEvent();
     public static UnityEvent<float> ActionHeld = new();
     public static UnityEvent<float> ActionNotHeld = new();
     public static UnityEvent<float> ActionCanceled = new();
@@ -92,6 +93,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
     private InputControlScheme? _gamepadScheme;
     private InputControlScheme? _kbmScheme;
 
+    private bool isCurrentlyKeyboard;
     private InputDevice _currentDevice = null;
     private bool _canUseControlSwap = true;
     private WaitForEndOfFrame _endOfFrame = null;
@@ -141,7 +143,11 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, device);
             _currentDevice = device;
             _canUseControlSwap = false;
-            OnControllerChanged.Invoke();
+
+            if(isCurrentlyKeyboard)
+                OnControllerChanged.Invoke();
+            isCurrentlyKeyboard = false;
+
             StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
         else if ((device is Keyboard || device is Mouse) && _kbmScheme.HasValue && playerInput.currentControlScheme != _kbmScheme.Value.name)
@@ -149,7 +155,11 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
             _currentDevice = device;
             _canUseControlSwap = false;
-            OnControllerChanged.Invoke();
+
+            if(!isCurrentlyKeyboard)
+                OnControllerChanged.Invoke();
+            isCurrentlyKeyboard = true;
+
             StartCoroutine(PreventControlSwapUntilEndOfFrame());
         }
     }
@@ -216,7 +226,8 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         Move.started += ctx => InputActionStarted(ref MovePressed, MoveStarted, ref moveTimeStarted);
         //Jump.started += ctx => InputActionStarted(ref JumpPressed, JumpStarted);
-        Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted, ref actionTimeStarted);
+        Action.started += ctx => InputActionStarted(ref ActionPressed, ActionStarted, ref actionTimeStarted, ignorePaused: false);
+        Action.started += ctx => InputActionStarted(ActionStarted_WhilePaused, ignorePaused: true);
         Interact.started += ctx => InputActionStarted(ref InteractPressed, InteractStarted, ref interactTimeStarted);
         //Space.started += ctx => InputActionStarted(ref SpacePressed, SpaceStarted, ref spaceTimeStarted);
         Pause.started += ctx => OnPauseStarted();
@@ -245,6 +256,15 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         timeStartedFlag = Time.time;
         pressedFlag = true;
+        actionEvent?.Invoke();
+    }
+
+    void InputActionStarted(UnityEvent actionEvent, bool ignorePaused = false)
+    {
+        if (GameManager.Instance == null) return;
+        if (GameManager.Instance.IsPaused && !ignorePaused)
+            return;
+
         actionEvent?.Invoke();
     }
 
@@ -307,9 +327,10 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             if (!WasAnySwitchRelevantDeviceUpdatedThisFrame())
                 continue;
 
-            OnControllerChanged.Invoke();
+            //OnControllerChanged.Invoke();
 
             string currentScheme = playerInput.currentControlScheme;
+
             if (TrySwitchToKeyboardMouseScheme(currentScheme))
                 continue;
 
@@ -337,7 +358,11 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
                 playerInput.SwitchCurrentControlScheme(_kbmScheme.Value.name, Keyboard.current, Mouse.current);
                 _currentDevice = Keyboard.current;
                 _canUseControlSwap = false;
-                OnControllerChanged.Invoke();
+
+                if(!isCurrentlyKeyboard)
+                    OnControllerChanged.Invoke();
+                isCurrentlyKeyboard = true;
+
                 StartCoroutine(PreventControlSwapUntilEndOfFrame());
             }
             return true;
@@ -353,9 +378,12 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
         if (Gamepad.current != null && IsInputFromGamepad())
         {
-            OnControllerChanged.Invoke();
+            if(isCurrentlyKeyboard)
+                OnControllerChanged.Invoke();
+
             if (_gamepadScheme.HasValue)
             {
+                isCurrentlyKeyboard = false;
                 playerInput.SwitchCurrentControlScheme(_gamepadScheme.Value.name, Gamepad.current);
                 _currentDevice = Gamepad.current;
                 _canUseControlSwap = false;

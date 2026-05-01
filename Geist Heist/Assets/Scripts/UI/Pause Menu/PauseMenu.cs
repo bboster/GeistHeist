@@ -30,7 +30,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField, Required] public GeneralTab generalTab;
 
     [Header("Buttons")]
-    [SerializeField, Required] private Button continueGameButton; 
+    [SerializeField, Required] public Button continueGameButton; 
     [SerializeField, Required] private Button quitToHubButton; 
     [SerializeField, Required] private Button quitToMainMenuButton; 
 
@@ -40,6 +40,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private string exitToMainMenuText = "Are you sure you want to exit to the main menu?\nYou will lose all progress in the current level";
 
     [Header("Debug Buttons")]
+    [SerializeField, Required] private RectTransform debugButtonsArea;
     [SerializeField, Required] private Button restartLevelButton;
     [SerializeField, Required] private Button resetSaveButton;
 
@@ -48,7 +49,6 @@ public class PauseMenu : MonoBehaviour
     private static float timeOfLastPause;
     private InputAction menuBackAction;
     private Color defaultNormalTabTextColor;
-    private PauseMenuTab currentTab;
 
     private void OnEnable()
     {
@@ -95,6 +95,12 @@ public class PauseMenu : MonoBehaviour
         resetSaveButton.onClick.AddListener(ResetSaveDataButtonClicked);
         restartLevelButton.onClick.AddListener(RestartLevelButtonClicked);
 
+        // if is build
+        if(Application.isPlaying && !Application.isEditor)
+        {
+            debugButtonsArea.gameObject.SetActive(false);
+        }
+
         ClosePauseMenu();
     }
 
@@ -110,7 +116,11 @@ public class PauseMenu : MonoBehaviour
 
         pauseScreenParent.gameObject.SetActive(true);
         StaticUtilities.EnableCanvasGroup(pauseGroup);
-        StaticUtilities.ShowCursor();
+
+        if(InputEvents.Instance.IsGamepadActive())
+            StaticUtilities.HideCursor();
+        else
+            StaticUtilities.ShowCursor();
 
         settingsTab.CloseTab();
         controlsTab.CloseTab();
@@ -168,7 +178,9 @@ public class PauseMenu : MonoBehaviour
         if (settingsOpen || controlsOpen)
         {
             generalTab.OpenTab();
-            EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
+
+            if(InputEvents.Instance.IsGamepadActive())
+                EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
             return;
         }
 
@@ -214,10 +226,14 @@ public class PauseMenu : MonoBehaviour
 
     private void SelectDefaultForCurrentTab()
     {
+        if (InputEvents.Instance.IsGamepadActive() == false) return;
+
         if (settingsTab.canvasGroup != null && settingsTab.canvasGroup.alpha > 0.001f)
             EventSystem.current.SetSelectedGameObject(settingsTab.toggleButton.gameObject);
+
         else if (controlsTab.canvasGroup != null && controlsTab.canvasGroup.alpha > 0.001f)
             EventSystem.current.SetSelectedGameObject(controlsTab.toggleButton.gameObject);
+
         else
             EventSystem.current.SetSelectedGameObject(generalTab.toggleButton.gameObject);
     }
@@ -226,7 +242,6 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenGeneralButtonSelected()
     {
-        currentTab = generalTab;
         generalTab.OpenTab();
 
         DisableAllWavyTexts();
@@ -241,7 +256,6 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenControlsButtonSelected()
     {
-        currentTab = controlsTab;
         controlsTab.OpenTab();
 
         DisableAllWavyTexts();
@@ -256,7 +270,6 @@ public class PauseMenu : MonoBehaviour
 
     void OnOpenSettingsButtonSelected()
     {
-        currentTab = settingsTab;
         settingsTab.OpenTab();
 
         DisableAllWavyTexts();
@@ -290,13 +303,6 @@ public class PauseMenu : MonoBehaviour
 
     void SetRightNavigationSelectable(Selectable selectable, Selectable button)
     {
-        if (selectable == null) return;
-
-
-        var firstSelectedNavigation = selectable.navigation;
-        firstSelectedNavigation.selectOnLeft = button;
-        selectable.navigation = firstSelectedNavigation;
-        
         var continueSelectedNavigation = continueGameButton.navigation;
         continueSelectedNavigation.selectOnRight = selectable;
         continueGameButton.navigation = continueSelectedNavigation;
@@ -312,6 +318,12 @@ public class PauseMenu : MonoBehaviour
         var controlsNavigation = controlsTab.toggleButton.navigation;
         controlsNavigation.selectOnRight = selectable;
         controlsTab.toggleButton.navigation = controlsNavigation;
+
+        if (selectable == null) return;
+
+        var firstSelectedNavigation = selectable.navigation;
+        firstSelectedNavigation.selectOnLeft = button;
+        selectable.navigation = firstSelectedNavigation;
     }
 
     #endregion
@@ -395,6 +407,11 @@ public class PauseMenu : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
 
             ResetAllToggleButtonColors();
+
+            if (IsConfirmationPopupOpen())
+                EventSystem.current.SetSelectedGameObject(confirmationPopup.confirmButton.gameObject);
+            else
+                EventSystem.current.SetSelectedGameObject(PauseMenuTab.currentOpenTab.toggleButton.gameObject);
         }
 
     }
