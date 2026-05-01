@@ -98,6 +98,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
 
         if( textData.overrideTextData)
         {
+            currentVL.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
             currentVL = AudioManager.Instance.CreateEventInstance(textData.overrideAudioEventReference);
             RuntimeManager.StudioSystem.setParameterByName(textData.AudioParameterName, textData.overrideAudioLine);
             currentVL.start();
@@ -106,6 +107,7 @@ public class DialogueUIManager : Singleton<DialogueUIManager>
 
         if (!oldAudioSystem)
         {
+            currentVL.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
             currentVL = AudioManager.Instance.CreateEventInstance(eventReference);
             RuntimeManager.StudioSystem.setParameterByName(parameter, textData.audioLine);
             currentVL.start();

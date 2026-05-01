@@ -64,6 +64,38 @@ Transform:
   - {fileID: 4791164194289135784}
   m_Father: {fileID: 8862898906648144643}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1811004227659523683
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1717227061212155510}
+  m_Layer: 0
+  m_Name: To Guard Camera Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1717227061212155510
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811004227659523683}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3355497925143820943}
+  m_Father: {fileID: 5225363458447540929}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1876427650027056345
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 049c7e2ee40feb44bb786b790f3c758b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlobePossessable
+  toGuardCamera: {fileID: 0}
   globeSwingCamera: {fileID: 0}
   globeRollCamera: {fileID: 0}
   globeHallwayCamera: {fileID: 0}
@@ -328,6 +361,8 @@ MonoBehaviour:
   endingButtonPresses: 10
   currentButtonPresses: 0
   EndingActive: 0
+  hasAchievement: 0
+  WhatAcheivement: 0
   explosionContainer: {fileID: 0}
   explosionParent: {fileID: 0}
   explosionSprites: []
@@ -568,6 +603,7 @@ Transform:
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1717227061212155510}
   - {fileID: 4736187171289028447}
   - {fileID: 1367606368036847963}
   - {fileID: 8862898906648144643}
@@ -957,6 +993,145 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6837122718734016892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5d7c088409d9a40b7b09aa707777f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineOrbitalFollow
+  TargetOffset: {x: 0, y: 0, z: 0}
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 1, y: 1, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  OrbitStyle: 0
+  Radius: 10
+  Orbits:
+    Top:
+      Radius: 2
+      Height: 5
+    Center:
+      Radius: 4
+      Height: 2.25
+    Bottom:
+      Radius: 2.5
+      Height: 0.1
+    SplineCurvature: 0.5
+  RecenteringTarget: 1
+  HorizontalAxis:
+    Value: 0
+    Center: 0
+    Range: {x: -180, y: 180}
+    Wrap: 1
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  VerticalAxis:
+    Value: 17.5
+    Center: 17.5
+    Range: {x: -10, y: 45}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  RadialAxis:
+    Value: 1
+    Center: 1
+    Range: {x: 1, y: 1}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+--- !u!1 &6980550887189239562
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3355497925143820943}
+  - component: {fileID: 3400645554021850230}
+  - component: {fileID: 589975518520710544}
+  m_Layer: 0
+  m_Name: To Guard Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &3355497925143820943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980550887189239562}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.18935181, y: -0.6588051, z: 0.19668376, w: 0.7010259}
+  m_LocalPosition: {x: -24.059998, y: -6.7400007, z: -3.68}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1717227061212155510}
+  m_LocalEulerAnglesHint: {x: 31.644, y: -85.942, z: 1.768}
+--- !u!114 &3400645554021850230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980550887189239562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 1
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 66.55482
+    OrthographicSize: 5
+    NearClipPlane: 0.01
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!114 &589975518520710544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980550887189239562}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b5d7c088409d9a40b7b09aa707777f8, type: 3}
@@ -1694,6 +1869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 049c7e2ee40feb44bb786b790f3c758b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlobePossessable
+  toGuardCamera: {fileID: 0}
   globeSwingCamera: {fileID: 582774347660886353}
   globeRollCamera: {fileID: 5263451495580764414}
   globeHallwayCamera: {fileID: 8709068852195673654}
@@ -1707,6 +1883,8 @@ MonoBehaviour:
   endingButtonPresses: 20
   currentButtonPresses: 0
   EndingActive: 0
+  hasAchievement: 0
+  WhatAcheivement: 0
   explosionContainer: {fileID: 1888542764079159742, guid: dddbdeafd8c775443bf71df675cee83d, type: 3}
   explosionParent: {fileID: 8886895077823007569}
   explosionSprites:

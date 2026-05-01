@@ -19,6 +19,9 @@ public class KeyManager : Singleton<KeyManager>
     public event Action<KeyType> OnKeyCollected;
 
     private readonly HashSet<KeyType> _keys = new();
+
+    [SerializeField] private bool debugHasAllKeys = false;
+
     public void Initialize()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -46,7 +49,8 @@ public class KeyManager : Singleton<KeyManager>
     }
 
     // Keys are not consumed on use.
-    public bool HasKey(KeyType key) => key != KeyType.None && _keys.Contains(key);
+    public bool HasKey(KeyType key) => debugHasAllKeys ||
+                                        (key != KeyType.None && _keys.Contains(key));
 
     public IReadOnlyCollection<KeyType> GetKeys() => _keys;
 
