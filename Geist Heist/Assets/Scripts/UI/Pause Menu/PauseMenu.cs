@@ -136,6 +136,9 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     void OnPauseKeyPressed()
     {
+        if (LevelManager.Instance.IsFading) //This should prevent the pause menu from opening under the fade to black element and freezing it
+            return;
+
         // Bandaid solution to a bad problem
         if (Time.unscaledTime - timeOfLastPause < 0.1f)
             return;

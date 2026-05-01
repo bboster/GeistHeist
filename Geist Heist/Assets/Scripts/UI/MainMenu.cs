@@ -234,7 +234,7 @@ public class MainMenu : MonoBehaviour
 
     void LoadScene(string sceneToLoad, GameObject loadingCardPrefab)
     {
-        Debug.LogError("No transition card set on " + gameObject.name);
+        //Debug.LogError("No transition card set on " + gameObject.name);
         //SceneLoadManager.Instance.LoadScene(sceneToLoad);
         LevelManager.Instance.InstantiateFadeToBlack(() => LevelManager.Instance.ChangeScene(sceneToLoad));
     }
