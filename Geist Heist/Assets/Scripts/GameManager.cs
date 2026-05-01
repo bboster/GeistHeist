@@ -124,6 +124,11 @@ public class GameManager : Singleton<GameManager>
     {
         if (!InGodMode)
         {
+            if(Player.TryGetComponent(out ThirdPersonInputHandler obj))
+            {
+                obj.animator.SetBool("isCaught", true);
+            }
+
             AchievementManager.Instance.UnlockAchievement(AchievementManager.eAchievements.getcaught);
             DialogueUIManager.Instance.StopVoiceLine();
             LevelManager.Instance.InstantiateFadeToBlack(() => SceneLoadManager.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex));
