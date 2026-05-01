@@ -23,6 +23,9 @@ public class GlobeInputHandler : IInputHandler
 {
     [Header ("Required Variables")]
 
+
+    [Tooltip("Camera that watches the guards.")]
+    [SerializeField] private CinemachineCamera toGuardCamera;
     [Tooltip("Camera for the ending swinging.")]
     [SerializeField] private CinemachineCamera globeSwingCamera;
     [Tooltip("Camera for the ending rolling before hallway.")]
@@ -64,6 +67,7 @@ public class GlobeInputHandler : IInputHandler
     [Foldout("Explosions"), SerializeField] private Transform explosionParent;
     [Foldout("Explosions"), SerializeField] private List<Sprite> explosionSprites;
 
+    #region Fubbles
     [Foldout("Fog Bubbles"), SerializeField] private int fubblesPerButtonPress =3 ;
     [Foldout("Fog Bubbles"), SerializeField] private float maxFogBubbleEmissionRate;
     [Foldout("Fog Bubbles"), SerializeField] private float minFogBubbleStartSpeed = 1;
@@ -76,6 +80,7 @@ public class GlobeInputHandler : IInputHandler
     [Foldout("Fog Bubbles"), SerializeField] private Material rightFogBubbleMaterial;
     [Foldout("Fog Bubbles"), SerializeField] private RenderTexture leftFogRenderTexture;
     [Foldout("Fog Bubbles"), SerializeField] private RenderTexture rightFogRenderTexture;
+    #endregion
 
     private Camera leftFogBubblesInstance, rightFogBubblesInstance;
     private ParticleSystem[] leftParticleSystems;
@@ -102,6 +107,9 @@ public class GlobeInputHandler : IInputHandler
         overlayCanvas.gameObject.SetActive(false);
 
         orchHit = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.GlobeClick);
+
+        leftFogBubblesInstance.gameObject.SetActive(false);
+        rightFogBubblesInstance.gameObject.SetActive(false);
     }
     public override void WhilePossessingUpdate()
     {
@@ -109,7 +117,11 @@ public class GlobeInputHandler : IInputHandler
 
     public override void OnPossessionStart()
     {
-        IncreaseCameraPriority(globeSwingCamera, 1);
+        //start cinematic
+        toGuardCamera.gameObject.SetActive(true);
+        IncreaseCameraPriority(toGuardCamera, 1);
+        EndingDoorController.Instance.DoorAnimator.SetBool("ENDSCENESTARTED", true);
+
         if (hasAchievement)
         {
             AchievementManager.Instance.UnlockAchievement(WhatAcheivement);
@@ -143,12 +155,12 @@ public class GlobeInputHandler : IInputHandler
     #region action
     public override void OnActionStarted()
     {
-        if (EndingActive)
+        if (EndingActive && toGuardCamera.Priority <= 0)
         {
             animator.SetBool("EndingStarted", true);
             currentButtonPresses++;
             orchHit.start();
-            orchHit.setParameterByName("GlobeRamp", currentButtonPresses);
+            RuntimeManager.StudioSystem.setParameterByName("GlobeRamp", currentButtonPresses);
 
             StaticUtilities.StopAndStartCoroutine(ref buttonPressAnimation, ExpandPressButton());
 
@@ -231,20 +243,28 @@ public class GlobeInputHandler : IInputHandler
     #region Other
     public IEnumerator ButtonPressMinigame()
     {
-        buttonPressUI.enabled = true;
 
         while (EndingActive)
         {
+            if (toGuardCamera.Priority <= 0)
+            {
+                buttonPressUI.enabled = true;
+            }
+
             if (currentButtonPresses >= endingButtonPresses)
             {
                 //animation will be adjusted here later
                 animator.SetBool("EndRoll", true);
+                MusicManager.Instance.EndSequenceStart();
+
                 EndingActive = false;
 
                 StaticUtilities.FadeToHidden(buttonPressUI.GetComponent<CanvasGroup>(), unscaledTime: true, seconds: 0.5f);
 
+                globeRollCamera.gameObject.SetActive(true);
                 IncreaseCameraPriority(globeRollCamera, 1);
                 DecreaseCameraPriority(globeSwingCamera);
+                globeSwingCamera.gameObject.SetActive(false);
             }
             yield return null;
         }
@@ -268,8 +288,17 @@ public class GlobeInputHandler : IInputHandler
 
     public void SwitchToHallwayCamera()
     {
+        globeHallwayCamera.gameObject.SetActive(true);
         IncreaseCameraPriority(globeHallwayCamera, 2);
         DecreaseCameraPriority(globeRollCamera);
+        globeRollCamera.gameObject.SetActive(false);
+    }
+    public void SwitchToSwingingCamera()
+    {
+        globeSwingCamera.gameObject.SetActive(true);
+        IncreaseCameraPriority(globeSwingCamera, 2);
+        DecreaseCameraPriority(toGuardCamera);
+        toGuardCamera.gameObject.SetActive(false);
     }
 
     public void FadeToWhite()
@@ -319,6 +348,11 @@ public class GlobeInputHandler : IInputHandler
         yield return StaticUtilities.AnimateScale(buttonTransform, startScale: new Vector3(1.25f, 1.25f, 1), endScale: Vector3.one, seconds: 0.1f)
             // rotate
             .And(StaticUtilities.AnimateRotation(buttonTransform, Quaternion.identity, seconds: 0.1f));
+    }
+
+    public void KnockOverGuards()
+    {
+        EndingGuardController.Instance.KnockOverGuards();
     }
 
     #endregion

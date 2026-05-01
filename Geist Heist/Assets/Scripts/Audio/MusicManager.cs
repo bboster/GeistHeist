@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -16,7 +15,7 @@ public class MusicManager : Singleton<MusicManager>
     [SerializeField, NaughtyAttributes.Scene] private string wing5Name;
     [SerializeField, NaughtyAttributes.Scene] private string globeName;
     [SerializeField, NaughtyAttributes.Scene] private string menuName;
-    
+
     //private EventInstance levelBGM;
     private EventInstance hubBGM;
     private EventInstance globeBGM;
@@ -25,6 +24,7 @@ public class MusicManager : Singleton<MusicManager>
     private EventInstance wing1BGM;
     private EventInstance wing2BGM;
     private EventInstance wing3BGM;
+    private EventInstance endBGM;
 
     protected override void Awake()
     {
@@ -44,7 +44,7 @@ public class MusicManager : Singleton<MusicManager>
         wing1BGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.Wing1BGM);
         wing2BGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.Wing2BGM);
         wing3BGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.Wing3BGM);
-
+        endBGM = AudioManager.Instance.CreateEventInstance(FMODEvents.Instance.EndingBGM);
 
         //the following if-else block could be changed to a Switch statement -Josh
         StopAll();
@@ -160,5 +160,18 @@ public class MusicManager : Singleton<MusicManager>
         wing1BGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         wing2BGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         wing3BGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        endBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
+
+    public void EndSequenceStart()
+    {
+        hubBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        endBGM.start();
+    }
+
+    public void EndSequenceEnd()
+    {
+        endBGM.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+    }
+
 }

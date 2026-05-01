@@ -15,6 +15,7 @@ using UnityEngine;
 
 public class FlavorTextActionable : MonoBehaviour, IInteractable
 {
+    private bool PlayedAlready = false;
     [SerializeField] private List<DialogueTextData> flavorText = new();
 
     // IMPLEMENT THIS AFTER FUSE
@@ -73,8 +74,8 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
             flavorText.Add(temp);
         }
 
-        if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
-            DisableTextActionable();
+        //if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
+            //DisableTextActionable();
     }
 
     public void Interact()
@@ -82,7 +83,12 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
         DialogueUIManager.Instance.DisplayText_Dialogue(flavorText, thisLevel, 
             useOldAudioSystem, audioEventReference, AudioParameterName,
             onDialogueEndCallback: OnFlavorTextEnd);
-        SaveDataManager.Instance.MarkFlavorTextAsRead(flavorText, autoSave: true);
+        if (!SaveDataManager.Instance.IsFlavorTextRead(flavorText))
+        {
+            SaveDataManager.Instance.MarkFlavorTextAsRead(flavorText, autoSave: true);
+            AchievementManager.Instance.checkHatAchievements();
+        }
+        PlayedAlready = true;
         DisableTextActionable();
     }
 
@@ -153,10 +159,17 @@ public class FlavorTextActionable : MonoBehaviour, IInteractable
     bool IInteractable.IsInteractable()
     {
         // only decide actionability first time you look at the object. Like shroedingers cat.
-        cached_isActionable = cached_isActionable ?? HasMetConditionsToAppear();
-
-        if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
+        if (!PlayedAlready)
+        {
+            cached_isActionable = cached_isActionable ?? HasMetConditionsToAppear();
+        }
+        else
+        {
             return false;
+        }
+
+        /*if (SaveDataManager.Instance.IsFlavorTextRead(flavorText))
+            return false;*/
 
         return cached_isActionable.Value;
     }
