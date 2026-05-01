@@ -303,13 +303,6 @@ public class PauseMenu : MonoBehaviour
 
     void SetRightNavigationSelectable(Selectable selectable, Selectable button)
     {
-        if (selectable == null) return;
-
-
-        var firstSelectedNavigation = selectable.navigation;
-        firstSelectedNavigation.selectOnLeft = button;
-        selectable.navigation = firstSelectedNavigation;
-        
         var continueSelectedNavigation = continueGameButton.navigation;
         continueSelectedNavigation.selectOnRight = selectable;
         continueGameButton.navigation = continueSelectedNavigation;
@@ -325,6 +318,12 @@ public class PauseMenu : MonoBehaviour
         var controlsNavigation = controlsTab.toggleButton.navigation;
         controlsNavigation.selectOnRight = selectable;
         controlsTab.toggleButton.navigation = controlsNavigation;
+
+        if (selectable == null) return;
+
+        var firstSelectedNavigation = selectable.navigation;
+        firstSelectedNavigation.selectOnLeft = button;
+        selectable.navigation = firstSelectedNavigation;
     }
 
     #endregion

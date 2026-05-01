@@ -71,7 +71,7 @@ public class PauseMenuTab : MonoBehaviour
 
     public Selectable GetFirstSelectedElementInMenu()
     {
-        if(_firstSelectedElementIsNull) return null;
+        if(firstSelectedElement == null) return null;
 
         if (firstSelectedElement.gameObject.activeSelf == false)
             return secondSelectedElement;
