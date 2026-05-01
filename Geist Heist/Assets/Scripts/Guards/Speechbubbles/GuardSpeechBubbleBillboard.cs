@@ -26,7 +26,7 @@ public class GuardSpeechBubbleBillboard : IBillboardUI
     public void UpdateBubble(string Caption)
     {
         talking = true;
-        Textbox.text = Caption;
+        //Textbox.text = Caption;
         CalculateOpacity(-1, -1, Vector3.zero);
     }
 
