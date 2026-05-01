@@ -69,6 +69,9 @@ public class ConfirmationPopup : MonoBehaviour
         // Press esc to close popup
         InputEvents.PauseStartedOverride = OnCancelButtonPressed;
 
+        // if user moves stick with controller, go into controller mode.
+        InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
+
         StaticUtilities.ShowCursor();
         oldTimeScale = Time.timeScale;
         if(freezeTime)
@@ -181,5 +184,19 @@ public class ConfirmationPopup : MonoBehaviour
             return;
 
         EventSystem.current.SetSelectedGameObject(previouslySelectedBeforeOpen);
+    }
+
+    void OnControllerChanged()
+    {
+        if (InputEvents.Instance.IsGamepadActive())
+        {
+            EventSystem.current.SetSelectedGameObject(cancelButton.gameObject);
+            StaticUtilities.HideCursor();
+        }
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            StaticUtilities.ShowCursor();
+        }
     }
 }

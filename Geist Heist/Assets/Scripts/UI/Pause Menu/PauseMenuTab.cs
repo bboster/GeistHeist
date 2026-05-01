@@ -19,15 +19,28 @@ public class PauseMenuTab : MonoBehaviour
     [SerializeField, Required] public WavyTextAnimation wavyTextAnimation;
     [SerializeField, Required] private Selectable firstSelectedElement;
     [SerializeField, HideIf(nameof(_firstSelectedElementIsNull))] private Selectable secondSelectedElement;
-
     private bool _firstSelectedElementIsNull => firstSelectedElement == null;
+
+    public bool IsOpen => currentOpenTab == this;
+
+    private PauseMenu pauseMenu;
 
     public virtual void OpenTab()
     {
+        if (pauseMenu == null) pauseMenu = GetComponentInParent<PauseMenu>();
+
         RefreshUI();
         if(toggleButton != null) toggleButton.isOn = true;
 
-        if (currentOpenTab == this) return;
+        // if already open
+        if (currentOpenTab == this)
+        {
+            var firstSelected = GetFirstSelectedElementInMenu();
+            if(firstSelected != null)
+                EventSystem.current.SetSelectedGameObject(firstSelected.gameObject);
+
+            return;
+        }
 
         if(currentOpenTab != null)
             currentOpenTab.CloseTab();
@@ -35,6 +48,8 @@ public class PauseMenuTab : MonoBehaviour
         currentOpenTab = this;
 
         StaticUtilities.EnableCanvasGroup(canvasGroup);
+
+        InputEvents.ActionStarted_WhilePaused.AddListener(OnControllerBackButtonPressed);
 
         /*StaticUtilities.DisableCanvasGroup(pauseMenu.pauseGroup);
         InputEvents.PauseStartedOverride = () => CloseTab();*/
@@ -44,6 +59,8 @@ public class PauseMenuTab : MonoBehaviour
     {
         if(toggleButton != null) toggleButton.isOn = false;
         StaticUtilities.DisableCanvasGroup(canvasGroup);
+
+        //InputEvents.ActionStarted.RemoveListener(OnControllerBackButtonPressed);
         //InputEvents.PauseStartedOverride = null;
         //pauseMenu.OpenPauseMenu();
     }
@@ -54,11 +71,27 @@ public class PauseMenuTab : MonoBehaviour
 
     public Selectable GetFirstSelectedElementInMenu()
     {
-        if(_firstSelectedElementIsNull) return null;
+        if(firstSelectedElement == null) return null;
 
         if (firstSelectedElement.gameObject.activeSelf == false)
             return secondSelectedElement;
         else
             return firstSelectedElement;
+    }
+
+
+    private void OnControllerBackButtonPressed()
+    {
+        Debug.Log("Back button pressed");
+
+        if (InputEvents.Instance.IsGamepadActive() == false)
+            return;
+
+        if (!IsOpen)
+            return;
+
+        if(pauseMenu == null) return;
+
+        EventSystem.current.SetSelectedGameObject(pauseMenu.continueGameButton.gameObject);
     }
 }
