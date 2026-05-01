@@ -323,8 +323,12 @@ public class SaveDataManager : DontDestroyOnLoadSingleton<SaveDataManager>
     {
         return currentSaveDta.CansThrown;
     }
+    public int getFlavorTextRead()
+    {
+        return currentSaveDta.FlavorTextsRead.Count();
+    }
 
-    
+
     #endregion
 
 
