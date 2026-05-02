@@ -113,6 +113,7 @@ public class GlobeInputHandler : IInputHandler
     }
     public override void WhilePossessingUpdate()
     {
+        OnControllerChanged();
     }
 
     public override void OnPossessionStart()
