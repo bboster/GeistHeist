@@ -18,6 +18,9 @@ public class FadeToBlack : Singleton<FadeToBlack>
     {
         DontDestroyOnLoad(gameObject);
 
+        if(LevelManager.Instance != null)
+            LevelManager.Instance.SetPlayerFading(true);
+
         if (fadeCoroutine == null)
         {
             fadeCanvasGroup.alpha = 0;
@@ -31,6 +34,10 @@ public class FadeToBlack : Singleton<FadeToBlack>
         action();
         yield return new WaitForSeconds(delayAfterAction);
         yield return StaticUtilities.FadeToHidden(fadeCanvasGroup, secondsForFade);
+
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.SetPlayerFading(false);
+
         Destroy(gameObject);
         fadeCoroutine = null;
     }

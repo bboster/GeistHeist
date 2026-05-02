@@ -204,5 +204,8 @@ public class GameManager : Singleton<GameManager>
     {
         IsPlayerInMenu = inMenu;
     }
+
+
+
     #endregion
 }
