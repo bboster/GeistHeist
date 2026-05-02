@@ -5910,7 +5910,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 251271536948804505, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.47
+      value: 18.98
       objectReference: {fileID: 0}
     - target: {fileID: 251271536948804505, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5948,6 +5948,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2625168896105126236, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4083520800827370424, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
       propertyPath: m_Name
       value: BlueWindowDoor
@@ -5956,13 +5960,17 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2625168896105126236, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 251271536948804505, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
       insertIndex: -1
       addedObject: {fileID: 69500511}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4083520800827370424, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1720421110}
   m_SourcePrefab: {fileID: 100100000, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
 --- !u!4 &94994071 stripped
 Transform:
@@ -13719,9 +13727,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 319195180727627934, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: UnpossessedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2ea3e7538a02f824a870f07021fa8cdf, type: 2}
+    - target: {fileID: 319195180727627934, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
       propertyPath: debugAlwaysPossessable
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 319195180727627934, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
+      propertyPath: VisibleUnPossessedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2ea3e7538a02f824a870f07021fa8cdf, type: 2}
     - target: {fileID: 1110696852583975983, guid: deeea537a6246dd428ab7075be745b1c, type: 3}
       propertyPath: UIObjectPrefab
       value: 
@@ -35156,7 +35172,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1fb4d8766f6d5d047889566f0b03b455, type: 2}
     - target: {fileID: 8762889882606682532, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 23.03
+      value: 23.43
       objectReference: {fileID: 0}
     - target: {fileID: 8762889882606682532, guid: c75e04841a4376b49bead083818ef1d6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -116052,6 +116068,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 23402110}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1720421106 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4083520800827370424, guid: 5b7c049bd1c7b3242a5bc26583c27002, type: 3}
+  m_PrefabInstance: {fileID: 94994070}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1720421110
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720421106}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.101789, y: 4.5000434, z: 0.7053419}
+  m_Center: {x: 0.28881368, y: 2.2500222, z: 0.06924577}
 --- !u!1001 &1720854898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -130539,6 +130581,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[2].StayLength
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[2].SecondsDelayUntilNextDialogue
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 2934618208113897100, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[0].StayLength
       value: 14
@@ -130696,8 +130746,8 @@ MonoBehaviour:
   - Exhibit 1 Wing 2 - Library
   - KitchenWing1
   - Exibit 2 Wing 2
-  requiredScenesNotCompleted:
   - Wing 3 - Bedroom Greybox
+  requiredScenesNotCompleted: []
   requiredCollectables: 
   requiredCollectablesUncollected: 
   RequireSpecificHat: 0
@@ -132250,7 +132300,7 @@ Transform:
   m_GameObject: {fileID: 1804313764}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.9999669, z: -0, w: 0.008135608}
-  m_LocalPosition: {x: -24.47, y: -8.23, z: -10.66}
+  m_LocalPosition: {x: -24.961, y: -8.23, z: -10.668}
   m_LocalScale: {x: 0.116584, y: 11.952859, z: 11.113128}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -140286,7 +140336,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.324327
+      value: 22.724327
       objectReference: {fileID: 0}
     - target: {fileID: 1760775535694100696, guid: d1d74148e6acabf43a90513bf8500c2c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -151342,7 +151392,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2437953222092821134, guid: e7a478e9841f4d24a92638c72a02e1dc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.744064
+      value: 19.59
       objectReference: {fileID: 0}
     - target: {fileID: 2437953222092821134, guid: e7a478e9841f4d24a92638c72a02e1dc, type: 3}
       propertyPath: m_LocalPosition.y
@@ -151384,6 +151434,14 @@ PrefabInstance:
       propertyPath: GuardAnimator
       value: 
       objectReference: {fileID: 697513670}
+    - target: {fileID: 5577319945334147685, guid: e7a478e9841f4d24a92638c72a02e1dc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5577319945334147685, guid: e7a478e9841f4d24a92638c72a02e1dc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5771793037184528130, guid: e7a478e9841f4d24a92638c72a02e1dc, type: 3}
       propertyPath: m_Name
       value: DoorContainer
