@@ -434,6 +434,7 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
             return false;
 
         string currentScheme = playerInput.currentControlScheme;
+        Debug.Log("CURRENT SCHEME: " + playerInput.currentControlScheme);
         if (string.IsNullOrEmpty(currentScheme))
             return false;
 
