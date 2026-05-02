@@ -269,6 +269,9 @@ public class InputEvents : DontDestroyOnLoadSingleton<InputEvents>
 
     void OnPauseStarted()
     {
+        if (ConfirmationPopup.AnyConfirmationMenuOpen) //Should prevent pause menu from opening over a confirmation menu
+            return;
+
         if (PauseStartedOverride != null)
             PauseStartedOverride();
         else
