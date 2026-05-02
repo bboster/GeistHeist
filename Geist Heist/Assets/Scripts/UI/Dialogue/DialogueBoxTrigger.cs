@@ -136,13 +136,16 @@ public class DialogueBoxTrigger : MonoBehaviour
         foreach (var scene in requiredScenesCompleted)
         {
             if (SaveDataManager.Instance.IsLevelCompleted(scene) == false)
+            {
                 return false;
+            }
         }
 
         foreach (var scene in requiredScenesNotCompleted)
         {
-            if (SaveDataManager.Instance.IsLevelCompleted(scene) == true)
+            if (SaveDataManager.Instance.IsLevelCompleted(scene) == true) {
                 return false;
+            }
         }
 
         foreach (var collectable in requiredCollectables)
