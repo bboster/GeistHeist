@@ -12042,8 +12042,6 @@ MonoBehaviour:
   confirmationText: Enter the Hub?
   confirmationPopupPrefab: {fileID: 120270094049834394, guid: 85a6c648e22bc79478015b1f3947e196, type: 3}
   closeMenuOnConfirm: 0
-  hasAchievement: 0
-  WhatAcheivement: 0
   hasConfirmationPopup: 0
 --- !u!1001 &723046992
 PrefabInstance:
@@ -23358,8 +23356,6 @@ MonoBehaviour:
   confirmationText: Enter the Hub?
   confirmationPopupPrefab: {fileID: 4188704250907839163, guid: 7d1938c1e6b17f74eb05b142d7f097f3, type: 3}
   closeMenuOnConfirm: 0
-  hasAchievement: 1
-  WhatAcheivement: 2
   hasConfirmationPopup: 0
 --- !u!114 &1485016962
 MonoBehaviour:
@@ -25438,8 +25434,40 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: thisLevel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: useOldAudioSystem
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: AudioParameterName
+      value: VLTutorial
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Path
+      value: event:/Voicelines/VLTutorial
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Guid.Data1
+      value: -1914395358
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Guid.Data2
+      value: 1196482480
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Guid.Data3
+      value: 947373446
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: audioEventReference.Guid.Data4
+      value: -826474661
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[0].BodyText
@@ -25450,8 +25478,16 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: requiredScenesNotCompleted.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: dialogueText.Array.data[0].dialogueSpeaker
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 874999385754937035, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].SecondsDelayUntilNextDialogue
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4135309368863494559, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: m_LocalScale.x
@@ -25509,7 +25545,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialogueTriggersIterativeLevel
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9024013404956872322, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+    - {fileID: 2934618208113897100, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+    - {fileID: 6375612502822045977, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+    - {fileID: 5677855763410897439, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
     m_RemovedGameObjects:
     - {fileID: 420265048089149496, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
     - {fileID: 3011754353872438091, guid: 08adf25719814f249b86152effb5f9f3, type: 3}

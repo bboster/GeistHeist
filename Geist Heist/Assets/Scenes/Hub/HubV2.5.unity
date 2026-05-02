@@ -130539,6 +130539,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2934618208113897100, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].StayLength
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2934618208113897100, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].SecondsDelayUntilNextDialogue
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5677855763410897439, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5677855763410897439, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].StayLength
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5677855763410897439, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].SecondsDelayUntilNextDialogue
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375612502822045977, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].StayLength
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375612502822045977, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[1].StayLength
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375612502822045977, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].SecondsDelayUntilNextDialogue
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375612502822045977, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[1].SecondsDelayUntilNextDialogue
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7566626684799874935, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 34.091137
@@ -130583,11 +130619,102 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialogueTriggersIterativeLevel
       objectReference: {fileID: 0}
+    - target: {fileID: 9024013404956872322, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].StayLength
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9024013404956872322, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[1].StayLength
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 9024013404956872322, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      propertyPath: dialogueText.Array.data[0].SecondsDelayUntilNextDialogue
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7148221544204128209, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1786311772}
   m_SourcePrefab: {fileID: 100100000, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+--- !u!1 &1786311771 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7148221544204128209, guid: 08adf25719814f249b86152effb5f9f3, type: 3}
+  m_PrefabInstance: {fileID: 1786311770}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1786311772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786311771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8fcdce510928fb4ab2354602fe37dcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PADialogueUITrigger
+  dialogueText:
+  - BodyText: I think... this is enough. I finally have all the things I truly hold
+      dear to me again.
+    dialogueSpeaker: 0
+    SecondsDelayUntilNextDialogue: 7
+    StayLength: 7
+    overrideTextData: 0
+    overrideAudioEventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    AudioParameterName: 
+    overrideAudioLine: 0
+    audioLine: 0
+  - BodyText: Even so, it's a shame I have to abandon so many belongings. But I won't
+      need them anymore. Perhaps other people can enjoy them as much as I have.
+    dialogueSpeaker: 1
+    SecondsDelayUntilNextDialogue: 8
+    StayLength: 8
+    overrideTextData: 0
+    overrideAudioEventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    AudioParameterName: 
+    overrideAudioLine: 0
+    audioLine: 1
+  AlwaysAppear: 0
+  chanceToAppear: 1
+  requiredScenesCompleted:
+  - FINAL Parlour Room
+  - Exhibit 1 Wing 2 - Library
+  - KitchenWing1
+  - Exibit 2 Wing 2
+  requiredScenesNotCompleted:
+  - Wing 3 - Bedroom Greybox
+  requiredCollectables: 
+  requiredCollectablesUncollected: 
+  RequireSpecificHat: 0
+  requiredHat: 0
+  useOldAudioSystem: 0
+  audioEventReference:
+    Guid:
+      Data1: 662193394
+      Data2: 1105250140
+      Data3: -614377026
+      Data4: 2119933193
+    Path: event:/Voicelines/VLLobbyNightFinale
+  AudioParameterName: VLLobbyNightFinale
+  Text: 
+  stayLength: 0
+  whichLine: 0
+  thisLevel: 1
 --- !u!1001 &1787941868
 PrefabInstance:
   m_ObjectHideFlags: 0
