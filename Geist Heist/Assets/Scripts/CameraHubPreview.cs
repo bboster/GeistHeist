@@ -68,4 +68,9 @@ public class CameraHubPreview : MonoBehaviour
         InputEvents.Instance.CutsceneRunning = false;
         camAnimator.SetInteger("Cutscene", 50);
     }
+
+    private void OnDisable()
+    {
+        InputEvents.Instance.CutsceneRunning = false;
+    }
 }
