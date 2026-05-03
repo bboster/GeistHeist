@@ -71,6 +71,8 @@ public class IntroCutsceneController : MonoBehaviour
 
     private void Start()
     {
+        ConfirmationPopup.AnyConfirmationMenuOpen = false;
+
         InputEvents.PauseStarted.AddListener(SkipCutscene);
         InputEvents.InteractStarted.AddListener(SkipCutscene);
 
