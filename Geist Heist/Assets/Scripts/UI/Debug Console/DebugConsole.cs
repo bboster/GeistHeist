@@ -39,7 +39,7 @@ public class DebugConsole : MonoBehaviour
     private void Start()
     {
         Console.SetActive(false);
-        InputEvents.DebugStarted.AddListener(ToggleConsole);
+        //InputEvents.DebugStarted.AddListener(ToggleConsole);
         FreeCamInstance = Instantiate(FreeCamPrefab, cameraGO.transform.position, Quaternion.identity);
 
         if (collectableRegistry == null)
