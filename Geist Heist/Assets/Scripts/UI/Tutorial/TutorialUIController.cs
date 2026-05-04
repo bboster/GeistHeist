@@ -35,6 +35,7 @@ public class TutorialUIController : MonoBehaviour
     {
         InputEvents.MoveStarted.AddListener(OnMoveStarted);
         InputEvents.Instance.OnControllerChanged.AddListener(OnControllerChanged);
+        OnControllerChanged();
         PlayerManager.OnPossessionObjectChanged.AddListener(OnPlayerPossessionObjectChanged);
 
         StaticUtilities.DisableCanvasGroup(MovementCanvasGroup);
