@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 /*
 * Contributors: Brenden
@@ -28,8 +29,14 @@ public class GuardSpeechBubbleBillboard : IBillboardUI
         talking = true;
         //Textbox.text = Caption;
         CalculateOpacity(-1, -1, Vector3.zero);
+        StartCoroutine(DisableSpeach());
     }
 
+    public IEnumerator DisableSpeach()
+    {
+        yield return new WaitForSeconds(3f);
+        stopTalking();
+    }
     public void stopTalking()
     {
         talking=false;
